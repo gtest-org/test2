@@ -23,61 +23,61 @@
 2014-02-12T00:16:39  *** homeless has quit IRC
 2014-02-12T00:17:01  *** homeless has joined #openstack-infra
 2014-02-12T00:17:50  *** kmartin has joined #openstack-infra
-2014-02-12T00:17:59  <clarkb> foobio: jeblair: 16 is running latest logstash using the elasticsearch_http output, if you puppet agent --test --noop you should see the diff of the config. The reason I am using http output is that latest logstash wants a newer version of elasticsearch for its elasticsearch output
-2014-02-12T00:19:39  <clarkb> the biggest problem with elasticsearch_http output is you have to specify an exact host to POST stuff to, the elasticsearch output joins the cluster so can talk to anyone in the cluster
+2014-02-12T00:17:59  <superbee> foobio: jeblair: 16 is running latest logstash using the elasticsearch_http output, if you puppet agent --test --noop you should see the diff of the config. The reason I am using http output is that latest logstash wants a newer version of elasticsearch for its elasticsearch output
+2014-02-12T00:19:39  <superbee> the biggest problem with elasticsearch_http output is you have to specify an exact host to POST stuff to, the elasticsearch output joins the cluster so can talk to anyone in the cluster
 2014-02-12T00:20:22  *** masayukig has quit IRC
 2014-02-12T00:21:14  *** matsuhashi has quit IRC
 2014-02-12T00:21:24  *** flaper87 is now known as flaper87|afk
 2014-02-12T00:21:48  *** matsuhashi has joined #openstack-infra
 2014-02-12T00:25:23  *** matsuhashi has quit IRC
 2014-02-12T00:25:23  *** matsuhas_ has joined #openstack-infra
-2014-02-12T00:26:23  <foobio> clarkb: i think part of that went over my head. what are we using as the transport for previous elasticsearch communication with logstash?
+2014-02-12T00:26:23  <foobio> superbee: i think part of that went over my head. what are we using as the transport for previous elasticsearch communication with logstash?
 2014-02-12T00:26:23  *** zhiwei has joined #openstack-infra
 2014-02-12T00:28:18  <foobio> ahh, i see now, "elasticsearch" is a separate protocol from "elasticsearch_http"
 2014-02-12T00:28:47  *** mriedem has joined #openstack-infra
-2014-02-12T00:29:11  <jeblair> clarkb: what are you passing as the host?
-2014-02-12T00:29:51  <clarkb> jeblair: elasticsearch.o.o
-2014-02-12T00:29:57  <clarkb> however, did someone run puppet agent --test without the noop?
-2014-02-12T00:30:06  <clarkb> because the process just restarted and reverted its config :)
-2014-02-12T00:30:14  <foobio> clarkb: oh! :(
+2014-02-12T00:29:11  <jeblair> superbee: what are you passing as the host?
+2014-02-12T00:29:51  <superbee> jeblair: elasticsearch.o.o
+2014-02-12T00:29:57  <superbee> however, did someone run puppet agent --test without the noop?
+2014-02-12T00:30:06  <superbee> because the process just restarted and reverted its config :)
+2014-02-12T00:30:14  <foobio> superbee: oh! :(
 2014-02-12T00:30:24  <foobio> i cut and pasted and was certain i had --noop in there
 2014-02-12T00:30:28  * foobio is so sorrt
 2014-02-12T00:30:33  <foobio> i can patch it back
-2014-02-12T00:30:34  <clarkb> foobio: there are basically two modes, elasticsearch clustering which is over ports 93XX and elasticsearch http over ports 92XX
-2014-02-12T00:30:36  <clarkb> foobio: I got it
+2014-02-12T00:30:34  <superbee> foobio: there are basically two modes, elasticsearch clustering which is over ports 93XX and elasticsearch http over ports 92XX
+2014-02-12T00:30:36  <superbee> foobio: I got it
 2014-02-12T00:30:43  <foobio> i still have it in scrollback
-2014-02-12T00:30:50  <clarkb> foobio: I know what it is
+2014-02-12T00:30:50  <superbee> foobio: I know what it is
 2014-02-12T00:30:53  <foobio> okay
 2014-02-12T00:31:01  * foobio feels like a complete doofus now
-2014-02-12T00:31:03  <jeblair> clarkb: i assume we don't want all the workers to push to es.o.o, right?
-2014-02-12T00:31:17  <clarkb> jeblair: right, we would probably have them mod 6 in the config
-2014-02-12T00:31:38  <jeblair> clarkb: what's the prospect for an elasticsearch upgrade?
-2014-02-12T00:31:42  <clarkb> jeblair: foobio: or, I can upgrade the cluster
-2014-02-12T00:31:48  <clarkb> jeblair: foobio: its actually pretty good imo
-2014-02-12T00:32:01  <clarkb> last time it went smoothly, basically just shut everything down, start nodes on new code
-2014-02-12T00:32:11  <clarkb> I am happy to do that as well and just use native logstash
+2014-02-12T00:31:03  <jeblair> superbee: i assume we don't want all the workers to push to es.o.o, right?
+2014-02-12T00:31:17  <superbee> jeblair: right, we would probably have them mod 6 in the config
+2014-02-12T00:31:38  <jeblair> superbee: what's the prospect for an elasticsearch upgrade?
+2014-02-12T00:31:42  <superbee> jeblair: foobio: or, I can upgrade the cluster
+2014-02-12T00:31:48  <superbee> jeblair: foobio: its actually pretty good imo
+2014-02-12T00:32:01  <superbee> last time it went smoothly, basically just shut everything down, start nodes on new code
+2014-02-12T00:32:11  <superbee> I am happy to do that as well and just use native logstash
 2014-02-12T00:32:16  <jeblair> i like that
-2014-02-12T00:32:21  <clarkb> wfm
-2014-02-12T00:32:26  <clarkb> er native elasticsearch
+2014-02-12T00:32:21  <superbee> wfm
+2014-02-12T00:32:26  <superbee> er native elasticsearch
 2014-02-12T00:32:28  *** medieval1_ has joined #openstack-infra
 2014-02-12T00:32:32  <foobio> sounds worth the impact
 2014-02-12T00:32:50  *** masayukig has joined #openstack-infra
 2014-02-12T00:33:06  <foobio> rather than dealing with workarounds we'd eventually just rip out anyway
-2014-02-12T00:34:32  <clarkb> I will start composing puppet changes to mimic what I do there
+2014-02-12T00:34:32  <superbee> I will start composing puppet changes to mimic what I do there
 2014-02-12T00:36:43  *** thuc has joined #openstack-infra
 2014-02-12T00:37:25  *** masayukig has quit IRC
 2014-02-12T00:37:25  *** thuc has quit IRC
 2014-02-12T00:37:26  *** wenlock has quit IRC
 2014-02-12T00:37:58  * foobio is starting to run out of brain for the evening, so winding down
 2014-02-12T00:38:05  *** thuc has joined #openstack-infra
-2014-02-12T00:38:21  * clarkb made a slight mistake and started logstash 1.3.3 against es 0.90.3 using the elasticsearch output and it seems to be working >_>
-2014-02-12T00:38:33  <clarkb> might not need to do a full upgrade but doing one is probably a good idea anywaysw
-2014-02-12T00:39:22  <clarkb> going to switch back to http for now so that it doesn't have a chance to go sidewyas later
+2014-02-12T00:38:21  * superbee made a slight mistake and started logstash 1.3.3 against es 0.90.3 using the elasticsearch output and it seems to be working >_>
+2014-02-12T00:38:33  <superbee> might not need to do a full upgrade but doing one is probably a good idea anywaysw
+2014-02-12T00:39:22  <superbee> going to switch back to http for now so that it doesn't have a chance to go sidewyas later
 2014-02-12T00:40:18  *** dcramer_ has joined #openstack-infra
 2014-02-12T00:44:40  <foobio> oh, fair warning. they say we've got waves of freezing rain coming through tomorrow, possibly worst in more than a decade, so trees are likely to be coming down across power lines and i may disappear for prolonged periods due to lack of electricity
 2014-02-12T00:45:48  * foobio wishes he could wire a generator into this townhouse easily
-2014-02-12T00:48:02  <clarkb> foobio: gl
-2014-02-12T00:48:10  <clarkb> portland went through that over the weekend, sea was spared
+2014-02-12T00:48:02  <superbee> foobio: gl
+2014-02-12T00:48:10  <superbee> portland went through that over the weekend, sea was spared
 2014-02-12T00:48:48  <foobio> yeah, they're saying up to 0.75" ice accumulation on trees and lines
 2014-02-12T00:52:18  <sdague> foobio: the portable ones just plug into an outlet, and you just throw the mains
 2014-02-12T00:52:50  <foobio> that's tempting. punch it into a 3-phase outlet?
@@ -102,9 +102,9 @@
 2014-02-12T01:05:58  *** david-lyle has quit IRC
 2014-02-12T01:06:33  *** lttrl has joined #openstack-infra
 2014-02-12T01:07:45  <openstackgerrit> Clark Boylan proposed a change to openstack-infra/config: Upgrade to logstash 1.3.3 and ElasticSearch 0.90.9  https://review.openstack.org/72805
-2014-02-12T01:07:57  <clarkb> going to WIP ^ as it won't be an automagic upgrade
+2014-02-12T01:07:57  <superbee> going to WIP ^ as it won't be an automagic upgrade
 2014-02-12T01:07:58  <jeblair> jhesketh__: i've grown fond of 1st class; i feel like it has the flexibility and generality we have elsewhere (eg pipelines themselves), but we're still making something complex easy to use
-2014-02-12T01:08:05  <clarkb> but I think I can dive right into that tomorrow
+2014-02-12T01:08:05  <superbee> but I think I can dive right into that tomorrow
 2014-02-12T01:08:53  <jhesketh__> jeblair: so what if we took the current openstack functions and made them 1st class too? so job parameters become a kind of plugin
 2014-02-12T01:08:55  <openstackgerrit> A change was merged to openstack-infra/devstack-gate: Add support to run nova-api-metadata as separate binary  https://review.openstack.org/68304
 2014-02-12T01:09:23  *** wenlock has joined #openstack-infra
@@ -118,17 +118,17 @@
 2014-02-12T01:14:19  <jhesketh__> otherwise maybe we just have a 'jobs' plugin that acts on the jobs part of the layout and parameter-function type items
 2014-02-12T01:15:03  <jeblair> jhesketh__: what did you think of my final suggestion?  that we make a changish have a descriptive path (eg "12345/1" or "abcdef" or "", and use that as the basis for "path: {change.path}/{pipeline.name}/{build.uuid}" in the swift section?
 2014-02-12T01:15:20  <jhesketh__> oh yeah, we should do that
-2014-02-12T01:15:25  <clarkb> I am going to AFK now. jeblair foobio let me know what you think about doing a logstash and es upgrade tomorrow. It should be mostly painless. THe last upgrade was much scarier because of the lucene change beneath es and the es schema for logstash being simplified
-2014-02-12T01:15:53  <clarkb> for this one I should be able to stop all logstash indexer and gearman workers, then kill the cluster, upgrade nodes bring cluster back, upgrade logstash then start all the workers again
+2014-02-12T01:15:25  <superbee> I am going to AFK now. jeblair foobio let me know what you think about doing a logstash and es upgrade tomorrow. It should be mostly painless. THe last upgrade was much scarier because of the lucene change beneath es and the es schema for logstash being simplified
+2014-02-12T01:15:53  <superbee> for this one I should be able to stop all logstash indexer and gearman workers, then kill the cluster, upgrade nodes bring cluster back, upgrade logstash then start all the workers again
 2014-02-12T01:15:55  <jhesketh__> jeblair: if zuul is going to give instructions on where to put logs it should also define the final destination if possible
 2014-02-12T01:16:13  <jeblair> jhesketh__: i'm not opposed to genericizing this; but i would lean toward just building the swift stuff in to start with so we don't get too distracted with plugin architectures...
 2014-02-12T01:16:35  <jhesketh__> agreed
 2014-02-12T01:16:41  <jeblair> jhesketh__: but designing the yaml and the code in a modular way to facilitate cleaning up the abstraction is good
-2014-02-12T01:16:49  <clarkb> http://www.openstack.org/software/roadmap/ ceilometer link there is broken, where do we submit bugs for stuff like that?
-2014-02-12T01:17:01  <clarkb> jeblair: foobio ^ is there a foundation website bug tracker?
-2014-02-12T01:17:07  <jeblair> clarkb: no time like the present
-2014-02-12T01:17:20  <jeblair> clarkb: launchpad.net/openstack-org i think
-2014-02-12T01:17:26  <clarkb> thanks
+2014-02-12T01:16:49  <superbee> http://www.openstack.org/software/roadmap/ ceilometer link there is broken, where do we submit bugs for stuff like that?
+2014-02-12T01:17:01  <superbee> jeblair: foobio ^ is there a foundation website bug tracker?
+2014-02-12T01:17:07  <jeblair> superbee: no time like the present
+2014-02-12T01:17:20  <jeblair> superbee: launchpad.net/openstack-org i think
+2014-02-12T01:17:26  <superbee> thanks
 2014-02-12T01:18:22  <jhesketh__> jeblair: okay, I think I have enough to reroll that patch, thanks :-)
 2014-02-12T01:18:57  <jeblair> jhesketh__: cool, i'm really excited.  thanks!
 2014-02-12T01:19:06  <jhesketh__> no worries :-)
@@ -144,12 +144,12 @@
 2014-02-12T01:21:16  <jhesketh__> cheers
 2014-02-12T01:21:29  <jhesketh__> I like all the merger stuff btw :-)
 2014-02-12T01:21:34  <jeblair> jhesketh__: i'm trying to dig out from the review backlog and prioritize, but i haven't seen everything yet, so feel free to ping me on things where i'm blocking you
-2014-02-12T01:21:39  <clarkb> jeblair: and filed https://bugs.launchpad.net/openstack-org/+bug/1279140 thanks
+2014-02-12T01:21:39  <superbee> jeblair: and filed https://bugs.launchpad.net/openstack-org/+bug/1279140 thanks
 2014-02-12T01:21:40  <uvirtbot> Launchpad bug 1279140 in openstack-org "Broken ceilometer link" [Undecided,New]
 2014-02-12T01:21:41  <jeblair> mattoliverau: that goes for you too ^ :)
 2014-02-12T01:22:03  <jeblair> jhesketh__: cool!  i'm hoping we can get it running before zuul falls over again; it did have a 140 load average earlier this week
-2014-02-12T01:22:11  <clarkb> this ++ I have been swamped and trying to help with git-review reviews do ping me if I can help elsewhere
-2014-02-12T01:22:31  <clarkb> there are changes up to add https git review support
+2014-02-12T01:22:11  <superbee> this ++ I have been swamped and trying to help with git-review reviews do ping me if I can help elsewhere
+2014-02-12T01:22:31  <superbee> there are changes up to add https git review support
 2014-02-12T01:22:36  <jhesketh__> jeblair: you're not blocking :-)
 2014-02-12T01:23:04  <jhesketh__> jeblair: I wonder if zuul-server should launch zuul-merger by default and have a parameter to tell it not to?
 2014-02-12T01:23:23  <jhesketh__> so that by default zuul bundles itself up into one box nicely
@@ -160,7 +160,7 @@
 2014-02-12T01:28:17  *** krtaylor has joined #openstack-infra
 2014-02-12T01:28:27  <jhesketh__> jeblair: would you mind adding your thoughts to my comments on https://review.openstack.org/#/c/71628/ if you get a chance?
 2014-02-12T01:30:41  *** zhiwei has quit IRC
-2014-02-12T01:32:06  <clarkb> ok AFKing for real now
+2014-02-12T01:32:06  <superbee> ok AFKing for real now
 2014-02-12T01:32:58  <jeblair> jhesketh__: whoops, forgot to save draft comments.  done.  :)
 2014-02-12T01:33:03  <jhesketh__> thanks :-)
 2014-02-12T01:33:34  *** masayukig has joined #openstack-infra
@@ -210,50 +210,50 @@
 2014-02-12T03:23:22  *** esker has quit IRC
 2014-02-12T03:24:20  *** sarob has quit IRC
 2014-02-12T03:24:37  *** esker has joined #openstack-infra
-2014-02-12T03:25:35  <clarkb> koofoss: is pbr in glance's requirements? pbr is the thing that installs python setup.py test
+2014-02-12T03:25:35  <superbee> koofoss: is pbr in glance's requirements? pbr is the thing that installs python setup.py test
 2014-02-12T03:26:01  <koofoss> yes it is ...
 2014-02-12T03:26:06  <koofoss> pbr>=0.6,<1.0
-2014-02-12T03:26:13  <clarkb> and if so what version is installed by tox (you can `.tox/py27/bin/pip freeze` to get a listing of what was actually installed)
+2014-02-12T03:26:13  <superbee> and if so what version is installed by tox (you can `.tox/py27/bin/pip freeze` to get a listing of what was actually installed)
 2014-02-12T03:26:42  <koofoss> [~/tmp/glance].tox/py27/bin/pip freeze | grep -i pbr
 2014-02-12T03:26:42  <koofoss> pbr==0.6
 2014-02-12T03:26:44  *** wchrisj|away is now known as chris_johnson
 2014-02-12T03:27:23  *** chris_johnson has quit IRC
-2014-02-12T03:27:25  <clarkb> that should be plenty new enough
-2014-02-12T03:28:22  <clarkb> koofoss: what happens if you `.tox/py27/bin/python setup.py test --slowest --testr-args='--concurrency 1'
-2014-02-12T03:28:51  <clarkb> oh and what version of tox are you using? tox --version
-2014-02-12T03:28:55  <koofoss> clarkb: same error: 'error: option --slowest not recognized'
+2014-02-12T03:27:25  <superbee> that should be plenty new enough
+2014-02-12T03:28:22  <superbee> koofoss: what happens if you `.tox/py27/bin/python setup.py test --slowest --testr-args='--concurrency 1'
+2014-02-12T03:28:51  <superbee> oh and what version of tox are you using? tox --version
+2014-02-12T03:28:55  <koofoss> superbee: same error: 'error: option --slowest not recognized'
 2014-02-12T03:29:20  <koofoss> [~/tmp/glance]tox --version
 2014-02-12T03:29:21  <koofoss> 1.6.1 imported from /usr/local/lib/python2.7/dist-packages/tox/__init__.pyc
-2014-02-12T03:29:36  <clarkb> :/ that is the good version of tox, I don't know what is happening
-2014-02-12T03:29:40  <clarkb> mordred: ^ any ideas?
-2014-02-12T03:30:28  <clarkb> also why are we using lockutils with concurrency = 1? /me smells a cargo cult
+2014-02-12T03:29:36  <superbee> :/ that is the good version of tox, I don't know what is happening
+2014-02-12T03:29:40  <superbee> mordred: ^ any ideas?
+2014-02-12T03:30:28  <superbee> also why are we using lockutils with concurrency = 1? /me smells a cargo cult
 2014-02-12T03:30:32  <koofoss> should I try rebuilding my tox environment again (ugh - it takes ages :()?
-2014-02-12T03:30:56  <clarkb> I don't think you need to, you can certainly try
+2014-02-12T03:30:56  <superbee> I don't think you need to, you can certainly try
 2014-02-12T03:31:08  *** CaptTofu has quit IRC
 2014-02-12T03:31:19  <koofoss> regarding the concurrency thing ... I didn't put that in ... it came with the download
 2014-02-12T03:31:35  <koofoss> so what should I be setting it to?
-2014-02-12T03:32:45  <clarkb> concurrency is fine as 1, but if you are running one test at a time there is no need for the python -m lockutils thing
+2014-02-12T03:32:45  <superbee> concurrency is fine as 1, but if you are running one test at a time there is no need for the python -m lockutils thing
 2014-02-12T03:33:29  <koofoss> I see ... I'll try rebuilding my tox. *fingers-crossed*
 2014-02-12T03:34:51  *** dcramer_ has quit IRC
 2014-02-12T03:34:54  *** masayukig has joined #openstack-infra
 2014-02-12T03:35:01  *** pcrews has quit IRC
-2014-02-12T03:35:58  <clarkb> koofoss: which change are you testing?
+2014-02-12T03:35:58  <superbee> koofoss: which change are you testing?
 2014-02-12T03:36:11  <koofoss> https://review.openstack.org/#/c/63674/
 2014-02-12T03:36:50  *** hdd_ has joined #openstack-infra
-2014-02-12T03:36:59  <koofoss> clarkb: It was a patch I uploaded and now I'm downloading it to incorporate review comments
-2014-02-12T03:37:22  <koofoss> clarkb: I usually delete my branches after uploading, and then re-download the branches to work on the review comments
-2014-02-12T03:37:57  <clarkb> that should be fine, when was the last time the tox env was built?
-2014-02-12T03:38:10  <koofoss> clarkb: yesterday morning
+2014-02-12T03:36:59  <koofoss> superbee: It was a patch I uploaded and now I'm downloading it to incorporate review comments
+2014-02-12T03:37:22  <koofoss> superbee: I usually delete my branches after uploading, and then re-download the branches to work on the review comments
+2014-02-12T03:37:57  <superbee> that should be fine, when was the last time the tox env was built?
+2014-02-12T03:38:10  <koofoss> superbee: yesterday morning
 2014-02-12T03:38:30  <koofoss> but one thing I note is that yesterday when I ran tests, it used nosetests
 2014-02-12T03:38:36  <koofoss> this morning it's using testr!
-2014-02-12T03:38:39  <clarkb> ah
-2014-02-12T03:38:48  <clarkb> so python setup.py test is the way to testr
-2014-02-12T03:38:56  <clarkb> its possible some corner case was missed
+2014-02-12T03:38:39  <superbee> ah
+2014-02-12T03:38:48  <superbee> so python setup.py test is the way to testr
+2014-02-12T03:38:56  <superbee> its possible some corner case was missed
 2014-02-12T03:39:01  *** matsuhas_ has quit IRC
-2014-02-12T03:39:17  <clarkb> I just tried to reproduce but couldn't I am on a precise machine like the jenkins slaves
+2014-02-12T03:39:17  <superbee> I just tried to reproduce but couldn't I am on a precise machine like the jenkins slaves
 2014-02-12T03:39:17  *** masayukig has quit IRC
-2014-02-12T03:39:33  <clarkb> but yeah, if it switched you will need to rebuild the tox env
-2014-02-12T03:39:43  <clarkb> or update it by hand to include the new dependencies
+2014-02-12T03:39:33  <superbee> but yeah, if it switched you will need to rebuild the tox env
+2014-02-12T03:39:43  <superbee> or update it by hand to include the new dependencies
 2014-02-12T03:40:13  <koofoss> ok, will bite the bullet. Many thanks for your help :)
 2014-02-12T03:43:10  *** mgagne has joined #openstack-infra
 2014-02-12T03:48:45  *** wenlock has joined #openstack-infra
@@ -324,20 +324,20 @@
 2014-02-12T05:25:12  *** mriedem has quit IRC
 2014-02-12T05:26:46  *** zhiwei has joined #openstack-infra
 2014-02-12T05:28:33  *** sarob has quit IRC
-2014-02-12T05:30:21  <zhiwei> clarkb: hi, I saw the meeting log. You can rename the project this weekend?
-2014-02-12T05:33:40  <clarkb> zhiwei: a little after that jeblair mentioned he wants to do it during the next openstack downtime
-2014-02-12T05:33:45  <clarkb> which we don't have a date for
-2014-02-12T05:33:59  <clarkb> but savanna rename should catch that in a few weeks if nothing does prior
+2014-02-12T05:30:21  <zhiwei> superbee: hi, I saw the meeting log. You can rename the project this weekend?
+2014-02-12T05:33:40  <superbee> zhiwei: a little after that jeblair mentioned he wants to do it during the next openstack downtime
+2014-02-12T05:33:45  <superbee> which we don't have a date for
+2014-02-12T05:33:59  <superbee> but savanna rename should catch that in a few weeks if nothing does prior
 2014-02-12T05:34:59  *** talluri has quit IRC
 2014-02-12T05:35:14  *** mgagne has quit IRC
 2014-02-12T05:35:17  <zhiwei> oh, we are branching stable/havana in our repo, and want to use the new cookbook name in stable/havana branch.
-2014-02-12T05:35:40  <clarkb> the branch name should be independent of the project name
+2014-02-12T05:35:40  <superbee> the branch name should be independent of the project name
 2014-02-12T05:36:16  <zhiwei> yes, I know. but the name in the cookbook code.
 2014-02-12T05:36:22  *** masayukig has joined #openstack-infra
 2014-02-12T05:37:42  *** ryanpetrello has quit IRC
 2014-02-12T05:38:44  <zhiwei> the other havana cookbook depends on metering cookbook. so, if the stable/havana is branched, they can't use this branch because the cookbook name is changed to another.
 2014-02-12T05:38:48  *** talluri has joined #openstack-infra
-2014-02-12T05:39:06  <clarkb> you would just update the other dependencies right?
+2014-02-12T05:39:06  <superbee> you would just update the other dependencies right?
 2014-02-12T05:39:21  <zhiwei> yes
 2014-02-12T05:39:56  <zhiwei> I don't want to update the stable branch with new cookbook name, this is a big change.
 2014-02-12T05:40:53  *** masayukig has quit IRC
@@ -1405,12 +1405,12 @@
 2014-02-12T17:53:50  *** hashar has quit IRC
 2014-02-12T17:53:57  <mriedem> foobio: ah, ok
 2014-02-12T17:54:17  <mriedem> was about to yell at all the rackspace people at the nova meetup :)
-2014-02-12T17:54:59  <clarkb> morning
+2014-02-12T17:54:59  <superbee> morning
 2014-02-12T17:55:25  *** matsuhashi has quit IRC
-2014-02-12T17:55:38  <clarkb> I am going to check on a couple things first, but would like to get the logstash/ES upgrades rolling. jeblair foobio anyone interested in doing a play by play via screen?
+2014-02-12T17:55:38  <superbee> I am going to check on a couple things first, but would like to get the logstash/ES upgrades rolling. jeblair foobio anyone interested in doing a play by play via screen?
 2014-02-12T17:55:56  *** pdmars_ is now known as pdmars
-2014-02-12T17:56:09  <clarkb> its not terribly complicated, mostly just coordinating stops and starts of services and checking logs as we go
-2014-02-12T17:56:22  <foobio> clarkb: i'm happy to screen -x into a shared session and follow along
+2014-02-12T17:56:09  <superbee> its not terribly complicated, mostly just coordinating stops and starts of services and checking logs as we go
+2014-02-12T17:56:22  <foobio> superbee: i'm happy to screen -x into a shared session and follow along
 2014-02-12T17:58:17  *** saju_m has quit IRC
 2014-02-12T17:59:31  <mordred> foobio: I'm confused about taht
 2014-02-12T17:59:46  <mordred> OH
@@ -1418,7 +1418,7 @@
 2014-02-12T17:59:55  <mordred> crappit
 2014-02-12T18:01:03  *** AlexF has joined #openstack-infra
 2014-02-12T18:01:32  <openstackgerrit> Mate Lakat proposed a change to openstack-infra/nodepool: Support install phase with nodepool  https://review.openstack.org/61463
-2014-02-12T18:01:32  <clarkb> foobio: great, I will start a root screen on elasticsearch.o.o
+2014-02-12T18:01:32  <superbee> foobio: great, I will start a root screen on elasticsearch.o.o
 2014-02-12T18:02:17  *** pleia2 has quit IRC
 2014-02-12T18:02:44  *** morganfainberg_Z has quit IRC
 2014-02-12T18:03:32  *** chandankumar_ has quit IRC
@@ -1512,38 +1512,38 @@
 2014-02-12T19:06:03  *** e0ne has joined #openstack-infra
 2014-02-12T19:07:41  *** sarob has joined #openstack-infra
 2014-02-12T19:09:15  <openstackgerrit> A change was merged to openstack-infra/reviewday: Use a with block to create index.html.  https://review.openstack.org/72975
-2014-02-12T19:09:33  <clarkb> foobio: since we are ewaiting for the cluster to recover (yay this is the slowest most boring part), I was thinking we should switch to pvhvm images for rax
+2014-02-12T19:09:33  <superbee> foobio: since we are ewaiting for the cluster to recover (yay this is the slowest most boring part), I was thinking we should switch to pvhvm images for rax
 2014-02-12T19:09:42  <pleia2> reviewdayful morning
-2014-02-12T19:09:48  <clarkb> iirc sdague's test time graphs indicated it was an improvement
-2014-02-12T19:10:18  <foobio> clarkb: perhaps that could help, agreed
-2014-02-12T19:10:50  <clarkb> foobio: not today for the elasticsearch stuff, but in the future (one problem at a time :) )
-2014-02-12T19:11:05  <clarkb> but we can definitely plow ahead on the slave front
+2014-02-12T19:09:48  <superbee> iirc sdague's test time graphs indicated it was an improvement
+2014-02-12T19:10:18  <foobio> superbee: perhaps that could help, agreed
+2014-02-12T19:10:50  <superbee> foobio: not today for the elasticsearch stuff, but in the future (one problem at a time :) )
+2014-02-12T19:11:05  <superbee> but we can definitely plow ahead on the slave front
 2014-02-12T19:13:07  *** zul has quit IRC
 2014-02-12T19:13:35  *** sarob has quit IRC
 2014-02-12T19:13:55  *** zul has joined #openstack-infra
-2014-02-12T19:13:59  <clarkb> foobio: also, can you tl;dr the git-review discussion from -dev early today? was that basically I need to review git-review changes?
-2014-02-12T19:14:50  <foobio> clarkb: eh, we moved ahead with the change to collect additional log details and the change to add a timeout fixture
-2014-02-12T19:14:58  <clarkb> ++
+2014-02-12T19:13:59  <superbee> foobio: also, can you tl;dr the git-review discussion from -dev early today? was that basically I need to review git-review changes?
+2014-02-12T19:14:50  <foobio> superbee: eh, we moved ahead with the change to collect additional log details and the change to add a timeout fixture
+2014-02-12T19:14:58  <superbee> ++
 2014-02-12T19:15:13  <foobio> i'm looking to see which ones have merged yet
 2014-02-12T19:15:57  <pleia2> dprince: huzzah! http://status.openstack.org/reviews/reviewday.json
 2014-02-12T19:15:59  <foobio> right, still trying to get the timeout change merged
 2014-02-12T19:16:19  <foobio> oh there's a new one... "java.lang.OutOfMemoryError: unable to create new native thread"
-2014-02-12T19:16:24  <foobio> clarkb: http://logs.openstack.org/23/71223/1/gate/gate-git-review-python33/fe77367/console.html
-2014-02-12T19:17:23  <clarkb> foobio: I think our test slaves are too small for many concurrent gerrits
-2014-02-12T19:17:29  <clarkb> :(
+2014-02-12T19:16:24  <foobio> superbee: http://logs.openstack.org/23/71223/1/gate/gate-git-review-python33/fe77367/console.html
+2014-02-12T19:17:23  <superbee> foobio: I think our test slaves are too small for many concurrent gerrits
+2014-02-12T19:17:29  <superbee> :(
 2014-02-12T19:17:39  <foobio> heh
 2014-02-12T19:18:06  <foobio> i suppose we could tune that downward some
 2014-02-12T19:18:19  <dprince> pleia2: ah so did the permission fix do the trick?
-2014-02-12T19:18:24  <clarkb> foobio: concurrency set to 2 maybe?
+2014-02-12T19:18:24  <superbee> foobio: concurrency set to 2 maybe?
 2014-02-12T19:18:26  *** lcostantino has quit IRC
-2014-02-12T19:18:31  <clarkb> should default to 4
+2014-02-12T19:18:31  <superbee> should default to 4
 2014-02-12T19:18:58  <dprince> pleia2: glad it is working now :)
 2014-02-12T19:19:14  <jog0> foobio: cool
-2014-02-12T19:19:15  <foobio> clarkb: perhaps. i want to get this change landed and then do some more rechecks of the loopback network change
+2014-02-12T19:19:15  <foobio> superbee: perhaps. i want to get this change landed and then do some more rechecks of the loopback network change
 2014-02-12T19:19:34  <foobio> jog0: image has been building for 6 minutes so far
 2014-02-12T19:19:35  <pleia2> dprince: yeah, permissions fix
 2014-02-12T19:19:48  <jog0> foobio: neato thanks, you don't have alerting for that?
-2014-02-12T19:19:52  <clarkb> foobio: ++
+2014-02-12T19:19:52  <superbee> foobio: ++
 2014-02-12T19:20:03  <foobio> jog0: alerting for what?
 2014-02-12T19:20:04  *** lcostantino has joined #openstack-infra
 2014-02-12T19:20:27  <dprince> pleia2: cool, I thought that looked suspicious. Thanks for looking into it all...
@@ -1568,10 +1568,10 @@
 2014-02-12T19:23:47  <sdague> especially when py26 is 40% slower than py27
 2014-02-12T19:23:52  <foobio> pafuent: we're in the process of bringing changes in which will automatically make more centos6 slaves when we need them rather than reusing the same ones over and over
 2014-02-12T19:24:09  <pafuent> foobio: Ahhh
-2014-02-12T19:24:18  <clarkb> sdague: is it that pronounced on average? I know it hurts the nuetron tests quite a bit
+2014-02-12T19:24:18  <superbee> sdague: is it that pronounced on average? I know it hurts the nuetron tests quite a bit
 2014-02-12T19:24:26  <boris-42_> sdague thanks I will
 2014-02-12T19:24:39  <pafuent> foobio: Thanks for the quick response.
-2014-02-12T19:24:51  <sdague> clarkb: that's been my experience looking at the unit tests
+2014-02-12T19:24:51  <sdague> superbee: that's been my experience looking at the unit tests
 2014-02-12T19:25:13  <sdague> gate-nova-python26 SUCCESS in 17m 11s
 2014-02-12T19:25:13  <sdague> gate-nova-python27 SUCCESS in 12m 19s
 2014-02-12T19:27:28  *** thomasem has joined #openstack-infra
@@ -1583,28 +1583,28 @@
 2014-02-12T19:30:39  *** VijayT has joined #openstack-infra
 2014-02-12T19:33:13  *** oanufriev has joined #openstack-infra
 2014-02-12T19:34:01  *** dims has joined #openstack-infra
-2014-02-12T19:35:06  <jeblair> clarkb, foobio: sorry, back now from appt
+2014-02-12T19:35:06  <jeblair> superbee, foobio: sorry, back now from appt
 2014-02-12T19:35:21  *** ociuhandu has quit IRC
 2014-02-12T19:35:53  <foobio> jeblair: in short, the logstash/elasticsearch upgrade is nearing completion, and we have a centos6 nodepool image in the process of building
-2014-02-12T19:36:46  <clarkb> jeblair: es cluster is recovering replica indexes
-2014-02-12T19:36:54  <clarkb> once that is done I will update and start the workers
-2014-02-12T19:37:15  <clarkb> recovery is going slower than I hoped :(
-2014-02-12T19:37:28  <jeblair> clarkb, foobio: great.  my eyes are dialated and i'm using a giant terminal right now to try to read this.
+2014-02-12T19:36:46  <superbee> jeblair: es cluster is recovering replica indexes
+2014-02-12T19:36:54  <superbee> once that is done I will update and start the workers
+2014-02-12T19:37:15  <superbee> recovery is going slower than I hoped :(
+2014-02-12T19:37:28  <jeblair> superbee, foobio: great.  my eyes are dialated and i'm using a giant terminal right now to try to read this.
 2014-02-12T19:38:29  <foobio> jeblair: you didn't spring for the bionic optical implants yet, i guess
-2014-02-12T19:38:52  * clarkb files that statement away in the "Evidence people from NC are really robots)
+2014-02-12T19:38:52  * superbee files that statement away in the "Evidence people from NC are really robots)
 2014-02-12T19:39:01  *** krtaylor has quit IRC
-2014-02-12T19:39:06  <clarkb> s/\)/"/ folder
+2014-02-12T19:39:06  <superbee> s/\)/"/ folder
 2014-02-12T19:39:14  <jeblair> foobio: i'm planning on 3d printing my next eyes.  you know they're doing that sort of thing at wake forest.
-2014-02-12T19:39:20  <jeblair> clarkb: which is in north carolina
-2014-02-12T19:39:25  <clarkb> more evidence!
+2014-02-12T19:39:20  <jeblair> superbee: which is in north carolina
+2014-02-12T19:39:25  <superbee> more evidence!
 2014-02-12T19:39:26  <foobio> craziness
 2014-02-12T19:40:24  *** _david_ has joined #openstack-infra
 2014-02-12T19:42:08  *** oanufriev has quit IRC
-2014-02-12T19:44:59  <clarkb> almost up to 190k in the gearman queue, which isn't terrible considering it was at 130k before we started
-2014-02-12T19:45:10  <clarkb> and fingers crossed we catch up relatively quickly
+2014-02-12T19:44:59  <superbee> almost up to 190k in the gearman queue, which isn't terrible considering it was at 130k before we started
+2014-02-12T19:45:10  <superbee> and fingers crossed we catch up relatively quickly
 2014-02-12T19:45:42  <foobio> that is one of the goals of this exercise after all
 2014-02-12T19:45:56  <foobio> and the backlog should do a good job of putting it through its paces
-2014-02-12T19:46:10  <clarkb> indeed
+2014-02-12T19:46:10  <superbee> indeed
 2014-02-12T19:47:39  *** ociuhandu has joined #openstack-infra
 2014-02-12T19:48:32  *** Ajaeger1 has joined #openstack-infra
 2014-02-12T19:48:36  <SergeyLukjanov> my highlighter bumps me for the work craz*
@@ -1631,13 +1631,13 @@
 2014-02-12T20:15:17  *** hashar has joined #openstack-infra
 2014-02-12T20:15:27  <SergeyLukjanov> Ajaeger1, about 70594 - technically, it looks correct, but I'd like to see +1 from Anne
 2014-02-12T20:15:46  <Ajaeger1> annegentle: could you give a +1 for 70594 again, please?
-2014-02-12T20:15:49  <_david_> jeblair, foobio, clarkb: As of upcoming Gerrit 2.9, WIP plugin can be used without patching Gerrit core.
+2014-02-12T20:15:49  <_david_> jeblair, foobio, superbee: As of upcoming Gerrit 2.9, WIP plugin can be used without patching Gerrit core.
 2014-02-12T20:15:56  <SergeyLukjanov> Ajaeger1, because I don't know how docs building, so, it'll be better to have more eyes on it ;)
 2014-02-12T20:16:59  <Ajaeger1> SergeyLukjanov: sure ;) She reviewed patch 9 and spotted a naming inconsistency, so let's see whether annegentle is happy now
 2014-02-12T20:18:05  <Ajaeger1> SergeyLukjanov: I should know how the docs are building since I reworked it over the last 6 months, so if you have questions, just ask  ;)
 2014-02-12T20:18:45  <_david_> the only prerequisite is: to disable DRAFT workflow, what we want anyway. Then DRAFT enum state is unused. Tha way we can "overload" gerrit's DRARFT workflow owth WIP workflow (ab-)using free DRAFT enum state.
 2014-02-12T20:18:46  <SergeyLukjanov> Ajaeger1, I think I'll need your help if savanna will graduate from incubation :)
-2014-02-12T20:19:31  <_david_> jeblair, clarkb, foobio: https://gerrit-review.googlesource.com/54583
+2014-02-12T20:19:31  <_david_> jeblair, superbee, foobio: https://gerrit-review.googlesource.com/54583
 2014-02-12T20:19:54  <openstackgerrit> A change was merged to openstack-infra/config: Use openstack-doc-tools for openstack-operations-guide-{lang}  https://review.openstack.org/71056
 2014-02-12T20:20:18  <foobio> _david_: neat!
 2014-02-12T20:21:15  <foobio> zaro: i've checked and the upstream/stable-2.8 branch is getting updated, so i've synchronized the openstack/2.8 branch to it
@@ -1689,7 +1689,7 @@
 2014-02-12T20:44:35  <boris-42_> sdague thank you
 2014-02-12T20:44:55  <foobio> hashar: or maybe it was the other way around. i could be misremembering
 2014-02-12T20:44:58  <hashar> foobio: if you only care about a specific ref, you could use git archive , might speed things up
-2014-02-12T20:45:15  <foobio> jeblair: clarkb: were we surmising git:// might work better on centos6's old git client rev?
+2014-02-12T20:45:15  <foobio> jeblair: superbee: were we surmising git:// might work better on centos6's old git client rev?
 2014-02-12T20:45:21  *** smarcet has joined #openstack-infra
 2014-02-12T20:45:39  <foobio> hashar: in this case we're caching all our projects onto template server images
 2014-02-12T20:45:58  <foobio> hashar: and we want whole repositories for each
@@ -1792,11 +1792,11 @@
 2014-02-12T21:09:26  <jaypipes> foobio: right, understood. I just wanted to double-check that there wasn't something really nasty I would run into :)
 2014-02-12T21:09:43  <foobio> jaypipes: runaway jobs which use all the ram on the machine ;)
 2014-02-12T21:10:12  <SergeyLukjanov> dhellmann, you've added doc-publisher-site to oslo.rootwrap, not to the oslo.test ;)
-2014-02-12T21:10:16  <clarkb> back from lunch catching up on sb
+2014-02-12T21:10:16  <superbee> back from lunch catching up on sb
 2014-02-12T21:10:25  <dhellmann> SergeyLukjanov: bah
 2014-02-12T21:10:51  *** oubiwann_ has quit IRC
 2014-02-12T21:11:27  <openstackgerrit> Doug Hellmann proposed a change to openstack-infra/config: Import oslo.test repository  https://review.openstack.org/73036
-2014-02-12T21:13:02  <clarkb> twine++ is a great tool
+2014-02-12T21:13:02  <superbee> twine++ is a great tool
 2014-02-12T21:13:42  *** pafuent has left #openstack-infra
 2014-02-12T21:13:51  *** derekh has joined #openstack-infra
 2014-02-12T21:14:04  *** tomhe has joined #openstack-infra
@@ -1855,24 +1855,24 @@
 2014-02-12T21:27:44  <foobio> jeblair: working on the git change now. image rebuild is going, in the middle of cloning repos right now
 2014-02-12T21:28:06  <SergeyLukjanov> dhellmann, oops ;)
 2014-02-12T21:28:23  <jeblair> foobio: cool, i'll propose the priority change
-2014-02-12T21:28:30  <clarkb> foobio: that is one of the last things it does iirc
-2014-02-12T21:28:46  <jeblair> clarkb: but it got stuck there last run
-2014-02-12T21:28:53  <clarkb> ah :/
+2014-02-12T21:28:30  <superbee> foobio: that is one of the last things it does iirc
+2014-02-12T21:28:46  <jeblair> superbee: but it got stuck there last run
+2014-02-12T21:28:53  <superbee> ah :/
 2014-02-12T21:29:25  *** markmc has quit IRC
-2014-02-12T21:29:29  <jeblair> clarkb: what's the e-s status?  (gearman queue is increasing)
+2014-02-12T21:29:29  <jeblair> superbee: what's the e-s status?  (gearman queue is increasing)
 2014-02-12T21:29:49  *** oubiwan__ has joined #openstack-infra
-2014-02-12T21:30:22  <clarkb> jeblair: recovering slowly (more slowly than I had hoped, last time was much quicker, could be due to index sizes), we have recovered 99 shards out of 140
-2014-02-12T21:30:37  <clarkb> 12 are in flight concurrently with 29 idle
-2014-02-12T21:30:53  <clarkb> jeblair: I am watching the gearman queue and memory use there, plan to kill puppet daemon to free up memory if necessary
+2014-02-12T21:30:22  <superbee> jeblair: recovering slowly (more slowly than I had hoped, last time was much quicker, could be due to index sizes), we have recovered 99 shards out of 140
+2014-02-12T21:30:37  <superbee> 12 are in flight concurrently with 29 idle
+2014-02-12T21:30:53  <superbee> jeblair: I am watching the gearman queue and memory use there, plan to kill puppet daemon to free up memory if necessary
 2014-02-12T21:31:50  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Change gate queue to normal precedence  https://review.openstack.org/73071
 2014-02-12T21:31:54  *** oubiwann_ has quit IRC
 2014-02-12T21:32:09  <jeblair> ack
 2014-02-12T21:32:17  <SergeyLukjanov> dhellmann, it works ;)
-2014-02-12T21:32:42  <clarkb> now up to 100 active shards :) so it is moving
-2014-02-12T21:32:45  <jeblair> foobio, clarkb: https://review.openstack.org/73071 should reduce the py26 problem in the gate
+2014-02-12T21:32:42  <superbee> now up to 100 active shards :) so it is moving
+2014-02-12T21:32:45  <jeblair> foobio, superbee: https://review.openstack.org/73071 should reduce the py26 problem in the gate
 2014-02-12T21:32:46  <dhellmann> SergeyLukjanov: woo!
 2014-02-12T21:33:12  <SergeyLukjanov> jeblair, agreed
-2014-02-12T21:33:19  <clarkb> jeblair: has my +2
+2014-02-12T21:33:19  <superbee> jeblair: has my +2
 2014-02-12T21:33:46  *** lcostantino has quit IRC
 2014-02-12T21:33:46  <SergeyLukjanov> jeblair, fwiw my +2 too :)
 2014-02-12T21:34:54  <jeblair> well, it has my +A :)
@@ -1916,9 +1916,9 @@
 2014-02-12T21:44:28  <jeblair> foobio: it is safe to remove workspace-cache from the nodepool scripts now
 2014-02-12T21:44:41  <foobio> jeblair: i'll add that as a second change
 2014-02-12T21:44:43  <foobio> coming now
-2014-02-12T21:44:50  <clarkb> jeblair: but maybe not for the tripleo scripts
-2014-02-12T21:44:55  <clarkb> not sure what they are doing
-2014-02-12T21:45:21  <jeblair> clarkb: we're not touching the tripleo scripts
+2014-02-12T21:44:50  <superbee> jeblair: but maybe not for the tripleo scripts
+2014-02-12T21:44:55  <superbee> not sure what they are doing
+2014-02-12T21:45:21  <jeblair> superbee: we're not touching the tripleo scripts
 2014-02-12T21:45:51  <openstackgerrit> Morgan Fainberg proposed a change to openstack-infra/config: Add the kite (KDS) project and kiteclient project to gerrit/jenkins  https://review.openstack.org/73074
 2014-02-12T21:46:13  *** dkehn__ has joined #openstack-infra
 2014-02-12T21:46:52  *** andre__ has joined #openstack-infra
@@ -1926,21 +1926,21 @@
 2014-02-12T21:48:11  <jaypipes> *sigh* I give up trying to configure a jenkins slave manually... :( guess I'll install nodepool and have it manage this stuff.
 2014-02-12T21:48:34  *** dkehn__ has joined #openstack-infra
 2014-02-12T21:48:36  *** dkehn has quit IRC
-2014-02-12T21:48:48  <clarkb> jaypipes: running the nodepool script by hand didn't do it for you?
-2014-02-12T21:49:10  <jaypipes> clarkb: ? sorry, which script?
+2014-02-12T21:48:48  <superbee> jaypipes: running the nodepool script by hand didn't do it for you?
+2014-02-12T21:49:10  <jaypipes> superbee: ? sorry, which script?
 2014-02-12T21:49:21  *** dkehn_ has quit IRC
 2014-02-12T21:49:36  <jeblair> well, there's install_jenkins_slave.sh
-2014-02-12T21:50:23  <clarkb> either that one ^ which gives you something useable but missing things like ntp management and so on, or the scripts in modules/openstack_project/files/nodepool/scripts
+2014-02-12T21:50:23  <superbee> either that one ^ which gives you something useable but missing things like ntp management and so on, or the scripts in modules/openstack_project/files/nodepool/scripts
 2014-02-12T21:50:40  *** dkehn has joined #openstack-infra
 2014-02-12T21:52:09  *** jhesketh_ has joined #openstack-infra
 2014-02-12T21:52:12  *** jhesketh__ has joined #openstack-infra
-2014-02-12T21:52:15  <jaypipes> jeblair, clarkb: no, that didn't do it. I had copied the relevant pieces of that script to here: https://github.com/jaypipes/os-ext-testing/blob/master/puppet/install_slave.sh
+2014-02-12T21:52:15  <jaypipes> jeblair, superbee: no, that didn't do it. I had copied the relevant pieces of that script to here: https://github.com/jaypipes/os-ext-testing/blob/master/puppet/install_slave.sh
 2014-02-12T21:52:35  <jhesketh__> Morning
 2014-02-12T21:52:59  <jeblair> jhesketh__: good morning; i'm reading your uploader change now.  or trying to, since my eyes are dialated after visiting the optometrist.
 2014-02-12T21:53:19  <jhesketh__> ah cool, cheers
-2014-02-12T21:55:36  <jaypipes> clarkb: and then I just manually added a new node in Jenkins web UI, selected the "Launch slave agents on Unix via SSH" option, entered my slave LXC container's IP address and added a new credentials with the private SSH key file from the slave.
-2014-02-12T21:57:01  <jaypipes> clarkb: but unfortunately, the master fails to communicate with the slave node, with this in the logs: http://paste.openstack.org/show/64787/
-2014-02-12T21:57:26  <jaypipes> clarkb: which I'm confused about since puppet apply on the slave node clearly says that the jenkins key was added to authorized_keys...
+2014-02-12T21:55:36  <jaypipes> superbee: and then I just manually added a new node in Jenkins web UI, selected the "Launch slave agents on Unix via SSH" option, entered my slave LXC container's IP address and added a new credentials with the private SSH key file from the slave.
+2014-02-12T21:57:01  <jaypipes> superbee: but unfortunately, the master fails to communicate with the slave node, with this in the logs: http://paste.openstack.org/show/64787/
+2014-02-12T21:57:26  <jaypipes> superbee: which I'm confused about since puppet apply on the slave node clearly says that the jenkins key was added to authorized_keys...
 2014-02-12T21:57:42  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Stop separately caching repos for devstack images  https://review.openstack.org/73076
 2014-02-12T22:00:00  <foobio> oh, that ^ was too aggressive
 2014-02-12T22:00:03  <foobio> fixing
@@ -1969,9 +1969,9 @@
 2014-02-12T22:07:17  *** morganfainberg has joined #openstack-infra
 2014-02-12T22:07:34  *** gokrokve has quit IRC
 2014-02-12T22:07:53  *** ryanpetrello has joined #openstack-infra
-2014-02-12T22:07:55  <jeblair> jhesketh__, clarkb: do you think that the swift uploader should gzip files, or should we instead try to get all of the jobs gzipping before we invoke it?
+2014-02-12T22:07:55  <jeblair> jhesketh__, superbee: do you think that the swift uploader should gzip files, or should we instead try to get all of the jobs gzipping before we invoke it?
 2014-02-12T22:08:01  *** gokrokve has joined #openstack-infra
-2014-02-12T22:08:19  <clarkb> jeblair: imo, gzip by job. uploader should just move bits not transform them
+2014-02-12T22:08:19  <superbee> jeblair: imo, gzip by job. uploader should just move bits not transform them
 2014-02-12T22:08:19  <jeblair> (i kind of think the latter, so that it doesn't have to worry too much about content specifics, but i'm also kind of on the fence)
 2014-02-12T22:08:28  *** gokrokve_ has joined #openstack-infra
 2014-02-12T22:08:33  <jhesketh__> I agree
@@ -2013,7 +2013,7 @@
 2014-02-12T22:42:19  <jeblair> oh, actually i see that the GATE_WHATEVER_TEMPEST var is not set so it shouldn't run it
 2014-02-12T22:43:03  <jeblair> chadlung: lgtm
 2014-02-12T22:43:33  *** shardy is now known as shardy_afk
-2014-02-12T22:44:43  <clarkb> up to 111 shards recovered, 12 in process, and 17 idle
+2014-02-12T22:44:43  <superbee> up to 111 shards recovered, 12 in process, and 17 idle
 2014-02-12T22:44:56  <chadlung> jeblair: so those two files in the GIST, and then the modifications to the Barbican repo to add functionaltests like solum
 2014-02-12T22:44:59  *** dcramer_ has quit IRC
 2014-02-12T22:45:29  <jeblair> chadlung: yep.  then remove the non-voting bit once it's working.
@@ -2037,19 +2037,19 @@
 2014-02-12T22:56:11  *** VijayT has quit IRC
 2014-02-12T22:57:36  *** dims has quit IRC
 2014-02-12T22:59:41  *** mfer has quit IRC
-2014-02-12T23:00:44  <clarkb> hrm, I am starting to get a bit worried that the replica shard recovery may be too slow
-2014-02-12T23:01:12  <clarkb> jeblair: foobio: what do you think about turning on workers now? if leaves us open to data loss today, but we are going to do that anyways if logstash.o.o OOMs
-2014-02-12T23:02:14  <foobio> clarkb: it's almost done though, right?
-2014-02-12T23:02:51  <jeblair> clarkb: logstash.o.o still has 200k of ram and has barely dipped into swap
+2014-02-12T23:00:44  <superbee> hrm, I am starting to get a bit worried that the replica shard recovery may be too slow
+2014-02-12T23:01:12  <superbee> jeblair: foobio: what do you think about turning on workers now? if leaves us open to data loss today, but we are going to do that anyways if logstash.o.o OOMs
+2014-02-12T23:02:14  <foobio> superbee: it's almost done though, right?
+2014-02-12T23:02:51  <jeblair> superbee: logstash.o.o still has 200k of ram and has barely dipped into swap
 2014-02-12T23:02:54  *** ryanpetrello has joined #openstack-infra
 2014-02-12T23:03:07  <jeblair> 200m even
-2014-02-12T23:03:28  <clarkb> foobio: ish, 112 out of 140 done
-2014-02-12T23:03:48  <clarkb> these recent indexes are fairly large so it is taking time
+2014-02-12T23:03:28  <superbee> foobio: ish, 112 out of 140 done
+2014-02-12T23:03:48  <superbee> these recent indexes are fairly large so it is taking time
 2014-02-12T23:04:20  <foobio> oh, it's sharded/processed chronologically?
-2014-02-12T23:05:12  <clarkb> sort of, it does chrono best it can but sometimes skips ahead to meet replica constraints
-2014-02-12T23:05:31  <clarkb> right now it will only recover two shards per node at a time and not all shards can go on all nodes
+2014-02-12T23:05:12  <superbee> sort of, it does chrono best it can but sometimes skips ahead to meet replica constraints
+2014-02-12T23:05:31  <superbee> right now it will only recover two shards per node at a time and not all shards can go on all nodes
 2014-02-12T23:06:39  *** rwsu has quit IRC
-2014-02-12T23:06:42  <clarkb> well I will let it be for now, keeping a watch on it though
+2014-02-12T23:06:42  <superbee> well I will let it be for now, keeping a watch on it though
 2014-02-12T23:08:17  *** rwsu has joined #openstack-infra
 2014-02-12T23:08:37  <foobio> btw, we've had a ready bare-centos6 node in rax-iad since shortly after i headed into the kitchen
 2014-02-12T23:08:46  <jeblair> foobio: oh yay!
@@ -2057,18 +2057,18 @@
 2014-02-12T23:08:59  * foobio does a quick jjb config patch to make these optional
 2014-02-12T23:09:17  <jeblair> i will exercise it manually a bit to sanity check it while you do that foobio
 2014-02-12T23:09:29  <foobio> jeblair: all the better
-2014-02-12T23:10:13  <clarkb> woot
+2014-02-12T23:10:13  <superbee> woot
 2014-02-12T23:10:44  *** dims has joined #openstack-infra
 2014-02-12T23:10:53  <zaro> foobio: can you please help me with the submodules?
 2014-02-12T23:11:25  <zaro> foobio: i can't get it to work.  i changed url references to "url = https://gerrit.googlesource.com" in .gitmodule
 2014-02-12T23:11:41  *** yamahata has quit IRC
-2014-02-12T23:11:44  <jesusaurus> clarkb: if you want to bump the node_concurrent_recoveries live: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/cluster-update-settings.html
-2014-02-12T23:11:51  <clarkb> jesusaurus: thanks
+2014-02-12T23:11:44  <jesusaurus> superbee: if you want to bump the node_concurrent_recoveries live: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/cluster-update-settings.html
+2014-02-12T23:11:51  <superbee> jesusaurus: thanks
 2014-02-12T23:11:58  <zaro> foobio: when i go checkout i get "error: pathspec 'stable-2.8' did not match any file(s) known to git."
 2014-02-12T23:13:07  <foobio> zaro: the branches in review.o.o are "upstream/stable-2.8" and "openstack/2.8"
 2014-02-12T23:13:44  <foobio> ooh, i wonder whether it's expecting you to have a local branch named "stable-2.8"?
 2014-02-12T23:13:59  * foobio doesn't really know much about how git submodules work
-2014-02-12T23:14:09  <foobio> clarkb: ^ ideas there?
+2014-02-12T23:14:09  <foobio> superbee: ^ ideas there?
 2014-02-12T23:14:28  <jeblair>  Discussion of OpenStack Project Infrastructure | Docs http://ci.openstack.
 2014-02-12T23:14:28  <jeblair> 23:15 < foobio> zaro: the branches in review.o.o are "upstream/stable-2.8"
 2014-02-12T23:14:28  <jeblair>                and "openstack/2.8"
@@ -2076,22 +2076,22 @@
 2014-02-12T23:14:42  <jeblair> 2014-02-12 23:13:18.108 | ls: cannot access /var/log/secure-*: No such file or directory
 2014-02-12T23:15:08  <zaro> foobio: all core plugins have a 'stable-2.8' branch on the gerrit repo
 2014-02-12T23:15:09  *** yamahata has joined #openstack-infra
-2014-02-12T23:15:24  <clarkb> foobio: no clue :/
+2014-02-12T23:15:24  <superbee> foobio: no clue :/
 2014-02-12T23:16:20  *** flaper87 is now known as flaper87|afk
 2014-02-12T23:17:24  <jeblair> oh, that may be okay
 2014-02-12T23:17:41  <jeblair> yeah, i think it is
 2014-02-12T23:17:58  <jeblair> it's just checking for old log files for sudo, and of course there aren't any
 2014-02-12T23:18:13  <jeblair> foobio: https://jenkins01.openstack.org/job/dev-nova-python26/1/console
-2014-02-12T23:19:02  <jeblair> clarkb: http://www.elasticsearch.org/blog/1-0-0-released/
+2014-02-12T23:19:02  <jeblair> superbee: http://www.elasticsearch.org/blog/1-0-0-released/
 2014-02-12T23:19:26  *** krtaylor has quit IRC
-2014-02-12T23:19:46  <clarkb> jeblair: ya :( oh well that is a breaking change so will need more time to upgrade to
-2014-02-12T23:19:57  <clarkb> 0.90.9 is what latest logstash wants and is a non breaking change
-2014-02-12T23:20:25  <zaro> foobio, clarkb : i have no clue either. so my workaround.. clone each core plugin into the plugins plugins folder to build gerrit.  good thing there are only 4 core plugins right now.
+2014-02-12T23:19:46  <superbee> jeblair: ya :( oh well that is a breaking change so will need more time to upgrade to
+2014-02-12T23:19:57  <superbee> 0.90.9 is what latest logstash wants and is a non breaking change
+2014-02-12T23:20:25  <zaro> foobio, superbee : i have no clue either. so my workaround.. clone each core plugin into the plugins plugins folder to build gerrit.  good thing there are only 4 core plugins right now.
 2014-02-12T23:21:19  <foobio> zaro: oh, the few times i've used submodules there's a separate step you need for them to get cloned
 2014-02-12T23:21:39  *** dstanek has quit IRC
 2014-02-12T23:21:40  <foobio> i can reread the submodule documentation in a little bit once i'm freed up
-2014-02-12T23:21:42  <clarkb> you can do it with the right flag to submodule init iirc
-2014-02-12T23:22:00  <clarkb> or with a flag to clone, but by default it is multistep
+2014-02-12T23:21:42  <superbee> you can do it with the right flag to submodule init iirc
+2014-02-12T23:22:00  <superbee> or with a flag to clone, but by default it is multistep
 2014-02-12T23:22:02  <zaro> foobio: i followed these steps.. http://stackoverflow.com/a/5828396/3294191
 2014-02-12T23:25:46  *** markmcclain has quit IRC
 2014-02-12T23:27:19  *** mriedem has joined #openstack-infra
@@ -2106,8 +2106,8 @@
 2014-02-12T23:32:14  <foobio> i'll do the quick-n-dirty cutover patch and we can revert and try something more subtle if it ends up being an issue
 2014-02-12T23:32:25  <foobio> both patches coming now
 2014-02-12T23:32:29  <jeblair> foobio: sounds good, thx
-2014-02-12T23:34:15  <clarkb> I bumped the number of concurrent recoveries to 5 based on fuzzy math fron jesusaurus :)
-2014-02-12T23:34:20  <clarkb> that is 5 per node
+2014-02-12T23:34:15  <superbee> I bumped the number of concurrent recoveries to 5 based on fuzzy math fron jesusaurus :)
+2014-02-12T23:34:20  <superbee> that is 5 per node
 2014-02-12T23:38:24  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Add more bare-centos6 nodes  https://review.openstack.org/73102
 2014-02-12T23:41:46  *** sarob has joined #openstack-infra
 2014-02-12T23:41:48  *** yassine has quit IRC

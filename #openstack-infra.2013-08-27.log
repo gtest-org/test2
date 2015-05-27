@@ -1,166 +1,166 @@
 2013-08-27T00:00:33  *** dims has quit IRC
 2013-08-27T00:01:11  *** dims has joined #openstack-infra
-2013-08-27T00:04:22  <clarkb> jeblair: I am going to disable puppet on old git.o.o, remove localhost from the haproxy config and reload haproxy. That way we don't possibly end up with weirdness once gerrit replication stops
+2013-08-27T00:04:22  <superbee> jeblair: I am going to disable puppet on old git.o.o, remove localhost from the haproxy config and reload haproxy. That way we don't possibly end up with weirdness once gerrit replication stops
 2013-08-27T00:05:55  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Fix graceful exit  https://review.openstack.org/43803
 2013-08-27T00:06:01  *** mikal has quit IRC
 2013-08-27T00:06:07  *** mikal has joined #openstack-infra
-2013-08-27T00:06:19  <jeblair> clarkb: sounds good.
-2013-08-27T00:06:48  <clarkb> and all done
-2013-08-27T00:06:58  <jeblair> clarkb: reviewing https://review.openstack.org/#/c/43743/ now
-2013-08-27T00:07:11  <clarkb> the old DNS TTL was for one hour and I change it about an hour ago. I think I am ready to move onto switching over when you are
-2013-08-27T00:07:45  <jeblair> clarkb: ok, aiui the process should be to change dns, wait a bit, then kill the old server, yeah?
-2013-08-27T00:08:10  <jeblair> clarkb: there shouldn't really be a downtime since the two servers behave the same and can remain up
-2013-08-27T00:08:20  <jeblair> clarkb: the new one will just take over from the old one as dns propogates
-2013-08-27T00:08:47  <clarkb> change dns, merge my puppet change, make sure puppet runs everywhere, restart gerrit, kill old server
-2013-08-27T00:09:34  <jeblair> clarkb: *nod(
+2013-08-27T00:06:19  <jeblair> superbee: sounds good.
+2013-08-27T00:06:48  <superbee> and all done
+2013-08-27T00:06:58  <jeblair> superbee: reviewing https://review.openstack.org/#/c/43743/ now
+2013-08-27T00:07:11  <superbee> the old DNS TTL was for one hour and I change it about an hour ago. I think I am ready to move onto switching over when you are
+2013-08-27T00:07:45  <jeblair> superbee: ok, aiui the process should be to change dns, wait a bit, then kill the old server, yeah?
+2013-08-27T00:08:10  <jeblair> superbee: there shouldn't really be a downtime since the two servers behave the same and can remain up
+2013-08-27T00:08:20  <jeblair> superbee: the new one will just take over from the old one as dns propogates
+2013-08-27T00:08:47  <superbee> change dns, merge my puppet change, make sure puppet runs everywhere, restart gerrit, kill old server
+2013-08-27T00:09:34  <jeblair> superbee: *nod(
 2013-08-27T00:10:15  *** michchap has joined #openstack-infra
-2013-08-27T00:11:20  <jeblair> clarkb: ready for me to merge?
-2013-08-27T00:11:52  <clarkb> jeblair: sure, do you want me to update DNS now?
-2013-08-27T00:11:58  <jeblair> clarkb: sounds good
+2013-08-27T00:11:20  <jeblair> superbee: ready for me to merge?
+2013-08-27T00:11:52  <superbee> jeblair: sure, do you want me to update DNS now?
+2013-08-27T00:11:58  <jeblair> superbee: sounds good
 2013-08-27T00:13:59  <openstackgerrit> A change was merged to openstack-infra/config: Split git.o.o haproxy out of cgit module.  https://review.openstack.org/43743
-2013-08-27T00:14:18  <clarkb> DNS records modified
+2013-08-27T00:14:18  <superbee> DNS records modified
 2013-08-27T00:14:44  *** UtahDave has quit IRC
-2013-08-27T00:15:07  <clarkb> er only the A and AAAA records are done. Doing reverse PTRs now
-2013-08-27T00:15:32  <jeblair> clarkb: oh, in the future you can go ahead and do those when creating the server
+2013-08-27T00:15:07  <superbee> er only the A and AAAA records are done. Doing reverse PTRs now
+2013-08-27T00:15:32  <jeblair> superbee: oh, in the future you can go ahead and do those when creating the server
 2013-08-27T00:20:04  *** weshay has joined #openstack-infra
-2013-08-27T00:20:56  <clarkb> jeblair: which env do I need to have sourced to do reverse dns records?
-2013-08-27T00:21:22  <jeblair> clarkb: do you have the output from when you created the server?
-2013-08-27T00:21:27  <clarkb> running dns.py git.openstack.org complains about OS_USERNAME and running the commands that launch node spat out gives me unauthorized errors
-2013-08-27T00:21:29  <clarkb> jeblair: I do
+2013-08-27T00:20:56  <superbee> jeblair: which env do I need to have sourced to do reverse dns records?
+2013-08-27T00:21:22  <jeblair> superbee: do you have the output from when you created the server?
+2013-08-27T00:21:27  <superbee> running dns.py git.openstack.org complains about OS_USERNAME and running the commands that launch node spat out gives me unauthorized errors
+2013-08-27T00:21:29  <superbee> jeblair: I do
 2013-08-27T00:21:55  *** michchap has quit IRC
-2013-08-27T00:21:56  <jeblair> clarkb: you'll want:
+2013-08-27T00:21:56  <jeblair> superbee: you'll want:
 2013-08-27T00:21:57  <jeblair> . ~root/rackdns-venv/bin/activate
 2013-08-27T00:22:02  <jeblair> and...
 2013-08-27T00:22:12  <jeblair> . ~root/ci-launch/openstackci-rs-nova.sh
 2013-08-27T00:22:30  *** michchap has joined #openstack-infra
-2013-08-27T00:22:31  <clarkb> that is what I have
-2013-08-27T00:22:41  <clarkb> or I think that is what I have. I will start with a claen env and do that
-2013-08-27T00:22:43  <jeblair> clarkb: you may want to start with a new shell then
-2013-08-27T00:23:47  <clarkb> that seems to have worked. new shell was needed
+2013-08-27T00:22:31  <superbee> that is what I have
+2013-08-27T00:22:41  <superbee> or I think that is what I have. I will start with a claen env and do that
+2013-08-27T00:22:43  <jeblair> superbee: you may want to start with a new shell then
+2013-08-27T00:23:47  <superbee> that seems to have worked. new shell was needed
 2013-08-27T00:24:25  *** dolphm has joined #openstack-infra
 2013-08-27T00:24:39  *** sarob_ has joined #openstack-infra
-2013-08-27T00:24:44  <clarkb> according to haproxy.log on the new server we have connections going through it
-2013-08-27T00:25:27  <jeblair> clarkb: new is 192.237.223.224 ?
-2013-08-27T00:25:33  <clarkb> jeblair: yes
-2013-08-27T00:25:49  <clarkb> old is 166.78.182.231
+2013-08-27T00:24:44  <superbee> according to haproxy.log on the new server we have connections going through it
+2013-08-27T00:25:27  <jeblair> superbee: new is 192.237.223.224 ?
+2013-08-27T00:25:33  <superbee> jeblair: yes
+2013-08-27T00:25:49  <superbee> old is 166.78.182.231
 2013-08-27T00:26:38  <jeblair> restarted snmpd
-2013-08-27T00:27:04  <clarkb> I am going to make sure that puppet is running everywhere and picking up the change
+2013-08-27T00:27:04  <superbee> I am going to make sure that puppet is running everywhere and picking up the change
 2013-08-27T00:28:13  *** sarob has quit IRC
 2013-08-27T00:29:02  *** sarob_ has quit IRC
-2013-08-27T00:30:05  <clarkb> git nodes look good and review.o.o's replication config is up to date
+2013-08-27T00:30:05  <superbee> git nodes look good and review.o.o's replication config is up to date
 2013-08-27T00:30:14  <pleia2> \o/
-2013-08-27T00:30:20  <clarkb> jeblair: should we restart gerrit now?
-2013-08-27T00:31:13  <jeblair> clarkb: yep
-2013-08-27T00:31:18  <clarkb> doing that now
+2013-08-27T00:30:20  <superbee> jeblair: should we restart gerrit now?
+2013-08-27T00:31:13  <jeblair> superbee: yep
+2013-08-27T00:31:18  <superbee> doing that now
 2013-08-27T00:32:11  <harlowja> oh no 503
 2013-08-27T00:32:13  *** markmcclain has joined #openstack-infra
 2013-08-27T00:32:14  <harlowja> oh, nm,
 2013-08-27T00:32:34  <jeblair> harlowja: ;|
-2013-08-27T00:32:45  <clarkb> jeblair: gerrit should be back
+2013-08-27T00:32:45  <superbee> jeblair: gerrit should be back
 2013-08-27T00:32:46  <morganfainberg> harlowja: restarting gerrit (in my experience) tends to do that.
 2013-08-27T00:32:49  <harlowja> ;)
 2013-08-27T00:33:01  *** dina_belova has joined #openstack-infra
-2013-08-27T00:33:57  <jeblair> clarkb: quite a lot of tests have started since the ttl expired and none have blown up
-2013-08-27T00:34:16  <clarkb> jeblair: cool
-2013-08-27T00:34:26  <clarkb> jeblair: I don't see any unexpected errors in the gerrit error log
-2013-08-27T00:34:43  <clarkb> jeblair: it is complaining about not being able to replicate All-Projects and API-Projects to gitXX
-2013-08-27T00:35:03  <jeblair> clarkb: yep; someday we should do something about that.  :)
-2013-08-27T00:35:12  <jeblair> clarkb: but it's a perfectly normal error for now.
-2013-08-27T00:35:46  <clarkb> jeblair: I started a tail on the haproxy log on old git.o.o and haven't seen any new connections for over 10 minutes
+2013-08-27T00:33:57  <jeblair> superbee: quite a lot of tests have started since the ttl expired and none have blown up
+2013-08-27T00:34:16  <superbee> jeblair: cool
+2013-08-27T00:34:26  <superbee> jeblair: I don't see any unexpected errors in the gerrit error log
+2013-08-27T00:34:43  <superbee> jeblair: it is complaining about not being able to replicate All-Projects and API-Projects to gitXX
+2013-08-27T00:35:03  <jeblair> superbee: yep; someday we should do something about that.  :)
+2013-08-27T00:35:12  <jeblair> superbee: but it's a perfectly normal error for now.
+2013-08-27T00:35:46  <superbee> jeblair: I started a tail on the haproxy log on old git.o.o and haven't seen any new connections for over 10 minutes
 2013-08-27T00:36:03  <pleia2> thinking tomorrow I'll take a little time to update https://wiki.openstack.org/wiki/Gerrit_Workflow & https://wiki.openstack.org/wiki/GerritJenkinsGithub (maybe rename+redirect too)
-2013-08-27T00:36:04  <clarkb> jeblair: I am going to stop haproxy there and if we continue to see no breakage we can delete the server
-2013-08-27T00:36:11  <jeblair> clarkb: sounds good
+2013-08-27T00:36:04  <superbee> jeblair: I am going to stop haproxy there and if we continue to see no breakage we can delete the server
+2013-08-27T00:36:11  <jeblair> superbee: sounds good
 2013-08-27T00:36:22  <pleia2> to point to git.o.o and mention it instead of github for things
-2013-08-27T00:36:29  <clarkb> haproxy is stopped. keep your eyes open
+2013-08-27T00:36:29  <superbee> haproxy is stopped. keep your eyes open
 2013-08-27T00:37:18  <jeblair> pleia2: yeah, i've been thinking that we should split up the gerritjenkinsgithub article into a series of 'reference guides' targeted to specific users (ptls, core, devs, release managers)
 2013-08-27T00:37:26  *** dina_belova has quit IRC
 2013-08-27T00:37:27  *** portante|afk is now known as portante
 2013-08-27T00:37:44  <pleia2> jeblair: that's a good idea, it has gotten a bit out of hand length-wise
 2013-08-27T00:37:45  <jeblair> pleia2: that may be more than what you're thinking of doing; just throwing that out there.
-2013-08-27T00:38:21  <jeblair> clarkb: i am curious about some changes at the bottom of the gate queue
-2013-08-27T00:38:44  <clarkb> jeblair: because they have passed but are still in the pipeline?
+2013-08-27T00:38:21  <jeblair> superbee: i am curious about some changes at the bottom of the gate queue
+2013-08-27T00:38:44  <superbee> jeblair: because they have passed but are still in the pipeline?
 2013-08-27T00:38:53  <jeblair> yep
 2013-08-27T00:38:59  <anteaya> pleia2: I can help you with that if you want
-2013-08-27T00:39:03  <jeblair> clarkb: and the nova change has failed and is still there
+2013-08-27T00:39:03  <jeblair> superbee: and the nova change has failed and is still there
 2013-08-27T00:39:18  <anteaya> new contributors get rather lost
-2013-08-27T00:39:23  <clarkb> perhaps my gerrit restart caught them at the wrong time?
-2013-08-27T00:39:48  <jeblair> clarkb: i'm starting to think so
+2013-08-27T00:39:23  <superbee> perhaps my gerrit restart caught them at the wrong time?
+2013-08-27T00:39:48  <jeblair> superbee: i'm starting to think so
 2013-08-27T00:39:59  <pleia2> anteaya: thanks, I'm going out for some fresh air now, but tomorrow I'll get to work on it and let you know :)
 2013-08-27T00:40:21  <anteaya> pleia2: yeah, I am close to closing out too, just watching the git change over unfold
 2013-08-27T00:40:27  <anteaya> tomorrow is good for me
 2013-08-27T00:41:47  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Remove testr-full job  https://review.openstack.org/43797
 2013-08-27T00:44:50  <jeblair> restarting zuul
-2013-08-27T00:45:03  <clarkb> ok
+2013-08-27T00:45:03  <superbee> ok
 2013-08-27T00:45:17  <jeblair> though it's a shame that change didn't make it in first
-2013-08-27T00:45:21  <clarkb> jeblair: did you grab a stack trace first?
-2013-08-27T00:46:08  <jeblair> clarkb: no, i have a handle on the bug from the logs
+2013-08-27T00:45:21  <superbee> jeblair: did you grab a stack trace first?
+2013-08-27T00:46:08  <jeblair> superbee: no, i have a handle on the bug from the logs
 2013-08-27T00:46:28  <jeblair> it marked the change as reported despite it having failed to report, so it wouldn't touch it again
-2013-08-27T00:46:36  <clarkb> gotcha
+2013-08-27T00:46:36  <superbee> gotcha
 2013-08-27T00:46:37  <jeblair> it wasn't wedged
 2013-08-27T00:47:14  *** dolphm has quit IRC
-2013-08-27T00:49:19  <clarkb> jeblair: should I go ahead and delete the old git.o.o?
-2013-08-27T00:49:37  <jeblair> clarkb: i think so.  want to delete the old static.o.o while you're there?
-2013-08-27T00:49:43  <jeblair> clarkb: should be in SHUTDOWN state
-2013-08-27T00:49:48  <clarkb> jeblair: sure
+2013-08-27T00:49:19  <superbee> jeblair: should I go ahead and delete the old git.o.o?
+2013-08-27T00:49:37  <jeblair> superbee: i think so.  want to delete the old static.o.o while you're there?
+2013-08-27T00:49:43  <jeblair> superbee: should be in SHUTDOWN state
+2013-08-27T00:49:48  <superbee> jeblair: sure
 2013-08-27T00:50:58  *** dkliban has quit IRC
-2013-08-27T00:51:45  <clarkb> both are in the process of being deleted
+2013-08-27T00:51:45  <superbee> both are in the process of being deleted
 2013-08-27T00:53:26  *** jhesketh has quit IRC
 2013-08-27T00:54:19  *** jhesketh has joined #openstack-infra
 2013-08-27T00:55:01  *** alexpilotti has quit IRC
-2013-08-27T00:56:11  <clarkb> old git.o.o doesn't show up in nova list, but old static.o.o still has a status of DELETED
-2013-08-27T00:57:56  <jeblair> clarkb: i wonder if i'll have to patch nodepool to deal with that too (i just did that for images)
-2013-08-27T00:58:38  <clarkb> that?
-2013-08-27T00:58:46  <clarkb> I am going to increase the DNS TTLs back up to an hour
-2013-08-27T01:01:47  <clarkb> hmm I seem to have two git.o.o AAAA records. Oh I know, it says it modified the existing records with a TTL of 5 minutes but I bet it didn't
+2013-08-27T00:56:11  <superbee> old git.o.o doesn't show up in nova list, but old static.o.o still has a status of DELETED
+2013-08-27T00:57:56  <jeblair> superbee: i wonder if i'll have to patch nodepool to deal with that too (i just did that for images)
+2013-08-27T00:58:38  <superbee> that?
+2013-08-27T00:58:46  <superbee> I am going to increase the DNS TTLs back up to an hour
+2013-08-27T01:01:47  <superbee> hmm I seem to have two git.o.o AAAA records. Oh I know, it says it modified the existing records with a TTL of 5 minutes but I bet it didn't
 2013-08-27T01:02:00  <openstackgerrit> James E. Blair proposed a change to openstack-infra/gear: Fix ordering of state change in server  https://review.openstack.org/43809
-2013-08-27T01:02:22  <clarkb> jeblair: I am just going to remove the record with a TTL of 5
+2013-08-27T01:02:22  <superbee> jeblair: I am just going to remove the record with a TTL of 5
 2013-08-27T01:02:24  <jeblair> that == servers sticking around in 'DELETED' state
-2013-08-27T01:02:35  <jeblair> clarkb: sounds good, i think the AAAA handling is not right
+2013-08-27T01:02:35  <jeblair> superbee: sounds good, i think the AAAA handling is not right
 2013-08-27T01:03:01  <jeblair> i've gotten in similar situations (though i think i removed both and added a new one)
-2013-08-27T01:03:33  <jeblair> clarkb: ^ that gear change is, i believe, what caused the zuul 26 test failures
+2013-08-27T01:03:33  <jeblair> superbee: ^ that gear change is, i believe, what caused the zuul 26 test failures
 2013-08-27T01:03:43  <jeblair> er, i mean it fixes what caused them
-2013-08-27T01:04:04  <clarkb> I think git.o.o should be good now
-2013-08-27T01:04:14  <clarkb> removing the extra AAAA record left the existing one behind best I can tell
-2013-08-27T01:04:56  <clarkb> static is still "DELETED"
+2013-08-27T01:04:04  <superbee> I think git.o.o should be good now
+2013-08-27T01:04:14  <superbee> removing the extra AAAA record left the existing one behind best I can tell
+2013-08-27T01:04:56  <superbee> static is still "DELETED"
 2013-08-27T01:07:30  *** weshay has quit IRC
-2013-08-27T01:12:13  <clarkb> jeblair: everything look good to you?
-2013-08-27T01:12:30  <clarkb> jeblair: we seem to have survived a gate restart
+2013-08-27T01:12:13  <superbee> jeblair: everything look good to you?
+2013-08-27T01:12:30  <superbee> jeblair: we seem to have survived a gate restart
 2013-08-27T01:12:52  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Report item stats when removing a change  https://review.openstack.org/43812
-2013-08-27T01:13:16  <jeblair> clarkb: new cacti graphs seem reasonable
-2013-08-27T01:13:30  <jeblair> clarkb: and i'm kinda counting on all those jobs to turn red if they have problems with git
-2013-08-27T01:13:39  <jeblair> clarkb: so i'd say lgtm
+2013-08-27T01:13:16  <jeblair> superbee: new cacti graphs seem reasonable
+2013-08-27T01:13:30  <jeblair> superbee: and i'm kinda counting on all those jobs to turn red if they have problems with git
+2013-08-27T01:13:39  <jeblair> superbee: so i'd say lgtm
 2013-08-27T01:14:55  *** sandywalsh has quit IRC
 2013-08-27T01:15:20  *** markmcclain has quit IRC
 2013-08-27T01:16:38  *** rcleere has quit IRC
-2013-08-27T01:22:08  <clarkb> jeblair: what is the difference between change.ref and change.refspec in zuul?
-2013-08-27T01:22:16  <clarkb> jeblair: seems to manifest as event.ref and event.refspec as well
+2013-08-27T01:22:08  <superbee> jeblair: what is the difference between change.ref and change.refspec in zuul?
+2013-08-27T01:22:16  <superbee> jeblair: seems to manifest as event.ref and event.refspec as well
 2013-08-27T01:22:53  *** nati_ueno has joined #openstack-infra
 2013-08-27T01:23:17  *** jhesketh has quit IRC
-2013-08-27T01:24:17  <clarkb> jeblair: looking at https://review.openstack.org/#/c/43775/2/zuul/scheduler.py
-2013-08-27T01:24:28  <clarkb> jeblair: and merger.py _mergeChange uses change.refspec
+2013-08-27T01:24:17  <superbee> jeblair: looking at https://review.openstack.org/#/c/43775/2/zuul/scheduler.py
+2013-08-27T01:24:28  <superbee> jeblair: and merger.py _mergeChange uses change.refspec
 2013-08-27T01:24:34  *** nati_ueno has joined #openstack-infra
-2013-08-27T01:28:26  <jeblair> clarkb: a Changeish only has a refspec if it is a Change (and has a ref only if it is a Ref)
-2013-08-27T01:28:35  <jeblair> clarkb: Refs are created for ref-updated events
-2013-08-27T01:29:16  <jeblair> clarkb: but that is referring to an event
+2013-08-27T01:28:26  <jeblair> superbee: a Changeish only has a refspec if it is a Change (and has a ref only if it is a Ref)
+2013-08-27T01:28:35  <jeblair> superbee: Refs are created for ref-updated events
+2013-08-27T01:29:16  <jeblair> superbee: but that is referring to an event
 2013-08-27T01:29:19  <jeblair> which is an Event
 2013-08-27T01:29:24  <anteaya> that was fast, the speed at which all jobs below the gate failure cancelled was impressive
 2013-08-27T01:29:32  <jeblair> which always has both attributes (though one may be None)
 2013-08-27T01:29:39  <jeblair> which makes that code really really wrong
-2013-08-27T01:29:53  <clarkb> jeblair: does https://review.openstack.org/#/c/43775/2/zuul/scheduler.py fix a bug then?
-2013-08-27T01:30:25  <jeblair> clarkb: an inefficiency -- that's why the commit message says it always updates the repo on every change or ref-updated event
-2013-08-27T01:30:29  <jeblair> clarkb: because the if was always true
-2013-08-27T01:30:36  <clarkb> jeblair: or is it adding a bug? trying to parse your statement at 01:30:07
-2013-08-27T01:31:31  <jeblair> clarkb: the old behavior was inefficient because the code was incorrect (it made no sense and did not match its comments) but it was harmless (other than sucking up lots and lots of time)
+2013-08-27T01:29:53  <superbee> jeblair: does https://review.openstack.org/#/c/43775/2/zuul/scheduler.py fix a bug then?
+2013-08-27T01:30:25  <jeblair> superbee: an inefficiency -- that's why the commit message says it always updates the repo on every change or ref-updated event
+2013-08-27T01:30:29  <jeblair> superbee: because the if was always true
+2013-08-27T01:30:36  <superbee> jeblair: or is it adding a bug? trying to parse your statement at 01:30:07
+2013-08-27T01:31:31  <jeblair> superbee: the old behavior was inefficient because the code was incorrect (it made no sense and did not match its comments) but it was harmless (other than sucking up lots and lots of time)
 2013-08-27T01:32:32  *** sjing has joined #openstack-infra
-2013-08-27T01:33:14  <clarkb> so now we only fetch individual refs when they update
+2013-08-27T01:33:14  <superbee> so now we only fetch individual refs when they update
 2013-08-27T01:33:18  *** xchu has joined #openstack-infra
 2013-08-27T01:33:25  *** jhesketh_ has joined #openstack-infra
-2013-08-27T01:33:26  <clarkb> which is more efficient
+2013-08-27T01:33:26  <superbee> which is more efficient
 2013-08-27T01:33:27  *** jhesketh has joined #openstack-infra
 2013-08-27T01:33:30  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Set merge result correctly on exceptions  https://review.openstack.org/43815
 2013-08-27T01:33:32  *** dina_belova has joined #openstack-infra
-2013-08-27T01:34:00  <jeblair> clarkb: yep; that should be about half of 1 minute spent dealing with a nova event.  the next change in that series deals with the other half.
-2013-08-27T01:34:12  <jeblair> clarkb: i think 43815 fixes what we just saw
+2013-08-27T01:34:00  <jeblair> superbee: yep; that should be about half of 1 minute spent dealing with a nova event.  the next change in that series deals with the other half.
+2013-08-27T01:34:12  <jeblair> superbee: i think 43815 fixes what we just saw
 2013-08-27T01:34:35  *** sandywalsh has joined #openstack-infra
 2013-08-27T01:36:00  <jeblair> jhesketh: you pinged earlier?
 2013-08-27T01:36:11  <jeblair> jhesketh: er, like yesterday from your pov? :)
@@ -182,9 +182,9 @@
 2013-08-27T01:38:24  <jhesketh> jeblair: anyway, I just have to deal with BasePipelineManager.getSubmitAllowNeeds()
 2013-08-27T01:38:36  <jeblair> jhesketh: yeah, isn't that ugly?  :)
 2013-08-27T01:38:40  <jhesketh> heh, yep
-2013-08-27T01:38:45  <clarkb> jeblair: your zuul changes lgtm
-2013-08-27T01:38:50  <clarkb> I am going to AFK now
-2013-08-27T01:39:06  <clarkb> dinner needs to be found
+2013-08-27T01:38:45  <superbee> jeblair: your zuul changes lgtm
+2013-08-27T01:38:50  <superbee> I am going to AFK now
+2013-08-27T01:39:06  <superbee> dinner needs to be found
 2013-08-27T01:39:41  <jeblair> jhesketh: ok, so how is that causing a problem?
 2013-08-27T01:40:19  <jhesketh> (sorry my typing is a bit slow, I have one hand at the moment - silly rsi)
 2013-08-27T01:40:24  <jhesketh>  work out how I want to explain/tackle it
@@ -288,13 +288,13 @@
 2013-08-27T03:52:09  *** morganfainberg|a is now known as morganfainberg
 2013-08-27T04:00:02  <lifeless> can regular novaclient talk to rackspace? I'm getting nova list
 2013-08-27T04:00:03  <lifeless> ERROR: AuthSystemNotFound: 'rackspace'
-2013-08-27T04:01:18  <clarkb> it can but you either have to use tokens or passwords. I don't remember. Or install the rackspace auth plugin
+2013-08-27T04:01:18  <superbee> it can but you either have to use tokens or passwords. I don't remember. Or install the rackspace auth plugin
 2013-08-27T04:06:28  *** nati_ueno has joined #openstack-infra
-2013-08-27T04:12:56  <lifeless> clarkb: sigh, why can't upstream be enough :(
+2013-08-27T04:12:56  <lifeless> superbee: sigh, why can't upstream be enough :(
 2013-08-27T04:14:10  <lifeless> ahha, got it
 2013-08-27T04:19:34  <jhesketh> is there any way to change your email address with gerrit?
-2013-08-27T04:20:53  <clarkb> jhesketh: https://review.openstack.org/#/settings/contact I think it needs to be one of the emails you have configured with the openstack foundation
-2013-08-27T04:21:21  <jhesketh> clarkb: clearly I'm very blind. Thanks for that
+2013-08-27T04:20:53  <superbee> jhesketh: https://review.openstack.org/#/settings/contact I think it needs to be one of the emails you have configured with the openstack foundation
+2013-08-27T04:21:21  <jhesketh> superbee: clearly I'm very blind. Thanks for that
 2013-08-27T04:24:01  *** michchap_ has quit IRC
 2013-08-27T04:24:38  *** michchap has joined #openstack-infra
 2013-08-27T04:31:57  *** vipul is now known as vipul-away
@@ -714,7 +714,7 @@
 2013-08-27T15:41:09  <jeblair> branen: pong
 2013-08-27T15:41:22  *** odyssey4me has quit IRC
 2013-08-27T15:42:12  *** jruzicka has joined #openstack-infra
-2013-08-27T15:43:21  <jeblair> clarkb: https://review.openstack.org/#/c/42608/  i'll spin that up when it lgty
+2013-08-27T15:43:21  <jeblair> superbee: https://review.openstack.org/#/c/42608/  i'll spin that up when it lgty
 2013-08-27T15:43:31  <ArxCruz> anteaya: gerrit installed, is there a way to import the openstack projects automatically to gerrit, or need to do this manually ?
 2013-08-27T15:43:45  <branen> jeblair, Hi, can you help me get a very simple version change approved? https://review.openstack.org/#/c/42991/ This library is only used by the HP 3PAR cinder drivers. Thanks
 2013-08-27T15:44:52  *** dkranz has quit IRC
@@ -743,7 +743,7 @@
 2013-08-27T15:58:06  *** dkranz has joined #openstack-infra
 2013-08-27T15:58:20  *** nati_ueno has joined #openstack-infra
 2013-08-27T15:58:34  <jeblair> tagged gear 0.4.0
-2013-08-27T15:59:18  <anteaya> jeblair clarkb I have been asked to officiate the Tuskar PTL elections, I am going with the notion I can get the mailing list of eligible voters from gerrit somehow
+2013-08-27T15:59:18  <anteaya> jeblair superbee I have been asked to officiate the Tuskar PTL elections, I am going with the notion I can get the mailing list of eligible voters from gerrit somehow
 2013-08-27T16:01:14  *** rpodolyaka has left #openstack-infra
 2013-08-27T16:01:26  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Require gear 0.4.0  https://review.openstack.org/43912
 2013-08-27T16:01:27  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Use the 'resolve' merge strategy by default  https://review.openstack.org/43629
@@ -761,13 +761,13 @@
 2013-08-27T16:06:29  <anteaya> okay, let me try some things with git log
 2013-08-27T16:07:02  <anteaya> as I write up the wiki page for "how to run an election" shall I mention both gerrit and git for getting a list of voters?
 2013-08-27T16:09:37  *** rnirmal has joined #openstack-infra
-2013-08-27T16:11:18  <clarkb> morning
+2013-08-27T16:11:18  <superbee> morning
 2013-08-27T16:11:33  *** nicedice_ has joined #openstack-infra
 2013-08-27T16:11:41  *** odyssey4me has quit IRC
-2013-08-27T16:12:11  <clarkb> anteaya: probably just git as gerrit needs special permissions
-2013-08-27T16:12:24  <anteaya> morning clarkb
+2013-08-27T16:12:11  <superbee> anteaya: probably just git as gerrit needs special permissions
+2013-08-27T16:12:24  <anteaya> morning superbee
 2013-08-27T16:12:26  <anteaya> okay
-2013-08-27T16:13:15  <clarkb> mornings are so busy. jeblair I will get to that review asap
+2013-08-27T16:13:15  <superbee> mornings are so busy. jeblair I will get to that review asap
 2013-08-27T16:13:23  *** ^d has joined #openstack-infra
 2013-08-27T16:13:23  *** ^d has joined #openstack-infra
 2013-08-27T16:15:28  *** pcrews has quit IRC
@@ -779,7 +779,7 @@
 2013-08-27T16:17:32  <reed> cool
 2013-08-27T16:18:49  *** odyssey4me has joined #openstack-infra
 2013-08-27T16:19:03  <openstackgerrit> A change was merged to openstack-infra/jenkins-job-builder: Revert "Adding AnsiColor Support"  https://review.openstack.org/43771
-2013-08-27T16:22:06  <clarkb> puppet should be able to delete lists. it can add and remove but not update
+2013-08-27T16:22:06  <superbee> puppet should be able to delete lists. it can add and remove but not update
 2013-08-27T16:27:24  *** mattf has joined #openstack-infra
 2013-08-27T16:27:34  <mattf> ruhe, here?
 2013-08-27T16:28:19  <ruhe> yes
@@ -811,7 +811,7 @@
 2013-08-27T16:49:20  *** nati_ueno has quit IRC
 2013-08-27T16:49:56  *** nati_ueno has joined #openstack-infra
 2013-08-27T16:50:01  *** ruhe has quit IRC
-2013-08-27T16:52:05  <clarkb> ArxCruz: anteaya: http://ci.openstack.org/sysadmin.html#making-a-change-in-puppet has useful info on how to use puppet in our environment
+2013-08-27T16:52:05  <superbee> ArxCruz: anteaya: http://ci.openstack.org/sysadmin.html#making-a-change-in-puppet has useful info on how to use puppet in our environment
 2013-08-27T16:52:16  *** fbo is now known as fbo_away
 2013-08-27T16:53:18  *** nati_ueno_2 has joined #openstack-infra
 2013-08-27T16:53:43  <pleia2> ArxCruz: and on http://ci.openstack.org/gerrit.html the "Puppet" section shows you the specific puppet modules + files we're using, it all comes from our config/ repo
@@ -837,46 +837,46 @@
 2013-08-27T17:06:18  <ArxCruz> pleia2: okay, I will digg into puppet now, if I got in trouble I will yell here :)
 2013-08-27T17:06:20  <ArxCruz> pleia2: thanks!
 2013-08-27T17:06:27  <pleia2> ArxCruz: sure, good luck :)
-2013-08-27T17:06:50  <clarkb> jeblair: I have reviewed the groups-dev patch and I think there are a couple things that need fixing
+2013-08-27T17:06:50  <superbee> jeblair: I have reviewed the groups-dev patch and I think there are a couple things that need fixing
 2013-08-27T17:06:51  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Use an OrderedDict for pipelines  https://review.openstack.org/43922
 2013-08-27T17:07:04  *** derekh has quit IRC
 2013-08-27T17:07:59  *** thomasbiege has joined #openstack-infra
-2013-08-27T17:08:05  <clarkb> jgriffith: you are awesome thank you
+2013-08-27T17:08:05  <superbee> jgriffith: you are awesome thank you
 2013-08-27T17:08:40  <jeblair> reed: ^ clark found some things on the groups-dev patch https://review.openstack.org/#/c/42608/4
-2013-08-27T17:08:51  <jeblair> clarkb: nice catches
+2013-08-27T17:08:51  <jeblair> superbee: nice catches
 2013-08-27T17:09:13  *** thomasbiege has quit IRC
 2013-08-27T17:10:20  *** pcrews has joined #openstack-infra
-2013-08-27T17:10:21  <jeblair> clarkb: https://review.openstack.org/#/c/43920/ should get us back to puppet-controlled nodepool
-2013-08-27T17:10:41  <jeblair> clarkb: and when you review https://review.openstack.org/#/c/43912/ and https://review.openstack.org/#/c/43922/ i'll upgrade zuul
-2013-08-27T17:11:20  <clarkb> jeblair: ok I will look at those now. Seems like a reasonable place to continue the review
-2013-08-27T17:12:43  <dkranz> clarkb: So I'm good to go on what we discussed yesterday and just need +A on https://review.openstack.org/#/c/43891/
-2013-08-27T17:12:55  <clarkb> jeblair: does the nodepool change not use jenkins credential store?
-2013-08-27T17:13:00  <clarkb> jeblair: is there a reason for that?
-2013-08-27T17:13:14  <dkranz> clarkb: After that works I'll submit non-voting to all projects.
-2013-08-27T17:13:36  <jeblair> clarkb: it does use it; see the bottom in the targets section (credentials-id)
-2013-08-27T17:13:50  <jeblair> clarkb: what's being added there is info for nodepool itself to be able to log into hosts
-2013-08-27T17:13:55  <clarkb> jeblair: and for dkranz's change are you still concerned that all of the exerpimental jobs are nonvoting?
-2013-08-27T17:14:00  <jeblair> clarkb: (which it has always done, just with hardcoded values)
-2013-08-27T17:14:02  <clarkb> jeblair: should we make them voting first?
-2013-08-27T17:14:16  <jeblair> clarkb, dkranz: I'm looking into current behavior of the experimental pipeline now
+2013-08-27T17:10:21  <jeblair> superbee: https://review.openstack.org/#/c/43920/ should get us back to puppet-controlled nodepool
+2013-08-27T17:10:41  <jeblair> superbee: and when you review https://review.openstack.org/#/c/43912/ and https://review.openstack.org/#/c/43922/ i'll upgrade zuul
+2013-08-27T17:11:20  <superbee> jeblair: ok I will look at those now. Seems like a reasonable place to continue the review
+2013-08-27T17:12:43  <dkranz> superbee: So I'm good to go on what we discussed yesterday and just need +A on https://review.openstack.org/#/c/43891/
+2013-08-27T17:12:55  <superbee> jeblair: does the nodepool change not use jenkins credential store?
+2013-08-27T17:13:00  <superbee> jeblair: is there a reason for that?
+2013-08-27T17:13:14  <dkranz> superbee: After that works I'll submit non-voting to all projects.
+2013-08-27T17:13:36  <jeblair> superbee: it does use it; see the bottom in the targets section (credentials-id)
+2013-08-27T17:13:50  <jeblair> superbee: what's being added there is info for nodepool itself to be able to log into hosts
+2013-08-27T17:13:55  <superbee> jeblair: and for dkranz's change are you still concerned that all of the exerpimental jobs are nonvoting?
+2013-08-27T17:14:00  <jeblair> superbee: (which it has always done, just with hardcoded values)
+2013-08-27T17:14:02  <superbee> jeblair: should we make them voting first?
+2013-08-27T17:14:16  <jeblair> superbee, dkranz: I'm looking into current behavior of the experimental pipeline now
 2013-08-27T17:14:17  *** nati_ueno_2 has quit IRC
 2013-08-27T17:14:20  <openstackgerrit> Mathieu Gagné proposed a change to openstack-infra/jenkins-job-builder: Sort entry_points in setup.py for maintainability  https://review.openstack.org/43924
-2013-08-27T17:14:42  <clarkb> jeblair: dkranz's change lgtm. Can I +2 it and let you +A if you are happy with the non voting behavior?
+2013-08-27T17:14:42  <superbee> jeblair: dkranz's change lgtm. Can I +2 it and let you +A if you are happy with the non voting behavior?
 2013-08-27T17:14:53  *** nati_ueno has joined #openstack-infra
-2013-08-27T17:15:08  <jeblair> clarkb: yes
-2013-08-27T17:15:46  <jeblair> clarkb: it looks like it works, but i lose my nickel bet;  it reports overall 'success' regardless of outcome.
+2013-08-27T17:15:08  <jeblair> superbee: yes
+2013-08-27T17:15:46  <jeblair> superbee: it looks like it works, but i lose my nickel bet;  it reports overall 'success' regardless of outcome.
 2013-08-27T17:15:51  <jeblair> https://review.openstack.org/#/c/43791/
-2013-08-27T17:16:01  <jeblair> clarkb, dkranz, jog0: ^
-2013-08-27T17:16:16  <clarkb> because they are not voting. I see
+2013-08-27T17:16:01  <jeblair> superbee, dkranz, jog0: ^
+2013-08-27T17:16:16  <superbee> because they are not voting. I see
 2013-08-27T17:16:48  <dkranz> The plan is to make it voting asap but I don't see how it can avoid going through a non-voting prelim.
-2013-08-27T17:17:16  <clarkb> dkranz: this is non voting in the experimental pipeline
-2013-08-27T17:17:39  <clarkb> dkranz: independent of the process of making it gating. Notice that even when a job fails jenkins says the experimental jobs succeed because they are both non voting
-2013-08-27T17:17:44  <dkranz> clarkb: For experimental, what does it mean to be voting?
+2013-08-27T17:17:16  <superbee> dkranz: this is non voting in the experimental pipeline
+2013-08-27T17:17:39  <superbee> dkranz: independent of the process of making it gating. Notice that even when a job fails jenkins says the experimental jobs succeed because they are both non voting
+2013-08-27T17:17:44  <dkranz> superbee: For experimental, what does it mean to be voting?
 2013-08-27T17:17:51  <jeblair> dkranz: it doesn't matter in the experimental pipeline; all things being equal, i'd like everything there to be voting; however, if the penultimate stage is non-voting in the check and gate pipelines, then, well, it's less typing to leave it as-is.  :)
 2013-08-27T17:18:03  *** adalbas has joined #openstack-infra
 2013-08-27T17:18:11  <dkranz> jeblair: Yes, thank you :)
-2013-08-27T17:18:15  <clarkb> dkranz: not much, you just end up with slightly confusing report comments when a test fails
-2013-08-27T17:18:23  <clarkb> dkranz: but everything else works as expected
+2013-08-27T17:18:15  <superbee> dkranz: not much, you just end up with slightly confusing report comments when a test fails
+2013-08-27T17:18:23  <superbee> dkranz: but everything else works as expected
 2013-08-27T17:19:10  *** nati_ueno has quit IRC
 2013-08-27T17:19:17  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Use an OrderedDict for pipelines  https://review.openstack.org/43922
 2013-08-27T17:19:29  <openstackgerrit> A change was merged to openstack-infra/config: Add experimental slow heat job  https://review.openstack.org/43891
@@ -884,49 +884,49 @@
 2013-08-27T17:19:38  <jeblair> dkranz: ^
 2013-08-27T17:20:12  <dkranz> jeblair: Thanks!
 2013-08-27T17:20:29  *** ruhe has quit IRC
-2013-08-27T17:20:50  <clarkb> jeblair: nodepool change reviewed. It would be nice to manage that ssh key on the nodepool host as well
+2013-08-27T17:20:50  <superbee> jeblair: nodepool change reviewed. It would be nice to manage that ssh key on the nodepool host as well
 2013-08-27T17:21:27  <pabelanger> So, to continue with my question from this morning.  Now playing with cloudenvy for provisioning
-2013-08-27T17:21:35  <jeblair> clarkb: pretty sure it is
-2013-08-27T17:21:45  <jeblair> clarkb: it should be the jenkins private key
+2013-08-27T17:21:35  <jeblair> superbee: pretty sure it is
+2013-08-27T17:21:45  <jeblair> superbee: it should be the jenkins private key
 2013-08-27T17:21:46  <jog0> you guys see this thread on the
 2013-08-27T17:21:50  <jog0> ML http://lists.openstack.org/pipermail/openstack-dev/2013-August/014298.html
-2013-08-27T17:21:54  <clarkb> jeblair: I skimmed through the puppet manifests and didn't see it. I may have missed it though
+2013-08-27T17:21:54  <superbee> jeblair: I skimmed through the puppet manifests and didn't see it. I may have missed it though
 2013-08-27T17:22:01  <jog0> ^ about rechecks
 2013-08-27T17:22:02  <uvirtbot> jog0: Error: "about" is not a valid command.
 2013-08-27T17:22:18  *** branen has joined #openstack-infra
-2013-08-27T17:22:44  <clarkb> jog0: yes, that is potentially one of the things elasticsearch would be useful for
+2013-08-27T17:22:44  <superbee> jog0: yes, that is potentially one of the things elasticsearch would be useful for
 2013-08-27T17:22:44  <ArxCruz> pleia2: first question, Tue Aug 27 17:22:19 +0000 2013 Puppet (warning): Found multiple default providers for vcsrepo: cvs, svn, git, hg, bzr; using cvs
 2013-08-27T17:23:03  <ArxCruz> why is always using cvs instead of git ?
-2013-08-27T17:23:24  <clarkb> jog0: but it is still in its infancy and I don't want to contradict jgriffith's argument because it is really good
-2013-08-27T17:23:36  <jog0> clarkb: thats what I thought, but figured it would be better for you guys to respond then me
-2013-08-27T17:23:40  <jog0> clarkb: good point
-2013-08-27T17:24:05  <jog0> clarkb: perhaps you could say +1 to his and say we are working on the second idea ... but its a ways off
+2013-08-27T17:23:24  <superbee> jog0: but it is still in its infancy and I don't want to contradict jgriffith's argument because it is really good
+2013-08-27T17:23:36  <jog0> superbee: thats what I thought, but figured it would be better for you guys to respond then me
+2013-08-27T17:23:40  <jog0> superbee: good point
+2013-08-27T17:24:05  <jog0> superbee: perhaps you could say +1 to his and say we are working on the second idea ... but its a ways off
 2013-08-27T17:24:07  <openstackgerrit> Mathieu Gagné proposed a change to openstack-infra/jenkins-job-builder: Sort entry_points in setup.py for maintainability  https://review.openstack.org/43924
-2013-08-27T17:24:13  <jog0> clarkb: or not
+2013-08-27T17:24:13  <jog0> superbee: or not
 2013-08-27T17:24:15  <openstackgerrit> will soula proposed a change to openstack-infra/jenkins-job-builder: Adding validation to the ansicolor plugin  https://review.openstack.org/43926
-2013-08-27T17:24:17  <clarkb> jog0: ya I can do that
-2013-08-27T17:24:49  <jeblair> clarkb, jog0: I also read the following:
+2013-08-27T17:24:17  <superbee> jog0: ya I can do that
+2013-08-27T17:24:49  <jeblair> superbee, jog0: I also read the following:
 2013-08-27T17:24:50  <jeblair> I'd love to see our CI system enhanced to do all of the pattern
 2013-08-27T17:24:50  <jeblair> matching to group failures by common patterns, and then when a technical
 2013-08-27T17:24:50  <jeblair> contributor looks at these groups they have tons of data points to _fix_
 2013-08-27T17:24:50  <jeblair> the problem rather than just spending their precious time identifying it.
 2013-08-27T17:25:00  <jeblair> as SpamapS volunteering to help out with that work
 2013-08-27T17:25:02  <jeblair> SpamapS: so, thanks!
-2013-08-27T17:25:15  <jeblair> SpamapS: clarkb will be following up with all the info you need to get started! :)
+2013-08-27T17:25:15  <jeblair> SpamapS: superbee will be following up with all the info you need to get started! :)
 2013-08-27T17:25:40  <pleia2> ArxCruz: afaik that's just the way the vcsrepo works (we didn't write it), you can configure your manifest to use the one you want
 2013-08-27T17:25:46  *** pcm_ has quit IRC
 2013-08-27T17:25:53  *** HenryG has quit IRC
-2013-08-27T17:26:03  <clarkb> jog0: I think the point that maybe hasn't been stressed enough is that we are in the home stretch of havana when we need to be diligent and people are not
+2013-08-27T17:26:03  <superbee> jog0: I think the point that maybe hasn't been stressed enough is that we are in the home stretch of havana when we need to be diligent and people are not
 2013-08-27T17:26:19  *** pcm_ has joined #openstack-infra
 2013-08-27T17:26:20  *** vipul-away is now known as vipul
-2013-08-27T17:26:20  <clarkb> jog0: so while having automagic tomorrow would be super duper this is a problem today with a known work around
-2013-08-27T17:26:26  <jog0> clarkb: ++
-2013-08-27T17:27:28  <jog0> clarkb: I do think being able to clean out and correct the recheck list would make that easier. yesterday I found a bug in recheck that was marked as a duplicate in launchpad
+2013-08-27T17:26:20  <superbee> jog0: so while having automagic tomorrow would be super duper this is a problem today with a known work around
+2013-08-27T17:26:26  <jog0> superbee: ++
+2013-08-27T17:27:28  <jog0> superbee: I do think being able to clean out and correct the recheck list would make that easier. yesterday I found a bug in recheck that was marked as a duplicate in launchpad
 2013-08-27T17:27:36  <jog0> so I did recheck the original bug not the dup
-2013-08-27T17:28:00  <clarkb> jog0: yeah there is definitely work that can be done on the recheck tracking side too
+2013-08-27T17:28:00  <superbee> jog0: yeah there is definitely work that can be done on the recheck tracking side too
 2013-08-27T17:28:02  <jog0> but that is neither here nor there
-2013-08-27T17:28:06  <clarkb> that script is fairly naive and simple
-2013-08-27T17:28:08  <jeblair> clarkb: https://etherpad.openstack.org/havana-ci-logging in case you want to mention that
+2013-08-27T17:28:06  <superbee> that script is fairly naive and simple
+2013-08-27T17:28:08  <jeblair> superbee: https://etherpad.openstack.org/havana-ci-logging in case you want to mention that
 2013-08-27T17:29:05  *** vogxn has quit IRC
 2013-08-27T17:29:23  <jog0> quick question: if I am resubmitting a reverted patch with proper fixes, do I use teh same commit iD?
 2013-08-27T17:29:26  <jog0> or a new one?
@@ -944,69 +944,69 @@
 2013-08-27T17:33:57  <jog0> grenade or devstack?
 2013-08-27T17:34:53  <jeblair> jog0: nova-compute is part of nova?
 2013-08-27T17:34:56  *** thomasbiege has joined #openstack-infra
-2013-08-27T17:34:58  <clarkb> My first thought is grenade but grenade is really worried about upgrades and not mixed installs
+2013-08-27T17:34:58  <superbee> My first thought is grenade but grenade is really worried about upgrades and not mixed installs
 2013-08-27T17:35:17  <jeblair> jog0: so _part_ of nova is one release, part is another?
-2013-08-27T17:35:19  <clarkb> maybe a special devstack tempest test that deploys the desired environment with devstack?
+2013-08-27T17:35:19  <superbee> maybe a special devstack tempest test that deploys the desired environment with devstack?
 2013-08-27T17:35:26  *** dina_belova has quit IRC
 2013-08-27T17:37:48  <jog0> jeblair: correct on both.  I was thinking putting nova-compute in a venv. to make sure we can run nova-compute (controls libvirt) as grizzly
 2013-08-27T17:38:12  <jog0> jeblair: so this seems like a not great fit for devstck either
 2013-08-27T17:39:07  <SpamapS> jeblair: any time! :)
-2013-08-27T17:39:18  <reed> jeblair, clarkb: thanks, saw the comments
+2013-08-27T17:39:18  <reed> jeblair, superbee: thanks, saw the comments
 2013-08-27T17:40:21  <openstackgerrit> Joe Gordon proposed a change to openstack-infra/config: Add gate-tempest-devstack-vm-large-ops job  https://review.openstack.org/43781
 2013-08-27T17:40:36  <jeblair> jog0: i'd talk to dtroyer and see if it fits with grenade
-2013-08-27T17:40:59  <jeblair> clarkb: the re-run jobs change to zuul seems to be working
-2013-08-27T17:41:18  <jeblair> clarkb: i found this example, which isn't great because the buildset was eventually canceled, but before that happened i think it worked as expected
+2013-08-27T17:40:59  <jeblair> superbee: the re-run jobs change to zuul seems to be working
+2013-08-27T17:41:18  <jeblair> superbee: i found this example, which isn't great because the buildset was eventually canceled, but before that happened i think it worked as expected
 2013-08-27T17:41:22  <jeblair> https://jenkins01.openstack.org/job/gate-grenade-devstack-vm/4151/console
 2013-08-27T17:41:46  <jog0> jeblair: cool
 2013-08-27T17:42:01  <SpamapS> jog0: eventually I think tripleo's CI will handle this case btw
 2013-08-27T17:42:29  <jog0> SpamapS: even running last stable release nova-compute vs trunk rest?
 2013-08-27T17:42:49  <SpamapS> jog0: thats just a different tag for the nova-compute element b[D[Duild. :)
 2013-08-27T17:43:03  <jog0> SpamapS: the triplo setup will make this much easier, right
-2013-08-27T17:43:03  <jeblair> clarkb: follow the link to the description of the build, then follow one of the other links to another job-build eg https://jenkins02.openstack.org/job/gate-tempest-devstack-vm-testr-full/4280/ and then note the link to a different (newer) grenade test
+2013-08-27T17:43:03  <jeblair> superbee: follow the link to the description of the build, then follow one of the other links to another job-build eg https://jenkins02.openstack.org/job/gate-tempest-devstack-vm-testr-full/4280/ and then note the link to a different (newer) grenade test
 2013-08-27T17:43:31  <SpamapS> jog0: though anything "stable release" is somewhat far down on the "tripleo cares about it" list.
 2013-08-27T17:43:32  <jog0> SpamapS: actually the fun test would be trunk everything and a second nova-compute on latest stable
 2013-08-27T17:44:15  <jog0> SpamapS: yeah but some folks in OpenStack care, and we don't test taht yet
 2013-08-27T17:45:14  *** dina_belova has joined #openstack-infra
 2013-08-27T17:45:27  <jog0> SpamapS: but yeah Triplo will help this big  time. perhaps the right answer for now is just test using upgrade_levels.compute=grizzly
 2013-08-27T17:45:47  <jog0> SpamapS: how far off do you think Triplo CI is? <6 months?
-2013-08-27T17:46:12  <clarkb> jeblair: cool
+2013-08-27T17:46:12  <superbee> jeblair: cool
 2013-08-27T17:46:59  *** branen has quit IRC
 2013-08-27T17:47:23  *** branen has joined #openstack-infra
-2013-08-27T17:47:24  <clarkb> jog0: SpamapS jeblair response sent.
+2013-08-27T17:47:24  <superbee> jog0: SpamapS jeblair response sent.
 2013-08-27T17:48:12  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Use an OrderedDict for pipelines  https://review.openstack.org/43922
 2013-08-27T17:48:21  *** thomasbiege has quit IRC
-2013-08-27T17:51:02  <jog0> clarkb: now that mroe people now about logstash it should be fun to see if it crashes
-2013-08-27T17:52:04  <clarkb> jog0: hopefulyl it doesn't :) it was very crash happy in the past but it seems to be doing much better now that we index less data
-2013-08-27T17:52:28  <clarkb> jog0: will be interesting to see.
-2013-08-27T17:52:58  <clarkb> mtreinish: how is the tempest testr stuff doing?
-2013-08-27T17:53:44  <mtreinish> clarkb: well we've got 2 big flaky fails that people seem to be hitting right now but no one has gone out of their way to yell at me
+2013-08-27T17:51:02  <jog0> superbee: now that mroe people now about logstash it should be fun to see if it crashes
+2013-08-27T17:52:04  <superbee> jog0: hopefulyl it doesn't :) it was very crash happy in the past but it seems to be doing much better now that we index less data
+2013-08-27T17:52:28  <superbee> jog0: will be interesting to see.
+2013-08-27T17:52:58  <superbee> mtreinish: how is the tempest testr stuff doing?
+2013-08-27T17:53:44  <mtreinish> superbee: well we've got 2 big flaky fails that people seem to be hitting right now but no one has gone out of their way to yell at me
 2013-08-27T17:53:48  <mtreinish> so I count it as a win :)
-2013-08-27T17:53:54  <clarkb> hurray
+2013-08-27T17:53:54  <superbee> hurray
 2013-08-27T17:54:00  *** fbo_away is now known as fbo
 2013-08-27T17:54:10  <mtreinish> https://bugs.launchpad.net/python-keystoneclient/+bug/1217159 and https://bugs.launchpad.net/tempest/+bug/1217163 in case anyone is interested
 2013-08-27T17:54:11  <uvirtbot> Launchpad bug 1217159 in tempest "tempest SimpleReadOnlyKeystoneClientTest fails" [Critical,Confirmed]
-2013-08-27T17:54:14  <jeblair> clarkb: https://git.openstack.org/cgit/openstack-infra/config/tree/modules/openstack_project/manifests/nodepool.pp#n26
+2013-08-27T17:54:14  <jeblair> superbee: https://git.openstack.org/cgit/openstack-infra/config/tree/modules/openstack_project/manifests/nodepool.pp#n26
 2013-08-27T17:54:23  *** sarob has joined #openstack-infra
-2013-08-27T17:55:15  <clarkb> jeblair: thanks. I was looking for use of the jenkins user manifest in the jenkins module
-2013-08-27T17:55:18  <dkranz> clarkb: My first run of slow heat in experimental failed with LOST https://review.openstack.org/#/c/43927/
-2013-08-27T17:55:30  <dkranz> clarkb: Should I retry or is some other action needed?
-2013-08-27T17:55:47  <clarkb> dkranz: I think you were faster than JJB. So the job hadn't been created in jenkins yet
+2013-08-27T17:55:15  <superbee> jeblair: thanks. I was looking for use of the jenkins user manifest in the jenkins module
+2013-08-27T17:55:18  <dkranz> superbee: My first run of slow heat in experimental failed with LOST https://review.openstack.org/#/c/43927/
+2013-08-27T17:55:30  <dkranz> superbee: Should I retry or is some other action needed?
+2013-08-27T17:55:47  <superbee> dkranz: I think you were faster than JJB. So the job hadn't been created in jenkins yet
 2013-08-27T17:56:04  *** branen_ has joined #openstack-infra
-2013-08-27T17:56:13  <clarkb> dkranz: if you go to https://jenkins01.openstack.org and search for the job do you see it?
-2013-08-27T17:56:19  <clarkb> dkranz: if you do then go ahead and give it another try
+2013-08-27T17:56:13  <superbee> dkranz: if you go to https://jenkins01.openstack.org and search for the job do you see it?
+2013-08-27T17:56:19  <superbee> dkranz: if you do then go ahead and give it another try
 2013-08-27T17:56:22  *** ^d is now known as ^demon|away
 2013-08-27T17:57:06  *** CaptTofu_ has quit IRC
-2013-08-27T17:57:09  <clarkb> jeblair: review on nodepool ssh key change updated
-2013-08-27T17:57:42  <dkranz> clarkb: Don't see it.
-2013-08-27T17:58:28  <clarkb> dkranz: the change merged long enough ago that it should have been applied. I will investigate
-2013-08-27T17:58:43  <dkranz> clarkb: Thanks
+2013-08-27T17:57:09  <superbee> jeblair: review on nodepool ssh key change updated
+2013-08-27T17:57:42  <dkranz> superbee: Don't see it.
+2013-08-27T17:58:28  <superbee> dkranz: the change merged long enough ago that it should have been applied. I will investigate
+2013-08-27T17:58:43  <dkranz> superbee: Thanks
 2013-08-27T17:58:46  *** branen has quit IRC
 2013-08-27T17:58:49  *** emagana_ has joined #openstack-infra
-2013-08-27T17:59:49  <clarkb> dkranz: https://jenkins02.openstack.org/job/gate-tempest-devstack-vm-heat-slow/ you can change jenkins02 to jenkins01 to see it on the other server
-2013-08-27T18:00:04  <clarkb> dkranz: let me check one more thing then you can try again
+2013-08-27T17:59:49  <superbee> dkranz: https://jenkins02.openstack.org/job/gate-tempest-devstack-vm-heat-slow/ you can change jenkins02 to jenkins01 to see it on the other server
+2013-08-27T18:00:04  <superbee> dkranz: let me check one more thing then you can try again
 2013-08-27T18:00:14  *** SergeyLukjanov has joined #openstack-infra
-2013-08-27T18:00:50  <clarkb> dkranz: I think it will work if run this time. Go ahead and try again
-2013-08-27T18:00:59  <dkranz> clarkb: OK
+2013-08-27T18:00:50  <superbee> dkranz: I think it will work if run this time. Go ahead and try again
+2013-08-27T18:00:59  <dkranz> superbee: OK
 2013-08-27T18:01:41  *** markmcclain has joined #openstack-infra
 2013-08-27T18:01:50  *** emagana has quit IRC
 2013-08-27T18:01:59  <SpamapS> jog0: I hope that we can have tripleo deploying and updating a whole cloud automatically/efficiently in 6 months yes.
@@ -1015,23 +1015,23 @@
 2013-08-27T18:06:44  <jog0> SpamapS: thats good enough for me, I will focus on the easier test for now then
 2013-08-27T18:06:47  <jog0> thanks
 2013-08-27T18:06:51  <mriedem> can anyone tell me why this hasn't run since 8/6? https://jenkins.openstack.org/view/All/job/nova-coverage/
-2013-08-27T18:07:35  <clarkb> mriedem: probably because we have three jenkins masters now, if you look on jenkins01 and jenkins02 you should see job runs
-2013-08-27T18:07:55  <mriedem> clarkb: oh yeah, octojenkins
+2013-08-27T18:07:35  <superbee> mriedem: probably because we have three jenkins masters now, if you look on jenkins01 and jenkins02 you should see job runs
+2013-08-27T18:07:55  <mriedem> superbee: oh yeah, octojenkins
 2013-08-27T18:07:56  <mriedem> checking
-2013-08-27T18:08:31  <jeblair> clarkb: nodepool is running master and puppet is running on nodepool
-2013-08-27T18:08:42  <clarkb> jeblair: awesome
+2013-08-27T18:08:31  <jeblair> superbee: nodepool is running master and puppet is running on nodepool
+2013-08-27T18:08:42  <superbee> jeblair: awesome
 2013-08-27T18:09:47  *** ^demon|away is now known as ^d
-2013-08-27T18:10:31  <clarkb> jeblair: the two zuul changes you mentioned lgtm
-2013-08-27T18:11:25  <mriedem> clarkb: so the coverage jobs must only keep a build history of a couple of days?
-2013-08-27T18:11:47  <mriedem> clarkb: trying to find something like this but for another commit: http://logs.openstack.org/5c/5cc63c91d045f7a37136107053f71db1d8edf425/post/nova-coverage/e91683d/cover/
-2013-08-27T18:12:39  <clarkb> mriedem: you want http://logs.openstack.org/gitsha[:2]/gitsha/post/nova-coverage
-2013-08-27T18:13:18  <clarkb> mriedem: make sure you use the gitsha that ended up being merged as that may be different than what you have locally
-2013-08-27T18:13:31  <mriedem> clarkb: so is that only for merged commits?
-2013-08-27T18:14:02  <clarkb> mriedem: yes, nova-coverage runs in the post queue which happens after merges
-2013-08-27T18:14:51  <mriedem> clarkb: ah, ok. in #openstack-nova we were talking about how nice it would be if we had coverage reports for patches so we could know on a giant blueprint patch how much is actually covered in the tests,
+2013-08-27T18:10:31  <superbee> jeblair: the two zuul changes you mentioned lgtm
+2013-08-27T18:11:25  <mriedem> superbee: so the coverage jobs must only keep a build history of a couple of days?
+2013-08-27T18:11:47  <mriedem> superbee: trying to find something like this but for another commit: http://logs.openstack.org/5c/5cc63c91d045f7a37136107053f71db1d8edf425/post/nova-coverage/e91683d/cover/
+2013-08-27T18:12:39  <superbee> mriedem: you want http://logs.openstack.org/gitsha[:2]/gitsha/post/nova-coverage
+2013-08-27T18:13:18  <superbee> mriedem: make sure you use the gitsha that ended up being merged as that may be different than what you have locally
+2013-08-27T18:13:31  <mriedem> superbee: so is that only for merged commits?
+2013-08-27T18:14:02  <superbee> mriedem: yes, nova-coverage runs in the post queue which happens after merges
+2013-08-27T18:14:51  <mriedem> superbee: ah, ok. in #openstack-nova we were talking about how nice it would be if we had coverage reports for patches so we could know on a giant blueprint patch how much is actually covered in the tests,
 2013-08-27T18:15:10  <mriedem> sort of going on about long review times in nova and what slows it down, one of which is giant patches
 2013-08-27T18:15:26  <mriedem> and you have to dig into the tests to compare to the new code to make sure everything is reasonably covered
-2013-08-27T18:15:38  <clarkb> mriedem: it would be nice :). The reason we don't run those tests prior to merging is they take forever to run and I think people want to see trends
+2013-08-27T18:15:38  <superbee> mriedem: it would be nice :). The reason we don't run those tests prior to merging is they take forever to run and I think people want to see trends
 2013-08-27T18:15:46  <openstackgerrit> A change was merged to openstack-infra/zuul: Require gear 0.4.0  https://review.openstack.org/43912
 2013-08-27T18:15:49  <openstackgerrit> A change was merged to openstack-infra/zuul: Use the 'resolve' merge strategy by default  https://review.openstack.org/43629
 2013-08-27T18:15:50  <openstackgerrit> A change was merged to openstack-infra/zuul: Fetch specific refs on ref-updated events  https://review.openstack.org/43775
@@ -1039,39 +1039,39 @@
 2013-08-27T18:15:51  <openstackgerrit> A change was merged to openstack-infra/zuul: Fix graceful exit  https://review.openstack.org/43803
 2013-08-27T18:15:52  <openstackgerrit> A change was merged to openstack-infra/zuul: Report item stats when removing a change  https://review.openstack.org/43812
 2013-08-27T18:15:56  <openstackgerrit> A change was merged to openstack-infra/zuul: Set merge result correctly on exceptions  https://review.openstack.org/43815
-2013-08-27T18:16:03  <clarkb> mriedem: we have fiddled with the idea of running them in the check queue instead for the reason you want them
-2013-08-27T18:16:04  <mriedem> clarkb: ah, ok - cuz i was thinking just getting the coverage report for a patch set should be trivial
+2013-08-27T18:16:03  <superbee> mriedem: we have fiddled with the idea of running them in the check queue instead for the reason you want them
+2013-08-27T18:16:04  <mriedem> superbee: ah, ok - cuz i was thinking just getting the coverage report for a patch set should be trivial
 2013-08-27T18:16:07  <openstackgerrit> A change was merged to openstack-infra/zuul: Use an OrderedDict for pipelines  https://review.openstack.org/43922
-2013-08-27T18:16:09  <mriedem> clarkb: yup
-2013-08-27T18:16:17  <clarkb> mriedem: it is trivial `tox -ecover`
+2013-08-27T18:16:09  <mriedem> superbee: yup
+2013-08-27T18:16:17  <superbee> mriedem: it is trivial `tox -ecover`
 2013-08-27T18:16:24  <mriedem> i didn't realize it took a long time
-2013-08-27T18:16:32  <clarkb> mriedem: but instrumenting the code makes it much slower
-2013-08-27T18:16:54  <jeblair> clarkb: are those run in parallel or serially?
-2013-08-27T18:16:55  <clarkb> mriedem: you could `git review -d $CHANGE && tox -ecover` to generate it locally
-2013-08-27T18:16:56  <mriedem> clarkb: ok, got it - thanks, glad you guys already looked into it (though i'm not surprised :) )
-2013-08-27T18:16:59  <clarkb> jeblair: parallel
-2013-08-27T18:17:20  <mriedem> clarkb: yeah, generating locally for some guy that i don't know or care what his blueprint does isn't going to probably happen :)
+2013-08-27T18:16:32  <superbee> mriedem: but instrumenting the code makes it much slower
+2013-08-27T18:16:54  <jeblair> superbee: are those run in parallel or serially?
+2013-08-27T18:16:55  <superbee> mriedem: you could `git review -d $CHANGE && tox -ecover` to generate it locally
+2013-08-27T18:16:56  <mriedem> superbee: ok, got it - thanks, glad you guys already looked into it (though i'm not surprised :) )
+2013-08-27T18:16:59  <superbee> jeblair: parallel
+2013-08-27T18:17:20  <mriedem> superbee: yeah, generating locally for some guy that i don't know or care what his blueprint does isn't going to probably happen :)
 2013-08-27T18:17:28  <mriedem> just brainstorming how to make reviews more efficient in nova
-2013-08-27T18:17:44  <clarkb> jeblair: now that you mention it it isn't too slow with testr
+2013-08-27T18:17:44  <superbee> jeblair: now that you mention it it isn't too slow with testr
 2013-08-27T18:18:00  <jeblair> maybe worth a look; maybe after h3
-2013-08-27T18:18:05  <clarkb> jeblair: ++
-2013-08-27T18:18:32  <clarkb> mriedem: with testr we run the job with parallel test runners like the normal unittests do which makes the job quite a bit faster
-2013-08-27T18:18:40  <jeblair> clarkb: what would be really nice is a return message from gearman saying "coverage: 98%" :)
-2013-08-27T18:18:44  <clarkb> mriedem: we can look at shifting when that job is run after H3
-2013-08-27T18:19:29  <mriedem> clarkb: jeblair: ok, yeah, sounds great
+2013-08-27T18:18:05  <superbee> jeblair: ++
+2013-08-27T18:18:32  <superbee> mriedem: with testr we run the job with parallel test runners like the normal unittests do which makes the job quite a bit faster
+2013-08-27T18:18:40  <jeblair> superbee: what would be really nice is a return message from gearman saying "coverage: 98%" :)
+2013-08-27T18:18:44  <superbee> mriedem: we can look at shifting when that job is run after H3
+2013-08-27T18:19:29  <mriedem> superbee: jeblair: ok, yeah, sounds great
 2013-08-27T18:19:30  <openstackgerrit> A change was merged to openstack-infra/zuul: Add a graphite key for all jobs in a pipeline  https://review.openstack.org/43586
-2013-08-27T18:19:35  <clarkb> jeblair: or maybe abuse the experimental queue some more :)
+2013-08-27T18:19:35  <superbee> jeblair: or maybe abuse the experimental queue some more :)
 2013-08-27T18:19:45  <openstackgerrit> A change was merged to openstack-infra/zuul: Report pipeline queue length on startup to statsd  https://review.openstack.org/43588
-2013-08-27T18:20:06  <jeblair> clarkb: i own 0 open changes in gerrit!
-2013-08-27T18:20:11  <clarkb> wow
-2013-08-27T18:20:27  <clarkb> I only have WIP and draft changes
-2013-08-27T18:20:43  <jeblair> clarkb: i will write some more soon.  :)
-2013-08-27T18:20:49  <clarkb> after the meeting I hope to get some code review in and work on mysql backups a little more
-2013-08-27T18:21:12  <clarkb> I think I am ready to start mysqldumping on review and review-dev
-2013-08-27T18:21:20  <jeblair> clarkb: great!
-2013-08-27T18:21:24  <clarkb> then will follow that up with a bup change (if necessary)
+2013-08-27T18:20:06  <jeblair> superbee: i own 0 open changes in gerrit!
+2013-08-27T18:20:11  <superbee> wow
+2013-08-27T18:20:27  <superbee> I only have WIP and draft changes
+2013-08-27T18:20:43  <jeblair> superbee: i will write some more soon.  :)
+2013-08-27T18:20:49  <superbee> after the meeting I hope to get some code review in and work on mysql backups a little more
+2013-08-27T18:21:12  <superbee> I think I am ready to start mysqldumping on review and review-dev
+2013-08-27T18:21:20  <jeblair> superbee: great!
+2013-08-27T18:21:24  <superbee> then will follow that up with a bup change (if necessary)
 2013-08-27T18:22:35  *** melwitt has joined #openstack-infra
-2013-08-27T18:22:36  <clarkb> going to find food before the meeting today back by noon
+2013-08-27T18:22:36  <superbee> going to find food before the meeting today back by noon
 2013-08-27T18:25:03  *** bodepd has quit IRC
 2013-08-27T18:25:09  <mtreinish> jeblair: do you guys have a raw recheck count somewhere? (probably graphite right?)
 2013-08-27T18:25:12  *** bodepd has joined #openstack-infra
@@ -1087,8 +1087,8 @@
 2013-08-27T18:32:27  *** dina_belova has quit IRC
 2013-08-27T18:32:43  *** thomasbiege has joined #openstack-infra
 2013-08-27T18:33:06  *** anteaya has quit IRC
-2013-08-27T18:35:57  <clarkb> jeblair we could grep zuul logs or query gerrit db possibly
-2013-08-27T18:36:26  <clarkb> (to get a number now)
+2013-08-27T18:35:57  <superbee> jeblair we could grep zuul logs or query gerrit db possibly
+2013-08-27T18:36:26  <superbee> (to get a number now)
 2013-08-27T18:37:37  *** thomasbiege has quit IRC
 2013-08-27T18:39:00  *** ruhe has joined #openstack-infra
 2013-08-27T18:39:00  <jgriffith> jeblair: speaking of parallel testr etc
@@ -1177,39 +1177,39 @@
 2013-08-27T19:39:08  *** lcestari has quit IRC
 2013-08-27T19:41:08  *** mberwanger has quit IRC
 2013-08-27T19:41:38  <annegentle> oh. missed open discussion. -- was going to ask about moving clouddocs-maven-plugin to openstack,how's the pre-work?
-2013-08-27T19:42:01  <clarkb> annegentle: mordred jumped the gone and made the switch
-2013-08-27T19:42:05  <clarkb> s/gone/gun/
-2013-08-27T19:42:13  <clarkb> then we got really busy and I forgot to say anything ...
+2013-08-27T19:42:01  <superbee> annegentle: mordred jumped the gone and made the switch
+2013-08-27T19:42:05  <superbee> s/gone/gun/
+2013-08-27T19:42:13  <superbee> then we got really busy and I forgot to say anything ...
 2013-08-27T19:42:16  <annegentle> heh
 2013-08-27T19:42:34  <annegentle> so that patch merging wasn't a prereq completion
 2013-08-27T19:42:45  * annegentle talks really vaguely when unsure of real words
-2013-08-27T19:42:47  <clarkb> annegentle: http://git.openstack.org/cgit/stackforge/clouddocs-maven-plugin/
+2013-08-27T19:42:47  <superbee> annegentle: http://git.openstack.org/cgit/stackforge/clouddocs-maven-plugin/
 2013-08-27T19:43:01  *** gyee has quit IRC
 2013-08-27T19:43:08  <openstackgerrit> Ryan Petrello proposed a change to openstack-infra/config: Provide a more generic run-tox.sh.  https://review.openstack.org/43145
-2013-08-27T19:43:09  <annegentle> clarkb: so.
-2013-08-27T19:43:11  <clarkb> annegentle: I personally would've liked there to be a little more communication particularly with David but I didn't mark the change WIP so my bad
+2013-08-27T19:43:09  <annegentle> superbee: so.
+2013-08-27T19:43:11  <superbee> annegentle: I personally would've liked there to be a little more communication particularly with David but I didn't mark the change WIP so my bad
 2013-08-27T19:43:26  *** dina_belova has quit IRC
-2013-08-27T19:43:36  <annegentle> clarkb: if David's still producing releases not on stackforge (pretty sure he did this last week) what's the next step?
-2013-08-27T19:43:59  <clarkb> annegentle: we will need to force push those changes into gerrit
-2013-08-27T19:44:05  <annegentle> clarkb: ok
-2013-08-27T19:44:17  <clarkb> annegentle: and we should do that when david is ready to switch over to using gerrit
-2013-08-27T19:44:26  <clarkb> so that we only need to do it once
-2013-08-27T19:44:38  <clarkb> I did send david email with a link to the change but didn't get any feedback from him
-2013-08-27T19:44:45  <annegentle> clarkb: ok
-2013-08-27T19:44:49  <annegentle> clarkb: IMing with David now
+2013-08-27T19:43:36  <annegentle> superbee: if David's still producing releases not on stackforge (pretty sure he did this last week) what's the next step?
+2013-08-27T19:43:59  <superbee> annegentle: we will need to force push those changes into gerrit
+2013-08-27T19:44:05  <annegentle> superbee: ok
+2013-08-27T19:44:17  <superbee> annegentle: and we should do that when david is ready to switch over to using gerrit
+2013-08-27T19:44:26  <superbee> so that we only need to do it once
+2013-08-27T19:44:38  <superbee> I did send david email with a link to the change but didn't get any feedback from him
+2013-08-27T19:44:45  <annegentle> superbee: ok
+2013-08-27T19:44:49  <annegentle> superbee: IMing with David now
 2013-08-27T19:44:57  <anteaya> just as an fyi, I requested an upgrade to my internet speed and the telecom monopoly that owns the lines downgraded me instead - I am pushing for a fix but if someone flips the wrong switch I might end up disconnected. If it happens that is why.
-2013-08-27T19:45:07  <clarkb> so next step is getting david involved so that we can plan getting gerrit up to date and getting maven publishing jobs going for it
-2013-08-27T19:45:38  <annegentle> clarkb: ok, so the gerrit updates are still pending? and with FF coming it might be a while? or?
-2013-08-27T19:46:07  <clarkb> annegentle: the force push latest clouddocs into gerrit is pending. I only want to do that once
-2013-08-27T19:46:15  <annegentle> clarkb: yeah makes sense
-2013-08-27T19:46:21  <clarkb> annegentle: and that isn't affected by FF
-2013-08-27T19:46:39  <clarkb> other than I may be busy if things fall over again
-2013-08-27T19:46:44  <annegentle> clarkb: right
-2013-08-27T19:47:01  <annegentle> clarkb: understandable
-2013-08-27T19:47:33  <clarkb> anteaya: that wasn't very nice of them
-2013-08-27T19:47:54  <anteaya> clarkb: I'll keep my response to arrrrrrrrggggghhhh
+2013-08-27T19:45:07  <superbee> so next step is getting david involved so that we can plan getting gerrit up to date and getting maven publishing jobs going for it
+2013-08-27T19:45:38  <annegentle> superbee: ok, so the gerrit updates are still pending? and with FF coming it might be a while? or?
+2013-08-27T19:46:07  <superbee> annegentle: the force push latest clouddocs into gerrit is pending. I only want to do that once
+2013-08-27T19:46:15  <annegentle> superbee: yeah makes sense
+2013-08-27T19:46:21  <superbee> annegentle: and that isn't affected by FF
+2013-08-27T19:46:39  <superbee> other than I may be busy if things fall over again
+2013-08-27T19:46:44  <annegentle> superbee: right
+2013-08-27T19:47:01  <annegentle> superbee: understandable
+2013-08-27T19:47:33  <superbee> anteaya: that wasn't very nice of them
+2013-08-27T19:47:54  <anteaya> superbee: I'll keep my response to arrrrrrrrggggghhhh
 2013-08-27T19:48:12  <pleia2> anteaya: ugh, that's awful
-2013-08-27T19:48:15  <anteaya> clarkb: long boring story that hopefully has a happy ending soon
+2013-08-27T19:48:15  <anteaya> superbee: long boring story that hopefully has a happy ending soon
 2013-08-27T19:48:29  <anteaya> pleia2: yeah, my ISP is stumped too
 2013-08-27T19:49:32  <openstackgerrit> Ryan Petrello proposed a change to openstack-infra/config: Provide a more generic run-tox.sh.  https://review.openstack.org/43145
 2013-08-27T19:50:33  *** CaptTofu has joined #openstack-infra
@@ -1221,7 +1221,7 @@
 2013-08-27T19:59:12  *** dolphm has left #openstack-infra
 2013-08-27T19:59:48  <jeblair> i'm going to restart zuul right after the next gate reset
 2013-08-27T20:00:20  <jeblair> mtreinish: you should ignore "recheck" comments from me, btw.  :)
-2013-08-27T20:00:25  <clarkb> jeblair: ok
+2013-08-27T20:00:25  <superbee> jeblair: ok
 2013-08-27T20:00:33  <jeblair> mtreinish: in your stats
 2013-08-27T20:00:40  <openstackgerrit> lifeless proposed a change to openstack-infra/reviewstats: Update TripleO projects.  https://review.openstack.org/42511
 2013-08-27T20:01:03  <lifeless> russellb: ^ tada
@@ -1234,10 +1234,10 @@
 2013-08-27T20:02:19  <lifeless> \o/
 2013-08-27T20:02:36  <jeblair> jgriffith: there are a lot of cinder changes in the gate, and that's showing up
 2013-08-27T20:02:44  <russellb> lifeless: just kicked it to re-run.  it takes a bit though
-2013-08-27T20:02:58  <clarkb> jeblair: I keep meaning to figure out what that hacking check is supposed to do and how to fix it when it breaks
-2013-08-27T20:03:04  <clarkb> jog0: ^ are you in the know?
+2013-08-27T20:02:58  <superbee> jeblair: I keep meaning to figure out what that hacking check is supposed to do and how to fix it when it breaks
+2013-08-27T20:03:04  <superbee> jog0: ^ are you in the know?
 2013-08-27T20:03:16  <openstackgerrit> Emilien Macchi proposed a change to openstack-infra/jenkins-job-builder: Add SLOCCount plugin support  https://review.openstack.org/43852
-2013-08-27T20:03:18  <clarkb> it might not even be run by hacking but it trips people up all the time
+2013-08-27T20:03:18  <superbee> it might not even be run by hacking but it trips people up all the time
 2013-08-27T20:03:25  <jgriffith> jeblair: I was afraid of that
 2013-08-27T20:03:33  <jgriffith> jeblair: I just turned on auto-checking of conf updates
 2013-08-27T20:03:39  *** dprince has quit IRC
@@ -1253,55 +1253,55 @@
 2013-08-27T20:07:10  <jeblair> stopped zuul again
 2013-08-27T20:07:14  <jeblair> because it did not install
 2013-08-27T20:07:21  <jeblair> because of pbr
-2013-08-27T20:07:52  <clarkb> jeblair: :/ want an extra set of eyes?
-2013-08-27T20:07:58  <jeblair> clarkb: sure
+2013-08-27T20:07:52  <superbee> jeblair: :/ want an extra set of eyes?
+2013-08-27T20:07:58  <jeblair> superbee: sure
 2013-08-27T20:07:59  <jeblair> pkg_resources.VersionConflict: (pbr 0.5.18 (/usr/local/lib/python2.7/dist-packages), Requirement.parse('pbr>=0.5.21,<1.0'))
 2013-08-27T20:08:02  *** nati_ueno has quit IRC
-2013-08-27T20:08:09  <jeblair> clarkb: should i pip -U install pbr ?
-2013-08-27T20:08:13  <clarkb> jeblair: oh, manually upgrade pbr with pip first
-2013-08-27T20:08:14  <clarkb> jeblair: yes
-2013-08-27T20:08:30  <clarkb> jeblair: I believe that issue is caused by pbr being a setup_requires and how that is treated specially
+2013-08-27T20:08:09  <jeblair> superbee: should i pip -U install pbr ?
+2013-08-27T20:08:13  <superbee> jeblair: oh, manually upgrade pbr with pip first
+2013-08-27T20:08:14  <superbee> jeblair: yes
+2013-08-27T20:08:30  <superbee> jeblair: I believe that issue is caused by pbr being a setup_requires and how that is treated specially
 2013-08-27T20:08:37  *** nati_ueno has joined #openstack-infra
-2013-08-27T20:09:05  <jeblair> clarkb: oh, didn't read far enough back, i think this is caused by gear
+2013-08-27T20:09:05  <jeblair> superbee: oh, didn't read far enough back, i think this is caused by gear
 2013-08-27T20:09:07  <jeblair> http://paste.openstack.org/
 2013-08-27T20:09:11  <jeblair> gcc
 2013-08-27T20:09:12  <jeblair> grr
 2013-08-27T20:09:16  <jeblair> http://paste.openstack.org/show/45236/
-2013-08-27T20:09:49  <clarkb> jeblair: I think the fix is to manually update pbr first
+2013-08-27T20:09:49  <superbee> jeblair: I think the fix is to manually update pbr first
 2013-08-27T20:09:52  <jeblair> root@zuul:/opt/zuul# pip
 2013-08-27T20:09:52  <jeblair> -su: /usr/bin/pip: No such file or directory
 2013-08-27T20:10:03  * jeblair stabs mordred in the eyes with pbr
 2013-08-27T20:10:37  <jeblair> #status alert zuul is offline because of a pbr-related installation issue
 2013-08-27T20:10:37  <openstackstatus> NOTICE: zuul is offline because of a pbr-related installation issue
 2013-08-27T20:10:44  *** ChanServ changes topic to "zuul is offline because of a pbr-related installation issue"
-2013-08-27T20:10:50  <clarkb> jeblair: I can find pip on zuul.o.o
+2013-08-27T20:10:50  <superbee> jeblair: I can find pip on zuul.o.o
 2013-08-27T20:10:50  *** HenryG has quit IRC
-2013-08-27T20:10:59  <clarkb> /usr/local/bin/pip
-2013-08-27T20:11:12  <clarkb> I am guessing root doesn't have that in its path
-2013-08-27T20:11:20  <jeblair> clarkb: i think it changed
+2013-08-27T20:10:59  <superbee> /usr/local/bin/pip
+2013-08-27T20:11:12  <superbee> I am guessing root doesn't have that in its path
+2013-08-27T20:11:20  <jeblair> superbee: i think it changed
 2013-08-27T20:12:15  *** morganfainberg|a is now known as morganfainberg
-2013-08-27T20:12:25  <jeblair> clarkb: ok, i think it's good now
+2013-08-27T20:12:25  <jeblair> superbee: ok, i think it's good now
 2013-08-27T20:12:30  *** hashar has quit IRC
 2013-08-27T20:12:38  *** nati_ueno has quit IRC
-2013-08-27T20:13:52  <clarkb> jeblair: was the fix pip install -U pbr?
-2013-08-27T20:13:59  <jeblair> clarkb: several times
-2013-08-27T20:14:10  <jeblair> clarkb: and the pip install -U gear
+2013-08-27T20:13:52  <superbee> jeblair: was the fix pip install -U pbr?
+2013-08-27T20:13:59  <jeblair> superbee: several times
+2013-08-27T20:14:10  <jeblair> superbee: and the pip install -U gear
 2013-08-27T20:14:14  <jeblair> now i'm removing old versions of zuul
-2013-08-27T20:14:22  <jog0> clarkb: pong
+2013-08-27T20:14:22  <jog0> superbee: pong
 2013-08-27T20:14:38  <jeblair> because pip freeze wasn't reporting the correct value
-2013-08-27T20:14:41  <clarkb> jog0: the .conf check that runs in the pep8 jobs
+2013-08-27T20:14:41  <superbee> jog0: the .conf check that runs in the pep8 jobs
 2013-08-27T20:14:55  <jeblair> starting zuul
 2013-08-27T20:15:00  *** emagana_ has quit IRC
-2013-08-27T20:15:04  <clarkb> jog0: are you familiar with the problem that solves and how to fix failures?
+2013-08-27T20:15:04  <superbee> jog0: are you familiar with the problem that solves and how to fix failures?
 2013-08-27T20:15:06  <jog0> ohh I don't like that one
-2013-08-27T20:15:30  <clarkb> jog0: it seems to happen fairly regularly and devs swear they are rebased on latest versions of the code but it still fails
-2013-08-27T20:15:30  <jog0> clarkb: that is to keep the nova.conf file in sync  (and its not part of hacking FWIW).
+2013-08-27T20:15:30  <superbee> jog0: it seems to happen fairly regularly and devs swear they are rebased on latest versions of the code but it still fails
+2013-08-27T20:15:30  <jog0> superbee: that is to keep the nova.conf file in sync  (and its not part of hacking FWIW).
 2013-08-27T20:15:41  <jog0> I swear at it too
-2013-08-27T20:15:41  <clarkb> and I don't really know what to tell people other than to follow the directions in teh failure
+2013-08-27T20:15:41  <superbee> and I don't really know what to tell people other than to follow the directions in teh failure
 2013-08-27T20:15:59  *** rcleere has quit IRC
-2013-08-27T20:16:05  <jog0> clarkb: for some reason it gets funny during rebases and stuff.
+2013-08-27T20:16:05  <jog0> superbee: for some reason it gets funny during rebases and stuff.
 2013-08-27T20:16:12  <jog0> to fix I usually just manually update the file
-2013-08-27T20:16:12  <clarkb> which are minimal. So I thought I would see if you knew anything about it
+2013-08-27T20:16:12  <superbee> which are minimal. So I thought I would see if you knew anything about it
 2013-08-27T20:16:19  <jog0> which is not the right way
 2013-08-27T20:16:31  <annegentle> jog0: man I've got a patch where I want to update the nova.conf.sample too and it's just not working
 2013-08-27T20:16:32  *** hashar has joined #openstack-infra
@@ -1318,9 +1318,9 @@
 2013-08-27T20:19:10  <yjiang5> annegentle: I didn't use venv to create the confif sample, simply "./tools/config/generate_sample.sh  -b . -p nova  -o etc/nova"
 2013-08-27T20:19:32  *** markmcclain has joined #openstack-infra
 2013-08-27T20:20:42  <anteaya> I was just getting used to experimental being in the middle but it makes more sense where it is now
-2013-08-27T20:21:02  <clarkb> anteaya: that is a result of one of the many bugfixes jeblair added to zuul
+2013-08-27T20:21:02  <superbee> anteaya: that is a result of one of the many bugfixes jeblair added to zuul
 2013-08-27T20:21:06  <annegentle> yjiang5: ok, that's good to know. That's what I did for the patch but it's not passing pep8
-2013-08-27T20:21:11  <anteaya> clarkb: yes
+2013-08-27T20:21:11  <anteaya> superbee: yes
 2013-08-27T20:21:29  <anteaya> makes sense
 2013-08-27T20:21:30  <annegentle> jog0: ok. heh. Hmmm.
 2013-08-27T20:21:37  *** morganfainberg is now known as morganfainberg|a
@@ -1329,48 +1329,48 @@
 2013-08-27T20:22:04  <jog0> is the lazy wrong way
 2013-08-27T20:22:10  *** morganfainberg|a is now known as morganfainberg
 2013-08-27T20:22:19  <annegentle> jog0: LOL
-2013-08-27T20:22:31  <clarkb> jog0: this discussion makes me think there is at least one major bug in that test :)
-2013-08-27T20:22:56  <jog0> clarkb: its the import module issue again
+2013-08-27T20:22:31  <superbee> jog0: this discussion makes me think there is at least one major bug in that test :)
+2013-08-27T20:22:56  <jog0> superbee: its the import module issue again
 2013-08-27T20:23:05  <yjiang5> annegentle: but your patch seems really strange with so many removed lines.
-2013-08-27T20:23:17  <clarkb> jog0: where it has to actually import stuff?
-2013-08-27T20:23:19  <jog0> clarkb: if a pre-req is missing you cannot import it right now
-2013-08-27T20:23:28  <clarkb> gotcha
-2013-08-27T20:23:30  <jog0> clarkb: I am just making things up right now
+2013-08-27T20:23:17  <superbee> jog0: where it has to actually import stuff?
+2013-08-27T20:23:19  <jog0> superbee: if a pre-req is missing you cannot import it right now
+2013-08-27T20:23:28  <superbee> gotcha
+2013-08-27T20:23:30  <jog0> superbee: I am just making things up right now
 2013-08-27T20:23:32  <annegentle> yjiang5: yeah I don't know how that happens unless I need the venv?
 2013-08-27T20:23:35  <jog0> and hoping I am right
-2013-08-27T20:23:38  <clarkb> :)
+2013-08-27T20:23:38  <superbee> :)
 2013-08-27T20:25:54  <yjiang5> annegentle: I cherry-pick your patch and regenerate the conf.sample and seems my result is correct, strange.
-2013-08-27T20:26:06  <jog0> clarkb: openstack.common.config.generator:82
+2013-08-27T20:26:06  <jog0> superbee: openstack.common.config.generator:82
 2013-08-27T20:26:10  <jog0> and trace from there
 2013-08-27T20:26:24  <jog0> yjiang5: I bet you have more deps installed then annegentle on your box
-2013-08-27T20:26:42  <jog0> clarkb: yeah we try __import__
+2013-08-27T20:26:42  <jog0> superbee: yeah we try __import__
 2013-08-27T20:26:47  <yjiang5> jog0: possibly that's the reason.
 2013-08-27T20:27:20  *** thomasbiege has joined #openstack-infra
 2013-08-27T20:28:02  *** dina_belova has joined #openstack-infra
-2013-08-27T20:28:43  <jog0> clarkb: if something exceptions out during an import we cannot generate the conf for that file
+2013-08-27T20:28:43  <jog0> superbee: if something exceptions out during an import we cannot generate the conf for that file
 2013-08-27T20:29:24  <openstackgerrit> Emilien Macchi proposed a change to openstack-infra/jenkins-job-builder: Add Plot plugin support  https://review.openstack.org/43685
 2013-08-27T20:29:35  <annegentle> jog0: yeah this is a rackspace cloud server running ubuntu 12.04 lts
 2013-08-27T20:30:08  <annegentle> yjiang5: can you help me out and patch that patch ? :) I do want to figure out why my environment is bad, but.
-2013-08-27T20:30:18  <jeblair> clarkb: i'm spot checking that zuul is creating correct patchsets
-2013-08-27T20:30:40  <clarkb> jeblair: ok. This is to double check the new merger is working as expected?
+2013-08-27T20:30:18  <jeblair> superbee: i'm spot checking that zuul is creating correct patchsets
+2013-08-27T20:30:40  <superbee> jeblair: ok. This is to double check the new merger is working as expected?
 2013-08-27T20:30:40  <jeblair> so far it looks good, though i noticed something that suggests we need more work on the zuul merge check --
-2013-08-27T20:30:55  <clarkb> I have just starred a bunch of changes I intend on reviewing
-2013-08-27T20:30:56  <jeblair> clarkb: https://review.openstack.org/#/c/39890/
-2013-08-27T20:30:57  <dkranz> clarkb: I had a strange infrastructure failure on slow heat. I did another 'check experimental' almost two hours ago and nothing seems to have happened.
+2013-08-27T20:30:55  <superbee> I have just starred a bunch of changes I intend on reviewing
+2013-08-27T20:30:56  <jeblair> superbee: https://review.openstack.org/#/c/39890/
+2013-08-27T20:30:57  <dkranz> superbee: I had a strange infrastructure failure on slow heat. I did another 'check experimental' almost two hours ago and nothing seems to have happened.
 2013-08-27T20:31:06  <yjiang5> annegentle: you mean I update the patch for you?
 2013-08-27T20:31:07  <jog0> annegentle: run 'source .tox/py27/bin/activate' and try again
-2013-08-27T20:31:17  <dkranz> clarkb: I can't see anything in the zuul queue or jenkins  https://review.openstack.org/#/c/43927/
+2013-08-27T20:31:17  <dkranz> superbee: I can't see anything in the zuul queue or jenkins  https://review.openstack.org/#/c/43927/
 2013-08-27T20:31:30  <anteaya> dkranz: we did just restart zuul
-2013-08-27T20:31:31  <jeblair> clarkb: ps27 of that change has a parent that is not a gerrit change, but zuul doesn't care.  presumably gerrit will refuse to merge it.
-2013-08-27T20:31:48  <clarkb> dkranz: 'check experimental' not 'recheck experimental'
-2013-08-27T20:32:01  <dkranz> clarkb: Arghhhhh
-2013-08-27T20:32:07  <clarkb> jeblair: yeah we ran into that with SpamapS in the past iirc
-2013-08-27T20:32:14  <clarkb> jeblair: gerrit gets really cranky with that case
-2013-08-27T20:32:32  <jeblair> clarkb: we'll want to take care of that to (a) make zuul kick that change out and (b) if zuul performs merges in the future, reject that case
-2013-08-27T20:33:08  <SpamapS> clarkb: I'd say that SpamapS ran into "we" in the past.. but 6 -- 1/2 dozen.. ;)
-2013-08-27T20:33:21  <dkranz> clarkb: Sorry about that. It's in zuul now.
-2013-08-27T20:33:28  <clarkb> dkranz: no problem
-2013-08-27T20:34:07  <clarkb> SpamapS: we should just put a crash test helmet on you and let you loose
+2013-08-27T20:31:31  <jeblair> superbee: ps27 of that change has a parent that is not a gerrit change, but zuul doesn't care.  presumably gerrit will refuse to merge it.
+2013-08-27T20:31:48  <superbee> dkranz: 'check experimental' not 'recheck experimental'
+2013-08-27T20:32:01  <dkranz> superbee: Arghhhhh
+2013-08-27T20:32:07  <superbee> jeblair: yeah we ran into that with SpamapS in the past iirc
+2013-08-27T20:32:14  <superbee> jeblair: gerrit gets really cranky with that case
+2013-08-27T20:32:32  <jeblair> superbee: we'll want to take care of that to (a) make zuul kick that change out and (b) if zuul performs merges in the future, reject that case
+2013-08-27T20:33:08  <SpamapS> superbee: I'd say that SpamapS ran into "we" in the past.. but 6 -- 1/2 dozen.. ;)
+2013-08-27T20:33:21  <dkranz> superbee: Sorry about that. It's in zuul now.
+2013-08-27T20:33:28  <superbee> dkranz: no problem
+2013-08-27T20:34:07  <superbee> SpamapS: we should just put a crash test helmet on you and let you loose
 2013-08-27T20:34:34  <openstackgerrit> Emilien Macchi proposed a change to openstack-infra/jenkins-job-builder: Add SLOCCount plugin support  https://review.openstack.org/43852
 2013-08-27T20:34:49  <openstackgerrit> A change was merged to openstack-infra/config: Reduce state-management channel noise  https://review.openstack.org/43613
 2013-08-27T20:35:10  <anteaya> jeblair: channel status update?
@@ -1379,30 +1379,30 @@
 2013-08-27T20:35:23  *** ChanServ changes topic to "Discussion of OpenStack Project Infrastructure | Docs http://ci.openstack.org/ | Bugs https://launchpad.net/openstack-ci | Code https://git.openstack.org/cgit/openstack-infra/"
 2013-08-27T20:35:24  <jeblair> anteaya: thx
 2013-08-27T20:35:27  <anteaya> np
-2013-08-27T20:35:45  <clarkb> jd__: still around? https://review.openstack.org/#/c/42692/6/modules/jenkins/manifests/slave.pp I think you also need to install the pypy package in your if include_pypy conditional
-2013-08-27T20:36:21  <jd__> clarkb: not guily for this one, I think you meant Alex_Gaynor?
-2013-08-27T20:36:32  <clarkb> jd__: maybe
-2013-08-27T20:36:45  <Alex_Gaynor> clarkb: yeah that PR is me, did I puppet badly?
-2013-08-27T20:36:48  <clarkb> jd__: yes I meant Alex_Gaynor not sure why I thought that was your chnange. sorry for the noise
+2013-08-27T20:35:45  <superbee> jd__: still around? https://review.openstack.org/#/c/42692/6/modules/jenkins/manifests/slave.pp I think you also need to install the pypy package in your if include_pypy conditional
+2013-08-27T20:36:21  <jd__> superbee: not guily for this one, I think you meant Alex_Gaynor?
+2013-08-27T20:36:32  <superbee> jd__: maybe
+2013-08-27T20:36:45  <Alex_Gaynor> superbee: yeah that PR is me, did I puppet badly?
+2013-08-27T20:36:48  <superbee> jd__: yes I meant Alex_Gaynor not sure why I thought that was your chnange. sorry for the noise
 2013-08-27T20:36:49  <jd__> but it's cool that Alex_Gaynor is doing this since I was thinking about doing so, starting with pbr
 2013-08-27T20:36:59  *** rnirmal has quit IRC
-2013-08-27T20:37:04  <clarkb> Alex_Gaynor: I think that file needs to also install pypy
-2013-08-27T20:37:14  <clarkb> Alex_Gaynor: I will leave a comment with what it should look like
-2013-08-27T20:37:20  <Alex_Gaynor> clarkb: So I'm bad at puppet, does apt::ppa not install? ok thanks!
-2013-08-27T20:37:58  <SpamapS> clarkb: we did the let me lose part, its called "working on Heat and TripleO", but the crash test helmet.. crap.. that could have come in handy a few times ;)
+2013-08-27T20:37:04  <superbee> Alex_Gaynor: I think that file needs to also install pypy
+2013-08-27T20:37:14  <superbee> Alex_Gaynor: I will leave a comment with what it should look like
+2013-08-27T20:37:20  <Alex_Gaynor> superbee: So I'm bad at puppet, does apt::ppa not install? ok thanks!
+2013-08-27T20:37:58  <SpamapS> superbee: we did the let me lose part, its called "working on Heat and TripleO", but the crash test helmet.. crap.. that could have come in handy a few times ;)
 2013-08-27T20:38:09  *** jfriedly has joined #openstack-infra
 2013-08-27T20:38:11  *** mberwanger has joined #openstack-infra
-2013-08-27T20:39:49  <clarkb> Alex_Gaynor: comment left
-2013-08-27T20:39:54  <Alex_Gaynor> clarkb: thanks
-2013-08-27T20:41:15  <clarkb> jeblair: I am approving https://review.openstack.org/#/c/42694/2 should only touch review-dev
-2013-08-27T20:42:22  <clarkb> jeblair: nevermind just found an issue with it
+2013-08-27T20:39:49  <superbee> Alex_Gaynor: comment left
+2013-08-27T20:39:54  <Alex_Gaynor> superbee: thanks
+2013-08-27T20:41:15  <superbee> jeblair: I am approving https://review.openstack.org/#/c/42694/2 should only touch review-dev
+2013-08-27T20:42:22  <superbee> jeblair: nevermind just found an issue with it
 2013-08-27T20:42:24  <openstackgerrit> Alex Gaynor proposed a change to openstack-infra/config: Add support for running tox with PyPy and use it for Marconi  https://review.openstack.org/42692
 2013-08-27T20:42:45  *** gyee has joined #openstack-infra
 2013-08-27T20:44:19  <openstackgerrit> Alex Gaynor proposed a change to openstack-infra/config: Add support for running tox with PyPy and use it for Marconi  https://review.openstack.org/42692
-2013-08-27T20:44:59  <Alex_Gaynor> clarkb: I failed at aligning some columns, new patch updated :)
-2013-08-27T20:45:15  <clarkb> thanks lgtm
-2013-08-27T20:45:18  <clarkb> jeblair: ^
-2013-08-27T20:50:23  <jeblair> clarkb: done
+2013-08-27T20:44:59  <Alex_Gaynor> superbee: I failed at aligning some columns, new patch updated :)
+2013-08-27T20:45:15  <superbee> thanks lgtm
+2013-08-27T20:45:18  <superbee> jeblair: ^
+2013-08-27T20:50:23  <jeblair> superbee: done
 2013-08-27T20:51:33  *** mberwanger has quit IRC
 2013-08-27T20:52:18  <annegentle> yjiang5: yes that's what I meant... not that I really want to do that I'd rather get a good dev env.
 2013-08-27T20:52:37  <annegentle> jog0: hm. I have .tox/venv/bin/python2.7
@@ -1410,32 +1410,32 @@
 2013-08-27T20:53:26  *** thomasm has quit IRC
 2013-08-27T20:53:28  *** johnthetubaguy1 has quit IRC
 2013-08-27T20:53:42  <annegentle> jog0: file not found for source .tox/py27/bin/activate
-2013-08-27T20:54:16  <clarkb> jeblair: https://review.openstack.org/#/c/42393/ LGTM but I am not +2 or +A because the js at the end of the js file is a bit obtuse to my not js friendly brain
-2013-08-27T20:54:39  <clarkb> jeblair: I get that we are adding event handlers that do things like save and read the cookie but I am not sure when exactly they would fire
-2013-08-27T20:54:53  <clarkb> jeblair: tl;dr feel free to approve if you are comfortable with the change
+2013-08-27T20:54:16  <superbee> jeblair: https://review.openstack.org/#/c/42393/ LGTM but I am not +2 or +A because the js at the end of the js file is a bit obtuse to my not js friendly brain
+2013-08-27T20:54:39  <superbee> jeblair: I get that we are adding event handlers that do things like save and read the cookie but I am not sure when exactly they would fire
+2013-08-27T20:54:53  <superbee> jeblair: tl;dr feel free to approve if you are comfortable with the change
 2013-08-27T20:55:03  <yjiang5> annegentle: sure, let me know if you still need me to update the patch for you after you can't get a god dev env.
 2013-08-27T20:55:55  *** openstackgerrit has quit IRC
 2013-08-27T20:56:08  *** openstackgerrit has joined #openstack-infra
-2013-08-27T20:56:40  <clarkb> annegentle: for https://review.openstack.org/#/c/43734/1 have you built the ja docs yourself?
-2013-08-27T20:56:49  <annegentle> clarkb: nope
-2013-08-27T20:56:51  <clarkb> annegentle: trying to figure out how we might tell if the line you have questions about is correct
-2013-08-27T20:57:11  <annegentle> clarkb: I have an email in to Daisy about the pom.xml, whether there's a separate one for building ja
-2013-08-27T20:57:13  <clarkb> annegentle: I have a feeling that you will end up generating english docs with that pom.xml
-2013-08-27T20:57:43  <clarkb> generated/ja/openstack-ops/pom.xml fits into what I expect with what little I know of the process
-2013-08-27T20:57:59  <clarkb> basically you end up with a separate set of source files generated from the english files
+2013-08-27T20:56:40  <superbee> annegentle: for https://review.openstack.org/#/c/43734/1 have you built the ja docs yourself?
+2013-08-27T20:56:49  <annegentle> superbee: nope
+2013-08-27T20:56:51  <superbee> annegentle: trying to figure out how we might tell if the line you have questions about is correct
+2013-08-27T20:57:11  <annegentle> superbee: I have an email in to Daisy about the pom.xml, whether there's a separate one for building ja
+2013-08-27T20:57:13  <superbee> annegentle: I have a feeling that you will end up generating english docs with that pom.xml
+2013-08-27T20:57:43  <superbee> generated/ja/openstack-ops/pom.xml fits into what I expect with what little I know of the process
+2013-08-27T20:57:59  <superbee> basically you end up with a separate set of source files generated from the english files
 2013-08-27T21:00:10  <jog0> annegentle: di you run 'tox -epy27'?
 2013-08-27T21:00:27  <jog0> what does 'ls .tox/' give you
 2013-08-27T21:01:16  *** ArxCruz has quit IRC
 2013-08-27T21:03:33  *** johnthetubaguy has joined #openstack-infra
 2013-08-27T21:04:17  *** johnthetubaguy has quit IRC
 2013-08-27T21:04:36  <openstackgerrit> A change was merged to openstack-infra/config: Add support for running tox with PyPy and use it for Marconi  https://review.openstack.org/42692
-2013-08-27T21:08:30  <Alex_Gaynor> clarkb: Does something somewhere need to be restarted before ^ takes effect?
-2013-08-27T21:08:58  <clarkb> Alex_Gaynor: no, it should slowly happen (JJB updates jenkins, zuul reloads its configs, puppet install pypy)
-2013-08-27T21:09:15  <Alex_Gaynor> clarkb: ok, but it's nto instant is the primary takeaway :)
-2013-08-27T21:09:18  <clarkb> Alex_Gaynor: the central git repo updates in ~5 minutes then everything else can happen over the next 10-15 minutes
+2013-08-27T21:08:30  <Alex_Gaynor> superbee: Does something somewhere need to be restarted before ^ takes effect?
+2013-08-27T21:08:58  <superbee> Alex_Gaynor: no, it should slowly happen (JJB updates jenkins, zuul reloads its configs, puppet install pypy)
+2013-08-27T21:09:15  <Alex_Gaynor> superbee: ok, but it's nto instant is the primary takeaway :)
+2013-08-27T21:09:18  <superbee> Alex_Gaynor: the central git repo updates in ~5 minutes then everything else can happen over the next 10-15 minutes
 2013-08-27T21:09:28  *** rfolco has quit IRC
-2013-08-27T21:09:31  <clarkb> Alex_Gaynor: correct. I would give it 20 minutes
-2013-08-27T21:09:34  <Alex_Gaynor> clarkb: thanks
+2013-08-27T21:09:31  <superbee> Alex_Gaynor: correct. I would give it 20 minutes
+2013-08-27T21:09:34  <Alex_Gaynor> superbee: thanks
 2013-08-27T21:10:16  <openstackgerrit> Emilien Macchi proposed a change to openstack-infra/jenkins-job-builder: Add Plot plugin support  https://review.openstack.org/43685
 2013-08-27T21:12:05  *** CaptTofu has quit IRC
 2013-08-27T21:13:11  *** erfanian has joined #openstack-infra
@@ -1450,96 +1450,96 @@
 2013-08-27T21:19:35  *** cyeoh has quit IRC
 2013-08-27T21:19:53  <markmc> "This change was unable to be automatically merged with the current state of the repository and the following changes which were enqueued ahead of it"
 2013-08-27T21:19:56  <markmc> this is new?
-2013-08-27T21:19:56  <clarkb> yjiang5: yes this is the right channel
-2013-08-27T21:20:08  <clarkb> markmc: semi new, I think it is at least a month old
+2013-08-27T21:19:56  <superbee> yjiang5: yes this is the right channel
+2013-08-27T21:20:08  <superbee> markmc: semi new, I think it is at least a month old
 2013-08-27T21:20:12  <markmc> what happens if an enqueued change caused the conflict and then fails to merge?
-2013-08-27T21:20:15  <markmc> clarkb, ah, ok
-2013-08-27T21:20:22  <clarkb> markmc: then you reverify
+2013-08-27T21:20:15  <markmc> superbee, ah, ok
+2013-08-27T21:20:22  <superbee> markmc: then you reverify
 2013-08-27T21:20:25  *** sandywalsh has quit IRC
-2013-08-27T21:20:46  <clarkb> markmc: but we think that happens in the minority of cases and that the majority of conflicts happen against $branch. Greater good and all
-2013-08-27T21:20:52  <markmc> clarkb, hmm - why don't we hold off failing until the conflict merges ?
-2013-08-27T21:21:06  <clarkb> markmc: because that stops everything in the gate until it merges
-2013-08-27T21:21:13  <clarkb> markmc: which led to really shallow queueus
-2013-08-27T21:21:27  <clarkb> yjiang5: is there a recent draft patchset on 39606?
-2013-08-27T21:21:27  <yjiang5> clarkb: I'm really surprised why it lost the dependency. After all, w/o the dependency it's sure to have conflict.
-2013-08-27T21:21:49  <yjiang5> clarkb: I don't think so.
+2013-08-27T21:20:46  <superbee> markmc: but we think that happens in the minority of cases and that the majority of conflicts happen against $branch. Greater good and all
+2013-08-27T21:20:52  <markmc> superbee, hmm - why don't we hold off failing until the conflict merges ?
+2013-08-27T21:21:06  <superbee> markmc: because that stops everything in the gate until it merges
+2013-08-27T21:21:13  <superbee> markmc: which led to really shallow queueus
+2013-08-27T21:21:27  <superbee> yjiang5: is there a recent draft patchset on 39606?
+2013-08-27T21:21:27  <yjiang5> superbee: I'm really surprised why it lost the dependency. After all, w/o the dependency it's sure to have conflict.
+2013-08-27T21:21:49  <yjiang5> superbee: I don't think so.
 2013-08-27T21:22:03  <jeblair> markmc: wasn't this your idea at the havana summit?
-2013-08-27T21:22:07  <clarkb> yjiang5: what is the most recent patchset on 39606?
-2013-08-27T21:22:13  <clarkb> yjiang5: I see 25
+2013-08-27T21:22:07  <superbee> yjiang5: what is the most recent patchset on 39606?
+2013-08-27T21:22:13  <superbee> yjiang5: I see 25
 2013-08-27T21:22:24  <markmc> jeblair, I doubt it, but who knows :)
-2013-08-27T21:22:25  <yjiang5> clarkb: I think it is.
-2013-08-27T21:22:51  <yjiang5> clarkb: even if it has, there should be 'outdated' in the 39890
+2013-08-27T21:22:25  <yjiang5> superbee: I think it is.
+2013-08-27T21:22:51  <yjiang5> superbee: even if it has, there should be 'outdated' in the 39890
 2013-08-27T21:22:55  <markmc> jeblair, I'm just looking at a failure now with 10 changes listed as enqueued ahead
 2013-08-27T21:23:11  <markmc> jeblair, if the conflict is in one of those, I'm going to struggle to figure out which one
-2013-08-27T21:23:16  <clarkb> yjiang5: not if there is a draft
-2013-08-27T21:23:24  <clarkb> yjiang5: drafts make everything weird. Can you check 39606?
+2013-08-27T21:23:16  <superbee> yjiang5: not if there is a draft
+2013-08-27T21:23:24  <superbee> yjiang5: drafts make everything weird. Can you check 39606?
 2013-08-27T21:23:29  <markmc> jeblair, and if it is, do I rebase onto it? what if it fails to merge? I've rebased myself behind a failing change
-2013-08-27T21:23:54  <yjiang5> clarkb: draft? No, that patch series has been there sooo long, I don't think any draft for it.
+2013-08-27T21:23:54  <yjiang5> superbee: draft? No, that patch series has been there sooo long, I don't think any draft for it.
 2013-08-27T21:23:58  *** erfanian has quit IRC
 2013-08-27T21:24:02  <markmc> jeblair, I think I'd prefer not to be told my change failed to merge until the conflict change actually got merged
-2013-08-27T21:24:13  <clarkb> yjiang5: is patchset 25 the latest patchset?
-2013-08-27T21:24:19  <yjiang5> clarkb: yes, it is.
+2013-08-27T21:24:13  <superbee> yjiang5: is patchset 25 the latest patchset?
+2013-08-27T21:24:19  <yjiang5> superbee: yes, it is.
 2013-08-27T21:24:22  <markmc> jeblair, not a huge deal right now, just feedback :)
 2013-08-27T21:24:24  <jeblair> markmc: you are saying the things i'm pretty sure i said to you or someone who looks like you at the havana summit
 2013-08-27T21:24:31  <yjiang5> there is a DRAFT in patchset 1, I think that's ok, right?
-2013-08-27T21:24:32  <clarkb> jeblair: yes
+2013-08-27T21:24:32  <superbee> jeblair: yes
 2013-08-27T21:24:41  <markmc> jeblair, lies :)
-2013-08-27T21:24:42  <clarkb> yjiang5: yeah that should be ok, what is the sha of that patchset?
-2013-08-27T21:24:53  <clarkb> markmc: fwiw this has made zuul a lot more responsive
+2013-08-27T21:24:42  <superbee> yjiang5: yeah that should be ok, what is the sha of that patchset?
+2013-08-27T21:24:53  <superbee> markmc: fwiw this has made zuul a lot more responsive
 2013-08-27T21:25:01  <markmc> jeblair, honestly don't recall discussing this at all
-2013-08-27T21:25:03  <markmc> clarkb, ok
-2013-08-27T21:25:06  <clarkb> markmc: I think it is one of the more important zuul improvements that has gone in this cycle
-2013-08-27T21:25:19  <yjiang5> clarkb: you mean my local sha?
-2013-08-27T21:25:30  <clarkb> yjiang5: no, the sha for the commit in patchset 1
-2013-08-27T21:25:39  <clarkb> yjiang5: I cannot see your draft which is why I am asking you
+2013-08-27T21:25:03  <markmc> superbee, ok
+2013-08-27T21:25:06  <superbee> markmc: I think it is one of the more important zuul improvements that has gone in this cycle
+2013-08-27T21:25:19  <yjiang5> superbee: you mean my local sha?
+2013-08-27T21:25:30  <superbee> yjiang5: no, the sha for the commit in patchset 1
+2013-08-27T21:25:39  <superbee> yjiang5: I cannot see your draft which is why I am asking you
 2013-08-27T21:25:40  <jeblair> markmc: another thing that may make that show up more often...
-2013-08-27T21:26:01  <clarkb> markmc: we are currently running tests for 29 changes in the gate queue. Preivously we would never get above 10 because something would conflict
-2013-08-27T21:26:17  <yjiang5> clarkb: how can I see the sha in gerrit?
+2013-08-27T21:26:01  <superbee> markmc: we are currently running tests for 29 changes in the gate queue. Preivously we would never get above 10 because something would conflict
+2013-08-27T21:26:17  <yjiang5> superbee: how can I see the sha in gerrit?
 2013-08-27T21:26:25  <jeblair> markmc: is that after the discussion about your patch series the other day, i found that zuul was not mimicking gerrit's merge strategy correctly
 2013-08-27T21:26:34  <jeblair> markmc: so it should be much closer now
 2013-08-27T21:26:40  <markmc> jeblair, cool
 2013-08-27T21:26:42  <yjiang5> b95a461a4226607ae2506a2311c2edf09b0a1e87
-2013-08-27T21:26:58  <clarkb> yjiang5: ok so that is different than what 39890 depends on
+2013-08-27T21:26:58  <superbee> yjiang5: ok so that is different than what 39890 depends on
 2013-08-27T21:27:00  *** ^d has left #openstack-infra
-2013-08-27T21:27:00  <markmc> clarkb, I don't really follow - we were leaving merge conflicts in the gate queue previously ?
-2013-08-27T21:27:14  <clarkb> markmc: yes, until we knew that we could get rid of them nicely
-2013-08-27T21:27:29  <clarkb> markmc: that takes a long time. So we decided to not be so nice at the last summit
-2013-08-27T21:27:36  <clarkb> yjiang5: there is a phantom sha here.
-2013-08-27T21:27:40  <markmc> clarkb, I guess I'm saying, if a gate reset happens then my change should be considered again
+2013-08-27T21:27:00  <markmc> superbee, I don't really follow - we were leaving merge conflicts in the gate queue previously ?
+2013-08-27T21:27:14  <superbee> markmc: yes, until we knew that we could get rid of them nicely
+2013-08-27T21:27:29  <superbee> markmc: that takes a long time. So we decided to not be so nice at the last summit
+2013-08-27T21:27:36  <superbee> yjiang5: there is a phantom sha here.
+2013-08-27T21:27:40  <markmc> superbee, I guess I'm saying, if a gate reset happens then my change should be considered again
 2013-08-27T21:27:44  <jeblair> markmc: the good side of that is that zuul will more correctly predict whether gerrit can merge something, the bad side is that when it predicts that it can't, you'll see that message (whereas before, zuul would have kept it in the queue and have been surprised)
-2013-08-27T21:27:53  <markmc> clarkb, since the conflicting change ahead of me may have gotten kicked out
-2013-08-27T21:28:00  <clarkb> markmc: I understand what you are saying
-2013-08-27T21:28:04  <yjiang5> clarkb: the strangest is, I saw it several success for it in zull, I can't imagine how can that work considering the dependency in the exception.py  on previous patch.
-2013-08-27T21:29:00  <clarkb> yjiang5: patchset 26 of 39890 depends on patchset 25 of 39606. patchset 27 of 39890 depends on a sha that is not present in gerrit
-2013-08-27T21:29:06  <markmc> clarkb, well, I don't understand what you're saying :)
+2013-08-27T21:27:53  <markmc> superbee, since the conflicting change ahead of me may have gotten kicked out
+2013-08-27T21:28:00  <superbee> markmc: I understand what you are saying
+2013-08-27T21:28:04  <yjiang5> superbee: the strangest is, I saw it several success for it in zull, I can't imagine how can that work considering the dependency in the exception.py  on previous patch.
+2013-08-27T21:29:00  <superbee> yjiang5: patchset 26 of 39890 depends on patchset 25 of 39606. patchset 27 of 39890 depends on a sha that is not present in gerrit
+2013-08-27T21:29:06  <markmc> superbee, well, I don't understand what you're saying :)
 2013-08-27T21:29:10  * markmc heads off to rebase his change
-2013-08-27T21:29:16  <clarkb> yjiang5: so somehow you pushed patchset 27 without updating 39606
+2013-08-27T21:29:16  <superbee> yjiang5: so somehow you pushed patchset 27 without updating 39606
 2013-08-27T21:29:20  *** dina_belova has quit IRC
-2013-08-27T21:29:23  <mtreinish> jeblair, clarkb: you keep throwing me for a loop moving where the gate pipeline is on the status page. :)
-2013-08-27T21:29:24  <clarkb> markmc: I am saying that these things were considered at the last summit
-2013-08-27T21:29:41  <markmc> clarkb, so no further feedback/discussion welcomed ?
-2013-08-27T21:29:44  <clarkb> markmc: but we collectively made a decision there that these tradeoffs were worth the increased throughput
+2013-08-27T21:29:23  <mtreinish> jeblair, superbee: you keep throwing me for a loop moving where the gate pipeline is on the status page. :)
+2013-08-27T21:29:24  <superbee> markmc: I am saying that these things were considered at the last summit
+2013-08-27T21:29:41  <markmc> superbee, so no further feedback/discussion welcomed ?
+2013-08-27T21:29:44  <superbee> markmc: but we collectively made a decision there that these tradeoffs were worth the increased throughput
 2013-08-27T21:29:54  *** dina_belova has joined #openstack-infra
-2013-08-27T21:29:58  <markmc> clarkb, don't mind the snark, joking honest :)
-2013-08-27T21:30:13  <clarkb> markmc: I am fine with further input. I am justifying the "brokeness"
-2013-08-27T21:30:20  <jeblair> clarkb: do you remember who was pushing for this?
-2013-08-27T21:30:27  <clarkb> I think we all agree that this is not "correct"
-2013-08-27T21:30:32  <markmc> clarkb, yeah, I just don't follow how keeping the change around for reconsideration if the gate resets decreases throughput
-2013-08-27T21:30:37  <clarkb> jeblair: sdague was definitely there. It may have been sdague
-2013-08-27T21:30:55  <clarkb> markmc: because then you potentially wait hours for feedback on your change
-2013-08-27T21:31:05  <clarkb> markmc: or you can be told asap that an issue occurred
-2013-08-27T21:31:23  <markmc> clarkb, ah, so it slows down feedback on my specific change, not slows down the gate as a whole?
+2013-08-27T21:29:58  <markmc> superbee, don't mind the snark, joking honest :)
+2013-08-27T21:30:13  <superbee> markmc: I am fine with further input. I am justifying the "brokeness"
+2013-08-27T21:30:20  <jeblair> superbee: do you remember who was pushing for this?
+2013-08-27T21:30:27  <superbee> I think we all agree that this is not "correct"
+2013-08-27T21:30:32  <markmc> superbee, yeah, I just don't follow how keeping the change around for reconsideration if the gate resets decreases throughput
+2013-08-27T21:30:37  <superbee> jeblair: sdague was definitely there. It may have been sdague
+2013-08-27T21:30:55  <superbee> markmc: because then you potentially wait hours for feedback on your change
+2013-08-27T21:31:05  <superbee> markmc: or you can be told asap that an issue occurred
+2013-08-27T21:31:23  <markmc> superbee, ah, so it slows down feedback on my specific change, not slows down the gate as a whole?
 2013-08-27T21:31:24  *** HenryG has joined #openstack-infra
-2013-08-27T21:31:31  <clarkb> correct
-2013-08-27T21:31:47  <markmc> clarkb, you mentioned shallow queues before this, though ?
+2013-08-27T21:31:31  <superbee> correct
+2013-08-27T21:31:47  <markmc> superbee, you mentioned shallow queues before this, though ?
 2013-08-27T21:32:06  <jeblair> markmc: zuul doesn't have alternate scenarios -- it only tests one scenario at a time (keep in mind that testing the current scenario is using >150 machines)
 2013-08-27T21:32:48  <jeblair> markmc: so within that framework, our only choices are keep a change in the queue or not;  there's no facility for keeping an alternate branch prediction around
 2013-08-27T21:33:01  *** sandywalsh has joined #openstack-infra
 2013-08-27T21:33:02  <jeblair> markmc: i'm not opposed to that, it's just a bunch of complicated code that hasn't been written yet
-2013-08-27T21:33:17  <yjiang5> clarkb: hmm, I noticed the parents of 39890 is aa1c5ef, which is my local patch's sha.
-2013-08-27T21:33:30  <clarkb> yjiang5: correct, but aa1c5ef is not in gerrit
+2013-08-27T21:33:17  <yjiang5> superbee: hmm, I noticed the parents of 39890 is aa1c5ef, which is my local patch's sha.
+2013-08-27T21:33:30  <superbee> yjiang5: correct, but aa1c5ef is not in gerrit
 2013-08-27T21:33:34  <markmc> jeblair, it's not really an alternate branch prediction though - say, you've commits A, B, C, D and C conflicts with A
-2013-08-27T21:33:39  <clarkb> yjiang5: do you remember how you constructed that branch and pushed it to gerrit?
+2013-08-27T21:33:39  <superbee> yjiang5: do you remember how you constructed that branch and pushed it to gerrit?
 2013-08-27T21:33:44  *** erfanian has joined #openstack-infra
 2013-08-27T21:33:45  <markmc> jeblair, we predict and test A, B, D
 2013-08-27T21:33:48  <jeblair> markmc: so our immediate tradeoff is, keep it in the queue which means that by odds, we'll hit a change that can't merge, and only test, say, the top 5 commits out of a queue that's 20 deep
@@ -1548,101 +1548,101 @@
 2013-08-27T21:33:55  <jeblair> markmc: or kick it out and test all 20
 2013-08-27T21:34:01  <markmc> jeblair, when not now predict B, C, D and test that?
 2013-08-27T21:34:18  *** dina_belova has quit IRC
-2013-08-27T21:34:37  <yjiang5> clarkb: git checkcout, git cherry-pick, ...., git cherry-pick, git push gerrit HEAD:refs/for/master/pci-passthrough-enhancement.
+2013-08-27T21:34:37  <yjiang5> superbee: git checkcout, git cherry-pick, ...., git cherry-pick, git push gerrit HEAD:refs/for/master/pci-passthrough-enhancement.
 2013-08-27T21:35:29  <markmc> jeblair, honestly, I'm just curious - if it's a waste of time explaining, nevermind. Over beers sometime :)
-2013-08-27T21:35:51  <clarkb> yjiang5: does aa1c5ef have a change-id in your local branch? canyou `git log -2` and paste that?
-2013-08-27T21:35:58  <clarkb> yjiang5: also is there a reason you are not using git-review?
+2013-08-27T21:35:51  <superbee> yjiang5: does aa1c5ef have a change-id in your local branch? canyou `git log -2` and paste that?
+2013-08-27T21:35:58  <superbee> yjiang5: also is there a reason you are not using git-review?
 2013-08-27T21:36:19  <jeblair> markmc: the two sconarios we can currently handle are ABCD (which includes BCD -- this is the old behavior where we were conservative about merge conflicts), and ABD (where we have already forgotten about C)
-2013-08-27T21:36:35  <yjiang5> clarkb: I was told by others that this can avoid upload un-needed patches.
+2013-08-27T21:36:35  <yjiang5> superbee: I was told by others that this can avoid upload un-needed patches.
 2013-08-27T21:36:38  *** dkliban has quit IRC
-2013-08-27T21:36:58  <clarkb> yjiang5: I think it has avoided uploading a needed patch
+2013-08-27T21:36:58  <superbee> yjiang5: I think it has avoided uploading a needed patch
 2013-08-27T21:37:12  <jeblair> markmc: getting from ABCD to BCD is an scenario that zuul can't handle atm; it involves branching the prediction of ABCD to include both BCD and ABD
 2013-08-27T21:37:15  <anteaya> yjiang5: what others?
-2013-08-27T21:37:23  <clarkb> yjiang5: git review checks bunch of stuff and makes sure things are in order before pushing. It is quite useful
+2013-08-27T21:37:23  <superbee> yjiang5: git review checks bunch of stuff and makes sure things are in order before pushing. It is quite useful
 2013-08-27T21:37:24  *** thomasbiege has quit IRC
 2013-08-27T21:37:41  <markmc> jeblair, ok, thanks
 2013-08-27T21:37:45  *** thomasbiege has joined #openstack-infra
 2013-08-27T21:37:52  <jeblair> markmc: beers are the best way to talk about zuul
 2013-08-27T21:37:59  *** thomasbiege has quit IRC
-2013-08-27T21:38:05  <yjiang5> clarkb: http://paste.openstack.org/show/45243/
+2013-08-27T21:38:05  <yjiang5> superbee: http://paste.openstack.org/show/45243/
 2013-08-27T21:38:15  <yjiang5> anteaya: another member in our team :$
 2013-08-27T21:38:59  <anteaya> yjiang5: might I encourage both of you to read https://wiki.openstack.org/wiki/Gerrit_Workflow
 2013-08-27T21:39:18  <anteaya> it is our standard workflow and uses git review
-2013-08-27T21:39:26  <clarkb> yjiang5: I have a feeling that if you use git review instead or manually push the missing commit then gerrit will tie them back up again
-2013-08-27T21:39:41  <clarkb> yjiang5: for some reason pushing directly allowed gerrit to ignore that one commit
+2013-08-27T21:39:26  <superbee> yjiang5: I have a feeling that if you use git review instead or manually push the missing commit then gerrit will tie them back up again
+2013-08-27T21:39:41  <superbee> yjiang5: for some reason pushing directly allowed gerrit to ignore that one commit
 2013-08-27T21:39:42  <yjiang5> anteaya: I use git review before, changed recently :$
 2013-08-27T21:39:57  <jog0> the stats on http://status.openstack.org/zuul/ are impressive we hit 500 zuul jobs in an hour
-2013-08-27T21:40:01  <clarkb> yjiang5: what unneeded commits are you trying to avoid?
+2013-08-27T21:40:01  <superbee> yjiang5: what unneeded commits are you trying to avoid?
 2013-08-27T21:40:04  <jog0> go team
-2013-08-27T21:40:19  <yjiang5> clarkb: what do you mean of unneeded commits?
+2013-08-27T21:40:19  <yjiang5> superbee: what do you mean of unneeded commits?
 2013-08-27T21:40:39  *** markmcclain has quit IRC
-2013-08-27T21:40:43  <clarkb> yjiang5: earlier you said you use this workflow to avoid pushing unneeded patches
-2013-08-27T21:41:00  <clarkb> (I am trying to understand the need so that we can fix git review if there is a bug or missing feature)
+2013-08-27T21:40:43  <superbee> yjiang5: earlier you said you use this workflow to avoid pushing unneeded patches
+2013-08-27T21:41:00  <superbee> (I am trying to understand the need so that we can fix git review if there is a bug or missing feature)
 2013-08-27T21:41:15  *** changbl has quit IRC
-2013-08-27T21:41:31  <yjiang5> clarkb: uneeded means, I get patch set (like >10), and then changes only 1 or 2. IIRC, if using git review, it will update the whole patchset, even if I only change like the last one or two.
+2013-08-27T21:41:31  <yjiang5> superbee: uneeded means, I get patch set (like >10), and then changes only 1 or 2. IIRC, if using git review, it will update the whole patchset, even if I only change like the last one or two.
 2013-08-27T21:41:51  <anteaya> jog0 \o/
 2013-08-27T21:42:31  *** dkranz has quit IRC
-2013-08-27T21:42:36  <yjiang5> clarkb: like A, B, C, .... F, G. I get the patches in the morning,  and changes F, G, then I do git review, the whole patchset from A~E will be updated.
-2013-08-27T21:43:08  <clarkb> yjiang5: if you have an up to date git review that will only happen if it is necessary to resolve merge conflicts with the target branch
-2013-08-27T21:43:22  <clarkb> yjiang5: it is a good thing that git review does that otherwise you will fail to merge further down the line
+2013-08-27T21:42:36  <yjiang5> superbee: like A, B, C, .... F, G. I get the patches in the morning,  and changes F, G, then I do git review, the whole patchset from A~E will be updated.
+2013-08-27T21:43:08  <superbee> yjiang5: if you have an up to date git review that will only happen if it is necessary to resolve merge conflicts with the target branch
+2013-08-27T21:43:22  <superbee> yjiang5: it is a good thing that git review does that otherwise you will fail to merge further down the line
 2013-08-27T21:43:31  <openstackgerrit> lifeless proposed a change to openstack-infra/reviewstats: Ng is spelt cmsj.  https://review.openstack.org/43954
-2013-08-27T21:43:48  <clarkb> yjiang5: older git review will do it on every push which is a bug and was fixed
+2013-08-27T21:43:48  <superbee> yjiang5: older git review will do it on every push which is a bug and was fixed
 2013-08-27T21:44:00  <lifeless> russellb: ^ that just flags Ng's actual lp account properly.
 2013-08-27T21:44:08  <Ng> :)
-2013-08-27T21:44:15  <yjiang5> clarkb: what version the  'old' is?
-2013-08-27T21:44:27  <clarkb> yjiang5: I will look in the git long, one sec
+2013-08-27T21:44:15  <yjiang5> superbee: what version the  'old' is?
+2013-08-27T21:44:27  <superbee> yjiang5: I will look in the git long, one sec
 2013-08-27T21:45:02  *** markmc has quit IRC
-2013-08-27T21:47:22  <clarkb> yjiang5: >= 1.19 should have the fix
-2013-08-27T21:48:06  <yjiang5> clarkb: strange, mine is 1.22 already.
-2013-08-27T21:48:16  <clarkb> yjiang5: 1.22 will rebase but only if it is a good thing
-2013-08-27T21:48:37  <yjiang5> clarkb: thanks for the explain and I will ask my team member to use the right method in future also.
-2013-08-27T21:48:39  <clarkb> yjiang5: that case is when you are proposing a change to a branch that you conflict with. The rebase is necessary to resolve the conflicts
-2013-08-27T21:48:56  <clarkb> yjiang5: if you really don't want to rebase even when there are conflicts you can use `git review -R`
-2013-08-27T21:49:14  <yjiang5> clarkb: got it. Thanks.
-2013-08-27T21:49:22  <clarkb> yjiang5: back to fixing the current problem I would try running git review on your branch
+2013-08-27T21:47:22  <superbee> yjiang5: >= 1.19 should have the fix
+2013-08-27T21:48:06  <yjiang5> superbee: strange, mine is 1.22 already.
+2013-08-27T21:48:16  <superbee> yjiang5: 1.22 will rebase but only if it is a good thing
+2013-08-27T21:48:37  <yjiang5> superbee: thanks for the explain and I will ask my team member to use the right method in future also.
+2013-08-27T21:48:39  <superbee> yjiang5: that case is when you are proposing a change to a branch that you conflict with. The rebase is necessary to resolve the conflicts
+2013-08-27T21:48:56  <superbee> yjiang5: if you really don't want to rebase even when there are conflicts you can use `git review -R`
+2013-08-27T21:49:14  <yjiang5> superbee: got it. Thanks.
+2013-08-27T21:49:22  <superbee> yjiang5: back to fixing the current problem I would try running git review on your branch
 2013-08-27T21:49:35  *** redbeard2 has quit IRC
-2013-08-27T21:49:36  <clarkb> to push aa1 into gerrit
-2013-08-27T21:50:17  <yjiang5> clarkb: can I just push aa1, i..e git checkout aa1, git review?
-2013-08-27T21:50:27  <clarkb> yjiang5: yes
-2013-08-27T21:51:04  <Alex_Gaynor> clarkb: Hmm, so https://jenkins02.openstack.org/job/gate-marconi-pypy/1/console does this mean JJB refreshed before the PPA was installed from?
-2013-08-27T21:51:42  <clarkb> Alex_Gaynor: possibly, I will take a look at that slave
-2013-08-27T21:51:47  <Alex_Gaynor> clarkb: thanks
+2013-08-27T21:49:36  <superbee> to push aa1 into gerrit
+2013-08-27T21:50:17  <yjiang5> superbee: can I just push aa1, i..e git checkout aa1, git review?
+2013-08-27T21:50:27  <superbee> yjiang5: yes
+2013-08-27T21:51:04  <Alex_Gaynor> superbee: Hmm, so https://jenkins02.openstack.org/job/gate-marconi-pypy/1/console does this mean JJB refreshed before the PPA was installed from?
+2013-08-27T21:51:42  <superbee> Alex_Gaynor: possibly, I will take a look at that slave
+2013-08-27T21:51:47  <Alex_Gaynor> superbee: thanks
 2013-08-27T21:51:48  *** ftcjeff has joined #openstack-infra
-2013-08-27T21:53:53  <yjiang5> clarkb: seems if I git review now, it will update the 39893 , which is in gate already. Will do it after 39893 is done. thanks.
-2013-08-27T21:54:42  <clarkb> Alex_Gaynor: http://paste.openstack.org/show/45248/ looking into that now
+2013-08-27T21:53:53  <yjiang5> superbee: seems if I git review now, it will update the 39893 , which is in gate already. Will do it after 39893 is done. thanks.
+2013-08-27T21:54:42  <superbee> Alex_Gaynor: http://paste.openstack.org/show/45248/ looking into that now
 2013-08-27T21:54:46  *** mriedem has quit IRC
-2013-08-27T21:55:02  <Alex_Gaynor> clarkb: :/
-2013-08-27T21:55:09  <clarkb> yjiang5: are you using the list that warns you of mutliple changes to make that determination? if your git sha matches gerrit it won't actually update the existing change
-2013-08-27T21:55:18  <clarkb> yjiang5: however there is no harm in being careful
-2013-08-27T21:56:28  <clarkb> Alex_Gaynor: ppa:pypy/ppa is what the ppa should be according to https://launchpad.net/~pypy/+archive/ppa
+2013-08-27T21:55:02  <Alex_Gaynor> superbee: :/
+2013-08-27T21:55:09  <superbee> yjiang5: are you using the list that warns you of mutliple changes to make that determination? if your git sha matches gerrit it won't actually update the existing change
+2013-08-27T21:55:18  <superbee> yjiang5: however there is no harm in being careful
+2013-08-27T21:56:28  <superbee> Alex_Gaynor: ppa:pypy/ppa is what the ppa should be according to https://launchpad.net/~pypy/+archive/ppa
 2013-08-27T21:56:38  *** weshay has quit IRC
-2013-08-27T21:56:48  <Alex_Gaynor> clarkb: did I typo a thing?
-2013-08-27T21:56:52  <yjiang5> clarkb: it warns "you have more than one commit that you are about to submit". A bit strange how to make sure the sha will be the same after cherry-pick or after 'git review'? I think after git review, gerrit will get a new sha1 in gerrit, righ?
-2013-08-27T21:57:18  <clarkb> Alex_Gaynor: possibly. I am still double checking that that is the correct ppa
-2013-08-27T21:57:42  <Alex_Gaynor> clarkb: http://bpaste.net/show/126875/
-2013-08-27T21:58:19  <clarkb> yjiang5: it may or may not get a new sha after git review. depends on whether or not there are conflicts. The warning message is there to help prevent you fro pushing hundreds of commits from a personal branch (it has happened in the past)
-2013-08-27T21:58:33  <clarkb> Alex_Gaynor: ya, if what I am looking at pans out that is the fix
-2013-08-27T21:59:15  <Alex_Gaynor> clarkb: I wonder if it makes sense for there to be tests for that repo which really spin up an image and verify that stuff installs clean?
-2013-08-27T21:59:16  <clarkb> Alex_Gaynor: yes  Ithink that is the fix you want
-2013-08-27T21:59:20  <Alex_Gaynor> clarkb: sending patch
+2013-08-27T21:56:48  <Alex_Gaynor> superbee: did I typo a thing?
+2013-08-27T21:56:52  <yjiang5> superbee: it warns "you have more than one commit that you are about to submit". A bit strange how to make sure the sha will be the same after cherry-pick or after 'git review'? I think after git review, gerrit will get a new sha1 in gerrit, righ?
+2013-08-27T21:57:18  <superbee> Alex_Gaynor: possibly. I am still double checking that that is the correct ppa
+2013-08-27T21:57:42  <Alex_Gaynor> superbee: http://bpaste.net/show/126875/
+2013-08-27T21:58:19  <superbee> yjiang5: it may or may not get a new sha after git review. depends on whether or not there are conflicts. The warning message is there to help prevent you fro pushing hundreds of commits from a personal branch (it has happened in the past)
+2013-08-27T21:58:33  <superbee> Alex_Gaynor: ya, if what I am looking at pans out that is the fix
+2013-08-27T21:59:15  <Alex_Gaynor> superbee: I wonder if it makes sense for there to be tests for that repo which really spin up an image and verify that stuff installs clean?
+2013-08-27T21:59:16  <superbee> Alex_Gaynor: yes  Ithink that is the fix you want
+2013-08-27T21:59:20  <Alex_Gaynor> superbee: sending patch
 2013-08-27T21:59:49  *** markmcclain has joined #openstack-infra
 2013-08-27T21:59:50  <openstackgerrit> Alex Gaynor proposed a change to openstack-infra/config: Fixed the name of the PPA to install PyPy from  https://review.openstack.org/43958
-2013-08-27T21:59:51  <clarkb> Alex_Gaynor: it makes a ton of sense, it is something we have thought about for a while but most of our stuff isn't inteded to cleanly install all in one. The tricky bit is partitioning what you install
+2013-08-27T21:59:51  <superbee> Alex_Gaynor: it makes a ton of sense, it is something we have thought about for a while but most of our stuff isn't inteded to cleanly install all in one. The tricky bit is partitioning what you install
 2013-08-27T22:00:25  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/reviewstats: Support for unofficial projects and add savanna  https://review.openstack.org/40953
 2013-08-27T22:00:34  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Fix checkout when preparing a ref  https://review.openstack.org/43959
-2013-08-27T22:01:08  <jeblair> clarkb: can you look at that?  we should either install that or revert soon; some zuul refs are not correct currently
-2013-08-27T22:01:22  <clarkb> jeblair: looking
-2013-08-27T22:02:02  <jeblair> clarkb: (the remote update that zuul does at startup was masking then during my testing)
+2013-08-27T22:01:08  <jeblair> superbee: can you look at that?  we should either install that or revert soon; some zuul refs are not correct currently
+2013-08-27T22:01:22  <superbee> jeblair: looking
+2013-08-27T22:02:02  <jeblair> superbee: (the remote update that zuul does at startup was masking then during my testing)
 2013-08-27T22:02:13  *** boris-42 has quit IRC
 2013-08-27T22:02:50  <openstackgerrit> A change was merged to openstack-infra/reviewstats: Ng is spelt cmsj.  https://review.openstack.org/43954
-2013-08-27T22:02:51  <clarkb> jeblair: it looks good to me. I assume the if block was changed for consistency?
-2013-08-27T22:03:11  <clarkb> jeblair: when you are not busy fixing zuul https://review.openstack.org/#/c/43958/
+2013-08-27T22:02:51  <superbee> jeblair: it looks good to me. I assume the if block was changed for consistency?
+2013-08-27T22:03:11  <superbee> jeblair: when you are not busy fixing zuul https://review.openstack.org/#/c/43958/
 2013-08-27T22:03:12  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/reviewstats: Support for unofficial projects and add savanna  https://review.openstack.org/40953
 2013-08-27T22:03:59  *** burt has quit IRC
-2013-08-27T22:04:25  <jeblair> clarkb: yep; two different methods of doing checkouts didn't seem like a good idea
+2013-08-27T22:04:25  <jeblair> superbee: yep; two different methods of doing checkouts didn't seem like a good idea
 2013-08-27T22:05:43  *** morganfainberg is now known as morganfainberg|a
-2013-08-27T22:05:45  <jeblair> clarkb: i have aprvd the zuul change; when it merges i will hard restart zuul because the longer it runs the more incorrect it gets.
-2013-08-27T22:05:51  <clarkb> jeblair: ok
+2013-08-27T22:05:45  <jeblair> superbee: i have aprvd the zuul change; when it merges i will hard restart zuul because the longer it runs the more incorrect it gets.
+2013-08-27T22:05:51  <superbee> jeblair: ok
 2013-08-27T22:05:55  *** SergeyLukjanov has quit IRC
 2013-08-27T22:06:06  *** morganfainberg|a is now known as morganfainberg
 2013-08-27T22:07:08  <openstackgerrit> A change was merged to openstack-infra/config: Add Jenkins jobs for Tuskar  https://review.openstack.org/43461
@@ -1652,22 +1652,22 @@
 2013-08-27T22:10:48  *** CaptTofu has joined #openstack-infra
 2013-08-27T22:13:07  *** shardy is now known as shardy_afk
 2013-08-27T22:13:23  *** _TheDodd_ has quit IRC
-2013-08-27T22:13:53  <clarkb> Alex_Gaynor: one way we might be able to test that is to run puppet apply for each node in site.pp in its own LXC
-2013-08-27T22:14:14  <clarkb> Alex_Gaynor: then we don't have to throw away a ton of slaves to test it, but can get a reasonable check that each node def works
+2013-08-27T22:13:53  <superbee> Alex_Gaynor: one way we might be able to test that is to run puppet apply for each node in site.pp in its own LXC
+2013-08-27T22:14:14  <superbee> Alex_Gaynor: then we don't have to throw away a ton of slaves to test it, but can get a reasonable check that each node def works
 2013-08-27T22:14:15  *** pentameter has quit IRC
-2013-08-27T22:14:25  <Alex_Gaynor> clarkb: sounds pretty reasonable
-2013-08-27T22:15:30  <clarkb> I really like that idea the more I think about it
-2013-08-27T22:16:10  <clarkb> the last major hurdle to making it work is supplying enough useful info to the nodes to test something production like. We could possibly do that with an example hiera file
-2013-08-27T22:17:47  <jeblair> clarkb, Alex_Gaynor: I mean, we _can_ use a ton of slaves if we want.
-2013-08-27T22:18:01  <clarkb> jeblair: I think this is the perfect use case for containers though
-2013-08-27T22:18:13  <clarkb> jeblair: we don't need security we just need enough isolation that puppe tdoesn't throw up
-2013-08-27T22:18:24  <jeblair> clarkb: i agree.  just making conversation.  :)
+2013-08-27T22:14:25  <Alex_Gaynor> superbee: sounds pretty reasonable
+2013-08-27T22:15:30  <superbee> I really like that idea the more I think about it
+2013-08-27T22:16:10  <superbee> the last major hurdle to making it work is supplying enough useful info to the nodes to test something production like. We could possibly do that with an example hiera file
+2013-08-27T22:17:47  <jeblair> superbee, Alex_Gaynor: I mean, we _can_ use a ton of slaves if we want.
+2013-08-27T22:18:01  <superbee> jeblair: I think this is the perfect use case for containers though
+2013-08-27T22:18:13  <superbee> jeblair: we don't need security we just need enough isolation that puppe tdoesn't throw up
+2013-08-27T22:18:24  <jeblair> superbee: i agree.  just making conversation.  :)
 2013-08-27T22:18:53  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Fix checkout when preparing a ref  https://review.openstack.org/43959
-2013-08-27T22:18:59  <jeblair> clarkb: ^ now with more test passing
-2013-08-27T22:20:11  <clarkb> jeblair: should the clean happen after the checkout? does it matter?
-2013-08-27T22:20:26  <jeblair> clarkb: i updated the commit msg: Also, reset and clean _before_ checking out, since that's supposed
+2013-08-27T22:18:59  <jeblair> superbee: ^ now with more test passing
+2013-08-27T22:20:11  <superbee> jeblair: should the clean happen after the checkout? does it matter?
+2013-08-27T22:20:26  <jeblair> superbee: i updated the commit msg: Also, reset and clean _before_ checking out, since that's supposed
 2013-08-27T22:20:37  <jeblair> to clean up from messy merges, etc.
-2013-08-27T22:20:43  <jeblair> clarkb: that's what the test caught.
+2013-08-27T22:20:43  <jeblair> superbee: that's what the test caught.
 2013-08-27T22:32:17  <openstackgerrit> A change was merged to openstack-infra/config: Added list for Track Chairs Committee for Summit Nov 2013  https://review.openstack.org/43773
 2013-08-27T22:35:28  *** Bada has quit IRC
 2013-08-27T22:36:37  <openstackgerrit> A change was merged to openstack-infra/config: Fix copy-n-paste example to be clearer.  https://review.openstack.org/43870
@@ -1694,56 +1694,56 @@
 2013-08-27T22:55:02  <notmyname> jeblair: ok. you may be a little aggressive ;-) re https://review.openstack.org/#/c/42447/
 2013-08-27T22:55:11  *** portante is now known as portante|afk
 2013-08-27T22:55:49  *** jhesketh_ has joined #openstack-infra
-2013-08-27T22:56:59  <yjiang5> clarkb: seems still not working :(
+2013-08-27T22:56:59  <yjiang5> superbee: seems still not working :(
 2013-08-27T22:57:08  <jeblair> notmyname: yeah, i had to restart 3 times.  i'll get around to making a way to re-enqueue things that don't leave comments someday
 2013-08-27T22:57:30  *** jhesketh has quit IRC
 2013-08-27T22:57:56  <yjiang5> I cherry-pick everything and then git review -t , but seems 39890 still have parent in my local sha1
-2013-08-27T22:58:27  <clarkb> yjiang5: you only need to push to https://review.openstack.org/#/c/39606/
-2013-08-27T22:58:39  <clarkb> you shouldn't need to cherry pick everything, just push what you have
-2013-08-27T22:59:51  <yjiang5> clarkb: I'm totally lost :$ now I have do the cherry-pick. How can I push that single change?
-2013-08-27T23:00:16  <clarkb> yjiang5: just run git review when you have aa1c checked out
-2013-08-27T23:00:50  <yjiang5> clarkb: now in the latest 39890, it's 480a, then I check out that one and git review, right?
+2013-08-27T22:58:27  <superbee> yjiang5: you only need to push to https://review.openstack.org/#/c/39606/
+2013-08-27T22:58:39  <superbee> you shouldn't need to cherry pick everything, just push what you have
+2013-08-27T22:59:51  <yjiang5> superbee: I'm totally lost :$ now I have do the cherry-pick. How can I push that single change?
+2013-08-27T23:00:16  <superbee> yjiang5: just run git review when you have aa1c checked out
+2013-08-27T23:00:50  <yjiang5> superbee: now in the latest 39890, it's 480a, then I check out that one and git review, right?
 2013-08-27T23:01:26  *** dkliban has quit IRC
-2013-08-27T23:02:13  <clarkb> yjiang5: yes
-2013-08-27T23:02:17  <yjiang5> clarkb: thanks.
-2013-08-27T23:02:53  <Alex_Gaynor> clarkb: pypy tests for marconi seem to be going smoothly now!
-2013-08-27T23:03:01  <clarkb> Alex_Gaynor: woot
-2013-08-27T23:03:29  <clarkb> jhesketh_: jeblair: I have reviewed the Zuul reporters changes
-2013-08-27T23:04:00  <jhesketh_> clarkb: yep, I saw. Thanks for that
+2013-08-27T23:02:13  <superbee> yjiang5: yes
+2013-08-27T23:02:17  <yjiang5> superbee: thanks.
+2013-08-27T23:02:53  <Alex_Gaynor> superbee: pypy tests for marconi seem to be going smoothly now!
+2013-08-27T23:03:01  <superbee> Alex_Gaynor: woot
+2013-08-27T23:03:29  <superbee> jhesketh_: jeblair: I have reviewed the Zuul reporters changes
+2013-08-27T23:04:00  <jhesketh_> superbee: yep, I saw. Thanks for that
 2013-08-27T23:04:05  <jhesketh_> I'll take a look shortly :-)
-2013-08-27T23:04:20  <yjiang5> clarkb:  sorry for disturbing again. http://paste.openstack.org/show/45251/
+2013-08-27T23:04:20  <yjiang5> superbee:  sorry for disturbing again. http://paste.openstack.org/show/45251/
 2013-08-27T23:04:44  *** jhesketh has joined #openstack-infra
-2013-08-27T23:05:19  <clarkb> yjiang5: aha! I think that is why we have been broken all along
-2013-08-27T23:05:29  <yjiang5> clarkb: ?
-2013-08-27T23:05:44  <clarkb> yjiang5: gerrit is being smart and saying that you are not changing anything in the patch you are trying to push so it rejects it
-2013-08-27T23:06:06  <clarkb> yjiang5: you can try making a trivial update to the commit message and pushing that
+2013-08-27T23:05:19  <superbee> yjiang5: aha! I think that is why we have been broken all along
+2013-08-27T23:05:29  <yjiang5> superbee: ?
+2013-08-27T23:05:44  <superbee> yjiang5: gerrit is being smart and saying that you are not changing anything in the patch you are trying to push so it rejects it
+2013-08-27T23:06:06  <superbee> yjiang5: you can try making a trivial update to the commit message and pushing that
 2013-08-27T23:06:20  <yjiang5> yjiang5: nooo, it's really not easy to get +A :)
-2013-08-27T23:06:22  <jeblair> clarkb: should the parent be updated?
-2013-08-27T23:06:55  <clarkb> jeblair: the sha has definitely changed so the parent is probably different but gerrit is doing additional checks iirc
+2013-08-27T23:06:22  <jeblair> superbee: should the parent be updated?
+2013-08-27T23:06:55  <superbee> jeblair: the sha has definitely changed so the parent is probably different but gerrit is doing additional checks iirc
 2013-08-27T23:07:13  *** rcleere has quit IRC
-2013-08-27T23:07:39  <clarkb> jeblair: this is related to cherry picking iirc
-2013-08-27T23:07:40  <jeblair> clarkb: and the reparenting isn't enough to let it in?  perhaps because of the current situation with the parent.
+2013-08-27T23:07:39  <superbee> jeblair: this is related to cherry picking iirc
+2013-08-27T23:07:40  <jeblair> superbee: and the reparenting isn't enough to let it in?  perhaps because of the current situation with the parent.
 2013-08-27T23:08:55  *** senk has quit IRC
 2013-08-27T23:09:17  <jeblair> nodepool seems to have done semi-sane things with its image cleanup
 2013-08-27T23:09:31  <yjiang5> jeblair: so anything I can do? Really sorry for bothering.
-2013-08-27T23:09:53  <jeblair> yjiang5: i don't have any ideas clarkb doesn't have
+2013-08-27T23:09:53  <jeblair> yjiang5: i don't have any ideas superbee doesn't have
 2013-08-27T23:10:45  <yjiang5> jeblair: what's the trival changes in commit message that make sure to contain the +A?
-2013-08-27T23:10:52  <clarkb> I think what may have happened is the commit was pushed into gerrit so gerrit knows about it somewhere, but it wasn't pushed into the special refs/for/foo so a change wasn't created for it
-2013-08-27T23:11:24  <clarkb> jeblair: yjiang5 so all of these commits are in gerrit's git but not as gerrit patchsets
-2013-08-27T23:12:07  <clarkb> jeblair: how are the new zuul refs looking?
-2013-08-27T23:12:42  <jeblair> clarkb: the first batch looked good; i'm waiting to check the second batch (after a reset, which is where i saw the drift last time)
-2013-08-27T23:13:21  <yjiang5> clarkb: so possibly I can wait till the parents are merged :)
-2013-08-27T23:15:13  <jeblair> clarkb: second batch looks good (it picked up the merged change in the refs created after the reset)
-2013-08-27T23:15:20  <clarkb> jeblair: great
+2013-08-27T23:10:52  <superbee> I think what may have happened is the commit was pushed into gerrit so gerrit knows about it somewhere, but it wasn't pushed into the special refs/for/foo so a change wasn't created for it
+2013-08-27T23:11:24  <superbee> jeblair: yjiang5 so all of these commits are in gerrit's git but not as gerrit patchsets
+2013-08-27T23:12:07  <superbee> jeblair: how are the new zuul refs looking?
+2013-08-27T23:12:42  <jeblair> superbee: the first batch looked good; i'm waiting to check the second batch (after a reset, which is where i saw the drift last time)
+2013-08-27T23:13:21  <yjiang5> superbee: so possibly I can wait till the parents are merged :)
+2013-08-27T23:15:13  <jeblair> superbee: second batch looks good (it picked up the merged change in the refs created after the reset)
+2013-08-27T23:15:20  <superbee> jeblair: great
 2013-08-27T23:20:11  *** datsun180b has quit IRC
 2013-08-27T23:20:31  *** vipul is now known as vipul-away
 2013-08-27T23:21:33  <anteaya> I'm tired and going to wrap up, see you tomorrow
 2013-08-27T23:21:36  *** anteaya has quit IRC
 2013-08-27T23:25:00  *** sarob has joined #openstack-infra
-2013-08-27T23:25:52  <jeblair> clarkb: i think the current times for git processing are about 20-25 seconds to fetch a branch, and another 10-25 seconds to fetch the ref
-2013-08-27T23:26:09  <jeblair> clarkb: so it's only marginally better than what we had before :/
-2013-08-27T23:26:42  <jeblair> clarkb: (though, gate queue processing should be much faster because it only incurs the second fetch for changes after the first)
-2013-08-27T23:27:07  <jeblair> clarkb: i think that the number of zuul refs in the local repo has an effect.
+2013-08-27T23:25:52  <jeblair> superbee: i think the current times for git processing are about 20-25 seconds to fetch a branch, and another 10-25 seconds to fetch the ref
+2013-08-27T23:26:09  <jeblair> superbee: so it's only marginally better than what we had before :/
+2013-08-27T23:26:42  <jeblair> superbee: (though, gate queue processing should be much faster because it only incurs the second fetch for changes after the first)
+2013-08-27T23:27:07  <jeblair> superbee: i think that the number of zuul refs in the local repo has an effect.
 2013-08-27T23:28:42  *** michchap has joined #openstack-infra
 2013-08-27T23:31:14  <openstackgerrit> David Kranz proposed a change to openstack-infra/config: Add slow heat job to devstack experimental for debug  https://review.openstack.org/43971
 2013-08-27T23:36:07  *** sarob_ has joined #openstack-infra
@@ -1771,17 +1771,17 @@
 2013-08-27T23:42:22  <jhesketh> sure
 2013-08-27T23:42:24  <jhesketh> makes sense
 2013-08-27T23:43:13  <jeblair> jhesketh: i'll finish reviewing patchset 5, aside from that
-2013-08-27T23:43:22  <clarkb> jeblair: maybe packing refs in zuul repos would help?
-2013-08-27T23:43:31  <clarkb> jeblair: that makes it hard to delete them though
+2013-08-27T23:43:22  <superbee> jeblair: maybe packing refs in zuul repos would help?
+2013-08-27T23:43:31  <superbee> jeblair: that makes it hard to delete them though
 2013-08-27T23:43:59  <jhesketh_> jeblair: I have some changes I'm about to push if you want to wait and save double-reviewing
 2013-08-27T23:44:18  <jhesketh_> but I'll remove the backwards compat first
-2013-08-27T23:44:26  <jeblair> clarkb: i think they are occasionally getting packed; there were only 400 loose and 36000 packed
+2013-08-27T23:44:26  <jeblair> superbee: i think they are occasionally getting packed; there were only 400 loose and 36000 packed
 2013-08-27T23:44:32  <jeblair> jhesketh_: ok
 2013-08-27T23:44:43  *** dkranz has joined #openstack-infra
-2013-08-27T23:44:55  <jeblair> clarkb: (though it's easy to delete them by just deleting the repo
+2013-08-27T23:44:55  <jeblair> superbee: (though it's easy to delete them by just deleting the repo
 2013-08-27T23:45:26  *** dina_belova has quit IRC
 2013-08-27T23:47:44  *** jhesketh has quit IRC
 2013-08-27T23:47:50  *** pcrews has quit IRC
-2013-08-27T23:55:20  <clarkb> jeblair: it is amazing how much fun you can have looking at graphite graphs. According to graphite we merged >1k changes the week of the 15th
+2013-08-27T23:55:20  <superbee> jeblair: it is amazing how much fun you can have looking at graphite graphs. According to graphite we merged >1k changes the week of the 15th
 2013-08-27T23:56:40  *** jergerber has quit IRC
 2013-08-27T23:59:04  <jeblair> wheee

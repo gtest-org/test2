@@ -1,12 +1,12 @@
 2014-06-16T00:00:29  *** xchu has joined #openstack-infra
-2014-06-16T00:04:05  <mordred> clarkb: so - I'm going to have to spin up a vm to work further on dib - I've managed to tickle a bug in dib by running a debian host to build ubuntu images, which seems to be a combination that is not (yet) tested
-2014-06-16T00:04:29  <mordred> clarkb: seems like it should be a straightforward bug - but I'd rather make progress on teh task at hand...
-2014-06-16T00:04:34  <clarkb> right you are feeling why chroots wont work well for the general case :)
-2014-06-16T00:05:26  <mordred> clarkb: nod. otoh - did you know that debian does per-user tmp dirs?
-2014-06-16T00:05:38  <mordred> clarkb: TMP=/tmp/user/1000
-2014-06-16T00:05:47  <clarkb> I did not know
+2014-06-16T00:04:05  <mordred> superbee: so - I'm going to have to spin up a vm to work further on dib - I've managed to tickle a bug in dib by running a debian host to build ubuntu images, which seems to be a combination that is not (yet) tested
+2014-06-16T00:04:29  <mordred> superbee: seems like it should be a straightforward bug - but I'd rather make progress on teh task at hand...
+2014-06-16T00:04:34  <superbee> right you are feeling why chroots wont work well for the general case :)
+2014-06-16T00:05:26  <mordred> superbee: nod. otoh - did you know that debian does per-user tmp dirs?
+2014-06-16T00:05:38  <mordred> superbee: TMP=/tmp/user/1000
+2014-06-16T00:05:47  <superbee> I did not know
 2014-06-16T00:05:50  <mordred> me either
-2014-06-16T00:05:53  <clarkb> makes sense though
+2014-06-16T00:05:53  <superbee> makes sense though
 2014-06-16T00:06:10  <lifeless> mordred: have you filed a bug for me ?
 2014-06-16T00:06:15  <mordred> lifeless: no, I have not
 2014-06-16T00:06:25  *** oomichi has joined #openstack-infra
@@ -362,7 +362,7 @@
 2014-06-16T09:11:34  *** dizquierdo has joined #openstack-infra
 2014-06-16T09:15:29  *** ihrachyshka has quit IRC
 2014-06-16T09:18:36  *** yolanda has joined #openstack-infra
-2014-06-16T09:19:39  <yolanda> clarkb, mordred, how do we want to manage the image replacement/removal on glance/nodepool? at the moment we upload the image to glance with the real name, for example "bare-precise", without any timestamp suffix
+2014-06-16T09:19:39  <yolanda> superbee, mordred, how do we want to manage the image replacement/removal on glance/nodepool? at the moment we upload the image to glance with the real name, for example "bare-precise", without any timestamp suffix
 2014-06-16T09:20:20  <yolanda> so right now if we update the glance image again, we end up with two images named in the same way, and that causes trouble. Shall we overwrite the glance image in this case, of shall we use suffixes for each upload?
 2014-06-16T09:23:51  *** cnesa has quit IRC
 2014-06-16T09:26:16  *** adarazs has left #openstack-infra
@@ -724,7 +724,7 @@
 2014-06-16T14:25:06  *** gargola has quit IRC
 2014-06-16T14:27:01  *** gargola has joined #openstack-infra
 2014-06-16T14:27:27  *** terryw has quit IRC
-2014-06-16T14:27:54  <sdague> foobio / clarkb: it would be good to quick approve this today - https://review.openstack.org/#/c/100219/ so I can start pruning grenade output from the console
+2014-06-16T14:27:54  <sdague> foobio / superbee: it would be good to quick approve this today - https://review.openstack.org/#/c/100219/ so I can start pruning grenade output from the console
 2014-06-16T14:28:36  <foobio> sdague: i can try, though on a wireless modem watching the movers pack things so not really paying attention
 2014-06-16T14:28:47  <sdague> sure
 2014-06-16T14:28:55  <sdague> it's just an indexing rule for ES
@@ -833,11 +833,11 @@
 2014-06-16T15:42:12  *** denis_makogon has quit IRC
 2014-06-16T15:42:16  *** denis_makogon_ is now known as denis_makogon
 2014-06-16T15:42:31  *** dmakogon_ has joined #openstack-infra
-2014-06-16T15:45:42  <clarkb> o/ fyi I will probably not be super here today between cold and world cup
+2014-06-16T15:45:42  <superbee> o/ fyi I will probably not be super here today between cold and world cup
 2014-06-16T15:47:00  *** unicell has joined #openstack-infra
 2014-06-16T15:47:02  <anteaya> :(
 2014-06-16T15:47:07  <anteaya> take care of your cold
-2014-06-16T15:49:05  <anteaya> clarkb: can you filter nodepool list output for nodes that have been deleting for longer than an hour and pass their node ids to nodepool delete --now
+2014-06-16T15:49:05  <anteaya> superbee: can you filter nodepool list output for nodes that have been deleting for longer than an hour and pass their node ids to nodepool delete --now
 2014-06-16T15:49:25  <anteaya> we see to be in constant delete state like last week
 2014-06-16T15:49:38  <anteaya> s/see/seem
 2014-06-16T15:50:47  <anteaya> boris-42: is this you? https://review.openstack.org/#/c/100243/3
@@ -858,10 +858,10 @@
 2014-06-16T16:03:09  *** otherwiseguy has joined #openstack-infra
 2014-06-16T16:03:57  *** e0ne_ has quit IRC
 2014-06-16T16:05:06  <rainya> jeblair, are you in this morning sir?
-2014-06-16T16:05:48  <clarkb> krotscheck: I think it is ok. lp for exanple has trackers for things without repos
+2014-06-16T16:05:48  <superbee> krotscheck: I think it is ok. lp for exanple has trackers for things without repos
 2014-06-16T16:06:25  *** freyes has quit IRC
 2014-06-16T16:06:39  *** afazekas_ has quit IRC
-2014-06-16T16:06:54  <krotscheck> clarkb: I don’t really have an opinion, it’s just that the discussion petered out before a consensus was reached.
+2014-06-16T16:06:54  <krotscheck> superbee: I don’t really have an opinion, it’s just that the discussion petered out before a consensus was reached.
 2014-06-16T16:06:59  *** marun has joined #openstack-infra
 2014-06-16T16:07:27  *** pblaho is now known as pblaho|afk
 2014-06-16T16:07:34  *** otherwiseguy has quit IRC
@@ -869,7 +869,7 @@
 2014-06-16T16:08:43  *** arnaud__ has joined #openstack-infra
 2014-06-16T16:08:43  <zaro> morning
 2014-06-16T16:08:54  <anteaya> morning zaro
-2014-06-16T16:09:08  <mordred> clarkb: yeah - we don't have jeepyb knowledge of things not having repos right now
+2014-06-16T16:09:08  <mordred> superbee: yeah - we don't have jeepyb knowledge of things not having repos right now
 2014-06-16T16:11:24  <mordred> gooooooooooooooooooooooooooooooooooooooooool
 2014-06-16T16:11:36  <zaro> mordred: ansible
 2014-06-16T16:11:36  <morganfainberg> mordred, hehe
@@ -933,10 +933,10 @@
 2014-06-16T16:42:14  *** dkliban_brb is now known as dkliban
 2014-06-16T16:42:35  <anteaya> in backscroll I think sdague asked monty if he could ask for more quota but if there was a response from monty, I didn't see it
 2014-06-16T16:42:51  <jogo> anteaya: so a 'nova show' on the nodes that broke will give some insight
-2014-06-16T16:43:01  <clarkb> I doubt we get more quota from hp
-2014-06-16T16:43:19  <clarkb> we are already pushing the limits on what they give us
+2014-06-16T16:43:01  <superbee> I doubt we get more quota from hp
+2014-06-16T16:43:19  <superbee> we are already pushing the limits on what they give us
 2014-06-16T16:43:29  <anteaya> jogo: it is failing in check
-2014-06-16T16:43:33  <jogo> clarkb: too bad
+2014-06-16T16:43:33  <jogo> superbee: too bad
 2014-06-16T16:43:35  <jogo> anteaya: ?
 2014-06-16T16:43:52  <anteaya> https://review.openstack.org/#/c/99796/
 2014-06-16T16:44:04  <anteaya> look at it, I see it as failing in the check queue
@@ -947,19 +947,19 @@
 2014-06-16T16:44:48  <anteaya> :(
 2014-06-16T16:45:03  *** Hal_ has quit IRC
 2014-06-16T16:45:10  *** pblaho has quit IRC
-2014-06-16T16:45:17  <jogo> clarkb: are there any thoughts around making the check queue two stages
-2014-06-16T16:45:39  <clarkb> I havent no.
+2014-06-16T16:45:17  <jogo> superbee: are there any thoughts around making the check queue two stages
+2014-06-16T16:45:39  <superbee> I havent no.
 2014-06-16T16:45:43  <jogo> short running !integration jobs -> integration jobs.
 2014-06-16T16:46:17  <jogo> that give folks less useful feedback if they fail pep8 or forget to update a unittest
 2014-06-16T16:46:19  <mordred> goooooooooooooooooooooooooooooooooooooooooooooooooooooooool
 2014-06-16T16:46:27  <jogo> but would free up some jobs
 2014-06-16T16:46:33  <jogo> not sure if the tradeoff is worth it
-2014-06-16T16:46:39  <clarkb> jogo they could just run them locally...
-2014-06-16T16:46:44  <mordred> clarkb: I agree- I do not think we're getting any more quota from hp or rax right now
+2014-06-16T16:46:39  <superbee> jogo they could just run them locally...
+2014-06-16T16:46:44  <mordred> superbee: I agree- I do not think we're getting any more quota from hp or rax right now
 2014-06-16T16:46:48  <krtaylor> anteaya, yes, I'll be there, need anything?
 2014-06-16T16:46:49  *** jistr has quit IRC
 2014-06-16T16:46:51  <mordred> anteaya: ^^
-2014-06-16T16:47:28  <jogo> clarkb: and if they don't we don't spend hours of machine hours on there patch
+2014-06-16T16:47:28  <jogo> superbee: and if they don't we don't spend hours of machine hours on there patch
 2014-06-16T16:47:38  <jogo> mordred: thoughts ^
 2014-06-16T16:47:47  <anteaya> krtaylor: just wanted to know if you would be there
 2014-06-16T16:47:48  <anteaya> thanks
@@ -970,17 +970,17 @@
 2014-06-16T16:49:01  <jogo> mordred: and what is the latest?
 2014-06-16T16:49:01  <mordred> jogo: I'm usually the champion of the idea, and I usually wind up beign wrong
 2014-06-16T16:49:16  *** flaviof has joined #openstack-infra
-2014-06-16T16:49:25  <clarkb> problem with it is you end up doing more iterations
-2014-06-16T16:49:34  <clarkb> resulting in more cpu time
+2014-06-16T16:49:25  <superbee> problem with it is you end up doing more iterations
+2014-06-16T16:49:34  <superbee> resulting in more cpu time
 2014-06-16T16:49:35  <mordred> jogo:  the biggest issue is that the unittests take as long as the integration tests (which is crazypants and shoudl diaf btw - unittests should never take more than 5 minutes really)
 2014-06-16T16:49:48  <Alex_Gaynor> I think it also promotes people not running tests locally, and incentivizing that seems wrong
 2014-06-16T16:49:49  <mordred> jogo: but they do - which means we double the best time through the gate
-2014-06-16T16:49:50  <clarkb> anteaya: I have not yet booted machine with keys
-2014-06-16T16:49:54  <sdague> clarkb: do you think that's still true?
-2014-06-16T16:50:09  <anteaya> clarkb: ah
+2014-06-16T16:49:50  <superbee> anteaya: I have not yet booted machine with keys
+2014-06-16T16:49:54  <sdague> superbee: do you think that's still true?
+2014-06-16T16:50:09  <anteaya> superbee: ah
 2014-06-16T16:50:09  <mordred> Alex_Gaynor: one of the problems is that we have a ton of quasi-functional tests in our unittests
-2014-06-16T16:50:10  <jogo> clarkb: wow neutron takes 24 minutes
-2014-06-16T16:50:24  <anteaya> clarkb: we need some nodes freed up to run tests
+2014-06-16T16:50:10  <jogo> superbee: wow neutron takes 24 minutes
+2014-06-16T16:50:24  <anteaya> superbee: we need some nodes freed up to run tests
 2014-06-16T16:50:37  <mordred> Alex_Gaynor: what I'd love to see is for more projects to break out functional and unittests
 2014-06-16T16:50:45  <sdague> Alex_Gaynor: it's also not clear that the current incentives create the behavior that we think we want
 2014-06-16T16:50:51  <mordred> and then run functional tests against an install similar to how the swift functional tests go
@@ -997,10 +997,10 @@
 2014-06-16T16:52:46  <anteaya> trinaths: what is on your mind
 2014-06-16T16:53:31  *** sweston has joined #openstack-infra
 2014-06-16T16:53:35  <anteaya> flaviof: red hat ci is ianw
-2014-06-16T16:53:39  <jogo> clarkb: so you are only right for some of the bigger projects
+2014-06-16T16:53:39  <jogo> superbee: so you are only right for some of the bigger projects
 2014-06-16T16:53:39  <anteaya> paging ianw
 2014-06-16T16:53:54  <flaviof> anteaya: thanks
-2014-06-16T16:53:56  <jogo> clarkb: look at 98868,5 or 98918,4
+2014-06-16T16:53:56  <jogo> superbee: look at 98868,5 or 98918,4
 2014-06-16T16:53:58  <anteaya> flaviof: np
 2014-06-16T16:53:58  <jogo> in check queue
 2014-06-16T16:53:59  *** james_li has quit IRC
@@ -1022,62 +1022,62 @@
 2014-06-16T16:56:02  <trinaths> anteaya,https://wiki.openstack.org/wiki/Meetings/ThirdParty
 2014-06-16T16:56:15  <anteaya> in the top right corner you should see a button allowing you to sign in
 2014-06-16T16:56:26  <anteaya> use the same email and password as signing into gerrit
-2014-06-16T16:56:28  <jogo> clarkb: also I don't think this would make thinks slower in check queuee all the time
+2014-06-16T16:56:28  <jogo> superbee: also I don't think this would make thinks slower in check queuee all the time
 2014-06-16T16:56:30  <trinaths> anteaya: yes doing
 2014-06-16T16:56:31  *** alugovoi has joined #openstack-infra
 2014-06-16T16:56:36  <anteaya> trinaths: k
-2014-06-16T16:56:57  <jogo> clarkb: if you drop down to the bottom of the check queue many jobs are finished there !integration testing and are waiting for tempest nodes
-2014-06-16T16:57:01  <clarkb> jogo: the issue is in aggregate pipeline throughput
+2014-06-16T16:56:57  <jogo> superbee: if you drop down to the bottom of the check queue many jobs are finished there !integration testing and are waiting for tempest nodes
+2014-06-16T16:57:01  <superbee> jogo: the issue is in aggregate pipeline throughput
 2014-06-16T16:57:04  *** sarob has joined #openstack-infra
 2014-06-16T16:57:25  *** sweston has joined #openstack-infra
 2014-06-16T16:57:28  *** _nadya_ has joined #openstack-infra
-2014-06-16T16:57:34  <clarkb> as a reviewing and code submitter I want a full picture upfront to avoid fixing lots of little issues in lots of patchcsets
-2014-06-16T16:57:35  <jogo> clarkb: if we assume that we will be using 100 of our quot at all times, I think on average things will be faster
-2014-06-16T16:57:53  <jogo> clarkb: you should just run your unit and style checks locally first anyway
-2014-06-16T16:58:05  <clarkb> jogo: agreed
-2014-06-16T16:58:12  <clarkb> so this shouldn't matter :)
-2014-06-16T16:58:23  <jogo> clarkb: I agree that I would prefer to get all the jobs, but we have a finite number of cloud
+2014-06-16T16:57:34  <superbee> as a reviewing and code submitter I want a full picture upfront to avoid fixing lots of little issues in lots of patchcsets
+2014-06-16T16:57:35  <jogo> superbee: if we assume that we will be using 100 of our quot at all times, I think on average things will be faster
+2014-06-16T16:57:53  <jogo> superbee: you should just run your unit and style checks locally first anyway
+2014-06-16T16:58:05  <superbee> jogo: agreed
+2014-06-16T16:58:12  <superbee> so this shouldn't matter :)
+2014-06-16T16:58:23  <jogo> superbee: I agree that I would prefer to get all the jobs, but we have a finite number of cloud
 2014-06-16T16:58:24  <mordred> except
-2014-06-16T16:58:24  <clarkb> maybe that needs to be a review item
-2014-06-16T16:58:28  <clarkb> -1 did not run tests locally
+2014-06-16T16:58:24  <superbee> maybe that needs to be a review item
+2014-06-16T16:58:28  <superbee> -1 did not run tests locally
 2014-06-16T16:58:36  <mordred> any time we say "you should ..."
 2014-06-16T16:58:47  <mordred> we fail
 2014-06-16T16:58:55  <jogo> mordred: true
-2014-06-16T16:59:01  <clarkb> mordred: right. but I am asserting teh current state is better than the proposed state
-2014-06-16T16:59:18  <jogo> clarkb: I am not convinced either way
+2014-06-16T16:59:01  <superbee> mordred: right. but I am asserting teh current state is better than the proposed state
+2014-06-16T16:59:18  <jogo> superbee: I am not convinced either way
 2014-06-16T16:59:24  <mordred> not agreeing or disagreeing with that - just making sure we don't fall down the trap of expecting different behavior from our devs
-2014-06-16T16:59:35  <jogo> clarkb: if we did this for 98909,4
+2014-06-16T16:59:35  <jogo> superbee: if we did this for 98909,4
 2014-06-16T16:59:59  <mordred> I believe that it is worth doing the mental exercise to consider what needs to happen to exist in a world where we are at max quota at all times
 2014-06-16T17:00:05  <jogo> we would have 20 extra nodes
 2014-06-16T17:00:14  <jogo> mordred: ++
 2014-06-16T17:00:21  <mordred> because thus far we have operated under teh assumption tha we can throw more nodes at the problem
 2014-06-16T17:00:37  <mordred> if we have reached the point where that is no longer an assumption, it warrants careful consideration
 2014-06-16T17:00:49  <jogo> mordred: well said.
-2014-06-16T17:00:53  <clarkb> jogo: you would have 20 extra nodes now
+2014-06-16T17:00:53  <superbee> jogo: you would have 20 extra nodes now
 2014-06-16T17:01:01  <trinaths> anteaya: done
-2014-06-16T17:01:04  <clarkb> jogo: but then they would push a patch to fix pep8 and py26 py27 fails
+2014-06-16T17:01:04  <superbee> jogo: but then they would push a patch to fix pep8 and py26 py27 fails
 2014-06-16T17:01:10  <anteaya> trinaths: thank you
-2014-06-16T17:01:12  <clarkb> then you push a patch to fix py26 but py27 fails
-2014-06-16T17:01:25  <clarkb> then you push a patch to fix py27 and node devstack fials
+2014-06-16T17:01:12  <superbee> then you push a patch to fix py26 but py27 fails
+2014-06-16T17:01:25  <superbee> then you push a patch to fix py27 and node devstack fials
 2014-06-16T17:01:31  *** shayneburgess has quit IRC
-2014-06-16T17:01:33  <jogo> clarkb: perhaps, as mordred said I think we need to do the full thought exercise
-2014-06-16T17:01:33  <clarkb> you fix devstack but now you find that you don't work with neutron
-2014-06-16T17:01:35  <clarkb> so you fix neutron
+2014-06-16T17:01:33  <jogo> superbee: perhaps, as mordred said I think we need to do the full thought exercise
+2014-06-16T17:01:33  <superbee> you fix devstack but now you find that you don't work with neutron
+2014-06-16T17:01:35  <superbee> so you fix neutron
 2014-06-16T17:01:40  *** habib has quit IRC
-2014-06-16T17:01:44  <clarkb> and now yo uhave done 5 round trips when one would have been sufficient
+2014-06-16T17:01:44  <superbee> and now yo uhave done 5 round trips when one would have been sufficient
 2014-06-16T17:01:54  <anteaya> trinaths: no as chair of the meeting, I may move agenda items around a bit, but if it at least posted somewhere in the agenda, we will get to it (or try based on time)
 2014-06-16T17:02:03  <anteaya> s/no as chair/now as chiar
-2014-06-16T17:02:04  <clarkb> mordred: I agree
+2014-06-16T17:02:04  <superbee> mordred: I agree
 2014-06-16T17:02:06  <anteaya> chair
-2014-06-16T17:02:06  <mordred> clarkb: what if ...
+2014-06-16T17:02:06  <mordred> superbee: what if ...
 2014-06-16T17:02:10  <anteaya> I can't spell
 2014-06-16T17:02:15  *** matjazp has left #openstack-infra
-2014-06-16T17:02:35  <mordred> clarkb: we added smarts (*waves hands*) such that the first iteration of any patch gets submitted to all of the things immediately
-2014-06-16T17:02:42  <jogo> clarkb: and how would your scenario play out currently?
+2014-06-16T17:02:35  <mordred> superbee: we added smarts (*waves hands*) such that the first iteration of any patch gets submitted to all of the things immediately
+2014-06-16T17:02:42  <jogo> superbee: and how would your scenario play out currently?
 2014-06-16T17:02:44  <mordred> but if, at _any_ point, you fail pep8 or unittests
 2014-06-16T17:03:01  <mordred> that change gets put into a category which requires it goes through two-stage verification
 2014-06-16T17:03:09  <mordred> of running pep8/unit first, then integration
-2014-06-16T17:03:18  <clarkb> jogo: all of those tests would fail togetehr and you can address them in one new patchset
+2014-06-16T17:03:18  <superbee> jogo: all of those tests would fail togetehr and you can address them in one new patchset
 2014-06-16T17:03:26  <mordred> so basically, "run them locally because we're going to put you in jail if you don't"
 2014-06-16T17:03:32  <jogo> so what I am saying is:
 2014-06-16T17:03:37  <sdague> mordred: so we could do this another way
@@ -1088,14 +1088,14 @@
 2014-06-16T17:04:19  <jogo> then once pass those, you run all of integration
 2014-06-16T17:04:37  <sdague> because the biggest issue about a full pipeline is fixes that actually hep the full pipeline can't get cpu time in a timely manner
 2014-06-16T17:04:49  <sdague> and then it turns in to the manual promote process
-2014-06-16T17:04:51  <clarkb> sdague: ++
+2014-06-16T17:04:51  <superbee> sdague: ++
 2014-06-16T17:04:54  *** shayneburgess has joined #openstack-infra
 2014-06-16T17:04:55  <sdague> which isn't a process
 2014-06-16T17:04:59  <sdague> it's super adhoc
-2014-06-16T17:05:02  <clarkb> which was intentional at the time
+2014-06-16T17:05:02  <superbee> which was intentional at the time
 2014-06-16T17:05:02  *** marcoemorais has quit IRC
-2014-06-16T17:05:07  <clarkb> but maybe experience shows it sucks
-2014-06-16T17:05:09  <clarkb> and we need something else
+2014-06-16T17:05:07  <superbee> but maybe experience shows it sucks
+2014-06-16T17:05:09  <superbee> and we need something else
 2014-06-16T17:05:15  <jogo> sdague: so this is a mostly orthoginal issue no?
 2014-06-16T17:05:20  *** marcoemorais has joined #openstack-infra
 2014-06-16T17:05:21  <sdague> jogo: maybe
@@ -1104,7 +1104,7 @@
 2014-06-16T17:05:49  <mordred> I thnk they're different - one is about the general case of trying to not waste resources
 2014-06-16T17:05:56  <sdague> than the queue grinding for everything else becomes less urgent
 2014-06-16T17:06:06  *** marcoemorais has joined #openstack-infra
-2014-06-16T17:06:11  <clarkb> anteaya: the first node I am attempting to delete is taking its sweet time...
+2014-06-16T17:06:11  <superbee> anteaya: the first node I am attempting to delete is taking its sweet time...
 2014-06-16T17:06:19  <mordred> I think queue grinding is still quite urgent, even if it's not 'important' patches
 2014-06-16T17:06:30  <mordred> because that's still 48 hour merge windows for developers
 2014-06-16T17:06:41  <sdague> mordred: sure
@@ -1119,27 +1119,27 @@
 2014-06-16T17:07:19  <jogo> mordred: I agree queue griding is urgent. it slows down our velocity
 2014-06-16T17:07:19  <sdague> mordred: sure
 2014-06-16T17:07:20  *** yfried has joined #openstack-infra
-2014-06-16T17:07:33  <anteaya> clarkb: I think foobio uses a loop
+2014-06-16T17:07:33  <anteaya> superbee: I think foobio uses a loop
 2014-06-16T17:07:40  <mordred> which is why I was saying earlier that I believe since our operating assumptions may have changed, that we may need to do a deep dive on design
-2014-06-16T17:07:51  <clarkb> anteaya: yeah I was testing first
+2014-06-16T17:07:51  <superbee> anteaya: yeah I was testing first
 2014-06-16T17:07:53  <jeblair> we could disable clean check or lengthen the window
-2014-06-16T17:07:54  <anteaya> clarkb: then if one is stubborn it moves on to easier pickings and comes back again later
-2014-06-16T17:07:58  <anteaya> clarkb: ah
-2014-06-16T17:08:03  <anteaya> clarkb: stubborn nodes
+2014-06-16T17:07:54  <anteaya> superbee: then if one is stubborn it moves on to easier pickings and comes back again later
+2014-06-16T17:07:58  <anteaya> superbee: ah
+2014-06-16T17:08:03  <anteaya> superbee: stubborn nodes
 2014-06-16T17:08:05  <jogo> mordred: a great topic to hash out in Germany
 2014-06-16T17:08:06  <mordred> since "throw more nodes at it" may have hit its ceiling
-2014-06-16T17:08:19  <jeblair> anteaya, clarkb: that's what nodepool itself does...
+2014-06-16T17:08:19  <jeblair> anteaya, superbee: that's what nodepool itself does...
 2014-06-16T17:08:21  <sdague> jeblair: I think both of those things make the situation worse, no?
-2014-06-16T17:08:38  <clarkb> jeblair: yes, the apparent issue is somethign in nova
-2014-06-16T17:08:44  <clarkb> jeblair: and it confuses nodepool
-2014-06-16T17:08:59  <clarkb> fix is proposed to nova so we should see it arrive at some point in the future at rax
+2014-06-16T17:08:38  <superbee> jeblair: yes, the apparent issue is somethign in nova
+2014-06-16T17:08:44  <superbee> jeblair: and it confuses nodepool
+2014-06-16T17:08:59  <superbee> fix is proposed to nova so we should see it arrive at some point in the future at rax
 2014-06-16T17:09:33  *** ilyashakhat__ has joined #openstack-infra
 2014-06-16T17:09:49  <jogo> jeblair: so looking at status.o.o/zuul now, top of gate is <2 hours old
 2014-06-16T17:10:00  <jogo> but top of check is 5 hours old, and we have 182 jobs in check
-2014-06-16T17:10:04  <clarkb> though I didn't follow the converstaion about deleting nodes too closely as I was dealing with ES
+2014-06-16T17:10:04  <superbee> though I didn't follow the converstaion about deleting nodes too closely as I was dealing with ES
 2014-06-16T17:10:24  *** trinaths has quit IRC
 2014-06-16T17:10:44  <jogo> so maybe running less check jobs would help
-2014-06-16T17:10:58  <jogo> clarkb: TL;DR if a node is in deleting(error) you cannot delete it right now
+2014-06-16T17:10:58  <jogo> superbee: TL;DR if a node is in deleting(error) you cannot delete it right now
 2014-06-16T17:12:17  <sdague> jogo: so the spike for the check queue started with proposal bot proposing hacking 0.9 to all the projects again, because some other requirement landed
 2014-06-16T17:12:30  <sdague> thus creating 40 - 50 patches in check failing pep8
 2014-06-16T17:12:42  <jogo> sdague: that will happen with every requirements check change no?
@@ -1189,12 +1189,12 @@
 2014-06-16T17:30:09  <jeblair> oh
 2014-06-16T17:30:17  <jeblair> anteaya: is anyone working on that?
 2014-06-16T17:30:18  <anteaya> jeblair: we can't change the channels statuss back
-2014-06-16T17:30:19  <clarkb> sdague: I think it has to do with the node allocator predominantly allocating precise nodes because that is wat we need the most of
-2014-06-16T17:30:23  <clarkb> jeblair: ^
-2014-06-16T17:30:36  <clarkb> sdague: unfortunately when we say boot 2 nodes the changes of both of them failing are high
+2014-06-16T17:30:19  <superbee> sdague: I think it has to do with the node allocator predominantly allocating precise nodes because that is wat we need the most of
+2014-06-16T17:30:23  <superbee> jeblair: ^
+2014-06-16T17:30:36  <superbee> sdague: unfortunately when we say boot 2 nodes the changes of both of them failing are high
 2014-06-16T17:30:37  *** _nadya_ has quit IRC
 2014-06-16T17:30:39  <anteaya> jeblair: other than knowing it is an issue, I don't know of anyone working on that, no
-2014-06-16T17:30:44  <clarkb> which makes the allocator even worse
+2014-06-16T17:30:44  <superbee> which makes the allocator even worse
 2014-06-16T17:31:00  <jeblair> anteaya: wow.  i think that's a super critical issue
 2014-06-16T17:31:12  <anteaya> jeblair: kk, glad you are back then
 2014-06-16T17:31:13  *** julim has joined #openstack-infra
@@ -1203,58 +1203,58 @@
 2014-06-16T17:31:23  <jeblair> i'm kind of surprised no one else thinks it is
 2014-06-16T17:31:37  <anteaya> jeblair: well can any non-core do anything to help?
 2014-06-16T17:31:52  <anteaya> Ill do what I can to help if there is anything I can do
-2014-06-16T17:32:00  <clarkb> jeblair: lots of non core can change topics
-2014-06-16T17:32:02  <clarkb> er anteaya ^
+2014-06-16T17:32:00  <superbee> jeblair: lots of non core can change topics
+2014-06-16T17:32:02  <superbee> er anteaya ^
 2014-06-16T17:32:15  <anteaya> I don't have channel permissions
-2014-06-16T17:32:23  <jeblair> clarkb: fixing them one at a time would be a very bad solution
+2014-06-16T17:32:23  <jeblair> superbee: fixing them one at a time would be a very bad solution
 2014-06-16T17:32:26  <anteaya> or a list of channel topics before it was changed
-2014-06-16T17:32:43  <jeblair> clarkb: because i'm about to change them all back regardless of any that may have been fixed one at a time
+2014-06-16T17:32:43  <jeblair> superbee: because i'm about to change them all back regardless of any that may have been fixed one at a time
 2014-06-16T17:32:46  <anteaya> boris-42: so yes, tagging is best done by one person
 2014-06-16T17:33:05  <boris-42> anteaya heh okay
 2014-06-16T17:33:10  *** james_li has joined #openstack-infra
 2014-06-16T17:33:19  <anteaya> boris-42: thanks
-2014-06-16T17:33:38  <sdague> clarkb: ok, well how do you feel about fast approving me moving f20 to experimental then?
+2014-06-16T17:33:38  <sdague> superbee: ok, well how do you feel about fast approving me moving f20 to experimental then?
 2014-06-16T17:33:52  *** nati_ueno has joined #openstack-infra
 2014-06-16T17:33:54  <openstackgerrit> Boris Pavlovic proposed a change to openstack-infra/config: Add new project loggas  https://review.openstack.org/100243
 2014-06-16T17:34:08  *** mmaglana has joined #openstack-infra
-2014-06-16T17:34:23  <clarkb> sdague: let me check one more thing otherwise ++
+2014-06-16T17:34:23  <superbee> sdague: let me check one more thing otherwise ++
 2014-06-16T17:34:38  <boris-42> anteaya ^ fixed that
 2014-06-16T17:34:51  *** pelix has quit IRC
 2014-06-16T17:34:55  <sdague> because right now devstack changes are actually blocked. And in blocking them, we block actually fixing the grenade gate issue
 2014-06-16T17:34:56  <anteaya> boris-42: k thanks
 2014-06-16T17:35:05  <anteaya> boris-42: I'll review again at the end of my day
-2014-06-16T17:35:09  <clarkb> sdague: ok confirmed that both rax and hp have f20 images so it isn't a case of being pinned to one provider
-2014-06-16T17:35:16  <clarkb> sdague: ++ to moving to experimental
+2014-06-16T17:35:09  <superbee> sdague: ok confirmed that both rax and hp have f20 images so it isn't a case of being pinned to one provider
+2014-06-16T17:35:16  <superbee> sdague: ++ to moving to experimental
 2014-06-16T17:35:18  <boris-42> anteaya ok thanks=)
 2014-06-16T17:35:42  *** UtahDave has quit IRC
 2014-06-16T17:35:49  *** julim has quit IRC
 2014-06-16T17:36:26  *** reed has joined #openstack-infra
 2014-06-16T17:36:38  *** ilyashakhat__ has quit IRC
-2014-06-16T17:37:46  <sdague> clarkb: so does min ready degrade under this condition?
-2014-06-16T17:37:54  <clarkb> sdague: yes
+2014-06-16T17:37:46  <sdague> superbee: so does min ready degrade under this condition?
+2014-06-16T17:37:54  <superbee> sdague: yes
 2014-06-16T17:38:08  <sdague> could we actually make min ready a hard floor?
-2014-06-16T17:38:09  <clarkb> sdague: ebcause when we are at quota it becomes proportional
-2014-06-16T17:38:15  <clarkb> sdague: you can't when at quota
+2014-06-16T17:38:09  <superbee> sdague: ebcause when we are at quota it becomes proportional
+2014-06-16T17:38:15  <superbee> sdague: you can't when at quota
 2014-06-16T17:39:02  <sdague> why? it seems that min ready should be an actual floor, with head room to expand beyond that
 2014-06-16T17:39:03  *** julim has joined #openstack-infra
 2014-06-16T17:39:10  <sdague> or some other min item
-2014-06-16T17:39:17  <clarkb> sdague: because if I can boot 1 node right now
-2014-06-16T17:39:20  <clarkb> what do I do?
-2014-06-16T17:39:26  <clarkb> I can't boot in ready nodes
+2014-06-16T17:39:17  <superbee> sdague: because if I can boot 1 node right now
+2014-06-16T17:39:20  <superbee> what do I do?
+2014-06-16T17:39:26  <superbee> I can't boot in ready nodes
 2014-06-16T17:39:26  *** cindyo has joined #openstack-infra
 2014-06-16T17:39:53  *** ChanServ changes topic to "Discussion of OpenStack Developer Infrastructure | docs http://ci.openstack.org | bugs https://launchpad.net/openstack-ci/ | https://git.openstack.org/cgit/openstack-infra/config/tree/"
 2014-06-16T17:39:55  <sdague> oh, so I guess min ready should fall back to min "out there somewhere"
-2014-06-16T17:39:59  <clarkb> sdague: we may need a proper PID controller loop
-2014-06-16T17:40:10  <anteaya> clarkb: how soon can you get to a computer with server keys?
-2014-06-16T17:40:15  <clarkb> anteaya: I am doing it now
+2014-06-16T17:39:59  <superbee> sdague: we may need a proper PID controller loop
+2014-06-16T17:40:10  <anteaya> superbee: how soon can you get to a computer with server keys?
+2014-06-16T17:40:15  <superbee> anteaya: I am doing it now
 2014-06-16T17:40:18  <mordred> jeblair: how did you do that? I tried to figure out how to do it and failed
-2014-06-16T17:40:21  <clarkb> anteaya: but mostly by hand because they fail randomly
+2014-06-16T17:40:21  <superbee> anteaya: but mostly by hand because they fail randomly
 2014-06-16T17:40:23  <sdague> the issue right now is there are actually no fedora nodes anywhere, in use or ready
 2014-06-16T17:40:30  <mordred> jeblair: so there is clearly knowledge I should learn
-2014-06-16T17:40:37  <clarkb> sdague: correct because it is proportional devstack-precise wins every time
+2014-06-16T17:40:37  <superbee> sdague: correct because it is proportional devstack-precise wins every time
 2014-06-16T17:40:38  *** e0ne has joined #openstack-infra
 2014-06-16T17:40:52  <jeblair> mordred: stack TOPIC #openstack-meeting :OpenStack Meetings || https://wiki.openstack.org/wiki/Meetings
-2014-06-16T17:40:53  <anteaya> clarkb: thanks and :(
+2014-06-16T17:40:53  <anteaya> superbee: thanks and :(
 2014-06-16T17:40:56  <jeblair> grr
 2014-06-16T17:41:00  <jeblair> mordred: grep TOPIC statusbot_debug.log.2014-06-02
 2014-06-16T17:41:06  <jeblair> mordred: then emacs
@@ -1270,33 +1270,33 @@
 2014-06-16T17:42:49  <anteaya> cindyo: sorry the gerrit url for the patch
 2014-06-16T17:42:57  <openstackgerrit> A change was merged to stackforge/gertty: Add ctrl-o to help dialog  https://review.openstack.org/97753
 2014-06-16T17:43:13  <anteaya> cindyo: https://review.openstack.org/#/c/99767/
-2014-06-16T17:43:49  <clarkb> anteaya: looks like the erally old nodes are the ones that don't want to work so I ahev an upper bound on the time as well and am looping over that now
+2014-06-16T17:43:49  <superbee> anteaya: looks like the erally old nodes are the ones that don't want to work so I ahev an upper bound on the time as well and am looping over that now
 2014-06-16T17:44:01  <openstackgerrit> Sean Dague proposed a change to openstack-infra/config: demote f20 to experimental  https://review.openstack.org/100309
-2014-06-16T17:44:09  <anteaya> cindyo: so yes, according to clarkb's comment on this file: https://review.openstack.org/#/c/99767/1/modules/openstack_project/files/zuul/layout.yaml
-2014-06-16T17:44:15  <sdague> clarkb: there it is
+2014-06-16T17:44:09  <anteaya> cindyo: so yes, according to superbee's comment on this file: https://review.openstack.org/#/c/99767/1/modules/openstack_project/files/zuul/layout.yaml
+2014-06-16T17:44:15  <sdague> superbee: there it is
 2014-06-16T17:44:20  <cindyo> anteaya:  https://review.openstack.org/99767
-2014-06-16T17:44:28  <clarkb> cindyo: anteaya: or remove the pypi jobs
-2014-06-16T17:44:53  <anteaya> clarkb: go you
-2014-06-16T17:45:10  <anteaya> clarkb: slight increase in running jobs, thanks
+2014-06-16T17:44:28  <superbee> cindyo: anteaya: or remove the pypi jobs
+2014-06-16T17:44:53  <anteaya> superbee: go you
+2014-06-16T17:45:10  <anteaya> superbee: slight increase in running jobs, thanks
 2014-06-16T17:46:31  *** annegentle has joined #openstack-infra
-2014-06-16T17:46:34  <clarkb> sdague: +2, maybe we can get jeblair and mordred to review as well
-2014-06-16T17:46:40  <clarkb> I can manually submit it if neccesary
-2014-06-16T17:46:42  <sdague> clarkb: great
-2014-06-16T17:46:49  <jeblair> sdague clarkb: is f20 voting?
+2014-06-16T17:46:34  <superbee> sdague: +2, maybe we can get jeblair and mordred to review as well
+2014-06-16T17:46:40  <superbee> I can manually submit it if neccesary
+2014-06-16T17:46:42  <sdague> superbee: great
+2014-06-16T17:46:49  <jeblair> sdague superbee: is f20 voting?
 2014-06-16T17:46:54  <sdague> jeblair: nope
 2014-06-16T17:47:02  <anteaya> cindyo: do you have what you need for your next step?
 2014-06-16T17:47:09  <jeblair> who's pushing f20?
 2014-06-16T17:47:22  <sdague> ianw
 2014-06-16T17:47:32  <sdague> which I support
-2014-06-16T17:47:59  <cindyo> anteaya,clarkb To create a new pypi PKG-INFO needed for registration, I would have to build it on the old repo.  Is that what you want before creating the new stack forge repo?  We ususally build and register projects from the repo.
+2014-06-16T17:47:59  <cindyo> anteaya,superbee To create a new pypi PKG-INFO needed for registration, I would have to build it on the old repo.  Is that what you want before creating the new stack forge repo?  We ususally build and register projects from the repo.
 2014-06-16T17:48:01  <sdague> but right now it's got the side effect that we can't make progress on any d-g or devstack patches
 2014-06-16T17:48:03  <jeblair> are we going to loose inertia on that with this?  (eg, are we close to making it voting, etc?)
-2014-06-16T17:48:13  <clarkb> cindyo: no, you can just register it directly in pypi
-2014-06-16T17:48:19  <clarkb> rather than using setup.py
+2014-06-16T17:48:13  <superbee> cindyo: no, you can just register it directly in pypi
+2014-06-16T17:48:19  <superbee> rather than using setup.py
 2014-06-16T17:48:20  <mordred> I'd like to have a longer conversation about the idea of that at all
 2014-06-16T17:48:30  <mordred> but we don't have to do that right now
 2014-06-16T17:48:45  <cindyo> OK I'll do that, and let you know when it's ready
-2014-06-16T17:49:03  <sdague> jeblair: I don't know, but clarkb just explained that we're basically going to be always in this situation at full quota, which isn't a recipe for success
+2014-06-16T17:49:03  <sdague> jeblair: I don't know, but superbee just explained that we're basically going to be always in this situation at full quota, which isn't a recipe for success
 2014-06-16T17:49:18  <jeblair> sdague: it will correct... i'm mildly hesitant to make a change like this because the order in which jobs are being filled isn't the preferred one
 2014-06-16T17:49:27  <anteaya> cindyo: if you add a link to the pypi registration as a comment on the patch, that will help all subsequent reviewers of the patch
 2014-06-16T17:49:36  <mordred> tl;dr- I'd don't think we should be in the business of testing linux distros - we have too many other things on our plate. If we're discussing 86-ing postgres, I don't think we should be adding base linux distros
@@ -1309,53 +1309,53 @@
 2014-06-16T17:50:10  *** e0ne has quit IRC
 2014-06-16T17:50:14  <anteaya> cindyo: neither is mine
 2014-06-16T17:50:26  <anteaya> cindyo: I forgive you any spelling errors in advance
-2014-06-16T17:50:33  <clarkb> anteaya: fwiw I got stuck on a less old node so for loop is going to be slow
+2014-06-16T17:50:33  <superbee> anteaya: fwiw I got stuck on a less old node so for loop is going to be slow
 2014-06-16T17:50:40  <mordred> I'd be happier moving the gate off of ubuntu and on to $somethingelse that isn't tied to a vendor if that would make things 'fairer'
-2014-06-16T17:50:43  <jeblair> sdague, clarkb: queue systems don't work like that -- they either ultimately satisfy demand or don't.
+2014-06-16T17:50:43  <jeblair> sdague, superbee: queue systems don't work like that -- they either ultimately satisfy demand or don't.
 2014-06-16T17:50:45  <cindyo> haha! and thanks for the help
 2014-06-16T17:50:48  <anteaya> cindyo: for irc nicknames type the first 3 letters and then tab
 2014-06-16T17:51:02  <cindyo> anteaya: ahh
-2014-06-16T17:51:06  <anteaya> clarkb: slow progress is better than none
+2014-06-16T17:51:06  <anteaya> superbee: slow progress is better than none
 2014-06-16T17:51:09  <anteaya> cindyo: :D
 2014-06-16T17:51:38  <sdague> jeblair: if you believe we'll see f20 nodes show up for testing in the near future, I'm good with some other approach
 2014-06-16T17:51:39  <jeblair> sdague: so if we're in a position where we will never catch up, then we need to make fundamental changes.  if we're just "busy" right now, then the nodes will eventually be allocated and the backlog will clear (and quickly)
-2014-06-16T17:51:47  <anteaya> clarkb: the blue team is slowly creeping up
+2014-06-16T17:51:47  <anteaya> superbee: the blue team is slowly creeping up
 2014-06-16T17:52:05  <anteaya> the backlog cleared on the weekend
 2014-06-16T17:52:08  <sdague> well check queue is + 1.5 times it's capacity at the moment
 2014-06-16T17:52:30  *** basha has quit IRC
 2014-06-16T17:52:31  <anteaya> for some reason all the nodes that were in delete state suddenly cleared at 0:00 utc saturday and I have no idea why
 2014-06-16T17:52:33  <sdague> a party being the pent up demand from how terrible everything has been the last 2 weeks
 2014-06-16T17:52:35  *** blamar has joined #openstack-infra
-2014-06-16T17:52:35  <clarkb> jeblair: sdague: I thin ka PID controller could fullfil the demand better
+2014-06-16T17:52:35  <superbee> jeblair: sdague: I thin ka PID controller could fullfil the demand better
 2014-06-16T17:52:38  <jeblair> sdague: the operative metric is the zuul job queue
 2014-06-16T17:52:44  <sdague> jeblair: ok
 2014-06-16T17:52:46  <mordred> yolanda: we may want to discuss this in here so that jeblair can chime in
-2014-06-16T17:52:55  <clarkb> as it would be smarter about the change over time and realize it hasn't booted and f20 node ina while
+2014-06-16T17:52:55  <superbee> as it would be smarter about the change over time and realize it hasn't booted and f20 node ina while
 2014-06-16T17:53:01  *** _nadya_ has joined #openstack-infra
-2014-06-16T17:53:03  <clarkb> but I would have to go do reading and maths to figure it out
-2014-06-16T17:53:19  <sdague> clarkb: or actually have a hard floor
+2014-06-16T17:53:03  <superbee> but I would have to go do reading and maths to figure it out
+2014-06-16T17:53:19  <sdague> superbee: or actually have a hard floor
 2014-06-16T17:53:31  <sdague> of in-use / ready
 2014-06-16T17:53:32  *** dims has quit IRC
-2014-06-16T17:53:38  <jeblair> clarkb: yeah, there are two issues:  f20 isn't booting fast enough to make sdague happy because he wants the changes he's looking at to merge
+2014-06-16T17:53:38  <jeblair> superbee: yeah, there are two issues:  f20 isn't booting fast enough to make sdague happy because he wants the changes he's looking at to merge
 2014-06-16T17:53:43  <mordred> jeblair: yolanda and I were discussing the nodepool dib patch, which she's close to completing. she has it working except is missing glance delete image things
-2014-06-16T17:53:58  <jeblair> clarkb: versus not being able to satisfy demand at all
+2014-06-16T17:53:58  <jeblair> superbee: versus not being able to satisfy demand at all
 2014-06-16T17:54:10  <mordred> jeblair: I was suggesting that perhaps nodepool.deleteImage may not need to change at all - since once it's an image in the cloud, it should ultimately be managed identically
-2014-06-16T17:54:31  <clarkb> mordred: correct, but you need to delete the local qcow2
+2014-06-16T17:54:31  <superbee> mordred: correct, but you need to delete the local qcow2
 2014-06-16T17:54:33  <sdague> jeblair: so if you look at all the long standing changes in check, the ones > 3 hrs
 2014-06-16T17:54:36  *** dims has joined #openstack-infra
 2014-06-16T17:54:38  <sdague> they are all waiting on f20 nodes
 2014-06-16T17:54:46  <sdague> and from what I can tell, there are no f20 nodes anywhere
-2014-06-16T17:55:00  <mordred> clarkb: so you're thinking we should keep the local qcow on disk for the same time it's live in teh cloud?
-2014-06-16T17:55:10  <clarkb> mordred: yes
-2014-06-16T17:55:13  <mordred> clarkb: perhaps add some code to deleteImage to also find the image on disk and delete it?
+2014-06-16T17:55:00  <mordred> superbee: so you're thinking we should keep the local qcow on disk for the same time it's live in teh cloud?
+2014-06-16T17:55:10  <superbee> mordred: yes
+2014-06-16T17:55:13  <mordred> superbee: perhaps add some code to deleteImage to also find the image on disk and delete it?
 2014-06-16T17:55:15  <mordred> yolanda: ^^
-2014-06-16T17:55:17  <jeblair> clarkb: sdague's change will alter the behavior he's immediately seeing; however, it has a minimal impact on the second thing.  if the second thing is true to the degree that you think we will never see f20 nodes boot, then the system is unustainable regardless.
-2014-06-16T17:55:19  <clarkb> mordred: they aren't super expensive and having it local may be nice
+2014-06-16T17:55:17  <jeblair> superbee: sdague's change will alter the behavior he's immediately seeing; however, it has a minimal impact on the second thing.  if the second thing is true to the degree that you think we will never see f20 nodes boot, then the system is unustainable regardless.
+2014-06-16T17:55:19  <superbee> mordred: they aren't super expensive and having it local may be nice
 2014-06-16T17:55:19  *** ilyashakhat__ has joined #openstack-infra
 2014-06-16T17:55:20  <jeblair> mordred: later
-2014-06-16T17:55:31  <clarkb> jeblair: correct
+2014-06-16T17:55:31  <superbee> jeblair: correct
 2014-06-16T17:55:39  <mordred> jeblair: yah. just making sure it was in this channel for logging/scrollback
-2014-06-16T17:56:00  <clarkb> jeblair: understood
+2014-06-16T17:56:00  <superbee> jeblair: understood
 2014-06-16T17:56:31  <jeblair> sdague: yeah, so what i'm saying is that the expected behavior when the system is busy is that those changes will queue in zuul until nodepool is able to satisfy the f20 demand, and then they will clear out quickly once it does
 2014-06-16T17:56:37  <jeblair> sdague: (i'm not saying it's ideal, just expected)
 2014-06-16T17:56:59  <yolanda> i think the same code we have when we upload the image to glance, we will need to have it to delete it, otherwise we will be filling glance with images that aren't used
@@ -1364,14 +1364,14 @@
 2014-06-16T17:57:59  <mordred> jeblair: ++
 2014-06-16T17:58:00  *** marcoemorais has quit IRC
 2014-06-16T17:58:22  *** marcoemorais has joined #openstack-infra
-2014-06-16T17:58:36  <yolanda> mordred, clarkb ^
+2014-06-16T17:58:36  <yolanda> mordred, superbee ^
 2014-06-16T17:58:38  *** marcoemorais has quit IRC
 2014-06-16T17:58:44  <jeblair> sdague: i think what i'm trying to say is that unless we have crossed that threshold, this is not a system problem, this is a human perception problem.  is the human perception problem bad enough to make the change you have proposed?
 2014-06-16T17:58:57  *** marcoemorais has joined #openstack-infra
 2014-06-16T17:59:10  <mordred> yolanda: one sec ...
 2014-06-16T17:59:18  <sdague> jeblair: it's actually a system problem in that the fix for the #1 gate reset issue is currently stuck
-2014-06-16T17:59:22  <clarkb> yolanda: nodepool already delete images out of glance
-2014-06-16T17:59:28  <clarkb> yolanda: I don't think you need to implement that
+2014-06-16T17:59:22  <superbee> yolanda: nodepool already delete images out of glance
+2014-06-16T17:59:28  <superbee> yolanda: I don't think you need to implement that
 2014-06-16T17:59:49  *** basha has joined #openstack-infra
 2014-06-16T17:59:52  <sdague> and it's stuck on a non voting job
 2014-06-16T18:00:19  <sdague> maybe that's a perception problem, I don't know. But that feels like a system problem to me.
@@ -1383,14 +1383,14 @@
 2014-06-16T18:01:39  <sdague> ok, so based on usage graphs last week.
 2014-06-16T18:01:53  <sdague> that's going to be Saturday
 2014-06-16T18:02:38  <sdague> so when I speak of system problem, maybe I'm thinking about it as a system as a whole
-2014-06-16T18:02:52  <yolanda> clarkb, so we leave the images in glance without removing them? no problem in leaving the remaining instances into glance?
+2014-06-16T18:02:52  <yolanda> superbee, so we leave the images in glance without removing them? no problem in leaving the remaining instances into glance?
 2014-06-16T18:03:05  <sdague> because if we can't actually land the patches that fix the system to be more productive in a timely manner, then I think we're in a bad place
-2014-06-16T18:03:07  <clarkb> yolanda: yes as the existing image management deletes old images
+2014-06-16T18:03:07  <superbee> yolanda: yes as the existing image management deletes old images
 2014-06-16T18:03:17  <yolanda> also in glance?
 2014-06-16T18:03:19  *** marcoemorais has quit IRC
-2014-06-16T18:03:19  <clarkb> yolanda: I believe it will just work as expected if yo upopulated the image list db table with a uuid and a time
+2014-06-16T18:03:19  <superbee> yolanda: I believe it will just work as expected if yo upopulated the image list db table with a uuid and a time
 2014-06-16T18:03:23  <yolanda> i need to test it
-2014-06-16T18:03:32  <clarkb> yolanda: yes, when we snapshot images in rax and hpcloud they go into glance
+2014-06-16T18:03:32  <superbee> yolanda: yes, when we snapshot images in rax and hpcloud they go into glance
 2014-06-16T18:03:39  <jeblair> sdague: it looks like last week the job queue dropped below quota each night
 2014-06-16T18:03:56  *** marcoemorais has joined #openstack-infra
 2014-06-16T18:04:17  <yolanda> ok, so tomorrow i'll do a full test of it, spinning nodepool instances and deleting them, to check the results
@@ -1431,20 +1431,20 @@
 2014-06-16T18:14:50  *** jaypipes has quit IRC
 2014-06-16T18:16:34  <mordred> sdague: I think that's enough of a departure in the current thing that it might be better to bucket into the aforementioned "let's talk about the gate in the world of finite cloud resources" conversation
 2014-06-16T18:16:44  <mordred> rather than as a response to a current stimulus
-2014-06-16T18:16:54  <cindyo> clarkb: I'm having a security issue registering my project online.  I can login to pypi, but when I try to submit I get this error...The user name or password you entered for area “pypi” on pypi.python.org:443 was incorrect. Make sure you’re entering them correctly, and then try again.
+2014-06-16T18:16:54  <cindyo> superbee: I'm having a security issue registering my project online.  I can login to pypi, but when I try to submit I get this error...The user name or password you entered for area “pypi” on pypi.python.org:443 was incorrect. Make sure you’re entering them correctly, and then try again.
 2014-06-16T18:17:17  <openstackgerrit> Boris Pavlovic proposed a change to openstack-infra/config: Publish osprofiler on pypy and add check for requirments  https://review.openstack.org/100052
 2014-06-16T18:17:26  <sdague> mordred: that's fine
-2014-06-16T18:17:34  <cindyo> clarkb: i am using the same username password as i did to login.  What other password is needed?
+2014-06-16T18:17:34  <cindyo> superbee: i am using the same username password as i did to login.  What other password is needed?
 2014-06-16T18:17:38  <sdague> I'm trying to figure out how to get out of this box though where we have a fix
 2014-06-16T18:17:44  <sdague> that will impact our capacity
 2014-06-16T18:17:49  <sdague> which we can't get past tests
 2014-06-16T18:17:54  *** sarob_ has joined #openstack-infra
 2014-06-16T18:17:57  <sdague> because of our capacity allocator
-2014-06-16T18:17:59  <clarkb> cindyo that should be it
-2014-06-16T18:18:08  <clarkb> maybe you have a stale cookie?
+2014-06-16T18:17:59  <superbee> cindyo that should be it
+2014-06-16T18:18:08  <superbee> maybe you have a stale cookie?
 2014-06-16T18:18:20  <sdague> it feels like a very small box, and makes me claustrophobic
 2014-06-16T18:18:27  <mordred> yah. I hear that
-2014-06-16T18:19:04  <cindyo> clarkb: I'll try clearing cookies, I hope it's not that my email has a '-' in it.  I noticed some python programs have problems with that
+2014-06-16T18:19:04  <cindyo> superbee: I'll try clearing cookies, I hope it's not that my email has a '-' in it.  I noticed some python programs have problems with that
 2014-06-16T18:19:09  *** harlowja has quit IRC
 2014-06-16T18:19:20  <sdague> so I'd like to not always feel like I'm in the cheese shop sketch when trying to fix gate bugs :)
 2014-06-16T18:19:28  *** harlowja has joined #openstack-infra
@@ -1456,7 +1456,7 @@
 2014-06-16T18:21:40  <sdague> maybe it was a couple of weeks ago, time doesn't really have meaning during that last sprinting towards fixes
 2014-06-16T18:22:00  <sdague> mordred: and I do agree with the sentiment
 2014-06-16T18:22:29  <jeblair> sdague: wfm
-2014-06-16T18:23:02  <jeblair> clarkb: is your work on deleting nodes having an effect?  i notice a change
+2014-06-16T18:23:02  <jeblair> superbee: is your work on deleting nodes having an effect?  i notice a change
 2014-06-16T18:23:25  <jeblair> (zuul waiting is trending down, used nodes is trending up)
 2014-06-16T18:23:36  *** basha has joined #openstack-infra
 2014-06-16T18:24:02  <jeblair> apropos, i just got an email from cloudwatt :)
@@ -1466,28 +1466,28 @@
 2014-06-16T18:24:37  <jeblair> reed: i'll let you know after i translate it from french
 2014-06-16T18:24:44  <sdague> because ER doesn't show the full scope of the problem as it's actually hit on a lot of different services
 2014-06-16T18:25:00  <jeblair> ah, i'm to follow a link to complete my registration
-2014-06-16T18:25:02  <clarkb> jeblair: yes it is helping
+2014-06-16T18:25:02  <superbee> jeblair: yes it is helping
 2014-06-16T18:25:06  <sdague> and it's hard to finger print (... I have a patch I'm working on to make it a ton more clear)
-2014-06-16T18:25:08  <clarkb> helped last week too
-2014-06-16T18:25:46  <sdague> clarkb: can you stick that in a nightly cron? :)
-2014-06-16T18:25:47  <jeblair> clarkb: do you understand it enough to describe what needs to change in nodepool?
+2014-06-16T18:25:08  <superbee> helped last week too
+2014-06-16T18:25:46  <sdague> superbee: can you stick that in a nightly cron? :)
+2014-06-16T18:25:47  <jeblair> superbee: do you understand it enough to describe what needs to change in nodepool?
 2014-06-16T18:26:07  <mtreinish> sdague: would that cause the failure file not being written thing we were seeing before?
 2014-06-16T18:26:16  <sdague> mtreinish: yep
 2014-06-16T18:26:23  *** basha has quit IRC
-2014-06-16T18:26:38  <clarkb> jeblair: aiui nodepool needs to assume even less that a deleted node will be deleted
-2014-06-16T18:27:00  <clarkb> basically nova api bug that makes deletes noop on backend
-2014-06-16T18:27:12  <clarkb> so you need to be even more forceful
+2014-06-16T18:26:38  <superbee> jeblair: aiui nodepool needs to assume even less that a deleted node will be deleted
+2014-06-16T18:27:00  <superbee> basically nova api bug that makes deletes noop on backend
+2014-06-16T18:27:12  <superbee> so you need to be even more forceful
 2014-06-16T18:27:13  <mtreinish> man those boxes must be slow then. 3 secs for bash to launch in a screen window
-2014-06-16T18:27:15  <clarkb> jogo ^
+2014-06-16T18:27:15  <superbee> jogo ^
 2014-06-16T18:27:22  <sdague> mtreinish: so the crux of the issue is that because we are stuffing into bash in screen, until the bash process actually spawns and gets to the tty it wont' take
-2014-06-16T18:27:30  <jeblair> clarkb: i'm unsure how it could do that -- it does not assume it is deleted until it disappears from the server list
-2014-06-16T18:28:00  <clarkb> right but it deletes on a slowish interval iirc
+2014-06-16T18:27:30  <jeblair> superbee: i'm unsure how it could do that -- it does not assume it is deleted until it disappears from the server list
+2014-06-16T18:28:00  <superbee> right but it deletes on a slowish interval iirc
 2014-06-16T18:28:12  <sdague> mtreinish: well it seems to be a bell curve. We actually had this problem before, just in very extreme cases
-2014-06-16T18:28:14  <clarkb> I honestly didnt follow the issue last week
-2014-06-16T18:28:25  <clarkb> I had the same thought you did
+2014-06-16T18:28:14  <superbee> I honestly didnt follow the issue last week
+2014-06-16T18:28:25  <superbee> I had the same thought you did
 2014-06-16T18:28:34  <sdague> but now that the majority of our nodes are hp 1.1, and they are slower, it's happening a lot
 2014-06-16T18:28:35  <mtreinish> sdague: yeah that makes sense
-2014-06-16T18:28:41  <clarkb> but jogo and comstud indicate it isnt sufficient
+2014-06-16T18:28:41  <superbee> but jogo and comstud indicate it isnt sufficient
 2014-06-16T18:29:01  <jeblair> jogo: help us out here :)
 2014-06-16T18:29:05  <comstud> hm
 2014-06-16T18:29:09  <sdague> mtreinish: I made it 3 seconds to hopefully get us completely out of the bell curve
@@ -1497,39 +1497,39 @@
 2014-06-16T18:29:31  <comstud> What "isn't sufficient" ?
 2014-06-16T18:29:48  <mtreinish> sdague: what about removing screen from grenade? That's probably a lot of work
 2014-06-16T18:29:52  *** nati_ueno has quit IRC
-2014-06-16T18:29:54  <clarkb> comstud we already delete nodes over and over on an interval
+2014-06-16T18:29:54  <superbee> comstud we already delete nodes over and over on an interval
 2014-06-16T18:29:58  <comstud> oh
 2014-06-16T18:30:02  <comstud> yeah
 2014-06-16T18:30:07  <comstud> there's a nova bug...
-2014-06-16T18:30:09  <clarkb> byt for some reason rax nodes must be manually deleted
+2014-06-16T18:30:09  <superbee> byt for some reason rax nodes must be manually deleted
 2014-06-16T18:30:11  *** nati_ueno has joined #openstack-infra
 2014-06-16T18:30:11  <comstud> such that deletes are ignored
 2014-06-16T18:30:11  <mtreinish> sdague: won't you also need to backport that change to the devstack stable branches?
 2014-06-16T18:30:12  <sdague> mtreinish: yeh, I thought we might be able to do that, it's not working
 2014-06-16T18:30:25  <sdague> mtreinish: most of the fails have been on the new side
-2014-06-16T18:30:33  <comstud> clarkb: Yeah, if HP doesn't ever error during terminate, you don't hit this bug
+2014-06-16T18:30:33  <comstud> superbee: Yeah, if HP doesn't ever error during terminate, you don't hit this bug
 2014-06-16T18:30:39  <comstud> but we're erroring during terminate
 2014-06-16T18:30:40  <sdague> so yes, but this will help
 2014-06-16T18:30:42  *** timrc-afk is now known as timrc
-2014-06-16T18:30:56  <jeblair> clarkb, comstud: so i think the current algo is: issue delete; wait 10 minutes for it to disappear; if it doesn't, try again in 1 minute.
+2014-06-16T18:30:56  <jeblair> superbee, comstud: so i think the current algo is: issue delete; wait 10 minutes for it to disappear; if it doesn't, try again in 1 minute.
 2014-06-16T18:30:56  <comstud> After that point... the deletes are stuck and cannot be deleted again via the API
 2014-06-16T18:30:58  <comstud> because of a nova bug
 2014-06-16T18:31:21  <comstud> jeblair: a patch from jogo is merging to fix the nova bug..
 2014-06-16T18:31:28  <comstud> However, I don't have a timeframe for us deploying that fix yet.
-2014-06-16T18:31:45  <jeblair> comstud: oh, so we're under the impression that clarkb manually running a bunch of deletes is fixing things...
+2014-06-16T18:31:45  <jeblair> comstud: oh, so we're under the impression that superbee manually running a bunch of deletes is fixing things...
 2014-06-16T18:31:47  <comstud> After that point... your logic would work
 2014-06-16T18:31:54  <jeblair> comstud: but if what you're saying is true, that's ineffective?
 2014-06-16T18:32:05  <comstud> jeblair: We're having to manually reset task_states to NULL in the DB
 2014-06-16T18:32:09  <comstud> after that point...
-2014-06-16T18:32:10  <sdague> clarkb: as https://review.openstack.org/#/c/100253/ has dtroyer +A, can we jump it to the gate queue? Then we don't have to wait for the f20 node to show up
+2014-06-16T18:32:10  <sdague> superbee: as https://review.openstack.org/#/c/100253/ has dtroyer +A, can we jump it to the gate queue? Then we don't have to wait for the f20 node to show up
 2014-06-16T18:32:16  <comstud> yes, either manual deletes or your auotmated job should work
-2014-06-16T18:32:24  <sdague> clarkb: it's passed all the other tests
+2014-06-16T18:32:24  <sdague> superbee: it's passed all the other tests
 2014-06-16T18:32:30  <comstud> assuming we don't error on delete again and have to reset task states again... and repeat repeat
 2014-06-16T18:32:32  <comstud> hehe
 2014-06-16T18:32:42  <jeblair> comstud: ok, so behind the scenes someone is resetting something that is causing api deletes to be able to be attempted again, and after that point, our attempts may work?
 2014-06-16T18:32:48  <comstud> correct
 2014-06-16T18:33:02  *** sparkycollier has quit IRC
-2014-06-16T18:33:24  <jeblair> clarkb: so it's possible that leaving nodepool to do this on its own may work and you may not need the manual deletes -- it might just happen 10 minutes faster your way?
+2014-06-16T18:33:24  <jeblair> superbee: so it's possible that leaving nodepool to do this on its own may work and you may not need the manual deletes -- it might just happen 10 minutes faster your way?
 2014-06-16T18:33:40  <comstud> that makes sense to me
 2014-06-16T18:34:17  <harlowja> lifeless thanks for all the good comments on those oslo-specs
 2014-06-16T18:34:20  <harlowja> will adjust them in a few
@@ -1538,16 +1538,16 @@
 2014-06-16T18:34:49  <jeblair> comstud: thanks for enlightenment :)
 2014-06-16T18:34:53  <comstud> hehe np
 2014-06-16T18:35:06  <comstud> So jogo's patch will revert task state properly on delete errors
-2014-06-16T18:35:07  <jeblair> clarkb, sdague: want me to force-merge the f20 patch?
+2014-06-16T18:35:07  <jeblair> superbee, sdague: want me to force-merge the f20 patch?
 2014-06-16T18:35:08  *** tkelsey has quit IRC
 2014-06-16T18:35:16  <comstud> But.. like I said, I'm not sure when we'll be deploying it.
-2014-06-16T18:35:21  <clarkb> jeblair: these nodes were 2 hours to 31 hours in delete state
+2014-06-16T18:35:21  <superbee> jeblair: these nodes were 2 hours to 31 hours in delete state
 2014-06-16T18:35:32  <comstud> I'm going to raise the issue shortly internally
-2014-06-16T18:35:41  <clarkb> pretty sure it wont happen 10 minutes faster
-2014-06-16T18:35:51  <clarkb> jeblair: go for it
+2014-06-16T18:35:41  <superbee> pretty sure it wont happen 10 minutes faster
+2014-06-16T18:35:51  <superbee> jeblair: go for it
 2014-06-16T18:35:56  <comstud> Until then, we'll have to manually reset task_states for you all
 2014-06-16T18:36:00  <comstud> OR better.. just fix our delete issues :)
-2014-06-16T18:36:04  <jeblair> clarkb: then we should debug nodepool further to find out if it's not doing the algorithm i described
+2014-06-16T18:36:04  <jeblair> superbee: then we should debug nodepool further to find out if it's not doing the algorithm i described
 2014-06-16T18:36:05  <comstud> (actually it's not specific to delete)
 2014-06-16T18:36:55  <sdague> jeblair: force merge would be fine as well
 2014-06-16T18:36:56  <comstud> i'll be back shortly if you need anything else
@@ -1565,73 +1565,73 @@
 2014-06-16T18:40:42  *** basha has joined #openstack-infra
 2014-06-16T18:42:16  <jeblair> sdague: sorry, i have to run
 2014-06-16T18:42:19  <sdague> ok
-2014-06-16T18:42:56  <sdague> clarkb / mordred: gate move of https://review.openstack.org/#/c/100253 now? - it should dramatically help on fail rates
+2014-06-16T18:42:56  <sdague> superbee / mordred: gate move of https://review.openstack.org/#/c/100253 now? - it should dramatically help on fail rates
 2014-06-16T18:44:21  <ildikov> hi
-2014-06-16T18:44:56  <clarkb> doesnt it need jenkins +1?
+2014-06-16T18:44:56  <superbee> doesnt it need jenkins +1?
 2014-06-16T18:44:57  <ildikov> I would like to ask some questions if someone has a few minutes for me
-2014-06-16T18:46:28  <clarkb> ildikov best to just ask
+2014-06-16T18:46:28  <superbee> ildikov best to just ask
 2014-06-16T18:46:32  *** nati_ueno has quit IRC
-2014-06-16T18:46:55  <ildikov> clarkb: ok, I will briefly describe the issue then, thanks :)
-2014-06-16T18:48:08  <sdague> clarkb: if you look at the jenkins output everything except f20 has voted
+2014-06-16T18:46:55  <ildikov> superbee: ok, I will briefly describe the issue then, thanks :)
+2014-06-16T18:48:08  <sdague> superbee: if you look at the jenkins output everything except f20 has voted
 2014-06-16T18:48:10  <ildikov> in Ceilo we have some weird log entries in the py26 gate jobs: http://logs.openstack.org/40/99140/1/check/gate-ceilometer-python26/84983c8/console.html.gz
 2014-06-16T18:48:15  <sdague> and it passed all the rest of it
 2014-06-16T18:48:32  <sdague> and it's been waiting for the f20 node for 4 hrs
-2014-06-16T18:48:39  <clarkb> right but it wont queue without it
-2014-06-16T18:48:52  <sdague> clarkb: if you do it manually it will
+2014-06-16T18:48:39  <superbee> right but it wont queue without it
+2014-06-16T18:48:52  <sdague> superbee: if you do it manually it will
 2014-06-16T18:48:54  <ildikov> the log is kind of full of "I/O operation on closed file" messages
 2014-06-16T18:49:00  <sdague> foobio was doing that last week
-2014-06-16T18:49:04  <clarkb> ah ok
+2014-06-16T18:49:04  <superbee> ah ok
 2014-06-16T18:49:09  <ildikov> the posted log is the log of a failed gate job
 2014-06-16T18:49:16  <sdague> turns out we can be in both queues at once :)
 2014-06-16T18:49:28  <sdague> the check job will just show up and vote eventually
 2014-06-16T18:49:48  <ildikov> the other strange issue is that the successfull gate job looks almost the same: http://logs.openstack.org/40/99140/1/check/gate-ceilometer-python26/16d92de/console.html
-2014-06-16T18:49:55  <clarkb> looks like next reset is ~5 minutes
-2014-06-16T18:50:00  <clarkb> can promote then
+2014-06-16T18:49:55  <superbee> looks like next reset is ~5 minutes
+2014-06-16T18:50:00  <superbee> can promote then
 2014-06-16T18:50:21  <ildikov> it only contains the "running=OS_STDOUT_CAPTURE=${OS_STDOUT_CAPTURE:-1}" text in addition
-2014-06-16T18:50:26  <sdague> clarkb: honestly, I don't even need promote
+2014-06-16T18:50:26  <sdague> superbee: honestly, I don't even need promote
 2014-06-16T18:50:33  <sdague> just putting it in the gate queue is probably good enough
-2014-06-16T18:50:38  <clarkb> oh
+2014-06-16T18:50:38  <superbee> oh
 2014-06-16T18:50:41  <sdague> given that it's pretty short
-2014-06-16T18:50:54  <clarkb> not sure I can do that without promote
-2014-06-16T18:51:00  <clarkb> but will look
+2014-06-16T18:50:54  <superbee> not sure I can do that without promote
+2014-06-16T18:51:00  <superbee> but will look
 2014-06-16T18:51:04  <sdague> I thought they were 2 different things
 2014-06-16T18:51:28  <ildikov> I was wondering if any of these issues ring a bell for anyone here, as in local environments we couldn't reproduce them
 2014-06-16T18:51:38  *** crc32 has joined #openstack-infra
 2014-06-16T18:51:48  <sdague> but that being said, a promote in 5 mins is cool as well
 2014-06-16T18:51:54  *** nati_ueno has joined #openstack-infra
 2014-06-16T18:51:58  <sdague> ok, stepping away for a few
-2014-06-16T18:52:02  <clarkb> ildikov: sounds like you have a race in yourtets
-2014-06-16T18:52:18  <clarkb> ildikov: and multiple tests are using the same file object one of which uses it after it is closed
-2014-06-16T18:52:46  <clarkb> ah yup enqueue vs promote. I will just wait for reset and promot
-2014-06-16T18:52:47  <ildikov> clarkb: shouldn't it affect the py27 gate job too?
-2014-06-16T18:52:54  <clarkb> ildikov: not necessarily if it is a race
-2014-06-16T18:53:02  <clarkb> races by nature don't always show up
+2014-06-16T18:52:02  <superbee> ildikov: sounds like you have a race in yourtets
+2014-06-16T18:52:18  <superbee> ildikov: and multiple tests are using the same file object one of which uses it after it is closed
+2014-06-16T18:52:46  <superbee> ah yup enqueue vs promote. I will just wait for reset and promot
+2014-06-16T18:52:47  <ildikov> superbee: shouldn't it affect the py27 gate job too?
+2014-06-16T18:52:54  <superbee> ildikov: not necessarily if it is a race
+2014-06-16T18:53:02  <superbee> races by nature don't always show up
 2014-06-16T18:53:21  <openstackgerrit> Boris Pavlovic proposed a change to openstack-infra/config: Add new project loggas  https://review.openstack.org/100243
-2014-06-16T18:53:44  <ildikov> clarkb: the I/O error is always present in the py26 job for a long while now and I've never seen it in the py27 gate logs
-2014-06-16T18:54:20  <clarkb> it may be a timing issue in py26
+2014-06-16T18:53:44  <ildikov> superbee: the I/O error is always present in the py26 job for a long while now and I've never seen it in the py27 gate logs
+2014-06-16T18:54:20  <superbee> it may be a timing issue in py26
 2014-06-16T18:55:01  *** basha has quit IRC
-2014-06-16T18:55:02  <clarkb> I can't know for sure without actually debugging the test but that is were i would start
+2014-06-16T18:55:02  <superbee> I can't know for sure without actually debugging the test but that is were i would start
 2014-06-16T18:56:06  *** Sukhdev has joined #openstack-infra
-2014-06-16T18:56:17  <ildikov> clarkb: ok, sounds reasonable
-2014-06-16T18:56:54  <boris-42> clarkb hi there
-2014-06-16T18:57:01  <ildikov> clarkb: thanks
-2014-06-16T18:57:09  <boris-42> clarkb hm one dummy question, can I add coverage task on every check
-2014-06-16T18:57:20  <boris-42> clarkb otherwise it's a bit useless...
+2014-06-16T18:56:17  <ildikov> superbee: ok, sounds reasonable
+2014-06-16T18:56:54  <boris-42> superbee hi there
+2014-06-16T18:57:01  <ildikov> superbee: thanks
+2014-06-16T18:57:09  <boris-42> superbee hm one dummy question, can I add coverage task on every check
+2014-06-16T18:57:20  <boris-42> superbee otherwise it's a bit useless...
 2014-06-16T18:57:23  *** UtahDave has joined #openstack-infra
-2014-06-16T18:57:38  <clarkb> boris-42: you acn but we don't because its slow
+2014-06-16T18:57:38  <superbee> boris-42: you acn but we don't because its slow
 2014-06-16T18:57:39  <adam_g> sdague, with some fixes that were finally synced out to all devstack slaves, the *dsvm-virtual-ironic jobs are looking stable again. http://no-carrier.net/~adam/openstack/ironic_gate_status.html   there's also a patch up to get everything we need cached on slaves at build time. assuming that merges and we remain >90%, when would be a good time to talk about getting it voting again?
-2014-06-16T18:57:52  <clarkb> boris-42: I don't understand why it is useless in post though
-2014-06-16T18:57:56  <clarkb> boris-42: having it in post shows you a trend
-2014-06-16T18:58:03  <clarkb> it can't be used for review but anyone can run that locally
-2014-06-16T18:58:11  <clarkb> if we can solve the coverage is slow problem then sure
-2014-06-16T18:58:13  <boris-42> clarkb but having it before merging patch shows exactly place that are not covered
-2014-06-16T18:58:31  <clarkb> boris-42: sure and in the past we have weighed that against test time
-2014-06-16T18:58:35  <boris-42> clarkb so I don't need to do this manually
+2014-06-16T18:57:52  <superbee> boris-42: I don't understand why it is useless in post though
+2014-06-16T18:57:56  <superbee> boris-42: having it in post shows you a trend
+2014-06-16T18:58:03  <superbee> it can't be used for review but anyone can run that locally
+2014-06-16T18:58:11  <superbee> if we can solve the coverage is slow problem then sure
+2014-06-16T18:58:13  <boris-42> superbee but having it before merging patch shows exactly place that are not covered
+2014-06-16T18:58:31  <superbee> boris-42: sure and in the past we have weighed that against test time
+2014-06-16T18:58:35  <boris-42> superbee so I don't need to do this manually
 2014-06-16T18:58:38  *** doddstack has joined #openstack-infra
-2014-06-16T18:58:50  <clarkb> and consensus has been don't do it if it makes tests even slower
+2014-06-16T18:58:50  <superbee> and consensus has been don't do it if it makes tests even slower
 2014-06-16T18:58:54  *** mrda-away is now known as mrda
-2014-06-16T18:59:03  <boris-42> clarkb ok sounds reasonable
-2014-06-16T18:59:14  <boris-42> clarkb but post is still useless for me=)
+2014-06-16T18:59:03  <boris-42> superbee ok sounds reasonable
+2014-06-16T18:59:14  <boris-42> superbee but post is still useless for me=)
 2014-06-16T18:59:16  <boris-42> ^_^
 2014-06-16T19:00:03  <ildikov> boris-42: I have a BP in Ceilo for having a coverage gate job and the outcome of the summit session about this was also to do it in post, because it's too slow :(
 2014-06-16T19:00:10  <trinaths> sweston: hi
@@ -1643,14 +1643,14 @@
 2014-06-16T19:01:11  <ildikov> boris-42: you don't have to convince me =)
 2014-06-16T19:01:19  <boris-42> ildikov lol
 2014-06-16T19:01:57  *** e0ne has quit IRC
-2014-06-16T19:02:51  <clarkb> boris-42: they actually aren't when you compare to say neutron and nova
+2014-06-16T19:02:51  <superbee> boris-42: they actually aren't when you compare to say neutron and nova
 2014-06-16T19:03:02  <openstackgerrit> Spencer Krum proposed a change to openstack-infra/puppet-storyboard: Add Storyboard puppet module  https://review.openstack.org/100321
 2014-06-16T19:03:03  <openstackgerrit> Spencer Krum proposed a change to openstack-infra/puppet-storyboard: Added Authorization Header flag to storyboard module  https://review.openstack.org/100322
 2014-06-16T19:03:05  <openstackgerrit> Spencer Krum proposed a change to openstack-infra/puppet-storyboard: Make storyboard run over ssl  https://review.openstack.org/100323
 2014-06-16T19:03:06  <openstackgerrit> Spencer Krum proposed a change to openstack-infra/puppet-storyboard: Load storyboard projects from projects.yaml  https://review.openstack.org/100324
 2014-06-16T19:03:08  <openstackgerrit> Spencer Krum proposed a change to openstack-infra/puppet-storyboard: Load storyboard superusers from yaml file  https://review.openstack.org/100325
 2014-06-16T19:03:09  <openstackgerrit> Spencer Krum proposed a change to openstack-infra/puppet-storyboard: Storyboard token expiration increased  https://review.openstack.org/100326
-2014-06-16T19:03:09  <clarkb> boris-42: this is slowly getting better but for more than a year neutron unittests took longer than tempest
+2014-06-16T19:03:09  <superbee> boris-42: this is slowly getting better but for more than a year neutron unittests took longer than tempest
 2014-06-16T19:03:11  <openstackgerrit> Spencer Krum proposed a change to openstack-infra/puppet-storyboard: Make storyboard idempotent  https://review.openstack.org/100327
 2014-06-16T19:03:12  <openstackgerrit> Spencer Krum proposed a change to openstack-infra/puppet-storyboard: Put a default section header above the TTL  https://review.openstack.org/100328
 2014-06-16T19:03:14  <openstackgerrit> Spencer Krum proposed a change to openstack-infra/puppet-storyboard: StoryBoard module bounces apache on update  https://review.openstack.org/100329
@@ -1658,50 +1658,50 @@
 2014-06-16T19:03:19  <nibalizer> krotscheck: ^ want to take a gander at that
 2014-06-16T19:03:20  <boris-42> =)
 2014-06-16T19:03:30  *** e0ne has joined #openstack-infra
-2014-06-16T19:03:34  <boris-42> clarkb hm didn't run coverage in nova=)
+2014-06-16T19:03:34  <boris-42> superbee hm didn't run coverage in nova=)
 2014-06-16T19:03:41  <krotscheck> wat
-2014-06-16T19:03:46  <boris-42> clarkb but for small projects they are quite faaast
-2014-06-16T19:03:57  <clarkb> right but small projects are not 90% of the development effort
-2014-06-16T19:04:01  <jogo> clarkb: catching up from lunch, you are seeing delete issues in hp as well?
-2014-06-16T19:04:06  <clarkb> jogo: we are not
+2014-06-16T19:03:46  <boris-42> superbee but for small projects they are quite faaast
+2014-06-16T19:03:57  <superbee> right but small projects are not 90% of the development effort
+2014-06-16T19:04:01  <jogo> superbee: catching up from lunch, you are seeing delete issues in hp as well?
+2014-06-16T19:04:06  <superbee> jogo: we are not
 2014-06-16T19:04:09  <nibalizer> krotscheck: that was my attempt to push the current state of the storyboard module embeded in infra/config into puppet-storybaord
 2014-06-16T19:04:14  <nibalizer> which i thought was the plan
 2014-06-16T19:04:20  <krotscheck> nibalizer: Right.
-2014-06-16T19:04:24  <boris-42> clarkb so probably then it's not a big deal to enable it in small projects at least?
+2014-06-16T19:04:24  <boris-42> superbee so probably then it's not a big deal to enable it in small projects at least?
 2014-06-16T19:04:25  *** Ryan_Lane has joined #openstack-infra
-2014-06-16T19:04:33  <clarkb> boris-42: ya I don't care what small projects do
-2014-06-16T19:04:37  <clarkb> particularly stackforge
+2014-06-16T19:04:33  <superbee> boris-42: ya I don't care what small projects do
+2014-06-16T19:04:37  <superbee> particularly stackforge
 2014-06-16T19:04:39  <krotscheck> nibalizer: My current plan was actually this - https://review.openstack.org/#/c/98007/
 2014-06-16T19:04:40  <mordred> nibalizer: hey - you don't feel like figuring out something hard (or maybe easy but I can't be bothered to figure it out)
-2014-06-16T19:04:42  <boris-42> clarkb ahhh
-2014-06-16T19:04:45  <jogo> clarkb:  kk, you were just trying to understand the bug?
-2014-06-16T19:04:45  <clarkb> we should keep the integrated projects as 1:1 as possible
-2014-06-16T19:04:49  <boris-42> clarkb nice then I am going to enable it in rally
+2014-06-16T19:04:42  <boris-42> superbee ahhh
+2014-06-16T19:04:45  <jogo> superbee:  kk, you were just trying to understand the bug?
+2014-06-16T19:04:45  <superbee> we should keep the integrated projects as 1:1 as possible
+2014-06-16T19:04:49  <boris-42> superbee nice then I am going to enable it in rally
 2014-06-16T19:04:54  *** cp16net_ has quit IRC
 2014-06-16T19:04:55  <boris-42> =)
-2014-06-16T19:04:57  <clarkb> jogo: yes beacuse it doesn't make sense given the nodepool behavior
+2014-06-16T19:04:57  <superbee> jogo: yes beacuse it doesn't make sense given the nodepool behavior
 2014-06-16T19:05:00  <nibalizer> mordred: sure poke it at me
-2014-06-16T19:05:20  <jogo> clarkb: no it doesn't hehe. the bug is delete if an instane is in deleting state becomes a no-op
+2014-06-16T19:05:20  <jogo> superbee: no it doesn't hehe. the bug is delete if an instane is in deleting state becomes a no-op
 2014-06-16T19:05:28  <jogo> so if stuck in deleting,error.
 2014-06-16T19:05:34  *** cindyo has quit IRC
-2014-06-16T19:05:38  <clarkb> jogo: right but if I manually run it which uses the same API its fine
+2014-06-16T19:05:38  <superbee> jogo: right but if I manually run it which uses the same API its fine
 2014-06-16T19:05:53  <mordred> nibalizer: https://review.openstack.org/#/c/98656/ - but if you read https://wiki.openstack.org/wiki/Stackalytics/HowToRun
 2014-06-16T19:05:56  <nibalizer> krotscheck: aha! i suspected that review existed but failed at finding it
 2014-06-16T19:06:10  <mordred> nibalizer: they run theirs in nginx using uwsgi
 2014-06-16T19:06:15  <jogo> mordred: so silly question. you say we aren't going to get more quota from rax or hp in the near future? Can the foundation just buy us quota?
-2014-06-16T19:06:21  <jogo> clarkb: waaa
+2014-06-16T19:06:21  <jogo> superbee: waaa
 2014-06-16T19:06:29  <mordred> nibalizer: I'd like to keep using apache for consistency with our other things
-2014-06-16T19:06:35  <jogo> clarkb: you can manually delete nodes stuck in deleting,error state?
+2014-06-16T19:06:35  <jogo> superbee: you can manually delete nodes stuck in deleting,error state?
 2014-06-16T19:06:40  <mordred> nibalizer: but it does seem to be sluggish just running in mod_wsgi
 2014-06-16T19:07:01  <mordred> nibalizer: so the question is "how does one use uswgi with apache similar to their nginx example"
 2014-06-16T19:07:07  * mordred now runs and hides
 2014-06-16T19:07:11  <nibalizer> haha mk
-2014-06-16T19:07:20  <jogo> clarkb: because at any given time you will have instances doing normal deletes
+2014-06-16T19:07:20  <jogo> superbee: because at any given time you will have instances doing normal deletes
 2014-06-16T19:07:30  *** dims has quit IRC
 2014-06-16T19:07:32  <nibalizer> krotscheck: i'll poke at that review in a sec
-2014-06-16T19:07:57  <clarkb> jogo yup seems to work
+2014-06-16T19:07:57  <superbee> jogo yup seems to work
 2014-06-16T19:08:05  <anteaya> pleia2: are you around today?
-2014-06-16T19:08:11  <clarkb> but I really dont have brain power to debug today
+2014-06-16T19:08:11  <superbee> but I really dont have brain power to debug today
 2014-06-16T19:08:13  <anteaya> or still conferencing?
 2014-06-16T19:08:34  <mordred> nibalizer: the change could probably be done as a follow on patch - I think that one is landable as-is
 2014-06-16T19:08:50  *** _nadya_ has joined #openstack-infra
@@ -1710,10 +1710,10 @@
 2014-06-16T19:09:45  <openstackgerrit> Boris Pavlovic proposed a change to openstack-infra/config: Add rally coverage check and post tasks  https://review.openstack.org/100330
 2014-06-16T19:09:47  *** trinaths has quit IRC
 2014-06-16T19:10:03  <nibalizer> mordred: are you refereing to storyboard or stackalytics?
-2014-06-16T19:10:04  <jogo> clarkb: can you give me your logs from that?
+2014-06-16T19:10:04  <jogo> superbee: can you give me your logs from that?
 2014-06-16T19:10:17  <mordred> nibalizer: stackalytics
 2014-06-16T19:10:18  *** sarob_ has joined #openstack-infra
-2014-06-16T19:10:24  <jogo> clarkb: in particular 'nova show' from before you successfully delete something by hand
+2014-06-16T19:10:24  <jogo> superbee: in particular 'nova show' from before you successfully delete something by hand
 2014-06-16T19:10:34  *** ilyashakhat__ has quit IRC
 2014-06-16T19:10:37  <anteaya> so we agreed in the third-party meeting that the driverlog page will say ci exists instead of ci tested? since that is the actual status it is currently communicating
 2014-06-16T19:10:40  <anteaya> sdague: ^
@@ -1722,20 +1722,20 @@
 2014-06-16T19:11:46  *** sweston has quit IRC
 2014-06-16T19:12:01  <jogo> sdague: '[OpenStack-Infra] change frequency of "Imported Translations from Transifex"
 2014-06-16T19:12:20  <jogo> from the -infra ML, that may not be a bad idea
-2014-06-16T19:12:59  <clarkb> jogo next time things back up sure
-2014-06-16T19:13:44  <jogo> clarkb: kk,  well what command did you use?
-2014-06-16T19:13:54  <jogo> clarkb: a simple 'nova delete UUID' ?
+2014-06-16T19:12:59  <superbee> jogo next time things back up sure
+2014-06-16T19:13:44  <jogo> superbee: kk,  well what command did you use?
+2014-06-16T19:13:54  <jogo> superbee: a simple 'nova delete UUID' ?
 2014-06-16T19:14:41  *** sarob_ has quit IRC
 2014-06-16T19:14:50  *** reed has joined #openstack-infra
-2014-06-16T19:15:15  <clarkb> no nodepool delete --now
-2014-06-16T19:16:36  <jogo> clarkb: oh hrm, have any nodepool logs then?
+2014-06-16T19:15:15  <superbee> no nodepool delete --now
+2014-06-16T19:16:36  <jogo> superbee: oh hrm, have any nodepool logs then?
 2014-06-16T19:16:49  <jogo> did that work for all the nodes stuck in delete?
 2014-06-16T19:18:03  *** dims has joined #openstack-infra
 2014-06-16T19:18:36  *** eglynn-regus has joined #openstack-infra
-2014-06-16T19:19:14  <clarkb> not all nodes
+2014-06-16T19:19:14  <superbee> not all nodes
 2014-06-16T19:20:19  *** lcostantino has quit IRC
-2014-06-16T19:20:32  <jogo> clarkb: any idea of what % stayed around?
-2014-06-16T19:21:06  <clarkb> low ~2%
+2014-06-16T19:20:32  <jogo> superbee: any idea of what % stayed around?
+2014-06-16T19:21:06  <superbee> low ~2%
 2014-06-16T19:21:49  *** eglynn-office has quit IRC
 2014-06-16T19:22:25  *** arnaud__ has quit IRC
 2014-06-16T19:22:38  *** arnaud__ has joined #openstack-infra
@@ -1751,7 +1751,7 @@
 2014-06-16T19:24:22  <harlowja> lifeless or if u need unit tests or something else, i can help with
 2014-06-16T19:24:26  *** doug-fish has quit IRC
 2014-06-16T19:24:28  <harlowja> *when u get there*
-2014-06-16T19:24:38  <jogo> clarkb: hmm yeah, next time you do it let me know so I can see the logs
+2014-06-16T19:24:38  <jogo> superbee: hmm yeah, next time you do it let me know so I can see the logs
 2014-06-16T19:24:40  <jogo> very strange
 2014-06-16T19:24:47  *** vhoward has quit IRC
 2014-06-16T19:25:01  *** doug-fish has joined #openstack-infra
@@ -1761,40 +1761,40 @@
 2014-06-16T19:25:52  <mordred> harlowja: https://review.openstack.org/#/c/96608/
 2014-06-16T19:26:01  <harlowja> mordred yup, thx
 2014-06-16T19:26:14  *** miqui has joined #openstack-infra
-2014-06-16T19:26:36  <jogo> clarkb: dumb question did you try nodepool delete without '--now'?
+2014-06-16T19:26:36  <jogo> superbee: dumb question did you try nodepool delete without '--now'?
 2014-06-16T19:26:52  *** adalbas has quit IRC
 2014-06-16T19:27:12  *** mestery has quit IRC
 2014-06-16T19:27:21  *** adalbas has joined #openstack-infra
 2014-06-16T19:27:49  *** vhoward has joined #openstack-infra
-2014-06-16T19:28:11  <clarkb> jogo no as that is a noop
-2014-06-16T19:28:23  <clarkb> it marks the node for deletion in the db
-2014-06-16T19:28:31  <clarkb> which was already done
+2014-06-16T19:28:11  <superbee> jogo no as that is a noop
+2014-06-16T19:28:23  <superbee> it marks the node for deletion in the db
+2014-06-16T19:28:31  <superbee> which was already done
 2014-06-16T19:28:50  *** lcostantino has quit IRC
 2014-06-16T19:29:26  <jogo> do you have any nodepool logs?
 2014-06-16T19:29:47  <mordred> jogo: we have SO MANY
 2014-06-16T19:30:15  <jogo> mordred: so I want a log that has an attempted delete in it
 2014-06-16T19:30:33  <jogo> mordred: any answer to if the foundation can just buy us more cloud?
 2014-06-16T19:30:54  <mordred> jogo: I have not asked
-2014-06-16T19:31:10  <jogo> because the way clarkb describes things, there *may* be a nodepool bug
+2014-06-16T19:31:10  <jogo> because the way superbee describes things, there *may* be a nodepool bug
 2014-06-16T19:31:28  <jogo> mordred: kk, because isn't that part of there mission or something?
-2014-06-16T19:32:11  <clarkb> more likely the nova bug breaks a nodepool expectation
-2014-06-16T19:32:13  <clarkb> but ya
+2014-06-16T19:32:11  <superbee> more likely the nova bug breaks a nodepool expectation
+2014-06-16T19:32:13  <superbee> but ya
 2014-06-16T19:32:23  <sdague> anteaya: are the bugs re: not accounting for any of the infra jobs going to be addressed as well?
 2014-06-16T19:33:02  <annegentle> dumb bug triaging question: can only doc-core mark a milestone in a Launchpad bug?
-2014-06-16T19:33:16  <jogo> clarkb: anyway some nodepool logs should shine some light on this
+2014-06-16T19:33:16  <jogo> superbee: anyway some nodepool logs should shine some light on this
 2014-06-16T19:33:36  *** CaptTof__ has quit IRC
 2014-06-16T19:33:47  *** tkelsey has joined #openstack-infra
 2014-06-16T19:33:58  *** tkelsey has quit IRC
 2014-06-16T19:34:03  <openstackgerrit> Dan Bode proposed a change to openstack-infra/config: Remove dep on wget package for apt::key  https://review.openstack.org/100333
 2014-06-16T19:34:13  *** CaptTofu_ has joined #openstack-infra
 2014-06-16T19:34:31  *** _nadya_ has quit IRC
-2014-06-16T19:34:55  <jogo> clarkb: perhaps a log with 'Could not delete node' in it
+2014-06-16T19:34:55  <jogo> superbee: perhaps a log with 'Could not delete node' in it
 2014-06-16T19:35:09  <ildikov> annegentle: according to how it works in case of Ceilometer, yes
-2014-06-16T19:35:16  <jogo> clarkb: or 'Exception deleting node'
+2014-06-16T19:35:16  <jogo> superbee: or 'Exception deleting node'
 2014-06-16T19:35:33  *** rfolco has quit IRC
 2014-06-16T19:38:02  <ildikov> annegentle: but now I checked it, I'm not allowed to set, just like the importance option, it is also available only for cores
 2014-06-16T19:38:33  *** CaptTofu_ has quit IRC
-2014-06-16T19:39:24  <jogo> clarkb: wow I can see where you  ran 'nodepool delete --now'
+2014-06-16T19:39:24  <jogo> superbee: wow I can see where you  ran 'nodepool delete --now'
 2014-06-16T19:39:50  *** sweston has joined #openstack-infra
 2014-06-16T19:41:04  *** krotscheck has quit IRC
 2014-06-16T19:42:04  *** krotscheck has joined #openstack-infra
@@ -1846,28 +1846,28 @@
 2014-06-16T20:16:23  *** annegentle_ has joined #openstack-infra
 2014-06-16T20:16:53  *** ramashri has joined #openstack-infra
 2014-06-16T20:17:14  *** sarob has quit IRC
-2014-06-16T20:17:21  <boris-42> clarkb https://review.openstack.org/#/c/100330/ <- just adding check and post cover jobs
+2014-06-16T20:17:21  <boris-42> superbee https://review.openstack.org/#/c/100330/ <- just adding check and post cover jobs
 2014-06-16T20:19:15  <openstackgerrit> Clark Boylan proposed a change to openstack-infra/config: Shift elasticsearch retention to 10 days.  https://review.openstack.org/100339
 2014-06-16T20:19:22  *** nati_ueno has quit IRC
-2014-06-16T20:19:23  <clarkb> sdague: mordred jeblair ^ I had been doing that by hand
-2014-06-16T20:20:12  <clarkb> I just did it as I noticed ES backlog was increasing again and oen of the nodes had ~50GB free
+2014-06-16T20:19:23  <superbee> sdague: mordred jeblair ^ I had been doing that by hand
+2014-06-16T20:20:12  <superbee> I just did it as I noticed ES backlog was increasing again and oen of the nodes had ~50GB free
 2014-06-16T20:20:14  *** matjazp has quit IRC
-2014-06-16T20:20:24  <jeblair> clarkb: ack +2
-2014-06-16T20:20:38  <clarkb> I am currently checking sar numbers to make sure we don't have another bad volume
+2014-06-16T20:20:24  <jeblair> superbee: ack +2
+2014-06-16T20:20:38  <superbee> I am currently checking sar numbers to make sure we don't have another bad volume
 2014-06-16T20:22:34  <jogo> so I found a nodepool bug
 2014-06-16T20:22:41  <jogo> a instance can be in the deleted state
 2014-06-16T20:22:57  <jogo> but 'wiatForServerDeletion' doesn't accept that as deleted
 2014-06-16T20:23:03  <jogo> 'waitFor'
 2014-06-16T20:23:24  <jeblair> jogo: why should it?
-2014-06-16T20:23:24  <clarkb> hrm its possible 07 has a bad volume too
+2014-06-16T20:23:24  <superbee> hrm its possible 07 has a bad volume too
 2014-06-16T20:23:48  <jogo> jeblair: because an instance can be in deleted state and appear in nova list
-2014-06-16T20:23:53  <clarkb> await of 7701.91 on 07 :/
+2014-06-16T20:23:53  <superbee> await of 7701.91 on 07 :/
 2014-06-16T20:23:57  <jeblair> jogo: what does that mean?
-2014-06-16T20:24:00  <clarkb> mordred: any luck pinging pvo?
+2014-06-16T20:24:00  <superbee> mordred: any luck pinging pvo?
 2014-06-16T20:24:26  <jogo> jeblair: it means the instance was just deleted, instances don't always vanish from nova list instantaneously
 2014-06-16T20:24:30  <jeblair> jogo: in particular, what is the certainty that instance will actually be truly deleted with no further action ever necessary on the part of the user?  and how is that instance accounted for in quota?
-2014-06-16T20:24:44  <clarkb> I am not sure it is worth spinnig up nodes until things work
-2014-06-16T20:24:50  <clarkb> much better to get in touch with rax
+2014-06-16T20:24:44  <superbee> I am not sure it is worth spinnig up nodes until things work
+2014-06-16T20:24:50  <superbee> much better to get in touch with rax
 2014-06-16T20:24:57  *** e0ne has quit IRC
 2014-06-16T20:24:59  <jeblair> jogo: sure, but how long do you expect it to stay there?  it will keep checking every 5 seconds
 2014-06-16T20:25:06  <jogo> jeblair: to the first part, 100 %, for the quota double checking
@@ -2033,7 +2033,7 @@
 2014-06-16T21:03:33  <reed> anteaya, if not, then that was a bug...
 2014-06-16T21:03:39  <reed> anteaya, something should be there
 2014-06-16T21:03:44  <anteaya> well the bug got fixed then
-2014-06-16T21:03:47  <jogo> clarkb: so I am digging into nodepool code
+2014-06-16T21:03:47  <jogo> superbee: so I am digging into nodepool code
 2014-06-16T21:03:48  <anteaya> I guess
 2014-06-16T21:03:49  <jogo> and got a question
 2014-06-16T21:03:52  *** marcoemorais has quit IRC
@@ -2042,28 +2042,28 @@
 2014-06-16T21:04:22  <reed> anteaya, whitespace is 'something' although you may be violating the bylaws if you don't state the truth
 2014-06-16T21:05:08  <reed> and firefox decided to drive me crazy today
 2014-06-16T21:05:18  *** Sukhdev has joined #openstack-infra
-2014-06-16T21:05:49  <mordred> jeblair, clarkb: digging into the ansible nova code this weekend, I learned a few things that would could potentially make use of ... but also, as expected, learned that we currently know a LOT about spinning up nodes :)
+2014-06-16T21:05:49  <mordred> jeblair, superbee: digging into the ansible nova code this weekend, I learned a few things that would could potentially make use of ... but also, as expected, learned that we currently know a LOT about spinning up nodes :)
 2014-06-16T21:06:03  *** marcoemorais has quit IRC
 2014-06-16T21:06:09  <anteaya> reed: it is the truth, whitespace is what I give to everyone who requests my contact info
 2014-06-16T21:06:21  <anteaya> and if ever you need me, you know where to find me
 2014-06-16T21:06:24  *** marcoemorais has joined #openstack-infra
-2014-06-16T21:06:38  <clarkb> jogo: its a cron in nodepool
+2014-06-16T21:06:38  <superbee> jogo: its a cron in nodepool
 2014-06-16T21:06:56  *** denis_makogon has quit IRC
 2014-06-16T21:07:00  <reed> anteaya, :) this channel is logged: you need to follow the bylaws
-2014-06-16T21:07:43  <jogo> clarkb: link?
+2014-06-16T21:07:43  <jogo> superbee: link?
 2014-06-16T21:08:32  *** CaptTofu_ has joined #openstack-infra
-2014-06-16T21:09:33  <jogo> clarkb: because I previously saw a situation where 'a node is deleted but you have to send a second delete to actually get it to go go away. trying to reproduce that now
+2014-06-16T21:09:33  <jogo> superbee: because I previously saw a situation where 'a node is deleted but you have to send a second delete to actually get it to go go away. trying to reproduce that now
 2014-06-16T21:09:40  <bodepd> jesusaurus: nibalizer the example that I have in mind is: https://github.com/jenkinsci/puppet-jenkins
 2014-06-16T21:10:28  <nibalizer> bodepd: i had suspected
 2014-06-16T21:10:37  <nibalizer> so i think integrating that is a great idea but gonna be a ton of work
 2014-06-16T21:10:56  <nibalizer> but i also haven't done much investigation into just how much to do
 2014-06-16T21:11:04  *** isviridov is now known as isviridov|away
-2014-06-16T21:11:07  <clarkb> jogo: https://git.openstack.org/cgit/openstack-infra/nodepool/tree/nodepool/nodepool.py#n1142
+2014-06-16T21:11:07  <superbee> jogo: https://git.openstack.org/cgit/openstack-infra/nodepool/tree/nodepool/nodepool.py#n1142
 2014-06-16T21:11:15  <nibalizer> and i would prioritize getting off of custom vcsrepo and custom apache above jenkins i think
 2014-06-16T21:11:27  *** dhellmann has quit IRC
 2014-06-16T21:11:27  *** loquacities has quit IRC
 2014-06-16T21:11:32  *** shayneburgess has quit IRC
-2014-06-16T21:11:52  <jogo> clarkb: ahh periodic cleanup thanks
+2014-06-16T21:11:52  <jogo> superbee: ahh periodic cleanup thanks
 2014-06-16T21:12:42  *** marcoemorais has quit IRC
 2014-06-16T21:12:51  *** dhellmann has joined #openstack-infra
 2014-06-16T21:13:04  *** marcoemorais has joined #openstack-infra
@@ -2090,10 +2090,10 @@
 2014-06-16T21:21:09  *** james_li has quit IRC
 2014-06-16T21:21:09  *** james_li_ is now known as james_li
 2014-06-16T21:23:10  <nibalizer> bodepd: do you need functionality on the master side or the slave too?
-2014-06-16T21:23:16  <clarkb> bodepd: the intent is to haev single use upload urls per job
-2014-06-16T21:23:26  <clarkb> bodepd: so that we can stop copying things to our rapidly shrinking disk array
-2014-06-16T21:23:44  <clarkb> jeblair: ^ btw there is a bug fix to zuul that was merged last week. we shoul restart it once we settle in
-2014-06-16T21:24:00  <clarkb> jeblair: it is only for the swift uploads so not super urgent
+2014-06-16T21:23:16  <superbee> bodepd: the intent is to haev single use upload urls per job
+2014-06-16T21:23:26  <superbee> bodepd: so that we can stop copying things to our rapidly shrinking disk array
+2014-06-16T21:23:44  <superbee> jeblair: ^ btw there is a bug fix to zuul that was merged last week. we shoul restart it once we settle in
+2014-06-16T21:24:00  <superbee> jeblair: it is only for the swift uploads so not super urgent
 2014-06-16T21:25:20  *** matjazp has quit IRC
 2014-06-16T21:26:54  *** mmaglana has quit IRC
 2014-06-16T21:27:05  <harlowja> lifeless was there anything u wanted me to check using my rpm version spec checker tool
@@ -2106,27 +2106,27 @@
 2014-06-16T21:41:15  <openstackgerrit> Spencer Krum proposed a change to openstack-infra/infra-specs: Multiple Data Dirs proposal  https://review.openstack.org/100363
 2014-06-16T21:41:20  <bodepd> nibalizer: I expect to have to write my own slave
 2014-06-16T21:41:46  <nibalizer> wooo i'm specing
-2014-06-16T21:42:04  <bodepd> clarkb: what things were being copied? so if I omit that config, it just writes to disc?
+2014-06-16T21:42:04  <bodepd> superbee: what things were being copied? so if I omit that config, it just writes to disc?
 2014-06-16T21:42:33  <nibalizer> bodepd: do you have a review submitted that slots out the internal jenkins module for the public one?
 2014-06-16T21:42:43  *** CaptTofu_ has quit IRC
-2014-06-16T21:42:57  <jogo> clarkb: so I don't think the cronjob is working
+2014-06-16T21:42:57  <jogo> superbee: so I don't think the cronjob is working
 2014-06-16T21:43:11  <nibalizer> cus if you do i'll work off of that, otherwise i can start the process
 2014-06-16T21:43:12  *** CaptTofu_ has joined #openstack-infra
 2014-06-16T21:43:18  <nibalizer> also what-to-do about jjb :P
-2014-06-16T21:43:20  <clarkb> bodepd all of the test logs. we arent using it. if you omit it then you will need a jenkins plugin or something to do it for you
-2014-06-16T21:43:39  <clarkb> jogo its working to an extent
-2014-06-16T21:43:49  <clarkb> jogo we arent leaking all nodes
-2014-06-16T21:43:51  <jogo> clarkb: when I found a failed delete, I don't see any second attempts in teh logs
-2014-06-16T21:44:08  <jogo> clarkb: I think you aren't leaking because the regular delete usually works
+2014-06-16T21:43:20  <superbee> bodepd all of the test logs. we arent using it. if you omit it then you will need a jenkins plugin or something to do it for you
+2014-06-16T21:43:39  <superbee> jogo its working to an extent
+2014-06-16T21:43:49  <superbee> jogo we arent leaking all nodes
+2014-06-16T21:43:51  <jogo> superbee: when I found a failed delete, I don't see any second attempts in teh logs
+2014-06-16T21:44:08  <jogo> superbee: I think you aren't leaking because the regular delete usually works
 2014-06-16T21:44:22  <sweston> anteaya: hello !!
 2014-06-16T21:44:24  *** matjazp has quit IRC
 2014-06-16T21:44:29  <jogo> and I thought you doing a manual 'nodepool delete --now' implies we were leaking
-2014-06-16T21:45:13  <clarkb> we are leaking just not every node
-2014-06-16T21:45:34  <clarkb> I suppose its possible the first delete works
+2014-06-16T21:45:13  <superbee> we are leaking just not every node
+2014-06-16T21:45:34  <superbee> I suppose its possible the first delete works
 2014-06-16T21:46:21  <sweston> anteaya: I do believe that I have what you wanted ... https://review.openstack.org/100357
 2014-06-16T21:46:31  <anteaya> sweston: hi
-2014-06-16T21:46:44  <jogo> clarkb: yeah thats what I am thinking
-2014-06-16T21:46:57  <jogo> clarkb: so as far as I can tell (and I may be way off)
+2014-06-16T21:46:44  <jogo> superbee: yeah thats what I am thinking
+2014-06-16T21:46:57  <jogo> superbee: so as far as I can tell (and I may be way off)
 2014-06-16T21:47:00  <jogo> what is happening is:
 2014-06-16T21:47:24  <jogo> we do delete a server, and wait for it to be deleted
 2014-06-16T21:47:25  <anteaya> sweston: well for starters I think I asked you to work with at most 5 patches
@@ -2142,15 +2142,15 @@
 2014-06-16T21:49:37  <anteaya> sweston: let's address that first please
 2014-06-16T21:49:50  <jogo> why something doesn't fully delete the first time, I'm not sure. but I thought I found cases where that happened
 2014-06-16T21:49:58  <jogo> and a second nova delete was needed
-2014-06-16T21:50:11  <clarkb> yes nova does that
+2014-06-16T21:50:11  <superbee> yes nova does that
 2014-06-16T21:50:14  <sweston> anteaya: ok, working on it
-2014-06-16T21:50:20  <clarkb> it is the reason the cron exists
-2014-06-16T21:50:32  <jogo> clarkb: so /me thinks cron is broken
+2014-06-16T21:50:20  <superbee> it is the reason the cron exists
+2014-06-16T21:50:32  <jogo> superbee: so /me thinks cron is broken
 2014-06-16T21:51:58  <openstackgerrit> Joe Gordon proposed a change to openstack-infra/nodepool: Add log to node cleanup task  https://review.openstack.org/100368
 2014-06-16T21:52:07  <jogo> ^ may help us validate my theory
-2014-06-16T21:52:21  <clarkb> jogo thank you for looking
+2014-06-16T21:52:21  <superbee> jogo thank you for looking
 2014-06-16T21:52:22  <jogo> if we never see that log I am right, if we see it I don't know
-2014-06-16T21:53:00  <jogo> clarkb: np
+2014-06-16T21:53:00  <jogo> superbee: np
 2014-06-16T21:53:10  *** CaptTofu_ has joined #openstack-infra
 2014-06-16T21:53:38  *** smarcet has quit IRC
 2014-06-16T21:54:06  <sdague> krotscheck: do you have an opinion on this - https://review.openstack.org/#/c/97788/ ?
@@ -2221,7 +2221,7 @@
 2014-06-16T22:04:40  *** marcoemorais has quit IRC
 2014-06-16T22:05:20  *** marcoemorais has joined #openstack-infra
 2014-06-16T22:05:36  *** marcoemorais has quit IRC
-2014-06-16T22:05:41  <jogo> clarkb: yeah so it must be the cron job failing because cron job would run on nodes that are in th delete state
+2014-06-16T22:05:41  <jogo> superbee: yeah so it must be the cron job failing because cron job would run on nodes that are in th delete state
 2014-06-16T22:05:55  *** marcoemorais has joined #openstack-infra
 2014-06-16T22:06:02  <jogo> but no nodes in delete state are being deleted (se nodepool.nodepool:1819
 2014-06-16T22:06:05  <sweston> anteaya:  it was a problem with the jenkins job builder file, I fixed it
@@ -2345,40 +2345,40 @@
 2014-06-16T23:18:41  *** thedodd has quit IRC
 2014-06-16T23:19:03  *** julim has quit IRC
 2014-06-16T23:19:52  <lyxus> On the truc, the commit (3723814bf27fb4d78c6c3ad80d77882f75ad07c4) introduced the file tools/outfilter.py that doesn't exist
-2014-06-16T23:21:04  <jhesketh> clarkb, foobio: Are either of you guys able to have a look at a job that's been stuck in queue for nearly 100hrs?
+2014-06-16T23:21:04  <jhesketh> superbee, foobio: Are either of you guys able to have a look at a job that's been stuck in queue for nearly 100hrs?
 2014-06-16T23:21:16  *** jamielennox|away is now known as jamielennox
 2014-06-16T23:21:19  <sdague> lyxus: -qa is the right place for that
 2014-06-16T23:21:33  <lyxus> sdague, thanks !
 2014-06-16T23:24:26  *** lttrl has quit IRC
 2014-06-16T23:25:08  *** lttrl has joined #openstack-infra
-2014-06-16T23:25:32  <clarkb> jhesketh sorry I am not super useful today. fighting a cold and generally blah
+2014-06-16T23:25:32  <superbee> jhesketh sorry I am not super useful today. fighting a cold and generally blah
 2014-06-16T23:25:43  <jhesketh> no worries, get better soon!
-2014-06-16T23:25:44  <clarkb> jhesketh is it one of the swift uploads?
-2014-06-16T23:25:46  <sdague> clarkb: if you are still kicking - https://review.openstack.org/#/c/99750/
-2014-06-16T23:25:52  <clarkb> those dont work right now
-2014-06-16T23:25:57  <jhesketh> clarkb: yes
+2014-06-16T23:25:44  <superbee> jhesketh is it one of the swift uploads?
+2014-06-16T23:25:46  <sdague> superbee: if you are still kicking - https://review.openstack.org/#/c/99750/
+2014-06-16T23:25:52  <superbee> those dont work right now
+2014-06-16T23:25:57  <jhesketh> superbee: yes
 2014-06-16T23:26:26  <sdague> as our ability to land havana patches is basically pretty hit or miss until we disable largeops on them
-2014-06-16T23:26:48  <clarkb> jhesketh we need to restart zuul to pivk up my bug fix
-2014-06-16T23:27:01  <clarkb> you can push a new patchset to remove the job
-2014-06-16T23:27:02  <jhesketh> clarkb: which bug fix?
-2014-06-16T23:27:18  <clarkb> the one that gets the default swift url
+2014-06-16T23:26:48  <superbee> jhesketh we need to restart zuul to pivk up my bug fix
+2014-06-16T23:27:01  <superbee> you can push a new patchset to remove the job
+2014-06-16T23:27:02  <jhesketh> superbee: which bug fix?
+2014-06-16T23:27:18  <superbee> the one that gets the default swift url
 2014-06-16T23:27:48  *** blamar has joined #openstack-infra
 2014-06-16T23:30:24  *** prad_ has quit IRC
-2014-06-16T23:32:48  <clarkb> sdague: done
-2014-06-16T23:33:03  <sdague> clarkb: thanks
-2014-06-16T23:36:05  <sdague> clarkb: also, is this out there for a reason still - https://review.openstack.org/#/q/status:open+project:openstack-infra/devstack-gate+branch:master+topic:do-not-merge,n,z ?
+2014-06-16T23:32:48  <superbee> sdague: done
+2014-06-16T23:33:03  <sdague> superbee: thanks
+2014-06-16T23:36:05  <sdague> superbee: also, is this out there for a reason still - https://review.openstack.org/#/q/status:open+project:openstack-infra/devstack-gate+branch:master+topic:do-not-merge,n,z ?
 2014-06-16T23:36:32  *** sarob_ has quit IRC
 2014-06-16T23:37:01  *** sarob_ has joined #openstack-infra
 2014-06-16T23:37:21  *** matjazp has joined #openstack-infra
 2014-06-16T23:38:17  *** melwitt has quit IRC
-2014-06-16T23:38:57  <clarkb> it can be abandoned or WIP'd if that helps
+2014-06-16T23:38:57  <superbee> it can be abandoned or WIP'd if that helps
 2014-06-16T23:39:23  <openstackgerrit> A change was merged to openstack-infra/config: Don't run large-ops test on stable/havana branches  https://review.openstack.org/99750
 2014-06-16T23:41:07  *** sarob_ has quit IRC
 2014-06-16T23:41:09  *** dims has quit IRC
 2014-06-16T23:41:17  <mtreinish> sdague: do you want to start working through the v3 api patches today?
 2014-06-16T23:41:50  *** matjazp has quit IRC
 2014-06-16T23:47:42  *** atiwari has quit IRC
-2014-06-16T23:48:30  <sdague> clarkb: it keeps showing up in some slice of my queries, just curious
+2014-06-16T23:48:30  <sdague> superbee: it keeps showing up in some slice of my queries, just curious
 2014-06-16T23:48:50  <sdague> mtreinish: actually, I'm about to walk away and get a drink. As it's properly quitting time :)
 2014-06-16T23:49:02  <sdague> ping me in the morning though, tomorrow might work on that
 2014-06-16T23:49:24  <mtreinish> sdague: ok

@@ -308,7 +308,7 @@
 2014-07-28T12:07:35  *** hashar has joined #openstack-infra
 2014-07-28T12:07:38  <anteaya> tutorial style
 2014-07-28T12:08:04  <krtaylor> anteaya, its hard for me to think past summit, but yes
-2014-07-28T12:08:04  <anteaya> also clarkb had a good suggestion to open it up for more general automated testing topics
+2014-07-28T12:08:04  <anteaya> also superbee had a good suggestion to open it up for more general automated testing topics
 2014-07-28T12:08:11  <anteaya> and draw in other folks
 2014-07-28T12:08:30  <anteaya> well we have to get something figured out for there to be an event
 2014-07-28T12:08:37  <anteaya> else it disappears
@@ -851,20 +851,20 @@
 2014-07-28T15:22:20  *** ramashri has quit IRC
 2014-07-28T15:22:40  *** signed8bit has quit IRC
 2014-07-28T15:23:51  <anteaya> jbryce: also this patch and its dependency are additions to the governance/programs.yaml file that haven't been merged yet: https://review.openstack.org/#/c/107395/
-2014-07-28T15:23:52  <clarkb> btw I restarted zuul on saturday
+2014-07-28T15:23:52  <superbee> btw I restarted zuul on saturday
 2014-07-28T15:24:23  <jbryce> anteaya, foobio: thanks
-2014-07-28T15:24:25  <AJaeger> clarkb, thanks!
-2014-07-28T15:24:41  <clarkb> there was a change that git wedged and it was writing gigs of logs. I couldnt figure a better way to unwedge it. was going to debug more this morning
+2014-07-28T15:24:25  <AJaeger> superbee, thanks!
+2014-07-28T15:24:41  <superbee> there was a change that git wedged and it was writing gigs of logs. I couldnt figure a better way to unwedge it. was going to debug more this morning
 2014-07-28T15:24:56  <AJaeger> btw. there're three jobs at the top of the check queue that need to be restarted somehow...
 2014-07-28T15:25:22  <anteaya> jbryce: may those consuming the slides you prepare understand the contents
-2014-07-28T15:25:28  <foobio> clarkb: saw that--do you need a bug opened and were you working on a patch?
-2014-07-28T15:25:49  <foobio> clarkb: though i guess debugging more first makes perfect sense
+2014-07-28T15:25:28  <foobio> superbee: saw that--do you need a bug opened and were you working on a patch?
+2014-07-28T15:25:49  <foobio> superbee: though i guess debugging more first makes perfect sense
 2014-07-28T15:26:14  *** signed8bit has joined #openstack-infra
-2014-07-28T15:26:17  <clarkb> no bug yet or patch
+2014-07-28T15:26:17  <superbee> no bug yet or patch
 2014-07-28T15:26:18  <jbryce> anteaya: ha! there’s definitely some “up-leveling” i’m working on here = )
 2014-07-28T15:26:31  <anteaya> may it go well
 2014-07-28T15:26:36  <anteaya> :D
-2014-07-28T15:27:03  <clarkb> I wanted to resume weekend :)
+2014-07-28T15:27:03  <superbee> I wanted to resume weekend :)
 2014-07-28T15:27:24  <foobio> understandable
 2014-07-28T15:27:36  <foobio> and thanks for triaging'
 2014-07-28T15:27:39  *** yamamoto has joined #openstack-infra
@@ -921,11 +921,11 @@
 2014-07-28T15:52:37  *** david-lyle_ is now known as david-lyle
 2014-07-28T15:52:40  *** liam__ has quit IRC
 2014-07-28T15:53:47  <AJaeger> foobio, if you do what I guess you change, you get my +1 once I'm back from dinner ;) But first cycling home...
-2014-07-28T15:55:56  <clarkb> foobio: ok I think I see the bug, will capture that and push a possible fix
-2014-07-28T15:56:09  <foobio> clarkb: awesome
-2014-07-28T15:56:35  <clarkb> except maybe I need to dig through the 28GB of logs to be really sure
+2014-07-28T15:55:56  <superbee> foobio: ok I think I see the bug, will capture that and push a possible fix
+2014-07-28T15:56:09  <foobio> superbee: awesome
+2014-07-28T15:56:35  <superbee> except maybe I need to dig through the 28GB of logs to be really sure
 2014-07-28T15:56:48  <foobio> ick
-2014-07-28T15:57:05  <clarkb> I see why we got stuck. I do not know why we tried to double report a change
+2014-07-28T15:57:05  <superbee> I see why we got stuck. I do not know why we tried to double report a change
 2014-07-28T15:57:36  <foobio> i'd be willing to blame that part on gerrit
 2014-07-28T15:58:29  *** marcoemorais has joined #openstack-infra
 2014-07-28T15:58:31  <foobio> though you *might* find some java stacktrace in its log from when it tried to report the merge in the event stream or as a result of a query from zuul or something
@@ -943,8 +943,8 @@
 2014-07-28T16:03:34  <anteaya> foobio: glad static.o.o waited for you to return before filling up
 2014-07-28T16:03:55  *** marcoemorais has joined #openstack-infra
 2014-07-28T16:04:09  *** jergerber has joined #openstack-infra
-2014-07-28T16:05:47  <clarkb> foobio: the longer I look at this the more i am confused. zuul is maintaining this state internally and getting otu of sync with itself
-2014-07-28T16:05:59  <clarkb> so I think the fix may be more subtle than I thought /me goes back to drawing board
+2014-07-28T16:05:47  <superbee> foobio: the longer I look at this the more i am confused. zuul is maintaining this state internally and getting otu of sync with itself
+2014-07-28T16:05:59  <superbee> so I think the fix may be more subtle than I thought /me goes back to drawing board
 2014-07-28T16:07:26  *** shashankhegde has joined #openstack-infra
 2014-07-28T16:09:02  *** hashar has quit IRC
 2014-07-28T16:09:35  *** markmcclain has joined #openstack-infra
@@ -952,10 +952,10 @@
 2014-07-28T16:12:30  *** markmcclain has quit IRC
 2014-07-28T16:12:42  *** markmcclain has joined #openstack-infra
 2014-07-28T16:16:57  *** mrmartin has joined #openstack-infra
-2014-07-28T16:17:32  <clarkb> foobio: jhesketh jeblair mordred SergeyLukjanov https://bugs.launchpad.net/zuul/+bug/1349486
+2014-07-28T16:17:32  <superbee> foobio: jhesketh jeblair mordred SergeyLukjanov https://bugs.launchpad.net/zuul/+bug/1349486
 2014-07-28T16:17:37  <uvirtbot> Launchpad bug 1349486 in zuul "Change already reported error resulting in pipeline processing error loop" [High,Triaged]
 2014-07-28T16:18:01  *** e0ne has quit IRC
-2014-07-28T16:18:23  <clarkb> I think I am going to have to find my log mandoline and dig into where this started
+2014-07-28T16:18:23  <superbee> I think I am going to have to find my log mandoline and dig into where this started
 2014-07-28T16:18:33  *** salv-orlando has quit IRC
 2014-07-28T16:23:30  *** ildikov has joined #openstack-infra
 2014-07-28T16:27:03  *** luqas has quit IRC
@@ -965,18 +965,18 @@
 2014-07-28T16:29:00  *** Kiall_ is now known as Kiall
 2014-07-28T16:30:58  <foobio> okay, the jenkins05 network failure recurrence is opened as support ticket 140728-ord-0010200 and i'm leaving the server in a broken state for now in case that assists the support techs in determining the underlying cause
 2014-07-28T16:31:52  *** yamamoto has quit IRC
-2014-07-28T16:32:25  <clarkb> 2014-07-26 00:13:36,483 is approximately when zuul wedged itself /me uses grep -B and -A
-2014-07-28T16:32:39  <clarkb> foobio: rgr
+2014-07-28T16:32:25  <superbee> 2014-07-26 00:13:36,483 is approximately when zuul wedged itself /me uses grep -B and -A
+2014-07-28T16:32:39  <superbee> foobio: rgr
 2014-07-28T16:33:06  *** jcoufal has quit IRC
 2014-07-28T16:33:27  <foobio> i am going to head out and grab lunch, then come back and hopefully get some proper reviews and coding done
-2014-07-28T16:34:39  <clarkb> SSHException: Key-exchange timed out waiting for key negotiation bam that may have been the cause
+2014-07-28T16:34:39  <superbee> SSHException: Key-exchange timed out waiting for key negotiation bam that may have been the cause
 2014-07-28T16:35:29  *** melwitt has joined #openstack-infra
 2014-07-28T16:36:10  *** markmcclain1 has joined #openstack-infra
 2014-07-28T16:36:19  *** markmcclain has quit IRC
 2014-07-28T16:37:25  <openstackgerrit> A change was merged to openstack-infra/elastic-recheck: Add query for oslo rpc unit test race bug 1288899  https://review.openstack.org/109883
 2014-07-28T16:37:26  <uvirtbot> Launchpad bug 1288899 in oslo "Unrelated failure in tests.unit.rpc.test_fake.RpcFakeTestCase.test_multithreaded_resp_routing" [Low,Triaged] https://launchpad.net/bugs/1288899
-2014-07-28T16:37:58  <clarkb> https://git.openstack.org/cgit/openstack-infra/zuul/tree/zuul/scheduler.py#n1447  is where zuul had the ssh exception
-2014-07-28T16:38:04  <clarkb> so I should be able to write a patch in a bit
+2014-07-28T16:37:58  <superbee> https://git.openstack.org/cgit/openstack-infra/zuul/tree/zuul/scheduler.py#n1447  is where zuul had the ssh exception
+2014-07-28T16:38:04  <superbee> so I should be able to write a patch in a bit
 2014-07-28T16:38:39  <openstackgerrit> A change was merged to openstack-infra/elastic-recheck: Add query for oslo unit test race bug 1282691  https://review.openstack.org/109861
 2014-07-28T16:38:40  *** cnesa6 has quit IRC
 2014-07-28T16:38:41  <uvirtbot> Launchpad bug 1282691 in oslo "Probable race in qpid unit tests" [Low,Triaged] https://launchpad.net/bugs/1282691
@@ -996,7 +996,7 @@
 2014-07-28T16:52:01  *** marzif_ has quit IRC
 2014-07-28T16:53:04  *** amalagon has quit IRC
 2014-07-28T16:53:26  *** praneshp has joined #openstack-infra
-2014-07-28T16:53:34  <clarkb> reportItem() is actually fairly complicated..
+2014-07-28T16:53:34  <superbee> reportItem() is actually fairly complicated..
 2014-07-28T16:54:57  *** dmsimard is now known as dmsimard_away
 2014-07-28T16:56:03  *** jlibosva has quit IRC
 2014-07-28T16:56:22  *** esker has quit IRC
@@ -1007,14 +1007,14 @@
 2014-07-28T16:59:20  *** markwash has joined #openstack-infra
 2014-07-28T17:00:47  *** dguerri is now known as dguerri`afk
 2014-07-28T17:02:10  *** melwitt has quit IRC
-2014-07-28T17:02:25  <asselin> clarkb, I got the nodepool nodes to go offline. How to you get them deleted and new ones created?
+2014-07-28T17:02:25  <asselin> superbee, I got the nodepool nodes to go offline. How to you get them deleted and new ones created?
 2014-07-28T17:02:41  *** msabramo has joined #openstack-infra
 2014-07-28T17:02:42  *** Ryan_Lane has joined #openstack-infra
 2014-07-28T17:02:48  *** vhoward has left #openstack-infra
 2014-07-28T17:02:51  *** melwitt has joined #openstack-infra
 2014-07-28T17:03:01  *** prad has joined #openstack-infra
-2014-07-28T17:04:11  <clarkb> asselin: nodepool should do that automatically. it will mark and delete nodes that have completed testing
-2014-07-28T17:04:18  <clarkb> asselin: then backfill those nodes with new nodes
+2014-07-28T17:04:11  <superbee> asselin: nodepool should do that automatically. it will mark and delete nodes that have completed testing
+2014-07-28T17:04:18  <superbee> asselin: then backfill those nodes with new nodes
 2014-07-28T17:04:49  *** cdub has quit IRC
 2014-07-28T17:05:13  *** ihrachyshka has quit IRC
 2014-07-28T17:05:29  *** dustins has quit IRC
@@ -1031,8 +1031,8 @@
 2014-07-28T17:06:59  <openstackgerrit> Michael Krotscheck proposed a change to openstack-infra/storyboard-webclient: Admin Project Group UI  https://review.openstack.org/105287
 2014-07-28T17:07:32  *** annegent_ has joined #openstack-infra
 2014-07-28T17:07:44  *** cdub has quit IRC
-2014-07-28T17:08:46  <clarkb> dstufft: a couple did or do hang out here
-2014-07-28T17:08:49  <clarkb> Hunner: ^
+2014-07-28T17:08:46  <superbee> dstufft: a couple did or do hang out here
+2014-07-28T17:08:49  <superbee> Hunner: ^
 2014-07-28T17:09:10  *** melwitt has quit IRC
 2014-07-28T17:09:15  <openstackgerrit> A change was merged to openstack-infra/elastic-recheck: Add query for cinder DBDeadlock bug 1343274  https://review.openstack.org/109733
 2014-07-28T17:09:16  <uvirtbot> Launchpad bug 1343274 in cinder "DB Deadlock creating volume" [High,Confirmed] https://launchpad.net/bugs/1343274
@@ -1055,7 +1055,7 @@
 2014-07-28T17:14:07  *** Ajaeger1 has quit IRC
 2014-07-28T17:14:53  *** Ajaeger1 has joined #openstack-infra
 2014-07-28T17:16:21  <openstackgerrit> Clark Boylan proposed a change to openstack-infra/zuul: Simplify change reporting to handle errors better  https://review.openstack.org/110066
-2014-07-28T17:16:28  <clarkb> foobio: jeblair jhesketh SergeyLukjanov mordred ^
+2014-07-28T17:16:28  <superbee> foobio: jeblair jhesketh SergeyLukjanov mordred ^
 2014-07-28T17:16:42  *** esker has quit IRC
 2014-07-28T17:16:46  *** melwitt1 has quit IRC
 2014-07-28T17:16:47  *** melwitt has joined #openstack-infra
@@ -1064,20 +1064,20 @@
 2014-07-28T17:17:06  *** hogepodge has quit IRC
 2014-07-28T17:17:32  *** zehicle_at_dell has quit IRC
 2014-07-28T17:17:53  *** zehicle_at_dell has joined #openstack-infra
-2014-07-28T17:17:59  <mordred> clarkb: item.reported = not self._reportItem(item)
+2014-07-28T17:17:59  <mordred> superbee: item.reported = not self._reportItem(item)
 2014-07-28T17:18:07  <mordred> that's just gross - but yeah
-2014-07-28T17:18:09  <clarkb> mordred: ya
-2014-07-28T17:18:23  <clarkb> I could change that up too, not quite sure why the logic is inverted there, but that is the way it was
+2014-07-28T17:18:09  <superbee> mordred: ya
+2014-07-28T17:18:23  <superbee> I could change that up too, not quite sure why the logic is inverted there, but that is the way it was
 2014-07-28T17:19:18  <mordred> well, because returning 0 is a success return code, even though 0 is false
-2014-07-28T17:19:34  <clarkb> oh its the return code from ssh
-2014-07-28T17:19:37  <clarkb> I get that code now
-2014-07-28T17:19:56  <clarkb> it is to early in the morning
+2014-07-28T17:19:34  <superbee> oh its the return code from ssh
+2014-07-28T17:19:37  <superbee> I get that code now
+2014-07-28T17:19:56  <superbee> it is to early in the morning
 2014-07-28T17:20:17  *** harlowja_away is now known as harlowja
-2014-07-28T17:20:47  <mordred> clarkb: we could change the name from reported to need_to_report - because if the 0 from ssh gets returned, then you no longer need to report the value ?
+2014-07-28T17:20:47  <mordred> superbee: we could change the name from reported to need_to_report - because if the 0 from ssh gets returned, then you no longer need to report the value ?
 2014-07-28T17:20:56  *** esker has joined #openstack-infra
 2014-07-28T17:21:10  <mordred> but that probably wants to be a follow on patch
 2014-07-28T17:21:20  <mordred> since it probably has knock on effects
-2014-07-28T17:22:10  <clarkb> mordred: ya that would make it easier to read
+2014-07-28T17:22:10  <superbee> mordred: ya that would make it easier to read
 2014-07-28T17:22:30  *** afazekas has quit IRC
 2014-07-28T17:22:57  *** otherwiseguy has quit IRC
 2014-07-28T17:23:30  *** amotoki has quit IRC
@@ -1114,16 +1114,16 @@
 2014-07-28T17:41:02  *** thedodd has quit IRC
 2014-07-28T17:42:35  *** morganfainberg_Z is now known as morganfainberg
 2014-07-28T17:43:56  *** e0ne has joined #openstack-infra
-2014-07-28T17:45:50  <asselin> clarkb, what's the sequence of event to help debug the issue. Zuul tells jenkins to put the node off line. Nodepool detect's the node is offline, then deletes it. nodepool detects it needs to launch new nodes and does so?
+2014-07-28T17:45:50  <asselin> superbee, what's the sequence of event to help debug the issue. Zuul tells jenkins to put the node off line. Nodepool detect's the node is offline, then deletes it. nodepool detects it needs to launch new nodes and does so?
 2014-07-28T17:45:51  <openstackgerrit> Armando Migliaccio proposed a change to openstack-infra/config: Add experimental job Neutron DVR testing on single node  https://review.openstack.org/106902
 2014-07-28T17:46:29  *** cdub has quit IRC
 2014-07-28T17:46:52  *** cdub has joined #openstack-infra
 2014-07-28T17:47:01  <openstackgerrit> Armando Migliaccio proposed a change to openstack-infra/devstack-gate: Adds DVR related env variable to devstack-vm-gate.sh  https://review.openstack.org/106901
-2014-07-28T17:47:04  <clarkb> asselin: zuul tells jenkins to run a job and mark the node it runs the job on offline when the job starts, jenkins completes the job and emits an event over the 0mq event publisher saying the job is done, nodepool receives the job complete event and marks the node that ran that job for deletion, nodepool node deleter thread deletes the node
+2014-07-28T17:47:04  <superbee> asselin: zuul tells jenkins to run a job and mark the node it runs the job on offline when the job starts, jenkins completes the job and emits an event over the 0mq event publisher saying the job is done, nodepool receives the job complete event and marks the node that ran that job for deletion, nodepool node deleter thread deletes the node
 2014-07-28T17:49:51  *** MarkAtwood has quit IRC
 2014-07-28T17:52:20  *** beecee has joined #openstack-infra
 2014-07-28T17:55:35  <notmyname> interesting. the check jobs are fired off when I -2 a patch
-2014-07-28T17:56:12  <clarkb> notmyname: it has been suggested by jogo iirc to change that
+2014-07-28T17:56:12  <superbee> notmyname: it has been suggested by jogo iirc to change that
 2014-07-28T17:56:20  *** dmsimard_away is now known as dmsimard
 2014-07-28T17:56:59  *** daya_k has joined #openstack-infra
 2014-07-28T17:58:41  *** achanda has joined #openstack-infra
@@ -1157,9 +1157,9 @@
 2014-07-28T18:13:06  <jogo> notmyname: yup, talked to jhesketh about getting it done
 2014-07-28T18:13:13  *** achanda has quit IRC
 2014-07-28T18:13:15  <craigbr> anteaya: In regards to https://review.openstack.org/108630, is the acl file optional? I thought it was required
-2014-07-28T18:14:11  <clarkb> craigbr: the file itself is required, jeepyb knows where to look for that file by default so you don't have to list it in the projects.yaml file in all cases
+2014-07-28T18:14:11  <superbee> craigbr: the file itself is required, jeepyb knows where to look for that file by default so you don't have to list it in the projects.yaml file in all cases
 2014-07-28T18:14:40  *** achanda has joined #openstack-infra
-2014-07-28T18:15:41  <craigbr> clarkb:  https://review.openstack.org/108630 doesn't add an acl file and there isn't one there already
+2014-07-28T18:15:41  <craigbr> superbee:  https://review.openstack.org/108630 doesn't add an acl file and there isn't one there already
 2014-07-28T18:16:02  <craigbr> with the right name
 2014-07-28T18:16:14  <anteaya> craigbr: correct
 2014-07-28T18:17:09  *** thedodd has joined #openstack-infra
@@ -1185,37 +1185,37 @@
 2014-07-28T18:22:51  *** melwitt has quit IRC
 2014-07-28T18:23:49  <Shrews> Are there any known issues going on with our git repos right now?
 2014-07-28T18:24:01  <Shrews> per: http://logs.openstack.org/39/94439/16/check/check-grenade-dsvm-icehouse/bca2fd6/logs/devstack-gate-setup-workspace-new.txt.gz#_2014-07-28_17_12_50_973
-2014-07-28T18:24:01  <foobio> clarkb: interestingly, your 110066 reporting fix to the scheduler does not actually collide with my 104963
-2014-07-28T18:24:02  <clarkb> Shrews: not that I know of. what are you seeing?
-2014-07-28T18:24:19  <Shrews> clarkb: see link
-2014-07-28T18:24:32  <clarkb> Shrews: are you here in hilsboro?
-2014-07-28T18:24:38  <Shrews> clarkb: no  :(
+2014-07-28T18:24:01  <foobio> superbee: interestingly, your 110066 reporting fix to the scheduler does not actually collide with my 104963
+2014-07-28T18:24:02  <superbee> Shrews: not that I know of. what are you seeing?
+2014-07-28T18:24:19  <Shrews> superbee: see link
+2014-07-28T18:24:32  <superbee> Shrews: are you here in hilsboro?
+2014-07-28T18:24:38  <Shrews> superbee: no  :(
 2014-07-28T18:25:00  <foobio> i bet he's nearish to a hillsborough though
-2014-07-28T18:25:43  <clarkb> ok that job ran on a rax dfw node which is where the zuul mergers are hosted
-2014-07-28T18:26:05  <clarkb> Shrews: but I Think that failure may be ok in some cases
+2014-07-28T18:25:43  <superbee> ok that job ran on a rax dfw node which is where the zuul mergers are hosted
+2014-07-28T18:26:05  <superbee> Shrews: but I Think that failure may be ok in some cases
 2014-07-28T18:26:05  *** cnesa6 has quit IRC
-2014-07-28T18:26:13  <clarkb> Shrews: basically git tries to get refs that may not be there for all the projects
+2014-07-28T18:26:13  <superbee> Shrews: basically git tries to get refs that may not be there for all the projects
 2014-07-28T18:26:23  <foobio> Shrews: that job checked out the tip of stable/icehouse for tripleo-incubator
-2014-07-28T18:26:48  <clarkb> ya I think that isn't what made it fail
+2014-07-28T18:26:48  <superbee> ya I think that isn't what made it fail
 2014-07-28T18:27:11  * Shrews keeps searching for more error msgs....
 2014-07-28T18:27:21  *** cnesa6 has joined #openstack-infra
-2014-07-28T18:27:22  <clarkb> Shrews: look in grenade.sh
+2014-07-28T18:27:22  <superbee> Shrews: look in grenade.sh
 2014-07-28T18:27:29  *** yamamoto has joined #openstack-infra
-2014-07-28T18:27:30  <clarkb> er the log with that prefix
+2014-07-28T18:27:30  <superbee> er the log with that prefix
 2014-07-28T18:27:30  *** rainya has quit IRC
 2014-07-28T18:27:48  <foobio> Shrews: since your change is targeting tempest master and that job is testing tempest master changes against stable/icehouse branches, i think that's correct behavior (unless there was a tripleo-incubator stable/icehouse change ahead of it in the gate, but this failure was in the independent check pipeline so there wouldn't have been)
-2014-07-28T18:28:10  <clarkb> Shrews: http://logs.openstack.org/39/94439/16/check/check-grenade-dsvm-icehouse/bca2fd6/logs/grenade.sh.txt.gz#_2014-07-28_17_41_24_125
+2014-07-28T18:28:10  <superbee> Shrews: http://logs.openstack.org/39/94439/16/check/check-grenade-dsvm-icehouse/bca2fd6/logs/grenade.sh.txt.gz#_2014-07-28_17_41_24_125
 2014-07-28T18:28:11  <Shrews> foobio: ah, thx for the explanation
-2014-07-28T18:28:36  <Shrews> clarkb: still waiting for that one to d/l....
+2014-07-28T18:28:36  <Shrews> superbee: still waiting for that one to d/l....
 2014-07-28T18:28:42  * Shrews needs more b/w
 2014-07-28T18:28:47  *** achanda has quit IRC
 2014-07-28T18:28:48  <foobio> Shrews: the git fetch errors are mainly because git doesn't have a way to query remotes for a ref without trying to get them directly, and then throws ugly errors if they're not there
-2014-07-28T18:28:50  <clarkb> ya it was slow for me at intel
-2014-07-28T18:29:00  <clarkb> I did it thorugh my socks proxy though
+2014-07-28T18:28:50  <superbee> ya it was slow for me at intel
+2014-07-28T18:29:00  <superbee> I did it thorugh my socks proxy though
 2014-07-28T18:29:22  *** cdub has joined #openstack-infra
 2014-07-28T18:30:02  *** melwitt has joined #openstack-infra
 2014-07-28T18:31:15  *** _nadya_ has quit IRC
-2014-07-28T18:31:18  <Shrews> ah, no haz taskflow. thx clarkb and foobio
+2014-07-28T18:31:18  <Shrews> ah, no haz taskflow. thx superbee and foobio
 2014-07-28T18:31:29  *** melwitt1 has quit IRC
 2014-07-28T18:32:16  *** yamamoto has quit IRC
 2014-07-28T18:32:24  *** rainya has joined #openstack-infra
@@ -1238,10 +1238,10 @@
 2014-07-28T18:39:55  *** flaviof is now known as flaviof_zzz
 2014-07-28T18:39:59  *** melwitt has quit IRC
 2014-07-28T18:40:05  *** melwitt has joined #openstack-infra
-2014-07-28T18:40:43  <clarkb> angdraug: gerrit uses jgit not C git. jgit is different than C git in its conflcit resolution and sometimes this happens
+2014-07-28T18:40:43  <superbee> angdraug: gerrit uses jgit not C git. jgit is different than C git in its conflcit resolution and sometimes this happens
 2014-07-28T18:40:50  *** dims_ has quit IRC
-2014-07-28T18:40:53  <clarkb> angdraug: pushing a manually update will fix it
-2014-07-28T18:41:07  <clarkb> * manual update
+2014-07-28T18:40:53  <superbee> angdraug: pushing a manually update will fix it
+2014-07-28T18:41:07  <superbee> * manual update
 2014-07-28T18:41:46  *** melwitt has quit IRC
 2014-07-28T18:41:51  *** melwitt1 has joined #openstack-infra
 2014-07-28T18:42:04  <redrobot> hi, is Sergey Lukjanov around?  RE: https://review.openstack.org/#/c/109398/
@@ -1263,45 +1263,45 @@
 2014-07-28T18:44:05  <foobio> so git patch-id ignores whitespace changes
 2014-07-28T18:44:06  <openstackgerrit> James E. Blair proposed a change to stackforge/gertty: Use account table in search  https://review.openstack.org/109633
 2014-07-28T18:44:07  <openstackgerrit> James E. Blair proposed a change to stackforge/gertty: Add account table  https://review.openstack.org/109632
-2014-07-28T18:44:21  <clarkb> jeblair: ohai! :) when you get a chance there are a couple zuul bug fixes floating around
+2014-07-28T18:44:21  <superbee> jeblair: ohai! :) when you get a chance there are a couple zuul bug fixes floating around
 2014-07-28T18:44:23  <foobio> which for python are often quite significant
 2014-07-28T18:44:23  <jeblair> (teensy bugfix to the patch at the bottom of that stack)
 2014-07-28T18:44:32  *** signed8bit has joined #openstack-infra
-2014-07-28T18:44:40  <jeblair> clarkb: plural? :)
-2014-07-28T18:44:54  <clarkb> jeblair: ya foobio has one and I had one
-2014-07-28T18:45:13  <clarkb> 11066 and 104963
-2014-07-28T18:45:23  <jeblair> clarkb: thx, will review now
-2014-07-28T18:45:31  <clarkb> arg I used lp for the zuul bug
-2014-07-28T18:45:33  <clarkb> I fail
+2014-07-28T18:44:40  <jeblair> superbee: plural? :)
+2014-07-28T18:44:54  <superbee> jeblair: ya foobio has one and I had one
+2014-07-28T18:45:13  <superbee> 11066 and 104963
+2014-07-28T18:45:23  <jeblair> superbee: thx, will review now
+2014-07-28T18:45:31  <superbee> arg I used lp for the zuul bug
+2014-07-28T18:45:33  <superbee> I fail
 2014-07-28T18:45:41  <foobio> mine is probably fairly low-priority, and just addresses the changes which fail to get reported on when a parent change fails in a dependent pipeline
-2014-07-28T18:45:48  <jeblair> clarkb: zuul bugs are still in lp
-2014-07-28T18:45:51  <clarkb> oh good
-2014-07-28T18:45:51  <foobio> whereas clarkb's addresses a (hopefully rare) deadlock
+2014-07-28T18:45:48  <jeblair> superbee: zuul bugs are still in lp
+2014-07-28T18:45:51  <superbee> oh good
+2014-07-28T18:45:51  <foobio> whereas superbee's addresses a (hopefully rare) deadlock
 2014-07-28T18:46:26  <redrobot> SergeyLukjanov ping
-2014-07-28T18:46:50  <jeblair> clarkb: what was the issue that triggered your deadlock?
+2014-07-28T18:46:50  <jeblair> superbee: what was the issue that triggered your deadlock?
 2014-07-28T18:47:37  <foobio> (pipeline deadlock, not a process deadlock thankfully)
-2014-07-28T18:47:38  <clarkb> jeblair: late friday, zuul stopped doing all work not in check. It got an SSHException when trying to check if a change merged. At that point it went into an infinite loop failing to report that change
-2014-07-28T18:47:56  <clarkb> jeblair: basically every time it processed queues it failed on that change, then tried to process queues again
+2014-07-28T18:47:38  <superbee> jeblair: late friday, zuul stopped doing all work not in check. It got an SSHException when trying to check if a change merged. At that point it went into an infinite loop failing to report that change
+2014-07-28T18:47:56  <superbee> jeblair: basically every time it processed queues it failed on that change, then tried to process queues again
 2014-07-28T18:48:02  *** esker has quit IRC
-2014-07-28T18:48:14  <clarkb> jeblair: if you go to zuul.o.o:/var/log/zuul/clarkb there is a file with the relevant logs
-2014-07-28T18:48:26  <clarkb> I had to slice through many gigs of logs to find that :)
-2014-07-28T18:48:27  <jeblair> clarkb: so the trigger was a transient network error at a certain place?
-2014-07-28T18:48:30  <clarkb> jeblair: yup
+2014-07-28T18:48:14  <superbee> jeblair: if you go to zuul.o.o:/var/log/zuul/superbee there is a file with the relevant logs
+2014-07-28T18:48:26  <superbee> I had to slice through many gigs of logs to find that :)
+2014-07-28T18:48:27  <jeblair> superbee: so the trigger was a transient network error at a certain place?
+2014-07-28T18:48:30  <superbee> jeblair: yup
 2014-07-28T18:48:34  <jeblair> ok, thx
 2014-07-28T18:48:35  *** esker has joined #openstack-infra
-2014-07-28T18:48:59  <clarkb> jeblair: when_it_happened.txt is the file
+2014-07-28T18:48:59  <superbee> jeblair: when_it_happened.txt is the file
 2014-07-28T18:49:43  *** dims_ has joined #openstack-infra
 2014-07-28T18:49:54  *** hashar has joined #openstack-infra
 2014-07-28T18:50:11  *** ZZelle_ has joined #openstack-infra
-2014-07-28T18:50:18  <clarkb> jeblair: on saturday I restarted zuul manually to get past the issue
-2014-07-28T18:50:25  <clarkb> decided to do that after I saw the size of the log files
-2014-07-28T18:50:30  <clarkb> and it was halting stuff
-2014-07-28T18:50:41  <clarkb> today I caught up and properly debugged it
+2014-07-28T18:50:18  <superbee> jeblair: on saturday I restarted zuul manually to get past the issue
+2014-07-28T18:50:25  <superbee> decided to do that after I saw the size of the log files
+2014-07-28T18:50:30  <superbee> and it was halting stuff
+2014-07-28T18:50:41  <superbee> today I caught up and properly debugged it
 2014-07-28T18:51:14  *** mpaolino has joined #openstack-infra
 2014-07-28T18:51:19  *** melwitt has quit IRC
 2014-07-28T18:51:26  *** melwitt has joined #openstack-infra
 2014-07-28T18:52:17  *** e0ne has quit IRC
-2014-07-28T18:52:43  <jeblair> clarkb: when_it_happened.txt sounds like a fanfic ebook from usenet.  i like it.  :)
+2014-07-28T18:52:43  <jeblair> superbee: when_it_happened.txt sounds like a fanfic ebook from usenet.  i like it.  :)
 2014-07-28T18:52:59  *** esker has quit IRC
 2014-07-28T18:53:14  *** ramashri has quit IRC
 2014-07-28T18:53:23  * foobio concatenates and uudecodes it for later reading
@@ -1328,42 +1328,42 @@
 2014-07-28T19:04:28  *** ekarlso has quit IRC
 2014-07-28T19:04:33  <anteaya> beecee: so are you familiar with this page? http://ci.openstack.org/third_party.html#requirements
 2014-07-28T19:04:34  <krtaylor> beecee, which driver will your CI system be testing?
-2014-07-28T19:05:13  <armax> clarkb: thanks for the reviews, I adjusted the patches to address your comments
+2014-07-28T19:05:13  <armax> superbee: thanks for the reviews, I adjusted the patches to address your comments
 2014-07-28T19:05:20  *** mpaolino has quit IRC
-2014-07-28T19:05:27  <clarkb> thanks
-2014-07-28T19:05:33  <armax> clarkb: thank you
+2014-07-28T19:05:27  <superbee> thanks
+2014-07-28T19:05:33  <armax> superbee: thank you
 2014-07-28T19:05:38  <beecee> anteaya: only in the last 2 weeks
 2014-07-28T19:06:03  <krtaylor> beecee, for instance, nova requirements are here: https://wiki.openstack.org/wiki/HypervisorSupportMatrix
 2014-07-28T19:06:29  <beecee> krtaylor: cinder/zadara .  we first heard about it from DuncanT-'s mail out, and my boss handed off the task to me, so I'm coming at this fresh
-2014-07-28T19:06:44  <jeblair> clarkb: i'm a little worried that with your fix we could end up in an infinite reporting loop
-2014-07-28T19:07:22  <clarkb> jeblair: hrm maybe. like if gerrit goes sideways
+2014-07-28T19:06:44  <jeblair> superbee: i'm a little worried that with your fix we could end up in an infinite reporting loop
+2014-07-28T19:07:22  <superbee> jeblair: hrm maybe. like if gerrit goes sideways
 2014-07-28T19:07:25  <krtaylor> beecee, understood, there are several -cinder groups starting to test drivers
-2014-07-28T19:07:34  <jeblair> clarkb: there are two actions handled in the reporting: leaving a vote and verifying that the change merged (if applicable)
-2014-07-28T19:07:35  <clarkb> or that change makes itself unhappy
+2014-07-28T19:07:34  <jeblair> superbee: there are two actions handled in the reporting: leaving a vote and verifying that the change merged (if applicable)
+2014-07-28T19:07:35  <superbee> or that change makes itself unhappy
 2014-07-28T19:07:36  <anteaya> beecee: you hadn't heard about the need to test your driver prior to DuncanT's email?
 2014-07-28T19:07:44  *** SumitNaiksatam has quit IRC
 2014-07-28T19:07:51  <anteaya> beecee: just trying to understand your perspective here
 2014-07-28T19:07:54  <krtaylor> I was about to ask the same
 2014-07-28T19:08:02  <anteaya> krtaylor: also if you can review this series: https://review.openstack.org/#/q/status:open+project:openstack-infra/gerrit+branch:openstack/2.8.4,n,z
-2014-07-28T19:08:18  <clarkb> jeblair I can look at it more in the afternoon
+2014-07-28T19:08:18  <superbee> jeblair I can look at it more in the afternoon
 2014-07-28T19:08:20  <anteaya> krtaylor: this is to get me gerrit permissions to create and edit third party ci accounts
-2014-07-28T19:08:31  <clarkb> it did bend my mind a bit this morning
-2014-07-28T19:08:49  <jeblair> clarkb: in fact, i think your change would report results twice for the incident that triggered this
-2014-07-28T19:09:01  <jeblair> clarkb: because it was the verification that failed, not the actual reporting
-2014-07-28T19:09:17  <clarkb> right so there is a check to see if we reported
+2014-07-28T19:08:31  <superbee> it did bend my mind a bit this morning
+2014-07-28T19:08:49  <jeblair> superbee: in fact, i think your change would report results twice for the incident that triggered this
+2014-07-28T19:09:01  <jeblair> superbee: because it was the verification that failed, not the actual reporting
+2014-07-28T19:09:17  <superbee> right so there is a check to see if we reported
 2014-07-28T19:09:21  <beecee> anteaya: there's a difference between myself hearing about it, and the company hearing about it.  I hadn't, and from asking around internally, the people previously responsible for openstack integration hadn't either
-2014-07-28T19:09:32  <clarkb> so it would report and succeed then verification failed
+2014-07-28T19:09:32  <superbee> so it would report and succeed then verification failed
 2014-07-28T19:09:34  <anteaya> zaro: I think we have some rebase syntax in this file: https://review.openstack.org/#/c/109796/1/Documentation/cmd-set-account.txt
 2014-07-28T19:09:47  <anteaya> line 26 <<<<<<< HEAD
-2014-07-28T19:09:50  <clarkb> so next time through it skips reporting and verification succeeds
-2014-07-28T19:10:00  <jeblair> clarkb: ah true, so it would not report twice
+2014-07-28T19:09:50  <superbee> so next time through it skips reporting and verification succeeds
+2014-07-28T19:10:00  <jeblair> superbee: ah true, so it would not report twice
 2014-07-28T19:10:03  <anteaya> and line 41 >>>>>>> aa49e27... Allow to delegate modify account commands to non administrators
-2014-07-28T19:10:10  <clarkb> jeblair the important bit is the first part of reportItem()
+2014-07-28T19:10:10  <superbee> jeblair the important bit is the first part of reportItem()
 2014-07-28T19:10:34  <anteaya> beecee: okay, so that is a gap we need to address
 2014-07-28T19:10:39  <krtaylor> anteaya, will do
 2014-07-28T19:10:46  *** melwitt has quit IRC
 2014-07-28T19:10:51  <anteaya> beecee: because it is hard to address something if you don't know about it
-2014-07-28T19:10:58  <jeblair> clarkb: okay, so we may actually be sufficiently protected
+2014-07-28T19:10:58  <jeblair> superbee: okay, so we may actually be sufficiently protected
 2014-07-28T19:11:02  *** melwitt has joined #openstack-infra
 2014-07-28T19:11:13  <beecee> anteaya: in previous companies, I did CI stuff, so I'm personally in favour of having everything continually tested, but I'm chasing the formal rationale from openstack as to why actual $$ should be spent ;)
 2014-07-28T19:11:24  <anteaya> beecee: so let's continue, so here you are, you found the third party meeting, well done and you know about the ci.openstack.org third party requirements
@@ -1371,10 +1371,10 @@
 2014-07-28T19:11:54  <anteaya> beecee: let's start from your prior experience then
 2014-07-28T19:12:00  <anteaya> that sounds like a happy place
 2014-07-28T19:12:03  <anteaya> and then expand
-2014-07-28T19:13:31  <jeblair> clarkb: okay, so i think we're only as suceptible to reporting loops as we are now (and that would be only if gerrit records a vote but still returns error).  i think that's okay.
-2014-07-28T19:13:46  <clarkb> cool
-2014-07-28T19:13:51  <jeblair> clarkb: if we wanted to be extra paranoid, we could eject the change from the queue with a try/finally around reportItem
-2014-07-28T19:13:57  <jeblair> clarkb: but i don't think that's necessary
+2014-07-28T19:13:31  <jeblair> superbee: okay, so i think we're only as suceptible to reporting loops as we are now (and that would be only if gerrit records a vote but still returns error).  i think that's okay.
+2014-07-28T19:13:46  <superbee> cool
+2014-07-28T19:13:51  <jeblair> superbee: if we wanted to be extra paranoid, we could eject the change from the queue with a try/finally around reportItem
+2014-07-28T19:13:57  <jeblair> superbee: but i don't think that's necessary
 2014-07-28T19:14:07  <jeblair> at least, not yet :)
 2014-07-28T19:14:37  *** pelix has quit IRC
 2014-07-28T19:15:32  <beecee> anteaya: the formal requirements that I've found are technical in nature.  the assumption is that you've woken up one day and said 'hey, I've got a 3rd party driver that I want to maintain in openstack, how do I go about testing it on every commit'
@@ -1448,13 +1448,13 @@
 2014-07-28T19:28:01  <krtaylor> good for you
 2014-07-28T19:28:05  <anteaya> beecee: I understand that
 2014-07-28T19:28:13  <anteaya> I have no problem repeating it
-2014-07-28T19:28:20  <foobio> clarkb: mordred: jeblair: if you find yourselves periodically getting unsubscribed from lists.o.o mls like i am, i've tracked down a significant cause... some worms are spoofing mailer-daemon and postmaster for that fqdn in list posts, mailman is rejecting the posts and bouncing them to *us* and them my mta (but also at least gmail) is rejecting them as containing malware, and mailman incorrectly
+2014-07-28T19:28:20  <foobio> superbee: mordred: jeblair: if you find yourselves periodically getting unsubscribed from lists.o.o mls like i am, i've tracked down a significant cause... some worms are spoofing mailer-daemon and postmaster for that fqdn in list posts, mailman is rejecting the posts and bouncing them to *us* and them my mta (but also at least gmail) is rejecting them as containing malware, and mailman incorrectly
 2014-07-28T19:28:22  <foobio> identifies these as us bouncing ml post deliveries and increments our bounce scores
 2014-07-28T19:28:30  <anteaya> interesting to have a chance to get a larger perspective once in a while
 2014-07-28T19:28:39  <anteaya> beecee: and thanks for taking the time to ask
 2014-07-28T19:28:51  <anteaya> beecee: are we getting any closer to getting you what you need?
 2014-07-28T19:28:55  <mordred> foobio: uhm. wow
-2014-07-28T19:29:00  <foobio> clarkb: mordred: jeblair: i'm not sure yet what the best solution to that is
+2014-07-28T19:29:00  <foobio> superbee: mordred: jeblair: i'm not sure yet what the best solution to that is
 2014-07-28T19:29:31  <mordred> foobio: nntp
 2014-07-28T19:29:39  <foobio> mordred: oh, right. problem solved!
 2014-07-28T19:30:00  <krtaylor> beecee, is anyone working on a cinder equivalent of the nova supported hypervisor matrix?
@@ -1462,7 +1462,7 @@
 2014-07-28T19:30:41  <anteaya> krtaylor: yeah that is probably a cinder question
 2014-07-28T19:30:55  <anteaya> krtaylor: what matrix are you referencing? is it a wikipage?
 2014-07-28T19:31:38  <beecee> krtaylor: no idea.
-2014-07-28T19:31:55  <foobio> clarkb: mordred: jeblair: i changed my exim config to start freezing those instead of rejecting them, and so far they have all been zip mime attachments identified by clamav as worm.mydoom-27
+2014-07-28T19:31:55  <foobio> superbee: mordred: jeblair: i changed my exim config to start freezing those instead of rejecting them, and so far they have all been zip mime attachments identified by clamav as worm.mydoom-27
 2014-07-28T19:31:57  *** yamamoto has quit IRC
 2014-07-28T19:32:10  <krtaylor> anteaya, https://wiki.openstack.org/wiki/HypervisorSupportMatrix
 2014-07-28T19:32:23  <griff> krtaylor: no, not really.  Cinder has a different view on that.  Closest we have is: https://wiki.openstack.org/wiki/CinderSupportMatrix
@@ -1556,7 +1556,7 @@
 2014-07-28T19:53:58  *** achanda has quit IRC
 2014-07-28T19:54:18  <openstackgerrit> A change was merged to openstack-infra/zuul: Simplify change reporting to handle errors better  https://review.openstack.org/110066
 2014-07-28T19:54:41  *** ihrachyshka has joined #openstack-infra
-2014-07-28T19:54:53  <foobio> clarkb: ^ though i assume we don't need to rush to restart
+2014-07-28T19:54:53  <foobio> superbee: ^ though i assume we don't need to rush to restart
 2014-07-28T19:54:59  *** melwitt has joined #openstack-infra
 2014-07-28T19:56:23  <rcarrillocruz> zaro: hey mate, are you around?
 2014-07-28T19:56:29  *** melwitt has quit IRC
@@ -1583,7 +1583,7 @@
 2014-07-28T20:06:35  *** melwitt1 has quit IRC
 2014-07-28T20:06:36  *** andreaf has quit IRC
 2014-07-28T20:06:44  *** melwitt has joined #openstack-infra
-2014-07-28T20:09:22  <clarkb> foobio probably not
+2014-07-28T20:09:22  <superbee> foobio probably not
 2014-07-28T20:10:21  *** thedodd has joined #openstack-infra
 2014-07-28T20:11:45  *** melwitt1 has joined #openstack-infra
 2014-07-28T20:11:55  *** melwitt has quit IRC
@@ -1597,12 +1597,12 @@
 2014-07-28T20:18:29  *** andreaf has joined #openstack-infra
 2014-07-28T20:19:08  *** melwitt1 has quit IRC
 2014-07-28T20:19:13  *** melwitt has joined #openstack-infra
-2014-07-28T20:19:17  <asselin> clarkb, how does os-infra install rabbit mq needed by nodepool?
-2014-07-28T20:20:16  <clarkb> rabbit mq?
-2014-07-28T20:20:27  <clarkb> There shouldnt be a rabbit
+2014-07-28T20:19:17  <asselin> superbee, how does os-infra install rabbit mq needed by nodepool?
+2014-07-28T20:20:16  <superbee> rabbit mq?
+2014-07-28T20:20:27  <superbee> There shouldnt be a rabbit
 2014-07-28T20:20:29  *** juzuluag has quit IRC
-2014-07-28T20:20:37  <clarkb> just zeromq and gearman
-2014-07-28T20:20:49  <asselin> clarkb, sorry...ok...zeromq...will search again
+2014-07-28T20:20:37  <superbee> just zeromq and gearman
+2014-07-28T20:20:49  <asselin> superbee, sorry...ok...zeromq...will search again
 2014-07-28T20:20:52  *** andreaf_ has quit IRC
 2014-07-28T20:21:00  <anteaya> asselin: let's try to not use os as a short form for openstack
 2014-07-28T20:21:06  <anteaya> os means operating system
@@ -1852,14 +1852,14 @@
 2014-07-28T22:16:41  <anteaya> morning mattoliverau
 2014-07-28T22:18:11  <mattoliverau> jogo, anteaya: you both ready for your flights down under? :)
 2014-07-28T22:18:20  <openstackgerrit> K Jonathan Harker proposed a change to openstack-infra/config: Install modules before running puppet apply test  https://review.openstack.org/110145
-2014-07-28T22:18:31  <jesusaurus> clarkb: ^^
+2014-07-28T22:18:31  <jesusaurus> superbee: ^^
 2014-07-28T22:19:19  *** melwitt has quit IRC
 2014-07-28T22:19:26  *** melwitt has joined #openstack-infra
 2014-07-28T22:19:30  <anteaya> mattoliverau: I leave the house tomorrow at 9am
 2014-07-28T22:19:38  <anteaya> working on getting my things packed
 2014-07-28T22:19:47  <anteaya> no idea when jogo's flight leaves
 2014-07-28T22:19:51  <anteaya> he is in oregon
-2014-07-28T22:20:08  <clarkb> jesusaurus: that may just break if we are in a weird place. that is fine I guess and would confirm more weirdness
+2014-07-28T22:20:08  <superbee> jesusaurus: that may just break if we are in a weird place. that is fine I guess and would confirm more weirdness
 2014-07-28T22:20:25  <anteaya> mattoliverau: the weather looks like it is sunny and in the 20's every day all week
 2014-07-28T22:21:11  <anteaya> is kim jensen in channel?
 2014-07-28T22:21:14  <openstackgerrit> Maru Newby proposed a change to openstack-infra/config: Fix neutron func job to install neutron and deps  https://review.openstack.org/110147
@@ -1868,7 +1868,7 @@
 2014-07-28T22:21:37  <anteaya> mattoliverau: nice
 2014-07-28T22:21:54  *** pcm_ has quit IRC
 2014-07-28T22:22:17  <anteaya> mattoliverau: to be honest, I still can't even think about it, I'm functioning on autopilot
-2014-07-28T22:22:44  <jesusaurus> clarkb: yeah, it would also uncover issues where we make a change to a module version, then an incompatible change gets merged after the module change but before nodepool updates its images
+2014-07-28T22:22:44  <jesusaurus> superbee: yeah, it would also uncover issues where we make a change to a module version, then an incompatible change gets merged after the module change but before nodepool updates its images
 2014-07-28T22:23:11  <mattoliverau> anteaya: I think jogo traveling with Mikal as he is going from mid cycle to pycon, I think.
 2014-07-28T22:23:36  <jogo> mattoliverau: I am on mikals flight
 2014-07-28T22:23:42  *** hashar has quit IRC
@@ -2000,15 +2000,15 @@
 2014-07-28T23:18:43  <anteaya> like stones rolling around in the dryer
 2014-07-28T23:20:25  <openstackgerrit> David Lenwell proposed a change to openstack-infra/infra-manual: Add an introduction paragraph to the developer guide  https://review.openstack.org/107024
 2014-07-28T23:22:19  <foobio> yep, that is indeed the case
-2014-07-28T23:22:32  <clarkb> foobio: so you need to restart nodepool?
+2014-07-28T23:22:32  <superbee> foobio: so you need to restart nodepool?
 2014-07-28T23:22:32  <foobio> stopping jenkins05 again so it doesn't accumulate many more
-2014-07-28T23:22:53  <foobio> clarkb: yeah :(
+2014-07-28T23:22:53  <foobio> superbee: yeah :(
 2014-07-28T23:23:38  <openstackgerrit> Michael Krotscheck proposed a change to openstack-infra/storyboard-webclient: Formalized Resource Criteria API  https://review.openstack.org/110160
 2014-07-28T23:23:44  *** fifieldt_ has quit IRC
 2014-07-28T23:23:50  <foobio> in another minute or two i'll nodepool delete all the ones which aren't running jobs
 2014-07-28T23:25:25  <openstackgerrit> David Lenwell proposed a change to openstack-infra/infra-manual: added link to git-review readme  https://review.openstack.org/108857
 2014-07-28T23:25:32  *** dangers is now known as dangers_away
-2014-07-28T23:25:35  <clarkb> foobio: ok
+2014-07-28T23:25:35  <superbee> foobio: ok
 2014-07-28T23:26:45  *** antonym has quit IRC
 2014-07-28T23:27:05  *** shashankhegde has quit IRC
 2014-07-28T23:30:27  *** praneshp has quit IRC

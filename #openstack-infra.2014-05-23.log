@@ -1,48 +1,48 @@
-2014-05-23T00:00:13  <clarkb> rm if I make it b4 I get no data as well
-2014-05-23T00:00:19  <clarkb> but nodes are being spun up in b4
-2014-05-23T00:00:40  * clarkb digs in graphite dashboard
-2014-05-23T00:01:30  <jeblair> clarkb: have any finished?
-2014-05-23T00:01:33  <clarkb> that explains it, just not in graphite. jeblair do we need to restart nodepool to get new graphite date?
-2014-05-23T00:01:39  <clarkb> jeblair: yes there is at least one ready node in b4
-2014-05-23T00:01:50  <clarkb> it is used now
-2014-05-23T00:01:53  <clarkb> b3 has a ready node too
-2014-05-23T00:01:54  <jeblair> clarkb: what explains it?
-2014-05-23T00:02:13  <clarkb> jeblair: the data isn't ni graphite
+2014-05-23T00:00:13  <superbee> rm if I make it b4 I get no data as well
+2014-05-23T00:00:19  <superbee> but nodes are being spun up in b4
+2014-05-23T00:00:40  * superbee digs in graphite dashboard
+2014-05-23T00:01:30  <jeblair> superbee: have any finished?
+2014-05-23T00:01:33  <superbee> that explains it, just not in graphite. jeblair do we need to restart nodepool to get new graphite date?
+2014-05-23T00:01:39  <superbee> jeblair: yes there is at least one ready node in b4
+2014-05-23T00:01:50  <superbee> it is used now
+2014-05-23T00:01:53  <superbee> b3 has a ready node too
+2014-05-23T00:01:54  <jeblair> superbee: what explains it?
+2014-05-23T00:02:13  <superbee> jeblair: the data isn't ni graphite
 2014-05-23T00:02:16  *** mrodden has joined #openstack-infra
-2014-05-23T00:02:21  <clarkb> hence no data, so not a bad query
-2014-05-23T00:02:28  <jeblair> clarkb: that sounds more like the problem statement than the solution.  :)
-2014-05-23T00:02:55  <jeblair> clarkb: i think we're on the same page now.
-2014-05-23T00:05:04  <jeblair> clarkb: they are being sent to graphite, so the problem is not on the nodepool side
-2014-05-23T00:05:21  <clarkb> ok
+2014-05-23T00:02:21  <superbee> hence no data, so not a bad query
+2014-05-23T00:02:28  <jeblair> superbee: that sounds more like the problem statement than the solution.  :)
+2014-05-23T00:02:55  <jeblair> superbee: i think we're on the same page now.
+2014-05-23T00:05:04  <jeblair> superbee: they are being sent to graphite, so the problem is not on the nodepool side
+2014-05-23T00:05:21  <superbee> ok
 2014-05-23T00:05:50  <jeblair> wow.
 2014-05-23T00:05:59  <jeblair> we are really good at filling up graphite's disk.
-2014-05-23T00:06:02  <clarkb> :/
+2014-05-23T00:06:02  <superbee> :/
 2014-05-23T00:06:16  <jeblair> we now have 1TB of data
 2014-05-23T00:06:39  <jeblair> it's cindered though, i'll add another vol
-2014-05-23T00:06:54  <clarkb> k
-2014-05-23T00:07:05  <clarkb> I am still poking around at how the new "providers" are doing
-2014-05-23T00:07:13  <clarkb> so far with the limited info I have I don't see anything to crazy
-2014-05-23T00:07:17  <clarkb> going to start grepping logs though
+2014-05-23T00:06:54  <superbee> k
+2014-05-23T00:07:05  <superbee> I am still poking around at how the new "providers" are doing
+2014-05-23T00:07:13  <superbee> so far with the limited info I have I don't see anything to crazy
+2014-05-23T00:07:17  <superbee> going to start grepping logs though
 2014-05-23T00:07:34  *** dstanek_zzz is now known as dstanek
-2014-05-23T00:08:34  <clarkb> SpamapS: lots of maximum number of ports exceeded for your clouds
+2014-05-23T00:08:34  <superbee> SpamapS: lots of maximum number of ports exceeded for your clouds
 2014-05-23T00:08:48  *** markmcclain has quit IRC
-2014-05-23T00:08:53  <clarkb> actually that may just be a rh1 problem
-2014-05-23T00:09:59  <clarkb> I need to get some load on zuul
-2014-05-23T00:10:08  <clarkb> we actually don't need to spin up any nodes right now
-2014-05-23T00:10:16  <clarkb> outside of tripleo
-2014-05-23T00:11:23  <jeblair> clarkb: push up some devstack-gate changes? :)
+2014-05-23T00:08:53  <superbee> actually that may just be a rh1 problem
+2014-05-23T00:09:59  <superbee> I need to get some load on zuul
+2014-05-23T00:10:08  <superbee> we actually don't need to spin up any nodes right now
+2014-05-23T00:10:16  <superbee> outside of tripleo
+2014-05-23T00:11:23  <jeblair> superbee: push up some devstack-gate changes? :)
 2014-05-23T00:11:30  <jeblair> Performing an on-line resize of /dev/main/graphite to 536868864 (4k) blocks.
 2014-05-23T00:11:53  *** mburned is now known as mburned_out
 2014-05-23T00:12:21  *** nati_ueno has joined #openstack-infra
 2014-05-23T00:12:50  *** gokrokve has joined #openstack-infra
-2014-05-23T00:13:20  <clarkb> recheck no bug may be in order >_>
+2014-05-23T00:13:20  <superbee> recheck no bug may be in order >_>
 2014-05-23T00:13:36  *** wenlock has quit IRC
 2014-05-23T00:13:48  <openstackgerrit> Joshua Hesketh proposed a change to openstack-infra/zuul: Fix up fetching jquery.visibility  https://review.openstack.org/91316
 2014-05-23T00:13:50  <openstackgerrit> Joshua Hesketh proposed a change to openstack-infra/zuul: Add in sparklines to status page pipelines  https://review.openstack.org/84922
 2014-05-23T00:13:51  <openstackgerrit> Joshua Hesketh proposed a change to openstack-infra/zuul: Make zuul javascript app more modular  https://review.openstack.org/91310
-2014-05-23T00:13:52  <jeblair> clarkb: stats should start showing up now
+2014-05-23T00:13:52  <jeblair> superbee: stats should start showing up now
 2014-05-23T00:13:53  <openstackgerrit> Joshua Hesketh proposed a change to openstack-infra/zuul: Move app.js to zuul.app.js  https://review.openstack.org/95043
-2014-05-23T00:13:59  <clarkb> thanks
+2014-05-23T00:13:59  <superbee> thanks
 2014-05-23T00:14:38  <jhesketh> jeblair: if you have time to look at my comment on https://review.openstack.org/#/c/91310/4 that'd be good please :-)
 2014-05-23T00:15:21  <jeblair> jhesketh: actually i didn't have a problem looking at the change -- it turns out gertty handled that case much better than gerrit did
 2014-05-23T00:15:49  <jhesketh> ah cool
@@ -52,30 +52,30 @@
 2014-05-23T00:16:59  <jhesketh> jeblair: right, but why can't that be done in the HTML?
 2014-05-23T00:17:05  *** fanhe has quit IRC
 2014-05-23T00:17:08  <jeblair> jhesketh: i like the idea that someone should be able to just drop this into an existing website (naturally, since that's what i want to do) without them needing to maintain it
-2014-05-23T00:17:14  <clarkb> ok rechecked 3 changes, that should generate a little load
+2014-05-23T00:17:14  <superbee> ok rechecked 3 changes, that should generate a little load
 2014-05-23T00:17:32  *** dstanek is now known as dstanek_zzz
 2014-05-23T00:17:54  <jeblair> jhesketh: the more stuff we put in the html, the harder that becomes (we have to change html that's external to zuul, which means we have to ask users to change it)
 2014-05-23T00:17:59  <jhesketh> jeblair: sure, but in my opinion it's not a large drop in.. in fact it's more flexible as you can drop in parts to integrate with your current page better (for example, maybe you want filters off to the side)
-2014-05-23T00:18:34  <clarkb> by the way I think the graphite delete numbers are off due to foobio's cleanup maybe
+2014-05-23T00:18:34  <superbee> by the way I think the graphite delete numbers are off due to foobio's cleanup maybe
 2014-05-23T00:18:43  <jhesketh> jeblair: only if they want to add/remove sections themselves.. the point being that they can more easily choose which parts they consume
-2014-05-23T00:18:48  <clarkb> the purple on zuul status page is very big but nodepool list doesn't show that many
-2014-05-23T00:19:00  <clarkb> its only 35 according to nodepool
-2014-05-23T00:19:20  <jeblair> clarkb: it doesn't look big to me
-2014-05-23T00:19:27  <jeblair> clarkb: maybe you need to reload?
+2014-05-23T00:18:48  <superbee> the purple on zuul status page is very big but nodepool list doesn't show that many
+2014-05-23T00:19:00  <superbee> its only 35 according to nodepool
+2014-05-23T00:19:20  <jeblair> superbee: it doesn't look big to me
+2014-05-23T00:19:27  <jeblair> superbee: maybe you need to reload?
 2014-05-23T00:19:32  <jeblair> sometimes i think it stops updating
 2014-05-23T00:20:31  <jeblair> jhesketh: i'm not opposed to supporting that kind of flexibility, but i also think we can and should support the very simple case of 'drop this into your web page'.
 2014-05-23T00:20:40  <jhesketh> sure, okay
 2014-05-23T00:21:18  <jhesketh> so I actually toyed with moving more dom building out of the javascript and put it inline (for example building the filter form) to allow for more html flexbility
-2014-05-23T00:21:37  <clarkb> yes I needed to reload. that will teach me
+2014-05-23T00:21:37  <superbee> yes I needed to reload. that will teach me
 2014-05-23T00:21:38  *** john3213 has joined #openstack-infra
 2014-05-23T00:21:51  *** michchap has quit IRC
 2014-05-23T00:21:52  <jhesketh> jeblair: are you suggesting that we build the dom in the javascript still?
 2014-05-23T00:21:59  *** michchap has joined #openstack-infra
 2014-05-23T00:22:10  <jhesketh> or keep the dom as I currently have it and move more javascript back into a .js file
 2014-05-23T00:22:18  *** wenlock has joined #openstack-infra
-2014-05-23T00:22:41  <clarkb> jeblair: https://review.openstack.org/#/c/85309/ needs a thirdish +2 since sdague and I have both hacked on the change
-2014-05-23T00:22:49  <clarkb> jeblair: but if yo uapprove that it will generate more load
-2014-05-23T00:23:34  <clarkb> there are also a handful of other d-g changes ready for +2 +A
+2014-05-23T00:22:41  <superbee> jeblair: https://review.openstack.org/#/c/85309/ needs a thirdish +2 since sdague and I have both hacked on the change
+2014-05-23T00:22:49  <superbee> jeblair: but if yo uapprove that it will generate more load
+2014-05-23T00:23:34  <superbee> there are also a handful of other d-g changes ready for +2 +A
 2014-05-23T00:23:35  *** matsuhashi has joined #openstack-infra
 2014-05-23T00:23:37  <jeblair> jhesketh: my primary goal is to never have to change anything about the status page in the config repo other than css and stuff we stick above/below it (like graphs).  i think the best way to do that is to make the footprint there as small as possible, so i think it should be one dom element and one function call.
 2014-05-23T00:24:17  <jeblair> jhesketh: so maybe we can build the dom in the js in that case, but if someone wants to supply parts manually, handle that too
@@ -94,38 +94,38 @@
 2014-05-23T00:28:17  <jeblair> SpamapS: which is pretty much every time we get a response code.
 2014-05-23T00:28:57  <jeblair> jhesketh: wfm
 2014-05-23T00:29:08  *** nati_ueno has quit IRC
-2014-05-23T00:29:22  <clarkb> preliminary statsd data looks good
+2014-05-23T00:29:22  <superbee> preliminary statsd data looks good
 2014-05-23T00:29:34  <SpamapS> jeblair: 500 is merely a suggestion that you should look elsewhere for enlightenment.
 2014-05-23T00:29:54  *** chuckC has quit IRC
-2014-05-23T00:30:03  <clarkb> http://goo.gl/KpPyg2
+2014-05-23T00:30:03  <superbee> http://goo.gl/KpPyg2
 2014-05-23T00:30:31  *** igor_ has joined #openstack-infra
-2014-05-23T00:30:36  <clarkb> and http://goo.gl/lnkLbo both look healtyh
-2014-05-23T00:30:49  <clarkb> that is only a 1 hour window because it scales funny when there is no data in the past
+2014-05-23T00:30:36  <superbee> and http://goo.gl/lnkLbo both look healtyh
+2014-05-23T00:30:49  <superbee> that is only a 1 hour window because it scales funny when there is no data in the past
 2014-05-23T00:31:08  *** wenlock has quit IRC
-2014-05-23T00:31:17  <jeblair> clarkb: you could have shortened the first one even more to "/"
-2014-05-23T00:31:31  <clarkb> jeblair: :)
+2014-05-23T00:31:17  <jeblair> superbee: you could have shortened the first one even more to "/"
+2014-05-23T00:31:31  <superbee> jeblair: :)
 2014-05-23T00:31:40  *** bhuvan has quit IRC
-2014-05-23T00:31:42  <clarkb> I have colors turned off in weechat so it wouldn't be the same
-2014-05-23T00:32:24  <clarkb> when we restart zuul tomorrow that will allow us to start working on the swift stuff \o/
+2014-05-23T00:31:42  <superbee> I have colors turned off in weechat so it wouldn't be the same
+2014-05-23T00:32:24  <superbee> when we restart zuul tomorrow that will allow us to start working on the swift stuff \o/
 2014-05-23T00:32:32  *** msabramo1 has quit IRC
-2014-05-23T00:32:33  <clarkb> jhesketh: did you see my comment on the job updates to do that?
+2014-05-23T00:32:33  <superbee> jhesketh: did you see my comment on the job updates to do that?
 2014-05-23T00:32:42  <jeblair> The filesystem on /dev/main/graphite is now 536868864 blocks long.
-2014-05-23T00:32:49  <clarkb> all the blocks
+2014-05-23T00:32:49  <superbee> all the blocks
 2014-05-23T00:33:22  *** lcostantino has joined #openstack-infra
 2014-05-23T00:33:24  <jeblair> exactly all of them in fact
-2014-05-23T00:34:03  <clarkb> be right back I think I have packages to pick up at the front desk
+2014-05-23T00:34:03  <superbee> be right back I think I have packages to pick up at the front desk
 2014-05-23T00:34:37  *** michchap_ has joined #openstack-infra
 2014-05-23T00:34:42  *** igor_ has quit IRC
-2014-05-23T00:35:54  <jhesketh> clarkb: which now?
+2014-05-23T00:35:54  <jhesketh> superbee: which now?
 2014-05-23T00:36:16  *** michchap has quit IRC
-2014-05-23T00:36:33  <SpamapS> clarkb: ok, I'm deleting "the lost boys" .. I think the weirdness behind the flavor change caused this.. all of the ones that have been sitting around doing nothing are h1.large
+2014-05-23T00:36:33  <SpamapS> superbee: ok, I'm deleting "the lost boys" .. I think the weirdness behind the flavor change caused this.. all of the ones that have been sitting around doing nothing are h1.large
 2014-05-23T00:36:45  <SpamapS> I suspect r2 may have more too
 2014-05-23T00:36:52  <SpamapS> I should figure out how to login to that region :-P
 2014-05-23T00:37:03  *** mayu_ has joined #openstack-infra
 2014-05-23T00:37:30  *** nati_ueno has joined #openstack-infra
-2014-05-23T00:38:05  <clarkb> jhesketh: the one that adds jjb defaults and macros
+2014-05-23T00:38:05  <superbee> jhesketh: the one that adds jjb defaults and macros
 2014-05-23T00:38:58  <mayu_> zuul of third party ci revceive gerrit message from openstack ci, but not trigger local jenkins to run a job, any body can help  ?
-2014-05-23T00:39:12  <jhesketh> clarkb: ah, right. I haven't looked yet sorry
+2014-05-23T00:39:12  <jhesketh> superbee: ah, right. I haven't looked yet sorry
 2014-05-23T00:39:15  <jhesketh> anything in particular?
 2014-05-23T00:39:31  <jerryz> mayu: we can talk
 2014-05-23T00:39:57  <mayu_> thank you jerryz
@@ -134,30 +134,30 @@
 2014-05-23T00:40:13  <mayu_> I will show you zuul layout.yaml
 2014-05-23T00:40:19  <SpamapS>      16 BUILD
 2014-05-23T00:40:24  <jerryz> mayu_: in paste
-2014-05-23T00:40:28  <SpamapS> clarkb: ^^ yay
-2014-05-23T00:40:32  <clarkb> jhesketh: yeah the addition to defaults confused me
-2014-05-23T00:40:39  <clarkb> jhesketh: not sure where that zuul logs thing comes from
+2014-05-23T00:40:28  <SpamapS> superbee: ^^ yay
+2014-05-23T00:40:32  <superbee> jhesketh: yeah the addition to defaults confused me
+2014-05-23T00:40:39  <superbee> jhesketh: not sure where that zuul logs thing comes from
 2014-05-23T00:40:43  <jhesketh> right
 2014-05-23T00:41:03  <mayu_> http://paste.openstack.org/show/81192/
-2014-05-23T00:41:18  <jhesketh> clarkb: the zuul_swift_upload.py slave script takes a --name parameter to pick an instruction set that zuul hands it
+2014-05-23T00:41:18  <jhesketh> superbee: the zuul_swift_upload.py slave script takes a --name parameter to pick an instruction set that zuul hands it
 2014-05-23T00:41:30  *** gokrokve has quit IRC
 2014-05-23T00:41:37  <jhesketh> zuul can hand swift upload creds for multiple containers/destinations (eg different one for logs vs assets)
-2014-05-23T00:42:02  <clarkb> jhesketh: well it was called as if it were a jjb builtin or a macro
-2014-05-23T00:42:07  <clarkb> but didn't appear to be either
+2014-05-23T00:42:02  <superbee> jhesketh: well it was called as if it were a jjb builtin or a macro
+2014-05-23T00:42:07  <superbee> but didn't appear to be either
 2014-05-23T00:42:51  <mayu_> jerryz: is there something wrong with layout.yaml ?
-2014-05-23T00:43:17  <jhesketh> clarkb: isn't it just setting a default value?
+2014-05-23T00:43:17  <jhesketh> superbee: isn't it just setting a default value?
 2014-05-23T00:43:39  <jhesketh> or do I need to do it under the shell builder..
 2014-05-23T00:43:44  <jerryz> mayu_: can you remove the filter from template and just leave recheck huawei
-2014-05-23T00:43:48  <clarkb> jhesketh: no that sets default wrappers builders etc
-2014-05-23T00:44:01  <SpamapS> clarkb: do you have tripleo-f20-1400163242.template.openstack.org ?
+2014-05-23T00:43:48  <superbee> jhesketh: no that sets default wrappers builders etc
+2014-05-23T00:44:01  <SpamapS> superbee: do you have tripleo-f20-1400163242.template.openstack.org ?
 2014-05-23T00:44:03  <jhesketh> okay, let me try again
 2014-05-23T00:44:03  <mayu_> jerryz: ok, i will try
-2014-05-23T00:44:14  <SpamapS> clarkb: I think I found another class of lost instance. :)
-2014-05-23T00:44:24  <clarkb> looking
+2014-05-23T00:44:14  <SpamapS> superbee: I think I found another class of lost instance. :)
+2014-05-23T00:44:24  <superbee> looking
 2014-05-23T00:44:30  <jerryz> mayu_: reload will read the new config
-2014-05-23T00:44:33  <SpamapS> clarkb: oh wait thats a dead template.. I bet that can just be nova deleted
+2014-05-23T00:44:33  <SpamapS> superbee: oh wait thats a dead template.. I bet that can just be nova deleted
 2014-05-23T00:44:34  *** gokrokve has joined #openstack-infra
-2014-05-23T00:45:09  <clarkb> SpamapS: ya I don't have it and should be safe to remove on your side
+2014-05-23T00:45:09  <superbee> SpamapS: ya I don't have it and should be safe to remove on your side
 2014-05-23T00:45:30  *** gokrokve_ has joined #openstack-infra
 2014-05-23T00:46:17  <mayu_> jerryz: jenkins master is restarting, I will try 'recheck huawei' .
 2014-05-23T00:47:41  <jerryz> mayu_: qianlin is helping you?
@@ -172,14 +172,14 @@
 2014-05-23T00:55:23  *** prad has quit IRC
 2014-05-23T00:56:48  <foobio> SpamapS: i do sometimes look at the nodepool alien-list output and nova delete things i know are cruft
 2014-05-23T00:57:37  <foobio> quite often those are orphaned templates from image builds which got aborted during an ungraceful nodepoold restart (heck, sometimes rackspace just blindly reboots that whole server to get it to stop swapping... fun times!)
-2014-05-23T01:00:58  <jhesketh> clarkb: can you provide a default to macros? http://paste.openstack.org/show/81195/
-2014-05-23T01:01:40  <clarkb> jhesketh: not really
+2014-05-23T01:00:58  <jhesketh> superbee: can you provide a default to macros? http://paste.openstack.org/show/81195/
+2014-05-23T01:01:40  <superbee> jhesketh: not really
 2014-05-23T01:01:46  <jhesketh> right, didn't think so :-(
-2014-05-23T01:01:49  <clarkb> jhesketh: what you can do is compose macros
+2014-05-23T01:01:49  <superbee> jhesketh: what you can do is compose macros
 2014-05-23T01:01:53  <jhesketh> oh well, each job will have to supply the instructionset
 2014-05-23T01:01:55  <ianw> foobio: a question about https://git.openstack.org/cgit/openstack-infra/devstack-gate/commit/?id=db80d838770915b44df9c0a822ef9204b0b494f1 (Keep logs in $BASE instead of $WORKSPACE)
-2014-05-23T01:01:57  <clarkb> and have simple ones with a value already set
-2014-05-23T01:02:02  <clarkb> and others that accept values
+2014-05-23T01:01:57  <superbee> and have simple ones with a value already set
+2014-05-23T01:02:02  <superbee> and others that accept values
 2014-05-23T01:02:04  <jhesketh> right
 2014-05-23T01:02:06  <jhesketh> good idea
 2014-05-23T01:02:18  *** nati_ueno has quit IRC
@@ -187,23 +187,23 @@
 2014-05-23T01:02:27  <ianw> foobio: i think this is the reason we have the grenade.sh* files in http://logs.openstack.org/46/93646/1/check/check-grenade-dsvm/f598b84/logs/ ?
 2014-05-23T01:03:09  <ianw> foobio: we should probably clear out all but grenade.sh.log?
 2014-05-23T01:03:22  <foobio> ianw: i think those should be there, we just need to rename them and remove the duplicate dated copies like we do with other logs in the cleanup function
-2014-05-23T01:03:27  <jhesketh> clarkb: right, so something like this: http://paste.openstack.org/show/81197/
+2014-05-23T01:03:27  <jhesketh> superbee: right, so something like this: http://paste.openstack.org/show/81197/
 2014-05-23T01:03:51  *** nati_ueno has joined #openstack-infra
-2014-05-23T01:04:04  <clarkb> jhesketh: yup
+2014-05-23T01:04:04  <superbee> jhesketh: yup
 2014-05-23T01:04:07  <foobio> ianw: i had started to work on a patch to fix that (editor's still open on the script) but have too many balls in the air apparently
 2014-05-23T01:04:13  <ianw> foobio: ok, i will fix that up with https://review.openstack.org/#/c/94753/
 2014-05-23T01:04:17  *** aconrad has quit IRC
 2014-05-23T01:04:20  <foobio> ianw: great!
-2014-05-23T01:04:24  <jhesketh> thanks for your help clarkb.. new patches up for review :-)
+2014-05-23T01:04:24  <jhesketh> thanks for your help superbee.. new patches up for review :-)
 2014-05-23T01:04:31  <openstackgerrit> Joshua Hesketh proposed a change to openstack-infra/config: Add in JJB macros for pushing to swift  https://review.openstack.org/94521
 2014-05-23T01:04:32  <openstackgerrit> Joshua Hesketh proposed a change to openstack-infra/config: Add slavescript to grab console log  https://review.openstack.org/94520
-2014-05-23T01:04:46  <clarkb> jhesketh: thank you! I am very excited about this stuff
+2014-05-23T01:04:46  <superbee> jhesketh: thank you! I am very excited about this stuff
 2014-05-23T01:05:18  <sdague> ianw: looks like merge conflict on that
 2014-05-23T01:05:23  <sdague> can you rebase?
 2014-05-23T01:05:30  <jhesketh> jjb hurts my head... very difficult to visualise what the output will look like with all the macros and builders etc
 2014-05-23T01:05:38  <jhesketh> but I'm learning my way around slowly
 2014-05-23T01:05:53  <ianw> sdague: yep, just fixing it up, i left in a copy that shouldn't be there
-2014-05-23T01:05:55  <clarkb> jhesketh: ya, there are definitely flaws in it
+2014-05-23T01:05:55  <superbee> jhesketh: ya, there are definitely flaws in it
 2014-05-23T01:06:02  <sdague> ianw: awesome
 2014-05-23T01:07:48  <ianw> sdague: i still haven't figured out why things don't bail out when grenade sanity check fails
 2014-05-23T01:08:04  <ianw> sdague: as you say, exit on err looks like it is set
@@ -216,8 +216,8 @@
 2014-05-23T01:17:13  *** lcostantino has quit IRC
 2014-05-23T01:17:28  *** r-daneel has joined #openstack-infra
 2014-05-23T01:17:48  <openstackgerrit> Joshua Harlow proposed a change to openstack-infra/config: Add a doc8 stackforge project  https://review.openstack.org/94236
-2014-05-23T01:18:02  <clarkb> hpcloud graphs are still green
-2014-05-23T01:18:07  <clarkb> but we haven't thrown significant load at it
+2014-05-23T01:18:02  <superbee> hpcloud graphs are still green
+2014-05-23T01:18:07  <superbee> but we haven't thrown significant load at it
 2014-05-23T01:18:20  *** dstanek is now known as dstanek_zzz
 2014-05-23T01:19:02  *** ramashri has quit IRC
 2014-05-23T01:19:49  <jeblair> jhesketh: the key thing to know about jjb is that it's project-oriented.  it's mostly about applying the same (templated) jobs to multiple projects.
@@ -255,9 +255,9 @@
 2014-05-23T01:40:27  *** fanhe has joined #openstack-infra
 2014-05-23T01:45:43  *** nati_ueno has joined #openstack-infra
 2014-05-23T01:46:32  *** otter768_ has quit IRC
-2014-05-23T01:46:44  <ianw> sdague/clarkb: if you could re-review https://review.openstack.org/#/c/93251/ (Modify horizon log copy for Fedora -- just a rebase) that would be awesome, last fedora specific patch :)
+2014-05-23T01:46:44  <ianw> sdague/superbee: if you could re-review https://review.openstack.org/#/c/93251/ (Modify horizon log copy for Fedora -- just a rebase) that would be awesome, last fedora specific patch :)
 2014-05-23T01:47:05  *** aconrad has quit IRC
-2014-05-23T01:48:05  <clarkb> done
+2014-05-23T01:48:05  <superbee> done
 2014-05-23T01:48:35  *** maxbit_ has joined #openstack-infra
 2014-05-23T01:49:54  *** nati_ueno has quit IRC
 2014-05-23T01:49:57  *** otter768 has joined #openstack-infra
@@ -312,11 +312,11 @@
 2014-05-23T02:40:36  *** gyee has quit IRC
 2014-05-23T02:40:50  <mordred> we also need to make sure we can feed in the states of the tip of the git repos for every repo that should be participating in the gate
 2014-05-23T02:41:30  <mordred> and/or that the testing thing, such as whatever dib is doing, can be pointed at the set of repo-states that have been pre-prepared by the testing structure
-2014-05-23T02:41:43  <clarkb> mordred: initial numbers for the hpcloud network reconfiguration are promising
-2014-05-23T02:41:47  <mordred> clarkb: woot!
-2014-05-23T02:41:53  <mordred> clarkb: that's EXCELLENT to hear
-2014-05-23T02:41:54  <clarkb> but we haven't thrown a lot of load at it
-2014-05-23T02:42:03  <clarkb> tomorrow morning will be a good test
+2014-05-23T02:41:43  <superbee> mordred: initial numbers for the hpcloud network reconfiguration are promising
+2014-05-23T02:41:47  <mordred> superbee: woot!
+2014-05-23T02:41:53  <mordred> superbee: that's EXCELLENT to hear
+2014-05-23T02:41:54  <superbee> but we haven't thrown a lot of load at it
+2014-05-23T02:42:03  <superbee> tomorrow morning will be a good test
 2014-05-23T02:42:10  *** praneshp has quit IRC
 2014-05-23T02:42:40  <mordred> ++
 2014-05-23T02:43:15  <mordred> lifeless: ALSO - since we want to more broadly be able to test "tip of branches vs. current released release things" in a non-tripleo context too
@@ -342,10 +342,10 @@
 2014-05-23T02:57:20  *** mriedem has quit IRC
 2014-05-23T02:58:45  <pleia2> our zanata contact may have the openstack summit plague (out sick), I'll catch up with them next week, the rest of the team thinks their puppet configs are "in no fit state to share"
 2014-05-23T03:01:46  <pleia2> so I'll see what I can do about that :)
-2014-05-23T03:02:46  <mordred> clarkb: http://goo.gl/Rl0oAG
+2014-05-23T03:02:46  <mordred> superbee: http://goo.gl/Rl0oAG
 2014-05-23T03:03:00  *** nosnos has quit IRC
-2014-05-23T03:03:05  <mordred> clarkb: ^^ there's a modification of jeblair's last graph that does your new split regions
-2014-05-23T03:03:21  <mordred> clarkb: you may already have one - but I wanted to see it - so I made one
+2014-05-23T03:03:05  <mordred> superbee: ^^ there's a modification of jeblair's last graph that does your new split regions
+2014-05-23T03:03:21  <mordred> superbee: you may already have one - but I wanted to see it - so I made one
 2014-05-23T03:03:41  <mordred> pleia2: nice
 2014-05-23T03:07:48  <openstackgerrit> David Lenwell proposed a change to openstack-infra/config: added use-storyboard flag to refstack  https://review.openstack.org/95058
 2014-05-23T03:09:53  *** dstanek_zzz is now known as dstanek
@@ -353,7 +353,7 @@
 2014-05-23T03:14:44  *** radez is now known as radez_g0n3
 2014-05-23T03:15:40  *** melwitt has joined #openstack-infra
 2014-05-23T03:15:40  *** melwitt1 has quit IRC
-2014-05-23T03:17:47  <jhesketh> clarkb: if you have time to look at my response to your comment on my nodepool patch that'd be shiny https://review.openstack.org/#/c/90883/5 :-)
+2014-05-23T03:17:47  <jhesketh> superbee: if you have time to look at my response to your comment on my nodepool patch that'd be shiny https://review.openstack.org/#/c/90883/5 :-)
 2014-05-23T03:19:55  *** dstanek is now known as dstanek_zzz
 2014-05-23T03:20:00  *** otter768 has quit IRC
 2014-05-23T03:21:53  *** alugovoi has quit IRC
@@ -504,7 +504,7 @@
 2014-05-23T07:04:24  *** marcoemorais1 has quit IRC
 2014-05-23T07:04:42  *** marcoemorais has joined #openstack-infra
 2014-05-23T07:06:34  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/config: Add sahara to bugday  https://review.openstack.org/95090
-2014-05-23T07:08:25  <ttx> sdague, foobio, clarkb: the list is at http://wiki.openstack.org/ReleaseNaming as usual. Will build the shortlist at the next TC meeting
+2014-05-23T07:08:25  <ttx> sdague, foobio, superbee: the list is at http://wiki.openstack.org/ReleaseNaming as usual. Will build the shortlist at the next TC meeting
 2014-05-23T07:08:45  <ttx> foobio: and it's Kepler street. not Keppler.
 2014-05-23T07:09:54  *** e0ne has quit IRC
 2014-05-23T07:10:16  *** zhiyan_ is now known as zhiyan
@@ -592,7 +592,7 @@
 2014-05-23T09:01:20  <ttx> +1
 2014-05-23T09:02:05  *** grantbow has quit IRC
 2014-05-23T09:03:22  <jd__> could I be added to gnocchi-core on Gerrit guys, 'cause looks like the group is empty :)
-2014-05-23T09:04:18  <SergeyLukjanov> jd__, I don't have root permissions yet, so, you should wait for jeblair, foobio, clarkb or mordred
+2014-05-23T09:04:18  <SergeyLukjanov> jd__, I don't have root permissions yet, so, you should wait for jeblair, foobio, superbee or mordred
 2014-05-23T09:04:51  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/config: Add example and details to the releasestatus config  https://review.openstack.org/95110
 2014-05-23T09:05:05  *** dstanek is now known as dstanek_zzz
 2014-05-23T09:05:08  <SergeyLukjanov> ttx, ^^ probably it'll make the config file easier to understand :)
@@ -956,7 +956,7 @@
 2014-05-23T14:54:54  <msabramo> so you're saying pinging zaro is the right way to go?
 2014-05-23T14:54:55  *** ihrachyshka has quit IRC
 2014-05-23T14:55:22  <mordred> yup. or, at least, it's a good way to go - he can accomplish that
-2014-05-23T14:56:01  <mordred> foobio, clarkb: the hp 1.1 multi-network thing seems to be holding up this morning
+2014-05-23T14:56:01  <mordred> foobio, superbee: the hp 1.1 multi-network thing seems to be holding up this morning
 2014-05-23T14:56:29  *** jlibosva has quit IRC
 2014-05-23T14:56:37  <jeblair> oooh yay
 2014-05-23T14:57:11  <foobio> yep, checked in on it earlier and seems stable under our current modest load
@@ -968,7 +968,7 @@
 2014-05-23T14:59:24  <openstackgerrit> Marc Abramowitz proposed a change to openstack-infra/jenkins-job-builder: Add tox "coverage" target  https://review.openstack.org/87382
 2014-05-23T14:59:33  <foobio> yeah, maybe adding a couple more nets and dropping down to 150 per
 2014-05-23T14:59:59  <foobio> i guess we could get to that with just one more
-2014-05-23T15:01:17  <jeblair> mordred: well i think we had a revised theory yesterday that it wasn't some vague "more is worse" thing, but actually clarkb found that the network only had 256 ips because it was a /24.
+2014-05-23T15:01:17  <jeblair> mordred: well i think we had a revised theory yesterday that it wasn't some vague "more is worse" thing, but actually superbee found that the network only had 256 ips because it was a /24.
 2014-05-23T15:01:25  <jeblair> foobio: ^
 2014-05-23T15:02:28  *** xchu has quit IRC
 2014-05-23T15:02:32  <jeblair> foobio: i think we're at 114/per net right now
@@ -1232,11 +1232,11 @@
 2014-05-23T16:39:32  <mgagne> zaro: stuff? an ascii art?
 2014-05-23T16:39:32  *** dripton has quit IRC
 2014-05-23T16:39:32  <zaro> msabramo: no usernames
-2014-05-23T16:39:32  <morganfainberg> clarkb, i noticed your fix for tox got merged! does this mean we can start looking at using newer versions of tox soon? (pending a release incorporating it)?
+2014-05-23T16:39:32  <morganfainberg> superbee, i noticed your fix for tox got merged! does this mean we can start looking at using newer versions of tox soon? (pending a release incorporating it)?
 2014-05-23T16:39:33  <zaro> mgagne: no, i see usernames
 2014-05-23T16:39:33  <mgagne> zaro: AUTHORS is automatically populated from git log by pbr
 2014-05-23T16:39:33  <jeblair> morganfainberg: i believe that's exactly the case
-2014-05-23T16:39:33  <jeblair> morganfainberg: clarkb tested the tip manually and it works, so just waiting on a rel
+2014-05-23T16:39:33  <jeblair> morganfainberg: superbee tested the tip manually and it works, so just waiting on a rel
 2014-05-23T16:39:33  <mgagne> zaro: http://docs.openstack.org/developer/pbr/ "AUTHORS: Generate AUTHORS file from git log"
 2014-05-23T16:39:33  <morganfainberg> jeblair, awesome! that makes me happy.
 2014-05-23T16:39:57  <anteaya> foobio: yes, that was what I was thinking in the first place
@@ -1251,13 +1251,13 @@
 2014-05-23T16:40:45  <msabramo> the "1" before "May 20" is indicating that the file size is 1 byte
 2014-05-23T16:40:45  *** dkehn has quit IRC
 2014-05-23T16:41:31  <zaro> ok. i see you mean current release.  should be all fixed in next release.
-2014-05-23T16:41:46  <clarkb> morgainfainber: yup, also please test with projects you care about
+2014-05-23T16:41:46  <superbee> morgainfainber: yup, also please test with projects you care about
 2014-05-23T16:41:53  *** dkehn has joined #openstack-infra
 2014-05-23T16:41:58  <chuckC> anteaya: I'll try that out this morning.  With everything I tried, I won't know it all works until I put something up for review.
-2014-05-23T16:42:02  <clarkb> you can hg clone the pip install that into a virtualenv
+2014-05-23T16:42:02  <superbee> you can hg clone the pip install that into a virtualenv
 2014-05-23T16:42:25  <anteaya> chuckC: okay thanks
 2014-05-23T16:42:25  *** derekh_ has quit IRC
-2014-05-23T16:42:26  <clarkb> then run that tox. should be version 0.7.2.something-dev iirc
+2014-05-23T16:42:26  <superbee> then run that tox. should be version 0.7.2.something-dev iirc
 2014-05-23T16:42:43  <anteaya> best to keep to one chuckC
 2014-05-23T16:43:18  * mordred goes to look for job logs to indicate errors
 2014-05-23T16:45:46  <mordred> https://jenkins05.openstack.org/job/jenkins-job-builder-tarball/1/console
@@ -1292,14 +1292,14 @@
 2014-05-23T16:53:00  <pleia2> anteaya: you had mentioned reviewstats the other day, do we want to be hosting that somewhere?
 2014-05-23T16:53:05  *** aconrad has joined #openstack-infra
 2014-05-23T16:53:36  <notmyname> mordred: tag 2.1.0 pushed to gerrit
-2014-05-23T16:54:03  <zaro> mordred, clarkb, jeblair : does it make sense to generate coverage with one of the python jobs that run tests?
+2014-05-23T16:54:03  <zaro> mordred, superbee, jeblair : does it make sense to generate coverage with one of the python jobs that run tests?
 2014-05-23T16:54:17  <mgagne> mordred: how can someone consume projects from trunk as an egg? Is there a place where egg are generated and could be used/tested before a release or is it left to an exercise to this potential user/dev?
 2014-05-23T16:54:35  <mordred> mgagne: we don't generate eggs, but we do generate source tarballs of trunk
 2014-05-23T16:54:46  <mordred> and they're at tarballs.o.o/$projectname/$projectname-master.tar.gz
 2014-05-23T16:54:48  <mgagne> zaro: IMO, coverage should be split into its own job
 2014-05-23T16:54:52  <mordred> (it gets overwritten each time)
 2014-05-23T16:55:00  <mordred> so if you want to pip install trunk of a project
-2014-05-23T16:55:10  <SlickNik> clarkb: Had to rebase https://review.openstack.org//#/c/92755/. Please can you take another look when you get a chance? Thanks!
+2014-05-23T16:55:10  <SlickNik> superbee: Had to rebase https://review.openstack.org//#/c/92755/. Please can you take another look when you get a chance? Thanks!
 2014-05-23T16:55:19  <mordred> pip install http://tarballs.openstack.org/jenkins-job-builder/jenkins-job-builder.master.tar.gz
 2014-05-23T16:55:29  <zaro> mgagne: it's already setup that way.  but takes a lot of time if it's a seperate job.
 2014-05-23T16:55:29  <mordred> jeblair: error rate on 1.1 is still good
@@ -1414,7 +1414,7 @@
 2014-05-23T17:13:59  <mordred> notmyname, msabramo: I'm sorry. this is 100% on me - I made a patch for this, like, in april and then didnt' follow it through
 2014-05-23T17:14:00  <gyee> anteaya, zaro, thanks, I'll mark the review as work in progress for him for now
 2014-05-23T17:14:07  <mordred> dhellmann: the fix didn't make it in
-2014-05-23T17:15:06  <dhellmann> mordred: ah, ok -- did you see clarkb's comment about a missing function?
+2014-05-23T17:15:06  <dhellmann> mordred: ah, ok -- did you see superbee's comment about a missing function?
 2014-05-23T17:15:08  <anteaya> zaro: okay, I must have missed it in the past
 2014-05-23T17:15:15  *** hogepodge has joined #openstack-infra
 2014-05-23T17:15:20  *** alaski is now known as lascii
@@ -1425,12 +1425,12 @@
 2014-05-23T17:17:39  <openstackgerrit> Devananda van der Veen proposed a change to openstack-infra/config: Promote tempest-dsvm-virtual-ironic job  https://review.openstack.org/95219
 2014-05-23T17:17:40  <openstackgerrit> Devananda van der Veen proposed a change to openstack-infra/config: Symmetricaly test dib and ironic  https://review.openstack.org/95220
 2014-05-23T17:19:19  <foobio> anteaya: yes, starting a new change loses the review history for the previous change, but since gerrit doesn't currently have a mechanism to transfer change ownership that's about the only option besides bugging the original owner or core reviewers to wip and un-wip it for you
-2014-05-23T17:19:43  <clarkb> mordred: reviewing it now
+2014-05-23T17:19:43  <superbee> mordred: reviewing it now
 2014-05-23T17:19:46  <anteaya> foobio: so zaro suggestion is the accepted process?
 2014-05-23T17:19:51  <anteaya> zaro's
 2014-05-23T17:20:07  <foobio> anteaya: accepted or not, it's basically the only available process
 2014-05-23T17:20:26  <anteaya> gyee: support is evident for zaro's suggestion
-2014-05-23T17:21:20  <Alex_Gaynor> clarkb: did all the images get updated?
+2014-05-23T17:21:20  <Alex_Gaynor> superbee: did all the images get updated?
 2014-05-23T17:22:09  <foobio> Alex_Gaynor: the loop i started to regenerate the py3k-precise image in hpcloud-az2 is still trying after several days
 2014-05-23T17:22:18  <Alex_Gaynor> foobio: womp womp :-( computers
 2014-05-23T17:22:27  <foobio> Alex_Gaynor: there's a good chance we'll stop using that az before we get a fresh image in it
@@ -1439,11 +1439,11 @@
 2014-05-23T17:24:02  <anteaya> I have to get a walk in
 2014-05-23T17:24:05  <anteaya> back in a bit
 2014-05-23T17:24:09  *** zns has quit IRC
-2014-05-23T17:25:21  <clarkb> Alex_Gaynor: no, hpcloud az2 still hates me
-2014-05-23T17:25:30  <clarkb> Alex_Gaynor: but I think we are getting close to turning that off so meh
-2014-05-23T17:25:51  <clarkb> mordred: what graphs for 1.1 are you looking at? I don't see any red
+2014-05-23T17:25:21  <superbee> Alex_Gaynor: no, hpcloud az2 still hates me
+2014-05-23T17:25:30  <superbee> Alex_Gaynor: but I think we are getting close to turning that off so meh
+2014-05-23T17:25:51  <superbee> mordred: what graphs for 1.1 are you looking at? I don't see any red
 2014-05-23T17:25:58  <foobio> mordred: upgrading .tox/venv to pbr 0.8.1.1.gd580d56 (your change) and rerunning setup.py sdist in it gets me an 82-line AUTHORS file for python-swiftclient now
-2014-05-23T17:26:12  <clarkb> oh needed to widen the time range. I see red now
+2014-05-23T17:26:12  <superbee> oh needed to widen the time range. I see red now
 2014-05-23T17:26:36  <pelix> foobio: does git on precise have 'shortlog'?
 2014-05-23T17:27:01  <foobio> pelix: yep
 2014-05-23T17:27:03  *** dripton_ is now known as dripton
@@ -1454,23 +1454,23 @@
 2014-05-23T17:28:24  *** marcoemorais has quit IRC
 2014-05-23T17:28:33  <foobio> pelix: though git log also respects .mailmap for certain format macros
 2014-05-23T17:28:42  <foobio> again, according to the git-log manpage
-2014-05-23T17:28:50  <mordred> clarkb: http://goo.gl/A50tpe
+2014-05-23T17:28:50  <mordred> superbee: http://goo.gl/A50tpe
 2014-05-23T17:28:59  <gyee> anteaya, cool, thanks
-2014-05-23T17:29:02  <clarkb> mordred: thanks
+2014-05-23T17:29:02  <superbee> mordred: thanks
 2014-05-23T17:29:44  <pelix> foobio: always fun seeing what really works
 2014-05-23T17:29:52  *** marcoemorais has joined #openstack-infra
 2014-05-23T17:29:53  <mordred> pelix: not a bad idea
 2014-05-23T17:29:57  *** _nadya_ has joined #openstack-infra
-2014-05-23T17:30:04  <clarkb> my only concern with that is the revert is known to work
+2014-05-23T17:30:04  <superbee> my only concern with that is the revert is known to work
 2014-05-23T17:30:08  *** marcoemorais has quit IRC
-2014-05-23T17:30:16  <clarkb> and I can approve it right now, tag a release and everyone is happy
-2014-05-23T17:30:26  <clarkb> with shortlog I have to be paranoid because we are reverting for raisins
+2014-05-23T17:30:16  <superbee> and I can approve it right now, tag a release and everyone is happy
+2014-05-23T17:30:26  <superbee> with shortlog I have to be paranoid because we are reverting for raisins
 2014-05-23T17:30:27  *** marcoemorais has joined #openstack-infra
 2014-05-23T17:31:00  *** marcoemorais has quit IRC
 2014-05-23T17:31:12  *** Ryan_Lane1 has joined #openstack-infra
 2014-05-23T17:31:17  *** marcoemorais has joined #openstack-infra
 2014-05-23T17:31:26  <foobio> git log --format="%aN <%aE>" | sort -u
-2014-05-23T17:31:27  <mordred> clarkb: I think we shoudl followon with the shortlog patch potentially
+2014-05-23T17:31:27  <mordred> superbee: I think we shoudl followon with the shortlog patch potentially
 2014-05-23T17:31:47  <mordred> I verify that foobio's command uses mailmap
 2014-05-23T17:31:58  *** marcoemorais has quit IRC
 2014-05-23T17:32:32  *** marcoemorais has joined #openstack-infra
@@ -1482,12 +1482,12 @@
 2014-05-23T17:33:31  *** amcrn has joined #openstack-infra
 2014-05-23T17:33:44  <foobio> pelix: it seems to use them for git log, based on my testing
 2014-05-23T17:33:51  <mordred> like, we may have been overthinking this the whole tie
-2014-05-23T17:33:54  <clarkb> mordred: jeblair: so trying to understand the 1.1 experiment. We are doing more nodes per network:router to see if it holds up?
-2014-05-23T17:33:59  <mordred> clarkb: yeah
-2014-05-23T17:34:11  <mordred> clarkb: to see if the _actual_ problem was exceeding the 256 nodes in a /24
+2014-05-23T17:33:54  <superbee> mordred: jeblair: so trying to understand the 1.1 experiment. We are doing more nodes per network:router to see if it holds up?
+2014-05-23T17:33:59  <mordred> superbee: yeah
+2014-05-23T17:34:11  <mordred> superbee: to see if the _actual_ problem was exceeding the 256 nodes in a /24
 2014-05-23T17:34:15  *** alugovoi has joined #openstack-infra
 2014-05-23T17:34:28  <pelix> foobio: wonder why it even has the option --use-mailmap for git-log so
-2014-05-23T17:34:49  <jeblair> clarkb: mordred still sees some failures, so we're trying to correlate failure rate with % of network range used
+2014-05-23T17:34:49  <jeblair> superbee: mordred still sees some failures, so we're trying to correlate failure rate with % of network range used
 2014-05-23T17:35:06  *** nati_ueno has quit IRC
 2014-05-23T17:35:22  <mordred> jeblair: failure rates are actually flatlined now
 2014-05-23T17:35:25  <mordred> not seeing any
@@ -1495,15 +1495,15 @@
 2014-05-23T17:35:50  <jeblair> mordred: but use is low
 2014-05-23T17:35:53  <mordred> yah
 2014-05-23T17:35:55  <foobio> pelix: it may be that --use-mailmap extends mailmap use to macros like %an without having to explicitly use %aN instead
-2014-05-23T17:35:58  <clarkb> ya we need to ramp up use
-2014-05-23T17:36:11  <clarkb> we can push ~10 d-g changes and zuul will go crazy
+2014-05-23T17:35:58  <superbee> ya we need to ramp up use
+2014-05-23T17:36:11  <superbee> we can push ~10 d-g changes and zuul will go crazy
 2014-05-23T17:36:36  <pelix> foobio: ah, well that's nice and unintuitive of the git devs
-2014-05-23T17:37:16  <clarkb> mordred: revert is +2 from me
+2014-05-23T17:37:16  <superbee> mordred: revert is +2 from me
 2014-05-23T17:37:21  <foobio> i confirm that using "%an <%ae>" produces un-mailmap-deduped output while "%aN <%aE>" seems to apply the .mailmap
 2014-05-23T17:37:45  *** duran has quit IRC
-2014-05-23T17:38:19  <mordred> dhellmann, clarkb: what do you think? the full revert? or a new patch that just removes the --use-mailmap?
+2014-05-23T17:38:19  <mordred> dhellmann, superbee: what do you think? the full revert? or a new patch that just removes the --use-mailmap?
 2014-05-23T17:38:50  *** ihrachyshka has joined #openstack-infra
-2014-05-23T17:39:00  <clarkb> if we can test the smaller change I think that is better, but we should properly test it
+2014-05-23T17:39:00  <superbee> if we can test the smaller change I think that is better, but we should properly test it
 2014-05-23T17:39:06  *** lttrl has quit IRC
 2014-05-23T17:39:45  <foobio> mordred: removing --use-mailmap and diffing the result against the AUTHORS file generated by the revert shows that it introduces two additional authors... Jenkins <jenkins@review.openstack.org> and OpenStack Jenkins <jenkins@openstack.org>
 2014-05-23T17:39:53  *** bknudson has quit IRC
@@ -1528,26 +1528,26 @@
 2014-05-23T17:46:54  <mordred> then if the simple one fixes it too - I vote for the two line change over the revert
 2014-05-23T17:46:55  <foobio> md5sum of the AUTHORS file produced by both is identical
 2014-05-23T17:46:56  <mtreinish> foobio, sdague: so here's something fun when I went to push the '1' tag for tempest I get: "! [remote rejected] 1 -> 1 (prohibited by Gerrit)"
-2014-05-23T17:47:01  <mordred> jeblair, clarkb, dhellmann ?
+2014-05-23T17:47:01  <mordred> jeblair, superbee, dhellmann ?
 2014-05-23T17:47:20  <foobio> mtreinish: acl on the tempest project in gerrit probably. checking
 2014-05-23T17:47:42  <mtreinish> oh I just assumed 1 was reserved, but that makes more sense :)
 2014-05-23T17:47:42  <dhellmann> yeah, I've also seen that when I didn't have the ssh key right but the acl is the most likely cause
 2014-05-23T17:48:38  <foobio> mtreinish: yep, acl isn't set up to allow tags. i'll propose a change for you real fast
 2014-05-23T17:48:40  <dstufft> mordred: someday i'd like to hammer out an idea I keep thinking of, something that would move the stuff that pbr does to package creation time instead of at setup.py execution time
-2014-05-23T17:49:15  <clarkb> mordred: either way is fine with me if we can test the new solution
+2014-05-23T17:49:15  <superbee> mordred: either way is fine with me if we can test the new solution
 2014-05-23T17:49:20  *** e0ne has joined #openstack-infra
 2014-05-23T17:49:20  <mtreinish> foobio: ok cool, thanks
 2014-05-23T17:49:52  <mordred> dstufft: funny story, I've been having the exact same thought
 2014-05-23T17:50:30  <mordred> dstufft: I was talking with notmyname about it at the summit - my lame version of talking about that is having pbr shove a static generated setup.py into the sdists it creates
-2014-05-23T17:50:46  <clarkb> wouldn't it be nice if we cold just get rid of setup.py completely?
-2014-05-23T17:50:51  <dstufft> clarkb: it'll happen
-2014-05-23T17:50:52  <mordred> clarkb: well, yeah.
+2014-05-23T17:50:46  <superbee> wouldn't it be nice if we cold just get rid of setup.py completely?
+2014-05-23T17:50:51  <dstufft> superbee: it'll happen
+2014-05-23T17:50:52  <mordred> superbee: well, yeah.
 2014-05-23T17:50:59  <dstufft> I promise you, it'll be an option at some point
 2014-05-23T17:51:32  *** alugovoi has quit IRC
 2014-05-23T17:51:51  *** zns has joined #openstack-infra
-2014-05-23T17:52:02  <mordred> clarkb: I believe foobio and I have both tested both and they both work - (on precise too)
+2014-05-23T17:52:02  <mordred> superbee: I believe foobio and I have both tested both and they both work - (on precise too)
 2014-05-23T17:52:06  <jeblair> mordred: what's your question to me?
-2014-05-23T17:52:08  <clarkb> mordred: cool it has my +2
+2014-05-23T17:52:08  <superbee> mordred: cool it has my +2
 2014-05-23T17:52:08  <mordred> so I'm fairly 'happy' with them
 2014-05-23T17:52:15  *** e0ne has quit IRC
 2014-05-23T17:52:18  <mordred> jeblair: we have two different solutions to today's pbr bug
@@ -1579,7 +1579,7 @@
 2014-05-23T17:57:32  <foobio> mordred: jeblair: if you look at the manpage for git-log circa ubuntu precise, it explicitly calls out that %aN and %aE apply .mailmap
 2014-05-23T17:57:48  <mordred> so, --use-mailmap makes %an use mailmap settings like aN
 2014-05-23T17:57:59  <mordred> because $sanity
-2014-05-23T17:58:25  <jeblair> okay.  well in that case i rather like 95225 which, like clarkb, i have not tesed :)
+2014-05-23T17:58:25  <jeblair> okay.  well in that case i rather like 95225 which, like superbee, i have not tesed :)
 2014-05-23T17:58:48  <mordred> I think that's my preference too
 2014-05-23T17:58:50  <jeblair> but i have read the manpage and agree with foobio that it says that :)
 2014-05-23T17:58:51  * foobio will paste up a confirmation of it working
@@ -1595,27 +1595,27 @@
 2014-05-23T18:02:18  <mtreinish> no that's fine I can't imagine anyone else needing to push a tag
 2014-05-23T18:04:22  <mtreinish> hmm, yeah that could be an issue although I don't think we have any plans to do that right now
 2014-05-23T18:05:11  *** rcarrill` has joined #openstack-infra
-2014-05-23T18:05:26  <foobio> clarkb: quick +2/+a on 95230? i'll add mtreinish to tempest-ptl once it lands
+2014-05-23T18:05:26  <foobio> superbee: quick +2/+a on 95230? i'll add mtreinish to tempest-ptl once it lands
 2014-05-23T18:05:42  <foobio> then he can get on with his releasing
 2014-05-23T18:06:00  *** saper has joined #openstack-infra
 2014-05-23T18:06:03  *** gokrokve has joined #openstack-infra
-2014-05-23T18:06:07  <clarkb> looking
+2014-05-23T18:06:07  <superbee> looking
 2014-05-23T18:06:36  *** rcarrillocruz has quit IRC
 2014-05-23T18:07:03  *** james_li has joined #openstack-infra
-2014-05-23T18:07:33  <clarkb> foobio: done
+2014-05-23T18:07:33  <superbee> foobio: done
 2014-05-23T18:07:52  <foobio> i suppose i should test tagging in a local checkout and making sure the sdist tarball gets correctly versioned
 2014-05-23T18:08:28  *** marun has quit IRC
 2014-05-23T18:10:26  <openstackgerrit> A change was merged to openstack-infra/config: Allow tempest tags and release tarballs  https://review.openstack.org/95230
 2014-05-23T18:10:31  *** radez is now known as radez_g0n3
 2014-05-23T18:11:14  *** e0ne has joined #openstack-infra
-2014-05-23T18:12:08  <clarkb> foobio: jeblair mordred I am going to approve jesusaurus' change now
+2014-05-23T18:12:08  <superbee> foobio: jeblair mordred I am going to approve jesusaurus' change now
 2014-05-23T18:12:47  *** radez_g0n3 is now known as radez
 2014-05-23T18:12:52  <reed> guys, how do I change topic on #openstack-community?
 2014-05-23T18:13:06  <jesusaurus> :)
-2014-05-23T18:13:08  <clarkb> approved
-2014-05-23T18:13:17  <clarkb> reed: as an op you need to /topic this is my new topic
-2014-05-23T18:13:31  <clarkb> reed: I think you should have perms right?
-2014-05-23T18:13:35  <reed> clarkb, next question, how do I get op? :)
+2014-05-23T18:13:08  <superbee> approved
+2014-05-23T18:13:17  <superbee> reed: as an op you need to /topic this is my new topic
+2014-05-23T18:13:31  <superbee> reed: I think you should have perms right?
+2014-05-23T18:13:35  <reed> superbee, next question, how do I get op? :)
 2014-05-23T18:13:59  <jeblair> reed: /msg chanserv op #openstack-community reed
 2014-05-23T18:14:10  <pleia2> you can just /msg chanserv topic #openstack-community blah blah blah
 2014-05-23T18:14:12  <pleia2> no need to op up
@@ -1631,17 +1631,17 @@
 2014-05-23T18:17:11  <reed> cool, no problem
 2014-05-23T18:17:20  <reed> I'll read the docs on freenode next time
 2014-05-23T18:17:28  <reed> not sure we need to duplicate info on our wiki
-2014-05-23T18:18:26  <clarkb> so what do people think about me pushing ~10 throwaway changes to d-g in order to exercise hpcloud 1.1?
+2014-05-23T18:18:26  <superbee> so what do people think about me pushing ~10 throwaway changes to d-g in order to exercise hpcloud 1.1?
 2014-05-23T18:18:30  <reed> what's openstack-attic?
-2014-05-23T18:18:41  <clarkb> is that just wasteful and we wait for monday/tuesday to see how it handles load?
-2014-05-23T18:18:53  <jeblair> clarkb: go for it
+2014-05-23T18:18:41  <superbee> is that just wasteful and we wait for monday/tuesday to see how it handles load?
+2014-05-23T18:18:53  <jeblair> superbee: go for it
 2014-05-23T18:18:59  <jeblair> reed: where we're putting projects we've abandoned
-2014-05-23T18:19:00  <clarkb> reed: it is the island of misfit toys^H^H^H^Hrepos
+2014-05-23T18:19:00  <superbee> reed: it is the island of misfit toys^H^H^H^Hrepos
 2014-05-23T18:19:18  <Alex_Gaynor> So many people have bene making "island of misfit toys" references lately.
 2014-05-23T18:19:22  <openstackgerrit> A change was merged to openstack-infra/config: Move openstack-specific config out of ::jenkins  https://review.openstack.org/89708
 2014-05-23T18:19:28  * nibalizer is rememebering the dollhouse attic
 2014-05-23T18:19:29  <reed> for some reason I thought that the attic was a good place to be :)
-2014-05-23T18:19:43  <foobio> clarkb: exercising hpcloud region b hardly seems wasteful however you do it
+2014-05-23T18:19:43  <foobio> superbee: exercising hpcloud region b hardly seems wasteful however you do it
 2014-05-23T18:19:55  <foobio> reed: when it floods, perhaps ;)
 2014-05-23T18:20:09  *** _nadya_ has joined #openstack-infra
 2014-05-23T18:20:41  *** thomasbiege has joined #openstack-infra
@@ -1662,7 +1662,7 @@
 2014-05-23T18:23:05  *** thomasbiege has quit IRC
 2014-05-23T18:23:09  *** comstud is now known as bearhands
 2014-05-23T18:24:26  <foobio> mtreinish: added you to https://review.openstack.org/#/admin/groups/355,members and fwiw, i did a tox -evenv python setup.py sdist in tempest after adding a signed 1 tag to the branch tip, and it produced tempest-1.tar.gz so should be all set
-2014-05-23T18:24:29  <clarkb> jeblair: any reason not to approve your change that names the integrated gate?
+2014-05-23T18:24:29  <superbee> jeblair: any reason not to approve your change that names the integrated gate?
 2014-05-23T18:24:34  *** ihrachyshka has quit IRC
 2014-05-23T18:25:06  *** aconrad has quit IRC
 2014-05-23T18:27:04  *** sweston has joined #openstack-infra
@@ -1672,21 +1672,21 @@
 2014-05-23T18:27:43  *** sweston has quit IRC
 2014-05-23T18:27:50  *** Sukhdev has joined #openstack-infra
 2014-05-23T18:28:10  *** sweston has joined #openstack-infra
-2014-05-23T18:28:49  <foobio> clarkb: we seem to be building 100 additional nodes in region b now. awesome
+2014-05-23T18:28:49  <foobio> superbee: we seem to be building 100 additional nodes in region b now. awesome
 2014-05-23T18:29:30  <foobio> though deletes have crept up coincident with that, it's probably a relatively proportional
 2014-05-23T18:29:46  <foobio> quantity
 2014-05-23T18:29:58  *** sweston_ has joined #openstack-infra
-2014-05-23T18:30:35  <clarkb> ya there is a nice spike on the graph
+2014-05-23T18:30:35  <superbee> ya there is a nice spike on the graph
 2014-05-23T18:30:57  *** e0ne has quit IRC
 2014-05-23T18:31:33  *** e0ne has joined #openstack-infra
-2014-05-23T18:31:44  <clarkb> and the errors have crept up slightly
-2014-05-23T18:31:48  <clarkb> but nothing really insance
-2014-05-23T18:31:52  <clarkb> *insane
+2014-05-23T18:31:44  <superbee> and the errors have crept up slightly
+2014-05-23T18:31:48  <superbee> but nothing really insance
+2014-05-23T18:31:52  <superbee> *insane
 2014-05-23T18:31:54  <openstackgerrit> Andreas Jaeger proposed a change to openstack-infra/config: Publish troveclient documentation  https://review.openstack.org/92562
 2014-05-23T18:32:50  *** sweston has quit IRC
-2014-05-23T18:33:00  <clarkb> though I think this confirms the error rate isn't a function of network:router sizes
+2014-05-23T18:33:00  <superbee> though I think this confirms the error rate isn't a function of network:router sizes
 2014-05-23T18:33:14  *** bknudson has joined #openstack-infra
-2014-05-23T18:33:17  <clarkb> jeblair: mordred ^ in a little bit the data should be more clear
+2014-05-23T18:33:17  <superbee> jeblair: mordred ^ in a little bit the data should be more clear
 2014-05-23T18:33:22  <anteaya> mansards full of wasps, interesting
 2014-05-23T18:33:40  *** sweston has joined #openstack-infra
 2014-05-23T18:34:22  <openstackgerrit> Andreas Jaeger proposed a change to openstack-infra/config: Publish troveclient documentation  https://review.openstack.org/92562
@@ -1710,14 +1710,14 @@
 2014-05-23T18:41:15  <anteaya> thanks
 2014-05-23T18:41:27  <anteaya> how are the braves doing anyway?
 2014-05-23T18:43:02  <jesusaurus> are there any jobs that run on the jenkins master? is the master also a slave?
-2014-05-23T18:43:52  <clarkb> nope
+2014-05-23T18:43:52  <superbee> nope
 2014-05-23T18:43:53  <anteaya> top of the national league east: http://mlb.mlb.com/mlb/standings/?tcid=mm_mlb_standings&c_id=atl
-2014-05-23T18:43:58  <clarkb> we can remove the masters use of slave_scripts
+2014-05-23T18:43:58  <superbee> we can remove the masters use of slave_scripts
 2014-05-23T18:44:15  <ttx> did anyone see mordred today ?
-2014-05-23T18:44:25  <clarkb> ttx: yes he was around
+2014-05-23T18:44:25  <superbee> ttx: yes he was around
 2014-05-23T18:45:40  *** marcoemorais has quit IRC
 2014-05-23T18:46:14  <openstackgerrit> K Jonathan Harker proposed a change to openstack-infra/config: Remove jenkins slave_scripts from jenkins masters  https://review.openstack.org/95249
-2014-05-23T18:46:22  <jesusaurus> clarkb: ^^
+2014-05-23T18:46:22  <jesusaurus> superbee: ^^
 2014-05-23T18:46:46  *** marcoemorais has joined #openstack-infra
 2014-05-23T18:46:56  *** marcoemorais has quit IRC
 2014-05-23T18:47:11  *** marcoemorais has joined #openstack-infra
@@ -1753,16 +1753,16 @@
 2014-05-23T18:55:52  *** sweston has joined #openstack-infra
 2014-05-23T18:56:10  <sdague> that's in the docs
 2014-05-23T18:56:19  <openstackgerrit> K Jonathan Harker proposed a change to openstack-infra/config: Move jenkins-sudo bits to openstack_project  https://review.openstack.org/95252
-2014-05-23T18:56:23  <jesusaurus> clarkb: also ^^
+2014-05-23T18:56:23  <jesusaurus> superbee: also ^^
 2014-05-23T18:57:14  <mtreinish> sdague: what's in the docs?
 2014-05-23T18:58:47  *** radez_g0n3 is now known as radez
-2014-05-23T18:59:04  <jeblair> clarkb: i am not positive the running zuul has that capability; i think it does but i haven't double checked.  it will definitely be safe after the renames though, so may as well just do it then
+2014-05-23T18:59:04  <jeblair> superbee: i am not positive the running zuul has that capability; i think it does but i haven't double checked.  it will definitely be safe after the renames though, so may as well just do it then
 2014-05-23T18:59:09  *** pelix has quit IRC
-2014-05-23T18:59:13  <jeblair> clarkb: (gate name change)
+2014-05-23T18:59:13  <jeblair> superbee: (gate name change)
 2014-05-23T18:59:23  <sdague> mtreinish: http://docs.openstack.org/developer/tempest/
 2014-05-23T18:59:36  <sdague> the setup.cfg version ends up in there
 2014-05-23T18:59:38  *** prad has joined #openstack-infra
-2014-05-23T18:59:39  <clarkb> jeblair: ok I will wait then, thanks
+2014-05-23T18:59:39  <superbee> jeblair: ok I will wait then, thanks
 2014-05-23T19:00:47  *** prad_ has quit IRC
 2014-05-23T19:01:18  *** prad_ has joined #openstack-infra
 2014-05-23T19:01:42  * SergeyLukjanov partially here
@@ -1772,39 +1772,39 @@
 2014-05-23T19:02:42  <foobio> mtreinish: so... the tarball job seems not to have run. i wonder if your version number was too "simple" for our release tag regex ;)
 2014-05-23T19:02:55  <SergeyLukjanov> anteaya, I'm here
 2014-05-23T19:03:03  <anteaya> yay
-2014-05-23T19:03:03  <clarkb> jeblair: foobio zaro mordred everyone else: gerrit upstream is talking about ripping out openid support in 2.10
-2014-05-23T19:03:07  <clarkb> because they hate us
+2014-05-23T19:03:03  <superbee> jeblair: foobio zaro mordred everyone else: gerrit upstream is talking about ripping out openid support in 2.10
+2014-05-23T19:03:07  <superbee> because they hate us
 2014-05-23T19:03:11  <foobio> mtreinish: yep! http://git.openstack.org/cgit/openstack-infra/config/tree/modules/openstack_project/files/zuul/layout.yaml#n130
 2014-05-23T19:03:19  <SergeyLukjanov> zaro, enabling coverage could affect some testing IMO (at least increase time for running them)
-2014-05-23T19:03:21  <clarkb> (well actually because google accounts are silly apparently, but still this is annoying)
-2014-05-23T19:03:26  <clarkb> so uh ya
-2014-05-23T19:03:41  <foobio> clarkb: wow!
+2014-05-23T19:03:21  <superbee> (well actually because google accounts are silly apparently, but still this is annoying)
+2014-05-23T19:03:26  <superbee> so uh ya
+2014-05-23T19:03:41  <foobio> superbee: wow!
 2014-05-23T19:03:48  <dstufft> foobio: I have a pretty thorough regex/PEP 440 parser thing
-2014-05-23T19:03:50  <clarkb> I am digging up a link to the thread now
+2014-05-23T19:03:50  <superbee> I am digging up a link to the thread now
 2014-05-23T19:03:55  <dstufft> foobio: FWIW
 2014-05-23T19:03:57  <mtreinish> foobio: ha, it needs a minor version
-2014-05-23T19:04:01  * anteaya stands by for clarkb's link
+2014-05-23T19:04:01  * anteaya stands by for superbee's link
 2014-05-23T19:04:05  *** sweston has quit IRC
 2014-05-23T19:04:13  *** prad has quit IRC
 2014-05-23T19:04:13  *** prad_ is now known as prad
-2014-05-23T19:04:31  <clarkb> https://groups.google.com/forum/#!topic/repo-discuss/Hjn-6BV3KBU no decision is made yet but ripping out support is mentioned
-2014-05-23T19:05:17  <SergeyLukjanov> foobio, jeblair, clarkb, anteaya, should I update renaming CRs?
-2014-05-23T19:05:44  <clarkb> SergeyLukjanov: to do what? sorry I think I am missing context
-2014-05-23T19:05:59  <SergeyLukjanov> clarkb, for todays renaming session
+2014-05-23T19:04:31  <superbee> https://groups.google.com/forum/#!topic/repo-discuss/Hjn-6BV3KBU no decision is made yet but ripping out support is mentioned
+2014-05-23T19:05:17  <SergeyLukjanov> foobio, jeblair, superbee, anteaya, should I update renaming CRs?
+2014-05-23T19:05:44  <superbee> SergeyLukjanov: to do what? sorry I think I am missing context
+2014-05-23T19:05:59  <SergeyLukjanov> superbee, for todays renaming session
 2014-05-23T19:06:15  <SergeyLukjanov> sounds like we decided to keep codename-based naming for specs
-2014-05-23T19:06:18  <clarkb> SergeyLukjanov: right, but do they need updating?
-2014-05-23T19:06:20  <clarkb> oh that
+2014-05-23T19:06:18  <superbee> SergeyLukjanov: right, but do they need updating?
+2014-05-23T19:06:20  <superbee> oh that
 2014-05-23T19:06:29  <mtreinish> foobio: so should we try this again as "1.0"?
 2014-05-23T19:06:38  <SergeyLukjanov> probably we need to rename spec repos that are now named using the program name
 2014-05-23T19:06:40  <mtreinish> and just ignore the minor version unless we need it
-2014-05-23T19:06:47  <clarkb> SergeyLukjanov: maybe we can put those changes at the end of the list so that we can use them if we want but ignore them if we don't want them
-2014-05-23T19:07:07  <clarkb> I don't really care much about what we call them so will defer to jeblair and others
-2014-05-23T19:07:18  <SergeyLukjanov> clarkb, I'll recheck changes and reorder them
+2014-05-23T19:06:47  <superbee> SergeyLukjanov: maybe we can put those changes at the end of the list so that we can use them if we want but ignore them if we don't want them
+2014-05-23T19:07:07  <superbee> I don't really care much about what we call them so will defer to jeblair and others
+2014-05-23T19:07:18  <SergeyLukjanov> superbee, I'll recheck changes and reorder them
 2014-05-23T19:07:21  <anteaya> SergeyLukjanov: there is still an email thread being discussed about that
 2014-05-23T19:07:48  <SergeyLukjanov> anteaya, probably we should to postpone the specs renaming for some time when we'll decide about it?
 2014-05-23T19:07:51  <anteaya> SergeyLukjanov: so some renames is deferred for today: https://etherpad.openstack.org/p/repo-renaming-2014-05-23
 2014-05-23T19:08:14  <anteaya> SergeyLukjanov: yes, that is what has been decided, postpone the specs renaming
-2014-05-23T19:08:27  <clarkb> mordred: jeblair the error rate after my d-g push looks really similar to the error rate from before. I think that means it is independent of network:router numbers and size
+2014-05-23T19:08:27  <superbee> mordred: jeblair the error rate after my d-g push looks really similar to the error rate from before. I think that means it is independent of network:router numbers and size
 2014-05-23T19:08:32  <foobio> mtreinish: nah, we should fix our regex. looking at dstufft's suggestion momentarily
 2014-05-23T19:08:34  <SergeyLukjanov> anteaya, okay, thanks
 2014-05-23T19:08:46  <anteaya> project renaming, climate to blazar, barbican and to -attic is still a go
@@ -1812,10 +1812,10 @@
 2014-05-23T19:08:57  <SergeyLukjanov> anteaya, oh, got it ;)
 2014-05-23T19:09:02  <anteaya> :D
 2014-05-23T19:09:22  <dstufft> foobio: PEP 440 isn't locked down yet, so it's still subject to changing but https://github.com/dstufft/packaging/pull/1
-2014-05-23T19:09:42  <anteaya> clarkb: so the early indications are we move to Google+ signin, OAuth2.0 signin or spin our own
-2014-05-23T19:09:49  <anteaya> clarkb: do I read that correctly?
-2014-05-23T19:10:19  <clarkb> anteaya: not quite, that is for upstream
-2014-05-23T19:10:33  <clarkb> anteaya: gerrit still supports other auth mechanisms. They are suggestion they will remove openid though
+2014-05-23T19:09:42  <anteaya> superbee: so the early indications are we move to Google+ signin, OAuth2.0 signin or spin our own
+2014-05-23T19:09:49  <anteaya> superbee: do I read that correctly?
+2014-05-23T19:10:19  <superbee> anteaya: not quite, that is for upstream
+2014-05-23T19:10:33  <superbee> anteaya: gerrit still supports other auth mechanisms. They are suggestion they will remove openid though
 2014-05-23T19:10:46  <anteaya> and we use openid right?
 2014-05-23T19:11:04  <SergeyLukjanov> anteaya, foobio, I'll cleanup changes in the next hour
 2014-05-23T19:11:36  <anteaya> SergeyLukjanov: I think it is mostly fixing the dependencies, is it not?
@@ -1824,12 +1824,12 @@
 2014-05-23T19:12:00  <SergeyLukjanov> anteaya, I think yes
 2014-05-23T19:12:05  <anteaya> SergeyLukjanov: k
 2014-05-23T19:12:24  <anteaya> SergeyLukjanov: if you need stuff re-reviewed, I'm standing by
-2014-05-23T19:12:30  <jeblair> SergeyLukjanov, clarkb, foobio, mordred: yeah, i think the consensus is heading toward codenames, so at this point i'm pretty sure we should not rename repos that currently have a codename
+2014-05-23T19:12:30  <jeblair> SergeyLukjanov, superbee, foobio, mordred: yeah, i think the consensus is heading toward codenames, so at this point i'm pretty sure we should not rename repos that currently have a codename
 2014-05-23T19:12:42  <SergeyLukjanov> anteaya, thanks!
-2014-05-23T19:13:44  <jeblair> SergeyLukjanov, clarkb, foobio, mordred: i've gotten explicit confirmation from devananda and notmyname that they are okay with renaming their program name repos to codename; haven't heard from dolphm eglynn or zaneb yet
+2014-05-23T19:13:44  <jeblair> SergeyLukjanov, superbee, foobio, mordred: i've gotten explicit confirmation from devananda and notmyname that they are okay with renaming their program name repos to codename; haven't heard from dolphm eglynn or zaneb yet
 2014-05-23T19:16:50  *** ChanServ changes topic to "Discussion of OpenStack Developer Infrastructure | docs http://ci.openstack.org | bugs https://launchpad.net/openstack-ci/ | https://git.openstack.org/cgit/openstack-infra/config/tree/"
 2014-05-23T19:18:20  *** mwagner_lap has quit IRC
-2014-05-23T19:19:02  <clarkb> jeblair: ok
+2014-05-23T19:19:02  <superbee> jeblair: ok
 2014-05-23T19:19:58  *** zehicle_at_dell has joined #openstack-infra
 2014-05-23T19:21:55  <anteaya> glad we are heading toward codenames
 2014-05-23T19:23:59  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Allow single-digit release tags  https://review.openstack.org/95257
@@ -1883,7 +1883,7 @@
 2014-05-23T19:39:35  <mtreinish> foobio: awesome thanks. I like that tempest-1
 2014-05-23T19:40:20  *** e0ne has joined #openstack-infra
 2014-05-23T19:41:00  <foobio> SpamapS: nodepool won't give up until we unconfigure it by setting the max-servers there to 0 and removing it from all labels, probably, but thanks for the heads up
-2014-05-23T19:41:22  <clarkb> SpamapS: nice!
+2014-05-23T19:41:22  <superbee> SpamapS: nice!
 2014-05-23T19:41:49  <SpamapS> foobio: ok thats probably fine
 2014-05-23T19:41:51  <foobio> mtreinish: hopefully 95257 or something like it merges before tempest 2, and then it should be automagic
 2014-05-23T19:42:10  <SpamapS> by stopping nova-api until we get it back up we'll prevent spurious failures on new nodes
@@ -1898,22 +1898,22 @@
 2014-05-23T19:51:16  <anteaya> see you when it is over
 2014-05-23T19:54:04  *** crc32 has joined #openstack-infra
 2014-05-23T19:54:27  *** nati_ueno has joined #openstack-infra
-2014-05-23T19:54:50  <clarkb> foobio: 95257, I think you can remove [0-9]* from the regex as well
-2014-05-23T19:55:19  <clarkb> foobio: is that worth a -1?
+2014-05-23T19:54:50  <superbee> foobio: 95257, I think you can remove [0-9]* from the regex as well
+2014-05-23T19:55:19  <superbee> foobio: is that worth a -1?
 2014-05-23T19:56:23  *** sweston has joined #openstack-infra
-2014-05-23T20:02:15  <clarkb> foobio: commented in either case but +2
-2014-05-23T20:02:28  <foobio> clarkb: on line 121?
+2014-05-23T20:02:15  <superbee> foobio: commented in either case but +2
+2014-05-23T20:02:28  <foobio> superbee: on line 121?
 2014-05-23T20:02:38  <foobio> oh, i see the comment now
 2014-05-23T20:02:43  *** thedodd has joined #openstack-infra
-2014-05-23T20:03:46  <foobio> clarkb: i do believe you're right, since ([0-9]+\.?)+ will also match [0-9]* now
-2014-05-23T20:04:23  <clarkb> ya, I almost thought we could do [0-9.]+ but that allows for a . prefix
-2014-05-23T20:04:26  <clarkb> which we don't want
-2014-05-23T20:04:27  <foobio> clarkb: however i don't believe the same is true for line 130 since it needs a non-empty-set somewhere
+2014-05-23T20:03:46  <foobio> superbee: i do believe you're right, since ([0-9]+\.?)+ will also match [0-9]* now
+2014-05-23T20:04:23  <superbee> ya, I almost thought we could do [0-9.]+ but that allows for a . prefix
+2014-05-23T20:04:26  <superbee> which we don't want
+2014-05-23T20:04:27  <foobio> superbee: however i don't believe the same is true for line 130 since it needs a non-empty-set somewhere
 2014-05-23T20:04:31  *** zns has quit IRC
 2014-05-23T20:05:08  <foobio> unless we don't care that ^refs/tags/([0-9]+\.)*$ will also match "refs/tags/" with no actual tag
-2014-05-23T20:05:10  <clarkb> foobio: it works if you use the same regex in both places
+2014-05-23T20:05:10  <superbee> foobio: it works if you use the same regex in both places
 2014-05-23T20:05:46  <foobio> not sure what you mean by "the same regex"
-2014-05-23T20:06:00  <clarkb> ^refs/tags/([0-9]\.?)+ that bit
+2014-05-23T20:06:00  <superbee> ^refs/tags/([0-9]\.?)+ that bit
 2014-05-23T20:06:07  <foobio> are you suggesting ^refs/tags/([0-9]+\.)+$
 2014-05-23T20:06:14  <SergeyLukjanov> renaming bomb
 2014-05-23T20:06:14  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/config: Move barbican from stackforge to barbican  https://review.openstack.org/94997
@@ -1928,10 +1928,10 @@
 2014-05-23T20:06:26  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/config: Move melange to attic  https://review.openstack.org/94950
 2014-05-23T20:06:28  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/config: Remove obsolete #openstack-climate channel  https://review.openstack.org/94913
 2014-05-23T20:06:29  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/config: Rename climate to blazar  https://review.openstack.org/94912
-2014-05-23T20:06:37  <foobio> clarkb: oh, you're suggesting ^refs/tags/([0-9]+\.?)+$
-2014-05-23T20:07:03  <foobio> clarkb: however that will match "refs/tags/1."
+2014-05-23T20:06:37  <foobio> superbee: oh, you're suggesting ^refs/tags/([0-9]+\.?)+$
+2014-05-23T20:07:03  <foobio> superbee: however that will match "refs/tags/1."
 2014-05-23T20:07:13  <foobio> which we probably don't want
-2014-05-23T20:07:49  <clarkb> foobio: hrm ya
+2014-05-23T20:07:49  <superbee> foobio: hrm ya
 2014-05-23T20:08:28  <foobio> so i think line 130 is about as distilled as it can be, but i agree on 121
 2014-05-23T20:08:46  <jeblair> jesusaurus: those changes look good to me; aprvd
 2014-05-23T20:09:04  <SergeyLukjanov> folks, I've removed specs renamings from the chain
@@ -1939,7 +1939,7 @@
 2014-05-23T20:09:11  <SergeyLukjanov> everything else is ready
 2014-05-23T20:09:50  <jesusaurus> jeblair: awesome
 2014-05-23T20:10:05  *** zns has joined #openstack-infra
-2014-05-23T20:10:07  <clarkb> zaro: that response is amazing
+2014-05-23T20:10:07  <superbee> zaro: that response is amazing
 2014-05-23T20:10:15  <openstackgerrit> A change was merged to openstack-infra/config: Remove jenkins slave_scripts from jenkins masters  https://review.openstack.org/95249
 2014-05-23T20:10:43  <bknudson> is http://status.openstack.org/rechecks/ not getting updated?
 2014-05-23T20:10:52  <bknudson> top one is "Last seen: 2014-04-28 16:27:40 UTC"
@@ -1948,7 +1948,7 @@
 2014-05-23T20:11:31  <foobio> bknudson: probably broken again. i'll see if it's stuck
 2014-05-23T20:12:00  <foobio> bknudson: most of us have just been looking at http://status.openstack.org/elastic-recheck/ and thus wouldn't notice
 2014-05-23T20:12:32  *** mkoderer has quit IRC
-2014-05-23T20:12:38  <SergeyLukjanov> I'll be here if some renaming changes will be needed << foobio, jeblair, clarkb
+2014-05-23T20:12:38  <SergeyLukjanov> I'll be here if some renaming changes will be needed << foobio, jeblair, superbee
 2014-05-23T20:12:38  <bknudson> foobio: I'm still working off https://wiki.openstack.org/wiki/GerritJenkinsGit#Test_Failures
 2014-05-23T20:12:59  <foobio> bknudson: yeah, unfortunately that's still official for a little longer
 2014-05-23T20:13:06  <foobio> SergeyLukjanov: thanks!
@@ -1956,14 +1956,14 @@
 2014-05-23T20:14:22  <jesusaurus> is there an etherpad or something that describes all of the upcoming project renames?
 2014-05-23T20:14:38  <foobio> jesusaurus: https://etherpad.openstack.org/p/repo-renaming-2014-05-23
 2014-05-23T20:14:50  <jesusaurus> perfect
-2014-05-23T20:15:33  <jeblair> clarkb, mordred, foobio: you should all vote on https://review.openstack.org/#/c/91012/
+2014-05-23T20:15:33  <jeblair> superbee, mordred, foobio: you should all vote on https://review.openstack.org/#/c/91012/
 2014-05-23T20:16:45  <foobio> jeblair: yes indeed
 2014-05-23T20:17:36  *** bhuvan has joined #openstack-infra
 2014-05-23T20:17:40  *** dstanek is now known as dstanek_zzz
-2014-05-23T20:21:25  <clarkb> +2
-2014-05-23T20:21:41  <jeblair> foobio, mordred, clarkb, SergeyLukjanov: 3/5 spec repos we created a couple days ago confirmed they are okay with codename
-2014-05-23T20:22:12  <jeblair> foobio, mordred, clarkb, SergeyLukjanov: i'm considering going out on a limb and just renaming them now so we can put it to bed
-2014-05-23T20:22:41  <zaro> clarkb: you mean openid plugin one?
+2014-05-23T20:21:25  <superbee> +2
+2014-05-23T20:21:41  <jeblair> foobio, mordred, superbee, SergeyLukjanov: 3/5 spec repos we created a couple days ago confirmed they are okay with codename
+2014-05-23T20:22:12  <jeblair> foobio, mordred, superbee, SergeyLukjanov: i'm considering going out on a limb and just renaming them now so we can put it to bed
+2014-05-23T20:22:41  <zaro> superbee: you mean openid plugin one?
 2014-05-23T20:22:51  <jeblair> i very much get the idea no one has strong feelings and would just like to be consistent
 2014-05-23T20:23:09  <foobio> the non-codename ones have existed for such a short time that they very well may not have any users or changes in them at all yet
 2014-05-23T20:23:25  <jeblair> foobio: that's what i'm thinking.  it's almost a public service to just do it now.
@@ -1979,14 +1979,14 @@
 2014-05-23T20:28:51  <SergeyLukjanov> I'm here
 2014-05-23T20:28:52  <SergeyLukjanov> jeblair, what's up?
 2014-05-23T20:29:19  <jeblair> SergeyLukjanov: was wondering if you have time to make changes for the 5 repos listed in "Last-minute additions" on https://etherpad.openstack.org/p/repo-renaming-2014-05-23 ?
-2014-05-23T20:29:23  * clarkb joins the etherpad finally scrollback++
+2014-05-23T20:29:23  * superbee joins the etherpad finally scrollback++
 2014-05-23T20:29:37  <SergeyLukjanov> jeblair, we'd like to rename from program name to codename?
 2014-05-23T20:30:01  <jeblair> SergeyLukjanov: i think so; the mailing list thread is heading that way, 3/5 of those explicitly told me it's okay, and i'm pretty sure the others don't feel strongly
 2014-05-23T20:30:22  <jeblair> SergeyLukjanov: since they are so new, i think it's probably better to rename them asap before they really get used
 2014-05-23T20:30:31  <jeblair> and then we can go back to real work :)
 2014-05-23T20:30:33  <SergeyLukjanov> jeblair, okay, I'll do it now
-2014-05-23T20:31:32  <clarkb> jeblair: I'm gessing reviewing SergeyLukjanov's changes is the current priority?
-2014-05-23T20:31:46  <clarkb> I will start that in just a minute
+2014-05-23T20:31:32  <superbee> jeblair: I'm gessing reviewing SergeyLukjanov's changes is the current priority?
+2014-05-23T20:31:46  <superbee> I will start that in just a minute
 2014-05-23T20:32:43  <jeblair> #status notice Gerrit will be offline for about 20 minutes in order to rename some projects starting at 21:00 UTC.
 2014-05-23T20:32:43  <openstackstatus> jeblair: sending notice
 2014-05-23T20:33:10  *** doddstack has joined #openstack-infra
@@ -1998,44 +1998,44 @@
 2014-05-23T20:35:43  <foobio> cut/paste is updated in the etherpad for sql and shell commands for all 16 projects
 2014-05-23T20:36:38  *** dstanek_zzz is now known as dstanek
 2014-05-23T20:36:42  <foobio> i'm going to precreate openstack-attic dirs on gerrit and the git servers so i don't forget to make them when we start
-2014-05-23T20:36:50  <clarkb> k
+2014-05-23T20:36:50  <superbee> k
 2014-05-23T20:36:52  *** nati_uen_ has joined #openstack-infra
 2014-05-23T20:37:29  *** marcoemorais has quit IRC
-2014-05-23T20:38:09  <clarkb> state = read only <- is that a thing? I am searching in gerrit docs and not finding it
-2014-05-23T20:38:42  <jeblair> clarkb: yeah, i emprically tested it
-2014-05-23T20:38:49  <clarkb> thanks
-2014-05-23T20:38:56  <jeblair> clarkb: it's what shows up in the config if you set the state multiple-select in the gui
+2014-05-23T20:38:09  <superbee> state = read only <- is that a thing? I am searching in gerrit docs and not finding it
+2014-05-23T20:38:42  <jeblair> superbee: yeah, i emprically tested it
+2014-05-23T20:38:49  <superbee> thanks
+2014-05-23T20:38:56  <jeblair> superbee: it's what shows up in the config if you set the state multiple-select in the gui
 2014-05-23T20:39:00  <jeblair> er single-select
 2014-05-23T20:39:30  *** nati_ueno has quit IRC
-2014-05-23T20:40:31  <clarkb> not approving anything until after the renames
-2014-05-23T20:41:38  <clarkb> jeblair: SergeyLukjanov I see status = read only and state = read only
-2014-05-23T20:41:42  <clarkb> are they equivalent?
-2014-05-23T20:42:06  <jeblair> clarkb, foobio: what do you think is the best way to stop our new puppetmaster launch-puppet script from running?
-2014-05-23T20:42:11  <SergeyLukjanov> clarkb, it should be state = read only
+2014-05-23T20:40:31  <superbee> not approving anything until after the renames
+2014-05-23T20:41:38  <superbee> jeblair: SergeyLukjanov I see status = read only and state = read only
+2014-05-23T20:41:42  <superbee> are they equivalent?
+2014-05-23T20:42:06  <jeblair> superbee, foobio: what do you think is the best way to stop our new puppetmaster launch-puppet script from running?
+2014-05-23T20:42:11  <SergeyLukjanov> superbee, it should be state = read only
 2014-05-23T20:42:18  <jeblair> cause i think we want to pause that during the downtime
-2014-05-23T20:42:24  <clarkb> SergeyLukjanov: https://review.openstack.org/#/c/94951/4/modules/openstack_project/files/gerrit/acls/openstack-attic/python-melangeclient.config says status
-2014-05-23T20:42:31  <SergeyLukjanov> clarkb, oops
-2014-05-23T20:42:47  <SergeyLukjanov> clarkb, I'll fix it
-2014-05-23T20:42:49  <clarkb> jeblair: it is a cron that runs a script maybe we can replace that script with `true`?
+2014-05-23T20:42:24  <superbee> SergeyLukjanov: https://review.openstack.org/#/c/94951/4/modules/openstack_project/files/gerrit/acls/openstack-attic/python-melangeclient.config says status
+2014-05-23T20:42:31  <SergeyLukjanov> superbee, oops
+2014-05-23T20:42:47  <SergeyLukjanov> superbee, I'll fix it
+2014-05-23T20:42:49  <superbee> jeblair: it is a cron that runs a script maybe we can replace that script with `true`?
 2014-05-23T20:42:53  <jeblair> (eg, pause puppet-runner, approve changes, do rename, unpause puppet-runner)
 2014-05-23T20:42:54  <SergeyLukjanov> I'm now making new changes
-2014-05-23T20:42:55  <clarkb> SergeyLukjanov: I haven't checked for any others yet
-2014-05-23T20:43:05  <clarkb> but will keep an eye out
-2014-05-23T20:43:18  <jeblair> clarkb: is that how puppet is run on ci-puppetmaster?
-2014-05-23T20:43:34  <clarkb> oh good question
-2014-05-23T20:43:42  <clarkb> I think so, but would have to double check
+2014-05-23T20:42:55  <superbee> SergeyLukjanov: I haven't checked for any others yet
+2014-05-23T20:43:05  <superbee> but will keep an eye out
+2014-05-23T20:43:18  <jeblair> superbee: is that how puppet is run on ci-puppetmaster?
+2014-05-23T20:43:34  <superbee> oh good question
+2014-05-23T20:43:42  <superbee> I think so, but would have to double check
 2014-05-23T20:43:56  *** nati_ueno has joined #openstack-infra
 2014-05-23T20:45:24  <foobio> okay, openstack-attic dirs precreated on gerrit and git farm
-2014-05-23T20:45:25  <clarkb> jeblair: I don't see a puppet agent daemon on the master and it does a ca listing to get nodes which would include the puppetmaster. I believe this means puppetmaster is puppeted just like everything else
-2014-05-23T20:45:49  <jeblair> clarkb: over ssh too, i wonder? :)
+2014-05-23T20:45:25  <superbee> jeblair: I don't see a puppet agent daemon on the master and it does a ca listing to get nodes which would include the puppetmaster. I believe this means puppetmaster is puppeted just like everything else
+2014-05-23T20:45:49  <jeblair> superbee: over ssh too, i wonder? :)
 2014-05-23T20:45:54  <jeblair> foobio: thx
 2014-05-23T20:45:54  *** nati_uen_ has quit IRC
 2014-05-23T20:46:39  *** nati_uen_ has joined #openstack-infra
-2014-05-23T20:46:50  <clarkb> jeblair: it says PermitRootLogin forcedcommandsonly
-2014-05-23T20:47:07  <clarkb> also I have no idea why the script isrun out of the git repo then calls out ot usr/local/bin
-2014-05-23T20:47:19  <clarkb> the comment in there says call external so that the above git fetch updates it which is wrong
-2014-05-23T20:47:24  <clarkb> because git fetch update the local thing
-2014-05-23T20:47:31  <clarkb> mordred: ^ mind explaining that when you have time
+2014-05-23T20:46:50  <superbee> jeblair: it says PermitRootLogin forcedcommandsonly
+2014-05-23T20:47:07  <superbee> also I have no idea why the script isrun out of the git repo then calls out ot usr/local/bin
+2014-05-23T20:47:19  <superbee> the comment in there says call external so that the above git fetch updates it which is wrong
+2014-05-23T20:47:24  <superbee> because git fetch update the local thing
+2014-05-23T20:47:31  <superbee> mordred: ^ mind explaining that when you have time
 2014-05-23T20:48:33  *** nati_ueno has quit IRC
 2014-05-23T20:49:51  <foobio> good news... i just double-checked the database schema and our renaming instructions still refer to valid table/column names ;)
 2014-05-23T20:49:51  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/config: Rename baremetal-specs to ironic-specs  https://review.openstack.org/95265
@@ -2048,28 +2048,28 @@
 2014-05-23T20:53:27  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/config: Rename orchestration-specs to heat-specs  https://review.openstack.org/95268
 2014-05-23T20:53:54  *** nati_uen_ has quit IRC
 2014-05-23T20:54:37  *** zz_gondoi is now known as gondoi
-2014-05-23T20:54:44  <clarkb> is someone doing a DB dump now?
-2014-05-23T20:54:51  <clarkb> I just got a 500 errorfrom gerrit
-2014-05-23T20:55:13  <clarkb> trying to leave a +2 on a change (which did happen oddly even though I also got a 500)
+2014-05-23T20:54:44  <superbee> is someone doing a DB dump now?
+2014-05-23T20:54:51  <superbee> I just got a 500 errorfrom gerrit
+2014-05-23T20:55:13  <superbee> trying to leave a +2 on a change (which did happen oddly even though I also got a 500)
 2014-05-23T20:55:14  <foobio> oh, ew. i was testing the mysqldump command. i guess it's not so gentle
 2014-05-23T20:55:30  *** nati_uen_ has joined #openstack-infra
 2014-05-23T20:55:53  <jeblair> mysqldump --opt --ignore-table mysql.event --all-databases | gzip -9 > gerrit-2014-05-23.sql.gz
 2014-05-23T20:55:58  <jeblair> foobio: i was thinking something like that ^
 2014-05-23T20:56:00  <foobio> we run it every night at 00:00 utc, so i suppose we're doing that to our users semi-regularly
 2014-05-23T20:56:25  *** pdmars has quit IRC
-2014-05-23T20:56:34  <clarkb> foobio: yes people have noticed :)
+2014-05-23T20:56:34  <superbee> foobio: yes people have noticed :)
 2014-05-23T20:56:38  <foobio> jeblair: yep, that's basically what i put in the etherpad
 2014-05-23T20:56:43  <AaronGr> mysqldump is always a blocking operation
 2014-05-23T20:57:02  *** mfer has quit IRC
 2014-05-23T20:57:03  <AaronGr> fwiw, xtrabackup isn't, other than about 5 seconds during it's finalize.
 2014-05-23T20:57:22  <AaronGr> though that's a binary backup, and not an sql dump.
-2014-05-23T20:57:41  <clarkb> for https://review.openstack.org/#/c/94997/3/modules/openstack_project/files/review.projects.yaml should we remove the upstream?
-2014-05-23T20:57:55  <clarkb> I think its safe to leave them there, mostly wondering about whether we want to do that cleanup
+2014-05-23T20:57:41  <superbee> for https://review.openstack.org/#/c/94997/3/modules/openstack_project/files/review.projects.yaml should we remove the upstream?
+2014-05-23T20:57:55  <superbee> I think its safe to leave them there, mostly wondering about whether we want to do that cleanup
 2014-05-23T20:58:00  <jeblair> foobio: how do you want to do group renames?  in the db or in the webui after we bring it back up but before we run m-p?
 2014-05-23T20:58:16  *** nati_ueno has joined #openstack-infra
 2014-05-23T20:58:19  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/config: Rename identity-specs to keystone-specs  https://review.openstack.org/95269
-2014-05-23T20:58:23  <jeblair> clarkb: let's do it later
-2014-05-23T20:58:26  <clarkb> k
+2014-05-23T20:58:23  <jeblair> superbee: let's do it later
+2014-05-23T20:58:26  <superbee> k
 2014-05-23T20:58:33  <foobio> jeblair: webui. the db doesn't take care of groups files in the individual repos
 2014-05-23T20:58:53  <jeblair> k, i'll work on a list of group renames we need to do
 2014-05-23T20:58:59  <foobio> appreciated
@@ -2089,14 +2089,14 @@
 2014-05-23T21:03:10  <mordred> o/
 2014-05-23T21:03:20  <jeblair> foobio, AaronGr: I have this thing about thinking that sql backups are inherently better.  :)  but we can beer that another time
 2014-05-23T21:03:29  *** smarcet has quit IRC
-2014-05-23T21:03:34  <clarkb> jeblair: ++
-2014-05-23T21:03:44  <clarkb> to beer and them being inherently better
-2014-05-23T21:03:55  <SergeyLukjanov> clarkb, only one status -> state?
+2014-05-23T21:03:34  <superbee> jeblair: ++
+2014-05-23T21:03:44  <superbee> to beer and them being inherently better
+2014-05-23T21:03:55  <SergeyLukjanov> superbee, only one status -> state?
 2014-05-23T21:03:56  <AaronGr> jeblair: that's a discussion i'd be happy to have with you another time :)
 2014-05-23T21:04:01  <foobio> beer is inherently better
-2014-05-23T21:04:03  <clarkb> SergeyLukjanov: so far that is the only one I have found
-2014-05-23T21:04:11  <clarkb> SergeyLukjanov: maybe you can git grep 'status =' in your repo
-2014-05-23T21:04:47  <foobio> clarkb: yeah, my acl normalization script takes status&state into account because there was at least one typo
+2014-05-23T21:04:03  <superbee> SergeyLukjanov: so far that is the only one I have found
+2014-05-23T21:04:11  <superbee> SergeyLukjanov: maybe you can git grep 'status =' in your repo
+2014-05-23T21:04:47  <foobio> superbee: yeah, my acl normalization script takes status&state into account because there was at least one typo
 2014-05-23T21:04:48  <jeblair> mordred: vote on https://review.openstack.org/#/c/91012/
 2014-05-23T21:04:55  <jeblair> mordred: then check out https://etherpad.openstack.org/p/repo-renaming-2014-05-23
 2014-05-23T21:05:02  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/config: Move barbican from stackforge to barbican  https://review.openstack.org/94997
@@ -2112,7 +2112,7 @@
 2014-05-23T21:05:17  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/config: Rename object-specs to swift-specs  https://review.openstack.org/95266
 2014-05-23T21:05:18  <SergeyLukjanov> renaming machine ;)
 2014-05-23T21:05:19  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/config: Rename climate to blazar  https://review.openstack.org/94912
-2014-05-23T21:05:49  <SergeyLukjanov> clarkb, only i bash8 project ;)
+2014-05-23T21:05:49  <SergeyLukjanov> superbee, only i bash8 project ;)
 2014-05-23T21:06:00  <SergeyLukjanov> I think everythin is ready :)
 2014-05-23T21:06:18  <mordred> jeblair: should I +A it as well since I'm the last +2 ?
 2014-05-23T21:07:03  <jeblair> SergeyLukjanov: https://review.openstack.org/#/c/95271/ has a confusing commit message
@@ -2139,14 +2139,14 @@
 2014-05-23T21:11:36  <foobio> SergeyLukjanov: awesome--thanks!
 2014-05-23T21:11:40  *** mattoliverau has joined #openstack-infra
 2014-05-23T21:12:03  <jeblair> okay i came up with 2 group renames; added to etherpad as step 10.5
-2014-05-23T21:12:05  <clarkb> in addition to a DB dump should we also make backups of all the renamed repos after shutting gerrit down?
+2014-05-23T21:12:05  <superbee> in addition to a DB dump should we also make backups of all the renamed repos after shutting gerrit down?
 2014-05-23T21:12:34  <foobio> jeblair: perfect. i suspected there wouldn't be many
-2014-05-23T21:13:00  <foobio> clarkb: maybe... but other than group renames i can't think of much in this process which would alter their contents
-2014-05-23T21:13:18  <clarkb> foobio: mostly thinking its new gerrit and being paranoid
+2014-05-23T21:13:00  <foobio> superbee: maybe... but other than group renames i can't think of much in this process which would alter their contents
+2014-05-23T21:13:18  <superbee> foobio: mostly thinking its new gerrit and being paranoid
 2014-05-23T21:13:24  <foobio> they're just directories getting moved on disk
 2014-05-23T21:13:48  <SergeyLukjanov> topics fixed too
 2014-05-23T21:13:49  <foobio> but we could, sure. i wonder how long an rsync of that would take
-2014-05-23T21:14:03  <clarkb> probably not long, these repos are relatively small
+2014-05-23T21:14:03  <superbee> probably not long, these repos are relatively small
 2014-05-23T21:14:25  <foobio> oh, just rsync the ones we're moving/renaming... good point
 2014-05-23T21:14:44  <mordred> ++
 2014-05-23T21:15:14  *** bogdando has quit IRC
@@ -2154,21 +2154,21 @@
 2014-05-23T21:16:29  *** jhesketh has quit IRC
 2014-05-23T21:16:38  <jeblair> we're a bit late :(
 2014-05-23T21:16:43  *** bogdando has joined #openstack-infra
-2014-05-23T21:16:54  <jeblair> clarkb: want to put together the rsync commands?
-2014-05-23T21:17:00  <clarkb> uh ok
+2014-05-23T21:16:54  <jeblair> superbee: want to put together the rsync commands?
+2014-05-23T21:17:00  <superbee> uh ok
 2014-05-23T21:17:02  <jeblair> i'm on puppetmaster right now, and it's mid-run
-2014-05-23T21:17:10  <clarkb> I was thinking git clone would me sufficientish
-2014-05-23T21:17:16  <clarkb> but that doesn't actually get everything I guess
+2014-05-23T21:17:10  <superbee> I was thinking git clone would me sufficientish
+2014-05-23T21:17:16  <superbee> but that doesn't actually get everything I guess
 2014-05-23T21:17:26  <openstackgerrit> K Jonathan Harker proposed a change to openstack-infra/config: Correct source file location  https://review.openstack.org/95272
 2014-05-23T21:17:35  <foobio> i'm working on the rsync command already
-2014-05-23T21:17:41  <jeblair> clarkb: ^ nm
-2014-05-23T21:17:52  <clarkb> oh ok
+2014-05-23T21:17:41  <jeblair> superbee: ^ nm
+2014-05-23T21:17:52  <superbee> oh ok
 2014-05-23T21:18:14  *** annegentle has joined #openstack-infra
 2014-05-23T21:19:46  <jeblair> still waiting on puppetmaster; i disabled the cron, though i'll need to check again when it's done with its run
-2014-05-23T21:20:00  <clarkb> k
+2014-05-23T21:20:00  <superbee> k
 2014-05-23T21:20:37  <jeblair> it's into the "brazenly run" part of the script
-2014-05-23T21:20:48  <clarkb> I am logged into github and ready to rename things there
-2014-05-23T21:21:06  <clarkb> and/or delete as appropriate
+2014-05-23T21:20:48  <superbee> I am logged into github and ready to rename things there
+2014-05-23T21:21:06  <superbee> and/or delete as appropriate
 2014-05-23T21:21:08  <mordred> I'm prepped and read for the mirror renames
 2014-05-23T21:21:10  <mordred> ready
 2014-05-23T21:21:15  * anteaya is back and reading backscroll
@@ -2198,18 +2198,18 @@
 2014-05-23T21:26:59  <jeblair> i have disabled the cron job again, so i think we're good
 2014-05-23T21:27:11  <mordred> woot
 2014-05-23T21:27:30  <jeblair> waiting/working on zuul now
-2014-05-23T21:27:48  <clarkb> mordred: if you look at the 1.1 error over success graph its like 100 is the magic number
-2014-05-23T21:28:13  <clarkb> maybe we also want to try say 100 nodes per router:network?
+2014-05-23T21:27:48  <superbee> mordred: if you look at the 1.1 error over success graph its like 100 is the magic number
+2014-05-23T21:28:13  <superbee> maybe we also want to try say 100 nodes per router:network?
 2014-05-23T21:28:26  *** annegentle has quit IRC
-2014-05-23T21:29:01  <mordred> clarkb: yeah.
-2014-05-23T21:29:22  <jeblair> clarkb: so new hypothesis?  the change from <100 to >100 causes errors, but increasing beyond that doesn't affect the rate?
+2014-05-23T21:29:01  <mordred> superbee: yeah.
+2014-05-23T21:29:22  <jeblair> superbee: so new hypothesis?  the change from <100 to >100 causes errors, but increasing beyond that doesn't affect the rate?
 2014-05-23T21:29:34  *** jhesketh has joined #openstack-infra
-2014-05-23T21:29:47  <clarkb> jeblair: ya, I am not super convinced of that, I think its a global number issue
-2014-05-23T21:29:52  <clarkb> but worth testing to see
-2014-05-23T21:30:10  <clarkb> since we don't see errors until we get to >=100 nodes ish
+2014-05-23T21:29:47  <superbee> jeblair: ya, I am not super convinced of that, I think its a global number issue
+2014-05-23T21:29:52  <superbee> but worth testing to see
+2014-05-23T21:30:10  <superbee> since we don't see errors until we get to >=100 nodes ish
 2014-05-23T21:30:20  <foobio> greater than two digits is clearly the problem. it's y2k all over again!
 2014-05-23T21:31:03  <jeblair> i'm waiting for one more change about to report
-2014-05-23T21:31:34  <clarkb> so once this is all done I think we go back to 5 providers with max servers set to 100 each then recheck no bug my test d-g changes
+2014-05-23T21:31:34  <superbee> so once this is all done I think we go back to 5 providers with max servers set to 100 each then recheck no bug my test d-g changes
 2014-05-23T21:31:40  <jeblair> SpamapS: do you want to declare bankruptcy on the check-tripleo queue?
 2014-05-23T21:32:14  <foobio> sounded like it wasn't going to catch up any time soon, with their largest region back down again all day with network breakage
 2014-05-23T21:32:25  <anteaya> jhesketh: we are here: https://etherpad.openstack.org/p/repo-renaming-2014-05-23
@@ -2232,10 +2232,10 @@
 2014-05-23T21:36:41  <foobio> backups complete and in ~root now
 2014-05-23T21:36:48  <foobio> starting db updates
 2014-05-23T21:36:50  <openstackstatus> jeblair: finished sending alert
-2014-05-23T21:36:57  <clarkb> should I start github now?
+2014-05-23T21:36:57  <superbee> should I start github now?
 2014-05-23T21:37:29  *** nati_ueno has quit IRC
-2014-05-23T21:37:53  <jeblair> clarkb: i think that's safe.. though oddly we have that in a later part of the instructions...
-2014-05-23T21:38:02  <clarkb> ok doing that now
+2014-05-23T21:37:53  <jeblair> superbee: i think that's safe.. though oddly we have that in a later part of the instructions...
+2014-05-23T21:38:02  <superbee> ok doing that now
 2014-05-23T21:38:10  <jeblair> probably just to minimize downtime, but we have extra hands right now
 2014-05-23T21:38:50  <foobio> no errors on mysql queries. doing filesystem changes on review.o.o now
 2014-05-23T21:39:11  <mordred> I was just about to see if foobio wanted help with the filesystem
@@ -2259,15 +2259,15 @@
 2014-05-23T21:42:04  <jeblair> mordred: i believe that would have prevented this.
 2014-05-23T21:42:10  <mordred> and all problems
 2014-05-23T21:42:15  *** zns has joined #openstack-infra
-2014-05-23T21:42:22  <clarkb> ok github renames done, moving to github deletes
+2014-05-23T21:42:22  <superbee> ok github renames done, moving to github deletes
 2014-05-23T21:42:51  *** giulivo has quit IRC
-2014-05-23T21:42:56  <clarkb> foobio: does that mean the rsync backups fetched the wrong things?
-2014-05-23T21:43:02  <clarkb> or did they get the right location?
-2014-05-23T21:43:17  <jeblair> clarkb: he backed up the canonical repos
+2014-05-23T21:42:56  <superbee> foobio: does that mean the rsync backups fetched the wrong things?
+2014-05-23T21:43:02  <superbee> or did they get the right location?
+2014-05-23T21:43:17  <jeblair> superbee: he backed up the canonical repos
 2014-05-23T21:43:23  <foobio> right, the rsync was fine
-2014-05-23T21:43:25  <clarkb> oh thats the mirror
-2014-05-23T21:43:27  <clarkb> roger
-2014-05-23T21:43:33  <clarkb> ok barbican and friends are being deleted on github now
+2014-05-23T21:43:25  <superbee> oh thats the mirror
+2014-05-23T21:43:27  <superbee> roger
+2014-05-23T21:43:33  <superbee> ok barbican and friends are being deleted on github now
 2014-05-23T21:44:25  <foobio> also done with the renames in /opt now
 2014-05-23T21:44:47  <foobio> are we ready to start gerrit again?
 2014-05-23T21:45:13  <jeblair> foobio: i think so
@@ -2279,54 +2279,54 @@
 2014-05-23T21:46:24  <jeblair> foobio: puppet is stopped, so order isn't critical there
 2014-05-23T21:46:34  <foobio> good point
 2014-05-23T21:46:46  <jeblair> starting zuul
-2014-05-23T21:46:58  <clarkb> github is done
+2014-05-23T21:46:58  <superbee> github is done
 2014-05-23T21:47:25  <foobio> so we should probably run them through the gate just in case we have merge conflicts somehow (i didn't 100% confirm the change dependency chain)?
 2014-05-23T21:47:43  <jeblair> zuul is not starting; debugging that now
 2014-05-23T21:47:58  <foobio> well, zuul did get new code
 2014-05-23T21:48:06  <foobio> swift stuff
-2014-05-23T21:48:14  <clarkb> jeblair: ugh it could be that the removal of the project id was insufficient. I tested swiftclient in python interpretter but not zuul directly
+2014-05-23T21:48:14  <superbee> jeblair: ugh it could be that the removal of the project id was insufficient. I tested swiftclient in python interpretter but not zuul directly
 2014-05-23T21:48:18  <jeblair> foobio: we can, though gerrit will still bomb out on merge conflicts
 2014-05-23T21:48:33  <foobio> fair enough
-2014-05-23T21:48:37  <clarkb> jeblair: if that is the case can you try setting the project id to something wrong eg 'myproject' and see if that fixes it?
-2014-05-23T21:48:53  <clarkb> though we had something wrong in there before and it didn't work... yay clouds
+2014-05-23T21:48:37  <superbee> jeblair: if that is the case can you try setting the project id to something wrong eg 'myproject' and see if that fixes it?
+2014-05-23T21:48:53  <superbee> though we had something wrong in there before and it didn't work... yay clouds
 2014-05-23T21:48:56  <jeblair> it's an un-logged startup error :( so it'll take a minute to diagnose
 2014-05-23T21:49:03  <mordred> jeblair: yay!
 2014-05-23T21:49:05  <foobio> i can go ahead and merge those changes then while you're debugging zuul
 2014-05-23T21:49:11  <jeblair> foobio: ++
 2014-05-23T21:49:14  *** packet has quit IRC
 2014-05-23T21:49:36  <jeblair> swiftclient.exceptions.ClientException: No tenant specified
-2014-05-23T21:49:53  <clarkb> damnit
-2014-05-23T21:50:12  <clarkb> so that totally worked when I set tenant_name to None manually
-2014-05-23T21:50:18  <clarkb> where is that exception coming from
-2014-05-23T21:50:31  <clarkb> and you can't pass in a space as a value in python ini files
-2014-05-23T21:50:35  <clarkb> so I'm stumped
+2014-05-23T21:49:53  <superbee> damnit
+2014-05-23T21:50:12  <superbee> so that totally worked when I set tenant_name to None manually
+2014-05-23T21:50:18  <superbee> where is that exception coming from
+2014-05-23T21:50:31  <superbee> and you can't pass in a space as a value in python ini files
+2014-05-23T21:50:35  <superbee> so I'm stumped
 2014-05-23T21:50:36  <openstackgerrit> A change was merged to openstack-infra/config: Move openstack-qa repo to attic  https://review.openstack.org/94949
-2014-05-23T21:50:40  <jeblair> clarkb: http://paste.openstack.org/show/81238/
+2014-05-23T21:50:40  <jeblair> superbee: http://paste.openstack.org/show/81238/
 2014-05-23T21:51:05  *** weshay has quit IRC
 2014-05-23T21:51:08  <openstackgerrit> A change was merged to openstack-infra/config: Move melange to attic  https://review.openstack.org/94950
 2014-05-23T21:51:10  <JayF> Dumb question: what is openstack-attic?
 2014-05-23T21:51:11  <openstackgerrit> K Jonathan Harker proposed a change to openstack-infra/jenkins-job-builder: Sanitize the output file name  https://review.openstack.org/95276
-2014-05-23T21:51:22  <clarkb> JayF: it is the island of misfit toys^H^H^H^Hrepos
+2014-05-23T21:51:22  <superbee> JayF: it is the island of misfit toys^H^H^H^Hrepos
 2014-05-23T21:51:32  *** hashar has quit IRC
 2014-05-23T21:51:34  <jesusaurus> JayF: its where we put the dusty projects that collect spiderwebs
 2014-05-23T21:51:36  <foobio> JayF: it's where we keep all the dusty odds and ends nobody uses any longer
-2014-05-23T21:51:39  <clarkb> jeblair: ok, simple thing is to remove the swift config again, unless you can figure out a way to pass in ' ' as the tenant_name
-2014-05-23T21:51:51  <clarkb> jeblair: but ConfigParser chomps strings
+2014-05-23T21:51:39  <superbee> jeblair: ok, simple thing is to remove the swift config again, unless you can figure out a way to pass in ' ' as the tenant_name
+2014-05-23T21:51:51  <superbee> jeblair: but ConfigParser chomps strings
 2014-05-23T21:51:53  <mordred> JayF: it's where I keep my boxes of stuff
-2014-05-23T21:51:54  <clarkb> so I couldn't figure it out
-2014-05-23T21:52:04  <JayF> clarkb wins for the most clever of answers
+2014-05-23T21:51:54  <superbee> so I couldn't figure it out
+2014-05-23T21:52:04  <JayF> superbee wins for the most clever of answers
 2014-05-23T21:52:07  <JayF> ty :)
 2014-05-23T21:52:53  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Disable zuul swift config  https://review.openstack.org/95277
 2014-05-23T21:53:07  *** dstanek is now known as dstanek_zzz
-2014-05-23T21:53:09  <clarkb> jhesketh: maybe you can get rax to fix this on your side?
-2014-05-23T21:53:12  <jeblair> clarkb: can you review that, and mordred can you approve it?
-2014-05-23T21:53:15  <clarkb> jeblair: yup
-2014-05-23T21:53:27  <jeblair> clarkb: particularly that that does what i think it does
-2014-05-23T21:53:43  <clarkb> jeblair: it will make zuul not attempt to auth at all?
-2014-05-23T21:54:05  <jeblair> clarkb: i think that will cause puppet to not insert the entire block
+2014-05-23T21:53:09  <superbee> jhesketh: maybe you can get rax to fix this on your side?
+2014-05-23T21:53:12  <jeblair> superbee: can you review that, and mordred can you approve it?
+2014-05-23T21:53:15  <superbee> jeblair: yup
+2014-05-23T21:53:27  <jeblair> superbee: particularly that that does what i think it does
+2014-05-23T21:53:43  <superbee> jeblair: it will make zuul not attempt to auth at all?
+2014-05-23T21:54:05  <jeblair> superbee: i think that will cause puppet to not insert the entire block
 2014-05-23T21:54:18  <foobio> patchbomb inbound
 2014-05-23T21:54:21  <jeblair> zuul is starting
-2014-05-23T21:54:27  <clarkb> ah yup
+2014-05-23T21:54:27  <superbee> ah yup
 2014-05-23T21:54:30  <mordred> jeblair: on it
 2014-05-23T21:54:30  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Move barbican from stackforge to barbican  https://review.openstack.org/94997
 2014-05-23T21:54:31  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Move database-api to attic  https://review.openstack.org/94953
@@ -2340,45 +2340,45 @@
 2014-05-23T21:54:44  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Rename baremetal-specs to ironic-specs  https://review.openstack.org/95265
 2014-05-23T21:54:45  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Rename object-specs to swift-specs  https://review.openstack.org/95266
 2014-05-23T21:54:46  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Rename climate to blazar  https://review.openstack.org/94912
-2014-05-23T21:54:51  <clarkb> foobio: needed a rebase?
+2014-05-23T21:54:51  <superbee> foobio: needed a rebase?
 2014-05-23T21:54:53  <jeblair> foobio: how far did you get before the bogus jgit conflict?  4 patches merged?
 2014-05-23T21:55:05  <foobio> jeblair: yep
 2014-05-23T21:55:11  <jeblair> i love that
 2014-05-23T21:55:19  <mordred> the zuul swift thing is so frustrating
-2014-05-23T21:55:24  <clarkb> mordred: yes
-2014-05-23T21:55:41  <clarkb> this is an easy fix if our config could represent ' '
+2014-05-23T21:55:24  <superbee> mordred: yes
+2014-05-23T21:55:41  <superbee> this is an easy fix if our config could represent ' '
 2014-05-23T21:55:42  <openstackgerrit> A change was merged to openstack-infra/config: Move python-melangeclient to attic  https://review.openstack.org/94951
 2014-05-23T21:55:49  <jeblair> reloading queue
-2014-05-23T21:55:49  <clarkb> but the fact that we need that at all is crazy
-2014-05-23T21:55:54  <mordred> clarkb: well, you know, the fact ^^ that
+2014-05-23T21:55:49  <superbee> but the fact that we need that at all is crazy
+2014-05-23T21:55:54  <mordred> superbee: well, you know, the fact ^^ that
 2014-05-23T21:56:01  <mordred> I shouldn't need to configure ' '
-2014-05-23T21:56:07  <clarkb> right
+2014-05-23T21:56:07  <superbee> right
 2014-05-23T21:56:08  <openstackgerrit> A change was merged to openstack-infra/config: Move openstack-chef to attic  https://review.openstack.org/94952
 2014-05-23T21:56:12  *** _nadya_ has joined #openstack-infra
 2014-05-23T21:56:26  <openstackgerrit> A change was merged to openstack-infra/config: Move database-api to attic  https://review.openstack.org/94953
-2014-05-23T21:56:35  <mordred> clarkb: we could put something into the config processing in zuul: if val == "None": val=None
+2014-05-23T21:56:35  <mordred> superbee: we could put something into the config processing in zuul: if val == "None": val=None
 2014-05-23T21:56:50  <openstackgerrit> A change was merged to openstack-infra/config: Rename oslo.test to oslotest  https://review.openstack.org/94954
-2014-05-23T21:56:54  <clarkb> if val == "metaspace" then val = ' '
+2014-05-23T21:56:54  <superbee> if val == "metaspace" then val = ' '
 2014-05-23T21:57:01  <SergeyLukjanov> sorry, I was in taxi going to home
-2014-05-23T21:57:06  <clarkb> mordred: so it used None there and it failed. I tested that and I thought it worked
+2014-05-23T21:57:06  <superbee> mordred: so it used None there and it failed. I tested that and I thought it worked
 2014-05-23T21:57:08  <SergeyLukjanov> anything bad happens?
 2014-05-23T21:57:14  <mordred> oh.
 2014-05-23T21:57:23  <openstackgerrit> A change was merged to openstack-infra/config: Move barbican from stackforge to barbican  https://review.openstack.org/94997
 2014-05-23T21:57:24  <anteaya> SergeyLukjanov: we had to fix the zuul swift change
 2014-05-23T21:57:24  <mordred> SergeyLukjanov: mostly fine - other than the swift zuul patch
 2014-05-23T21:57:25  <jeblair> SergeyLukjanov: nope, all ok.
-2014-05-23T21:57:32  <clarkb> but our python clients are so ridiculously meta programmed that you can't determine how any of the args are supposed to work
+2014-05-23T21:57:32  <superbee> but our python clients are so ridiculously meta programmed that you can't determine how any of the args are supposed to work
 2014-05-23T21:57:43  <openstackgerrit> A change was merged to openstack-infra/config: Rename climate to blazar  https://review.openstack.org/94912
-2014-05-23T21:57:43  <clarkb> because clearly obfuscated client apis is a good thing
-2014-05-23T21:57:54  <mordred> clarkb: but that means that the args can be introspected by the factories that introspect the args from the factory factories
+2014-05-23T21:57:43  <superbee> because clearly obfuscated client apis is a good thing
+2014-05-23T21:57:54  <mordred> superbee: but that means that the args can be introspected by the factories that introspect the args from the factory factories
 2014-05-23T21:58:04  <openstackgerrit> A change was merged to openstack-infra/config: Rename murano-api repo to murano  https://review.openstack.org/95085
 2014-05-23T21:58:31  <openstackgerrit> A change was merged to openstack-infra/config: Rename baremetal-specs to ironic-specs  https://review.openstack.org/95265
-2014-05-23T21:58:34  <mordred> clarkb: notmyname DID release a new version of python-swiftclient today - it's possible that the world changed since you tested
-2014-05-23T21:58:47  <clarkb> mordred: its keystoneclient where the problem is
+2014-05-23T21:58:34  <mordred> superbee: notmyname DID release a new version of python-swiftclient today - it's possible that the world changed since you tested
+2014-05-23T21:58:47  <superbee> mordred: its keystoneclient where the problem is
 2014-05-23T21:58:49  <openstackgerrit> A change was merged to openstack-infra/config: Rename object-specs to swift-specs  https://review.openstack.org/95266
-2014-05-23T21:58:54  <sdague> clarkb: fun story
-2014-05-23T21:58:55  <clarkb> well keystoneclient talking to rax ID
-2014-05-23T21:58:56  <mordred> clarkb: I do not believe that notmyname released a new version of that
+2014-05-23T21:58:54  <sdague> superbee: fun story
+2014-05-23T21:58:55  <superbee> well keystoneclient talking to rax ID
+2014-05-23T21:58:56  <mordred> superbee: I do not believe that notmyname released a new version of that
 2014-05-23T21:59:06  * mordred stabs rax ID in the face
 2014-05-23T21:59:08  <openstackgerrit> A change was merged to openstack-infra/config: Rename orchestration-specs to heat-specs  https://review.openstack.org/95268
 2014-05-23T21:59:20  * mordred throws a wet burning cat at rackspace's not-a-keystone
@@ -2396,16 +2396,16 @@
 2014-05-23T22:00:26  *** _nadya_ has quit IRC
 2014-05-23T22:00:26  *** wenlock has quit IRC
 2014-05-23T22:00:28  <foobio> okay, all changes merged now
-2014-05-23T22:00:31  <clarkb> sdague: mordred: so I think I know my way around python relatively well, and the fact that even after RTFS'ing I can't figure out how to auth with keystone is ridiculous
-2014-05-23T22:00:43  <sdague> clarkb: agreed
+2014-05-23T22:00:31  <superbee> sdague: mordred: so I think I know my way around python relatively well, and the fact that even after RTFS'ing I can't figure out how to auth with keystone is ridiculous
+2014-05-23T22:00:43  <sdague> superbee: agreed
 2014-05-23T22:00:46  <mordred> sdague: I do not believe jeblair is kidding, btw
-2014-05-23T22:00:51  <clarkb> ideally it would just be documented, but the code is available so the fact it isn't documented means I can read the code, but its just scary
+2014-05-23T22:00:51  <superbee> ideally it would just be documented, but the code is available so the fact it isn't documented means I can read the code, but its just scary
 2014-05-23T22:01:04  <sdague> mordred: yeh... so it would require unwinding some of the tempest conf bits
 2014-05-23T22:01:06  * mordred blames morganfainberg
 2014-05-23T22:01:08  <jeblair> foobio: renaming groups now?
-2014-05-23T22:01:11  <clarkb> I really like how command line arg parsing happens
+2014-05-23T22:01:11  <superbee> I really like how command line arg parsing happens
 2014-05-23T22:01:20  <sdague> which... honestly I've considered doing as part of this
-2014-05-23T22:01:25  <clarkb> there is about 5 layers of indirection to parse a single argument
+2014-05-23T22:01:25  <superbee> there is about 5 layers of indirection to parse a single argument
 2014-05-23T22:01:31  *** gondoi is now known as zz_gondoi
 2014-05-23T22:01:43  <mordred> isn't this why openstacksdk was going to be written? how's that going?
 2014-05-23T22:01:50  <anteaya> can everyone update the etherpad so we know what has been done? https://etherpad.openstack.org/p/repo-renaming-2014-05-23
@@ -2418,47 +2418,47 @@
 2014-05-23T22:02:37  <jeblair> anteaya: and it's the only thing left on the etherpad, but we still have more on http://ci.openstack.org/gerrit.html
 2014-05-23T22:02:42  <sdague> the tempest clients aren't a gold standard by any means, but, they are a bit more straight forward
 2014-05-23T22:02:45  <notmyname> mordred: I stepped away. back now, and I see in scrollback that you're using my name in vain and cursing swift. or something. what's up?
-2014-05-23T22:03:08  <clarkb> notmyname: we continue to be unable to auth against rax swift due to rax id service
+2014-05-23T22:03:08  <superbee> notmyname: we continue to be unable to auth against rax swift due to rax id service
 2014-05-23T22:03:20  *** otherwiseguy has joined #openstack-infra
 2014-05-23T22:03:30  <mordred> notmyname: we're mainly cursing auth
-2014-05-23T22:03:31  <clarkb> notmyname: the state of client code has not helped our debugging but it is keystoneclient not swiftclient that is the problem
+2014-05-23T22:03:31  <superbee> notmyname: the state of client code has not helped our debugging but it is keystoneclient not swiftclient that is the problem
 2014-05-23T22:03:37  <anteaya> jeblair: thanks, following along
 2014-05-23T22:03:48  <mordred> notmyname: but we happen to be doing swift, so we're cursing you for good measure
 2014-05-23T22:03:50  *** james_li has quit IRC
-2014-05-23T22:03:52  <notmyname> clarkb: mordred: I can join you in cursing auth ;-)
-2014-05-23T22:03:55  <clarkb> the root of the problem is rackspace having an ID service that does not return a complete catalog when you provide a correct tenant name
+2014-05-23T22:03:52  <notmyname> superbee: mordred: I can join you in cursing auth ;-)
+2014-05-23T22:03:55  <superbee> the root of the problem is rackspace having an ID service that does not return a complete catalog when you provide a correct tenant name
 2014-05-23T22:03:59  <jeblair> we should probably delay this conversation for a few minutes to make sure we don't miss anything
 2014-05-23T22:04:01  <mordred> ++
 2014-05-23T22:04:05  <mordred> jeblair: +
 2014-05-23T22:04:07  <mordred> ++
-2014-05-23T22:04:26  <notmyname> clarkb: mordred: ok, let me know if I can do anything.
+2014-05-23T22:04:26  <notmyname> superbee: mordred: ok, let me know if I can do anything.
 2014-05-23T22:04:29  <foobio> groups renamed in gerrit now
-2014-05-23T22:04:47  <jamielennox> clarkb: keystoneclient is a mess because it's trying to change and keep backwards compatability
+2014-05-23T22:04:47  <jamielennox> superbee: keystoneclient is a mess because it's trying to change and keep backwards compatability
 2014-05-23T22:04:50  <jamielennox> what are you trying to do/
 2014-05-23T22:04:53  <notmyname> mordred: also, just to clarify, is there any issue with the swiftclient release? AFAIK, everything is ok there
 2014-05-23T22:05:04  <jamielennox> (also they all suck)
 2014-05-23T22:05:13  <anteaya> jamielennox notmyname we have the conversation on pause for a few more moments please
-2014-05-23T22:05:14  <clarkb> foobio: marked that off on the etherpad
+2014-05-23T22:05:14  <superbee> foobio: marked that off on the etherpad
 2014-05-23T22:05:23  <jeblair> foobio, mordred: so do we need to do the jenkins cleanup step on our persistent slaves?
 2014-05-23T22:05:25  <anteaya> foobio is still finishing up the rename
 2014-05-23T22:05:31  <jeblair> mordred: do we still have solt running such that we can do that?
 2014-05-23T22:06:01  <foobio> jeblair: mordred: i think the pypi upload and proposal slaves may need it
 2014-05-23T22:06:28  <foobio> should be the same list of project names which needed deleting from github
-2014-05-23T22:06:30  <clarkb> yup
-2014-05-23T22:06:31  <jeblair> clarkb: can you work on that?
-2014-05-23T22:06:39  <clarkb> sure I will start on pypi.slave
+2014-05-23T22:06:30  <superbee> yup
+2014-05-23T22:06:31  <jeblair> superbee: can you work on that?
+2014-05-23T22:06:39  <superbee> sure I will start on pypi.slave
 2014-05-23T22:06:47  * SergeyLukjanov lurking
 2014-05-23T22:06:53  <jeblair> foobio: i think we're ready to re-enable puppet in review now
-2014-05-23T22:07:05  <clarkb> just removing the workspaces correct?
+2014-05-23T22:07:05  <superbee> just removing the workspaces correct?
 2014-05-23T22:07:11  <foobio> jeblair: done
-2014-05-23T22:07:13  <foobio> clarkb: yes
+2014-05-23T22:07:13  <foobio> superbee: yes
 2014-05-23T22:07:44  <jeblair> foobio, mordred: so shall i just run the "run_all" script in screen on ci-puppetmaster to kick us back off again?
-2014-05-23T22:07:57  <clarkb> actually it will be naything that was renamed too because the git remotes have changed
+2014-05-23T22:07:57  <superbee> actually it will be naything that was renamed too because the git remotes have changed
 2014-05-23T22:08:03  <foobio> jeblair: unless you want to have manage-projects run separately
-2014-05-23T22:08:08  <clarkb> I will delete workspaces for any renamed or deleted things on github
-2014-05-23T22:08:21  <clarkb> oh wait nevermind new name == new workspace
-2014-05-23T22:08:22  <foobio> clarkb: renamed things are fine, just cruft
-2014-05-23T22:08:26  <clarkb> ya
+2014-05-23T22:08:08  <superbee> I will delete workspaces for any renamed or deleted things on github
+2014-05-23T22:08:21  <superbee> oh wait nevermind new name == new workspace
+2014-05-23T22:08:22  <foobio> superbee: renamed things are fine, just cruft
+2014-05-23T22:08:26  <superbee> ya
 2014-05-23T22:08:27  <foobio> yeah
 2014-05-23T22:08:33  <jeblair> foobio: well it starts by running them in the right order, so...
 2014-05-23T22:08:42  <foobio> ahh, okay
@@ -2466,7 +2466,7 @@
 2014-05-23T22:09:10  <mordred> jeblair: hey
 2014-05-23T22:09:16  <mordred> jeblair: yes
 2014-05-23T22:09:22  <jeblair> ok, doing that now
-2014-05-23T22:09:30  <clarkb> none of those projects have workspaces on pypi.slave. looking at proposal.slave now
+2014-05-23T22:09:30  <superbee> none of those projects have workspaces on pypi.slave. looking at proposal.slave now
 2014-05-23T22:09:32  * foobio is watching via screen -x
 2014-05-23T22:09:46  <jeblair> Warning: Missing dependency 'puppetlabs-vcsrepo': 'nibalizer-puppetboard' (v2.3.0) requires 'puppetlabs-vcsrepo' (>= 0.1.2)
 2014-05-23T22:09:51  <jeblair> is that a known thing?
@@ -2478,14 +2478,14 @@
 2014-05-23T22:10:16  *** ArxCruz has quit IRC
 2014-05-23T22:10:42  <jeblair> i'm tailing the log in window 2
 2014-05-23T22:10:42  *** yamahata has quit IRC
-2014-05-23T22:10:47  <clarkb> and none of them have workspaces on proposal.o.o
+2014-05-23T22:10:47  <superbee> and none of them have workspaces on proposal.o.o
 2014-05-23T22:10:49  <jeblair> or 1.  or whatever you call the second one.
 2014-05-23T22:10:50  *** rickerc_ has joined #openstack-infra
 2014-05-23T22:11:04  *** doddstack has quit IRC
-2014-05-23T22:11:04  <clarkb> I htink since they were mostly unused repos they never got special jobs for publications and translations and things
+2014-05-23T22:11:04  <superbee> I htink since they were mostly unused repos they never got special jobs for publications and translations and things
 2014-05-23T22:11:21  <jeblair> mordred: do you want to do .gitreview updates?
-2014-05-23T22:11:34  <clarkb> so I think we are fine with jenkins slave cleanup. nothing to do there
-2014-05-23T22:11:35  <foobio> clarkb: seems likely
+2014-05-23T22:11:34  <superbee> so I think we are fine with jenkins slave cleanup. nothing to do there
+2014-05-23T22:11:35  <foobio> superbee: seems likely
 2014-05-23T22:11:36  <mordred> jeblair: god, do I ever
 2014-05-23T22:11:48  <jeblair> mordred: you'll get to vote in lots of elections
 2014-05-23T22:11:57  <anteaya> ha ha ha
@@ -2494,30 +2494,30 @@
 2014-05-23T22:12:25  *** bknudson has quit IRC
 2014-05-23T22:12:47  *** andreykurilin_ has quit IRC
 2014-05-23T22:12:52  *** bknudson has joined #openstack-infra
-2014-05-23T22:13:03  <clarkb> jeblair: foobio: what are you watching via screen -x?
+2014-05-23T22:13:03  <superbee> jeblair: foobio: what are you watching via screen -x?
 2014-05-23T22:13:08  *** rickerc has quit IRC
 2014-05-23T22:13:08  *** rickerc_ is now known as rickerc
-2014-05-23T22:13:12  <jeblair> clarkb: puppet run all
+2014-05-23T22:13:12  <jeblair> superbee: puppet run all
 2014-05-23T22:13:17  <jeblair> on ci-puppetmaster
-2014-05-23T22:13:22  <clarkb> oh there it is further up in sb
+2014-05-23T22:13:22  <superbee> oh there it is further up in sb
 2014-05-23T22:13:32  <jeblair> it's not exciting
-2014-05-23T22:13:44  <clarkb> ok I won't attach then
+2014-05-23T22:13:44  <superbee> ok I won't attach then
 2014-05-23T22:13:44  <jeblair> we're on git05
 2014-05-23T22:13:46  <foobio> it's like watching paint not peel
-2014-05-23T22:14:23  <clarkb> the 1.1 error rate seems to have grown
+2014-05-23T22:14:23  <superbee> the 1.1 error rate seems to have grown
 2014-05-23T22:14:25  *** openstackgerrit has quit IRC
 2014-05-23T22:14:26  <jeblair> on review.o.o now
 2014-05-23T22:14:30  *** atiwari has quit IRC
-2014-05-23T22:14:47  <clarkb> it is higher than the success rate now
+2014-05-23T22:14:47  <superbee> it is higher than the success rate now
 2014-05-23T22:14:50  *** yamahata has joined #openstack-infra
-2014-05-23T22:14:50  <jeblair> clarkb: we launched a lot of nodes; is that the ratio or absolute value?
-2014-05-23T22:15:08  <clarkb> I am looking at both
-2014-05-23T22:15:31  <clarkb> absolute value went up and the lines for success and fail crossed
+2014-05-23T22:14:50  <jeblair> superbee: we launched a lot of nodes; is that the ratio or absolute value?
+2014-05-23T22:15:08  <superbee> I am looking at both
+2014-05-23T22:15:31  <superbee> absolute value went up and the lines for success and fail crossed
 2014-05-23T22:15:42  <jeblair> so > 50% error
 2014-05-23T22:15:42  *** openstackgerrit has joined #openstack-infra
 2014-05-23T22:16:28  *** david-lyle has quit IRC
-2014-05-23T22:16:47  <clarkb> oh hey I am now subscribed to 7 github repos
-2014-05-23T22:16:55  <clarkb> I take it review.o.o is being puppetted now
+2014-05-23T22:16:47  <superbee> oh hey I am now subscribed to 7 github repos
+2014-05-23T22:16:55  <superbee> I take it review.o.o is being puppetted now
 2014-05-23T22:16:58  <anteaya> lucky you
 2014-05-23T22:17:10  <foobio> seems that way
 2014-05-23T22:17:26  <jeblair> we should add a foreground mode to this script
@@ -2534,9 +2534,9 @@
 2014-05-23T22:21:31  <anteaya> so we're done?
 2014-05-23T22:21:44  <jeblair> i don't see why it was disconnected in the logs.
 2014-05-23T22:22:11  <anteaya> mordred: did you finish updating the .gitreview files?
-2014-05-23T22:22:34  <clarkb> lots of LaunchStatusException status: Error for hpcloud 1.1
+2014-05-23T22:22:34  <superbee> lots of LaunchStatusException status: Error for hpcloud 1.1
 2014-05-23T22:22:35  <foobio> supposedly "Remote host closed the connection" but yeah, logs unhelpful
-2014-05-23T22:22:40  <clarkb> unfortunately not more info than that
+2014-05-23T22:22:40  <superbee> unfortunately not more info than that
 2014-05-23T22:22:40  <jeblair> however, i think there's a bug where on reconnect it re-saves the topic.
 2014-05-23T22:22:53  <jeblair> because it's currently setting them all to the alert.
 2014-05-23T22:23:02  <foobio> grr
@@ -2544,8 +2544,8 @@
 2014-05-23T22:23:07  <jeblair> i'll fix em.
 2014-05-23T22:23:22  *** nati_ueno has joined #openstack-infra
 2014-05-23T22:25:12  <foobio> got the github notification for 7 projects created, so manage-projects did something at any rate
-2014-05-23T22:25:19  <clarkb> foobio: yup
-2014-05-23T22:25:41  <clarkb> https://github.com/openstack/barbican is there and looks happy
+2014-05-23T22:25:19  <superbee> foobio: yup
+2014-05-23T22:25:41  <superbee> https://github.com/openstack/barbican is there and looks happy
 2014-05-23T22:26:03  *** nati_ueno has quit IRC
 2014-05-23T22:26:10  <foobio> spot checks show acls applied correctly
 2014-05-23T22:26:23  *** ChanServ changes topic to "Discussion of OpenStack Developer Infrastructure | docs http://ci.openstack.org | bugs https://launchpad.net/openstack-ci/ | https://git.openstack.org/cgit/openstack-infra/config/tree/"
@@ -2553,73 +2553,73 @@
 2014-05-23T22:26:48  *** gokrokve has quit IRC
 2014-05-23T22:27:14  *** gokrokve has joined #openstack-infra
 2014-05-23T22:27:44  <openstackgerrit> Clark Boylan proposed a change to openstack-infra/config: Use 100 servers per hpcloud network:router pair.  https://review.openstack.org/95289
-2014-05-23T22:28:28  <clarkb> mordred: ^ when the gerrit stuff settles down we should consider that I think
-2014-05-23T22:28:36  <clarkb> mordred: if you look at your graph for 1.1 you will see why
+2014-05-23T22:28:28  <superbee> mordred: ^ when the gerrit stuff settles down we should consider that I think
+2014-05-23T22:28:36  <superbee> mordred: if you look at your graph for 1.1 you will see why
 2014-05-23T22:28:37  *** rfolco has quit IRC
 2014-05-23T22:28:37  *** ChanServ changes topic to "Gerrit upgraded to 2.8.  See: https://wiki.openstack.org/wiki/GerritUpgrade"
-2014-05-23T22:28:52  <mordred> clarkb: yup!
-2014-05-23T22:29:09  <clarkb> mordred: also I wonder if this is a rate limit thing because if you look at your graph that cloud can handle more nodes
-2014-05-23T22:29:19  <clarkb> mordred: but its falling over now when we put a lot of requests for new nodes in
+2014-05-23T22:28:52  <mordred> superbee: yup!
+2014-05-23T22:29:09  <superbee> mordred: also I wonder if this is a rate limit thing because if you look at your graph that cloud can handle more nodes
+2014-05-23T22:29:19  <superbee> mordred: but its falling over now when we put a lot of requests for new nodes in
 2014-05-23T22:29:37  <anteaya> mordred: finished the .gitreview changes, yes?
 2014-05-23T22:29:37  <jeblair> okay i think that's done
 2014-05-23T22:29:40  *** ChanServ changes topic to "Discussion of OpenStack Developer Infrastructure | docs http://ci.openstack.org | bugs https://launchpad.net/openstack-ci/ | https://git.openstack.org/cgit/openstack-infra/config/tree/"
 2014-05-23T22:29:42  <mordred> anteaya: just did
 2014-05-23T22:29:47  <anteaya> mordred: great thanks
-2014-05-23T22:29:53  <clarkb> the area under the blue line is is much bigger than in previous loads
-2014-05-23T22:30:24  <mordred> clarkb: any reason to not just go ahead and land it?
+2014-05-23T22:29:53  <superbee> the area under the blue line is is much bigger than in previous loads
+2014-05-23T22:30:24  <mordred> superbee: any reason to not just go ahead and land it?
 2014-05-23T22:30:46  <jeblair> oh i just approved it :)
-2014-05-23T22:30:51  <clarkb> mordred: I don't think so
-2014-05-23T22:30:53  <clarkb> cool
+2014-05-23T22:30:51  <superbee> mordred: I don't think so
+2014-05-23T22:30:53  <superbee> cool
 2014-05-23T22:31:04  <jeblair> crontab is back to normal on puppetmaster
 2014-05-23T22:32:05  *** gokrokve has quit IRC
-2014-05-23T22:35:08  <clarkb> notmyname: swiftclient is fine. This is a known problem with rax id made worse by being unable to understand how to pass bogus data to keystoneclient
-2014-05-23T22:36:06  <clarkb> if you provide swiftclient a tenant_name or id when authenticating against rax id you do not get a complete catalog. The catalog you get does not have an object files entry. To get the object files enty you need to provide ' ' as your tenant_name
-2014-05-23T22:36:20  <jamielennox> clarkb: this doesn't sound like a problem with keystoneclient
-2014-05-23T22:36:21  <clarkb> when I testsed it appeared that passing None as tenant_id worked but zuul threw up on that so apparently not
-2014-05-23T22:36:41  <clarkb> jamielennox: it isn't. The problem in keystone client is figuring out how to auth in the first place
-2014-05-23T22:36:52  <clarkb> made more complicated by needing to pass in bogus data
+2014-05-23T22:35:08  <superbee> notmyname: swiftclient is fine. This is a known problem with rax id made worse by being unable to understand how to pass bogus data to keystoneclient
+2014-05-23T22:36:06  <superbee> if you provide swiftclient a tenant_name or id when authenticating against rax id you do not get a complete catalog. The catalog you get does not have an object files entry. To get the object files enty you need to provide ' ' as your tenant_name
+2014-05-23T22:36:20  <jamielennox> superbee: this doesn't sound like a problem with keystoneclient
+2014-05-23T22:36:21  <superbee> when I testsed it appeared that passing None as tenant_id worked but zuul threw up on that so apparently not
+2014-05-23T22:36:41  <superbee> jamielennox: it isn't. The problem in keystone client is figuring out how to auth in the first place
+2014-05-23T22:36:52  <superbee> made more complicated by needing to pass in bogus data
 2014-05-23T22:36:57  *** otherwiseguy has quit IRC
-2014-05-23T22:37:02  <jamielennox> clarkb: right, so auth has changed recently and it means it routes all over the place
-2014-05-23T22:37:08  <clarkb> when I tested keystoneclient directly I got it to work with a None tenant_name
-2014-05-23T22:37:18  <clarkb> when zuul uses it it dies
+2014-05-23T22:37:02  <jamielennox> superbee: right, so auth has changed recently and it means it routes all over the place
+2014-05-23T22:37:08  <superbee> when I tested keystoneclient directly I got it to work with a None tenant_name
+2014-05-23T22:37:18  <superbee> when zuul uses it it dies
 2014-05-23T22:37:21  <jamielennox> you need CLI or the library?
-2014-05-23T22:37:27  <clarkb> library
-2014-05-23T22:37:33  <clarkb> and I have no idea what is going on because its spaghetti
-2014-05-23T22:37:54  <jamielennox> clarkb: subclass https://github.com/openstack/python-keystoneclient/blob/master/keystoneclient/auth/base.py with something that makes sense for rax
-2014-05-23T22:38:27  <clarkb> I'm guessing that zuul constructs a client in a subtley different way than I was doing it in python directly which results in complettely different code paths
+2014-05-23T22:37:27  <superbee> library
+2014-05-23T22:37:33  <superbee> and I have no idea what is going on because its spaghetti
+2014-05-23T22:37:54  <jamielennox> superbee: subclass https://github.com/openstack/python-keystoneclient/blob/master/keystoneclient/auth/base.py with something that makes sense for rax
+2014-05-23T22:38:27  <superbee> I'm guessing that zuul constructs a client in a subtley different way than I was doing it in python directly which results in complettely different code paths
 2014-05-23T22:38:29  <jamielennox> yea - backwards compatability is a bitch, especially when the initial thing sucks so much that people were hacking into it directly
-2014-05-23T22:39:38  <clarkb> looking at http://paste.openstack.org/show/81238/ again I think swift may actually be checking for the tenant_name and not keystoneclient
-2014-05-23T22:39:47  <clarkb> so while keystoneclient is cool with a None tenant_name swiftclient is not
-2014-05-23T22:39:57  <clarkb> which arguable is fine because tenant_ids should be athing you use
-2014-05-23T22:40:10  * clarkb reads more code
+2014-05-23T22:39:38  <superbee> looking at http://paste.openstack.org/show/81238/ again I think swift may actually be checking for the tenant_name and not keystoneclient
+2014-05-23T22:39:47  <superbee> so while keystoneclient is cool with a None tenant_name swiftclient is not
+2014-05-23T22:39:57  <superbee> which arguable is fine because tenant_ids should be athing you use
+2014-05-23T22:40:10  * superbee reads more code
 2014-05-23T22:42:31  <jamielennox> swiftclient is extracting that from keystoneclient
 2014-05-23T22:42:34  <jamielennox> ?
-2014-05-23T22:42:50  <clarkb> not sure yet
-2014-05-23T22:43:13  <clarkb> if (not 'tenant_name' in os_options): # nope swiftclient does the check itself
-2014-05-23T22:43:19  <clarkb> notmyname: so maybe swiftclient is at fault
+2014-05-23T22:42:50  <superbee> not sure yet
+2014-05-23T22:43:13  <superbee> if (not 'tenant_name' in os_options): # nope swiftclient does the check itself
+2014-05-23T22:43:19  <superbee> notmyname: so maybe swiftclient is at fault
 2014-05-23T22:43:24  *** shivharis has joined #openstack-infra
-2014-05-23T22:43:28  <clarkb> but it depends on whether or not tenant_name is actually a required thing
-2014-05-23T22:43:42  <clarkb> jamielennox: is tenant_name required to auth with keystone?
+2014-05-23T22:43:28  <superbee> but it depends on whether or not tenant_name is actually a required thing
+2014-05-23T22:43:42  <superbee> jamielennox: is tenant_name required to auth with keystone?
 2014-05-23T22:44:25  <jamielennox> not required
-2014-05-23T22:44:38  <clarkb> notmyname: ^
+2014-05-23T22:44:38  <superbee> notmyname: ^
 2014-05-23T22:44:41  *** dstanek_zzz is now known as dstanek
 2014-05-23T22:44:51  <jamielennox> but you probably want either tenant_name/tenant_id/project_name/project_id to get a scoped token
 2014-05-23T22:45:01  *** Ivo has joined #openstack-infra
-2014-05-23T22:45:05  <clarkb> jamielennox: right, but ti doesn't work with rax id
-2014-05-23T22:45:22  <clarkb> so if possible use it, otherwise cry :)
-2014-05-23T22:45:34  <shivharis> clarkb: what privilege do i need to be able to change the importance of launchpad bugs?
+2014-05-23T22:45:05  <superbee> jamielennox: right, but ti doesn't work with rax id
+2014-05-23T22:45:22  <superbee> so if possible use it, otherwise cry :)
+2014-05-23T22:45:34  <shivharis> superbee: what privilege do i need to be able to change the importance of launchpad bugs?
 2014-05-23T22:45:35  <Alex_Gaynor> Of note on Rackspace for cloud-files you get a different tenant_id than for everything else
-2014-05-23T22:45:46  <clarkb> Alex_Gaynor: hrm really?
+2014-05-23T22:45:46  <superbee> Alex_Gaynor: hrm really?
 2014-05-23T22:45:49  <mordred> Alex_Gaynor: oh?
 2014-05-23T22:45:49  <jamielennox> Alex_Gaynor: oh, joy
-2014-05-23T22:45:50  <clarkb> maybe that is part of the problem
+2014-05-23T22:45:50  <superbee> maybe that is part of the problem
 2014-05-23T22:46:00  <mordred> so maybe if we configure to use _that_ id
-2014-05-23T22:46:02  <clarkb> because using the regular tenant id I don't get object files in the catalog
-2014-05-23T22:46:03  <clarkb> mordred: ya
-2014-05-23T22:46:03  <Alex_Gaynor> clarkb: Yes, if you look at the raw service catalg you can see it. Specifying tenant_id=" " works around this
+2014-05-23T22:46:02  <superbee> because using the regular tenant id I don't get object files in the catalog
+2014-05-23T22:46:03  <superbee> mordred: ya
+2014-05-23T22:46:03  <Alex_Gaynor> superbee: Yes, if you look at the raw service catalg you can see it. Specifying tenant_id=" " works around this
 2014-05-23T22:46:03  <mordred> we'll get a proper catalog?
-2014-05-23T22:46:18  <clarkb> Alex_Gaynor: yes thats the workaround but is there actually another tenant id? and if so wtf
-2014-05-23T22:46:30  <clarkb> I will look into this
+2014-05-23T22:46:18  <superbee> Alex_Gaynor: yes thats the workaround but is there actually another tenant id? and if so wtf
+2014-05-23T22:46:30  <superbee> I will look into this
 2014-05-23T22:46:30  <mordred> Alex_Gaynor: but we can't specify tenant_id=" " in our case  ... can we get the tenant_id itself?
 2014-05-23T22:46:51  <Alex_Gaynor> mordred: Yeah, you could look at the raw service catalg and grab it, not sure if there's a better way
 2014-05-23T22:46:59  <mordred> that's fantastic
@@ -2641,31 +2641,31 @@
 2014-05-23T22:49:31  <mgagne> mordred: now sure how their tests are passing (if there is any) =)
 2014-05-23T22:49:49  *** msabramo has quit IRC
 2014-05-23T22:50:08  *** crc32 has quit IRC
-2014-05-23T22:50:36  <clarkb> well now I can't auth using the workaround
-2014-05-23T22:50:42  <clarkb> so I have no idea what is going on
-2014-05-23T22:50:49  * clarkb tries a bigger hammer
-2014-05-23T22:51:36  <mgagne> clarkb: can't we poke someone from rackspace about it?
+2014-05-23T22:50:36  <superbee> well now I can't auth using the workaround
+2014-05-23T22:50:42  <superbee> so I have no idea what is going on
+2014-05-23T22:50:49  * superbee tries a bigger hammer
+2014-05-23T22:51:36  <mgagne> superbee: can't we poke someone from rackspace about it?
 2014-05-23T22:51:38  <shivharis> anteaya: i happen to be the ML2 bug czar, but do not have the privilege tochange bug importance...
 2014-05-23T22:51:59  <shivharis> anteaya: what can i do to get this priv.
 2014-05-23T22:52:28  <foobio> shivharis: you need to be in whatever group is configured as the bug supervisor in launchpad for the project in question
 2014-05-23T22:52:45  <foobio> shivharis: the project is neutron, i assume?
 2014-05-23T22:52:55  <shivharis> foobio: yes it is neutron
-2014-05-23T22:53:03  <clarkb> mgagne: no need figured it out with a bigger hammer
-2014-05-23T22:53:07  <clarkb> so ya the tenant id is different
-2014-05-23T22:53:09  <clarkb> because you know
-2014-05-23T22:53:17  <clarkb> I will propose a change to use this tenant id
-2014-05-23T22:53:23  <mgagne> clarkb: different identity backend but with the same tenant name?
+2014-05-23T22:53:03  <superbee> mgagne: no need figured it out with a bigger hammer
+2014-05-23T22:53:07  <superbee> so ya the tenant id is different
+2014-05-23T22:53:09  <superbee> because you know
+2014-05-23T22:53:17  <superbee> I will propose a change to use this tenant id
+2014-05-23T22:53:23  <mgagne> superbee: different identity backend but with the same tenant name?
 2014-05-23T22:53:36  <foobio> shivharis: at https://bugs.launchpad.net/neutron on the right side of the page you'll see that the Bug supervisor is "Neutron Bugs"
-2014-05-23T22:53:41  <clarkb> mgagne: apparently
-2014-05-23T22:53:51  <clarkb> mgagne: er now, its the same endpoint with two different tenant names
-2014-05-23T22:53:56  <clarkb> so everything is the same but the tenant
+2014-05-23T22:53:41  <superbee> mgagne: apparently
+2014-05-23T22:53:51  <superbee> mgagne: er now, its the same endpoint with two different tenant names
+2014-05-23T22:53:56  <superbee> so everything is the same but the tenant
 2014-05-23T22:54:05  <openstackgerrit> A change was merged to openstack-infra/config: Use 100 servers per hpcloud network:router pair.  https://review.openstack.org/95289
 2014-05-23T22:54:20  <foobio> shivharis: you can request membership from the current admins of that group at https://launchpad.net/~neutron-bugs
 2014-05-23T22:54:40  *** dstanek is now known as dstanek_zzz
 2014-05-23T22:54:42  <foobio> shivharis: and you can see who the current members and admins are at https://launchpad.net/~neutron-bugs/+members
 2014-05-23T22:54:55  <shivharis> foobio: thanks. i sent the request.
-2014-05-23T22:55:31  <clarkb> ok I will try cleaning this up. Do we want the tenant_id/name to be hiera data or in the manifests?
-2014-05-23T22:56:13  <clarkb> jamielennox: tenant name/id isn't sensitive correct?
+2014-05-23T22:55:31  <superbee> ok I will try cleaning this up. Do we want the tenant_id/name to be hiera data or in the manifests?
+2014-05-23T22:56:13  <superbee> jamielennox: tenant name/id isn't sensitive correct?
 2014-05-23T22:56:30  <anteaya> shivharis: of the listed admins, I would suggest tracking down markmcclain
 2014-05-23T22:56:38  <shivharis> foobio: should I also send a separate email to Mark M. or Dan W. for admission to this group, since there a many pending requests
 2014-05-23T22:56:40  <anteaya> shivharis: I don't think the other two admins are active
@@ -2674,26 +2674,26 @@
 2014-05-23T22:57:01  <shivharis> anteaya: i will send mail to Mark M.
 2014-05-23T22:57:11  <anteaya> I don't think dan has contributed in quite a while
 2014-05-23T22:57:17  <foobio> shivharis: or maybe just ping them the next time you see them in irc or ask in the next neutron team meeting
-2014-05-23T22:57:21  <clarkb> well the other id is in hiera so I will put this one in hiera as well
-2014-05-23T22:57:31  * clarkb acquires hiera lock
+2014-05-23T22:57:21  <superbee> well the other id is in hiera so I will put this one in hiera as well
+2014-05-23T22:57:31  * superbee acquires hiera lock
 2014-05-23T22:57:56  <shivharis> foobio, anteaya: I will get in touch with Mark and cc: kokura
 2014-05-23T22:58:34  <anteaya> shivharis: kukura
 2014-05-23T22:59:01  <shivharis> anteaya: i hope he is not logged in at this time.. :-)
 2014-05-23T22:59:15  *** reed has quit IRC
 2014-05-23T22:59:38  *** msabramo has joined #openstack-infra
-2014-05-23T22:59:53  <clarkb> lock released
+2014-05-23T22:59:53  <superbee> lock released
 2014-05-23T23:00:51  <anteaya> shivharis: he isn't in this channel
 2014-05-23T23:01:04  *** sweston has joined #openstack-infra
-2014-05-23T23:01:08  <jamielennox> clarkb: id is uuid - i don't remember on name
+2014-05-23T23:01:08  <jamielennox> superbee: id is uuid - i don't remember on name
 2014-05-23T23:01:21  *** morganfainberg is now known as morganfainberg_Z
 2014-05-23T23:01:55  *** wenlock has joined #openstack-infra
 2014-05-23T23:02:23  <openstackgerrit> Clark Boylan proposed a change to openstack-infra/config: Pass tenant_name to zuul config.  https://review.openstack.org/95302
-2014-05-23T23:02:49  <clarkb> jamielennox: I am justgoing to keep it secret since we appear to have done that with the compute tenant name
-2014-05-23T23:02:59  <clarkb> jamielennox: don't think it is necessary though
-2014-05-23T23:03:03  <clarkb> jeblair: jhesketh foobio mordred ^
+2014-05-23T23:02:49  <superbee> jamielennox: I am justgoing to keep it secret since we appear to have done that with the compute tenant name
+2014-05-23T23:02:59  <superbee> jamielennox: don't think it is necessary though
+2014-05-23T23:03:03  <superbee> jeblair: jhesketh foobio mordred ^
 2014-05-23T23:04:19  <zaro> mgagne: ping
-2014-05-23T23:04:43  <clarkb> Alex_Gaynor: would it be possible to put entries for both tenant_names in the catalog? that will be backward compat and comaptible for suckers like me that don't understand why you would do such a thing :)
-2014-05-23T23:05:40  <Alex_Gaynor> clarkb: Can you remind me about this issue on Wednesday? I tried to get this fixed a few months ago, but I got distracted, I'm happy to bang on it again, but I'm nominally on vacation right now :-)
+2014-05-23T23:04:43  <superbee> Alex_Gaynor: would it be possible to put entries for both tenant_names in the catalog? that will be backward compat and comaptible for suckers like me that don't understand why you would do such a thing :)
+2014-05-23T23:05:40  <Alex_Gaynor> superbee: Can you remind me about this issue on Wednesday? I tried to get this fixed a few months ago, but I got distracted, I'm happy to bang on it again, but I'm nominally on vacation right now :-)
 2014-05-23T23:06:04  *** msabramo1 has joined #openstack-infra
 2014-05-23T23:06:18  *** msabramo has quit IRC
 2014-05-23T23:06:20  <Alex_Gaynor> Just putting both in there seems like the right solution
@@ -2704,17 +2704,17 @@
 2014-05-23T23:12:23  <uvirtbot> Launchpad bug 1298568 in openstack-ci "Jenkins jobs builder job-group parameter substitution not working" [Undecided,New]
 2014-05-23T23:12:46  <mgagne> zaro: I once tried to do what the guy is trying to do
 2014-05-23T23:12:57  <zaro> mgagne: noticed you made the change to enable such things.. https://review.openstack.org/#/c/43013
-2014-05-23T23:13:29  <clarkb> Alex_Gaynor: sure I can bug you later
+2014-05-23T23:13:29  <superbee> Alex_Gaynor: sure I can bug you later
 2014-05-23T23:13:32  <zaro> mgagne: well he is correct, that does not work
-2014-05-23T23:13:40  <mgagne> zaro: and the answer I got from clarkb or jeblair was that there is no substitution done for job parameters
-2014-05-23T23:13:44  <Alex_Gaynor> clarkb: Ok. I'll try to remember as well, but if I don't and you yell and me, I'll do stuff :-)
+2014-05-23T23:13:40  <mgagne> zaro: and the answer I got from superbee or jeblair was that there is no substitution done for job parameters
+2014-05-23T23:13:44  <Alex_Gaynor> superbee: Ok. I'll try to remember as well, but if I don't and you yell and me, I'll do stuff :-)
 2014-05-23T23:13:47  *** nati_ueno has quit IRC
 2014-05-23T23:14:14  * SergeyLukjanov still not sleeping O_O
 2014-05-23T23:14:16  <mgagne> zaro: hmm
-2014-05-23T23:14:24  <clarkb> Alex_Gaynor: ya having both will allow me to use one openstackrc file with different services
+2014-05-23T23:14:24  <superbee> Alex_Gaynor: ya having both will allow me to use one openstackrc file with different services
 2014-05-23T23:14:30  <zaro> mgagne: the example you put in the doc suggest that there is substitution.
-2014-05-23T23:14:36  <clarkb> Alex_Gaynor: anytime I need to use different rc fiels for what should be the same endpoint is silly
-2014-05-23T23:14:37  <Alex_Gaynor> clarkb: Cloud interoperability??!?
+2014-05-23T23:14:36  <superbee> Alex_Gaynor: anytime I need to use different rc fiels for what should be the same endpoint is silly
+2014-05-23T23:14:37  <Alex_Gaynor> superbee: Cloud interoperability??!?
 2014-05-23T23:14:38  <SergeyLukjanov> jeblair, I found access to *.o.o servers :)
 2014-05-23T23:14:51  <mgagne> zaro: yes, now I'm not sure why I did it :-/
 2014-05-23T23:15:14  <mgagne> zaro: I'll test with my use case
@@ -2749,13 +2749,13 @@
 2014-05-23T23:24:21  <foobio> SergeyLukjanov: added you to https://launchpad.net/~openstack-ci-admins as well, to cover things which use that openid group for elevated privs
 2014-05-23T23:24:23  <openstackgerrit> Marc Abramowitz proposed a change to openstack-infra/jenkins-job-builder: Add tox "coverage" target  https://review.openstack.org/87382
 2014-05-23T23:24:38  *** ewindisch has quit IRC
-2014-05-23T23:25:22  <clarkb> I am going to recheck my test d-g changes to put some load on the new balance of hpcloud servers
+2014-05-23T23:25:22  <superbee> I am going to recheck my test d-g changes to put some load on the new balance of hpcloud servers
 2014-05-23T23:26:32  *** nati_ueno has joined #openstack-infra
 2014-05-23T23:27:29  *** jhesketh has quit IRC
 2014-05-23T23:28:26  <SergeyLukjanov> foobio, cool, sounds like I'll find some new buttons in some services :)
 2014-05-23T23:28:41  * foobio needs to knock off for the evening and get stuff done around the house
 2014-05-23T23:28:54  <foobio> so much still to do before i move
-2014-05-23T23:29:16  <clarkb> foobio: gl hf
+2014-05-23T23:29:16  <superbee> foobio: gl hf
 2014-05-23T23:30:15  <anteaya> foobio: happy organizing
 2014-05-23T23:31:24  <zaro> mattoliverau: those samples are not useful, we should just git rid of em.
 2014-05-23T23:31:41  <zaro> i meant mgagne ^
@@ -2768,10 +2768,10 @@
 2014-05-23T23:36:44  *** dstanek_zzz is now known as dstanek
 2014-05-23T23:38:58  *** doude has quit IRC
 2014-05-23T23:40:58  *** jhesketh has joined #openstack-infra
-2014-05-23T23:45:29  <clarkb> zaro: which pipeline.yaml?
-2014-05-23T23:45:33  <clarkb> this is in jjb?
-2014-05-23T23:45:44  <clarkb> zaro: fwiw git blame shows you the commit so you can git show commitsha1
-2014-05-23T23:45:58  <clarkb> and see which commit did the thing and take the change id from there
+2014-05-23T23:45:29  <superbee> zaro: which pipeline.yaml?
+2014-05-23T23:45:33  <superbee> this is in jjb?
+2014-05-23T23:45:44  <superbee> zaro: fwiw git blame shows you the commit so you can git show commitsha1
+2014-05-23T23:45:58  <superbee> and see which commit did the thing and take the change id from there
 2014-05-23T23:46:46  *** dstanek is now known as dstanek_zzz
 2014-05-23T23:51:17  *** otter768 has joined #openstack-infra
 2014-05-23T23:56:36  <openstackgerrit> A change was merged to openstack-infra/config: Correct source file location  https://review.openstack.org/95272

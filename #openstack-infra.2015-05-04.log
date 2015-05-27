@@ -505,7 +505,7 @@
 2015-05-04T12:06:41  <foobio> pc_m: wait, i just brained wrong. the pep8 env calls the flake8 command line utility. flake8 itself magically reads tox.ini too and looks for a "flake8" env containing its configuration
 2015-05-04T12:06:56  <foobio> pc_m: so forget what i said about calling an env from another env
 2015-05-04T12:07:10  *** luqas has joined #openstack-infra
-2015-05-04T12:07:56  <foobio> AJaeger: yes, i think that jenkins-gearman bug clarkb and zaro were looking at last week is still an issue. i'll clear out more stale ready nodes for now and that should speed things back up
+2015-05-04T12:07:56  <foobio> AJaeger: yes, i think that jenkins-gearman bug superbee and zaro were looking at last week is still an issue. i'll clear out more stale ready nodes for now and that should speed things back up
 2015-05-04T12:08:30  <AJaeger> foobio, thanks! That jenkins-gearman bug is becoming famous ;/
 2015-05-04T12:08:31  <jhesketh> sdague: oh cool, nice stuff (re zuul status patches)
 2015-05-04T12:10:20  <sdague> jhesketh: yeh, so the jquery visibility bit still needs that file to actually get deployed, I don't know where best to do that
@@ -961,52 +961,52 @@
 2015-05-04T15:37:37  <foobio> jeblair: i figured i wasn't the only one to spot that. good to know
 2015-05-04T15:37:38  <jeblair> foobio: though, i mean, hopefully "not crashing" might be a less substantial bugfix
 2015-05-04T15:38:02  <foobio> i thought a stopgap might be to just treat a multi-parent change as a non-parented change and move on
-2015-05-04T15:38:03  <clarkb> jeblair: question about gearman, if you send a RESET_ABILITIES does that clear out a pending GET JOB?
-2015-05-04T15:38:15  <clarkb> zaro: I think ^ may be the problem and it is much less complicated than I thought
-2015-05-04T15:38:46  <jeblair> clarkb: hehe, i do not immediately know the answer to your pop quiz!  i'll look
+2015-05-04T15:38:03  <superbee> jeblair: question about gearman, if you send a RESET_ABILITIES does that clear out a pending GET JOB?
+2015-05-04T15:38:15  <superbee> zaro: I think ^ may be the problem and it is much less complicated than I thought
+2015-05-04T15:38:46  <jeblair> superbee: hehe, i do not immediately know the answer to your pop quiz!  i'll look
 2015-05-04T15:38:54  *** sputnik13 has quit IRC
-2015-05-04T15:39:03  <clarkb> jeblair: we are seeing nodepool nodes remain "ready" for long periods of time and reading jenkins logs inidicates they go in that state if they send a GET JOB then immediately register functions
+2015-05-04T15:39:03  <superbee> jeblair: we are seeing nodepool nodes remain "ready" for long periods of time and reading jenkins logs inidicates they go in that state if they send a GET JOB then immediately register functions
 2015-05-04T15:39:08  *** sarob_ has quit IRC
-2015-05-04T15:39:26  <clarkb> jeblair: I had thought the run loop was getting live locked but in this case I think it may be the server state is changing around the GET JOB because we RESET ABILITIES
-2015-05-04T15:40:01  <jeblair> clarkb: we send 'get job' before registering functions?  that sounds buggy, right?
-2015-05-04T15:40:14  <clarkb> jeblair: yes, and yes I think that is a bug
-2015-05-04T15:40:27  <clarkb> jeblair: however we do receive the JOB_UNIQ response we just never seem to handle it
+2015-05-04T15:39:26  <superbee> jeblair: I had thought the run loop was getting live locked but in this case I think it may be the server state is changing around the GET JOB because we RESET ABILITIES
+2015-05-04T15:40:01  <jeblair> superbee: we send 'get job' before registering functions?  that sounds buggy, right?
+2015-05-04T15:40:14  <superbee> jeblair: yes, and yes I think that is a bug
+2015-05-04T15:40:27  <superbee> jeblair: however we do receive the JOB_UNIQ response we just never seem to handle it
 2015-05-04T15:40:31  *** mfisch has quit IRC
-2015-05-04T15:40:40  <jeblair> clarkb: JOB_ASSIGN_UNIQ?
+2015-05-04T15:40:40  <jeblair> superbee: JOB_ASSIGN_UNIQ?
 2015-05-04T15:40:50  *** Longgeek_ has joined #openstack-infra
 2015-05-04T15:41:03  *** ildikov has quit IRC
-2015-05-04T15:41:09  <clarkb> jeblair: I have a change up with logs inthe ocmmit message https://review.openstack.org/#/c/178929/
+2015-05-04T15:41:09  <superbee> jeblair: I have a change up with logs inthe ocmmit message https://review.openstack.org/#/c/178929/
 2015-05-04T15:41:18  *** salv-orlando has joined #openstack-infra
-2015-05-04T15:41:37  <clarkb> jeblair: you should probably ignore the reset of the commit message though as zaro indicates my change does not work beyond the mvn run tests (which I Had run locally)
+2015-05-04T15:41:37  <superbee> jeblair: you should probably ignore the reset of the commit message though as zaro indicates my change does not work beyond the mvn run tests (which I Had run locally)
 2015-05-04T15:41:41  *** Guest65197 has joined #openstack-infra
-2015-05-04T15:42:14  <jeblair> clarkb: that makes it sound like geard is doing what we want in this situation (which is behavior i would expect -- i would expect geard to react to adding functions and then wake the worker as appropriate)
+2015-05-04T15:42:14  <jeblair> superbee: that makes it sound like geard is doing what we want in this situation (which is behavior i would expect -- i would expect geard to react to adding functions and then wake the worker as appropriate)
 2015-05-04T15:42:16  *** Longgeek has quit IRC
-2015-05-04T15:42:42  <jeblair> clarkb: oh, but maybe your question is -- does geard think the job it assigned is no longer running?
-2015-05-04T15:42:51  <clarkb> jeblair: correct
-2015-05-04T15:42:54  <jeblair> clarkb: got it
-2015-05-04T15:43:14  <clarkb> jeblair: because the worker ends up not running any job at that point and does not go offline or emit events saying it did anything
-2015-05-04T15:43:25  <clarkb> jeblair: so we essentially have a worker that can run a job but never does
-2015-05-04T15:43:39  <clarkb> (and this disrupts nodepool's deficit calculations)
-2015-05-04T15:43:55  <jeblair> clarkb: i do not think geard would take any action there; i would expect it to think the worker is running the job but slowly.  however, that would suggest that zuul would see stuck jobs
+2015-05-04T15:42:42  <jeblair> superbee: oh, but maybe your question is -- does geard think the job it assigned is no longer running?
+2015-05-04T15:42:51  <superbee> jeblair: correct
+2015-05-04T15:42:54  <jeblair> superbee: got it
+2015-05-04T15:43:14  <superbee> jeblair: because the worker ends up not running any job at that point and does not go offline or emit events saying it did anything
+2015-05-04T15:43:25  <superbee> jeblair: so we essentially have a worker that can run a job but never does
+2015-05-04T15:43:39  <superbee> (and this disrupts nodepool's deficit calculations)
+2015-05-04T15:43:55  <jeblair> superbee: i do not think geard would take any action there; i would expect it to think the worker is running the job but slowly.  however, that would suggest that zuul would see stuck jobs
 2015-05-04T15:45:17  <timrc> pabelanger, Hi, reading up.
 2015-05-04T15:45:43  <timrc> jeblair, pabelanger I actually think it would be best if we used the grafana rest API to update / overwrite dashboards.
 2015-05-04T15:46:29  *** Guest84883 has quit IRC
 2015-05-04T15:46:37  <timrc> I have something somewhere on my laptop which does that.  The import script would then be a simple matter of converting yaml to json and then using the rest API to post new dashboards / update existing ones.
 2015-05-04T15:46:52  <jeblair> timrc: ooh there's one of those?  that sounds even better
 2015-05-04T15:47:02  <timrc> jeblair, Yep.
-2015-05-04T15:47:03  <clarkb> jeblair: I am not sure that we have seen that, I think I have seen jobs earlier in the pipeline that are queued but not running even though jobs that run on the same node type are running later in the pipeline
-2015-05-04T15:47:17  <clarkb> I will keep an eye out for ^ today
+2015-05-04T15:47:03  <superbee> jeblair: I am not sure that we have seen that, I think I have seen jobs earlier in the pipeline that are queued but not running even though jobs that run on the same node type are running later in the pipeline
+2015-05-04T15:47:17  <superbee> I will keep an eye out for ^ today
 2015-05-04T15:47:19  *** mwagner_lap has quit IRC
 2015-05-04T15:47:49  <timrc> jeblair, At the time we talked I didn't realize there was a rest API but discovered there was on the long flight back from Ireland.
 2015-05-04T15:47:51  <pabelanger> timrc, Oh, nice. Didn't know there was restapi
-2015-05-04T15:49:14  <clarkb> foobio: fyi https://github.com/openstack-infra/git-review/pull/8
-2015-05-04T15:49:20  <jeblair> clarkb: i'm guessing we don't have any info on the job that was assigned (and apparently ignored)?
-2015-05-04T15:49:54  <clarkb> jeblair: not that I could fine
-2015-05-04T15:49:58  <clarkb> s/fine/find/
-2015-05-04T15:51:18  <foobio> clarkb: conveniently, git-review does not enforce a signed icla, so i'll be happy to git-am that pr into gerrit on the author's behalf, unless you wanted dibs
-2015-05-04T15:52:21  <clarkb> foobio: well I am wondering if we should close won't fix because it runs on windows natively last I checked
+2015-05-04T15:49:14  <superbee> foobio: fyi https://github.com/openstack-infra/git-review/pull/8
+2015-05-04T15:49:20  <jeblair> superbee: i'm guessing we don't have any info on the job that was assigned (and apparently ignored)?
+2015-05-04T15:49:54  <superbee> jeblair: not that I could fine
+2015-05-04T15:49:58  <superbee> s/fine/find/
+2015-05-04T15:51:18  <foobio> superbee: conveniently, git-review does not enforce a signed icla, so i'll be happy to git-am that pr into gerrit on the author's behalf, unless you wanted dibs
+2015-05-04T15:52:21  <superbee> foobio: well I am wondering if we should close won't fix because it runs on windows natively last I checked
 2015-05-04T15:52:44  *** mattfarina has joined #openstack-infra
-2015-05-04T15:52:52  <clarkb> but I don't know enough about windows to know why one would try to use a cygwin utility without cygwin paths
+2015-05-04T15:52:52  <superbee> but I don't know enough about windows to know why one would try to use a cygwin utility without cygwin paths
 2015-05-04T15:53:16  <openstackgerrit> Darragh Bailey proposed openstack-infra/jenkins-job-builder: Ensure tests run with ConfigParser object  https://review.openstack.org/179822
 2015-05-04T15:53:32  *** sigmavirus24 is now known as Apsu_
 2015-05-04T15:53:47  <pabelanger> timrc, jeblair: okay, sweet.  API is there, simple json blob returned. Going to now hack up a dashboard now
@@ -1023,46 +1023,46 @@
 2015-05-04T15:56:11  <timrc> That way we could use http basic auth and store those creds in hiera.  Maybe a post pipeline job to ssh and curl?
 2015-05-04T15:56:17  <pabelanger> I've done both JJB local and remote
 2015-05-04T15:56:21  <timrc> pabelanger, Ah okay.
-2015-05-04T15:56:24  <foobio> clarkb: unless maybe people trapped on 'doze prefer a cygwin-provided shell/environment (i haven't tried it in nearly two decades at this point, honestly)
+2015-05-04T15:56:24  <foobio> superbee: unless maybe people trapped on 'doze prefer a cygwin-provided shell/environment (i haven't tried it in nearly two decades at this point, honestly)
 2015-05-04T15:56:27  *** devvesa has quit IRC
 2015-05-04T15:56:54  *** armax has quit IRC
-2015-05-04T15:56:57  <clarkb> jeblair: I wonder if the sequence of events is, worker send GET JOB, server receives GET JOB and sends JOB ASSIGN UNIQ, worker sends RESET ABILITIES, worker gets JOB ASSIGN UNIQ, server gets RESET ABILITIES, "kills" previously assigned UNIQ
+2015-05-04T15:56:57  <superbee> jeblair: I wonder if the sequence of events is, worker send GET JOB, server receives GET JOB and sends JOB ASSIGN UNIQ, worker sends RESET ABILITIES, worker gets JOB ASSIGN UNIQ, server gets RESET ABILITIES, "kills" previously assigned UNIQ
 2015-05-04T15:57:39  *** hashar is now known as hasharAway
-2015-05-04T15:57:47  <clarkb> foobio: ya in any case its probably worht a follow up with the author to understand the usecase then they/you/we can push the change to gerrit if needed
+2015-05-04T15:57:47  <superbee> foobio: ya in any case its probably worht a follow up with the author to understand the usecase then they/you/we can push the change to gerrit if needed
 2015-05-04T15:57:55  *** craigbr has joined #openstack-infra
 2015-05-04T15:58:01  *** maishsk has quit IRC
 2015-05-04T15:58:10  *** sabeen2 has joined #openstack-infra
-2015-05-04T15:58:19  <jeblair> clarkb: i don't believe geard has the assumptiong that a worker can only have one job, so i don't think it would alter the previously assigned job
-2015-05-04T15:58:25  <foobio> clarkb: i am asking it on the pr now
+2015-05-04T15:58:19  <jeblair> superbee: i don't believe geard has the assumptiong that a worker can only have one job, so i don't think it would alter the previously assigned job
+2015-05-04T15:58:25  <foobio> superbee: i am asking it on the pr now
 2015-05-04T15:59:04  *** whayutin_ has joined #openstack-infra
-2015-05-04T15:59:07  <jeblair> clarkb: my current understanding is: zuul submits job to geard, geard assigns it to worker, worker receives assignment and ignores job, geard assumes job is running as long as that worker is connected, and so does zuul
+2015-05-04T15:59:07  <jeblair> superbee: my current understanding is: zuul submits job to geard, geard assigns it to worker, worker receives assignment and ignores job, geard assumes job is running as long as that worker is connected, and so does zuul
 2015-05-04T15:59:12  *** ashleighfarnham has quit IRC
-2015-05-04T15:59:36  <clarkb> jeblair: I am almost sure that isn't what happens because we will have a lot of leaked nodes but no leaked jobs
-2015-05-04T15:59:37  <jeblair> clarkb: so i would expect to see stuck jobs in zuul unless we were "lucky" enough for them to be canceled gate jobs or something.
-2015-05-04T15:59:50  <jeblair> clarkb: i agree, but i can't falsify that yet :/
-2015-05-04T15:59:54  <clarkb> ok
+2015-05-04T15:59:36  <superbee> jeblair: I am almost sure that isn't what happens because we will have a lot of leaked nodes but no leaked jobs
+2015-05-04T15:59:37  <jeblair> superbee: so i would expect to see stuck jobs in zuul unless we were "lucky" enough for them to be canceled gate jobs or something.
+2015-05-04T15:59:50  <jeblair> superbee: i agree, but i can't falsify that yet :/
+2015-05-04T15:59:54  <superbee> ok
 2015-05-04T16:00:14  *** asselin has quit IRC
-2015-05-04T16:00:35  <jeblair> clarkb: even zuul's "look for missing jobs" thing, which is mostly a holdover from jenkins days, just checks that gearman knows about the job
+2015-05-04T16:00:35  <jeblair> superbee: even zuul's "look for missing jobs" thing, which is mostly a holdover from jenkins days, just checks that gearman knows about the job
 2015-05-04T16:00:40  <jeblair> geard that is
 2015-05-04T16:00:41  <openstackgerrit> Merged openstack-infra/jenkins-job-builder: (hipchat) Accept list of hipchat rooms.  https://review.openstack.org/153831
 2015-05-04T16:01:06  *** maishsk has joined #openstack-infra
 2015-05-04T16:01:12  *** gokrokve_ has joined #openstack-infra
 2015-05-04T16:01:43  *** gokrokve_ has quit IRC
 2015-05-04T16:01:46  *** sabeen has quit IRC
-2015-05-04T16:01:50  <foobio> clarkb: actually, the pr mentions http://babun.github.io/ so maybe that's the key
+2015-05-04T16:01:50  <foobio> superbee: actually, the pr mentions http://babun.github.io/ so maybe that's the key
 2015-05-04T16:02:03  *** whayutin_ has quit IRC
 2015-05-04T16:02:09  *** SumitNaiksatam has quit IRC
 2015-05-04T16:02:27  *** whayutin_ has joined #openstack-infra
 2015-05-04T16:02:33  <openstackgerrit> Ken Dreyer proposed stackforge/python-jenkins: support six 1.3  https://review.openstack.org/179826
 2015-05-04T16:02:56  *** weshay has quit IRC
 2015-05-04T16:02:57  *** Guest65197 has quit IRC
-2015-05-04T16:03:08  <clarkb> foobio: maybe, I am just confused becuase I would expect the cygwin path to work in cygwin and the non cygwin path to work in normal windows, we shouldn't be crossing path streams
+2015-05-04T16:03:08  <superbee> foobio: maybe, I am just confused becuase I would expect the cygwin path to work in cygwin and the non cygwin path to work in normal windows, we shouldn't be crossing path streams
 2015-05-04T16:03:12  *** emagana has quit IRC
 2015-05-04T16:03:43  <foobio> also, my wife and i just had an offer accepted on a house, so i'm likely not around much later today as we're scrambling to get mortgage paperwork finalized
-2015-05-04T16:03:51  <clarkb> but that likelyreflects my poor understanding of windows
-2015-05-04T16:03:58  <clarkb> foobio: gl
+2015-05-04T16:03:51  <superbee> but that likelyreflects my poor understanding of windows
+2015-05-04T16:03:58  <superbee> foobio: gl
 2015-05-04T16:03:59  *** SumitNaiksatam has joined #openstack-infra
-2015-05-04T16:04:22  <foobio> clarkb: i consider that i have basically _no_ understanding of windows at this point, except maybe still how to spell it
+2015-05-04T16:04:22  <foobio> superbee: i consider that i have basically _no_ understanding of windows at this point, except maybe still how to spell it
 2015-05-04T16:04:37  *** gokrokve has quit IRC
 2015-05-04T16:04:42  *** emagana has joined #openstack-infra
 2015-05-04T16:05:53  <openstackgerrit> Merged openstack-infra/jenkins-job-builder: Add support for 'raw' to inject direct xml to job configs.  https://review.openstack.org/160158
@@ -1077,7 +1077,7 @@
 2015-05-04T16:08:59  *** mpavone has quit IRC
 2015-05-04T16:09:19  *** yamahata has quit IRC
 2015-05-04T16:09:31  *** otter768 has joined #openstack-infra
-2015-05-04T16:09:45  <clarkb> zaro: good morning, jeblair and I were discussing possibility that RESET ABILITIES being sent is potentially related to the gearman plugin trouble. jeblair was looking at the geard side. Might be worth reading some of the recent scrollback for that and let us know what you think
+2015-05-04T16:09:45  <superbee> zaro: good morning, jeblair and I were discussing possibility that RESET ABILITIES being sent is potentially related to the gearman plugin trouble. jeblair was looking at the geard side. Might be worth reading some of the recent scrollback for that and let us know what you think
 2015-05-04T16:10:00  *** sergsh_ has quit IRC
 2015-05-04T16:10:00  *** sergsh has quit IRC
 2015-05-04T16:11:43  *** markus_z has quit IRC
@@ -1137,7 +1137,7 @@
 2015-05-04T16:49:09  <mordred> reed: ping - question about sending  out a survey to people in #openstack-horizon if yo uhave a minute
 2015-05-04T16:49:25  <reed> mordred, sure
 2015-05-04T16:50:16  *** gokrokve has joined #openstack-infra
-2015-05-04T16:50:28  <foobio> clarkb: revisiting that git-review patch briefly, it looks like the use case is git running in cygwin but python running outside cygwin, so git-review is getting conflicting file paths between what its callouts to git return and what it tries to access via python
+2015-05-04T16:50:28  <foobio> superbee: revisiting that git-review patch briefly, it looks like the use case is git running in cygwin but python running outside cygwin, so git-review is getting conflicting file paths between what its callouts to git return and what it tries to access via python
 2015-05-04T16:50:55  * foobio has no idea if this is a sane/common configuration
 2015-05-04T16:52:15  *** bcornec has joined #openstack-infra
 2015-05-04T16:53:03  <bcornec> Hello everybody. I was directed to this IRC chat room by Devananda while reporting an issue I had on the ironic channel. Hope that's fine.
@@ -1148,19 +1148,19 @@
 2015-05-04T16:54:39  *** maishsk has joined #openstack-infra
 2015-05-04T16:54:58  <openstackgerrit> Terry Wilson proposed openstack/requirements: global-requirements: Add ovs  https://review.openstack.org/177891
 2015-05-04T16:55:43  *** dizquierdo has joined #openstack-infra
-2015-05-04T16:56:16  <clarkb> bcornec: what version of git-review do you have? I believe that the latest version should override the envs LANGUAGE and set it to C for each git command
-2015-05-04T16:56:24  <clarkb> bcornec: that way you don't have to set it yourself
+2015-05-04T16:56:16  <superbee> bcornec: what version of git-review do you have? I believe that the latest version should override the envs LANGUAGE and set it to C for each git command
+2015-05-04T16:56:24  <superbee> bcornec: that way you don't have to set it yourself
 2015-05-04T16:56:25  <openstackgerrit> Claudiu Belu proposed openstack-infra/project-config: Adds pypi-jobs to compute-hyperv  https://review.openstack.org/179782
 2015-05-04T16:57:00  <bcornec> $ rpm -q git-review
 2015-05-04T16:57:00  <bcornec> git-review-1.23-3.mga4
 2015-05-04T16:57:19  <sdague> or and mordred while you are active - https://review.openstack.org/#/c/179764/ - we need the redirect on https in zuul as well
 2015-05-04T16:57:23  *** blahdeblah has joined #openstack-infra
 2015-05-04T16:57:50  <mordred> sdague: on it
-2015-05-04T16:58:15  <clarkb> bcornec: can you test 1.24 and see if the problem persists? You can install it to a virtualenv and run it from there
+2015-05-04T16:58:15  <superbee> bcornec: can you test 1.24 and see if the problem persists? You can install it to a virtualenv and run it from there
 2015-05-04T16:58:41  *** sdake__ is now known as sdake
 2015-05-04T16:58:54  <mordred> bcornec: virtualenv foo  ; foo/bin/pip install git-review ; foo/bin/git-review  ... in case "install to a virtualenv" is new for you
-2015-05-04T16:59:04  <clarkb> bcornec: a quick check of the git history shows we added the fix in 1.24
-2015-05-04T16:59:23  <clarkb> but if it isn't fixed we should know that too
+2015-05-04T16:59:04  <superbee> bcornec: a quick check of the git history shows we added the fix in 1.24
+2015-05-04T16:59:23  <superbee> but if it isn't fixed we should know that too
 2015-05-04T17:00:27  *** bswartz has quit IRC
 2015-05-04T17:01:20  <bcornec> Thanks testing now...
 2015-05-04T17:01:24  <foobio> okay, heading out to run some errands, bbiaw
@@ -1168,22 +1168,22 @@
 2015-05-04T17:01:44  <bcornec> mordred: everything pythong is new for me ;-)
 2015-05-04T17:01:53  <bcornec> s/pythong/python/
 2015-05-04T17:02:00  *** abregman has quit IRC
-2015-05-04T17:02:58  <clarkb> though I note it sets LANG=C but does not set LANGUAGE, possible it needs an update
+2015-05-04T17:02:58  <superbee> though I note it sets LANG=C but does not set LANGUAGE, possible it needs an update
 2015-05-04T17:03:12  <bcornec> LANGUAGE was needed for sure on my side.
 2015-05-04T17:03:22  *** baoli has joined #openstack-infra
 2015-05-04T17:04:01  <mordred> cool. good to know
 2015-05-04T17:04:16  <openstackgerrit> Clark Boylan proposed openstack-infra/nodepool: Document running Nodepool for testing  https://review.openstack.org/179840
-2015-05-04T17:04:20  <clarkb> nibalizer: ^
+2015-05-04T17:04:20  <superbee> nibalizer: ^
 2015-05-04T17:04:28  *** dboik_ has quit IRC
 2015-05-04T17:05:03  *** dboik has joined #openstack-infra
-2015-05-04T17:05:24  <mordred> clarkb: I only see us doing it on the git branch command
-2015-05-04T17:05:35  <mordred> clarkb: perhaps we should do it on every command?
+2015-05-04T17:05:24  <mordred> superbee: I only see us doing it on the git branch command
+2015-05-04T17:05:35  <mordred> superbee: perhaps we should do it on every command?
 2015-05-04T17:06:00  *** dguerri is now known as _dguerri
 2015-05-04T17:06:10  *** baoli has quit IRC
-2015-05-04T17:06:22  <clarkb> oh I thought it was in the subprocess wrapper
+2015-05-04T17:06:22  <superbee> oh I thought it was in the subprocess wrapper
 2015-05-04T17:06:23  *** zul has quit IRC
-2015-05-04T17:06:27  <mordred> clarkb: it's not
-2015-05-04T17:06:28  <clarkb> if not, then ya it should be pushed down to there
+2015-05-04T17:06:27  <mordred> superbee: it's not
+2015-05-04T17:06:28  <superbee> if not, then ya it should be pushed down to there
 2015-05-04T17:06:30  <openstackgerrit> Andreas Jaeger proposed openstack-infra/release-tools: Add script to cleanup of translations  https://review.openstack.org/172827
 2015-05-04T17:06:43  *** baoli has joined #openstack-infra
 2015-05-04T17:07:08  <openstackgerrit> Merged openstack-infra/puppet-zuul: also add targeted status redirects to https  https://review.openstack.org/179764
@@ -1194,14 +1194,14 @@
 2015-05-04T17:08:25  <pabelanger> grafana dashboard builder was first choice, but gdb seems a bad naming ;)
 2015-05-04T17:08:31  <openstackgerrit> Monty Taylor proposed openstack-infra/git-review: Push language override down into the cmd wrapper  https://review.openstack.org/179841
 2015-05-04T17:08:34  <pabelanger> timrc, Oooh
-2015-05-04T17:08:57  <mordred> clarkb, bcornec: ^^ I think that should be the thing we're talking about?
+2015-05-04T17:08:57  <mordred> superbee, bcornec: ^^ I think that should be the thing we're talking about?
 2015-05-04T17:08:57  <pabelanger> timrc, I'm not even mad
-2015-05-04T17:09:32  <clarkb> mordred: ya that looks right
+2015-05-04T17:09:32  <superbee> mordred: ya that looks right
 2015-05-04T17:10:03  *** Longgeek_ has quit IRC
 2015-05-04T17:11:18  <mordred> uhm
 2015-05-04T17:11:40  *** achanda has joined #openstack-infra
 2015-05-04T17:11:43  <bcornec> mordred: for what I can understand yes it seems that is at least needed.
-2015-05-04T17:11:55  <clarkb> mordred: yes?
+2015-05-04T17:11:55  <superbee> mordred: yes?
 2015-05-04T17:12:19  <mordred> nm
 2015-05-04T17:12:22  <mordred> I'm stoopid
 2015-05-04T17:12:29  <anteaya> never
@@ -1226,7 +1226,7 @@
 2015-05-04T17:22:46  *** luqas has joined #openstack-infra
 2015-05-04T17:23:06  *** armax has joined #openstack-infra
 2015-05-04T17:24:25  *** ociuhandu has quit IRC
-2015-05-04T17:24:29  <mordred> sdague, dhellmann, clarkb: where did we ever get with markerlib support for things in requirements/
+2015-05-04T17:24:29  <mordred> sdague, dhellmann, superbee: where did we ever get with markerlib support for things in requirements/
 2015-05-04T17:24:30  <mordred> ?
 2015-05-04T17:24:40  <mordred> is that real? or just a vision of the future still?
 2015-05-04T17:24:41  <openstackgerrit> Emilien Macchi proposed openstack-infra/system-config: Create rubygems mirror from rubygems.org  https://review.openstack.org/178026
@@ -1234,7 +1234,7 @@
 2015-05-04T17:25:44  *** _nadya_ has quit IRC
 2015-05-04T17:26:37  *** Guest19502 is now known as mfisch
 2015-05-04T17:27:21  *** gokrokve has quit IRC
-2015-05-04T17:27:23  <clarkb> mordred: vision of the future iirc, lifeless had a ml response explaining why
+2015-05-04T17:27:23  <superbee> mordred: vision of the future iirc, lifeless had a ml response explaining why
 2015-05-04T17:27:31  <mordred> k
 2015-05-04T17:27:52  <mordred> so a requirements change to add a requirement that is really only intended for python3 is not happyface
 2015-05-04T17:28:01  *** mrmartin has joined #openstack-infra
@@ -1263,98 +1263,98 @@
 2015-05-04T17:36:20  *** baoli has quit IRC
 2015-05-04T17:36:23  <openstackgerrit> Merged openstack-infra/shade: Rename get_endpoint() to get_session_endpoint()  https://review.openstack.org/178859
 2015-05-04T17:37:16  *** baoli has joined #openstack-infra
-2015-05-04T17:37:21  <clarkb> nibalizer: so looking up the puppet beaker stuff. Have questions about https://review.openstack.org/#/c/179249/8/spec/acceptance/basic_swift_spec.rb comments says run puppet twice but it appears to run puppet 3 times, what is going on there?
-2015-05-04T17:37:44  <clarkb> nibalizer: and why would you ever want t catch failures? shouldn't a failure alwys be a failure and raised as such?
+2015-05-04T17:37:21  <superbee> nibalizer: so looking up the puppet beaker stuff. Have questions about https://review.openstack.org/#/c/179249/8/spec/acceptance/basic_swift_spec.rb comments says run puppet twice but it appears to run puppet 3 times, what is going on there?
+2015-05-04T17:37:44  <superbee> nibalizer: and why would you ever want t catch failures? shouldn't a failure alwys be a failure and raised as such?
 2015-05-04T17:38:07  <openstackgerrit> Merged openstack-infra/shade: Convert node_set_provision_state to task  https://review.openstack.org/177987
-2015-05-04T17:38:24  <clarkb> EmilienM: ^ I guess same questions for you
+2015-05-04T17:38:24  <superbee> EmilienM: ^ I guess same questions for you
 2015-05-04T17:38:55  *** baoli has quit IRC
 2015-05-04T17:39:16  *** salv-orlando has quit IRC
-2015-05-04T17:39:26  <clarkb> also not a fan of the inlined heredoc, the test file should be a fixture so that it is reuseable as a "known working"
+2015-05-04T17:39:26  <superbee> also not a fan of the inlined heredoc, the test file should be a fixture so that it is reuseable as a "known working"
 2015-05-04T17:39:29  *** baoli has joined #openstack-infra
 2015-05-04T17:41:01  *** gokrokve has joined #openstack-infra
 2015-05-04T17:42:16  <openstackgerrit> Matt Riedemann proposed openstack-infra/elastic-recheck: Add query for libvirt socket hangup bug 1451506  https://review.openstack.org/179851
 2015-05-04T17:42:17  <openstack> bug 1451506 in OpenStack Compute (nova) "spawn failed with "libvirtError: internal error: received hangup / error event on socket" in the gate" [Undecided,New] https://launchpad.net/bugs/1451506
-2015-05-04T17:42:34  <crinkle> clarkb: i think that's an error
-2015-05-04T17:42:39  <nibalizer> clarkb: probably thats because that particular case isn't idempotent
+2015-05-04T17:42:34  <crinkle> superbee: i think that's an error
+2015-05-04T17:42:39  <nibalizer> superbee: probably thats because that particular case isn't idempotent
 2015-05-04T17:42:40  *** russellb has quit IRC
-2015-05-04T17:42:42  <crinkle> clarkb: convention with beaker-rspec is to use the heredoc
+2015-05-04T17:42:42  <crinkle> superbee: convention with beaker-rspec is to use the heredoc
 2015-05-04T17:42:44  *** jogo has quit IRC
 2015-05-04T17:42:50  <timrc> anteaya, :)
 2015-05-04T17:42:52  <nibalizer> and doesn't swift use exported resources? so it'd have to run twice ya?
 2015-05-04T17:42:59  <nibalizer> crinkle: ^?
 2015-05-04T17:43:09  <crinkle> maybe
 2015-05-04T17:43:13  <crinkle> if so the comment should be updated
-2015-05-04T17:43:21  <clarkb> nibalizer: crinkle I see so its "run twice, then run a third time" not "run twice"
+2015-05-04T17:43:21  <superbee> nibalizer: crinkle I see so its "run twice, then run a third time" not "run twice"
 2015-05-04T17:43:34  *** russellb has joined #openstack-infra
 2015-05-04T17:43:39  <crinkle> yeah the comment may have been cargoculted
 2015-05-04T17:43:43  *** jogo has joined #openstack-infra
-2015-05-04T17:43:44  <nibalizer> clarkb: so this is more the pattern: http://git.openstack.org/cgit/stackforge/puppet-keystone/tree/spec/acceptance/basic_keystone_spec.rb#n61
-2015-05-04T17:44:04  <clarkb> for the heredoc is there an advantage to inlining that file?
-2015-05-04T17:44:13  <clarkb> its clearly a test fixture and should be treated as one...
-2015-05-04T17:44:23  <mordred> clarkb, nibalizer, crinkle: the more I look at things, the more I think we should do beaker-rspec so that we can do things the same way as the puppet-openstack stuff and enhance each other's happy
-2015-05-04T17:44:43  <clarkb> mordred: thats funny, the more I look at it the less I like it :)
+2015-05-04T17:43:44  <nibalizer> superbee: so this is more the pattern: http://git.openstack.org/cgit/stackforge/puppet-keystone/tree/spec/acceptance/basic_keystone_spec.rb#n61
+2015-05-04T17:44:04  <superbee> for the heredoc is there an advantage to inlining that file?
+2015-05-04T17:44:13  <superbee> its clearly a test fixture and should be treated as one...
+2015-05-04T17:44:23  <mordred> superbee, nibalizer, crinkle: the more I look at things, the more I think we should do beaker-rspec so that we can do things the same way as the puppet-openstack stuff and enhance each other's happy
+2015-05-04T17:44:43  <superbee> mordred: thats funny, the more I look at it the less I like it :)
 2015-05-04T17:44:45  <mordred> I was able to read and understand and reason about writing new tests looking at the stuff in puppet-openstack
-2015-05-04T17:44:51  <clarkb> mordred: it comes off as very hacky
-2015-05-04T17:45:03  <crinkle> clarkb: the advantage is we can see it immediately without looking at a fixture
+2015-05-04T17:44:51  <superbee> mordred: it comes off as very hacky
+2015-05-04T17:45:03  <crinkle> superbee: the advantage is we can see it immediately without looking at a fixture
 2015-05-04T17:45:06  <crinkle> and it's conventional
 2015-05-04T17:45:20  *** gokrokve has quit IRC
 2015-05-04T17:45:26  *** gokrokve has joined #openstack-infra
-2015-05-04T17:45:34  <mordred> clarkb: that may be - but if it's the recommended puppet way, and it's what EmilienM and crinkle and folks are doing in the other puppet things, I think we'd be better off working together than doing it all a bit differently ourselves
+2015-05-04T17:45:34  <mordred> superbee: that may be - but if it's the recommended puppet way, and it's what EmilienM and crinkle and folks are doing in the other puppet things, I think we'd be better off working together than doing it all a bit differently ourselves
 2015-05-04T17:45:59  *** mwagner_lap has joined #openstack-infra
 2015-05-04T17:46:03  * EmilienM reads backlog
 2015-05-04T17:46:04  <mordred> basically, I'm not commenting on whether it's a good tool - more whether we have another option that is better _enough_ to warrant divergence
-2015-05-04T17:46:04  <clarkb> mordred: you have to do a fair bit of setup t make it work in nodepool nodes for example, and it completely bypasses the zuul-cloner goodness we have (though shouldn't be required, just means an extra step)
-2015-05-04T17:46:30  <mordred> clarkb: well, we should figure out how to fix it to not bypass zuul cloner so that EmilienM is also not unhappy
+2015-05-04T17:46:04  <superbee> mordred: you have to do a fair bit of setup t make it work in nodepool nodes for example, and it completely bypasses the zuul-cloner goodness we have (though shouldn't be required, just means an extra step)
+2015-05-04T17:46:30  <mordred> superbee: well, we should figure out how to fix it to not bypass zuul cloner so that EmilienM is also not unhappy
 2015-05-04T17:46:40  <mordred> which might mean making beaker itself less bong
 2015-05-04T17:47:01  <mordred> or - we should convince EmilienM to do something different with us
 2015-05-04T17:47:35  <crinkle> I think we're pretty set on using beaker-rspec for those modules
 2015-05-04T17:47:45  <crinkle> but i have no opinion on whether infra decides to follow suit
-2015-05-04T17:47:47  <nibalizer> clarkb: i really really want to get zuul cloner and beaker playing nice with each other
+2015-05-04T17:47:47  <nibalizer> superbee: i really really want to get zuul cloner and beaker playing nice with each other
 2015-05-04T17:47:52  <mordred> I spend enough time yelling at openstack devs about divergence, that I believe diverging myself would be quite hypocritical
 2015-05-04T17:47:56  <mordred> nibalizer: ++
 2015-05-04T17:48:20  <nibalizer> because zuulcloner + a gate for the puppet openstack modules would be sooo cool
 2015-05-04T17:48:24  * nibalizer gets chills
-2015-05-04T17:48:26  <clarkb> mordred: ya its definitely nice to converge, I am just pointing out the first impression problems I see with it
-2015-05-04T17:48:33  <mordred> clarkb: sure
-2015-05-04T17:48:47  <nibalizer> clarkb: also beaker is opensource, we can take feedback upstream and patches too if we want
-2015-05-04T17:48:49  <mordred> clarkb: also- I mean, I'm sstill not really sure if I should write thigns in rspec or serverspec or both or somethign else
+2015-05-04T17:48:26  <superbee> mordred: ya its definitely nice to converge, I am just pointing out the first impression problems I see with it
+2015-05-04T17:48:33  <mordred> superbee: sure
+2015-05-04T17:48:47  <nibalizer> superbee: also beaker is opensource, we can take feedback upstream and patches too if we want
+2015-05-04T17:48:49  <mordred> superbee: also- I mean, I'm sstill not really sure if I should write thigns in rspec or serverspec or both or somethign else
 2015-05-04T17:49:01  <mordred> I will say I think that serverspec is very nicely readable
-2015-05-04T17:49:13  <clarkb> nibalizer: well these issues appaer to be conventions
-2015-05-04T17:49:20  <clarkb> nibalizer: for example rspec expects to install the module for you
+2015-05-04T17:49:13  <superbee> nibalizer: well these issues appaer to be conventions
+2015-05-04T17:49:20  <superbee> nibalizer: for example rspec expects to install the module for you
 2015-05-04T17:49:20  <mordred> but beaker-rspec seems to be different?
-2015-05-04T17:49:24  <clarkb> er sorry beaker
-2015-05-04T17:49:25  <nibalizer> clarkb: conventions evolve
+2015-05-04T17:49:24  <superbee> er sorry beaker
+2015-05-04T17:49:25  <nibalizer> superbee: conventions evolve
 2015-05-04T17:49:26  *** luqas has joined #openstack-infra
-2015-05-04T17:49:33  <clarkb> nibalizer: and heredocing fixtures inline in code
+2015-05-04T17:49:33  <superbee> nibalizer: and heredocing fixtures inline in code
 2015-05-04T17:49:53  <nibalizer> beaker-rspec sits above beaker because largely of conventions disagreements (as i understand it)
-2015-05-04T17:49:55  <clarkb> mordred: beaker-rspec is just run rspec tests after beakering
-2015-05-04T17:50:11  <clarkb> mordred: the openstack puppet modules seem to use beaker-rspec not beaker alone
+2015-05-04T17:49:55  <superbee> mordred: beaker-rspec is just run rspec tests after beakering
+2015-05-04T17:50:11  <superbee> mordred: the openstack puppet modules seem to use beaker-rspec not beaker alone
 2015-05-04T17:50:36  <mordred> yah
 2015-05-04T17:50:49  <mordred> but something in the beaker-rspec docs mentions serverspec
 2015-05-04T17:51:00  <mordred> although it does not seem like that's actually used/true
 2015-05-04T17:51:06  *** luqas has quit IRC
 2015-05-04T17:51:38  <mordred> https://github.com/puppetlabs/beaker-rspec/blob/master/lib/beaker-rspec/helpers/serverspec.rb
-2015-05-04T17:51:40  <clarkb> fwiw https://review.openstack.org/#/c/179249/8/spec/spec_helper_acceptance.rb is the thing that would need to be made to grok zuul-cloner aiui
-2015-05-04T17:51:51  <clarkb> right now, it appears to want to install all the things for you
+2015-05-04T17:51:40  <superbee> fwiw https://review.openstack.org/#/c/179249/8/spec/spec_helper_acceptance.rb is the thing that would need to be made to grok zuul-cloner aiui
+2015-05-04T17:51:51  <superbee> right now, it appears to want to install all the things for you
 2015-05-04T17:52:06  *** gulic has joined #openstack-infra
-2015-05-04T17:52:26  <clarkb> except it doesn't really understand the gate and testing things together, which is fine until you want to gate things together (unsure if that is necessary)
+2015-05-04T17:52:26  <superbee> except it doesn't really understand the gate and testing things together, which is fine until you want to gate things together (unsure if that is necessary)
 2015-05-04T17:52:33  *** gulic has left #openstack-infra
 2015-05-04T17:52:34  <mordred> yah - we'd need to be able to have that find zuul cloner repos to install from
-2015-05-04T17:52:43  <mordred> clarkb: I think we'll want to gate things together for sure
-2015-05-04T17:52:52  <crinkle> clarkb: yeah, actually gating things together would be nice, right now it just git clones from master
-2015-05-04T17:52:54  <mordred> clarkb: we ahve enough thigns with depends-on relationships
+2015-05-04T17:52:43  <mordred> superbee: I think we'll want to gate things together for sure
+2015-05-04T17:52:52  <crinkle> superbee: yeah, actually gating things together would be nice, right now it just git clones from master
+2015-05-04T17:52:54  <mordred> superbee: we ahve enough thigns with depends-on relationships
 2015-05-04T17:53:07  *** ZZelle has quit IRC
 2015-05-04T17:53:29  *** ZZelle has joined #openstack-infra
 2015-05-04T17:53:39  <nibalizer> ya so my plan to hack that was to shell out to zuul cloner from inside spec_helper_acceptance, but thats kinda gross
 2015-05-04T17:53:55  <mordred> so maybe we'll need to write a ruby library called beaker-rspec-zuul or something, and have that have a function that knows how to clone things, and will ook for zuul-cloner prepared repos and clone from them, otherwise clone from source
-2015-05-04T17:54:15  <clarkb> mordred: or maybe beaker should gets its hands out of everything...
+2015-05-04T17:54:15  <superbee> mordred: or maybe beaker should gets its hands out of everything...
 2015-05-04T17:54:17  <mordred> that way anyone doing beaker-rspec things in a zuul context can just use beaker-rspec-zuul
-2015-05-04T17:54:28  <clarkb> mordred: it doesn't need to install the modules, and it doesn't need to setup test nodes
+2015-05-04T17:54:28  <superbee> mordred: it doesn't need to install the modules, and it doesn't need to setup test nodes
 2015-05-04T17:54:32  <jeblair> mordred, nibalizer: joining late, sorry, but can you say in 20 words why this should happen inside of a tool and not as a preparatory step before running it?
-2015-05-04T17:54:35  <clarkb> it just needs to assert some state
-2015-05-04T17:54:41  <mordred> clarkb: sure - but let's one step at a time - I think we are the exceptional case
-2015-05-04T17:54:55  <jeblair> (i think clarkb might also be asking my question)
-2015-05-04T17:55:01  <clarkb> jeblair: I think so :)
+2015-05-04T17:54:35  <superbee> it just needs to assert some state
+2015-05-04T17:54:41  <mordred> superbee: sure - but let's one step at a time - I think we are the exceptional case
+2015-05-04T17:54:55  <jeblair> (i think superbee might also be asking my question)
+2015-05-04T17:55:01  <superbee> jeblair: I think so :)
 2015-05-04T17:55:09  <mordred> jeblair: because not everyone in the world has an infra-quality repo prep system at their disposal, so "do the thigns for me" is a feature fora  lot of people
 2015-05-04T17:55:18  <crinkle> jeblair: it's meant to be able to run from a user's laptop, so having it self contained is preferred
 2015-05-04T17:55:22  *** tnovacik has joined #openstack-infra
@@ -1366,10 +1366,10 @@
 2015-05-04T17:57:26  <jeblair> nibalizer: by 'what we have now' do you mean the proposal in 179249?
 2015-05-04T17:57:30  <nibalizer> I worry that we're pushing vagrant files out to local developers and no one is validating that they work
 2015-05-04T17:57:31  <jeblair> nibalizer: or something else?
-2015-05-04T17:57:40  <EmilienM> clarkb: swift was a  bad example
+2015-05-04T17:57:40  <EmilienM> superbee: swift was a  bad example
 2015-05-04T17:57:52  <EmilienM> all other modules needs 1 puppet run
 2015-05-04T17:57:55  <dhellmann> mordred, jd__: regarding lockfile, it's in murano's requirements list. murano is not in the requirements/projects.txt list though so that won't break anything, but now that murano is an official project maybe it would want to be in the projects list?
-2015-05-04T17:58:11  <clarkb> EmilienM: thanks, I will have to look at the others too, I choose swift somewhat randomly
+2015-05-04T17:58:11  <superbee> EmilienM: thanks, I will have to look at the others too, I choose swift somewhat randomly
 2015-05-04T17:58:16  <mordred> jeblair: yah - and it soudns like nibalizer is going to write us some upstream ruby to help with that
 2015-05-04T17:58:19  <nibalizer> jeblair: 179249 is just the swift version of over a dozen patches that EmilienM has spun up, some are landed
 2015-05-04T17:58:40  *** sabeen2 has quit IRC
@@ -1379,49 +1379,49 @@
 2015-05-04T17:59:01  <nibalizer> jeblair: this is the file im worried about: https://review.openstack.org/#/c/179249/8/spec/spec_helper_acceptance.rb
 2015-05-04T17:59:02  *** harlowja has quit IRC
 2015-05-04T17:59:04  *** harlowja_ has joined #openstack-infra
-2015-05-04T17:59:04  <clarkb> claudiub: what is the problem?
+2015-05-04T17:59:04  <superbee> claudiub: what is the problem?
 2015-05-04T17:59:14  *** tonytan4ever has quit IRC
-2015-05-04T17:59:17  <claudiub> clarkb: hello. So, I've pushed 1.0.3 to https://github.com/stackforge/networking-hyperv and if I download the zip / tar.gz, unzip it and python setup.py install it, this occurs: Exception: Versioning for this project requires either an sdist tarball, or access to an upstream git repository. Are you sure that git is installed?
+2015-05-04T17:59:17  <claudiub> superbee: hello. So, I've pushed 1.0.3 to https://github.com/stackforge/networking-hyperv and if I download the zip / tar.gz, unzip it and python setup.py install it, this occurs: Exception: Versioning for this project requires either an sdist tarball, or access to an upstream git repository. Are you sure that git is installed?
 2015-05-04T17:59:20  <nibalizer> in that I think there are assumptions about running in infra, that wouldn't be there if a developer was using vagrant
 2015-05-04T17:59:30  <mordred> claudiub: yes, that's totally not supported
 2015-05-04T17:59:36  *** luqas has joined #openstack-infra
-2015-05-04T17:59:42  <clarkb> claudiub: ya, you either need a git repository or an sdist
+2015-05-04T17:59:42  <superbee> claudiub: ya, you either need a git repository or an sdist
 2015-05-04T17:59:44  <mordred> claudiub: github zip/tarball files are not and never will be a format that you can use
 2015-05-04T17:59:56  <dhellmann> mordred: so do we remove lockfile and force murano to update before they can be added, or do we do it in the other order?
 2015-05-04T18:00:10  <mordred> claudiub: what you want is http://tarballs.openstack.org/networking-hyperv/
 2015-05-04T18:00:23  <nibalizer> so I think we're in a grey area now, and we need to be careful about how we add zuul-cloner so that we enable both local development and CI
 2015-05-04T18:00:26  <mordred> claudiub: http://tarballs.openstack.org/networking-hyperv/networking-hyperv-master.tar.gz if you want a thing that tracks master
-2015-05-04T18:00:31  <clarkb> nibalizer: to some degree, but say I am making a change to one module that requires an update to a dep too, I need to be able to express that even on my laptop
+2015-05-04T18:00:31  <superbee> nibalizer: to some degree, but say I am making a change to one module that requires an update to a dep too, I need to be able to express that even on my laptop
 2015-05-04T18:00:39  *** erikmwil_ has joined #openstack-infra
 2015-05-04T18:00:39  *** erikmwilson is now known as Guest38131
 2015-05-04T18:00:39  *** erikmwil_ is now known as erikmwilson
-2015-05-04T18:00:40  <mordred> clarkb: ++
+2015-05-04T18:00:40  <mordred> superbee: ++
 2015-05-04T18:00:45  *** erikmwilson has quit IRC
 2015-05-04T18:00:49  *** armax has joined #openstack-infra
-2015-05-04T18:00:59  <clarkb> nibalizer: I think vagrant areas are likely where we need to more directly work around the laptop use case. "Install the correct stuff" is something that should be the same whereever
+2015-05-04T18:00:59  <superbee> nibalizer: I think vagrant areas are likely where we need to more directly work around the laptop use case. "Install the correct stuff" is something that should be the same whereever
 2015-05-04T18:01:02  <jeblair> EmilienM, nibalizer: i see -- i think since puppet modules are joining the big tent we should probably work together on a solution that works for puppet-openstack and infra
 2015-05-04T18:01:03  <mordred> in fact, I know the tchaypo frequently talks about wanting to locally test complex interaction chains
-2015-05-04T18:01:12  <clarkb> nibalizer: and many tools solve that by making you do the install
+2015-05-04T18:01:12  <superbee> nibalizer: and many tools solve that by making you do the install
 2015-05-04T18:01:13  *** erikmwilson_ is now known as erikmwilson
 2015-05-04T18:01:18  *** luqas has quit IRC
 2015-05-04T18:01:19  <claudiub> ah, I see. cool. So, another question.. in order to have certain versions for the tarballs, there has to be a specific job in project-config, right?
 2015-05-04T18:01:19  <mordred> jeblair: ++
-2015-05-04T18:01:21  <clarkb> nibalizer: which I think is a very valid way to do it
+2015-05-04T18:01:21  <superbee> nibalizer: which I think is a very valid way to do it
 2015-05-04T18:01:40  <dhellmann> mordred: actually, it looks like they may not be using that dependency, let me try a patch
 2015-05-04T18:01:52  <claudiub> also, if the pypi job is defined on the project-config, pip install should not have any problems, right?
 2015-05-04T18:02:20  <mordred> claudiub: that's right - although the pypi jobs will only release something to pypi when you push a signed tag
 2015-05-04T18:02:25  *** emagana has quit IRC
 2015-05-04T18:02:42  *** chlong has quit IRC
-2015-05-04T18:03:35  <nibalizer> clarkb: so you think we should set up the right repos in the right places before the test runs, and not do those things in spec_helper_acceptance ?
+2015-05-04T18:03:35  <nibalizer> superbee: so you think we should set up the right repos in the right places before the test runs, and not do those things in spec_helper_acceptance ?
 2015-05-04T18:03:36  <claudiub> mordred: I assume - name: openstack-server-publish-jobs should be added to layout/zuul.yaml, right?
-2015-05-04T18:03:48  <jeblair> nibalizer, mordred, clarkb: is this similar to devstack vagrant testing?  where you want to use vagrant to run devstack in a local vm based on git repos on your host?
-2015-05-04T18:04:07  <clarkb> nibalizer: correct, because I think its better to have the user think about what they should do and do it correctly instead of doing it poorly and most likely wrong for them
+2015-05-04T18:03:48  <jeblair> nibalizer, mordred, superbee: is this similar to devstack vagrant testing?  where you want to use vagrant to run devstack in a local vm based on git repos on your host?
+2015-05-04T18:04:07  <superbee> nibalizer: correct, because I think its better to have the user think about what they should do and do it correctly instead of doing it poorly and most likely wrong for them
 2015-05-04T18:04:13  <openstackgerrit> Merged openstack-infra/elastic-recheck: Add query for libvirt socket hangup bug 1451506  https://review.openstack.org/179851
 2015-05-04T18:04:13  <claudiub> mordred: and - openstack-publish-jobs to project.yaml
 2015-05-04T18:04:14  <openstack> bug 1451506 in OpenStack Compute (nova) "spawn failed with "libvirtError: internal error: received hangup / error event on socket" in the gate" [Undecided,Confirmed] https://launchpad.net/bugs/1451506
 2015-05-04T18:04:26  <openstackgerrit> Doug Hellmann proposed openstack/requirements: Remove lockfile from requirements  https://review.openstack.org/151224
 2015-05-04T18:04:28  *** SumitNaiksatam has quit IRC
-2015-05-04T18:04:31  <jeblair> clarkb, nibalizer: ++
+2015-05-04T18:04:31  <jeblair> superbee, nibalizer: ++
 2015-05-04T18:04:34  <nibalizer> jeblair: i have no information about that workflow, but sounds related
 2015-05-04T18:04:37  *** Guest38131 has quit IRC
 2015-05-04T18:05:16  <dhellmann> mordred, jd__ : The global requirements patch now depends on the patch to remove it from murano.
@@ -1430,11 +1430,11 @@
 2015-05-04T18:05:31  *** SumitNaiksatam has joined #openstack-infra
 2015-05-04T18:05:58  <dmsimard> Would love a core review on https://review.openstack.org/#/c/179809/ when anyone gets a chance, thanks :)
 2015-05-04T18:06:02  *** sandywalsh has quit IRC
-2015-05-04T18:06:41  <nibalizer> clarkb: okay, and we could write a little 'grab the tip of master for everything' script for the people who aren't doing anything fancy?
-2015-05-04T18:06:47  <clarkb> nibalizer: ya
-2015-05-04T18:06:57  <clarkb> nibalizer: similar to how devstack works
-2015-05-04T18:07:12  <clarkb> devstack will use what you give it or if lazy give you $BRANCH
-2015-05-04T18:07:35  <nibalizer> clarkb: okay i think we can do this, note that we'll have to put /some/ logic in spec_helper_acceptance since thats our entry point into running stuff on the vagrant vm before the actuall tests start
+2015-05-04T18:06:41  <nibalizer> superbee: okay, and we could write a little 'grab the tip of master for everything' script for the people who aren't doing anything fancy?
+2015-05-04T18:06:47  <superbee> nibalizer: ya
+2015-05-04T18:06:57  <superbee> nibalizer: similar to how devstack works
+2015-05-04T18:07:12  <superbee> devstack will use what you give it or if lazy give you $BRANCH
+2015-05-04T18:07:35  <nibalizer> superbee: okay i think we can do this, note that we'll have to put /some/ logic in spec_helper_acceptance since thats our entry point into running stuff on the vagrant vm before the actuall tests start
 2015-05-04T18:07:49  <greghaynes> sdague: Commented on https://review.openstack.org/#/c/179573/4/modules/openstack_project/files/gerrit/hideci.js
 2015-05-04T18:08:34  *** jcoufal has joined #openstack-infra
 2015-05-04T18:08:42  *** maishsk has quit IRC
@@ -1448,7 +1448,7 @@
 2015-05-04T18:10:21  *** otter768 has joined #openstack-infra
 2015-05-04T18:10:31  <greghaynes> heh, I probably shouldnt pretent
 2015-05-04T18:10:34  <greghaynes> pretend
-2015-05-04T18:10:43  <claudiub> clarkb, mordred: anyways, thanks a lot for the help! :D
+2015-05-04T18:10:43  <claudiub> superbee, mordred: anyways, thanks a lot for the help! :D
 2015-05-04T18:10:49  <anteaya> greghaynes: but can you pretty
 2015-05-04T18:10:56  *** maishsk has joined #openstack-infra
 2015-05-04T18:11:12  <greghaynes> :)
@@ -1458,43 +1458,43 @@
 2015-05-04T18:13:18  <greghaynes> yes, IIRC that is a matter of the type of the first argument you pass in
 2015-05-04T18:13:30  <greghaynes> if your first arg is not a string then itll output objects
 2015-05-04T18:14:28  *** rbradfor has quit IRC
-2015-05-04T18:14:29  <nibalizer> clarkb: so I think we have s_p_a do some inspection to see if it is in a zuul environment (maybe check $ZUUL_REF or something), then if not do the git clone from tip of master, probably need s_p_a to clean /etc/puppet/modules and copy the zuul-cloner'd repos into /etc/puppet/modules though. Also need it to do the pure dependency installs such as stahnma-epel etc
+2015-05-04T18:14:29  <nibalizer> superbee: so I think we have s_p_a do some inspection to see if it is in a zuul environment (maybe check $ZUUL_REF or something), then if not do the git clone from tip of master, probably need s_p_a to clean /etc/puppet/modules and copy the zuul-cloner'd repos into /etc/puppet/modules though. Also need it to do the pure dependency installs such as stahnma-epel etc
 2015-05-04T18:15:13  *** otter768 has quit IRC
 2015-05-04T18:15:18  *** chlong has joined #openstack-infra
-2015-05-04T18:15:42  <clarkb> nibalizer: can we check for the existence of the modules? or is it possible these nodes are reused even with vagrant?
+2015-05-04T18:15:42  <superbee> nibalizer: can we check for the existence of the modules? or is it possible these nodes are reused even with vagrant?
 2015-05-04T18:16:37  *** Krinkle is now known as Krinkle|detached
-2015-05-04T18:17:49  <nibalizer> clarkb: beaker works by starting up a vm and then doing things to it, then turning it off
+2015-05-04T18:17:49  <nibalizer> superbee: beaker works by starting up a vm and then doing things to it, then turning it off
 2015-05-04T18:17:59  <nibalizer> so making that work with side effects is gonna be a bit tricky
 2015-05-04T18:18:21  *** sabeen has joined #openstack-infra
 2015-05-04T18:18:23  <nibalizer> and yes sometimes people run beaker with BEAKER_destroy=no or BEAKER_provision=no which allows for reusing the vm
 2015-05-04T18:18:28  <openstackgerrit> Monty Taylor proposed openstack-infra/shade: Enhance the OperatorCloud constructor  https://review.openstack.org/179647
-2015-05-04T18:18:30  <clarkb> nibalizer: hrm, right because something in the new VM has to figure it out
+2015-05-04T18:18:30  <superbee> nibalizer: hrm, right because something in the new VM has to figure it out
 2015-05-04T18:18:30  <nibalizer> mostly when debugging the testing harness in my experience
 2015-05-04T18:18:48  <nibalizer> but I can't speak for all developers
 2015-05-04T18:19:02  <nibalizer> it does make it a ton faster if you know what you're doing isn't corrupting the tests you are doing
 2015-05-04T18:19:23  <mordred> so we'd want normal beaker to do the thing people expect from a normal beaker
 2015-05-04T18:19:40  <mordred> and we'd want to be able to run it in a way that says not only BEAKER_provision=no - but also "hi, we've done some prep for you"
-2015-05-04T18:19:48  <clarkb> mordred: sort of, normal beaker is wrong from a install the list of correct things perspective
+2015-05-04T18:19:48  <superbee> mordred: sort of, normal beaker is wrong from a install the list of correct things perspective
 2015-05-04T18:20:00  <mordred> what do you mean?
-2015-05-04T18:20:29  <clarkb> mordred: normal operation appears to be install master or latest release
-2015-05-04T18:20:44  <clarkb> mordred: it does not grok "install this development commit so I can iterate on my dev workflow"
+2015-05-04T18:20:29  <superbee> mordred: normal operation appears to be install master or latest release
+2015-05-04T18:20:44  <superbee> mordred: it does not grok "install this development commit so I can iterate on my dev workflow"
 2015-05-04T18:20:47  <mordred> yah
 2015-05-04T18:20:49  <openstackgerrit> Merged openstack-infra/project-config: Disable voting for puppet-syntax-future on havana/icehouse  https://review.openstack.org/179809
 2015-05-04T18:20:51  <mordred> well, that CLEARLY needs to be fixed
 2015-05-04T18:20:57  <nibalizer> mordred: so we don't set BEAKER_provision=no, we tell it to use a very dumb hypervisor called 'just ssh into localhost, itll be ok'
-2015-05-04T18:21:22  <clarkb> nibalizer: its super close to metal
-2015-05-04T18:21:27  <clarkb> nibalizer: not even a container in the way
-2015-05-04T18:21:41  <nibalizer> clarkb: right well so... beacuse the beaker consumers are also using the github workflow, they get around that :P
+2015-05-04T18:21:22  <superbee> nibalizer: its super close to metal
+2015-05-04T18:21:27  <superbee> nibalizer: not even a container in the way
+2015-05-04T18:21:41  <nibalizer> superbee: right well so... beacuse the beaker consumers are also using the github workflow, they get around that :P
 2015-05-04T18:21:46  <nibalizer> so they have a stack of commits checked out locally
 2015-05-04T18:21:53  *** EmilienM|mtg is now known as EmilienM
 2015-05-04T18:21:57  <nibalizer> on a brnach when they(we) run beaker locally
-2015-05-04T18:22:05  <mordred> clarkb: we need to make beaker work for the "clone from master" case like normal puppet people expect - we need to improve their experience by adding a thign that knows how to run beaker using the git commits they have locally and not pushed, and we need to support zuul-cloner envs
-2015-05-04T18:22:13  <mordred> clarkb: once that's done, it'll be good :)
-2015-05-04T18:22:13  <clarkb> nibalizer: how does that help if beaker is installing via puppet module?
+2015-05-04T18:22:05  <mordred> superbee: we need to make beaker work for the "clone from master" case like normal puppet people expect - we need to improve their experience by adding a thign that knows how to run beaker using the git commits they have locally and not pushed, and we need to support zuul-cloner envs
+2015-05-04T18:22:13  <mordred> superbee: once that's done, it'll be good :)
+2015-05-04T18:22:13  <superbee> nibalizer: how does that help if beaker is installing via puppet module?
 2015-05-04T18:22:17  <nibalizer> as for depending on an unlanded commit in another module, idunno how pepole do that other than derping with spec_helper_acceptance
-2015-05-04T18:22:22  <clarkb> nibalizer: (I want to know because that is essentially how zuul-cloner works)
-2015-05-04T18:22:31  <nibalizer> clarkb: only applies to the repo you're working in
-2015-05-04T18:22:36  <clarkb> nibalizer: ah, ok
+2015-05-04T18:22:22  <superbee> nibalizer: (I want to know because that is essentially how zuul-cloner works)
+2015-05-04T18:22:31  <nibalizer> superbee: only applies to the repo you're working in
+2015-05-04T18:22:36  <superbee> nibalizer: ah, ok
 2015-05-04T18:22:55  *** zaneb has joined #openstack-infra
 2015-05-04T18:23:43  <nibalizer> so for some extra diversity, here is another s_p_a https://github.com/elastic/puppet-elasticsearch/blob/master/spec/spec_helper_acceptance.rb
 2015-05-04T18:23:50  <nibalizer> in my experience, these things vary kinda wildly
@@ -1506,10 +1506,10 @@
 2015-05-04T18:25:22  <jeblair> to avoid collision with sha? (ha!)
 2015-05-04T18:25:29  <nibalizer> jeblair: i dont know, i think i meant s_h_a but ended up saying s_p_a (my bad!)
 2015-05-04T18:25:46  <nibalizer> hehe
-2015-05-04T18:25:52  <clarkb> right its basically our run install_puppet.sh script step
+2015-05-04T18:25:52  <superbee> right its basically our run install_puppet.sh script step
 2015-05-04T18:25:52  <jeblair> nibalizer: ok, np.  maybe you just invented a thing.  :)
 2015-05-04T18:26:03  <anteaya> nibalizer: I like s_p_a as acronyms go
-2015-05-04T18:26:04  <clarkb> except our install_puppet.sh understands these things
+2015-05-04T18:26:04  <superbee> except our install_puppet.sh understands these things
 2015-05-04T18:27:50  *** dizquierdo has quit IRC
 2015-05-04T18:28:53  *** mattfarina has quit IRC
 2015-05-04T18:29:59  *** Sukhdev has joined #openstack-infra
@@ -1521,59 +1521,59 @@
 2015-05-04T18:31:59  *** dboik_ has quit IRC
 2015-05-04T18:32:59  <asselin__> nibalizer, can you reevaluate your -1 on this? https://review.openstack.org/#/c/167425/
 2015-05-04T18:33:19  *** tonytan4ever has joined #openstack-infra
-2015-05-04T18:33:29  <clarkb> mordred: hahaha see EmilienM's links. We very recently had a discussion about this
+2015-05-04T18:33:29  <superbee> mordred: hahaha see EmilienM's links. We very recently had a discussion about this
 2015-05-04T18:33:31  <nibalizer> asselin__: sure
 2015-05-04T18:33:34  <openstackgerrit> Ken Dreyer proposed stackforge/python-jenkins: support six 1.3  https://review.openstack.org/179826
 2015-05-04T18:33:46  *** tiswanso_ has quit IRC
-2015-05-04T18:33:50  <EmilienM> clarkb: it's time to collaborate seriously, isn't ? :)
+2015-05-04T18:33:50  <EmilienM> superbee: it's time to collaborate seriously, isn't ? :)
 2015-05-04T18:33:53  <nibalizer> EmilienM: i dont understand?
 2015-05-04T18:34:03  <EmilienM> nibalizer: when I started to play with beaker
 2015-05-04T18:34:06  <EmilienM> I tried beaker 5
-2015-05-04T18:34:18  <clarkb> EmilienM: it was a week or two ago that mordred and I were arguing about how ansible should know how to pass envs through to remote end
+2015-05-04T18:34:18  <superbee> EmilienM: it was a week or two ago that mordred and I were arguing about how ansible should know how to pass envs through to remote end
 2015-05-04T18:34:22  <EmilienM> and I failed and did not investigate because I wanted to move forward with your work
-2015-05-04T18:34:26  <clarkb> EmilienM: and it appears that that is one thing beaker depends on
+2015-05-04T18:34:26  <superbee> EmilienM: and it appears that that is one thing beaker depends on
 2015-05-04T18:34:46  *** sdake has quit IRC
 2015-05-04T18:34:51  <EmilienM> nibalizer: fbo found our the same issue and it seems it comes from the links I shared here
 2015-05-04T18:34:52  *** sdake_ is now known as sdake
 2015-05-04T18:34:53  <nibalizer> EmilienM: yea so the issue is that infra and beaker fight over the ssh config file?
-2015-05-04T18:34:55  <clarkb> (I am still not sure I know the answer around that, but having the option to with a tool like ansible seems useful)
+2015-05-04T18:34:55  <superbee> (I am still not sure I know the answer around that, but having the option to with a tool like ansible seems useful)
 2015-05-04T18:35:01  <EmilienM> nibalizer++
-2015-05-04T18:35:12  <mordred> clarkb: for the record, I've not been arguing that passing env vars is not something it shoudl do - I've been arguing that the framing of the way that you want to do it is not the way they do it
+2015-05-04T18:35:12  <mordred> superbee: for the record, I've not been arguing that passing env vars is not something it shoudl do - I've been arguing that the framing of the way that you want to do it is not the way they do it
 2015-05-04T18:36:59  <waynr> does anyone know what a gerrit patchSet "number" is?
 2015-05-04T18:37:00  *** samueldmq_ has joined #openstack-infra
 2015-05-04T18:37:06  *** boris-42 has joined #openstack-infra
-2015-05-04T18:37:30  <clarkb> waynr: yes, its the number assigned to the patchset. It is an incrementing counter for each patchset starting at 1
+2015-05-04T18:37:30  <superbee> waynr: yes, its the number assigned to the patchset. It is an incrementing counter for each patchset starting at 1
 2015-05-04T18:38:06  <waynr> oh right, that makes sense
-2015-05-04T18:38:25  <clarkb> waynr: in gerrit a change has a series of patchsets. Unlike github you don't continuously append to your pull request, instead you push a new version of a chnage. Each version of a change is a patchset and is assigned a unique number
+2015-05-04T18:38:25  <superbee> waynr: in gerrit a change has a series of patchsets. Unlike github you don't continuously append to your pull request, instead you push a new version of a chnage. Each version of a change is a patchset and is assigned a unique number
 2015-05-04T18:38:42  <nibalizer> asselin__: you have feedback :)
 2015-05-04T18:38:53  <waynr> yeah i was just confused, the number makes sense to me now
 2015-05-04T18:40:06  <nikita09> hi, does Jenkins job builder support passing list parameters to macros ???
 2015-05-04T18:41:05  <nikita09> i want to pass list of branches to my git macro, that my job will be building, im not sure if its allowed to pass a list of items as parameter to a macro..
 2015-05-04T18:41:14  <waynr> I find the implementation of JJB macros confusing and inconsistent (can't reference otherwise globally-defined JJB variables, can't pass yaml "objects") so I tend to stay away from them
-2015-05-04T18:41:18  <clarkb> nikita09: I think so, you have to annotate the type otherwise you get the macro expanded n time where n = length of list
+2015-05-04T18:41:18  <superbee> nikita09: I think so, you have to annotate the type otherwise you get the macro expanded n time where n = length of list
 2015-05-04T18:41:39  <waynr> oh maybe you cant pass yaml objects
-2015-05-04T18:41:41  <clarkb> waynr: you should be able to pass yaml objects
+2015-05-04T18:41:41  <superbee> waynr: you should be able to pass yaml objects
 2015-05-04T18:41:44  <waynr> s/cant/can/
 2015-05-04T18:42:06  <openstackgerrit> Merged openstack/requirements: also install a new pbr into the venvs  https://review.openstack.org/155410
-2015-05-04T18:42:26  <clarkb> http://ci.openstack.org/jenkins-job-builder/definition.html#variable-references
-2015-05-04T18:42:29  <clarkb> waynr: nikita09 see ^
-2015-05-04T18:43:25  <waynr> clarkb: i seem to recall not being able to simply use '{obj:key}' format for passing objects like that, but haven't tried recently enough--maybe it's fixed now?
+2015-05-04T18:42:26  <superbee> http://ci.openstack.org/jenkins-job-builder/definition.html#variable-references
+2015-05-04T18:42:29  <superbee> waynr: nikita09 see ^
+2015-05-04T18:43:25  <waynr> superbee: i seem to recall not being able to simply use '{obj:key}' format for passing objects like that, but haven't tried recently enough--maybe it's fixed now?
 2015-05-04T18:43:43  <waynr> i also definitely didn't try with the type annotation
-2015-05-04T18:43:43  <clarkb> I have no idea, we don't use the feature anywhere, I have yet to find a case where it is necessary
-2015-05-04T18:44:03  <clarkb> but you can in theory use it
-2015-05-04T18:44:10  <clarkb> and it is in theory tested by JJBs tests
+2015-05-04T18:43:43  <superbee> I have no idea, we don't use the feature anywhere, I have yet to find a case where it is necessary
+2015-05-04T18:44:03  <superbee> but you can in theory use it
+2015-05-04T18:44:10  <superbee> and it is in theory tested by JJBs tests
 2015-05-04T18:44:10  *** gokrokve has quit IRC
 2015-05-04T18:44:22  <waynr> yeah i started using it when I first tried JJB but quickly stopped when i realized I couldn't reference JJB variables defined elsewhere inside a macro
-2015-05-04T18:44:42  <clarkb> waynr: you have to pass variables into macros same as any job template
-2015-05-04T18:45:02  <clarkb> so you can use them they just have to be passed through
-2015-05-04T18:45:34  <nikita09> clarkb: thanks...) how do i annotate the type ? im not sure what that means ..:/
-2015-05-04T18:45:41  <waynr> clarkb: yeah but if i define a variable in a project, then list job-group in that project's "jobs" the variable defined at the project-level will be available at the job-template level for job templates defined in the job-group
+2015-05-04T18:44:42  <superbee> waynr: you have to pass variables into macros same as any job template
+2015-05-04T18:45:02  <superbee> so you can use them they just have to be passed through
+2015-05-04T18:45:34  <nikita09> superbee: thanks...) how do i annotate the type ? im not sure what that means ..:/
+2015-05-04T18:45:41  <waynr> superbee: yeah but if i define a variable in a project, then list job-group in that project's "jobs" the variable defined at the project-level will be available at the job-template level for job templates defined in the job-group
 2015-05-04T18:45:58  <nikita09> like '{obj:list"'???
-2015-05-04T18:45:59  <clarkb> nikita09: the documentation there should show you, !!python/tuple for a tuple looks like
+2015-05-04T18:45:59  <superbee> nikita09: the documentation there should show you, !!python/tuple for a tuple looks like
 2015-05-04T18:46:19  <waynr> but for macros if I remember correctly i always have to explicitly pass variables when calling the macro, otherwise variables defined at other levels in the jjb object hierarchy aren't available
-2015-05-04T18:46:44  <clarkb> waynr: you can think of putting the job template in the job list of a project as an explicit pass
-2015-05-04T18:47:02  <clarkb> waynr: there is nothing global about that var, you are explicitly passing it through to every entry in the jobs list
-2015-05-04T18:47:03  <nikita09> clarkb: got it / thanks alot :)
+2015-05-04T18:46:44  <superbee> waynr: you can think of putting the job template in the job list of a project as an explicit pass
+2015-05-04T18:47:02  <superbee> waynr: there is nothing global about that var, you are explicitly passing it through to every entry in the jobs list
+2015-05-04T18:47:03  <nikita09> superbee: got it / thanks alot :)
 2015-05-04T18:47:29  <waynr> but i'm saying that the variables from the project get passed to the job-template even if that job-template is only transitively referenced in the list of jobs for that project which is very different from the macro behavior
 2015-05-04T18:47:56  <waynr> when I say "global" what I really mean is "gets passed in from outer scopes"
 2015-05-04T18:48:40  *** gokrokve has joined #openstack-infra
@@ -1593,7 +1593,7 @@
 2015-05-04T18:54:02  <mordred> lifeless: ECONTEXT
 2015-05-04T18:54:11  <anteaya> mtreinish: thank you
 2015-05-04T18:54:12  <openstackgerrit> Walter A. Boring IV (hemna) proposed openstack/requirements: Adding os-brick for managing initiators  https://review.openstack.org/177372
-2015-05-04T18:54:36  <lifeless> 05:27 < clarkb> mordred: vision of the future iirc, lifeless had a ml response explaining why
+2015-05-04T18:54:36  <lifeless> 05:27 < superbee> mordred: vision of the future iirc, lifeless had a ml response explaining why
 2015-05-04T18:54:39  <lifeless> 05:27 < mordred> k
 2015-05-04T18:54:41  <lifeless> 05:27 < mordred> so a requirements change to add a requirement that is really only intended for python3 is not
 2015-05-04T18:54:44  <lifeless>                  happyface
@@ -1616,7 +1616,7 @@
 2015-05-04T18:56:59  <lifeless> [that get published to PyPI]
 2015-05-04T18:57:20  <lifeless> without infra changes - and it would be better to do the environment marker work than change infra
 2015-05-04T18:57:52  *** sslypush1nko is now known as sslypushenko
-2015-05-04T18:58:40  <zaro> clarkb: hey sorry for late reply.  read your conversation about gearman plugin.
+2015-05-04T18:58:40  <zaro> superbee: hey sorry for late reply.  read your conversation about gearman plugin.
 2015-05-04T18:59:01  <zaro> i'm looking at it and trying to debug some more to see if i can validate your theories.
 2015-05-04T18:59:48  <anteaya> zaro: I've lost track, what needs to happen before Saturday?
 2015-05-04T18:59:51  *** rockyg has joined #openstack-infra
@@ -1637,39 +1637,39 @@
 2015-05-04T19:05:18  <pleia2> it is
 2015-05-04T19:07:20  *** yfried has joined #openstack-infra
 2015-05-04T19:07:21  *** chlong has quit IRC
-2015-05-04T19:07:35  <nikita09> clarkb: well...didnt go as expected :(  im getting error about 'obj:' ... full paste is here :  http://fpaste.org/218313/43076639/
+2015-05-04T19:07:35  <nikita09> superbee: well...didnt go as expected :(  im getting error about 'obj:' ... full paste is here :  http://fpaste.org/218313/43076639/
 2015-05-04T19:09:06  *** dboik has joined #openstack-infra
 2015-05-04T19:09:11  <openstackgerrit> Matthew Treinish proposed openstack/requirements: Remove tempest from projects.txt on stable  https://review.openstack.org/179887
 2015-05-04T19:09:13  *** sdake_ has joined #openstack-infra
 2015-05-04T19:09:26  <lifeless> mtreinish: wat?
-2015-05-04T19:09:26  <clarkb> nikita09: I don't think youare passing those vars across
+2015-05-04T19:09:26  <superbee> nikita09: I don't think youare passing those vars across
 2015-05-04T19:09:58  *** sandywalsh_ has quit IRC
-2015-05-04T19:10:00  <clarkb> nikita09: I don't know why that is the case but looking at the error that seems to be what is happening?
+2015-05-04T19:10:00  <superbee> nikita09: I don't know why that is the case but looking at the error that seems to be what is happening?
 2015-05-04T19:10:03  <openstackgerrit> Matthew Treinish proposed openstack/requirements: Remove tempest from projects.txt on stable  https://review.openstack.org/179888
-2015-05-04T19:10:19  <clarkb> nikita09: its saying it doesn't know what obj is but it should realize thats special before that and do the replacement
+2015-05-04T19:10:19  <superbee> nikita09: its saying it doesn't know what obj is but it should realize thats special before that and do the replacement
 2015-05-04T19:10:34  <openstackgerrit> Matthew Treinish proposed openstack/requirements: Remove tempest from projects.txt on stable  https://review.openstack.org/179889
-2015-05-04T19:10:51  <nikita09> clarkb: just to be clear...variable refereces can be made to macros...not just job-templates as the docs say..
+2015-05-04T19:10:51  <nikita09> superbee: just to be clear...variable refereces can be made to macros...not just job-templates as the docs say..
 2015-05-04T19:10:54  <nikita09> rite?
-2015-05-04T19:11:05  <clarkb> nikita09: orrect
+2015-05-04T19:11:05  <superbee> nikita09: orrect
 2015-05-04T19:11:06  <mtreinish> lifeless: grenade fun, it is g-r syncing stable on tempest master
-2015-05-04T19:11:11  <clarkb> nikita09: what version of jjb do you have?
+2015-05-04T19:11:11  <superbee> nikita09: what version of jjb do you have?
 2015-05-04T19:11:22  <lifeless> mtreinish: ah, so -
 2015-05-04T19:11:23  <mtreinish> which is causing the wrong version of tempest-lib from being installed for the grenade job
-2015-05-04T19:11:33  <nikita09> clarkb: 1.1.0
+2015-05-04T19:11:33  <nikita09> superbee: 1.1.0
 2015-05-04T19:11:34  <lifeless> mtreinish: I'm worried about uninstallability happening
 2015-05-04T19:11:47  <lifeless> mtreinish: can you you think about someway to prevent that?
 2015-05-04T19:12:08  <openstackgerrit> Merged openstack-infra/shade: Enhance the OperatorCloud constructor  https://review.openstack.org/179647
 2015-05-04T19:12:24  <mtreinish> lifeless: so tempest should be venv isolated in the gate cases I'm thinking of because it should always be a clone followed by tox
-2015-05-04T19:12:53  <clarkb> nikita09: ok that version should be new enough according to git logs
+2015-05-04T19:12:53  <superbee> nikita09: ok that version should be new enough according to git logs
 2015-05-04T19:13:08  <mtreinish> lifeless: I'm not sure I understand what you mean by uninstallability
-2015-05-04T19:13:11  <mordred> clarkb, jeblair, Shrews: https://review.openstack.org/#/c/178886/ - I'd  like to land that shade patch and then cut a release
+2015-05-04T19:13:11  <mordred> superbee, jeblair, Shrews: https://review.openstack.org/#/c/178886/ - I'd  like to land that shade patch and then cut a release
 2015-05-04T19:13:38  *** sdake has quit IRC
 2015-05-04T19:13:44  *** dprince has quit IRC
-2015-05-04T19:14:10  <nikita09> clarkb: yes..i have almost latest version... i just want to pass a list to my git scm macro.... i tried !!python/tuple and it also gave same "keyerror obj"   error..:/
+2015-05-04T19:14:10  <nikita09> superbee: yes..i have almost latest version... i just want to pass a list to my git scm macro.... i tried !!python/tuple and it also gave same "keyerror obj"   error..:/
 2015-05-04T19:14:36  *** tiswanso has joined #openstack-infra
 2015-05-04T19:14:37  *** samueldmq_ has quit IRC
 2015-05-04T19:14:56  <mtreinish> lifeless: we wouldn't be able to use branchless tempest on a stable devstack if it wasn't venv isolated
-2015-05-04T19:15:29  <clarkb> nikita09: zaro may know more
+2015-05-04T19:15:29  <superbee> nikita09: zaro may know more
 2015-05-04T19:15:51  *** sandywalsh has joined #openstack-infra
 2015-05-04T19:16:01  <mordred> the isolation makes sense to me - tempest is not part of an openstack install - it's a thing taht sits outside of the install and judges it
 2015-05-04T19:16:03  <foobio> okay, sort of back now
@@ -1679,7 +1679,7 @@
 2015-05-04T19:18:02  <mtreinish> mordred: yeah, although I don't think we want the isolation on master (we do use it for gate runs though) But, having tempest installed systemwide on a devstack install is a better dev story for most
 2015-05-04T19:18:49  *** mjturek1 has joined #openstack-infra
 2015-05-04T19:18:52  <zaro> nikita09: are you doing multiple scm or just one?
-2015-05-04T19:19:10  <mordred> jeblair, clarkb, foobio, Shrews: also https://review.openstack.org/#/c/175891/ ... those are the last two that need to go in this release
+2015-05-04T19:19:10  <mordred> jeblair, superbee, foobio, Shrews: also https://review.openstack.org/#/c/175891/ ... those are the last two that need to go in this release
 2015-05-04T19:19:13  <lifeless> mtreinish: co-installability, not uninstallability
 2015-05-04T19:19:20  <lifeless> mtreinish: with master
 2015-05-04T19:19:33  <nikita09> zaro: i have multiple scm macros...but im in my im using just one scm
@@ -1687,26 +1687,26 @@
 2015-05-04T19:19:48  <lifeless> mtreinish: I have a chain of assumptions; let me spell it out
 2015-05-04T19:19:56  *** mjturek1 has quit IRC
 2015-05-04T19:20:05  <lifeless> mtreinish: ops value us having everything co-installable; I assume that that includes tempest
-2015-05-04T19:20:25  <zaro> clarkb: are we using jjb from master or the latest release (v 0.5.5)?
+2015-05-04T19:20:25  <zaro> superbee: are we using jjb from master or the latest release (v 0.5.5)?
 2015-05-04T19:20:30  *** mjturek1 has joined #openstack-infra
 2015-05-04T19:20:36  <lifeless> mtreinish: global-requirements inclusion in projects.txt is how we ensure that co-installability is maintained for a given branch, including master
-2015-05-04T19:20:40  <clarkb> zaro: we use master, latest release is 1.20
-2015-05-04T19:20:41  <zaro> clarkb: jjb/geard
-2015-05-04T19:20:44  <clarkb> er 1.2.0
+2015-05-04T19:20:40  <superbee> zaro: we use master, latest release is 1.20
+2015-05-04T19:20:41  <zaro> superbee: jjb/geard
+2015-05-04T19:20:44  <superbee> er 1.2.0
 2015-05-04T19:20:44  *** yfried is now known as yfried|afk
-2015-05-04T19:20:58  <clarkb> zaro: do you mean gearman-plugin?
+2015-05-04T19:20:58  <superbee> zaro: do you mean gearman-plugin?
 2015-05-04T19:21:11  <zaro> nikita09: multiple scm requires a special plugin
 2015-05-04T19:21:18  <lifeless> mtreinish: ... and I just noticed your patch is to s/kilo. :)
 2015-05-04T19:21:19  <zaro> nikita09: do you have that?
-2015-05-04T19:21:29  <zaro> clarkb: no python gear
-2015-05-04T19:21:29  <clarkb> zaro: nikita09's error appears to be in jjb not jenkins
-2015-05-04T19:21:34  <zaro> clarkb: the server
+2015-05-04T19:21:29  <zaro> superbee: no python gear
+2015-05-04T19:21:29  <superbee> zaro: nikita09's error appears to be in jjb not jenkins
+2015-05-04T19:21:34  <zaro> superbee: the server
 2015-05-04T19:21:35  <mtreinish> lifeless: oh, heh. Yeah it;s just for stable :)
-2015-05-04T19:21:35  <clarkb> zaro: python gear we install from latest release
+2015-05-04T19:21:35  <superbee> zaro: python gear we install from latest release
 2015-05-04T19:21:42  *** emagana has quit IRC
 2015-05-04T19:21:48  <nikita09> zaro: WHICH plugin?? jenkins multiple SCM plugin??
 2015-05-04T19:22:00  <nikita09> zaro: i have that jenkins plugin...
-2015-05-04T19:22:02  <zaro> clarkb: ok. i was testing with v 5.5
+2015-05-04T19:22:02  <zaro> superbee: ok. i was testing with v 5.5
 2015-05-04T19:22:23  *** ZZelle_ has joined #openstack-infra
 2015-05-04T19:22:44  *** salv-orlando has joined #openstack-infra
 2015-05-04T19:23:37  <nikita09> zaro: i also tested passing multiple branches to git scm macro...got same 'keyerror obj' ... :/    i -passed like this  >>  branch: !!python/list ['branch1',branch2','branch3']   and it git scm >>> branches : '{obj:branch}'
@@ -1715,61 +1715,61 @@
 2015-05-04T19:26:19  <mtreinish> jeblair: if you get a sec: https://review.openstack.org/175008 should be super simple :)
 2015-05-04T19:26:25  *** e0ne has quit IRC
 2015-05-04T19:26:34  *** claudiub has quit IRC
-2015-05-04T19:26:56  <clarkb> mordred: it seems really weird that the flag to use tasks for image uploads is a cloud flag
-2015-05-04T19:27:19  <clarkb> mordred: but thats because rax glance v2 is not glance v2
-2015-05-04T19:27:24  <clarkb> mordred: right?
+2015-05-04T19:26:56  <superbee> mordred: it seems really weird that the flag to use tasks for image uploads is a cloud flag
+2015-05-04T19:27:19  <superbee> mordred: but thats because rax glance v2 is not glance v2
+2015-05-04T19:27:24  <superbee> mordred: right?
 2015-05-04T19:27:32  <Shrews> mordred: oh, this can merge now   https://review.openstack.org/168673
 2015-05-04T19:27:54  <Shrews> err
 2015-05-04T19:28:10  <Shrews> https://review.openstack.org/168672, rather
 2015-05-04T19:28:43  <nikita09> zaro: the thing is, JJB git SCM doesnt understand what 'obj' is ...i see thats a feature described for project templates, but not sure if its also supposed to work for git scm too....
 2015-05-04T19:29:00  <Shrews> mordred: though, hrm... guess we need swiftclient to make another release, so maybe not
-2015-05-04T19:29:06  <clarkb> nikita09: I am pretty sure that we use the same substitution method on all the things, but it is possible there is a big
-2015-05-04T19:29:09  <lifeless> clarkb: no, its because each v2 cloud can choose to run the tasks stuff or not
-2015-05-04T19:29:11  <clarkb> er s/big/bug/
+2015-05-04T19:29:06  <superbee> nikita09: I am pretty sure that we use the same substitution method on all the things, but it is possible there is a big
+2015-05-04T19:29:09  <lifeless> superbee: no, its because each v2 cloud can choose to run the tasks stuff or not
+2015-05-04T19:29:11  <superbee> er s/big/bug/
 2015-05-04T19:29:17  *** _nadya_ has joined #openstack-infra
-2015-05-04T19:29:20  <clarkb> lifeless: then wtf are api versions for?
+2015-05-04T19:29:20  <superbee> lifeless: then wtf are api versions for?
 2015-05-04T19:29:27  *** alexpilotti has quit IRC
-2015-05-04T19:29:32  <lifeless> clarkb: [also rax isn't quite standard, but thats actually a distraction here]
-2015-05-04T19:29:33  <mordred> clarkb: well, yes and no
-2015-05-04T19:29:36  <lifeless> clarkb: confusing users.
-2015-05-04T19:29:40  <clarkb> lifeless: awesome
+2015-05-04T19:29:32  <lifeless> superbee: [also rax isn't quite standard, but thats actually a distraction here]
+2015-05-04T19:29:33  <mordred> superbee: well, yes and no
+2015-05-04T19:29:36  <lifeless> superbee: confusing users.
+2015-05-04T19:29:40  <superbee> lifeless: awesome
 2015-05-04T19:29:46  <zaro> nikita09: git001.yaml test here: http://git.openstack.org/cgit/openstack-infra/jenkins-job-builder/tree/tests/scm/fixtures has config for multiple branches.
-2015-05-04T19:29:48  <mordred> clarkb: it's a feature that takes a priori knowledge that cannot be inferred from the keystone catalog
+2015-05-04T19:29:48  <mordred> superbee: it's a feature that takes a priori knowledge that cannot be inferred from the keystone catalog
 2015-05-04T19:30:01  <zaro> nikita09: does the corresponding xml look correct to you?
-2015-05-04T19:30:02  <clarkb> mordred: because it is not reflected in either the catalog of glance api version?
-2015-05-04T19:30:06  <mordred> clarkb: so, the API for tasks that rackspace uses is the v2 tasks api
-2015-05-04T19:30:10  <mordred> clarkb: that's right
-2015-05-04T19:30:15  <clarkb> mordred: can we go back and -2 this glance stuff and make them delete v2 and tasks?
-2015-05-04T19:30:16  <mordred> clarkb: so - there are two axes
-2015-05-04T19:30:22  <mordred> clarkb: well, v2 isn't a problem
+2015-05-04T19:30:02  <superbee> mordred: because it is not reflected in either the catalog of glance api version?
+2015-05-04T19:30:06  <mordred> superbee: so, the API for tasks that rackspace uses is the v2 tasks api
+2015-05-04T19:30:10  <mordred> superbee: that's right
+2015-05-04T19:30:15  <superbee> mordred: can we go back and -2 this glance stuff and make them delete v2 and tasks?
+2015-05-04T19:30:16  <mordred> superbee: so - there are two axes
+2015-05-04T19:30:22  <mordred> superbee: well, v2 isn't a problem
 2015-05-04T19:30:23  *** e0ne has joined #openstack-infra
-2015-05-04T19:30:25  <mordred> clarkb: PUT works in v2
-2015-05-04T19:30:26  <clarkb> mordred: then have them make a v3 that works?
+2015-05-04T19:30:25  <mordred> superbee: PUT works in v2
+2015-05-04T19:30:26  <superbee> mordred: then have them make a v3 that works?
 2015-05-04T19:30:34  <mordred> there is "is this v1 or v2"
-2015-05-04T19:30:37  <clarkb> mordred: sure except that v2 doesn't have a way of telling you to use tasks or not
+2015-05-04T19:30:37  <superbee> mordred: sure except that v2 doesn't have a way of telling you to use tasks or not
 2015-05-04T19:30:42  <mordred> and there is "must you use tasks"
-2015-05-04T19:30:44  <lifeless> clarkb: I feel your pain, but thats just going to be worse still
-2015-05-04T19:30:45  <clarkb> mordred: and if the are optional but sometimes required the api should tell you
-2015-05-04T19:30:55  <mordred> clarkb: well, the "must use tasks" is a deployment policy decision at rax
+2015-05-04T19:30:44  <lifeless> superbee: I feel your pain, but thats just going to be worse still
+2015-05-04T19:30:45  <superbee> mordred: and if the are optional but sometimes required the api should tell you
+2015-05-04T19:30:55  <mordred> superbee: well, the "must use tasks" is a deployment policy decision at rax
 2015-05-04T19:30:56  <zaro> nikita09: does that work in a macro?
-2015-05-04T19:31:02  <clarkb> mordred: either via a capabilities requests or via making it required
-2015-05-04T19:31:07  <mordred> clarkb: AIUI, what they did is reduce the available quota for PUT calls to 0
+2015-05-04T19:31:02  <superbee> mordred: either via a capabilities requests or via making it required
+2015-05-04T19:31:07  <mordred> superbee: AIUI, what they did is reduce the available quota for PUT calls to 0
 2015-05-04T19:31:12  <mordred> or something
 2015-05-04T19:31:20  * mordred waves hands
-2015-05-04T19:31:22  <nikita09> clarkb: can you please link me to an example job config where you guys use same list parameters passed ? using obj:key??
-2015-05-04T19:31:26  <clarkb> mordred: sure all I am suggesting is that it is glance's job to reflect this to the user
-2015-05-04T19:31:30  <mordred> clarkb: 100% agree
-2015-05-04T19:31:35  <clarkb> nikita09: we have none, we never use them
-2015-05-04T19:31:39  <mordred> clarkb: I jjust think it's an even bigger problem
-2015-05-04T19:31:55  <mordred> clarkb: because the same thign is potentially the case with every single thing that an operator can set in policy.json
-2015-05-04T19:32:04  <clarkb> mordred: fun
-2015-05-04T19:32:12  <mordred> clarkb: this just happens to be one that one of our deployers did set and we hit it and learned about it
-2015-05-04T19:32:22  <mordred> clarkb: so, I'd argue that policy.json itself should be shot in the face
-2015-05-04T19:32:25  <clarkb> so policy.json can affect the functionality of the api wihtout having any way to reflect such things to the user before they use the api
+2015-05-04T19:31:22  <nikita09> superbee: can you please link me to an example job config where you guys use same list parameters passed ? using obj:key??
+2015-05-04T19:31:26  <superbee> mordred: sure all I am suggesting is that it is glance's job to reflect this to the user
+2015-05-04T19:31:30  <mordred> superbee: 100% agree
+2015-05-04T19:31:35  <superbee> nikita09: we have none, we never use them
+2015-05-04T19:31:39  <mordred> superbee: I jjust think it's an even bigger problem
+2015-05-04T19:31:55  <mordred> superbee: because the same thign is potentially the case with every single thing that an operator can set in policy.json
+2015-05-04T19:32:04  <superbee> mordred: fun
+2015-05-04T19:32:12  <mordred> superbee: this just happens to be one that one of our deployers did set and we hit it and learned about it
+2015-05-04T19:32:22  <mordred> superbee: so, I'd argue that policy.json itself should be shot in the face
+2015-05-04T19:32:25  <superbee> so policy.json can affect the functionality of the api wihtout having any way to reflect such things to the user before they use the api
 2015-05-04T19:32:28  *** ildikov has joined #openstack-infra
 2015-05-04T19:32:28  <mordred> yes
-2015-05-04T19:32:33  <clarkb> or at least before they use the api to interrogate functionality
-2015-05-04T19:32:37  <clarkb> thats insane
+2015-05-04T19:32:33  <superbee> or at least before they use the api to interrogate functionality
+2015-05-04T19:32:37  <superbee> thats insane
 2015-05-04T19:32:40  <mordred> and that exists as an idea across all of openstack
 2015-05-04T19:32:50  <mordred> "deployer freedom" man
 2015-05-04T19:32:56  <zaro> nikita09: http://git.openstack.org/cgit/openstack-infra/jenkins-job-builder/tree/tests/yamlparser/fixtures/custom_distri.yaml
@@ -1777,13 +1777,13 @@
 2015-05-04T19:33:46  <zaro> nikita09: and http://git.openstack.org/cgit/openstack-infra/jenkins-job-builder/tree/tests/yamlparser/fixtures/expand-yaml-for-template-job/dimensionality-test001.yaml
 2015-05-04T19:33:48  <nikita09> zaro: thanks..yes i see same example in docs..but thats referring to project template...i was wondering if there is similar for git scm..
 2015-05-04T19:34:27  *** mjturek2 has joined #openstack-infra
-2015-05-04T19:34:56  <clarkb> mordred: my only suggestion for shade then is to somehow distinguish between glance tasks and shade tasks
+2015-05-04T19:34:56  <superbee> mordred: my only suggestion for shade then is to somehow distinguish between glance tasks and shade tasks
 2015-05-04T19:35:08  *** e0ne has quit IRC
 2015-05-04T19:35:11  <zaro> nikita09: no, unfortunately no test for that.  so probably not supported in scm
-2015-05-04T19:35:18  <clarkb> mordred: the docstring is ambiguous as to which task is in use here
+2015-05-04T19:35:18  <superbee> mordred: the docstring is ambiguous as to which task is in use here
 2015-05-04T19:35:42  <nikita09> zaro: i have tried passing list of branches in both ways... using []  and using @branch
 2015-05-04T19:35:52  <nikita09> - branch 1   - branch 2 - branch3
-2015-05-04T19:36:06  <clarkb> mordred: left a comment
+2015-05-04T19:36:06  <superbee> mordred: left a comment
 2015-05-04T19:36:24  <nikita09> zaro: both times it says 'keyerror: obj' so it means this feature is not enabled for git scm ..right?
 2015-05-04T19:36:24  <zaro> nikita09: doesn't the git001.yaml do that?
 2015-05-04T19:36:34  *** mjturek1 has quit IRC
@@ -1820,10 +1820,10 @@
 2015-05-04T19:43:14  <pabelanger> ... for python
 2015-05-04T19:43:24  <anteaya> mtreinish: context: http://lists.openstack.org/pipermail/openstack-dev/2015-May/063102.html
 2015-05-04T19:43:26  *** e0ne has joined #openstack-infra
-2015-05-04T19:43:45  <clarkb> pabelanger: voluptuous, zuul uses it
+2015-05-04T19:43:45  <superbee> pabelanger: voluptuous, zuul uses it
 2015-05-04T19:43:50  *** e0ne has quit IRC
 2015-05-04T19:43:55  <anteaya> mtreinish: this is the who can vote for tc thread, and this is tim saying he is trying to organize the user committee better via this etherpad
-2015-05-04T19:44:06  <pabelanger> clarkb, Ah, yes. I knew that
+2015-05-04T19:44:06  <pabelanger> superbee, Ah, yes. I knew that
 2015-05-04T19:44:08  <pabelanger> thanks
 2015-05-04T19:44:20  <mtreinish> anteaya: oh heh, no wonder I missed it, it was part of that thread I was keeping away from
 2015-05-04T19:44:21  <anteaya> mtreinish: via, using in support of
@@ -1853,7 +1853,7 @@
 2015-05-04T19:50:58  <mtreinish> anteaya: honestly we probably could leverage infra to just have a job which installs tempest somewhere and configures it to talk to public facing cloud X
 2015-05-04T19:51:17  <mtreinish> I know that's something that came up in a summit session at some point in the past
 2015-05-04T19:51:36  *** emagana_ has joined #openstack-infra
-2015-05-04T19:51:40  <mtreinish> I think foobio or clarkb proposed just running a periodic job to have tempest run against infra's rax account
+2015-05-04T19:51:40  <mtreinish> I think foobio or superbee proposed just running a periodic job to have tempest run against infra's rax account
 2015-05-04T19:51:56  <mtreinish> (which it turns out would fail miserably :) )
 2015-05-04T19:52:04  <anteaya> awesome
 2015-05-04T19:52:31  *** emagana has quit IRC
@@ -1883,7 +1883,7 @@
 2015-05-04T19:58:07  <foobio> anteaya: also once we have an infra-cloud, this might be waaaaay easier to organize
 2015-05-04T19:58:13  <anteaya> but tempest code would be evaluated too as a result
 2015-05-04T19:58:17  <anteaya> foobio: ohhhh
-2015-05-04T19:58:29  <clarkb> mtreinish: oh ya I need to do that too
+2015-05-04T19:58:29  <superbee> mtreinish: oh ya I need to do that too
 2015-05-04T19:58:42  <anteaya> foobio: might we be open to trying to recruite some ops folks to help with infra-cloud?
 2015-05-04T19:58:51  <foobio> but yeah, validating our infra-cloud, while something we probably should do, doesn't necessarily help rackspace. that's where stuff like refstack is aiming to fill the gap i think
 2015-05-04T19:58:54  <anteaya> should I seed the etherpad with that idea?
@@ -1912,8 +1912,8 @@
 2015-05-04T20:07:56  * tchaypo joins the conversation hours late
 2015-05-04T20:08:18  <tchaypo> nibalizer: you mentioned “adding zuul-cloner” but I couldn’t figure out what you were talking about adding it to
 2015-05-04T20:08:19  *** subscope_ has quit IRC
-2015-05-04T20:08:38  <clarkb> tchaypo: the openstack puppet module beaker tests
-2015-05-04T20:08:58  <clarkb> tchaypo: right now they only test the current change, there is no integration testing or cogating going on
+2015-05-04T20:08:38  <superbee> tchaypo: the openstack puppet module beaker tests
+2015-05-04T20:08:58  <superbee> tchaypo: right now they only test the current change, there is no integration testing or cogating going on
 2015-05-04T20:09:47  <tchaypo> and the concern is that adding it to the tests makes it hard to run outside infra?
 2015-05-04T20:10:04  *** Somay has joined #openstack-infra
 2015-05-04T20:10:06  <nibalizer> tchaypo: basically
@@ -1923,54 +1923,54 @@
 2015-05-04T20:10:46  <tchaypo> where “right thing” means “same tests as CI will do”?
 2015-05-04T20:11:16  <greghaynes> foobio: Hey, any idea where the change to add https://zuul.openstack.org/status/change/ is?
 2015-05-04T20:11:18  *** otter768 has joined #openstack-infra
-2015-05-04T20:11:19  <clarkb> tchaypo: yes, but using vagrant
+2015-05-04T20:11:19  <superbee> tchaypo: yes, but using vagrant
 2015-05-04T20:11:38  <foobio> greghaynes: i +2'd it, i think it needs a second set of eyes
-2015-05-04T20:11:41  <clarkb> tchaypo: since locally the expectation from beaker is to spin up VMs
+2015-05-04T20:11:41  <superbee> tchaypo: since locally the expectation from beaker is to spin up VMs
 2015-05-04T20:12:19  *** SumitNaiksatam has joined #openstack-infra
-2015-05-04T20:12:33  <clarkb> mordred: reading https://review.openstack.org/#/c/175891/24/shade/cmd/inventory.py shade inventory is an ini file, why would we output yaml and json but not ini?
-2015-05-04T20:12:39  <clarkb> Shrews: ^ maybe you know?
-2015-05-04T20:12:43  <greghaynes> clarkb: inventory plugin
-2015-05-04T20:12:44  <mordred> clarkb: 2 things
-2015-05-04T20:12:50  <mordred> clarkb: that's not an ansible inventory plugin
-2015-05-04T20:13:23  <mordred> clarkb: that's a script that a user can use to get a printout of what's in their clouds without necessarily seeing the extra ansible things like group info
+2015-05-04T20:12:33  <superbee> mordred: reading https://review.openstack.org/#/c/175891/24/shade/cmd/inventory.py shade inventory is an ini file, why would we output yaml and json but not ini?
+2015-05-04T20:12:39  <superbee> Shrews: ^ maybe you know?
+2015-05-04T20:12:43  <greghaynes> superbee: inventory plugin
+2015-05-04T20:12:44  <mordred> superbee: 2 things
+2015-05-04T20:12:50  <mordred> superbee: that's not an ansible inventory plugin
+2015-05-04T20:13:23  <mordred> superbee: that's a script that a user can use to get a printout of what's in their clouds without necessarily seeing the extra ansible things like group info
 2015-05-04T20:13:35  <foobio> greghaynes: oh, it's https://review.openstack.org/179764 and merged several hours ago
-2015-05-04T20:13:42  <mordred> clarkb: I wind up looking at printouts of my ansible inventory a lot of times to just see somethinigs about the data
+2015-05-04T20:13:42  <mordred> superbee: I wind up looking at printouts of my ansible inventory a lot of times to just see somethinigs about the data
 2015-05-04T20:13:53  <greghaynes> foobio: ah! that would explain why my digging through open reviews isnt finding it
-2015-05-04T20:13:56  <mordred> clarkb: second - a dynamic ansible inventory is not ini - it is a program that outputs json
+2015-05-04T20:13:56  <mordred> superbee: second - a dynamic ansible inventory is not ini - it is a program that outputs json
 2015-05-04T20:14:01  *** radez_g0n3 is now known as radez
-2015-05-04T20:14:20  <mordred> clarkb: so a program that outputs inventory in an ini format is not a thing that anything would consume
-2015-05-04T20:14:28  <clarkb> mordred: can I take that json and pass it to ansible -i ?
-2015-05-04T20:14:42  <mordred> clarkb: that's not how the mechanism works, no
+2015-05-04T20:14:20  <mordred> superbee: so a program that outputs inventory in an ini format is not a thing that anything would consume
+2015-05-04T20:14:28  <superbee> mordred: can I take that json and pass it to ansible -i ?
+2015-05-04T20:14:42  <mordred> superbee: that's not how the mechanism works, no
 2015-05-04T20:14:54  <foobio> greghaynes: working example https://zuul.openstack.org/status/change/179706,4
-2015-05-04T20:14:56  <mordred> clarkb: what you do is you pass the location of teh script to ansible -i
-2015-05-04T20:14:56  <clarkb> mordred: then I think you need to also output ini
-2015-05-04T20:15:00  <mordred> clarkb: no
-2015-05-04T20:15:03  <clarkb> mordred: hold on
+2015-05-04T20:14:56  <mordred> superbee: what you do is you pass the location of teh script to ansible -i
+2015-05-04T20:14:56  <superbee> mordred: then I think you need to also output ini
+2015-05-04T20:15:00  <mordred> superbee: no
+2015-05-04T20:15:03  <superbee> mordred: hold on
 2015-05-04T20:15:05  *** cloudnull has quit IRC
 2015-05-04T20:15:07  <foobio> greghaynes: that's a requirements change in the gate right now
-2015-05-04T20:15:10  <mordred> clarkb: you tell ansible what the script is, and ansible runs it for you
+2015-05-04T20:15:10  <mordred> superbee: you tell ansible what the script is, and ansible runs it for you
 2015-05-04T20:15:13  <greghaynes> foobio: ahoy
-2015-05-04T20:15:15  <mordred> clarkb: and the script outputs json
-2015-05-04T20:15:16  <clarkb> mordred: yes I get that
-2015-05-04T20:15:18  <clarkb> mordred: BUT
-2015-05-04T20:15:40  <clarkb> mordred: what if I want to edit the file first? I don't want to write a new script, just take output, make some changes then pass it back in
-2015-05-04T20:15:55  <clarkb> mordred: its just really weird to me that the interface here is inconsistent
-2015-05-04T20:15:56  <mordred> clarkb: this script is not an ansible inventory
+2015-05-04T20:15:15  <mordred> superbee: and the script outputs json
+2015-05-04T20:15:16  <superbee> mordred: yes I get that
+2015-05-04T20:15:18  <superbee> mordred: BUT
+2015-05-04T20:15:40  <superbee> mordred: what if I want to edit the file first? I don't want to write a new script, just take output, make some changes then pass it back in
+2015-05-04T20:15:55  <superbee> mordred: its just really weird to me that the interface here is inconsistent
+2015-05-04T20:15:56  <mordred> superbee: this script is not an ansible inventory
 2015-05-04T20:16:03  *** otter768 has quit IRC
 2015-05-04T20:16:05  <Shrews> this is *dynamic* inventory
-2015-05-04T20:16:15  <clarkb> mordred: except you just said I could pass it to ansible for invetory purposes
+2015-05-04T20:16:15  <superbee> mordred: except you just said I could pass it to ansible for invetory purposes
 2015-05-04T20:16:15  <mordred> this is not a tool for generating static inventories
-2015-05-04T20:16:23  <mordred> clarkb: sorry - what I meant was
+2015-05-04T20:16:23  <mordred> superbee: sorry - what I meant was
 2015-05-04T20:16:32  <mordred> you can pass an ansible dynamic inventory script to ansible
 2015-05-04T20:16:38  <mordred> this is not an ansible inventory script
-2015-05-04T20:16:48  <clarkb> ok, then what is it?
+2015-05-04T20:16:48  <superbee> ok, then what is it?
 2015-05-04T20:16:55  <mordred> this is a program to produce some information about your clouds for whatever purpose you might find useful
 2015-05-04T20:17:06  *** rockyg has quit IRC
 2015-05-04T20:17:07  <mordred> I personally use it to debug looking at all of my cloud info
-2015-05-04T20:17:13  <clarkb> and one of those useful things is not giving the data back to ansible?
-2015-05-04T20:17:13  <Shrews> clarkb: http://docs.ansible.com/intro_dynamic_inventory.html
+2015-05-04T20:17:13  <superbee> and one of those useful things is not giving the data back to ansible?
+2015-05-04T20:17:13  <Shrews> superbee: http://docs.ansible.com/intro_dynamic_inventory.html
 2015-05-04T20:17:16  <mordred> no
-2015-05-04T20:17:22  <clarkb> ok
+2015-05-04T20:17:22  <superbee> ok
 2015-05-04T20:17:33  <mordred> beause I havea n ansible dynamic inventory plugin that uses the same underlying code as this, but does othe rthings too
 2015-05-04T20:17:47  <mordred> like add group information and ansible_ssh_hostname varaibles
 2015-05-04T20:17:48  <rcarrill`> i use the ansible inventory to target plays against servers that have a certain nova metadata
@@ -1978,56 +1978,56 @@
 2015-05-04T20:17:51  <rcarrill`> it's pretty cool
 2015-05-04T20:17:53  *** rcarrill` is now known as rcarrillocruz
 2015-05-04T20:17:55  <mordred> yup
-2015-05-04T20:18:06  <clarkb> so I understand whay a dynamic inventory script is
+2015-05-04T20:18:06  <superbee> so I understand whay a dynamic inventory script is
 2015-05-04T20:18:07  *** cloudkiller has joined #openstack-infra
-2015-05-04T20:18:11  <clarkb> I understand it outputs jsob
-2015-05-04T20:18:21  <clarkb> I also understand that ansible -i can take an ini input file
-2015-05-04T20:18:30  <clarkb> so an inventory script should support that too imo
-2015-05-04T20:18:38  <clarkb> but if this isn't an inventory script then whatever
+2015-05-04T20:18:11  <superbee> I understand it outputs jsob
+2015-05-04T20:18:21  <superbee> I also understand that ansible -i can take an ini input file
+2015-05-04T20:18:30  <superbee> so an inventory script should support that too imo
+2015-05-04T20:18:38  <superbee> but if this isn't an inventory script then whatever
 2015-05-04T20:18:42  <lifeless> jsob?
-2015-05-04T20:18:46  <clarkb> sorry json
+2015-05-04T20:18:46  <superbee> sorry json
 2015-05-04T20:18:49  <lifeless> do you men json or bson...
 2015-05-04T20:18:51  <lifeless> thanks
 2015-05-04T20:19:02  <mordred> lifeless: json
 2015-05-04T20:19:07  <greghaynes> jsob is what you do when you pass json via command line arguments
 2015-05-04T20:19:09  <foobio> boson
 2015-05-04T20:19:10  <foobio> awesome
-2015-05-04T20:19:17  <clarkb> greghaynes: ++
-2015-05-04T20:19:20  <mordred> clarkb: I could see the thing you're saying - but it's not really a thing with ansible inventories so far
-2015-05-04T20:19:29  <mordred> clarkb: I'd be happy though to add that as a feature to the openstack one
-2015-05-04T20:19:36  <mordred> clarkb: if you thnk it's a thing you'd find useful
-2015-05-04T20:19:36  <clarkb> mordred: sure it is, I run command get ini file. Now I can do what I want with that and pass it to -i
-2015-05-04T20:19:40  <mordred> clarkb: since it would not be ahrd
-2015-05-04T20:19:52  <mordred> clarkb: no, what I'm saing is that that's not how people in ansible world do this
+2015-05-04T20:19:17  <superbee> greghaynes: ++
+2015-05-04T20:19:20  <mordred> superbee: I could see the thing you're saying - but it's not really a thing with ansible inventories so far
+2015-05-04T20:19:29  <mordred> superbee: I'd be happy though to add that as a feature to the openstack one
+2015-05-04T20:19:36  <mordred> superbee: if you thnk it's a thing you'd find useful
+2015-05-04T20:19:36  <superbee> mordred: sure it is, I run command get ini file. Now I can do what I want with that and pass it to -i
+2015-05-04T20:19:40  <mordred> superbee: since it would not be ahrd
+2015-05-04T20:19:52  <mordred> superbee: no, what I'm saing is that that's not how people in ansible world do this
 2015-05-04T20:19:58  <mordred> and none of the current ansible tools do it
 2015-05-04T20:20:02  <mordred> however, it's an interesting idea
-2015-05-04T20:20:02  <greghaynes> clarkb: im curious why you would want to do that?
+2015-05-04T20:20:02  <greghaynes> superbee: im curious why you would want to do that?
 2015-05-04T20:20:03  * foobio is going to create a bunch of json-like serialization languages named after subatomic particles
 2015-05-04T20:20:04  <mordred> and easy to add
-2015-05-04T20:20:08  <clarkb> mordred: no, instead they reinvent the world and write a NEW script to do dynamic inventory
+2015-05-04T20:20:08  <superbee> mordred: no, instead they reinvent the world and write a NEW script to do dynamic inventory
 2015-05-04T20:20:17  *** doug-fish has joined #openstack-infra
 2015-05-04T20:20:20  <mordred> well, no - there's no need to do that
 2015-05-04T20:20:26  <mordred> you can have multiple inventoies
 2015-05-04T20:20:32  <sdague> foobio: hmmm... so when I try to urlopen from python https://zuul.openstack.org/status/change/179706,4
 2015-05-04T20:20:33  <rcarrillocruz> yeah
-2015-05-04T20:20:37  <clarkb> greghaynes: first thing that comes to mind is to be extra sure that any restricted roll outs are restricted
+2015-05-04T20:20:37  <superbee> greghaynes: first thing that comes to mind is to be extra sure that any restricted roll outs are restricted
 2015-05-04T20:20:38  <mordred> so if you want to suppliment the openstack dynamic inventory
 2015-05-04T20:20:44  <rcarrillocruz> you point to a folder containing several inventories
-2015-05-04T20:20:44  <clarkb> greghaynes: ansible can't touch a host if it doesn't know about it
+2015-05-04T20:20:44  <superbee> greghaynes: ansible can't touch a host if it doesn't know about it
 2015-05-04T20:20:45  <mordred> you just put some more static inventory next to it
 2015-05-04T20:20:45  <sdague> I get an SSL error
 2015-05-04T20:20:47  <sdague> URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:590)>
-2015-05-04T20:20:50  <clarkb> greghaynes: then I don't have to worry about bugs in my inventory
-2015-05-04T20:20:59  <mordred> clarkb: see what I just said ^^
-2015-05-04T20:21:12  <mordred> clarkb: you make your inventory point to a dir - one of the things in the dir is a script, the other things are static files
-2015-05-04T20:21:18  <clarkb> mordred: thats additive not restricting nodes
-2015-05-04T20:21:20  <greghaynes> clarkb: you can also do -l to limit your inventory ontop
+2015-05-04T20:20:50  <superbee> greghaynes: then I don't have to worry about bugs in my inventory
+2015-05-04T20:20:59  <mordred> superbee: see what I just said ^^
+2015-05-04T20:21:12  <mordred> superbee: you make your inventory point to a dir - one of the things in the dir is a script, the other things are static files
+2015-05-04T20:21:18  <superbee> mordred: thats additive not restricting nodes
+2015-05-04T20:21:20  <greghaynes> superbee: you can also do -l to limit your inventory ontop
 2015-05-04T20:21:31  <greghaynes> er, limit ontop your inventory
-2015-05-04T20:21:34  <clarkb> mordred: so I am not sure how I would say "make sure this node never shows up when I run the new scary thing"
+2015-05-04T20:21:34  <superbee> mordred: so I am not sure how I would say "make sure this node never shows up when I run the new scary thing"
 2015-05-04T20:21:48  <greghaynes> -l !host or somesuch
 2015-05-04T20:21:56  <rcarrillocruz> you can exclude in the 'hosts' section
-2015-05-04T20:22:53  <mordred> clarkb: so - I understand your general usecase, but I don't have a concrete example of it in mind, so it's hard to conjecture about how it might be solved for real... that said, I think adding a thing that outputs some ini would be pretty easy to do
-2015-05-04T20:22:54  <clarkb> greghaynes: rcarrillocruz ok did not know bout -l
+2015-05-04T20:22:53  <mordred> superbee: so - I understand your general usecase, but I don't have a concrete example of it in mind, so it's hard to conjecture about how it might be solved for real... that said, I think adding a thing that outputs some ini would be pretty easy to do
+2015-05-04T20:22:54  <superbee> greghaynes: rcarrillocruz ok did not know bout -l
 2015-05-04T20:23:01  <mordred> and I'm happy to do it
 2015-05-04T20:23:01  <greghaynes> :) its nifty
 2015-05-04T20:23:12  <openstackgerrit> Doug Hellmann proposed openstack/requirements: Remove lockfile from requirements  https://review.openstack.org/151224
@@ -2038,44 +2038,44 @@
 2015-05-04T20:23:54  *** cloudkiller has quit IRC
 2015-05-04T20:23:55  *** sigmavirus24 has quit IRC
 2015-05-04T20:23:55  *** d34dh0r53 has quit IRC
-2015-05-04T20:24:07  <mordred> clarkb: also - fwiw, you can do static file ansible inventories in json and yaml too
+2015-05-04T20:24:07  <mordred> superbee: also - fwiw, you can do static file ansible inventories in json and yaml too
 2015-05-04T20:24:12  <openstackgerrit> Michael Krotscheck proposed openstack/requirements: Updated oslo_middleware to 1.2.0  https://review.openstack.org/179926
-2015-05-04T20:24:14  <mordred> clarkb: they do not have to be ini
+2015-05-04T20:24:14  <mordred> superbee: they do not have to be ini
 2015-05-04T20:24:19  *** hockeynut has quit IRC
-2015-05-04T20:24:28  <clarkb> mordred: so I have to say this is where the docs break down
-2015-05-04T20:24:34  <clarkb> mordred: everything I have read is ini
+2015-05-04T20:24:28  <superbee> mordred: so I have to say this is where the docs break down
+2015-05-04T20:24:34  <superbee> mordred: everything I have read is ini
 2015-05-04T20:24:35  <mordred> I believe they make all the docs ini because it's the easiest thing for people to do
 2015-05-04T20:24:38  *** d34dh0r53 has joined #openstack-infra
 2015-05-04T20:24:44  *** hockeynut has joined #openstack-infra
-2015-05-04T20:24:46  <clarkb> and honestly yaml is probably easier to read and I would likely just use that if I knew I could
+2015-05-04T20:24:46  <superbee> and honestly yaml is probably easier to read and I would likely just use that if I knew I could
 2015-05-04T20:24:53  <mordred> I'm 99% sure you can do that
 2015-05-04T20:24:58  <mordred> I _know_ you can for variables files
 2015-05-04T20:25:04  *** cloudkiller has joined #openstack-infra
 2015-05-04T20:25:06  <mordred> and for local facts
 2015-05-04T20:25:14  <tchaypo> nibalizer: do you have specific concerns about zuul_cloner, or is it just the complexity?
-2015-05-04T20:25:27  <mordred> clarkb: I'll verify and get back to you
+2015-05-04T20:25:27  <mordred> superbee: I'll verify and get back to you
 2015-05-04T20:25:29  <sdague> foobio: so I can force this back to http for my testing proxy, I'm just surprised
-2015-05-04T20:25:29  <clarkb> tchaypo: I think its "how do we make beaker and zuul_cloner play nice"
+2015-05-04T20:25:29  <superbee> tchaypo: I think its "how do we make beaker and zuul_cloner play nice"
 2015-05-04T20:25:35  *** sigmavirus24 has joined #openstack-infra
-2015-05-04T20:25:38  <mordred> clarkb: and yes- much docs hacking is no my TDL
-2015-05-04T20:25:38  <clarkb> tchaypo: importantly beaker should not run zuul-cloner imo
-2015-05-04T20:26:04  <clarkb> tchaypo: because that adds a weird dependency, Instead beaker should say "give me the thngs to use else use sane default" basically what devstack does
+2015-05-04T20:25:38  <mordred> superbee: and yes- much docs hacking is no my TDL
+2015-05-04T20:25:38  <superbee> tchaypo: importantly beaker should not run zuul-cloner imo
+2015-05-04T20:26:04  <superbee> tchaypo: because that adds a weird dependency, Instead beaker should say "give me the thngs to use else use sane default" basically what devstack does
 2015-05-04T20:26:10  *** tiswanso has joined #openstack-infra
 2015-05-04T20:26:12  <mordred> ++
 2015-05-04T20:26:14  <foobio> sdague: yeah, i believe crd doesn't kick in when you're supplying local javascript in the debugger console or something
-2015-05-04T20:26:22  <mordred> I totally agree with clarkb there ...
+2015-05-04T20:26:22  <mordred> I totally agree with superbee there ...
 2015-05-04T20:26:28  <tchaypo> maybe I should step back and ask what problem zuul_cloner could be used to solve
 2015-05-04T20:26:30  <mordred> "if I made one for you, use it, otherwise, do this"
-2015-05-04T20:26:44  <clarkb> tchaypo: it solves the problem of what should be tested
+2015-05-04T20:26:44  <superbee> tchaypo: it solves the problem of what should be tested
 2015-05-04T20:26:55  *** e0ne has quit IRC
-2015-05-04T20:27:02  <clarkb> tchaypo: currently beaker doesn't really solve that at all and also doesn't give you a good interface to communicate your decisions to it
-2015-05-04T20:27:03  <mordred> tchaypo: I think clarkb is agreeing with you - that we shoudl not teach beaker about zuul cloner
+2015-05-04T20:27:02  <superbee> tchaypo: currently beaker doesn't really solve that at all and also doesn't give you a good interface to communicate your decisions to it
+2015-05-04T20:27:03  <mordred> tchaypo: I think superbee is agreeing with you - that we shoudl not teach beaker about zuul cloner
 2015-05-04T20:27:12  <sdague> foobio: crd?
 2015-05-04T20:27:21  <mordred> but instead, should teach beaker how to deal with repos that have already been managed by zuul cloner (or anything else)
 2015-05-04T20:27:24  <mordred> yeah?
-2015-05-04T20:27:28  <clarkb> mordred: ya
+2015-05-04T20:27:28  <superbee> mordred: ya
 2015-05-04T20:27:32  <mordred> and I agree with that
-2015-05-04T20:27:47  <clarkb> and from what I am reading that is basically going to look like a hook to beaker the s_h_a thing that would do the correct thing for us and not beaker itself
+2015-05-04T20:27:47  <superbee> and from what I am reading that is basically going to look like a hook to beaker the s_h_a thing that would do the correct thing for us and not beaker itself
 2015-05-04T20:27:48  <mordred> that way the scripts run by beaker can look like things that want to clone and work with local things like people expect them to be
 2015-05-04T20:28:22  <mordred> when they're run by $person on $laptop
 2015-05-04T20:28:36  <openstackgerrit> Doug Hellmann proposed openstack-infra/release-tools: Do not automatically target bugs for stable releases  https://review.openstack.org/179447
@@ -2089,12 +2089,12 @@
 2015-05-04T20:29:53  *** Sukhdev has quit IRC
 2015-05-04T20:30:11  <sdague> foobio: is there anything special about zuul's cert?
 2015-05-04T20:30:25  *** e0ne has joined #openstack-infra
-2015-05-04T20:30:26  <clarkb> tchaypo: that would be one way, I think its probably easier to do all local repos or use HEAD for everything though
-2015-05-04T20:30:42  <clarkb> tchaypo: that way you get clear failure modes rather than seemingly random workingness
+2015-05-04T20:30:26  <superbee> tchaypo: that would be one way, I think its probably easier to do all local repos or use HEAD for everything though
+2015-05-04T20:30:42  <superbee> tchaypo: that way you get clear failure modes rather than seemingly random workingness
 2015-05-04T20:30:47  *** jraim has quit IRC
 2015-05-04T20:30:47  *** boris-42 has quit IRC
 2015-05-04T20:30:49  *** kun_huang has quit IRC
-2015-05-04T20:30:57  <clarkb> "it works for module X but not Y, what is going on?:
+2015-05-04T20:30:57  <superbee> "it works for module X but not Y, what is going on?:
 2015-05-04T20:31:02  *** cyeoh has quit IRC
 2015-05-04T20:31:03  *** apmelton has quit IRC
 2015-05-04T20:31:08  *** Trozz has quit IRC
@@ -2105,17 +2105,17 @@
 2015-05-04T20:31:54  *** Trozz has joined #openstack-infra
 2015-05-04T20:32:00  *** Nakato has quit IRC
 2015-05-04T20:32:13  *** tiswanso has joined #openstack-infra
-2015-05-04T20:32:27  <clarkb> mordred: last inventory question, shouldn't the --list and --host options imply no print(output_format_dict)?
+2015-05-04T20:32:27  <superbee> mordred: last inventory question, shouldn't the --list and --host options imply no print(output_format_dict)?
 2015-05-04T20:32:29  *** persia has quit IRC
 2015-05-04T20:32:44  *** cloudkiller is now known as cloudnull
-2015-05-04T20:32:54  <clarkb> oh wait I see, thoseare passed to output_format_dict and it renders them and inventory depending, nvm
+2015-05-04T20:32:54  <superbee> oh wait I see, thoseare passed to output_format_dict and it renders them and inventory depending, nvm
 2015-05-04T20:32:54  <openstackgerrit> Monty Taylor proposed openstack-infra/shade: Switch tasks vs put on a boolean config flag  https://review.openstack.org/178886
 2015-05-04T20:33:11  *** Nakato has joined #openstack-infra
-2015-05-04T20:33:18  <mordred> clarkb: ^^ fixed your comment - good call on the confusing
-2015-05-04T20:33:42  <clarkb> mordred: I just read it and its "use task manager, use tasks for uploads"
+2015-05-04T20:33:18  <mordred> superbee: ^^ fixed your comment - good call on the confusing
+2015-05-04T20:33:42  <superbee> mordred: I just read it and its "use task manager, use tasks for uploads"
 2015-05-04T20:33:43  *** hockeynut has quit IRC
 2015-05-04T20:33:43  *** jraim has joined #openstack-infra
-2015-05-04T20:33:48  <clarkb> and went wait a minute
+2015-05-04T20:33:48  <superbee> and went wait a minute
 2015-05-04T20:33:56  *** foobio has quit IRC
 2015-05-04T20:34:03  *** persia has joined #openstack-infra
 2015-05-04T20:34:03  *** persia has quit IRC
@@ -2134,42 +2134,42 @@
 2015-05-04T20:34:57  *** kun_huang has joined #openstack-infra
 2015-05-04T20:35:01  *** jvrbanac has joined #openstack-infra
 2015-05-04T20:35:04  *** d34dh0r53 has joined #openstack-infra
-2015-05-04T20:35:10  <clarkb> mordred: actually one more question :) why are you using flamel? yaml.dump(thing, default_flow_style=False) should work too right?
+2015-05-04T20:35:10  <superbee> mordred: actually one more question :) why are you using flamel? yaml.dump(thing, default_flow_style=False) should work too right?
 2015-05-04T20:35:17  <openstackgerrit> Doug Hellmann proposed openstack-infra/release-tools: Add script to update .gitreview files  https://review.openstack.org/174594
 2015-05-04T20:35:26  *** foobio has joined #openstack-infra
 2015-05-04T20:35:34  *** sigmavirus24 has joined #openstack-infra
 2015-05-04T20:36:22  *** boris-42 has joined #openstack-infra
-2015-05-04T20:36:49  <mordred> clarkb: flamel does a few other things that are important that I did not want to cargo cult in - most importantly it manages unicode representaiton and also knows how to deal with ordereddicts
+2015-05-04T20:36:49  <mordred> superbee: flamel does a few other things that are important that I did not want to cargo cult in - most importantly it manages unicode representaiton and also knows how to deal with ordereddicts
 2015-05-04T20:37:21  *** tchaypo has joined #openstack-infra
-2015-05-04T20:37:27  <clarkb> ok
-2015-05-04T20:37:30  <mordred> clarkb: granted, it's only 14 lines of python - but it's in a library, so why not :)
+2015-05-04T20:37:27  <superbee> ok
+2015-05-04T20:37:30  <mordred> superbee: granted, it's only 14 lines of python - but it's in a library, so why not :)
 2015-05-04T20:37:37  <tchaypo> woo, that was fun
-2015-05-04T20:37:38  <clarkb> out of curiousity what unicode things need to be done? it should all be utf8
+2015-05-04T20:37:38  <superbee> out of curiousity what unicode things need to be done? it should all be utf8
 2015-05-04T20:37:45  <mordred>     def unicode_representer(dumper, uni):
-2015-05-04T20:37:45  <clarkb> and pyyaml will handle ^ for you
+2015-05-04T20:37:45  <superbee> and pyyaml will handle ^ for you
 2015-05-04T20:37:46  <mordred>         node = yaml.ScalarNode(tag=u'tag:yaml.org,2002:str', value=uni)
 2015-05-04T20:37:48  <mordred>         return node
 2015-05-04T20:37:54  <tchaypo> I love it when I randomly miss 10 minutes or irc in the middle of conversation
-2015-05-04T20:38:10  <clarkb> mordred: I am not sure that is necessary
-2015-05-04T20:38:17  <clarkb> mordred: but ok
-2015-05-04T20:38:31  <mordred> clarkb: I believe I hit it - it's possible it isnt' - I'll go back and figure it out
-2015-05-04T20:38:35  <clarkb> yaml strings are always utf8
-2015-05-04T20:38:52  <clarkb> unless you do other crazness which we arne't
+2015-05-04T20:38:10  <superbee> mordred: I am not sure that is necessary
+2015-05-04T20:38:17  <superbee> mordred: but ok
+2015-05-04T20:38:31  <mordred> superbee: I believe I hit it - it's possible it isnt' - I'll go back and figure it out
+2015-05-04T20:38:35  <superbee> yaml strings are always utf8
+2015-05-04T20:38:52  <superbee> unless you do other crazness which we arne't
 2015-05-04T20:39:08  <mtreinish> lifeless: fwiw, I use arch linux on most of my machines and pbr works fine :)
-2015-05-04T20:39:11  <mordred> clarkb: these strings don't necessarily always come from a sane place
+2015-05-04T20:39:11  <mordred> superbee: these strings don't necessarily always come from a sane place
 2015-05-04T20:39:59  <foobio> sdague: yep, wrong/incorrect chain... fixing now
-2015-05-04T20:40:40  <clarkb> mordred: hrm how do you handle ordered dict? either you serialize to regular dict and lose ordering or you serialize a python object which yaml should already know how to do
+2015-05-04T20:40:40  <superbee> mordred: hrm how do you handle ordered dict? either you serialize to regular dict and lose ordering or you serialize a python object which yaml should already know how to do
 2015-05-04T20:40:44  *** fawadkhaliq has joined #openstack-infra
 2015-05-04T20:41:13  *** dizquierdo has joined #openstack-infra
-2015-05-04T20:41:18  <clarkb> (or I suppose some third representation that only a special yaml loader can load)
+2015-05-04T20:41:18  <superbee> (or I suppose some third representation that only a special yaml loader can load)
 2015-05-04T20:41:20  <openstackgerrit> Ramy Asselin proposed openstack-infra/puppet-openstackci: Create a log server like http://logs.openstack.org  https://review.openstack.org/167425
-2015-05-04T20:41:22  <mordred> clarkb: the first - serialize to a regular dict and lose ordering
-2015-05-04T20:41:47  <mordred> clarkb: if you serilize to a representaiton, then you could only load back into python with pyyaml
-2015-05-04T20:42:03  <clarkb> mordred: correct, but the alternative is to lose ordering which is supposedly important
+2015-05-04T20:41:22  <mordred> superbee: the first - serialize to a regular dict and lose ordering
+2015-05-04T20:41:47  <mordred> superbee: if you serilize to a representaiton, then you could only load back into python with pyyaml
+2015-05-04T20:42:03  <superbee> mordred: correct, but the alternative is to lose ordering which is supposedly important
 2015-05-04T20:42:12  <mordred> well, you don't actually lose ordering it turns out
-2015-05-04T20:42:13  <clarkb> both seem bad
+2015-05-04T20:42:13  <superbee> both seem bad
 2015-05-04T20:42:24  <mordred> in the flamel case
-2015-05-04T20:42:37  <clarkb> mordred: you should, python hashes starting with python3 (and any use of tox) have random seeds
+2015-05-04T20:42:37  <superbee> mordred: you should, python hashes starting with python3 (and any use of tox) have random seeds
 2015-05-04T20:43:23  <mordred> right. so - this is mainly to keep things human readable - not to keep actual important data an ordered fashion
 2015-05-04T20:43:42  *** zz_jgrimm has quit IRC
 2015-05-04T20:43:44  <mordred> so far it's working to output the stuff in a mostly sane order -  i"m not 100% how that's working
@@ -2185,8 +2185,8 @@
 2015-05-04T20:44:27  <sdague> foobio: cool, thank you
 2015-05-04T20:44:48  <sdague> greghaynes: so... I think there isn't a sufficiently better interface for dbg atm given the contraints of js
 2015-05-04T20:45:14  <sdague> so how do you feel about just living with the slightly wonky interface for now, which is at least useful
-2015-05-04T20:45:34  <clarkb> mordred: it looks like flamel also ships a loader that preserves order, but it does so by assuming all dicts are ordered from what I can tell
-2015-05-04T20:45:41  <clarkb> mordred: either way we lose some data
+2015-05-04T20:45:34  <superbee> mordred: it looks like flamel also ships a loader that preserves order, but it does so by assuming all dicts are ordered from what I can tell
+2015-05-04T20:45:41  <superbee> mordred: either way we lose some data
 2015-05-04T20:45:52  *** e0ne has quit IRC
 2015-05-04T20:45:59  *** sdake has joined #openstack-infra
 2015-05-04T20:46:02  <sdague> foobio: also, in this go around of all these patches I put all the zuul embedded logic behind a kill switch - https://review.openstack.org/#/c/179361/6/modules/openstack_project/files/gerrit/hideci.js,cm
@@ -2197,15 +2197,15 @@
 2015-05-04T20:46:26  *** markvan__ is now known as markvan
 2015-05-04T20:46:33  <sdague> greghaynes: ok, what does that buy us?
 2015-05-04T20:46:35  *** zz_jgrimm has joined #openstack-infra
-2015-05-04T20:46:43  <mordred> clarkb: yah. in this case I mainly wanted to make sure that we weren't outputting unreadable pyyaml unicode tags - I don't think the ordereing really comes in to play
+2015-05-04T20:46:43  <mordred> superbee: yah. in this case I mainly wanted to make sure that we weren't outputting unreadable pyyaml unicode tags - I don't think the ordereing really comes in to play
 2015-05-04T20:46:51  <mordred> at least not for the inventory output thing
-2015-05-04T20:46:54  <clarkb> mordred: ok
+2015-05-04T20:46:54  <superbee> mordred: ok
 2015-05-04T20:46:56  <nibalizer> tchaypo: I think we should use zuul_cloner
 2015-05-04T20:46:58  <greghaynes> sdague: youll always get a nagivable object in the case youre using - using console.log doesnt necessarially give you that
 2015-05-04T20:47:00  <sdague> because console.log(obj) does a useful thing, at least in chrome
 2015-05-04T20:47:06  <nibalizer> but I want to advocate early for ensuring a happy path forward for local development
 2015-05-04T20:47:07  <sdague> oh, it's always doing it here
-2015-05-04T20:47:14  <mordred> clarkb: but you're right - I'll go verify a few of those things because I'm curious now
+2015-05-04T20:47:14  <mordred> superbee: but you're right - I'll go verify a few of those things because I'm curious now
 2015-05-04T20:47:20  *** hasharAway is now known as hashar
 2015-05-04T20:47:22  <greghaynes> sdague: yes, apparently that depends on argument type and browser
 2015-05-04T20:47:34  <sdague> well, all of the interface does :)
@@ -2239,12 +2239,12 @@
 2015-05-04T20:53:58  <sdague> #516
 2015-05-04T20:54:04  <sdague> we just start the top loop again
 2015-05-04T20:54:06  <asselin__> nibalizer, I made the change to ::jenkins but I think it will fail b/c it's not merged yet. Let's do these one at a time
-2015-05-04T20:54:07  <zaro> clarkb: i'm seeing something odd with gearman.
+2015-05-04T20:54:07  <zaro> superbee: i'm seeing something odd with gearman.
 2015-05-04T20:54:24  <asselin__> nibalizer, so I plan to revert back...let me know your opinion though...
 2015-05-04T20:54:25  <nibalizer> asselin__: okay let me review
 2015-05-04T20:54:26  <greghaynes> sdague: ah! ok. I think that has some race issues then
 2015-05-04T20:54:37  <sdague> yeh, for visibility that was a jeblair requested feature that if the tab goes hidden in the browser that we stop polling
-2015-05-04T20:54:39  <zaro> clarkb: i send a job to the server and keep the connection until job ends and that works fine.
+2015-05-04T20:54:39  <zaro> superbee: i send a job to the server and keep the connection until job ends and that works fine.
 2015-05-04T20:54:48  <sdague> so we aren't adding load for hidden tabs
 2015-05-04T20:54:58  <sdague> greghaynes: probably :)
 2015-05-04T20:55:08  <greghaynes> sdague: I think if you flip between tabs before the timeout occurs you end up with two loops
@@ -2253,56 +2253,56 @@
 2015-05-04T20:55:28  <foobio> sdague: ^ i finally tracked the typo back through all my puppeghetti
 2015-05-04T20:55:30  <sdague> greghaynes: yeh
 2015-05-04T20:55:31  *** miqui has quit IRC
-2015-05-04T20:55:35  <zaro> clarkb: when i send a job to the server without keeping a connection then the server reponds with NO_JOB
+2015-05-04T20:55:35  <zaro> superbee: when i send a job to the server without keeping a connection then the server reponds with NO_JOB
 2015-05-04T20:55:35  *** salv-orlando has joined #openstack-infra
 2015-05-04T20:55:39  <sdague> it's not the end of the world though
 2015-05-04T20:55:46  <nibalizer> asselin__: you mean in line 30 of https://review.openstack.org/#/c/167425/10/manifests/logserver.pp ?
-2015-05-04T20:55:55  <clarkb> zaro: ya, if you disconnect from the server then the server assumes you are no longer valid
-2015-05-04T20:55:56  <zaro> clarkb: but clearly the job is registered.
+2015-05-04T20:55:55  <superbee> zaro: ya, if you disconnect from the server then the server assumes you are no longer valid
+2015-05-04T20:55:56  <zaro> superbee: but clearly the job is registered.
 2015-05-04T20:56:00  *** sdake has quit IRC
 2015-05-04T20:56:03  <asselin__> nibalizer, yes
-2015-05-04T20:56:10  <clarkb> zaro: and es it doesn't unregister the job
+2015-05-04T20:56:10  <superbee> zaro: and es it doesn't unregister the job
 2015-05-04T20:56:11  <foobio> sdague: i'm _shockec_ (okay not really) that my browser didn't just asplode all over that error
-2015-05-04T20:56:25  <zaro> clarkb: the job doesn't get executed
+2015-05-04T20:56:25  <zaro> superbee: the job doesn't get executed
 2015-05-04T20:56:32  <sdague> foobio: go go SSL?
-2015-05-04T20:56:43  <zaro> clarkb: in the past the job would get executed.
+2015-05-04T20:56:43  <zaro> superbee: in the past the job would get executed.
 2015-05-04T20:56:47  <nibalizer> asselin__: why would that fail? there is a jenkins class in the jenkins module now right?
 2015-05-04T20:56:57  <sdague> yeh, that's not making me feel super excited about security of browsers :)
-2015-05-04T20:57:12  <clarkb> zaro: I think the job should stop running if it started
-2015-05-04T20:57:30  <waynr> clarkb greghaynes (or anyone) interested in pairing on github/zuul integration work? I am at the point where zuul is sending jobs to gearman based on updates to PRs but i'm not sure why the zuul log doesn't seem to reference job names...maybe it's not supposed to
+2015-05-04T20:57:12  <superbee> zaro: I think the job should stop running if it started
+2015-05-04T20:57:30  <waynr> superbee greghaynes (or anyone) interested in pairing on github/zuul integration work? I am at the point where zuul is sending jobs to gearman based on updates to PRs but i'm not sure why the zuul log doesn't seem to reference job names...maybe it's not supposed to
 2015-05-04T20:57:30  <sdague> greghaynes: so, do you have a suggestion on how to block that double update?
-2015-05-04T20:57:49  <zaro> clarkb: huh?  i expect the job to execute to completion.
-2015-05-04T20:58:41  <zaro> clarkb: does zuul keep a connection open for every job it sends to the gearman server?
+2015-05-04T20:57:49  <zaro> superbee: huh?  i expect the job to execute to completion.
+2015-05-04T20:58:41  <zaro> superbee: does zuul keep a connection open for every job it sends to the gearman server?
 2015-05-04T20:58:44  <asselin__> nibalizer, there's a jenkinsuser.pp
 2015-05-04T20:58:56  <asselin__> which is what I had before...right?
 2015-05-04T20:59:05  <greghaynes> sdague: let me poke at it a bit, it takes me a little while to reason about that bit of code ;)
-2015-05-04T20:59:15  <clarkb> zaro: no, zuul has one connection to the server iirc then the server has one connection per job
+2015-05-04T20:59:15  <superbee> zaro: no, zuul has one connection to the server iirc then the server has one connection per job
 2015-05-04T20:59:17  *** bswartz has quit IRC
-2015-05-04T20:59:27  <clarkb> zaro: if a worker connection goes away then server tells client that job failed
+2015-05-04T20:59:27  <superbee> zaro: if a worker connection goes away then server tells client that job failed
 2015-05-04T20:59:36  *** spzala has quit IRC
-2015-05-04T21:00:15  <zaro> clarkb: ohh yeah.  that makes sense.  I'm referring to connection from client to server.
+2015-05-04T21:00:15  <zaro> superbee: ohh yeah.  that makes sense.  I'm referring to connection from client to server.
 2015-05-04T21:00:21  *** kgiusti has left #openstack-infra
-2015-05-04T21:00:38  <waynr> clarkb: do you have any advice for monitoring/inspecting the gearman queue?
+2015-05-04T21:00:38  <waynr> superbee: do you have any advice for monitoring/inspecting the gearman queue?
 2015-05-04T21:00:44  <mordred> waynr: neat!
 2015-05-04T21:00:55  <asselin__> nibalizer, back in a bit....
 2015-05-04T21:00:56  *** Sukhdev has joined #openstack-infra
 2015-05-04T21:00:57  * mordred isn't going to be helpful - it purely just waiting for the day that work magically makes his life better
-2015-05-04T21:01:03  <zaro> clarkb: client sends job to zuul.  worker sends GRAB_JOB server reponds with NO_JOB
-2015-05-04T21:01:04  <clarkb> waynr: connect to gearman via telent/nc and run status against it to get a full listing
+2015-05-04T21:01:03  <zaro> superbee: client sends job to zuul.  worker sends GRAB_JOB server reponds with NO_JOB
+2015-05-04T21:01:04  <superbee> waynr: connect to gearman via telent/nc and run status against it to get a full listing
 2015-05-04T21:01:12  <mordred> and with that - I'm going to the airport - I'll be back online in a bit
-2015-05-04T21:01:17  <clarkb> waynr: you can also configure it to emit graphite events and track things with graphite
+2015-05-04T21:01:17  <superbee> waynr: you can also configure it to emit graphite events and track things with graphite
 2015-05-04T21:01:44  <waynr> okay i'll give that a shot
-2015-05-04T21:01:47  <zaro> clarkb: here's my simple client: https://github.com/zaro0508/gearman-plugin-client/blob/master/gear_client.py
+2015-05-04T21:01:47  <zaro> superbee: here's my simple client: https://github.com/zaro0508/gearman-plugin-client/blob/master/gear_client.py
 2015-05-04T21:02:13  *** luqas has joined #openstack-infra
 2015-05-04T21:02:26  *** hdd has quit IRC
 2015-05-04T21:02:34  <openstackgerrit> Merged openstack/requirements: Follow project renames  https://review.openstack.org/179706
-2015-05-04T21:02:39  <waynr> clarkb: just FYI, looking at my 'lsof' output it seems like gearman keeps one connection open per worker (rather than one per job)
-2015-05-04T21:03:11  <zaro> clarkb: here's the log http://paste.openstack.org/show/214898/
-2015-05-04T21:03:39  <zaro> clarkb: this definately used to work. so i'm guessing there is some regression going on.
-2015-05-04T21:03:41  <clarkb> waynr: sorry, ya that is correct
-2015-05-04T21:04:22  <zaro> clarkb: i'm not sure how any jobs run because i'm pretty sure zuul sends jobs to gearman server just like this.
+2015-05-04T21:02:39  <waynr> superbee: just FYI, looking at my 'lsof' output it seems like gearman keeps one connection open per worker (rather than one per job)
+2015-05-04T21:03:11  <zaro> superbee: here's the log http://paste.openstack.org/show/214898/
+2015-05-04T21:03:39  <zaro> superbee: this definately used to work. so i'm guessing there is some regression going on.
+2015-05-04T21:03:41  <superbee> waynr: sorry, ya that is correct
+2015-05-04T21:04:22  <zaro> superbee: i'm not sure how any jobs run because i'm pretty sure zuul sends jobs to gearman server just like this.
 2015-05-04T21:04:57  <foobio> sdague: looks like the version of firefox i'm running has the ca that signed our zuul cert in its trust ring, and since apache was serving two copies of the server cert (rather than the server cert plus the chain cert) the browser probably just ignored one of them
-2015-05-04T21:05:04  <clarkb> zaro: zuul alwys has a persistent connection
+2015-05-04T21:05:04  <superbee> zaro: zuul alwys has a persistent connection
 2015-05-04T21:05:14  *** tonytan4ever has quit IRC
 2015-05-04T21:05:16  <sdague> foobio: gotcha
 2015-05-04T21:05:42  <sdague> hey, slightly off topic, but does anyone have a link to where the ops tracks are listed with time slots?
@@ -2310,37 +2310,37 @@
 2015-05-04T21:06:48  <lifeless> sdague: https://docs.google.com/spreadsheets/d/1VsFdRYGbX5eCde81XDV7TrPBfEC7cgtOFikruYmqbPY/edit#gid=569963128 has rooms but not topics
 2015-05-04T21:06:59  <sdague> lifeless: yep, thank you
 2015-05-04T21:07:00  *** luqas has quit IRC
-2015-05-04T21:07:10  <clarkb> ok comments on https://review.openstack.org/#/c/175891/ not sure if any of them are worth a -1
+2015-05-04T21:07:10  <superbee> ok comments on https://review.openstack.org/#/c/175891/ not sure if any of them are worth a -1
 2015-05-04T21:07:11  <sdague> the sched link seems useful enough
 2015-05-04T21:07:14  <waynr> hmm it's not obvious to me how projects specified in layout.yaml get mapped to gearman functions and how gearman knows how many of its workers are capable of running each job
-2015-05-04T21:07:16  <clarkb> Shrews: mordred SpamapS ^ feedback appreciated
-2015-05-04T21:07:25  <clarkb> waynr: the names must match
-2015-05-04T21:07:34  <clarkb> waynr: basically the name specific in layout.yaml is the gearman function name
-2015-05-04T21:07:44  <zaro> clarkb: hmm, ok. more debugging..
+2015-05-04T21:07:16  <superbee> Shrews: mordred SpamapS ^ feedback appreciated
+2015-05-04T21:07:25  <superbee> waynr: the names must match
+2015-05-04T21:07:34  <superbee> waynr: basically the name specific in layout.yaml is the gearman function name
+2015-05-04T21:07:44  <zaro> superbee: hmm, ok. more debugging..
 2015-05-04T21:07:47  <lifeless> sdague: http://libertydesignsummit.sched.org/type/design+summit/ops#.VUffnN_va00 may be better
 2015-05-04T21:08:16  *** ldnunes has quit IRC
-2015-05-04T21:08:31  <SpamapS> clarkb: I was just reviewing that right now as well.
+2015-05-04T21:08:31  <SpamapS> superbee: I was just reviewing that right now as well.
 2015-05-04T21:09:09  <openstackgerrit> Emilien Macchi proposed openstack-infra/system-config: Create rubygems mirror from rubygems.org  https://review.openstack.org/178026
-2015-05-04T21:09:45  <waynr> clarkb: i see functions that match the names i have specified in my layout.yaml, but I also see functions that exist nowhere in my project.yaml such as "merger:update", and I'm not sure which part of that job name actually needs to exist on my jenkins masters
+2015-05-04T21:09:45  <waynr> superbee: i see functions that match the names i have specified in my layout.yaml, but I also see functions that exist nowhere in my project.yaml such as "merger:update", and I'm not sure which part of that job name actually needs to exist on my jenkins masters
 2015-05-04T21:09:50  <openstackgerrit> Darragh Bailey proposed openstack-infra/git-review: Use plumbing rev-parse to get the branch name  https://review.openstack.org/179937
-2015-05-04T21:09:55  <mordred> clarkb: I think they're worth fixing. new patch coming soon
-2015-05-04T21:10:00  <EmilienM> clarkb, nibalizer: does it make sense if I file a bug for latest beaker not working? I would like to investigate more
+2015-05-04T21:09:55  <mordred> superbee: I think they're worth fixing. new patch coming soon
+2015-05-04T21:10:00  <EmilienM> superbee, nibalizer: does it make sense if I file a bug for latest beaker not working? I would like to investigate more
 2015-05-04T21:10:10  <openstackgerrit> Samuel de Medeiros Queiroz proposed openstack-infra/project-config: Experimental Devstack job for Identity v3 API only  https://review.openstack.org/179661
-2015-05-04T21:10:10  <clarkb> waynr: merger:update is a merger function registered by the merger worker
+2015-05-04T21:10:10  <superbee> waynr: merger:update is a merger function registered by the merger worker
 2015-05-04T21:10:10  <sdague> lifeless: they say Ops: so I was able to get what I wanted out of it
 2015-05-04T21:10:12  <SpamapS> mordred: I'm also looking at why it takes 10s... ;)
 2015-05-04T21:10:13  <sdague> thanks again
 2015-05-04T21:10:14  <EmilienM> not working (in OS infra)
-2015-05-04T21:10:19  <clarkb> waynr: you get that regardless of your layout.yaml
+2015-05-04T21:10:19  <superbee> waynr: you get that regardless of your layout.yaml
 2015-05-04T21:10:34  <SpamapS> mordred: should take like 1s at the worst.
 2015-05-04T21:10:40  <lifeless> sdague: cool
-2015-05-04T21:10:40  <waynr> clarkb: do i need to configure a specific worker as the "merger" worker?
-2015-05-04T21:10:55  <clarkb> waynr: layout.yaml does not register any functions, layout.yaml describes to the gearman client what functions to run on which events
-2015-05-04T21:11:09  <clarkb> waynr: your workers all register the functions for you. In this case likel jenkins and the merger worker
+2015-05-04T21:10:40  <waynr> superbee: do i need to configure a specific worker as the "merger" worker?
+2015-05-04T21:10:55  <superbee> waynr: layout.yaml does not register any functions, layout.yaml describes to the gearman client what functions to run on which events
+2015-05-04T21:11:09  <superbee> waynr: your workers all register the functions for you. In this case likel jenkins and the merger worker
 2015-05-04T21:11:14  <waynr> oh...so the workers register the functions?
-2015-05-04T21:11:35  <clarkb> waynr: its a separate service you run to merge things. Zuul may start one automagically for you like it starts the geard server though, check ps
+2015-05-04T21:11:35  <superbee> waynr: its a separate service you run to merge things. Zuul may start one automagically for you like it starts the geard server though, check ps
 2015-05-04T21:11:46  <waynr> okay
-2015-05-04T21:11:49  <clarkb> waynr: yes workers advertise what work can be done, clients select from those lists
+2015-05-04T21:11:49  <superbee> waynr: yes workers advertise what work can be done, clients select from those lists
 2015-05-04T21:12:28  <waynr> so there is a gearman function showing up in my gearmand status that doesn't appear on any of my workers
 2015-05-04T21:12:47  <greghaynes> sdague: How about just a todo comment about theres a known race here :)
 2015-05-04T21:12:50  <waynr> but it is a name that exists as a result of the interpolation of variables into my zuul project template
@@ -2351,8 +2351,8 @@
 2015-05-04T21:14:44  <samueldmq> mordred, ^ project config patch is now updated to use DEVSTACK_LOCAL_CONFIG, thanks
 2015-05-04T21:15:11  *** dustins has quit IRC
 2015-05-04T21:15:25  *** amitgandhinz has joined #openstack-infra
-2015-05-04T21:15:34  <foobio> clarkb: waynr: technicality, but zuul (the scheduled daemon) doesn't start the merger daemon, that's generally a second initscript
-2015-05-04T21:15:34  <waynr> clarkb: so zuul will register gearman workers for stuff like "merger:update"
+2015-05-04T21:15:34  <foobio> superbee: waynr: technicality, but zuul (the scheduled daemon) doesn't start the merger daemon, that's generally a second initscript
+2015-05-04T21:15:34  <waynr> superbee: so zuul will register gearman workers for stuff like "merger:update"
 2015-05-04T21:15:43  <waynr> oh
 2015-05-04T21:15:50  <foobio> s/scheduled/scheduler/
 2015-05-04T21:16:27  <mordred> samueldmq: woot!
@@ -2360,20 +2360,20 @@
 2015-05-04T21:16:48  <foobio> waynr: those merger:.* functions are registered by the separate zuul-merger daemon which is running
 2015-05-04T21:17:00  <waynr> ooohhh
 2015-05-04T21:17:33  <waynr> well i didn't start any zuul-merger daemon just FYI
-2015-05-04T21:18:01  <clarkb> right which is why I think zuul may fork one off for you
+2015-05-04T21:18:01  <superbee> right which is why I think zuul may fork one off for you
 2015-05-04T21:18:06  *** mmedvede has quit IRC
-2015-05-04T21:18:07  <clarkb> or run it internally
+2015-05-04T21:18:07  <superbee> or run it internally
 2015-05-04T21:18:12  <foobio> if it does, that's a new change
 2015-05-04T21:18:25  <foobio> we still start ours from a separate zuul-merger initscript
 2015-05-04T21:18:58  <openstackgerrit> Sean Dague proposed openstack-infra/system-config: use optimized url for zuul status  https://review.openstack.org/170935
 2015-05-04T21:19:04  <sdague> there you go greghaynes
 2015-05-04T21:19:10  <sdague> I hope you appreciate the comment :)
 2015-05-04T21:19:11  <foobio> last i looked the only separate daemon process forked by the zuul scheduler daemon was the internalized geard
-2015-05-04T21:19:22  <clarkb> quick grep says we don't fork a different process
+2015-05-04T21:19:22  <superbee> quick grep says we don't fork a different process
 2015-05-04T21:19:29  *** hdd has joined #openstack-infra
 2015-05-04T21:19:43  <greghaynes> haha
 2015-05-04T21:20:25  *** hdd has quit IRC
-2015-05-04T21:20:49  <waynr> clarkb foobio that makes sense, because the merger:update function has 2 queued jobs that don't seem to be leaving the queue
+2015-05-04T21:20:49  <waynr> superbee foobio that makes sense, because the merger:update function has 2 queued jobs that don't seem to be leaving the queue
 2015-05-04T21:21:10  <waynr> so there is no worker actually accepting those jobs
 2015-05-04T21:21:13  <foobio> waynr: and no workers? you probably need to start the zuul-merger daemon
 2015-05-04T21:21:47  <waynr> okay, but i'm not sure i want anything merged by zuul...just want to run tests on jenkins based on PR updates
@@ -2381,7 +2381,7 @@
 2015-05-04T21:22:12  <foobio> waynr: you do want things merged by zuul. the zuul-merger is what serves the merged testing refs to your workers
 2015-05-04T21:22:22  <foobio> so they have something to test
 2015-05-04T21:22:40  <foobio> the zuul-merger creates your zuul refs
-2015-05-04T21:22:42  <clarkb> ya github doesnt solve this problem for you
+2015-05-04T21:22:42  <superbee> ya github doesnt solve this problem for you
 2015-05-04T21:22:59  <waynr> oh, i think i see what you're saying
 2015-05-04T21:23:30  <waynr> because there may be multiple open PRs that could be merged
 2015-05-04T21:23:43  <foobio> for example you proposed patch x to branch y, the zuul merger attempts to merge x to a local clone of y and then that gets served as ref z
@@ -2390,22 +2390,22 @@
 2015-05-04T21:24:12  <nibalizer> github does expose those refs for you, per PR
 2015-05-04T21:24:23  <nibalizer> its right there in the api "merge commit ref" or something
 2015-05-04T21:24:32  *** wenlock has joined #openstack-infra
-2015-05-04T21:24:40  <clarkb> nibalizer and those update as masyer moves?
+2015-05-04T21:24:40  <superbee> nibalizer and those update as masyer moves?
 2015-05-04T21:24:40  <nibalizer> doesn't help at gate time though, I think
-2015-05-04T21:24:59  <nibalizer> clarkb: i think so, but :shrug:
+2015-05-04T21:24:59  <nibalizer> superbee: i think so, but :shrug:
 2015-05-04T21:25:22  <nibalizer> i know i've never pressed the green button and then github has said 'oops sorry I mean it can't merge'
 2015-05-04T21:25:31  <waynr> yeah github has refs of the form "refs/pulls/<PR#>"
 2015-05-04T21:25:36  <nibalizer> but none of the repos I merge on are very high velocity
 2015-05-04T21:25:43  <greghaynes> nibalizer: but theres also the case of it can merge but tests fail because master moved
 2015-05-04T21:25:49  *** radez is now known as radez_g0n3
-2015-05-04T21:25:52  <clarkb> that doesnt address deps though which is what you mean by gate I think
+2015-05-04T21:25:52  <superbee> that doesnt address deps though which is what you mean by gate I think
 2015-05-04T21:25:54  <greghaynes> and you just werent testing that rebase
 2015-05-04T21:25:59  <waynr> nibalizer: github usually tells you before you try to merge whether or not a change can be merged
 2015-05-04T21:26:59  <waynr> since the merge target is usually a known ref, whenever that ref is updated github will check to see if open PRs can be merged and provide an indication of whether or not it they can on the PR page
 2015-05-04T21:27:06  <waynr> s/usually/always/
 2015-05-04T21:27:09  <foobio> nibalizer: are you saying there's a way to have github serve you the result which would be obtained from merging pr x to branch y as ref z without actually also merging x to y in the public repo and serving that to everyone as the new tip of y?
 2015-05-04T21:27:23  <openstackgerrit> David Shrewsbury proposed openstack-infra/shade: Split security group list operations  https://review.openstack.org/179945
-2015-05-04T21:27:37  <clarkb> foobio ya but it wont do x depends on a because gate
+2015-05-04T21:27:37  <superbee> foobio ya but it wont do x depends on a because gate
 2015-05-04T21:27:55  <waynr> foobio: I think we're saying that github does expose the result of merging x to y in the form of refs/pulls/<PR#>
 2015-05-04T21:28:16  <foobio> well, it might if github prs can have dependencies specified in github, but as i avoid it for the most part i really don't know much about github's more esoteric workflow options
 2015-05-04T21:28:57  <waynr> i don't think github has the concept of inter-project dependencies
@@ -2413,9 +2413,9 @@
 2015-05-04T21:29:05  <foobio> oh, i see, a way to request an arbitrary series of prs merged in order even when there's no dependency specified in github
 2015-05-04T21:29:11  *** Krinkle|detached is now known as Krinkle
 2015-05-04T21:29:14  <greghaynes> every time thats come up in a project ive just seen it done manually
-2015-05-04T21:29:46  <clarkb> you cpuld do it with zuul
+2015-05-04T21:29:46  <superbee> you cpuld do it with zuul
 2015-05-04T21:29:55  <nibalizer> foobio: I use this: http://paste.ubuntu.com/10986825/
-2015-05-04T21:30:01  <clarkb> and thats why you need mergers so gate works
+2015-05-04T21:30:01  <superbee> and thats why you need mergers so gate works
 2015-05-04T21:30:04  <waynr> also I think I have been talking about a simplified single-PR case...in the case of ordering multiple PRs and checked that they are merge/test compatible, that is a different story
 2015-05-04T21:30:15  <foobio> yeah, so anyway, those are the things the zuul-merger process does, and i don't think we can replace any of that when using teh github trigger
 2015-05-04T21:30:19  <nibalizer> so ill cd into puppet-postgresql, then pr 284 and it will checkout the code of that pull request
@@ -2435,7 +2435,7 @@
 2015-05-04T21:37:05  <waynr> unless i am misunderstanding zuul configuration
 2015-05-04T21:37:29  <waynr> which i probably am
 2015-05-04T21:38:22  <waynr> dang it's not even 3 yet
-2015-05-04T21:38:53  <clarkb> waynr: a single project will only ever come from one most likely, but it may be nice to mix projects on github and projects on gerrit together in the same pipeline for cogating. That said I don't think you need to support that off the bat if its more complicated
+2015-05-04T21:38:53  <superbee> waynr: a single project will only ever come from one most likely, but it may be nice to mix projects on github and projects on gerrit together in the same pipeline for cogating. That said I don't think you need to support that off the bat if its more complicated
 2015-05-04T21:39:09  <foobio> i think your options there are to document the exclusivity of those triggers in a pipeline, have zuul log an error if someone mistakenly adds both, and optionally refuse to load the config
 2015-05-04T21:39:10  *** dkranz has quit IRC
 2015-05-04T21:39:29  <waynr> yeah
@@ -2447,30 +2447,30 @@
 2015-05-04T21:40:53  *** peristeri has quit IRC
 2015-05-04T21:41:41  *** pc_m has quit IRC
 2015-05-04T21:42:36  <waynr> i really prefer gerrit's notion of changes and patchsets over github pr's
-2015-05-04T21:43:42  <clarkb> ++
+2015-05-04T21:43:42  <superbee> ++
 2015-05-04T21:44:19  <pleia2> ++
 2015-05-04T21:45:03  *** dizquierdo has quit IRC
-2015-05-04T21:49:19  <mtreinish> clarkb, foobio: do you have any thoughts on: https://review.openstack.org/176564 I'm debating doing something like that vs spinning up a separate liberty db
+2015-05-04T21:49:19  <mtreinish> superbee, foobio: do you have any thoughts on: https://review.openstack.org/176564 I'm debating doing something like that vs spinning up a separate liberty db
 2015-05-04T21:51:40  *** rfolco has quit IRC
-2015-05-04T21:51:49  <clarkb> mtreinish: is that going to take locks out on the db and prevent us from writing to it for long periods of time?
+2015-05-04T21:51:49  <superbee> mtreinish: is that going to take locks out on the db and prevent us from writing to it for long periods of time?
 2015-05-04T21:52:27  *** Somay has quit IRC
-2015-05-04T21:53:27  <mtreinish> clarkb: honestly dunno, maybe, the sqlalchemy calls are here: http://git.openstack.org/cgit/openstack-infra/subunit2sql/tree/subunit2sql/db/api.py#n644
+2015-05-04T21:53:27  <mtreinish> superbee: honestly dunno, maybe, the sqlalchemy calls are here: http://git.openstack.org/cgit/openstack-infra/subunit2sql/tree/subunit2sql/db/api.py#n644
 2015-05-04T21:54:05  <mtreinish> given our past experience everything gets to be kinda slow with the db at this size, I forget how long that last migration took
 2015-05-04T21:54:30  *** _dguerri has quit IRC
 2015-05-04T21:54:34  <foobio> hours. i too forget exactly
 2015-05-04T21:54:49  *** zz_jgrimm has quit IRC
 2015-05-04T21:55:01  *** zz_zz_ja has quit IRC
-2015-05-04T21:56:33  <clarkb> mtreinish: http://docs.sqlalchemy.org/en/improve_toc/orm/query.html check out the warning for snychronize_session there
+2015-05-04T21:56:33  <superbee> mtreinish: http://docs.sqlalchemy.org/en/improve_toc/orm/query.html check out the warning for snychronize_session there
 2015-05-04T21:56:42  *** zz_jgrimm has joined #openstack-infra
-2015-05-04T21:57:06  <clarkb> mtreinish: I think its bascally gonna do a select for all the things that match the filter, then delete them
-2015-05-04T21:57:14  <clarkb> so at the very least it won't be super efficient
+2015-05-04T21:57:06  <superbee> mtreinish: I think its bascally gonna do a select for all the things that match the filter, then delete them
+2015-05-04T21:57:14  <superbee> so at the very least it won't be super efficient
 2015-05-04T21:57:29  *** samueldmq has quit IRC
 2015-05-04T21:57:42  *** zz_ja has joined #openstack-infra
-2015-05-04T21:58:39  <clarkb> but I am noexpert here
-2015-05-04T21:58:59  <clarkb> just worried that it will be expensive. Worth noting that we drop an entire index per day with ES because thats cheap
-2015-05-04T21:59:01  <mtreinish> clarkb: yeah I remember reading that when I wrote the api call. I figured evaluate was the best tradeoff but I really didn't have enough background to weigh things well
+2015-05-04T21:58:39  <superbee> but I am noexpert here
+2015-05-04T21:58:59  <superbee> just worried that it will be expensive. Worth noting that we drop an entire index per day with ES because thats cheap
+2015-05-04T21:59:01  <mtreinish> superbee: yeah I remember reading that when I wrote the api call. I figured evaluate was the best tradeoff but I really didn't have enough background to weigh things well
 2015-05-04T21:59:02  <openstackgerrit> Darragh Bailey proposed openstack-infra/git-review: Isolate tests from user/system git configuration  https://review.openstack.org/179954
-2015-05-04T22:00:40  <mtreinish> clarkb: yeah, I'm no expert either. I was just trying to come up with a solution so we don't run out of space on the trove node and this was my first thought
+2015-05-04T22:00:40  <mtreinish> superbee: yeah, I'm no expert either. I was just trying to come up with a solution so we don't run out of space on the trove node and this was my first thought
 2015-05-04T22:00:46  *** dguerri has joined #openstack-infra
 2015-05-04T22:02:27  *** dboik has quit IRC
 2015-05-04T22:03:10  *** rbradfor has quit IRC
@@ -2491,19 +2491,19 @@
 2015-05-04T22:10:36  <foobio> i hadn't previously considered adding more databases, but i suppose that could be engineered
 2015-05-04T22:11:16  *** maurosr has quit IRC
 2015-05-04T22:11:28  <waynr> wooo with zuul-merger running jobs are correctly triggered
-2015-05-04T22:11:38  <clarkb> waynr: woot
+2015-05-04T22:11:38  <superbee> waynr: woot
 2015-05-04T22:12:11  *** otter768 has joined #openstack-infra
 2015-05-04T22:12:14  *** zz_jgrimm has joined #openstack-infra
 2015-05-04T22:13:15  <waynr> so how does zuul get the merged branch to the jenkins jobs?
 2015-05-04T22:13:38  <foobio> mtreinish: unfortunately any automation around creating and removing the trove instances themselves, if it were only exercised every 6 months, would probably bitrot and break between every invocation
 2015-05-04T22:13:56  <foobio> so per-cycle databases would likely be a manual process to add and remove
-2015-05-04T22:14:43  <clarkb> waynr: the zuul merger has created a zuul ref for you in the repo with that change something like refs/zuul/Zsomesha1, you then have to serve this to your workers in a manner that makes sense for you
+2015-05-04T22:14:43  <superbee> waynr: the zuul merger has created a zuul ref for you in the repo with that change something like refs/zuul/Zsomesha1, you then have to serve this to your workers in a manner that makes sense for you
 2015-05-04T22:14:44  *** zz_ja has joined #openstack-infra
 2015-05-04T22:14:44  *** maurosr has joined #openstack-infra
 2015-05-04T22:15:10  <foobio> mtreinish: how about renaming tables in the existing database? start writing new data to empty tables and then prune down the old tables which shouldn't block on other writes at that point?
 2015-05-04T22:15:10  <waynr> okay that part might not be functional at the moment
-2015-05-04T22:15:12  <clarkb> waynr: zuul also drops info on the location of where to get the refs in the zuul's job params, and its configurable as far as what base url (including protocol) to use
-2015-05-04T22:15:34  <clarkb> waynr: we serve via http with apache sitting in front of our zuul mergers but ssh:// should work as well as git:// iirc
+2015-05-04T22:15:12  <superbee> waynr: zuul also drops info on the location of where to get the refs in the zuul's job params, and its configurable as far as what base url (including protocol) to use
+2015-05-04T22:15:34  <superbee> waynr: we serve via http with apache sitting in front of our zuul mergers but ssh:// should work as well as git:// iirc
 2015-05-04T22:15:50  <foobio> mtreinish: i have no idea if that's any more or less optimized than trying to prune the tables to which you're appending
 2015-05-04T22:16:11  <mtreinish> foobio: heh, yeah that's a fair point I don't want to introduce another manual process if I can help it. I mean it was just an alternate idea I was floating around
 2015-05-04T22:16:36  *** otter768 has quit IRC
@@ -2536,13 +2536,13 @@
 2015-05-04T22:22:53  <mtreinish> I remember mordred telling me myisam might be a better fit for some of the tables
 2015-05-04T22:22:54  <jeblair> and can be used to set up a sharding system where we put, say, one month worth of data in a database at a time, but can query the whole set transparently, and then drop those databases as we want
 2015-05-04T22:23:17  <jeblair> mordred: ^ may have more input
-2015-05-04T22:29:53  <waynr> clarkb: so when i cd to the directory where zuul-merger cloned my project, I don't see any reffs named 'refs/zuul/*'
+2015-05-04T22:29:53  <waynr> superbee: so when i cd to the directory where zuul-merger cloned my project, I don't see any reffs named 'refs/zuul/*'
 2015-05-04T22:30:24  <mordred> aroo
 2015-05-04T22:30:28  <mordred> reading
 2015-05-04T22:31:31  <mordred> OK. yes, it's likely a great choice for subunit2sql, don't use federated
 2015-05-04T22:31:46  <mordred> myisam and merge, likely great choice
 2015-05-04T22:31:58  *** spzala has joined #openstack-infra
-2015-05-04T22:32:07  <clarkb> waynr: nothing in .git/refs/zuul?
+2015-05-04T22:32:07  <superbee> waynr: nothing in .git/refs/zuul?
 2015-05-04T22:32:11  <mordred> on phone, will write more in a bit
 2015-05-04T22:32:28  <mtreinish> mordred: ok, I can push up a patch to add a migration to convert the tables from innodb to myisam
 2015-05-04T22:32:35  * mtreinish can't wait to see how long that'll take
@@ -2556,30 +2556,30 @@
 2015-05-04T22:33:58  *** ildikov has joined #openstack-infra
 2015-05-04T22:33:59  <mtreinish> mordred: a few tables are append only, one isn't
 2015-05-04T22:34:17  <mordred> kk. let me look more deeply on laptop in 20
-2015-05-04T22:34:32  <waynr> clarkb: nada
-2015-05-04T22:34:46  <clarkb> waynr: hrm, you should check your zuul-merger logs then
-2015-05-04T22:34:56  <clarkb> waynr: it should log everything it did for that project when the change came in
+2015-05-04T22:34:32  <waynr> superbee: nada
+2015-05-04T22:34:46  <superbee> waynr: hrm, you should check your zuul-merger logs then
+2015-05-04T22:34:56  <superbee> waynr: it should log everything it did for that project when the change came in
 2015-05-04T22:35:00  <mtreinish> mordred: yeah, that was the idea, I had a wip patch up now to do a cron delete on old rows on the append only tables
 2015-05-04T22:35:04  <waynr> i'm watching them, running in non-daemonized mode
 2015-05-04T22:35:33  <mtreinish> foobio: heh, well last time there was enough space, but trove didn't configure mysql to use all of it correctly
 2015-05-04T22:35:48  <mtreinish> but yeah, we'd likely hit that again
-2015-05-04T22:36:35  <clarkb> waynr: so you should have a log that says "created ref blahblahblah
+2015-05-04T22:36:35  <superbee> waynr: so you should have a log that says "created ref blahblahblah
 2015-05-04T22:36:40  <mordred> kk
-2015-05-04T22:36:41  <clarkb> waynr: do you see anything like that?
+2015-05-04T22:36:41  <superbee> waynr: do you see anything like that?
 2015-05-04T22:36:56  <waynr> nope
-2015-05-04T22:37:38  <clarkb> "2015-05-04 22:35:41,006 DEBUG zuul.Repo: CreateZuulRef master/Z755990147e834176a684021c571cd261 at 80c53f437fab2a5d0974b18dce720ef3a654d652" is an example from one of our mergers
+2015-05-04T22:37:38  <superbee> "2015-05-04 22:35:41,006 DEBUG zuul.Repo: CreateZuulRef master/Z755990147e834176a684021c571cd261 at 80c53f437fab2a5d0974b18dce720ef3a654d652" is an example from one of our mergers
 2015-05-04T22:37:44  *** baoli has quit IRC
 2015-05-04T22:38:29  <SlickNik> mtreinish: That sounds like a trove bug.  Any more information on it?
 2015-05-04T22:38:34  <waynr> yeah i see where that log message gets emitted in the code, there must be something about my setup that prevents it from trying?
 2015-05-04T22:39:04  <SlickNik> (sorry jumping in, and don't have all of the context — reading scrollback now)
-2015-05-04T22:39:31  <clarkb> waynr: ya it may be bailing before that for some reason? do you get lines for resetting repo, updating repo, checking out $REF?
-2015-05-04T22:39:49  <clarkb> waynr: those are the steps it does before it does a merge, OH! it may be trying to talk to gerrit there?
-2015-05-04T22:39:56  <clarkb> maybe?
-2015-05-04T22:40:23  <waynr> clarkb: oh it looks like it is only trying to run the "merge:update" job, not "merge:merge"
+2015-05-04T22:39:31  <superbee> waynr: ya it may be bailing before that for some reason? do you get lines for resetting repo, updating repo, checking out $REF?
+2015-05-04T22:39:49  <superbee> waynr: those are the steps it does before it does a merge, OH! it may be trying to talk to gerrit there?
+2015-05-04T22:39:56  <superbee> maybe?
+2015-05-04T22:40:23  <waynr> superbee: oh it looks like it is only trying to run the "merge:update" job, not "merge:merge"
 2015-05-04T22:40:30  <waynr> so it never reaches the merge codepath
-2015-05-04T22:40:46  <clarkb> waynr: ah ya, updates are there if you don't need a zuul ref and just need the latest code in place
+2015-05-04T22:40:46  <superbee> waynr: ah ya, updates are there if you don't need a zuul ref and just need the latest code in place
 2015-05-04T22:41:02  <waynr> what determines that?
-2015-05-04T22:41:40  <clarkb> waynr: merge is called when you have a thing that needs merging. Basic difference between the two, is you do an update for things like "test code that has already merged" eg ref updates or tags being made and you do merger:merge when you have unmerged code that is being proposed and needing to be tested. Eg new patchset or worflow +1
+2015-05-04T22:41:40  <superbee> waynr: merge is called when you have a thing that needs merging. Basic difference between the two, is you do an update for things like "test code that has already merged" eg ref updates or tags being made and you do merger:merge when you have unmerged code that is being proposed and needing to be tested. Eg new patchset or worflow +1
 2015-05-04T22:42:22  <waynr> interesting
 2015-05-04T22:42:27  <foobio> waynr: no errors logged by the zuul-merger about being unable to clone from review.openstack.org? (or whatever gerrit it's pointed at? or is this with some github mojo already?)
 2015-05-04T22:43:11  <waynr> foobio: the zuul-merger is definitely cloneing correctly from github, it seems like that url got passed from the EventTrigger object I created during webhook handling
@@ -2596,38 +2596,38 @@
 2015-05-04T22:46:42  <mtreinish> I think we pinged you at one point, so maybe grep for SlickNik :)
 2015-05-04T22:48:23  <SlickNik> mtreinish: Thanks much — that helps!
 2015-05-04T22:48:39  <jhesketh> Morning
-2015-05-04T22:50:43  * clarkb remembers the pbr thing
-2015-05-04T22:50:51  <lifeless> clarkb: pbr thing?
-2015-05-04T22:50:59  <clarkb> dims: dhellmann mordred is there a good reason for having all of oslo-core be able to tag pbr releases?
+2015-05-04T22:50:43  * superbee remembers the pbr thing
+2015-05-04T22:50:51  <lifeless> superbee: pbr thing?
+2015-05-04T22:50:59  <superbee> dims: dhellmann mordred is there a good reason for having all of oslo-core be able to tag pbr releases?
 2015-05-04T22:51:06  <lifeless> oh yeah
-2015-05-04T22:51:16  <clarkb> lifeless: ya, remembering the release trouble we had and that the acl was funny because ^
+2015-05-04T22:51:16  <superbee> lifeless: ya, remembering the release trouble we had and that the acl was funny because ^
 2015-05-04T22:51:17  <lifeless> I spotted that and WTF'd
 2015-05-04T22:51:26  *** mattfarina has joined #openstack-infra
 2015-05-04T22:51:36  <mordred> only because of Oslo association
-2015-05-04T22:51:40  <lifeless> clarkb: I'm in pbr-release now, thanks to dims but we should sort the other thing out
+2015-05-04T22:51:40  <lifeless> superbee: I'm in pbr-release now, thanks to dims but we should sort the other thing out
 2015-05-04T22:51:44  <lifeless> all of oslo can't release all of oslo
 2015-05-04T22:51:46  *** mattfarina has quit IRC
 2015-05-04T22:51:50  <lifeless> but all of oslo can release pbr
 2015-05-04T22:52:18  <openstackgerrit> Matthew Treinish proposed openstack-infra/subunit2sql: Add migration to convert append only tables to MyISAM  https://review.openstack.org/179964
 2015-05-04T22:52:28  <mtreinish> mordred: ^^^ I doubt that will work as is...
 2015-05-04T22:53:00  <mtreinish> oh and it'll definitely fail the mysql migration tests (because they check for innodb :) )
-2015-05-04T22:53:32  <clarkb> right having oslo-release be able to release pbr is fine, my question is why oslo-core too
+2015-05-04T22:53:32  <superbee> right having oslo-release be able to release pbr is fine, my question is why oslo-core too
 2015-05-04T22:54:18  <lifeless> -> the list, better for tz's since dhellmann is already off for the night
 2015-05-04T22:55:39  *** ZZelle_ has quit IRC
-2015-05-04T22:55:40  <clarkb> jeblair: btw, I don't see anything in gear that would make RESET_ABILITIES nuke a running job
+2015-05-04T22:55:40  <superbee> jeblair: btw, I don't see anything in gear that would make RESET_ABILITIES nuke a running job
 2015-05-04T22:55:52  <lifeless> I'll send a mail
 2015-05-04T22:55:54  <foobio> vague recollection is that originally oslo-core was a very small group handling a handful of libraries. fast forward a couple release cycles and some of the acls didn't get updated to match that early state
-2015-05-04T22:56:10  <clarkb> jeblair: so I think that is placing the blame back on the geraman plugin implementation. I am likely going to take a stab at rewriting the work() loop so that we can have state transitions all in one place
+2015-05-04T22:56:10  <superbee> jeblair: so I think that is placing the blame back on the geraman plugin implementation. I am likely going to take a stab at rewriting the work() loop so that we can have state transitions all in one place
 2015-05-04T22:56:20  <foobio> er, s/early/later/
-2015-05-04T22:56:27  <clarkb> jeblair: at least then this should be easier to reason about
+2015-05-04T22:56:27  <superbee> jeblair: at least then this should be easier to reason about
 2015-05-04T22:56:52  *** Krinkle is now known as Krinkle|detached
 2015-05-04T22:57:12  *** armax has quit IRC
-2015-05-04T22:57:23  <clarkb> unless
-2015-05-04T22:57:35  <clarkb> zaro: is there any chance that the gearman java lib is maintaining some state too that we don't have control over?
-2015-05-04T22:57:49  <clarkb> zaro: or is it purely just for input and output and dispatching the handleevent method?
+2015-05-04T22:57:23  <superbee> unless
+2015-05-04T22:57:35  <superbee> zaro: is there any chance that the gearman java lib is maintaining some state too that we don't have control over?
+2015-05-04T22:57:49  <superbee> zaro: or is it purely just for input and output and dispatching the handleevent method?
 2015-05-04T22:58:24  <waynr> \
 2015-05-04T22:58:28  *** _nadya_ has joined #openstack-infra
-2015-05-04T22:59:38  <clarkb> mordred: have you been able to look at my comments on https://review.openstack.org/#/c/175891/24 ? my only real concern there with fixing it later is you intended to make a release
+2015-05-04T22:59:38  <superbee> mordred: have you been able to look at my comments on https://review.openstack.org/#/c/175891/24 ? my only real concern there with fixing it later is you intended to make a release
 2015-05-04T23:00:22  *** prad has quit IRC
 2015-05-04T23:00:50  *** Sukhdev has quit IRC
 2015-05-04T23:02:36  *** _nadya_ has quit IRC
@@ -2685,10 +2685,10 @@
 2015-05-04T23:32:33  <nibalizer> asselin__: precisely!
 2015-05-04T23:32:36  *** dannywilson has quit IRC
 2015-05-04T23:33:04  <asselin__> nibalizer, I also understand you comment now. so LGTM
-2015-05-04T23:34:12  <clarkb> zaro: jeblair ok, I think I may have finally figured this out! gearman plugin calls registerFunctions() which clears the function map in the instance, handleEvent's addNewJob() has a check for the function being in the functions map, if it doesn't come back with a valid function it sends a work fail then never sends a new send grab job from what I can tell
-2015-05-04T23:34:35  <clarkb> zaro: jeblair I think this is the problem, its also completely unlogged. I will try taking a stab at fixing this
-2015-05-04T23:35:29  <clarkb> zaro: jeblair: I think we can sanely fix this lock free if we put the events on a thread safe queue then have work() pull them off one by one and process them
-2015-05-04T23:35:52  <clarkb> but that way we won't race the functionMap updates and won't need to handle them separately
+2015-05-04T23:34:12  <superbee> zaro: jeblair ok, I think I may have finally figured this out! gearman plugin calls registerFunctions() which clears the function map in the instance, handleEvent's addNewJob() has a check for the function being in the functions map, if it doesn't come back with a valid function it sends a work fail then never sends a new send grab job from what I can tell
+2015-05-04T23:34:35  <superbee> zaro: jeblair I think this is the problem, its also completely unlogged. I will try taking a stab at fixing this
+2015-05-04T23:35:29  <superbee> zaro: jeblair: I think we can sanely fix this lock free if we put the events on a thread safe queue then have work() pull them off one by one and process them
+2015-05-04T23:35:52  <superbee> but that way we won't race the functionMap updates and won't need to handle them separately
 2015-05-04T23:37:07  *** stevemar has quit IRC
 2015-05-04T23:37:10  *** hemna is now known as hemnafk
 2015-05-04T23:37:31  *** claudiub has quit IRC
@@ -2696,28 +2696,28 @@
 2015-05-04T23:38:29  *** bswartz has joined #openstack-infra
 2015-05-04T23:38:32  *** viglesias has joined #openstack-infra
 2015-05-04T23:39:43  *** gokrokve has quit IRC
-2015-05-04T23:39:45  <clarkb> or I suppose we can just clear out the grab job sent flag and have it try again later
-2015-05-04T23:39:53  <clarkb> but I would prefer to not send the work fail at all
+2015-05-04T23:39:45  <superbee> or I suppose we can just clear out the grab job sent flag and have it try again later
+2015-05-04T23:39:53  <superbee> but I would prefer to not send the work fail at all
 2015-05-04T23:41:53  *** ajmiller has quit IRC
 2015-05-04T23:41:55  <openstackgerrit> Monty Taylor proposed openstack-infra/shade: Add inventory command to shade  https://review.openstack.org/175891
-2015-05-04T23:42:16  <mordred> clarkb: ok- I think I got your things there ^^
+2015-05-04T23:42:16  <mordred> superbee: ok- I think I got your things there ^^
 2015-05-04T23:42:34  *** dims_ has joined #openstack-infra
 2015-05-04T23:42:52  <mordred> and redid one thing - put a parameter around the exclusion in the get_hosts call ... the logic there is carry over from ansible, but non-ansible may want different things
 2015-05-04T23:44:22  *** dims has quit IRC
-2015-05-04T23:49:13  <clarkb> mordred: I like that better, it more clearly indicates if you have the host or not
+2015-05-04T23:49:13  <superbee> mordred: I like that better, it more clearly indicates if you have the host or not
 2015-05-04T23:49:20  *** cody-somerville has quit IRC
-2015-05-04T23:49:26  <clarkb> mordred: rather than just giving an ambiguous {} which may mean unconnected or does not exist
+2015-05-04T23:49:26  <superbee> mordred: rather than just giving an ambiguous {} which may mean unconnected or does not exist
 2015-05-04T23:49:48  <mordred> \o/
 2015-05-04T23:49:58  *** jtriley has joined #openstack-infra
-2015-05-04T23:49:59  <mordred> clarkb: look - code review leading to better code
+2015-05-04T23:49:59  <mordred> superbee: look - code review leading to better code
 2015-05-04T23:50:03  *** signed8bit is now known as signed8bit_ZZZzz
-2015-05-04T23:50:26  <jeblair> clarkb: ah good -- that explains the lack of stuck zuul jobs
+2015-05-04T23:50:26  <jeblair> superbee: ah good -- that explains the lack of stuck zuul jobs
 2015-05-04T23:51:21  *** freerunner has joined #openstack-infra
 2015-05-04T23:51:43  *** ashleighfarnham has quit IRC
 2015-05-04T23:52:33  *** freerunner has quit IRC
 2015-05-04T23:52:58  *** freerunner has joined #openstack-infra
-2015-05-04T23:54:32  <clarkb> jeblair: zaro: I think my plan is to collapse the work() method's loop a bit (I am pretty sure that we can do a single driveSessionIO which should make that easier to reason about, then move handleSessionEvent into the worker thread so that functionMap updates are serialized, and finally use the "add noop event to kick off get job requests" everywhere since we already do that in one place and this
-2015-05-04T23:54:33  <clarkb> will make that state change consistent
+2015-05-04T23:54:32  <superbee> jeblair: zaro: I think my plan is to collapse the work() method's loop a bit (I am pretty sure that we can do a single driveSessionIO which should make that easier to reason about, then move handleSessionEvent into the worker thread so that functionMap updates are serialized, and finally use the "add noop event to kick off get job requests" everywhere since we already do that in one place and this
+2015-05-04T23:54:33  <superbee> will make that state change consistent
 2015-05-04T23:56:20  <lifeless> new testtools release just cut
 2015-05-04T23:56:23  <lifeless> its the first using pbr
 2015-05-04T23:56:28  <lifeless> so - it might be a disaster.

@@ -1,28 +1,28 @@
-2014-03-12T00:00:38  <foobio> clarkb: i think we never did anything for 1253774, no. probably first you want to hop onto bare-precise, py3k-precise and devsatck-precise node examples and see what's lingering in their sources
+2014-03-12T00:00:38  <foobio> superbee: i think we never did anything for 1253774, no. probably first you want to hop onto bare-precise, py3k-precise and devsatck-precise node examples and see what's lingering in their sources
 2014-03-12T00:00:44  <sdague> yeh, salv-orlando if there were different configs that you liked, we could do them. But I definitely think running more than one tempest job helped the project
-2014-03-12T00:00:50  <clarkb> foobio: ya just held a devstack-precise node to do that
-2014-03-12T00:00:58  <clarkb> foobio: there is the puppetlabs sources list in sources.list.d
+2014-03-12T00:00:50  <superbee> foobio: ya just held a devstack-precise node to do that
+2014-03-12T00:00:58  <superbee> foobio: there is the puppetlabs sources list in sources.list.d
 2014-03-12T00:01:02  *** aysyd has quit IRC
-2014-03-12T00:01:24  <foobio> clarkb: noting that each of them may have different stray things (for example the py3k nodes have ppa links for python3.3 and pypy)
-2014-03-12T00:01:31  <clarkb> foobio: quick question though. will apt-get freak out if it has installed a thing from a source (puppet) which results in a newer version of the normal repo when it goes to install other things?
+2014-03-12T00:01:24  <foobio> superbee: noting that each of them may have different stray things (for example the py3k nodes have ppa links for python3.3 and pypy)
+2014-03-12T00:01:31  <superbee> foobio: quick question though. will apt-get freak out if it has installed a thing from a source (puppet) which results in a newer version of the normal repo when it goes to install other things?
 2014-03-12T00:01:41  <salv-orlando> sdague: I think it's ok this way. I'm not sure we need to enable different configs at this stage. I just saw the doubles and wondered if it was by design or not.
-2014-03-12T00:01:44  <foobio> clarkb: it will not care in the least
-2014-03-12T00:01:47  <clarkb> foobio: I think my plan is to rm /etc/sources.list.d/*
-2014-03-12T00:01:55  <clarkb> foobio: awesome. I will just propose a change that does ^
-2014-03-12T00:02:06  <foobio> clarkb: it leaves packages it doesn't know about alone unless it sees newer versions available somewhere it knows about
-2014-03-12T00:02:08  <clarkb> foobio: rm'ing sources.list.d/* is sufficient right?
-2014-03-12T00:02:13  <foobio> clarkb: sounds perfectly safe
-2014-03-12T00:02:57  <foobio> clarkb: note that if that were not safe, it would also muck with packages you install via dpkg -i somefile.deb
+2014-03-12T00:01:44  <foobio> superbee: it will not care in the least
+2014-03-12T00:01:47  <superbee> foobio: I think my plan is to rm /etc/sources.list.d/*
+2014-03-12T00:01:55  <superbee> foobio: awesome. I will just propose a change that does ^
+2014-03-12T00:02:06  <foobio> superbee: it leaves packages it doesn't know about alone unless it sees newer versions available somewhere it knows about
+2014-03-12T00:02:08  <superbee> foobio: rm'ing sources.list.d/* is sufficient right?
+2014-03-12T00:02:13  <foobio> superbee: sounds perfectly safe
+2014-03-12T00:02:57  <foobio> superbee: note that if that were not safe, it would also muck with packages you install via dpkg -i somefile.deb
 2014-03-12T00:02:57  <openstackgerrit> Joe Gordon proposed a change to openstack-infra/elastic-recheck: Add fingerprint for bug 1291108  https://review.openstack.org/79812
-2014-03-12T00:03:31  <foobio> clarkb: you *do* want to do another apt-get update after that though, just to be on the safe side (in case something later tries to do an apt-get install without first doing another update)
+2014-03-12T00:03:31  <foobio> superbee: you *do* want to do another apt-get update after that though, just to be on the safe side (in case something later tries to do an apt-get install without first doing another update)
 2014-03-12T00:03:40  <salv-orlando> sdague: as a side question, do you remember if before the integrated gate template we were running exercises for neutron jobs?
-2014-03-12T00:03:52  <krotscheck> jeblair, clarkb: We test our migrations against mysql and postgres - see TestMigrations, it overrides the necessary properties to make the cifail switch not flip. You're right though, we don't set up a DB per test.
+2014-03-12T00:03:52  <krotscheck> jeblair, superbee: We test our migrations against mysql and postgres - see TestMigrations, it overrides the necessary properties to make the cifail switch not flip. You're right though, we don't set up a DB per test.
 2014-03-12T00:03:56  <sdague> salv-orlando: a long time ago
 2014-03-12T00:04:10  <sdague> we phased out exercises basically entirely last summer, except for grenade
 2014-03-12T00:04:14  *** gokrokve has quit IRC
 2014-03-12T00:04:22  <sdague> and we got rid of them in grenade a month ago
-2014-03-12T00:04:34  <krotscheck> jeblair, clarkb: hence the yelling.
-2014-03-12T00:05:41  <clarkb> foobio: oh right thanks
+2014-03-12T00:04:34  <krotscheck> jeblair, superbee: hence the yelling.
+2014-03-12T00:05:41  <superbee> foobio: oh right thanks
 2014-03-12T00:06:53  *** yamahata__ has joined #openstack-infra
 2014-03-12T00:07:01  *** thuc_ has joined #openstack-infra
 2014-03-12T00:07:52  *** thuc_ has quit IRC
@@ -32,24 +32,24 @@
 2014-03-12T00:09:15  *** thuc_ has quit IRC
 2014-03-12T00:09:23  <mriedem> jogo: well kiss my grits
 2014-03-12T00:09:24  <jogo> re: https://review.openstack.org/#/c/79812/
-2014-03-12T00:10:02  <clarkb> we lost gerrit bot
-2014-03-12T00:10:03  <clarkb> foobio: https://review.openstack.org/79814
+2014-03-12T00:10:02  <superbee> we lost gerrit bot
+2014-03-12T00:10:03  <superbee> foobio: https://review.openstack.org/79814
 2014-03-12T00:10:42  * jogo likes his grits cheesy
 2014-03-12T00:10:42  <openstackgerrit> Clark Boylan proposed a change to openstack-infra/config: Remove unneeded apt sources from nodepool nodes.  https://review.openstack.org/79814
-2014-03-12T00:10:43  <clarkb> oh nvermind, just slow
+2014-03-12T00:10:43  <superbee> oh nvermind, just slow
 2014-03-12T00:10:43  <mriedem> jogo: anyway, if we drop build_name from the query that's one less wildcard search
 2014-03-12T00:10:43  <mriedem> and sdague has me all paranoid about wildcards in the queries now
 2014-03-12T00:10:43  <mriedem> jogo: or is that somehow offset by filtering by build_name, even with the wildcard?
-2014-03-12T00:10:43  <mriedem> clarkb: ^?
+2014-03-12T00:10:43  <mriedem> superbee: ^?
 2014-03-12T00:11:04  <mriedem> i had grits in tennessee last year for the first time, grossed me out
-2014-03-12T00:11:24  <jogo> mriedem: not sure which way is better, I agree lets ask clarkb
-2014-03-12T00:11:26  <clarkb> mriedem: instead of using the wildcard be specific
-2014-03-12T00:11:30  <clarkb> and OR them all together
+2014-03-12T00:11:24  <jogo> mriedem: not sure which way is better, I agree lets ask superbee
+2014-03-12T00:11:26  <superbee> mriedem: instead of using the wildcard be specific
+2014-03-12T00:11:30  <superbee> and OR them all together
 2014-03-12T00:11:37  <mriedem> yeah, that's the alternative
 2014-03-12T00:11:39  <foobio> mriedem: what's gross about grits? you just soak dry corn in wet lye for a while and then...
 2014-03-12T00:12:02  <mriedem> pew
-2014-03-12T00:12:07  <clarkb> gate-cinder-python27 OR gate-cinder-python26 OR gate-cinder-pypy andso on (I don't think we are testing pypy or py3k with cinder yet, 26 and 27 are the values you need)
-2014-03-12T00:12:24  <mriedem> clarkb: we don't even really need build_name in the query though,
+2014-03-12T00:12:07  <superbee> gate-cinder-python27 OR gate-cinder-python26 OR gate-cinder-pypy andso on (I don't think we are testing pypy or py3k with cinder yet, 26 and 27 are the values you need)
+2014-03-12T00:12:24  <mriedem> superbee: we don't even really need build_name in the query though,
 2014-03-12T00:12:24  <sdague> salv-orlando: correct
 2014-03-12T00:12:33  <mriedem> this only shows up in python UT jobs anyway
 2014-03-12T00:12:45  <foobio> mriedem: but really, if you grow up with them, it's no stranger than, say, lutefisk
@@ -62,77 +62,77 @@
 2014-03-12T00:13:39  <sdague> salv-orlando: so.... that job exists for grenade
 2014-03-12T00:13:41  *** mgagne has joined #openstack-infra
 2014-03-12T00:13:48  <sdague> except we don't need it any more
-2014-03-12T00:14:17  <clarkb> mriedem: right you aren't doing that to make sure you only see those jobs you are doing it so that the poor ES cluster doesn't have to search everything
+2014-03-12T00:14:17  <superbee> mriedem: right you aren't doing that to make sure you only see those jobs you are doing it so that the poor ES cluster doesn't have to search everything
 2014-03-12T00:14:18  <openstackgerrit> Davanum Srinivas (dims) proposed a change to openstack-infra/devstack-gate: WIP : Try patched libvirt from @hallyn - Not for review  https://review.openstack.org/79816
-2014-03-12T00:14:22  <clarkb> mriedem: filters restrict the search space
-2014-03-12T00:14:30  <mriedem> clarkb: ok, that's the answer i was looking for
+2014-03-12T00:14:22  <superbee> mriedem: filters restrict the search space
+2014-03-12T00:14:30  <mriedem> superbee: ok, that's the answer i was looking for
 2014-03-12T00:14:50  *** dstufft has quit IRC
 2014-03-12T00:14:55  <salv-orlando> sdague: so I can avoid worrying about those failures, and move on to the next one?
-2014-03-12T00:15:00  <sdague> clarkb: so in reality, do you think wildcards in filters like that is actually helpful or not
+2014-03-12T00:15:00  <sdague> superbee: so in reality, do you think wildcards in filters like that is actually helpful or not
 2014-03-12T00:15:26  *** dstufft has joined #openstack-infra
 2014-03-12T00:15:28  <sdague> salv-orlando: yeh, I think we can actually probably delete that job honestly
 2014-03-12T00:15:36  <salv-orlando> ok thanks then
 2014-03-12T00:15:39  <salv-orlando> and goodnight!
-2014-03-12T00:15:41  <clarkb> sdague: I think it is less helpful. wildcards are a search. non wildcards are a filter
+2014-03-12T00:15:41  <superbee> sdague: I think it is less helpful. wildcards are a search. non wildcards are a filter
 2014-03-12T00:15:44  <sdague> goodnight
-2014-03-12T00:16:01  <clarkb> sdague: so by having that as a wildcard we have to serach through that space. having it as a filter reduces any remaining search space
-2014-03-12T00:16:19  <sdague> clarkb: so if that was SQL, it would actually be slower with the wildcards
+2014-03-12T00:16:01  <superbee> sdague: so by having that as a wildcard we have to serach through that space. having it as a filter reduces any remaining search space
+2014-03-12T00:16:19  <sdague> superbee: so if that was SQL, it would actually be slower with the wildcards
 2014-03-12T00:16:45  <sdague> because the message field is full text indexed, so it's pretty fast
 2014-03-12T00:17:01  <sdague> but that ends up being string compares with regex, which is slow
-2014-03-12T00:17:02  <clarkb> sdague: thats what I am saying
-2014-03-12T00:17:07  <clarkb> wildcards are slower
-2014-03-12T00:17:22  <sdague> clarkb: I mean slower with wildcards, then making no reference to that field at all
+2014-03-12T00:17:02  <superbee> sdague: thats what I am saying
+2014-03-12T00:17:07  <superbee> wildcards are slower
+2014-03-12T00:17:22  <sdague> superbee: I mean slower with wildcards, then making no reference to that field at all
 2014-03-12T00:17:51  <mriedem> ^ that's what i was wondering
 2014-03-12T00:17:54  <sdague> as in deleting the filter would make the query faster
 2014-03-12T00:18:05  *** yamahata has joined #openstack-infra
-2014-03-12T00:18:06  <clarkb> sdague: making no reference in this case is probbaly slower because then the console.html for every single job in the last 2 weeks will be searched
-2014-03-12T00:18:24  <clarkb> sdague: rather than searching through only the those for gate-python-cinder2X
+2014-03-12T00:18:06  <superbee> sdague: making no reference in this case is probbaly slower because then the console.html for every single job in the last 2 weeks will be searched
+2014-03-12T00:18:24  <superbee> sdague: rather than searching through only the those for gate-python-cinder2X
 2014-03-12T00:18:26  <sdague> right, but the way it will be searched is actually fast
 2014-03-12T00:18:35  <sdague> relatively
 2014-03-12T00:18:46  *** atiwari has quit IRC
-2014-03-12T00:18:53  <clarkb> sdague: right but we are talking orders of magnitude different data that must be combed through (granted the index helps so it isn't that terrible)
+2014-03-12T00:18:53  <superbee> sdague: right but we are talking orders of magnitude different data that must be combed through (granted the index helps so it isn't that terrible)
 2014-03-12T00:18:55  <sdague> it would be interesting to ask an ES person about things like these actually
-2014-03-12T00:19:01  <clarkb> sdague: I did
-2014-03-12T00:19:05  <clarkb> at a local meetup
-2014-03-12T00:19:08  <clarkb> sdague: filtering is good
-2014-03-12T00:19:12  <clarkb> filtering != wildcards
+2014-03-12T00:19:01  <superbee> sdague: I did
+2014-03-12T00:19:05  <superbee> at a local meetup
+2014-03-12T00:19:08  <superbee> sdague: filtering is good
+2014-03-12T00:19:12  <superbee> filtering != wildcards
 2014-03-12T00:19:14  <sdague> ok, awesome +1
 2014-03-12T00:19:26  <sdague> right, filtering definitely good
 2014-03-12T00:19:41  <sdague> I guess the wildcard thing would be interesting to understand
-2014-03-12T00:19:46  <clarkb> so explicitly spell it out. build_name:"gate-cinder-python26" OR build_name:"gate-cinder-python27"
+2014-03-12T00:19:46  <superbee> so explicitly spell it out. build_name:"gate-cinder-python26" OR build_name:"gate-cinder-python27"
 2014-03-12T00:19:54  <sdague> right that would be faster
-2014-03-12T00:20:14  <clarkb> sdague: I think if you flip the order of the searches it may be faster
-2014-03-12T00:20:19  <clarkb> console.html is about half our log data
-2014-03-12T00:20:30  <clarkb> so on a busy day a quarter of a billion documents
+2014-03-12T00:20:14  <superbee> sdague: I think if you flip the order of the searches it may be faster
+2014-03-12T00:20:19  <superbee> console.html is about half our log data
+2014-03-12T00:20:30  <superbee> so on a busy day a quarter of a billion documents
 2014-03-12T00:20:34  <sdague> it doesn't do query reordering automatically?
 2014-03-12T00:20:37  <sdague> most of those do
 2014-03-12T00:20:56  *** thuc has joined #openstack-infra
-2014-03-12T00:21:04  <clarkb> if you can restrict that first with a relatively cheap wildcard serach to go from .25 billion to .01 billion I think you win
-2014-03-12T00:21:22  <clarkb> sdague: I am not sure. the behavior I have seen is that order matters but I haven't heard that from someone that actually know
+2014-03-12T00:21:04  <superbee> if you can restrict that first with a relatively cheap wildcard serach to go from .25 billion to .01 billion I think you win
+2014-03-12T00:21:22  <superbee> sdague: I am not sure. the behavior I have seen is that order matters but I haven't heard that from someone that actually know
 2014-03-12T00:21:34  <sdague> so it might be really nice to add another tag for "unittests"
 2014-03-12T00:21:37  *** thuc has quit IRC
-2014-03-12T00:21:46  <clarkb> sdague: we don't have a reliable way to do that
-2014-03-12T00:21:51  <clarkb> same problem as slave az and image
+2014-03-12T00:21:46  <superbee> sdague: we don't have a reliable way to do that
+2014-03-12T00:21:51  <superbee> same problem as slave az and image
 2014-03-12T00:21:53  <sdague> because then we could tag:unittests AND project:openstack/cinder
 2014-03-12T00:22:08  *** thuc has joined #openstack-infra
-2014-03-12T00:22:33  <sdague> clarkb: *python* ?
+2014-03-12T00:22:33  <sdague> superbee: *python* ?
 2014-03-12T00:22:41  *** thuc has quit IRC
 2014-03-12T00:22:48  <sdague> when we create that field
-2014-03-12T00:22:57  <clarkb> sdague: but that misses pypy
-2014-03-12T00:23:01  <clarkb> and py3k
-2014-03-12T00:23:06  <clarkb> and all the funny django tests
-2014-03-12T00:23:09  <clarkb> and so on
-2014-03-12T00:23:11  <clarkb> :/
+2014-03-12T00:22:57  <superbee> sdague: but that misses pypy
+2014-03-12T00:23:01  <superbee> and py3k
+2014-03-12T00:23:06  <superbee> and all the funny django tests
+2014-03-12T00:23:09  <superbee> and so on
+2014-03-12T00:23:11  <superbee> :/
 2014-03-12T00:23:12  *** thuc has joined #openstack-infra
 2014-03-12T00:23:14  <sdague> ok, well we can add them over time
 2014-03-12T00:23:25  <sdague> it would still be much better to filter on
 2014-03-12T00:23:31  <sdague> just a thought
-2014-03-12T00:23:42  <mriedem> sdague: clarkb: so the take away for me is be really strict now on wildcard usage when i see it in reviews
+2014-03-12T00:23:42  <mriedem> sdague: superbee: so the take away for me is be really strict now on wildcard usage when i see it in reviews
 2014-03-12T00:23:46  *** thuc has quit IRC
 2014-03-12T00:23:52  <mriedem> i'd like to get something in the readme at least on wildcards
-2014-03-12T00:23:58  <clarkb> sdague: I agree, I just think we need to be better about the information upfront rather than approximating
+2014-03-12T00:23:58  <superbee> sdague: I agree, I just think we need to be better about the information upfront rather than approximating
 2014-03-12T00:23:59  <mriedem> we used to say it wasn't supported/didn't work, but it does...
-2014-03-12T00:24:07  <clarkb> sdague: because with approximations we will fail and confusion will happen
+2014-03-12T00:24:07  <superbee> sdague: because with approximations we will fail and confusion will happen
 2014-03-12T00:24:14  *** thuc has joined #openstack-infra
 2014-03-12T00:26:17  <sdague> bah, approximations are the spice of life :)
 2014-03-12T00:26:43  *** matsuhashi has joined #openstack-infra
@@ -151,32 +151,32 @@
 2014-03-12T00:28:49  *** bhuvan has joined #openstack-infra
 2014-03-12T00:28:49  *** bhuvan_ has joined #openstack-infra
 2014-03-12T00:29:09  <sdague> mriedem: probably, we need test results anyway
-2014-03-12T00:30:51  <mriedem> foobio: clarkb: do you know where the code is that sends out the automatic global-reqs updates to the other projects?
+2014-03-12T00:30:51  <mriedem> foobio: superbee: do you know where the code is that sends out the automatic global-reqs updates to the other projects?
 2014-03-12T00:30:58  <openstackgerrit> A change was merged to openstack-infra/elastic-recheck: Add fingerprint for bug 1291108  https://review.openstack.org/79812
-2014-03-12T00:31:09  <clarkb> mriedem: ya I will get a link
-2014-03-12T00:31:27  <clarkb> mriedem: it needs to not do that when there are changes in the gate otherwise they get kicked out
-2014-03-12T00:31:34  <foobio> mriedem: just a sec, let me let clarkb get that for you ;)
-2014-03-12T00:31:51  <mriedem> clarkb: what needs to not do what now?
+2014-03-12T00:31:09  <superbee> mriedem: ya I will get a link
+2014-03-12T00:31:27  <superbee> mriedem: it needs to not do that when there are changes in the gate otherwise they get kicked out
+2014-03-12T00:31:34  <foobio> mriedem: just a sec, let me let superbee get that for you ;)
+2014-03-12T00:31:51  <mriedem> superbee: what needs to not do what now?
 2014-03-12T00:32:14  *** mgagne has joined #openstack-infra
 2014-03-12T00:32:19  <foobio> mriedem: when the gate is long, a project might approve their requirements updates change while there is a requirements change ahead of them in te gate
-2014-03-12T00:32:21  <clarkb> mriedem: https://git.openstack.org/cgit/openstack-infra/config/tree/modules/jenkins/files/slave_scripts/propose_requirements_update.sh those jobs push updates immediately after a requirements change merges
-2014-03-12T00:32:37  <clarkb> then what foobio says happens and we kick stuff out of the gate due to new patchsets
+2014-03-12T00:32:21  <superbee> mriedem: https://git.openstack.org/cgit/openstack-infra/config/tree/modules/jenkins/files/slave_scripts/propose_requirements_update.sh those jobs push updates immediately after a requirements change merges
+2014-03-12T00:32:37  <superbee> then what foobio says happens and we kick stuff out of the gate due to new patchsets
 2014-03-12T00:32:37  *** markmcclain has joined #openstack-infra
 2014-03-12T00:32:52  <foobio> mriedem: then the merger of the global requirements change triggers an update job, and snipes any currently approved per-project requirements changes pending merger
 2014-03-12T00:32:53  *** HenryG_ has quit IRC
-2014-03-12T00:32:56  <clarkb> also maybe it hsan't been advertized enough but requirements should be feature frozen too for the most part
-2014-03-12T00:33:05  <clarkb> so now is a good time to get everything synced
-2014-03-12T00:33:24  <mriedem> clarkb: reqs freeze is kind of what i was thinking too
-2014-03-12T00:33:29  <foobio> clarkb: yes, i think feature freeze and requirements freeze should go hand-in-hand personally
+2014-03-12T00:32:56  <superbee> also maybe it hsan't been advertized enough but requirements should be feature frozen too for the most part
+2014-03-12T00:33:05  <superbee> so now is a good time to get everything synced
+2014-03-12T00:33:24  <mriedem> superbee: reqs freeze is kind of what i was thinking too
+2014-03-12T00:33:29  <foobio> superbee: yes, i think feature freeze and requirements freeze should go hand-in-hand personally
 2014-03-12T00:33:34  *** gokrokve has joined #openstack-infra
 2014-03-12T00:33:42  *** mgagne has quit IRC
-2014-03-12T00:34:32  <clarkb> I wonder if we can make that a ttx release check, for project in $PROJECTS; do check_reqs_syncage ; done
-2014-03-12T00:34:46  <clarkb> iirc nova's havana release was immediately broken because we didn't do ^
+2014-03-12T00:34:32  <superbee> I wonder if we can make that a ttx release check, for project in $PROJECTS; do check_reqs_syncage ; done
+2014-03-12T00:34:46  <superbee> iirc nova's havana release was immediately broken because we didn't do ^
 2014-03-12T00:35:26  <foobio> though fwiw, in havana there was a lot less time to get all that matched up, but we definitely hoped that for icehouse everyone would be in sync
-2014-03-12T00:35:33  <clarkb> this felt like a productive bug day
-2014-03-12T00:35:42  <clarkb> pleia2: thank you for putting it together (and reminding us that we should do one)
+2014-03-12T00:35:33  <superbee> this felt like a productive bug day
+2014-03-12T00:35:42  <superbee> pleia2: thank you for putting it together (and reminding us that we should do one)
 2014-03-12T00:35:50  <foobio> it was bug-productive, but i didn't get to most of the other stuff i need to do
-2014-03-12T00:35:51  <pleia2> clarkb: sure thing :)
+2014-03-12T00:35:51  <pleia2> superbee: sure thing :)
 2014-03-12T00:35:57  <foobio> pleia2: awesome job!
 2014-03-12T00:36:19  *** Sukhdev has quit IRC
 2014-03-12T00:36:23  <pleia2> now I get to go to a hockey game
@@ -184,69 +184,69 @@
 2014-03-12T00:36:40  <StevenK> pleia2: Ice or grass?
 2014-03-12T00:36:48  <pleia2> StevenK: ice, with canadians!
 2014-03-12T00:36:50  *** mgagne has joined #openstack-infra
-2014-03-12T00:37:25  <clarkb> mriedem: thats matching the change id to any existing unmerged requirement updates for that change
-2014-03-12T00:37:34  <clarkb> mriedem: this way we push new patchsets not new changes
-2014-03-12T00:38:12  <mriedem> clarkb: so what i wanted was to link something like this https://review.openstack.org/#/c/79338/ back to the original global-requirements change
+2014-03-12T00:37:25  <superbee> mriedem: thats matching the change id to any existing unmerged requirement updates for that change
+2014-03-12T00:37:34  <superbee> mriedem: this way we push new patchsets not new changes
+2014-03-12T00:38:12  <mriedem> superbee: so what i wanted was to link something like this https://review.openstack.org/#/c/79338/ back to the original global-requirements change
 2014-03-12T00:38:23  <mriedem> so we can see the original commit message to know why it's being updated, b/c that's what i do when i review these
 2014-03-12T00:38:37  <mriedem> i.e. if it's a bug fix or something
 2014-03-12T00:38:53  <jogo> 2014-03-12 00:34:09.832 TRACE nova Stderr: 'Traceback (most recent call last):\n  File "/usr/local/bin/nova-rootwrap", line 6, in <module>\n    from oslo.rootwrap.cmd import main\nImportError: No module named rootwrap.cmd\n'
 2014-03-12T00:39:05  <jogo> is that one of those weird oslo namespace issues?
 2014-03-12T00:39:08  *** thuc has quit IRC
 2014-03-12T00:39:09  <jogo> that was when running grenade locally
-2014-03-12T00:39:18  <clarkb> mriedem: you can do that if you can build the state in that script
-2014-03-12T00:39:28  <clarkb> mriedem: I would need to think about that more to know how difficult it would be
+2014-03-12T00:39:18  <superbee> mriedem: you can do that if you can build the state in that script
+2014-03-12T00:39:28  <superbee> mriedem: I would need to think about that more to know how difficult it would be
 2014-03-12T00:39:42  *** thuc has joined #openstack-infra
-2014-03-12T00:39:44  <clarkb> mriedem: so honestly, I think people should be reviewing openstack/requirements if they care at that level
-2014-03-12T00:40:07  <clarkb> mriedem: you are already being tested with the requirements in the global requirements. The only reason we havethose files in nova is so that you can pip install nova without an additional step
-2014-03-12T00:40:28  <mriedem> clarkb: well and packagers rely on them right?
+2014-03-12T00:39:44  <superbee> mriedem: so honestly, I think people should be reviewing openstack/requirements if they care at that level
+2014-03-12T00:40:07  <superbee> mriedem: you are already being tested with the requirements in the global requirements. The only reason we havethose files in nova is so that you can pip install nova without an additional step
+2014-03-12T00:40:28  <mriedem> superbee: well and packagers rely on them right?
 2014-03-12T00:40:42  <mriedem> i know we do internally, we use that to update rpm specs
-2014-03-12T00:40:46  <clarkb> mriedem: maybe, openstack/requirements is largely for the packagers
-2014-03-12T00:40:55  <clarkb> they package the stuff in the list then don't have to worry about stuff on a case by case basis
+2014-03-12T00:40:46  <superbee> mriedem: maybe, openstack/requirements is largely for the packagers
+2014-03-12T00:40:55  <superbee> they package the stuff in the list then don't have to worry about stuff on a case by case basis
 2014-03-12T00:41:02  <mriedem> right
 2014-03-12T00:41:23  *** ociuhandu has quit IRC
-2014-03-12T00:41:25  <clarkb> my point is adding that info to the nova requirements update isn't a bad thing but it is the wrong place to be reviewing that data
+2014-03-12T00:41:25  <superbee> my point is adding that info to the nova requirements update isn't a bad thing but it is the wrong place to be reviewing that data
 2014-03-12T00:41:32  <foobio> mriedem: packagers probably rely on the requirements names listed in each project, but the versions in global-reqs are what's going to be needed if they want to package more than one project for teh same distro
-2014-03-12T00:41:35  <clarkb> it needs to be reviewed when proposed to openstack/requirements
+2014-03-12T00:41:35  <superbee> it needs to be reviewed when proposed to openstack/requirements
 2014-03-12T00:41:47  *** ryanpetrello has joined #openstack-infra
 2014-03-12T00:41:59  <mriedem> foobio: yeah, and that's what we do
 2014-03-12T00:42:15  <mriedem> foobio: and so like when you have some projects capped on different versions of sqla/migrate, it gets weird
-2014-03-12T00:42:31  <clarkb> pleia2: good point about if debian. do you know how yum works when we add the puppet repos? we should remvoe them from yum too if possible
-2014-03-12T00:42:43  <clarkb> mriedem: not really, they are all tested with the same version
-2014-03-12T00:42:50  <clarkb> mriedem: which is why openstack/requirements exists
-2014-03-12T00:43:12  <foobio> clarkb: well, i suspect he meant it gets weird trying to package them
+2014-03-12T00:42:31  <superbee> pleia2: good point about if debian. do you know how yum works when we add the puppet repos? we should remvoe them from yum too if possible
+2014-03-12T00:42:43  <superbee> mriedem: not really, they are all tested with the same version
+2014-03-12T00:42:50  <superbee> mriedem: which is why openstack/requirements exists
+2014-03-12T00:43:12  <foobio> superbee: well, i suspect he meant it gets weird trying to package them
 2014-03-12T00:43:17  *** mrodden1 is now known as mrodden
 2014-03-12T00:43:22  <foobio> for the same distro
-2014-03-12T00:43:23  <mriedem> clarkb: so as of yesterday i know that all projects run against global-requirements,
+2014-03-12T00:43:23  <mriedem> superbee: so as of yesterday i know that all projects run against global-requirements,
 2014-03-12T00:43:26  <mriedem> foobio: yes
 2014-03-12T00:43:44  *** thuc has quit IRC
 2014-03-12T00:43:46  <mriedem> so is it pip/pbr that allows version caps to be ignored?
 2014-03-12T00:44:01  <locke105> wut?
-2014-03-12T00:44:03  <clarkb> mriedem: foobio but it isn't weird
-2014-03-12T00:44:13  <clarkb> you just package what oepnstack/requirements says and ignore what nova says because nova is wrong
-2014-03-12T00:44:18  <foobio> mriedem: well, not entirely true. what clarkb neglected to mention is that it's just the integration tests which get run reset to the global requirements lists. not individual project unit tests
-2014-03-12T00:44:44  <foobio> clarkb: you have to pay attention to the list of dependencies nova declares, just not necessarily the versions of them
+2014-03-12T00:44:03  <superbee> mriedem: foobio but it isn't weird
+2014-03-12T00:44:13  <superbee> you just package what oepnstack/requirements says and ignore what nova says because nova is wrong
+2014-03-12T00:44:18  <foobio> mriedem: well, not entirely true. what superbee neglected to mention is that it's just the integration tests which get run reset to the global requirements lists. not individual project unit tests
+2014-03-12T00:44:44  <foobio> superbee: you have to pay attention to the list of dependencies nova declares, just not necessarily the versions of them
 2014-03-12T00:45:06  <mriedem> ok, "you just package what oepnstack/requirements says and ignore what nova says because nova is wrong" is news to me
-2014-03-12T00:45:10  <foobio> clarkb: you wouldn't package nova and claim it depends on every single package listed in the global requirements
-2014-03-12T00:45:25  <clarkb> foobio: right but we aren't talking about that we are talking about 50 different versions of sqlalchemy
+2014-03-12T00:45:10  <foobio> superbee: you wouldn't package nova and claim it depends on every single package listed in the global requirements
+2014-03-12T00:45:25  <superbee> foobio: right but we aren't talking about that we are talking about 50 different versions of sqlalchemy
 2014-03-12T00:45:33  <mriedem> right, like pecan and the other 20 things that ceilometer uses but no one else does, for exapmle
 2014-03-12T00:45:56  <mriedem> but i'm getting the point
 2014-03-12T00:46:19  <mriedem> and yeah it's what happens anyway, we just end up updating the nova rpm spec using nova's requirements.txt, but the values in there match global requirements more or less anyway
 2014-03-12T00:46:22  *** rms_13 has left #openstack-infra
-2014-03-12T00:46:29  <foobio> clarkb: true... though if nova doesn't keep up to date on global requirements sync, it may run with the versions in global-reqs per our integration tests, but may not be able to pass its own unit tests
+2014-03-12T00:46:29  <foobio> superbee: true... though if nova doesn't keep up to date on global requirements sync, it may run with the versions in global-reqs per our integration tests, but may not be able to pass its own unit tests
 2014-03-12T00:46:32  <mriedem> we're just usually a day or so behind b/c someone in nova has to merge those changes
 2014-03-12T00:47:03  <foobio> corner case, but i expect it to happen at some point
 2014-03-12T00:47:21  <mriedem> so is there value in updating the sync commit message to explain some of this for reviewers?
-2014-03-12T00:47:23  <clarkb> foobio: it is certianly possibly
-2014-03-12T00:47:26  <clarkb> *possible
+2014-03-12T00:47:23  <superbee> foobio: it is certianly possibly
+2014-03-12T00:47:26  <superbee> *possible
 2014-03-12T00:47:42  <mriedem> like 'if you're worried about testing, you're too late because it's already tested, this is more or less for downstream CD'
-2014-03-12T00:47:47  <clarkb> mriedem: IMO it doesn't hurt, but I also think that if you care about that at that level you need to review openstack/requirements changes instead
+2014-03-12T00:47:47  <superbee> mriedem: IMO it doesn't hurt, but I also think that if you care about that at that level you need to review openstack/requirements changes instead
 2014-03-12T00:47:59  <foobio> openstack proves the infinite monkey theorem on a regular basis
-2014-03-12T00:48:14  <mriedem> clarkb: my caring is really only in doing some kind of review on these changes when they show up in nova
-2014-03-12T00:48:16  <clarkb> mriedem: I don't want nova to get the impression that they can refuse an update because they don't like the commit from requirements
+2014-03-12T00:48:14  <mriedem> superbee: my caring is really only in doing some kind of review on these changes when they show up in nova
+2014-03-12T00:48:16  <superbee> mriedem: I don't want nova to get the impression that they can refuse an update because they don't like the commit from requirements
 2014-03-12T00:48:18  <mriedem> *on doing
-2014-03-12T00:48:22  <clarkb> it should've been refused in requirements
+2014-03-12T00:48:22  <superbee> it should've been refused in requirements
 2014-03-12T00:48:26  *** thuc has joined #openstack-infra
-2014-03-12T00:48:30  <mriedem> clarkb: no i get that
+2014-03-12T00:48:30  <mriedem> superbee: no i get that
 2014-03-12T00:48:32  <mriedem> not my point
 2014-03-12T00:48:32  * locke105 google inifinite monkey theorem
 2014-03-12T00:48:42  <locke105> googles* bah
@@ -257,11 +257,11 @@
 2014-03-12T00:49:21  <foobio> locke105: basically saying that if there is a corner case we can define, we will almost certainly encounter it at some point due to the sheer size of the project
 2014-03-12T00:49:26  <mriedem> although if i didn't poke on the sqla nova sync change yesterday, we wouldn't have known this was broken in how things were tested...
 2014-03-12T00:49:28  *** thuc has joined #openstack-infra
-2014-03-12T00:49:44  <clarkb> mriedem: we really don't want jenkins to have merge rights :)
-2014-03-12T00:49:52  <clarkb> for code that it proposes
+2014-03-12T00:49:44  <superbee> mriedem: we really don't want jenkins to have merge rights :)
+2014-03-12T00:49:52  <superbee> for code that it proposes
 2014-03-12T00:50:03  <mriedem> for when it becomes self-aware
 2014-03-12T00:50:06  <foobio> mriedem: it provides some oversight, but it's on the same level as translation proposals
-2014-03-12T00:50:08  <clarkb> right now we mostly have that separated out with zuul being the organizer
+2014-03-12T00:50:08  <superbee> right now we mostly have that separated out with zuul being the organizer
 2014-03-12T00:50:09  <mriedem> yeah, just playing devil's advocate
 2014-03-12T00:50:14  *** ryanpetrello has quit IRC
 2014-03-12T00:50:41  *** ryanpetrello has joined #openstack-infra
@@ -318,10 +318,10 @@
 2014-03-12T00:58:23  <openstackgerrit> Clark Boylan proposed a change to openstack-infra/config: Remove unneeded package sources from nodepool node  https://review.openstack.org/79814
 2014-03-12T00:58:24  <sdague> because I mess those up plenty
 2014-03-12T00:58:24  <mriedem> sdague: i assumed you were way over my head on something
-2014-03-12T00:58:24  <clarkb> pleia2: ^ I think that fixes the problem you pointed out
+2014-03-12T00:58:24  <superbee> pleia2: ^ I think that fixes the problem you pointed out
 2014-03-12T00:58:24  *** alexandra_ has joined #openstack-infra
 2014-03-12T00:58:24  *** branen_ has joined #openstack-infra
-2014-03-12T00:58:24  <clarkb> pleia2: I looked at a centos machine but figure all redhat ish distros use yum.repos.d since they use yum
+2014-03-12T00:58:24  <superbee> pleia2: I looked at a centos machine but figure all redhat ish distros use yum.repos.d since they use yum
 2014-03-12T00:58:24  <sdague> so yeh, bad rebase, which I totally didn't resolve right
 2014-03-12T00:58:24  <sdague> anyway, it's right now
 2014-03-12T00:58:24  <mriedem> yeah, +1
@@ -369,9 +369,9 @@
 2014-03-12T01:12:20  <jeblair> jogo: i think we should do all the things.  get more resources, be smarter about the ones we have (sdague is working on that as you know)
 2014-03-12T01:13:41  *** jnoller has joined #openstack-infra
 2014-03-12T01:13:53  *** ryanpetrello has quit IRC
-2014-03-12T01:13:55  <clarkb> I think rechecking was crucial to gate health during feature freeze
-2014-03-12T01:14:14  <clarkb> it was so smooth compared to havana
-2014-03-12T01:14:45  <jogo> clarkb: while I would like to agree with you, I don't think we really have enough data to say *what* helped -- too many changes
+2014-03-12T01:13:55  <superbee> I think rechecking was crucial to gate health during feature freeze
+2014-03-12T01:14:14  <superbee> it was so smooth compared to havana
+2014-03-12T01:14:45  <jogo> superbee: while I would like to agree with you, I don't think we really have enough data to say *what* helped -- too many changes
 2014-03-12T01:15:22  <jeblair> we can also do mean things like fast-fail (abort jobs on the first failure), or hang everything off of a group of jobs (people suggest pep8, but i also think requirements check failures should get the same treatment)
 2014-03-12T01:15:24  <SpamapS> Yeah, could just be Neutron sucking less. ;)
 2014-03-12T01:15:36  <jeblair> those would be zuul changes
@@ -381,10 +381,10 @@
 2014-03-12T01:15:50  <jeblair> also, if developers are impatient... they _could_ run tests locally before uploading :)
 2014-03-12T01:16:04  <jogo> my hunch is we now just have tons of check jobs  (for several reasons)
 2014-03-12T01:16:14  <jogo> and not enough nodes
-2014-03-12T01:16:57  <clarkb> check most == gate
+2014-03-12T01:16:57  <superbee> check most == gate
 2014-03-12T01:17:08  *** gokrokve has quit IRC
-2014-03-12T01:17:13  <clarkb> jeblair ++
-2014-03-12T01:17:21  <jogo> clarkb: ?
+2014-03-12T01:17:13  <superbee> jeblair ++
+2014-03-12T01:17:21  <jogo> superbee: ?
 2014-03-12T01:17:22  <foobio> i still think we don't allow the gate window floor to dip low enough when there's high volume and a lot of gate resets going on, wasting resources over and over while more or less starving out the check pipeline for a while (which slows new changes entering gating too)
 2014-03-12T01:17:51  <sdague> jeblair: we need that as the new openstack hoodie "we should do all the things"
 2014-03-12T01:17:53  <jogo> foobio: interesting idea
@@ -412,7 +412,7 @@
 2014-03-12T01:21:06  <jeblair> foobio: but with the current model, i think going below 20 would hurt us more than help
 2014-03-12T01:21:13  <sdague> yeh, we'd starve
 2014-03-12T01:21:25  <foobio> mmm, perhaps so
-2014-03-12T01:21:26  <jeblair> foobio, clarkb: i think we can make a more accurate heuristic too...
+2014-03-12T01:21:26  <jeblair> foobio, superbee: i think we can make a more accurate heuristic too...
 2014-03-12T01:21:33  <sdague> and, honestly, I think it's a low item to optimize
 2014-03-12T01:21:41  <sdague> because the floor was about not thrashing
 2014-03-12T01:21:46  <sdague> not really about waste
@@ -457,16 +457,16 @@
 2014-03-12T01:27:23  <locke105> by that you mean devstack-gate?
 2014-03-12T01:27:26  <jeblair> locke105: (deploy every comment, or as near as you can make it)
 2014-03-12T01:27:39  <sdague> otherwise we end up with "oh, land this neutron change, guess it's the right one, wait until it's landed, then start working on the nova change"
-2014-03-12T01:27:54  <clarkb> why is atomic required?
+2014-03-12T01:27:54  <superbee> why is atomic required?
 2014-03-12T01:27:55  <jeblair> locke105: it's specifically referring to operators, though the devstack-gate process is designed to make it easier for them
-2014-03-12T01:28:00  <jeblair> clarkb: it's not
-2014-03-12T01:28:10  <clarkb> ok didnt think it was
-2014-03-12T01:28:11  <mordred> clarkb: in fact, it's not desired
+2014-03-12T01:28:00  <jeblair> superbee: it's not
+2014-03-12T01:28:10  <superbee> ok didnt think it was
+2014-03-12T01:28:11  <mordred> superbee: in fact, it's not desired
 2014-03-12T01:28:26  *** jhesketh_ has joined #openstack-infra
 2014-03-12T01:28:28  <mordred> the coordinated change dependency version requires atomic landing
 2014-03-12T01:28:32  *** weiwei has joined #openstack-infra
-2014-03-12T01:28:39  <sdague> clarkb: no, I don't want it
-2014-03-12T01:28:40  <jeblair> clarkb: that's only required for full-cycle cross-repo deps, which are considered to be hazardous to CD and possibly upgrade testing
+2014-03-12T01:28:39  <sdague> superbee: no, I don't want it
+2014-03-12T01:28:40  <jeblair> superbee: that's only required for full-cycle cross-repo deps, which are considered to be hazardous to CD and possibly upgrade testing
 2014-03-12T01:28:44  <sdague> I think atomic is bad
 2014-03-12T01:28:51  <sdague> I agreed with mordred on that
 2014-03-12T01:28:59  <mordred> sdague: I figured we proably agreed
@@ -489,55 +489,55 @@
 2014-03-12T01:31:50  <sdague> jeblair: I was assuming we'd use an Idempotent id
 2014-03-12T01:32:08  <jeblair> sdague: i think that may be what they did.
 2014-03-12T01:32:12  <sdague> cool
-2014-03-12T01:32:20  <clarkb> it would be goid to make it not gerrit specific
+2014-03-12T01:32:20  <superbee> it would be goid to make it not gerrit specific
 2014-03-12T01:32:29  <sdague> yeh, honestly, I've been doing Depends-On: Idempotent id
 2014-03-12T01:32:30  <locke105> if they merge in-order, and if its shortly one after another, whats stopping the CD framework from say, picking up both the nova and neutron update and not realizing they need to be done in-order?
 2014-03-12T01:32:38  <sdague> just manually for signaling in the past
-2014-03-12T01:32:48  <sdague> clarkb: it needs to be an idempotent id
+2014-03-12T01:32:48  <sdague> superbee: it needs to be an idempotent id
 2014-03-12T01:32:49  *** salv-orlando_ has joined #openstack-infra
 2014-03-12T01:32:57  <jeblair> sdague: but istr something about using the change-id and s/I/D/... but i don't recall all details.  main thing is -- a lot of thinking has already been done there
 2014-03-12T01:32:58  <sdague> otherwise it breaks on rebasing
 2014-03-12T01:33:04  *** zigo has joined #openstack-infra
 2014-03-12T01:33:14  <sdague> coolio, if you have pointers, would appreciate them
-2014-03-12T01:33:26  <jeblair> clarkb: it's necessarily not gerrit-specific because it's not in gerrit.  :)
+2014-03-12T01:33:26  <jeblair> superbee: it's necessarily not gerrit-specific because it's not in gerrit.  :)
 2014-03-12T01:33:52  <jeblair> sdague: not off hand, but i should be able to find the patch series when it's time
 2014-03-12T01:34:16  *** dstanek_afk is now known as dstanek
 2014-03-12T01:34:21  <jeblair> i need to run now, ttyl
-2014-03-12T01:34:31  <clarkb> whats wromg with change id + project?
-2014-03-12T01:34:56  <clarkb> oh branches
+2014-03-12T01:34:31  <superbee> whats wromg with change id + project?
+2014-03-12T01:34:56  <superbee> oh branches
 2014-03-12T01:37:21  *** salv-orlando has quit IRC
 2014-03-12T01:37:21  *** salv-orlando_ is now known as salv-orlando
-2014-03-12T01:37:50  <clarkb> change id's may not be best because gerrit pairs them with project:branch to get the unique key
+2014-03-12T01:37:50  <superbee> change id's may not be best because gerrit pairs them with project:branch to get the unique key
 2014-03-12T01:38:12  *** gokrokve has quit IRC
 2014-03-12T01:39:31  *** nosnos has joined #openstack-infra
-2014-03-12T01:39:39  <clarkb> sdague: https://gerrit-review.googlesource.com/#/q/topic:cross-repo-dependencies is the code jeblair is talking about I think
+2014-03-12T01:39:39  <superbee> sdague: https://gerrit-review.googlesource.com/#/q/topic:cross-repo-dependencies is the code jeblair is talking about I think
 2014-03-12T01:40:19  <mordred> sdague: so - it doesn't affect the gate per-se ... but why is n-novnc enabled by default in devstack?
 2014-03-12T01:40:34  <foobio> okay, the project plan for tomorrow morning's maintenance is here for anyone who wants to give it a once-over... https://etherpad.openstack.org/p/project-rename-2014-03-12
 2014-03-12T01:40:36  <mordred> sdague: we do not have a project option for it
-2014-03-12T01:40:51  <clarkb> foobio: looking
+2014-03-12T01:40:51  <superbee> foobio: looking
 2014-03-12T01:42:33  <sdague> mordred: for raisons?
 2014-03-12T01:42:41  <mordred> sdague: awesome
-2014-03-12T01:42:53  <foobio> clarkb: also note that SergeyLukjanov's more details series of savanna-specific stuff is here... https://etherpad.openstack.org/p/savanna-renaming-process
+2014-03-12T01:42:53  <foobio> superbee: also note that SergeyLukjanov's more details series of savanna-specific stuff is here... https://etherpad.openstack.org/p/savanna-renaming-process
 2014-03-12T01:42:59  <sdague> honestly, that so predates me, I have no idea
 2014-03-12T01:43:18  <sdague> could be linear-b
-2014-03-12T01:43:19  <clarkb> mordred: probably because people like vnc consoles by default?
-2014-03-12T01:43:34  <mordred> clarkb: for their devstack working env?
-2014-03-12T01:43:48  <clarkb> mordred: ya
+2014-03-12T01:43:19  <superbee> mordred: probably because people like vnc consoles by default?
+2014-03-12T01:43:34  <mordred> superbee: for their devstack working env?
+2014-03-12T01:43:48  <superbee> mordred: ya
 2014-03-12T01:43:57  <mordred> hrm
-2014-03-12T01:44:11  <clarkb> foobio: plan looks mostly good to me, couple of notes
+2014-03-12T01:44:11  <superbee> foobio: plan looks mostly good to me, couple of notes
 2014-03-12T01:44:21  <sdague> I thought we had working spice now though
-2014-03-12T01:44:29  <clarkb> mordred: remember devstack is the most common deployment method :)
+2014-03-12T01:44:29  <superbee> mordred: remember devstack is the most common deployment method :)
 2014-03-12T01:44:39  <mordred> well, just pointing out, spurred by looking at it again because of the mailing list thread - that it's the only thing we clone from github with no other optino
 2014-03-12T01:44:41  <mordred> option
 2014-03-12T01:44:48  *** gokrokve has joined #openstack-infra
-2014-03-12T01:44:58  <clarkb> mordred: there is an option
-2014-03-12T01:45:10  <clarkb> you can override the location, seem my response to the thread
+2014-03-12T01:44:58  <superbee> mordred: there is an option
+2014-03-12T01:45:10  <superbee> you can override the location, seem my response to the thread
 2014-03-12T01:45:37  <sdague> anyway, time to call it a night. See you guys in the morning.
 2014-03-12T01:45:47  <mordred> sdague: have fun!
-2014-03-12T01:47:53  <clarkb> mordred: I mean its not necessarily a great option but you can clone from elsewhere
-2014-03-12T01:48:11  <clarkb> for most elsewhere is probably a fork of the github project on github though :)
+2014-03-12T01:47:53  <superbee> mordred: I mean its not necessarily a great option but you can clone from elsewhere
+2014-03-12T01:48:11  <superbee> for most elsewhere is probably a fork of the github project on github though :)
 2014-03-12T01:48:30  *** sarob has joined #openstack-infra
-2014-03-12T01:48:58  <foobio> clarkb: suggestions integrated--thanks!
+2014-03-12T01:48:58  <foobio> superbee: suggestions integrated--thanks!
 2014-03-12T01:54:34  <foobio> SergeyLukjanov: when you wake up, you'll probably want to review the project plan for the bits i'm doing at 12:00 utc (except step 14, which is up to you for your projects)
 2014-03-12T01:56:02  *** khyati_ has quit IRC
 2014-03-12T01:57:25  *** arosen has joined #openstack-infra
@@ -600,35 +600,35 @@
 2014-03-12T03:25:36  *** bhuvan_ has quit IRC
 2014-03-12T03:25:36  *** bhuvan has quit IRC
 2014-03-12T03:28:19  *** dkliban has quit IRC
-2014-03-12T03:29:11  <clarkb> foobio: https://developer.github.com/v3/oauth/ we need to add the read:org scope to our token. this may require a new token
-2014-03-12T03:29:48  <clarkb> foobio: turns out I am in a channel with someone that contributes to pygithub and they were able to help. seriously though why have api versions if when you change stuff like this you don't create a new version
+2014-03-12T03:29:11  <superbee> foobio: https://developer.github.com/v3/oauth/ we need to add the read:org scope to our token. this may require a new token
+2014-03-12T03:29:48  <superbee> foobio: turns out I am in a channel with someone that contributes to pygithub and they were able to help. seriously though why have api versions if when you change stuff like this you don't create a new version
 2014-03-12T03:31:01  <openstackgerrit> Joshua Hesketh proposed a change to openstack-infra/config: Add zuul overlay to review page  https://review.openstack.org/79836
 2014-03-12T03:32:23  <openstackgerrit> Joshua Hesketh proposed a change to openstack-infra/config: Add zuul overlay to review page  https://review.openstack.org/79836
 2014-03-12T03:32:26  *** SumitNaiksatam has joined #openstack-infra
 2014-03-12T03:33:01  *** jnoller has quit IRC
 2014-03-12T03:33:42  *** jnoller has joined #openstack-infra
 2014-03-12T03:33:55  <openstackgerrit> Joshua Hesketh proposed a change to openstack-infra/config: Add zuul overlay to review page  https://review.openstack.org/79836
-2014-03-12T03:34:27  <jhesketh__> jeblair, clarkb: ^ what do you think of this for an improvement to gerrit?
+2014-03-12T03:34:27  <jhesketh__> jeblair, superbee: ^ what do you think of this for an improvement to gerrit?
 2014-03-12T03:34:38  <jhesketh__> (more or less proof of concept at this point)
 2014-03-12T03:37:04  *** wchrisj has joined #openstack-infra
-2014-03-12T03:37:09  <clarkb> jhesketh__: I am not the greatest person to review css and javascript, but I am super willing to throw that on review-dev and give it a spin
+2014-03-12T03:37:09  <superbee> jhesketh__: I am not the greatest person to review css and javascript, but I am super willing to throw that on review-dev and give it a spin
 2014-03-12T03:37:10  *** sarob has joined #openstack-infra
-2014-03-12T03:37:12  <clarkb> I think it is a great idea
+2014-03-12T03:37:12  <superbee> I think it is a great idea
 2014-03-12T03:37:15  *** reed has joined #openstack-infra
-2014-03-12T03:37:31  <jhesketh__> clarkb: heh, I'm not the greatest person at writing javascript/css!
+2014-03-12T03:37:31  <jhesketh__> superbee: heh, I'm not the greatest person at writing javascript/css!
 2014-03-12T03:37:36  <jhesketh__> particularly the css part
-2014-03-12T03:37:51  <clarkb> its basically zuul status in the change for that change right?
+2014-03-12T03:37:51  <superbee> its basically zuul status in the change for that change right?
 2014-03-12T03:37:58  <jhesketh__> yep
-2014-03-12T03:38:11  <clarkb> then yes I think we should put this on review-dev asap :)
+2014-03-12T03:38:11  <superbee> then yes I think we should put this on review-dev asap :)
 2014-03-12T03:38:18  <jhesketh__> woo :-)
-2014-03-12T03:38:47  <clarkb> I am currently taste testing a couple IPAs though so will have to wait for tomorrow before I can help :)
+2014-03-12T03:38:47  <superbee> I am currently taste testing a couple IPAs though so will have to wait for tomorrow before I can help :)
 2014-03-12T03:39:06  <arosen-home> one change i'd like to make is to add the patch owner to that page by the id. I  find myself having to look up the  patch id and search the zuul page over and over when i only care about my patches :)
-2014-03-12T03:39:18  <jhesketh__> clarkb: mmm, nice
+2014-03-12T03:39:18  <jhesketh__> superbee: mmm, nice
 2014-03-12T03:39:22  <jhesketh__> enjoy! :-)
 2014-03-12T03:39:51  <jhesketh__> arosen-home: you mean to the zuul status page?
 2014-03-12T03:40:05  <arosen-home> jhesketh_ i mean here: http://status.openstack.org/zuul/
 2014-03-12T03:40:42  *** oda-g_ has joined #openstack-infra
-2014-03-12T03:41:12  <jhesketh__> arosen-home: sure. I would want to get clarkb's and jeblair's opinion on that. I'd be cautious of not adding too much clutter. The change I proposed embeds those boxes on the associated patches. So to see the status you'd just have to open your patches.
+2014-03-12T03:41:12  <jhesketh__> arosen-home: sure. I would want to get superbee's and jeblair's opinion on that. I'd be cautious of not adding too much clutter. The change I proposed embeds those boxes on the associated patches. So to see the status you'd just have to open your patches.
 2014-03-12T03:41:16  <jhesketh__> (in gerrit that is)
 2014-03-12T03:42:28  <mattoliverau> jhesketh__: awesome idea :)
 2014-03-12T03:43:11  *** sarob__ has joined #openstack-infra
@@ -644,7 +644,7 @@
 2014-03-12T03:54:45  *** dstanek has quit IRC
 2014-03-12T03:56:08  *** sileht has quit IRC
 2014-03-12T03:56:17  *** jnoller_ has joined #openstack-infra
-2014-03-12T03:56:38  <clarkb> dhellmann: the oslo.test chagnes lgtm
+2014-03-12T03:56:38  <superbee> dhellmann: the oslo.test chagnes lgtm
 2014-03-12T03:56:39  *** jnoller has quit IRC
 2014-03-12T03:57:45  *** Daisy_ has quit IRC
 2014-03-12T03:58:07  *** sileht has joined #openstack-infra
@@ -658,10 +658,10 @@
 2014-03-12T04:02:55  *** dstanek has joined #openstack-infra
 2014-03-12T04:05:13  *** gokrokve has joined #openstack-infra
 2014-03-12T04:05:24  *** markmcclain has quit IRC
-2014-03-12T04:05:38  <clarkb> dstufft: that half does something pbr did do and half makes it safer to install pbr yeah?
-2014-03-12T04:05:44  <clarkb> slowly one day pbr will die and I will be happy
+2014-03-12T04:05:38  <superbee> dstufft: that half does something pbr did do and half makes it safer to install pbr yeah?
+2014-03-12T04:05:44  <superbee> slowly one day pbr will die and I will be happy
 2014-03-12T04:06:33  *** thuc has joined #openstack-infra
-2014-03-12T04:06:59  <dstufft> clarkb: well even if you ``pip install foo``, if foo uses setup_requires in it's setup.py, then setuptools will be used to download and install wahtever is in the setup_requires
+2014-03-12T04:06:59  <dstufft> superbee: well even if you ``pip install foo``, if foo uses setup_requires in it's setup.py, then setuptools will be used to download and install wahtever is in the setup_requires
 2014-03-12T04:07:07  <dstufft> my PoC uses pip to do that instead
 2014-03-12T04:07:15  *** thuc_ has joined #openstack-infra
 2014-03-12T04:07:18  <dstufft> so that if you're using pip, setuptools should never touch the network
@@ -669,13 +669,13 @@
 2014-03-12T04:08:06  <dstufft> I'm monkeypatching distutils (which will then be monkeypatched by setuptools) inside of a python -c "" which reads the setup.py file and evals it
 2014-03-12T04:08:27  <dstufft> https://github.com/dstufft/pip/compare/pypa:develop...dstufft:eldritch-horror
 2014-03-12T04:08:30  *** sarob has quit IRC
-2014-03-12T04:08:48  <clarkb> wow
-2014-03-12T04:08:53  <clarkb> appropriate branch name
+2014-03-12T04:08:48  <superbee> wow
+2014-03-12T04:08:53  <superbee> appropriate branch name
 2014-03-12T04:09:00  *** sarob has joined #openstack-infra
 2014-03-12T04:10:16  <dstufft> mostly this means there won't be a second place to make settings for setup_requires
 2014-03-12T04:10:49  *** thuc has quit IRC
-2014-03-12T04:12:37  <clarkb> mikal: I want you to know that if someone were to read your twitter stuff they would probably think you run an ISP
-2014-03-12T04:12:44  <clarkb> mikal: I am sure you would run a great isp
+2014-03-12T04:12:37  <superbee> mikal: I want you to know that if someone were to read your twitter stuff they would probably think you run an ISP
+2014-03-12T04:12:44  <superbee> mikal: I am sure you would run a great isp
 2014-03-12T04:13:19  *** sarob has quit IRC
 2014-03-12T04:15:26  *** wchrisj has quit IRC
 2014-03-12T04:16:36  *** jepoy_ has joined #openstack-infra
@@ -722,7 +722,7 @@
 2014-03-12T04:56:51  *** jepoy has quit IRC
 2014-03-12T04:57:52  *** thuc_ has quit IRC
 2014-03-12T04:58:25  *** thuc has joined #openstack-infra
-2014-03-12T04:59:16  <mikal> clarkb: no, just filled with rage at the govt
+2014-03-12T04:59:16  <mikal> superbee: no, just filled with rage at the govt
 2014-03-12T05:00:13  *** sarob has joined #openstack-infra
 2014-03-12T05:00:52  *** jnoller has quit IRC
 2014-03-12T05:01:10  *** xchu_ has joined #openstack-infra
@@ -753,12 +753,12 @@
 2014-03-12T05:15:07  <mordred> StevenK: I'm pretty sure that "Testrepository Contributors" don't have any copyright in the file
 2014-03-12T05:15:41  <StevenK> mordred: Well, your PR makes you a contributor, so ... :-)
 2014-03-12T05:16:31  <mordred> ah. well. now I get to decide if I'm going to disagree with this read on how the Berne Convention works - or just say screw it and go along
-2014-03-12T05:17:08  <clarkb> mordred: honesly that file is so small  you could probably argue it isn't copyrightable :P
-2014-03-12T05:17:17  <mordred> clarkb: that's the better argument, tbh
+2014-03-12T05:17:08  <superbee> mordred: honesly that file is so small  you could probably argue it isn't copyrightable :P
+2014-03-12T05:17:17  <mordred> superbee: that's the better argument, tbh
 2014-03-12T05:17:39  <StevenK> mordred: It's up to lifeless. Not sure if I even have a valid opinion, since I can't recall if I have any code in testr
 2014-03-12T05:18:10  <mordred> to me - Copyright (c) 2009-2013 Testrepository Contributors implies that "Testrepository Contributors" have copyright over this particular work, which, if it is copyrightable in the first place, is invalid
 2014-03-12T05:18:34  <mordred> as neither I nor HP have granted any copyright to any of the other contributors
-2014-03-12T05:18:43  <mordred> but tbh - clarkb's opinion makes this much easier
+2014-03-12T05:18:43  <mordred> but tbh - superbee's opinion makes this much easier
 2014-03-12T05:20:26  *** markwash has joined #openstack-infra
 2014-03-12T05:21:14  <mordred> StevenK: fixed
 2014-03-12T05:23:27  <mordred> StevenK, lifeless: actually - the history in that branch was silly - re-submitted https://github.com/testing-cabal/testrepository/pull/2
@@ -852,17 +852,17 @@
 2014-03-12T05:55:51  <lifeless> 5 commits after 0.0.18
 2014-03-12T05:56:38  <lifeless> mordred: how do I get alpha version strings out ?
 2014-03-12T05:57:02  <lifeless> mordred: 0.0.18 is now signed
-2014-03-12T05:57:05  <clarkb> lifeless: you have to tag alphas iirc
+2014-03-12T05:57:05  <superbee> lifeless: you have to tag alphas iirc
 2014-03-12T05:57:09  *** zhiwei has quit IRC
 2014-03-12T06:00:30  *** CaptTofu has joined #openstack-infra
 2014-03-12T06:00:50  <jhesketh__> is anybody else having a very slow response time from gerrit queries? (ie via the commandline)
 2014-03-12T06:00:59  <jhesketh__> or are any root/core infra's around to help me debug?
-2014-03-12T06:01:20  <clarkb> jhesketh__: gerrit ls-projects is responsive
-2014-03-12T06:02:05  <clarkb> http://cacti.openstack.org/cacti/graph.php?action=view&local_graph_id=25&rra_id=all there si a bit of iowait there
+2014-03-12T06:01:20  <superbee> jhesketh__: gerrit ls-projects is responsive
+2014-03-12T06:02:05  <superbee> http://cacti.openstack.org/cacti/graph.php?action=view&local_graph_id=25&rra_id=all there si a bit of iowait there
 2014-03-12T06:02:06  <jhesketh__> okay, so I can query successfully from my local machine, but it seems slow
-2014-03-12T06:02:09  <clarkb> wonder if that is backups
-2014-03-12T06:02:19  <jhesketh__> clarkb: more to the point though our zuul is failing to get a response altogether
-2014-03-12T06:02:22  * clarkb is about to go to bed and doesn't trust himself to debug
+2014-03-12T06:02:09  <superbee> wonder if that is backups
+2014-03-12T06:02:19  <jhesketh__> superbee: more to the point though our zuul is failing to get a response altogether
+2014-03-12T06:02:22  * superbee is about to go to bed and doesn't trust himself to debug
 2014-03-12T06:02:22  <jhesketh__> right, possibly
 2014-03-12T06:02:27  <jhesketh__> that's okay
 2014-03-12T06:11:15  *** sarob has joined #openstack-infra
@@ -888,7 +888,7 @@
 2014-03-12T06:51:10  <lifeless> yeah, I'm going to need to patch pbr. Tomorrow. mordred :) - pbr isn't compatible with it's own semver doc :>
 2014-03-12T06:52:10  *** saju_m has joined #openstack-infra
 2014-03-12T07:00:12  *** rpodolyaka has quit IRC
-2014-03-12T07:05:05  <SergeyLukjanov> foobio, clarkb, mordred, jeblair, are you sleeping folks?
+2014-03-12T07:05:05  <SergeyLukjanov> foobio, superbee, mordred, jeblair, are you sleeping folks?
 2014-03-12T07:05:17  <SergeyLukjanov> we need a force push for savanna to revert 0.9 sqla
 2014-03-12T07:08:37  *** pblaho has joined #openstack-infra
 2014-03-12T07:10:39  *** ildikov_ has joined #openstack-infra
@@ -1551,7 +1551,7 @@
 2014-03-12T15:08:31  <sdague> but lacking that, that list is basically a "must package" list for distributors
 2014-03-12T15:08:47  <sdague> so we don't want to add things not actually used
 2014-03-12T15:09:06  <zns> sdague: OK. I can approach it from that end, then.
-2014-03-12T15:09:23  <ArxCruz> clarkb: I'm getting https://git.openstack.org/openstack/savanna-dashboard/' not found
+2014-03-12T15:09:23  <ArxCruz> superbee: I'm getting https://git.openstack.org/openstack/savanna-dashboard/' not found
 2014-03-12T15:09:46  <foobio> ArxCruz: http://lists.openstack.org/pipermail/openstack-dev/2014-March/029770.html
 2014-03-12T15:10:07  *** pcrews has joined #openstack-infra
 2014-03-12T15:10:27  <ArxCruz> foobio: thanks! I need to pay more attention on mail lists
@@ -1635,7 +1635,7 @@
 2014-03-12T15:47:22  *** esker has quit IRC
 2014-03-12T15:48:00  <malini> if any other core reviewers need good karma, here is a one line change https://review.openstack.org/#/c/78392/ !!
 2014-03-12T15:50:27  *** johnthetubaguy1 has joined #openstack-infra
-2014-03-12T15:50:31  <jeblair> rcarrillocruz, clarkb: i left my suggetion in https://bugs.launchpad.net/openstack-ci/+bug/1235335 for the record, but i don't think trying to implement that is low-hanging-fruit.
+2014-03-12T15:50:31  <jeblair> rcarrillocruz, superbee: i left my suggetion in https://bugs.launchpad.net/openstack-ci/+bug/1235335 for the record, but i don't think trying to implement that is low-hanging-fruit.
 2014-03-12T15:51:59  <rcarrillocruz> cool, thx sir, i'll try it and depending on how hard it gets i'll go forward or ditch
 2014-03-12T15:52:24  *** yamahata has quit IRC
 2014-03-12T15:53:08  *** johnthetubaguy has quit IRC
@@ -1738,7 +1738,7 @@
 2014-03-12T16:27:44  <sdague> so it's more limitted pain
 2014-03-12T16:27:50  *** wenlock has quit IRC
 2014-03-12T16:28:06  <sdague> jeblair: this job would not have passed, agreed
-2014-03-12T16:28:28  <SergeyLukjanov> foobio, jeblair, clarkb, could you please take a look on gerrit mirroring? https://git.openstack.org/cgit/openstack/sahara is empty...
+2014-03-12T16:28:28  <SergeyLukjanov> foobio, jeblair, superbee, could you please take a look on gerrit mirroring? https://git.openstack.org/cgit/openstack/sahara is empty...
 2014-03-12T16:28:42  <mgagne> SergeyLukjanov: showing fine to me here
 2014-03-12T16:28:43  <jeblair> SergeyLukjanov: i will trigger gerrit replication
 2014-03-12T16:28:59  <jeblair> SergeyLukjanov: you might want to check each of "git01" .. "git05" to narrow down the problem
@@ -1772,7 +1772,7 @@
 2014-03-12T16:36:39  *** Ryan_Lane has joined #openstack-infra
 2014-03-12T16:37:03  *** Ryan_Lane1 has joined #openstack-infra
 2014-03-12T16:39:24  <foobio> looks like it should all be replicated and up to date now?
-2014-03-12T16:40:25  <pleia2> clarkb: just had one comment re: 79814 (not actually a blocker, but might consider it)
+2014-03-12T16:40:25  <pleia2> superbee: just had one comment re: 79814 (not actually a blocker, but might consider it)
 2014-03-12T16:41:06  *** bhuvan has joined #openstack-infra
 2014-03-12T16:41:06  *** bhuvan_ has joined #openstack-infra
 2014-03-12T16:41:53  *** khyati has joined #openstack-infra
@@ -1786,17 +1786,17 @@
 2014-03-12T16:51:09  *** rcarrillocruz1 has joined #openstack-infra
 2014-03-12T16:51:20  *** SumitNaiksatam has joined #openstack-infra
 2014-03-12T16:51:42  <openstackgerrit> Sergey Lukjanov proposed a change to openstack/requirements: Rename Savanna to Sahara  https://review.openstack.org/79994
-2014-03-12T16:52:21  <SergeyLukjanov> foobio, clarkb, jeblair, sdague, folks, could you please fast approve https://review.openstack.org/79994 to make sahara jobs running using pypi.o.o
+2014-03-12T16:52:21  <SergeyLukjanov> foobio, superbee, jeblair, sdague, folks, could you please fast approve https://review.openstack.org/79994 to make sahara jobs running using pypi.o.o
 2014-03-12T16:52:27  *** thuc has joined #openstack-infra
 2014-03-12T16:53:01  *** lcostantino has joined #openstack-infra
 2014-03-12T16:53:19  *** rcarrillocruz has quit IRC
 2014-03-12T16:53:41  <foobio> SergeyLukjanov: approved
 2014-03-12T16:53:44  *** thuc_ has joined #openstack-infra
 2014-03-12T16:53:50  <SergeyLukjanov> foobio, thank you!
-2014-03-12T16:54:12  <clarkb> morning
-2014-03-12T16:54:19  <SergeyLukjanov> clarkb, good morning
+2014-03-12T16:54:12  <superbee> morning
+2014-03-12T16:54:19  <SergeyLukjanov> superbee, good morning
 2014-03-12T16:54:22  <foobio> SergeyLukjanov: i'm just sorry i didn't think to suggest a patch to that file too
-2014-03-12T16:54:24  <clarkb> pleia2: lookig thanks
+2014-03-12T16:54:24  <superbee> pleia2: lookig thanks
 2014-03-12T16:54:38  *** e0ne has quit IRC
 2014-03-12T16:54:50  <SergeyLukjanov> foobio, my bad, absolutely forget about the dep on it for choosing mirrors
 2014-03-12T16:55:25  <foobio> SergeyLukjanov: i think it would probably have also broken requirements update proposals too
@@ -1809,15 +1809,15 @@
 2014-03-12T17:03:33  *** cody-somerville_ has quit IRC
 2014-03-12T17:03:33  *** cody-somerville_ has joined #openstack-infra
 2014-03-12T17:03:41  <openstackgerrit> Clark Boylan proposed a change to openstack-infra/config: Remove unneeded package sources from nodepool node  https://review.openstack.org/79814
-2014-03-12T17:03:49  <clarkb> pleia2: ^ I think that should do it
+2014-03-12T17:03:49  <superbee> pleia2: ^ I think that should do it
 2014-03-12T17:04:29  *** harlowja_away is now known as harlowja
 2014-03-12T17:05:29  <openstackgerrit> James E. Blair proposed a change to openstack-infra/statusbot: Sleep 1 second  https://review.openstack.org/79956
 2014-03-12T17:06:09  *** nati_ueno has joined #openstack-infra
 2014-03-12T17:07:25  <jeblair> oh wow, i just learned you can "yum install /path/to/binary/you/want"
 2014-03-12T17:07:41  <jeblair> and that will install the package that provides it
-2014-03-12T17:08:32  <clarkb> jeblair: and you don't even need to do a package list update first :)
+2014-03-12T17:08:32  <superbee> jeblair: and you don't even need to do a package list update first :)
 2014-03-12T17:08:34  <SergeyLukjanov> jeblair, oh, interesting
-2014-03-12T17:09:03  <SergeyLukjanov> clarkb, bah, fantastic
+2014-03-12T17:09:03  <SergeyLukjanov> superbee, bah, fantastic
 2014-03-12T17:09:13  *** afazekas has joined #openstack-infra
 2014-03-12T17:09:13  *** afazekas has quit IRC
 2014-03-12T17:09:13  <foobio> neat. better than using apt-file search
@@ -1827,30 +1827,30 @@
 2014-03-12T17:10:32  *** reed has joined #openstack-infra
 2014-03-12T17:11:08  <dstufft> jeblair: that is awesome
 2014-03-12T17:11:19  *** andreaf has joined #openstack-infra
-2014-03-12T17:12:20  <clarkb> dtroyer: Alex_Gaynor for the openstack sdks' ptl group who should be the initial member
+2014-03-12T17:12:20  <superbee> dtroyer: Alex_Gaynor for the openstack sdks' ptl group who should be the initial member
 2014-03-12T17:12:24  *** gokrokve has quit IRC
-2014-03-12T17:12:51  <foobio> clarkb: added a few more comments on 79814
-2014-03-12T17:13:01  <Alex_Gaynor> clarkb: Jesse Noller I suppose
+2014-03-12T17:12:51  <foobio> superbee: added a few more comments on 79814
+2014-03-12T17:13:01  <Alex_Gaynor> superbee: Jesse Noller I suppose
 2014-03-12T17:13:19  *** morganfainberg_Z is now known as morganfainberg
-2014-03-12T17:13:21  <clarkb> Alex_Gaynor: thanks
-2014-03-12T17:13:34  <Alex_Gaynor> clarkb: sure
+2014-03-12T17:13:21  <superbee> Alex_Gaynor: thanks
+2014-03-12T17:13:34  <Alex_Gaynor> superbee: sure
 2014-03-12T17:13:57  <foobio> dstufft: did you get my ping the other night that i put your keys on those sample servers where we're seeing discrepancies in pip behavior wrt https://github.com/pypa/pip/issues/1632
 2014-03-12T17:14:25  <dstufft> foobio: oh I missed it
 2014-03-12T17:14:38  <dstufft> and then forgot
 2014-03-12T17:14:39  <dstufft> :[
 2014-03-12T17:14:40  *** VijayTripathi has quit IRC
 2014-03-12T17:14:43  <dstufft> sorry!
-2014-03-12T17:14:45  <clarkb> foobio: responded. I can fix the comment but we actually need sudo there because distros
+2014-03-12T17:14:45  <superbee> foobio: responded. I can fix the comment but we actually need sudo there because distros
 2014-03-12T17:15:28  <Alex_Gaynor> dstufft: lol. Have fun debugging that
 2014-03-12T17:15:29  <foobio> dstufft: 'ssh jenkins@23.253.82.112' is where we're seeing it break (rackspace) and 'ssh jenkins@15.185.123.189' is where we're seeing it work normally (hpcloud)
-2014-03-12T17:15:49  <clarkb> foobio: can you take a look before I push a new patchset?
-2014-03-12T17:15:56  <foobio> clarkb: looking
+2014-03-12T17:15:49  <superbee> foobio: can you take a look before I push a new patchset?
+2014-03-12T17:15:56  <foobio> superbee: looking
 2014-03-12T17:16:39  *** esker has joined #openstack-infra
-2014-03-12T17:16:41  <zaro> clarkb: i tried verifying this on my personal VM but i don't know how to setup a reverse proxy.  https://review.openstack.org/#/c/60893/
+2014-03-12T17:16:41  <zaro> superbee: i tried verifying this on my personal VM but i don't know how to setup a reverse proxy.  https://review.openstack.org/#/c/60893/
 2014-03-12T17:16:45  *** saju_m has joined #openstack-infra
-2014-03-12T17:17:02  <clarkb> zaro: just install gerrit with that puppet change
+2014-03-12T17:17:02  <superbee> zaro: just install gerrit with that puppet change
 2014-03-12T17:17:07  <dstufft> foobio: Ok, i'm fixing my devenv since homebrew and apple decided to conspire to destroy my productivity today
-2014-03-12T17:17:09  <clarkb> zaro: that will setup apache and everything
+2014-03-12T17:17:09  <superbee> zaro: that will setup apache and everything
 2014-03-12T17:17:11  <dstufft> I'll look at it after that
 2014-03-12T17:17:35  <foobio> dstufft: appreciated--and good luck with the fruit
 2014-03-12T17:18:14  <dstufft> hmm
@@ -1858,23 +1858,23 @@
 2014-03-12T17:18:44  <dstufft> I could totally use my eldritch-horror branch on pip and make it so pip just assumes setuptools is a setup_requires and installs it in a temp location :V
 2014-03-12T17:18:48  *** kmartin has quit IRC
 2014-03-12T17:18:54  <dstufft> then this shouldn't be possible to happen
-2014-03-12T17:19:19  <foobio> clarkb: lgtm
-2014-03-12T17:19:44  <zaro> clarkb: i don't think i even have apache installed.  don't even have the /etc/apache folder.
+2014-03-12T17:19:19  <foobio> superbee: lgtm
+2014-03-12T17:19:44  <zaro> superbee: i don't think i even have apache installed.  don't even have the /etc/apache folder.
 2014-03-12T17:19:53  <foobio> dstufft: i wanted to compliment you on your choice of branch naming there, if nothing else. very nice ;)
-2014-03-12T17:19:58  <clarkb> foobio: thanks
+2014-03-12T17:19:58  <superbee> foobio: thanks
 2014-03-12T17:20:15  <dstufft> foobio:  the first revision was worse than the current revision :V
-2014-03-12T17:20:25  <zaro> clarkb: is it just a straight forward install of apache with those changes?
+2014-03-12T17:20:25  <zaro> superbee: is it just a straight forward install of apache with those changes?
 2014-03-12T17:20:30  <dstufft> the current one is not entirely super horrible
 2014-03-12T17:20:49  <foobio> dstufft: i assume while it's still named eldritch-horror, i should expect to be driven mad simply by a mere glimpse of the source code there
-2014-03-12T17:21:03  <clarkb> zaro: mostly. but you can have puppet do it all for you
+2014-03-12T17:21:03  <superbee> zaro: mostly. but you can have puppet do it all for you
 2014-03-12T17:21:17  *** afazekas has joined #openstack-infra
 2014-03-12T17:21:41  <dstufft> foobio: https://github.com/dstufft/pip/compare/pypa:develop...eldritch-horror monkeypatching via python -c "" is the best ever
-2014-03-12T17:22:52  <zaro> clarkb: i forgot how.  i'll be in tomorrow, just i'll just postpone until then.
+2014-03-12T17:22:52  <zaro> superbee: i forgot how.  i'll be in tomorrow, just i'll just postpone until then.
 2014-03-12T17:23:29  <foobio> dstufft: you know now that i've clicked, i'm going to live out the remainder of my days gibbering in a corner, mumbling incoherently about ancient computer gods from other dimensions
-2014-03-12T17:23:48  <zaro> clarkb: have you taken a look at jeblair comment on https://review.openstack.org/#/c/61321/
+2014-03-12T17:23:48  <zaro> superbee: have you taken a look at jeblair comment on https://review.openstack.org/#/c/61321/
 2014-03-12T17:24:05  <andreaf> sdague: ping
-2014-03-12T17:24:49  <clarkb> zaro: not yet, still digging out of the remains of bug day
-2014-03-12T17:24:57  * clarkb is going to fix release two more bugs
+2014-03-12T17:24:49  <superbee> zaro: not yet, still digging out of the remains of bug day
+2014-03-12T17:24:57  * superbee is going to fix release two more bugs
 2014-03-12T17:24:57  <foobio> dstufft: also always a fan of commit messages like "Make this less bad"
 2014-03-12T17:25:23  <dstufft> foobio: :3
 2014-03-12T17:25:52  <dstufft> foobio: it's cool though, it actually works (not options like --cert are passed through yet), no more setuptools touching the network with that branch
@@ -1882,16 +1882,16 @@
 2014-03-12T17:27:06  <foobio> says a lot right there about the fright level of monkey-patching there
 2014-03-12T17:27:21  <dstufft> a lot of pip could justifably be moved into that module
 2014-03-12T17:27:52  <openstackgerrit> A change was merged to openstack-infra/statusbot: Sleep 1 second  https://review.openstack.org/79956
-2014-03-12T17:28:38  <clarkb> jeblair: foobio SergeyLukjanov mordred I have two nodepool script changes that need an additional +2 and +A. I can babysit some image builds if I can get reviewers
-2014-03-12T17:29:13  <SergeyLukjanov> clarkb,  you get one
-2014-03-12T17:29:53  <foobio> clarkb: i think i already +2'd them both
+2014-03-12T17:28:38  <superbee> jeblair: foobio SergeyLukjanov mordred I have two nodepool script changes that need an additional +2 and +A. I can babysit some image builds if I can get reviewers
+2014-03-12T17:29:13  <SergeyLukjanov> superbee,  you get one
+2014-03-12T17:29:53  <foobio> superbee: i think i already +2'd them both
 2014-03-12T17:30:20  *** sarob has joined #openstack-infra
-2014-03-12T17:30:35  <clarkb> foobio: you did thanks
-2014-03-12T17:31:17  <clarkb> zaro: I think jeblair is right. We need to make sure that line 30 of https://review.openstack.org/#/c/61321/12/modules/openstack_project/templates/nodepool/nodepool-dev.yaml.erb runs a script that will install the correct key for jenkins-dev/nodepool-dev
+2014-03-12T17:30:35  <superbee> foobio: you did thanks
+2014-03-12T17:31:17  <superbee> zaro: I think jeblair is right. We need to make sure that line 30 of https://review.openstack.org/#/c/61321/12/modules/openstack_project/templates/nodepool/nodepool-dev.yaml.erb runs a script that will install the correct key for jenkins-dev/nodepool-dev
 2014-03-12T17:31:20  *** jcoufal has quit IRC
 2014-03-12T17:32:18  *** krotscheck has joined #openstack-infra
-2014-03-12T17:32:34  <jeblair> clarkb: aprvd
-2014-03-12T17:32:42  <clarkb> jeblair: awesome thank you
+2014-03-12T17:32:34  <jeblair> superbee: aprvd
+2014-03-12T17:32:42  <superbee> jeblair: awesome thank you
 2014-03-12T17:32:55  <openstackgerrit> A change was merged to openstack-infra/config: Remove unneeded package sources from nodepool node  https://review.openstack.org/79814
 2014-03-12T17:34:12  *** dprince has quit IRC
 2014-03-12T17:34:28  *** kmartin has joined #openstack-infra
@@ -1923,19 +1923,19 @@
 2014-03-12T17:54:06  <openstackgerrit> A change was merged to openstack-infra/storyboard: Rename migration revisions  https://review.openstack.org/79869
 2014-03-12T17:54:10  *** bhuvan_ has quit IRC
 2014-03-12T17:54:10  *** bhuvan has quit IRC
-2014-03-12T17:54:34  <clarkb> uh
+2014-03-12T17:54:34  <superbee> uh
 2014-03-12T17:54:47  *** hashar has quit IRC
-2014-03-12T17:54:52  <clarkb> so you may as well use migrate if you are going to do ^
+2014-03-12T17:54:52  <superbee> so you may as well use migrate if you are going to do ^
 2014-03-12T17:55:14  <openstackgerrit> A change was merged to openstack-infra/config: Add experimental job for Marconi  https://review.openstack.org/78392
-2014-03-12T17:55:33  <clarkb> iirc alembic uses proper uuid like ids because it can build arbitrary graphs
-2014-03-12T17:55:45  <clarkb> rather than doing the "human readable" thing that migrate does
+2014-03-12T17:55:33  <superbee> iirc alembic uses proper uuid like ids because it can build arbitrary graphs
+2014-03-12T17:55:45  <superbee> rather than doing the "human readable" thing that migrate does
 2014-03-12T17:56:01  *** rpodolyaka has joined #openstack-infra
 2014-03-12T17:57:24  *** rpodolyaka has quit IRC
 2014-03-12T17:57:27  *** reed has quit IRC
 2014-03-12T17:57:53  *** reed has joined #openstack-infra
 2014-03-12T17:57:54  *** rlandy_ has joined #openstack-infra
-2014-03-12T17:58:34  <foobio> clarkb: jeblair: mordred: you'll be amused to know that i'm getting eoferror (or sometimes connection reset) repeatedly retrying to update the devstack-precise image in rax-iad now ;)
-2014-03-12T17:58:53  <clarkb> foobio: ya I ran into that when sudo went sideways
+2014-03-12T17:58:34  <foobio> superbee: jeblair: mordred: you'll be amused to know that i'm getting eoferror (or sometimes connection reset) repeatedly retrying to update the devstack-precise image in rax-iad now ;)
+2014-03-12T17:58:53  <superbee> foobio: ya I ran into that when sudo went sideways
 2014-03-12T17:58:56  *** vkozhukalov has quit IRC
 2014-03-12T17:58:59  *** bhuvan_ has joined #openstack-infra
 2014-03-12T17:58:59  *** bhuvan has joined #openstack-infra
@@ -1944,81 +1944,81 @@
 2014-03-12T17:59:42  <jeblair> :/
 2014-03-12T17:59:58  *** bhuvan___ has quit IRC
 2014-03-12T17:59:58  *** bhuvan__ has quit IRC
-2014-03-12T18:00:02  <clarkb> foobio: I think we may have leaked nodes too. I meant to look at that toay
+2014-03-12T18:00:02  <superbee> foobio: I think we may have leaked nodes too. I meant to look at that toay
 2014-03-12T18:00:21  <foobio> i was actually about to do the same, and noticed that my iad image still wasn't updated
 2014-03-12T18:00:41  *** rlandy has quit IRC
 2014-03-12T18:01:01  *** rpodolyaka has joined #openstack-infra
-2014-03-12T18:01:11  <clarkb> there are a bunch of ~140 hour old ready nodes
+2014-03-12T18:01:11  <superbee> there are a bunch of ~140 hour old ready nodes
 2014-03-12T18:01:14  <openstackgerrit> A change was merged to openstack-infra/config: Limit non tripleo nodepool nodes to 8GB of RAM  https://review.openstack.org/78440
 2014-03-12T18:01:28  *** bhuvan___ has joined #openstack-infra
 2014-03-12T18:01:28  *** bhuvan__ has joined #openstack-infra
-2014-03-12T18:01:29  <foobio> clarkb: yeah, i'm looking at those. some in other states past 3 hours as well
+2014-03-12T18:01:29  <foobio> superbee: yeah, i'm looking at those. some in other states past 3 hours as well
 2014-03-12T18:01:44  <foobio> i'll give 'em all a quick death
-2014-03-12T18:02:12  <clarkb> nodepool list | grep ready | sort -t'|' -k11 -n
+2014-03-12T18:02:12  <superbee> nodepool list | grep ready | sort -t'|' -k11 -n
 2014-03-12T18:03:49  <foobio> the 140-hour-old ones are dsvm-precise-krnl
 2014-03-12T18:03:50  *** bhuvan_ has quit IRC
 2014-03-12T18:03:50  *** bhuvan has quit IRC
 2014-03-12T18:03:56  <foobio> more of those than i would have expected
 2014-03-12T18:05:59  <foobio> i omitted any in a hold state and am deleting any others which are >3 hours in any given state
 2014-03-12T18:06:03  *** Sukhdev has quit IRC
-2014-03-12T18:06:04  <clarkb> woot ram change merged. I am going to spin up a new hpcloud region b devstack-precise-check image
-2014-03-12T18:06:13  <clarkb> foobio: that doesn't interfere with what you are doing does it?
-2014-03-12T18:06:21  <foobio> clarkb: not in the least
+2014-03-12T18:06:04  <superbee> woot ram change merged. I am going to spin up a new hpcloud region b devstack-precise-check image
+2014-03-12T18:06:13  <superbee> foobio: that doesn't interfere with what you are doing does it?
+2014-03-12T18:06:21  <foobio> superbee: not in the least
 2014-03-12T18:07:38  *** derekh has quit IRC
 2014-03-12T18:09:26  *** jgallard has quit IRC
 2014-03-12T18:09:31  <SergeyLukjanov> folks, I've just find that we need to have etc/sahara/sahara.conf in repo for d-g, will symlink work well or I need to copy-paste conf sample?
 2014-03-12T18:09:31  <SergeyLukjanov> https://review.openstack.org/80038
-2014-03-12T18:10:33  <clarkb> SergeyLukjanov: I think copy paste then you can delete the old one after a release or two, but then you have to double account which sucks
-2014-03-12T18:10:46  <clarkb> SergeyLukjanov: also symlinks aren't a thing on windows. not sure if that matteers
+2014-03-12T18:10:33  <superbee> SergeyLukjanov: I think copy paste then you can delete the old one after a release or two, but then you have to double account which sucks
+2014-03-12T18:10:46  <superbee> SergeyLukjanov: also symlinks aren't a thing on windows. not sure if that matteers
 2014-03-12T18:11:08  <sdague> given how pegged we are on dsvm nodes, thoughts on merging this - https://review.openstack.org/#/c/78687/
-2014-03-12T18:11:14  <foobio> clarkb: windows has "shortcuts" instead (don't ask why i know this)
+2014-03-12T18:11:14  <foobio> superbee: windows has "shortcuts" instead (don't ask why i know this)
 2014-03-12T18:11:20  <sdague> which drops jobs we don't want
 2014-03-12T18:11:33  <sdague> jogo: can you rebase that?
-2014-03-12T18:11:39  <SergeyLukjanov> clarkb, we're planning to not keep backward compat for such stuff, so, I'll add temp copy-paste
-2014-03-12T18:11:43  <SergeyLukjanov> clarkb, thanks
+2014-03-12T18:11:39  <SergeyLukjanov> superbee, we're planning to not keep backward compat for such stuff, so, I'll add temp copy-paste
+2014-03-12T18:11:43  <SergeyLukjanov> superbee, thanks
 2014-03-12T18:11:50  *** zns has quit IRC
-2014-03-12T18:12:28  <SergeyLukjanov> clarkb, we just need it to merged updated devstack integration and then rename all internals
-2014-03-12T18:12:38  <clarkb> SergeyLukjanov: wfm
-2014-03-12T18:13:53  <SergeyLukjanov> clarkb, could I ask you to forse push it? https://review.openstack.org/80038
-2014-03-12T18:14:23  <clarkb> SergeyLukjanov: is it not possible to run it through the gate normally? (would be good to see it actually fix the problem)
-2014-03-12T18:14:52  <SergeyLukjanov> clarkb, devstack integration update isn't merged yet :(
-2014-03-12T18:15:04  <SergeyLukjanov> clarkb, here is an issue - http://logs.openstack.org/53/79353/3/check/check-tempest-dsvm-sahara-full-nv/f4580cf/logs/devstacklog.txt.gz#_2014-03-12_17_27_25_560
+2014-03-12T18:12:28  <SergeyLukjanov> superbee, we just need it to merged updated devstack integration and then rename all internals
+2014-03-12T18:12:38  <superbee> SergeyLukjanov: wfm
+2014-03-12T18:13:53  <SergeyLukjanov> superbee, could I ask you to forse push it? https://review.openstack.org/80038
+2014-03-12T18:14:23  <superbee> SergeyLukjanov: is it not possible to run it through the gate normally? (would be good to see it actually fix the problem)
+2014-03-12T18:14:52  <SergeyLukjanov> superbee, devstack integration update isn't merged yet :(
+2014-03-12T18:15:04  <SergeyLukjanov> superbee, here is an issue - http://logs.openstack.org/53/79353/3/check/check-tempest-dsvm-sahara-full-nv/f4580cf/logs/devstacklog.txt.gz#_2014-03-12_17_27_25_560
 2014-03-12T18:15:42  *** bhuvan has joined #openstack-infra
 2014-03-12T18:15:42  *** bhuvan_ has joined #openstack-infra
-2014-03-12T18:15:56  <clarkb> SergeyLukjanov: right but won't 80038 fix ^ without needing a force push?
-2014-03-12T18:16:14  <clarkb> jgriffith: you got change 80000 I am jealous
+2014-03-12T18:15:56  <superbee> SergeyLukjanov: right but won't 80038 fix ^ without needing a force push?
+2014-03-12T18:16:14  <superbee> jgriffith: you got change 80000 I am jealous
 2014-03-12T18:16:18  <openstackgerrit> Nikola Dipanov proposed a change to openstack-dev/hacking: Add an import whitelist helper factory  https://review.openstack.org/80018
 2014-03-12T18:16:21  *** wenlock has quit IRC
 2014-03-12T18:16:24  *** bhuvan___ has quit IRC
 2014-03-12T18:16:24  *** bhuvan__ has quit IRC
 2014-03-12T18:16:29  <jeblair> sdague: lgtm
 2014-03-12T18:16:34  <jeblair> SergeyLukjanov: where's the devstack change?
-2014-03-12T18:16:53  <SergeyLukjanov> clarkb, I can't merge it to sahara because d-g job is voting
+2014-03-12T18:16:53  <SergeyLukjanov> superbee, I can't merge it to sahara because d-g job is voting
 2014-03-12T18:16:54  <SergeyLukjanov> https://review.openstack.org/#/c/79353/
 2014-03-12T18:16:57  <SergeyLukjanov> jeblair, ^^
-2014-03-12T18:17:25  <clarkb> oh I see 79353 depends on 80038 and vice versa
+2014-03-12T18:17:25  <superbee> oh I see 79353 depends on 80038 and vice versa
 2014-03-12T18:17:26  <openstackgerrit> Nikola Dipanov proposed a change to openstack-dev/hacking: Add an import whitelist helper factory  https://review.openstack.org/80018
 2014-03-12T18:17:28  *** bhuvan_ has quit IRC
 2014-03-12T18:17:28  *** bhuvan has quit IRC
-2014-03-12T18:17:42  <clarkb> I think I am ok force pushing the sahara change since it is just copy pasta. jeblair foobio mordred any dissent?
+2014-03-12T18:17:42  <superbee> I think I am ok force pushing the sahara change since it is just copy pasta. jeblair foobio mordred any dissent?
 2014-03-12T18:17:46  <jeblair> https://review.openstack.org/#/c/79353/ depends on 80038?
-2014-03-12T18:18:02  <SergeyLukjanov> clarkb, yeah, we've added all needed aliases except conf file I hope
-2014-03-12T18:18:16  <clarkb> jeblair: that is my understanding since it is trying to setup sahara etc files not savanna etc files
+2014-03-12T18:18:02  <SergeyLukjanov> superbee, yeah, we've added all needed aliases except conf file I hope
+2014-03-12T18:18:16  <superbee> jeblair: that is my understanding since it is trying to setup sahara etc files not savanna etc files
 2014-03-12T18:18:28  *** bhuvan has joined #openstack-infra
 2014-03-12T18:18:28  *** bhuvan_ has joined #openstack-infra
-2014-03-12T18:18:40  <clarkb> jeblair: we could probably split it out into a couple changes that use savanna etc fiels with sahara then sahara etc files with sahara
+2014-03-12T18:18:40  <superbee> jeblair: we could probably split it out into a couple changes that use savanna etc fiels with sahara then sahara etc files with sahara
 2014-03-12T18:18:41  <jeblair> is 79353 overreaching then?
-2014-03-12T18:18:47  <jeblair> clarkb: yeah
-2014-03-12T18:18:48  <clarkb> jeblair: ya it may be ^
-2014-03-12T18:19:02  <SergeyLukjanov> clarkb, that's an option too
-2014-03-12T18:19:05  <foobio> clarkb: seems fine, though note that this morning before we started the rename SergeyLukjanov had already discovered that the devstack fix to start properly overriding from global-requirements.txt may have put savanna in a broken state, so until it's determined what is broken there there may be more forced merges to come
-2014-03-12T18:19:10  <clarkb> SergeyLukjanov: I think we should go that route then
-2014-03-12T18:19:19  <clarkb> SergeyLukjanov: its more CD friendly and all that
-2014-03-12T18:19:32  <SergeyLukjanov> clarkb, ok, it's fair
+2014-03-12T18:18:47  <jeblair> superbee: yeah
+2014-03-12T18:18:48  <superbee> jeblair: ya it may be ^
+2014-03-12T18:19:02  <SergeyLukjanov> superbee, that's an option too
+2014-03-12T18:19:05  <foobio> superbee: seems fine, though note that this morning before we started the rename SergeyLukjanov had already discovered that the devstack fix to start properly overriding from global-requirements.txt may have put savanna in a broken state, so until it's determined what is broken there there may be more forced merges to come
+2014-03-12T18:19:10  <superbee> SergeyLukjanov: I think we should go that route then
+2014-03-12T18:19:19  <superbee> SergeyLukjanov: its more CD friendly and all that
+2014-03-12T18:19:32  <SergeyLukjanov> superbee, ok, it's fair
 2014-03-12T18:19:58  <SergeyLukjanov> heh, looks like +10h of looking on zuul status page ;)
 2014-03-12T18:20:41  *** sarob has joined #openstack-infra
 2014-03-12T18:20:56  *** rpodolyaka has quit IRC
-2014-03-12T18:21:58  <clarkb> hpcloud region b image update is running now
+2014-03-12T18:21:58  <superbee> hpcloud region b image update is running now
 2014-03-12T18:22:04  <jeblair> SergeyLukjanov: ?
 2014-03-12T18:22:38  <openstackgerrit> A change was merged to openstack-infra/jenkins-job-builder: Minor fixes in the trigger documentation  https://review.openstack.org/79854
 2014-03-12T18:22:43  <SergeyLukjanov> jeblair, you're about "+10h of looking on zuul status page ;)"?
@@ -2044,9 +2044,9 @@
 2014-03-12T18:32:42  *** bhuvan has quit IRC
 2014-03-12T18:33:03  <jeblair> SergeyLukjanov: lgtm; sdague ^
 2014-03-12T18:33:40  <reed> where can I find a list of all the web properties managed by the CI team?
-2014-03-12T18:34:01  <clarkb> reed: openstack-infra/config/manifests/site.pp is probably the closest thing
-2014-03-12T18:34:21  <reed> clarkb, wonderful, that's what I was looking for
-2014-03-12T18:34:37  <jeblair> clarkb: a possibly incomplete list is in our docs (it omits some smaller things): http://ci.openstack.org/
+2014-03-12T18:34:01  <superbee> reed: openstack-infra/config/manifests/site.pp is probably the closest thing
+2014-03-12T18:34:21  <reed> superbee, wonderful, that's what I was looking for
+2014-03-12T18:34:37  <jeblair> superbee: a possibly incomplete list is in our docs (it omits some smaller things): http://ci.openstack.org/
 2014-03-12T18:34:40  <jeblair> reed: ^
 2014-03-12T18:35:01  *** homeless_ has joined #openstack-infra
 2014-03-12T18:35:17  <openstackgerrit> James E. Blair proposed a change to openstack-infra/devstack-gate: WIP: test caching-forwarding nameserver  https://review.openstack.org/80045
@@ -2055,10 +2055,10 @@
 2014-03-12T18:36:16  *** sarob has joined #openstack-infra
 2014-03-12T18:36:23  <SergeyLukjanov> jeblair, thx
 2014-03-12T18:36:54  <SergeyLukjanov> russellb, re https://review.openstack.org/#/c/79900/3
-2014-03-12T18:37:13  <clarkb> http://paste.openstack.org/show/73279/ huh
-2014-03-12T18:37:29  <clarkb> I am going to retry the image build to see if this is consistent. May just be that puppet forge said go away
+2014-03-12T18:37:13  <superbee> http://paste.openstack.org/show/73279/ huh
+2014-03-12T18:37:29  <superbee> I am going to retry the image build to see if this is consistent. May just be that puppet forge said go away
 2014-03-12T18:37:33  <SergeyLukjanov> russellb, you should add section about nova-docker to modules/openstack_project/files/jenkins_job_builder/config/porjects.yaml to generate jobs in jenkins
-2014-03-12T18:38:02  <jeblair> clarkb: yeah
+2014-03-12T18:38:02  <jeblair> superbee: yeah
 2014-03-12T18:38:23  *** wenlock_demo has joined #openstack-infra
 2014-03-12T18:38:42  <jogo> mtreinish: that was my thinking
 2014-03-12T18:39:12  *** sweston has quit IRC
@@ -2075,7 +2075,7 @@
 2014-03-12T18:40:56  *** lcostantino has quit IRC
 2014-03-12T18:41:17  *** sdake has quit IRC
 2014-03-12T18:41:31  <jeblair> i mean, i do think it's extremely useful for people tending e-r, _especially_ the unclassified announcements
-2014-03-12T18:41:32  <clarkb> well someone did try, but then it got more complicated than we realized
+2014-03-12T18:41:32  <superbee> well someone did try, but then it got more complicated than we realized
 2014-03-12T18:41:47  <jamespage> dims_, was really hoping to have libvirt 1.2.2 + patch into the icehouse CA today
 2014-03-12T18:41:49  <mtreinish> jeblair: well this is a bit more specific it will only announce the failures with a known bug and only if the bug matches the projects listed in the yaml for the channel
 2014-03-12T18:41:56  <jamespage> however debugging a unit test failure in it right now
@@ -2090,31 +2090,31 @@
 2014-03-12T18:43:07  *** rlandy_ has quit IRC
 2014-03-12T18:43:18  <jogo> jeblair: my thinking was others will but push this out on phases
 2014-03-12T18:43:29  <foobio> actually it looks fine
-2014-03-12T18:43:29  <clarkb> foobio: I think we should make it read only and let it die
+2014-03-12T18:43:29  <superbee> foobio: I think we should make it read only and let it die
 2014-03-12T18:43:32  <jogo> and I as nova want it
-2014-03-12T18:43:36  <clarkb> foobio: I think drizzle is just slow
+2014-03-12T18:43:36  <superbee> foobio: I think drizzle is just slow
 2014-03-12T18:43:37  *** krotscheck has quit IRC
-2014-03-12T18:43:42  <clarkb> because old drizzle and so on
+2014-03-12T18:43:42  <superbee> because old drizzle and so on
 2014-03-12T18:44:10  <mtreinish> jogo: well I was thinking the first patch it might make sense to include neutron and cinder too
 2014-03-12T18:44:16  <jeblair> mtreinish: i could see that being useful then; though that makes me think we might not want it in infra -- we have a lot of unfixable bugs, so much of what it would say to us is unactionable
 2014-03-12T18:44:16  <jogo> mtreinish: your call
 2014-03-12T18:44:30  *** sdake_ has joined #openstack-infra
 2014-03-12T18:44:32  <jeblair> mtreinish: (example: ubuntu mirror is wonky)
-2014-03-12T18:44:38  <clarkb> there are so many paste services out that that all support basically the same functionality I am not sure we need our own. The only reason to keep it would be to avoid a paste provider going away causing everyone to not have paste but there are a lot of options (I suppose running an open version of a thing is valuable too)
+2014-03-12T18:44:38  <superbee> there are so many paste services out that that all support basically the same functionality I am not sure we need our own. The only reason to keep it would be to avoid a paste provider going away causing everyone to not have paste but there are a lot of options (I suppose running an open version of a thing is valuable too)
 2014-03-12T18:44:52  <jogo> jeblair: good point about infra bugs. mtreinish ^
 2014-03-12T18:45:02  <mtreinish> jeblair: you don't want e-r to spam the channel for every patch  when there is a mirror outage :)
 2014-03-12T18:45:06  *** sdake has joined #openstack-infra
-2014-03-12T18:45:08  <clarkb> jeblair: the puppet module thing happened again. I think I am going to get lunch and try again after
+2014-03-12T18:45:08  <superbee> jeblair: the puppet module thing happened again. I think I am going to get lunch and try again after
 2014-03-12T18:45:22  *** andreaf has quit IRC
-2014-03-12T18:45:28  <jeblair> clarkb: ack.  also, i think it's worth spending a few minutes fixing paste.
+2014-03-12T18:45:28  <jeblair> superbee: ack.  also, i think it's worth spending a few minutes fixing paste.
 2014-03-12T18:45:29  *** weshay has quit IRC
-2014-03-12T18:45:30  <clarkb> mordred: ^ have you seen hpcloud region b connectivty issues to puppet forge
+2014-03-12T18:45:30  <superbee> mordred: ^ have you seen hpcloud region b connectivty issues to puppet forge
 2014-03-12T18:45:47  <mordred> uhm. no
-2014-03-12T18:45:47  <clarkb> jeblair: definitely. I don't think we should kill that service without some headroom
+2014-03-12T18:45:47  <superbee> jeblair: definitely. I don't think we should kill that service without some headroom
 2014-03-12T18:45:55  <mtreinish> jogo: yeah I didn't think about that, we probably should exclude infra then
-2014-03-12T18:46:09  <clarkb> jeblair: just throwing it out there that I think the value of having our own is minimal
-2014-03-12T18:46:45  <clarkb> mordred: jeblair actually I got more error message this time. I think we may have conflicting requirements somewhere
-2014-03-12T18:46:52  <clarkb> :( I will look into fixing that after lunch
+2014-03-12T18:46:09  <superbee> jeblair: just throwing it out there that I think the value of having our own is minimal
+2014-03-12T18:46:45  <superbee> mordred: jeblair actually I got more error message this time. I think we may have conflicting requirements somewhere
+2014-03-12T18:46:52  <superbee> :( I will look into fixing that after lunch
 2014-03-12T18:47:41  *** rpodolyaka has quit IRC
 2014-03-12T18:48:08  <openstackgerrit> Matthew Treinish proposed a change to openstack-infra/config: Elastic recheck irc spam everywhere  https://review.openstack.org/79123
 2014-03-12T18:48:19  <mtreinish> jogo: ^^^ just nova, cinder, and neutron
@@ -2127,8 +2127,8 @@
 2014-03-12T18:49:51  <dims_> jamespage, the 0.9.8+ deb(s) are holding up very well. need to run it another 5-8 times (i have 5-6 good runs so far)
 2014-03-12T18:50:06  <mtreinish> foobio: that or most likely to respond to an e-r comment in irc
 2014-03-12T18:50:32  <foobio> mtreinish: ooh, burn ;)
-2014-03-12T18:52:21  <jeblair> foobio, clarkb: so my thinking is recursive resolvers on all servers, and forwarding resolvers on nodepool nodes.  how does that sound?
-2014-03-12T18:52:46  <jeblair> foobio, clarkb: https://review.openstack.org/#/c/80045/ is an attempt to see if that would mess up devstack
+2014-03-12T18:52:21  <jeblair> foobio, superbee: so my thinking is recursive resolvers on all servers, and forwarding resolvers on nodepool nodes.  how does that sound?
+2014-03-12T18:52:46  <jeblair> foobio, superbee: https://review.openstack.org/#/c/80045/ is an attempt to see if that would mess up devstack
 2014-03-12T18:53:13  <foobio> jeblair: *caching* forwarding resolvers on nodepool nodes? if so, yes perfect
 2014-03-12T18:53:23  <jeblair> foobio: yes
 2014-03-12T18:53:29  *** johnthetubaguy1 has quit IRC
@@ -2138,117 +2138,117 @@
 2014-03-12T18:53:54  <foobio> jeblair: though i think we need a little extra bootstrapping in jobs once that's in place. some initial retries to lookup things we know we'll use and "prime the pump" so to speak
 2014-03-12T18:53:59  <SergeyLukjanov> foobio, ^^
 2014-03-12T18:54:37  <foobio> jeblair: which hopefully will help guard against stray initial cache misses timing out
-2014-03-12T18:54:40  <clarkb> jeblair: out of curiousity why bind?
+2014-03-12T18:54:40  <superbee> jeblair: out of curiousity why bind?
 2014-03-12T18:55:07  <jgriffith> mtreinish: reading back
-2014-03-12T18:55:12  <jeblair> clarkb: "yum install caching-nameserver" and "apt-get install bind9" are all that are needed to get a caching recursive resolver on both os's.
+2014-03-12T18:55:12  <jeblair> superbee: "yum install caching-nameserver" and "apt-get install bind9" are all that are needed to get a caching recursive resolver on both os's.
 2014-03-12T18:55:20  *** thuc has quit IRC
 2014-03-12T18:55:33  <foobio> i personally am fine with bind. at least since 9.x it's not the bloated monstrosity of spaghetti it was in the post-4 days of 8.x
-2014-03-12T18:55:34  <jeblair> clarkb: i'd be pretty coll with unbound though.
+2014-03-12T18:55:34  <jeblair> superbee: i'd be pretty coll with unbound though.
 2014-03-12T18:55:46  <jeblair> cool.
 2014-03-12T18:55:52  <jgriffith> mtreinish: I'm fine with trying it
 2014-03-12T18:55:57  *** thuc has joined #openstack-infra
 2014-03-12T18:56:08  <jgriffith> mtreinish: if it's overwhelming we can revisit
 2014-03-12T18:56:10  *** SumitNaiksatam_ has joined #openstack-infra
-2014-03-12T18:56:19  <clarkb> jeblair: I don't have any thing against bind it just seems overcomplicated for what we need
+2014-03-12T18:56:19  <superbee> jeblair: I don't have any thing against bind it just seems overcomplicated for what we need
 2014-03-12T18:56:20  <jgriffith> mtreinish: it could get pretty distracting
 2014-03-12T18:56:36  <foobio> when you run bind as a recursive resolver, most of the sharp edges and moving parts are safely out of harm's way
 2014-03-12T18:57:11  <foobio> but i'm also fine with something even more lightweight and designed not to act as an authoritative resolver at all
 2014-03-12T18:57:18  <jeblair> unbound is available on both os's.
 2014-03-12T18:57:47  <foobio> i do agree that if we pick something, it should be the same something on all platforms with consistent configuration
-2014-03-12T18:57:55  <clarkb> ++ to consistency
+2014-03-12T18:57:55  <superbee> ++ to consistency
 2014-03-12T18:57:59  *** SumitNaiksatam has quit IRC
-2014-03-12T18:58:03  <clarkb> looks like unbound will only do recursive
-2014-03-12T18:58:21  <jeblair> clarkb: unbound can forward
+2014-03-12T18:58:03  <superbee> looks like unbound will only do recursive
+2014-03-12T18:58:21  <jeblair> superbee: unbound can forward
 2014-03-12T18:58:26  *** SumitNaiksatam_ is now known as SumitNaiksatam
-2014-03-12T18:58:47  <clarkb> great. So either one works for me
-2014-03-12T18:58:57  <clarkb> was curious if there was a specific reason for bind
+2014-03-12T18:58:47  <superbee> great. So either one works for me
+2014-03-12T18:58:57  <superbee> was curious if there was a specific reason for bind
 2014-03-12T18:59:06  <dims_> jamespage, @hallyn had provided a url that i am wget-ing for the 0.9.8+ debs. how much work/time is it move to proposed?
 2014-03-12T18:59:24  <foobio> i take it nobody's a huge fan of nscd (i've used it very little myself, so it very well may be a hideous idea)
 2014-03-12T19:00:00  *** thuc has quit IRC
-2014-03-12T19:00:20  <clarkb> foobio: nscd is that service you restart anytime something else breaks
+2014-03-12T19:00:20  <superbee> foobio: nscd is that service you restart anytime something else breaks
 2014-03-12T19:00:26  <jeblair> unbound does use like 1/5 the ram of named...
-2014-03-12T19:00:28  <foobio> clarkb: got it
-2014-03-12T19:00:38  <foobio> clarkb: i thought that was pulseaudio
+2014-03-12T19:00:28  <foobio> superbee: got it
+2014-03-12T19:00:38  <foobio> superbee: i thought that was pulseaudio
 2014-03-12T19:00:43  *** e0ne has joined #openstack-infra
 2014-03-12T19:00:59  <sdague> mtreinish: I think you need russellb sign off before doing it
 2014-03-12T19:01:10  <jeblair> more like 1/3
 2014-03-12T19:01:10  *** weshay has joined #openstack-infra
-2014-03-12T19:01:16  <clarkb> jeblair: that might be a good reason to use it
+2014-03-12T19:01:16  <superbee> jeblair: that might be a good reason to use it
 2014-03-12T19:01:25  *** mark0n has joined #openstack-infra
 2014-03-12T19:01:38  <foobio> what percentage of our 8gb of ram does that work out to? ;)
-2014-03-12T19:02:01  <clarkb> foobio: jeblair: does centos not do nscd? that might be the simplest to start with
+2014-03-12T19:02:01  <superbee> foobio: jeblair: does centos not do nscd? that might be the simplest to start with
 2014-03-12T19:02:03  <foobio> but yeah, unbound sounds like a great choice
 2014-03-12T19:03:03  <jeblair> does nscd actually cache dns records?
-2014-03-12T19:03:27  <clarkb> ya it caches host lookups
+2014-03-12T19:03:27  <superbee> ya it caches host lookups
 2014-03-12T19:03:28  <openstackgerrit> Sean Dague proposed a change to openstack-infra/config: Don't run large-ops test on repos that it doesn't touch  https://review.openstack.org/78687
 2014-03-12T19:03:32  <sdague> ok, that's the rebase
-2014-03-12T19:03:39  <mark0n> clarkb: remember my problem with JJB and multiple Git remotes? I prepared a patch for that. I also want to add a simple unit test. But I have problems running "tox -epy27". Are you familiar with tox?
-2014-03-12T19:03:48  <clarkb> mark0n: yup
+2014-03-12T19:03:39  <mark0n> superbee: remember my problem with JJB and multiple Git remotes? I prepared a patch for that. I also want to add a simple unit test. But I have problems running "tox -epy27". Are you familiar with tox?
+2014-03-12T19:03:48  <superbee> mark0n: yup
 2014-03-12T19:03:58  *** thuc has joined #openstack-infra
 2014-03-12T19:04:01  <foobio> the trick with nscd, as i understand it, is that it hooks into the local resolver library and then forwards and caches based on your resolv.conf
 2014-03-12T19:04:16  <foobio> rather than putting your loopback in resolv.conf
 2014-03-12T19:04:50  <foobio> but i always thought the c in nscd stood for "cache"
 2014-03-12T19:05:29  <jeblair> http://stackoverflow.com/questions/11020027/dns-caching-in-linux
-2014-03-12T19:05:35  <mark0n> clarkb: I'm running it on Ubuntu 13.10. It crashes with an exception: https://gist.github.com/mark0n/9513987
+2014-03-12T19:05:35  <mark0n> superbee: I'm running it on Ubuntu 13.10. It crashes with an exception: https://gist.github.com/mark0n/9513987
 2014-03-12T19:05:39  *** rpodolyaka has joined #openstack-infra
 2014-03-12T19:05:43  <jeblair> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=335476
-2014-03-12T19:05:57  <clarkb> huh its disabled
-2014-03-12T19:05:59  <clarkb> good to know
+2014-03-12T19:05:57  <superbee> huh its disabled
+2014-03-12T19:05:59  <superbee> good to know
 2014-03-12T19:06:04  <foobio> oho, "You should install this package only if you use slow services like LDAP, NIS or NIS+."
 2014-03-12T19:06:10  <jeblair> yah, cause it's broken
-2014-03-12T19:06:34  <clarkb> jeblair: I wonder if unscd has the same problem. but unbound seems like a great options if we want simple and bind if we need to do more complicated things
+2014-03-12T19:06:34  <superbee> jeblair: I wonder if unscd has the same problem. but unbound seems like a great options if we want simple and bind if we need to do more complicated things
 2014-03-12T19:06:58  <jeblair> i'll hack out a change to use unbound after lunch
 2014-03-12T19:07:06  <foobio> awesome
-2014-03-12T19:07:25  <clarkb> mark0n: huh, let me try reproducing
+2014-03-12T19:07:25  <superbee> mark0n: huh, let me try reproducing
 2014-03-12T19:07:43  <jeblair> that d-g change should still give us the answers we need about running a caching nameserver locally and pointing /etc/hosts at it in general
-2014-03-12T19:07:48  <clarkb> ++
+2014-03-12T19:07:48  <superbee> ++
 2014-03-12T19:07:59  <foobio> agreed
 2014-03-12T19:08:15  *** sweston has quit IRC
 2014-03-12T19:09:08  *** sweston has joined #openstack-infra
-2014-03-12T19:09:12  <clarkb> mark0n: works for me. Can you try `tox -repy27` that will rebuild the virtualenv for you. I wonder if the virtualenv is missing something
-2014-03-12T19:10:21  <mark0n> clarkb: that gives me the same output
-2014-03-12T19:10:49  <mark0n> clarkb: what OS are you using?
-2014-03-12T19:10:53  <clarkb> mark0n: the same
-2014-03-12T19:11:05  <clarkb> but my tox is version 1.6.1
+2014-03-12T19:09:12  <superbee> mark0n: works for me. Can you try `tox -repy27` that will rebuild the virtualenv for you. I wonder if the virtualenv is missing something
+2014-03-12T19:10:21  <mark0n> superbee: that gives me the same output
+2014-03-12T19:10:49  <mark0n> superbee: what OS are you using?
+2014-03-12T19:10:53  <superbee> mark0n: the same
+2014-03-12T19:11:05  <superbee> but my tox is version 1.6.1
 2014-03-12T19:11:16  *** caleb_ has joined #openstack-infra
 2014-03-12T19:11:30  <mtreinish> jgriffith: yeah I could see it getting distracting, but how many gate failures does e-r attribute to cinder bugs?
-2014-03-12T19:12:25  <clarkb> mark0n: is pip installed?
-2014-03-12T19:12:32  <mark0n> clarkb: did you install tox from the Ubuntu repo or using pip?
-2014-03-12T19:12:37  <clarkb> mark0n: using pip
-2014-03-12T19:13:11  <clarkb> mark0n: I think what is happening there is tox is trying to fork and exec pip
-2014-03-12T19:13:13  <clarkb> but not finding pip
+2014-03-12T19:12:25  <superbee> mark0n: is pip installed?
+2014-03-12T19:12:32  <mark0n> superbee: did you install tox from the Ubuntu repo or using pip?
+2014-03-12T19:12:37  <superbee> mark0n: using pip
+2014-03-12T19:13:11  <superbee> mark0n: I think what is happening there is tox is trying to fork and exec pip
+2014-03-12T19:13:13  <superbee> but not finding pip
 2014-03-12T19:14:17  *** salv-orlando has joined #openstack-infra
-2014-03-12T19:18:10  <mark0n> clarkb: I tried 1.7.0 - seems to have a different issue, see gist
-2014-03-12T19:18:23  <clarkb> mark0n: yea 1.7.0 won't work
-2014-03-12T19:18:31  <clarkb> mark0n: they broke backward compat
+2014-03-12T19:18:10  <mark0n> superbee: I tried 1.7.0 - seems to have a different issue, see gist
+2014-03-12T19:18:23  <superbee> mark0n: yea 1.7.0 won't work
+2014-03-12T19:18:31  <superbee> mark0n: they broke backward compat
 2014-03-12T19:18:42  *** thuc_ has joined #openstack-infra
 2014-03-12T19:18:44  *** thuc has quit IRC
-2014-03-12T19:18:50  <clarkb> mark0n: I would install 1.6.1, pip install --upgrade tox==1.6.1
+2014-03-12T19:18:50  <superbee> mark0n: I would install 1.6.1, pip install --upgrade tox==1.6.1
 2014-03-12T19:19:13  *** thuc has joined #openstack-infra
 2014-03-12T19:19:17  *** hogepodge has joined #openstack-infra
 2014-03-12T19:20:13  *** zhiyan is now known as zhiyan_
-2014-03-12T19:20:58  <mark0n> clarkb: hmm, with 1.6.1 I have the first issue again...
+2014-03-12T19:20:58  <mark0n> superbee: hmm, with 1.6.1 I have the first issue again...
 2014-03-12T19:21:01  *** mburned is now known as mburned_out
-2014-03-12T19:21:07  <clarkb> mark0n: weird
-2014-03-12T19:21:24  <clarkb> mark0n: are you doing this on tip of master or on your patch? can you try doing it on tip of master to see if that is different?
-2014-03-12T19:21:38  <clarkb> I wonder if something in the local tree is confusing tox
-2014-03-12T19:21:46  <mark0n> clarkb: without my patch
+2014-03-12T19:21:07  <superbee> mark0n: weird
+2014-03-12T19:21:24  <superbee> mark0n: are you doing this on tip of master or on your patch? can you try doing it on tip of master to see if that is different?
+2014-03-12T19:21:38  <superbee> I wonder if something in the local tree is confusing tox
+2014-03-12T19:21:46  <mark0n> superbee: without my patch
 2014-03-12T19:22:48  *** thuc_ has quit IRC
 2014-03-12T19:23:27  *** jooools has quit IRC
 2014-03-12T19:24:13  *** mburned_out is now known as mburned
-2014-03-12T19:24:20  <mark0n> clarkb: I also purged all auto-generated files (including git-ignored files)
-2014-03-12T19:24:47  <clarkb> mark0n: ok, let us try debugging this step by step using the virtualenv tox creates. `source .tox/py27/bin/activate ; pip install -r/home/marko/work/automated builds/vagrant/jenkins-job-builder/tools/pip-requires -r/home/marko/work/automated builds/vagrant/jenkins-job-builder/tools/test-requires ; python setup.py testr --slowest`
-2014-03-12T19:25:40  <clarkb> oh after pip install -r's you should pip install $PATH_TO_JENKINS_JOB_BUILDER
+2014-03-12T19:24:20  <mark0n> superbee: I also purged all auto-generated files (including git-ignored files)
+2014-03-12T19:24:47  <superbee> mark0n: ok, let us try debugging this step by step using the virtualenv tox creates. `source .tox/py27/bin/activate ; pip install -r/home/marko/work/automated builds/vagrant/jenkins-job-builder/tools/pip-requires -r/home/marko/work/automated builds/vagrant/jenkins-job-builder/tools/test-requires ; python setup.py testr --slowest`
+2014-03-12T19:25:40  <superbee> oh after pip install -r's you should pip install $PATH_TO_JENKINS_JOB_BUILDER
 2014-03-12T19:26:02  *** krotscheck has joined #openstack-infra
 2014-03-12T19:26:17  *** melwitt has quit IRC
-2014-03-12T19:26:43  <clarkb> that is basically what tox should be doing for us, and hopefully gives us an idea of what is breaking
+2014-03-12T19:26:43  <superbee> that is basically what tox should be doing for us, and hopefully gives us an idea of what is breaking
 2014-03-12T19:27:08  *** melwitt has joined #openstack-infra
 2014-03-12T19:27:13  *** malini is now known as malini_afk
-2014-03-12T19:27:14  <clarkb> but I think tox can't find pip for some reason
-2014-03-12T19:28:18  <clarkb> I need to grab lunch now, but will be back in a bit others in here should be able to help if you find something new before I get back
+2014-03-12T19:27:14  <superbee> but I think tox can't find pip for some reason
+2014-03-12T19:28:18  <superbee> I need to grab lunch now, but will be back in a bit others in here should be able to help if you find something new before I get back
 2014-03-12T19:30:19  <mordred> kiall: we should actually probably have that conversation here
 2014-03-12T19:30:40  *** zns has quit IRC
-2014-03-12T19:30:47  <mordred> kiall: because even if you do all the work over the weekend because you think it's fun, we'll want jeblair and clarkb and foobio and SergeyLukjanov to be on board
+2014-03-12T19:30:47  <mordred> kiall: because even if you do all the work over the weekend because you think it's fun, we'll want jeblair and superbee and foobio and SergeyLukjanov to be on board
 2014-03-12T19:31:04  *** SumitNaiksatam_ has joined #openstack-infra
 2014-03-12T19:31:07  *** SumitNaiksatam has quit IRC
 2014-03-12T19:31:07  *** SumitNaiksatam_ is now known as SumitNaiksatam
@@ -2267,7 +2267,7 @@
 2014-03-12T19:34:20  <mordred> foobio: so as best I can tell, options would be either adding jabber support to gerritbot, or porting gerritbot to errbot, or writing a duplicate of the gerritbot functionality for something else
 2014-03-12T19:34:24  <kiall> foobio: lol.. I wish HP Cloud would get onboard with IRC .. But.. The animated gif support got too many people
 2014-03-12T19:34:30  *** ildikov_ has joined #openstack-infra
-2014-03-12T19:34:42  <clarkb> can it do ssl connections?
+2014-03-12T19:34:42  <superbee> can it do ssl connections?
 2014-03-12T19:34:49  <mordred> I'm a fan of options 1 and 2 because they lead to less forking of things
 2014-03-12T19:35:03  <foobio> honestly, i think gerritbot may be too fragile for much of that, and suspect it would be a porting/rewriting effort
 2014-03-12T19:35:20  <kiall> It uses the same underlying IRC lib as gerritbot does near as I can see
@@ -2275,7 +2275,7 @@
 2014-03-12T19:35:35  <kiall> so .. SSL is probably a yes
 2014-03-12T19:35:57  <kiall> dstufft: like this? https://github.com/gbin/err/tree/master/errbot/backends ;)
 2014-03-12T19:36:00  <mordred> haha
-2014-03-12T19:36:08  <mordred> clarkb: errbot usees irc.bot as its irc stuff
+2014-03-12T19:36:08  <mordred> superbee: errbot usees irc.bot as its irc stuff
 2014-03-12T19:36:32  <mordred> so - I'd say it supports the exact same irc features :)
 2014-03-12T19:36:39  <kiall> well.. irc.connection, not irc.bot.. same lib then
 2014-03-12T19:36:52  <mordred> https://github.com/gbin/err/blob/master/errbot/backends/irc.py#L11
@@ -2290,9 +2290,9 @@
 2014-03-12T19:39:36  <mordred> kiall: oh right- if the irc lib was not there
 2014-03-12T19:39:42  <kiall> Yep
 2014-03-12T19:39:46  *** locke105 has joined #openstack-infra
-2014-03-12T19:40:00  <mark0n> clarkb: a white-space in my path broke it...
-2014-03-12T19:40:13  <mark0n> clarkb: thanks
-2014-03-12T19:40:16  <clarkb> np
+2014-03-12T19:40:00  <mark0n> superbee: a white-space in my path broke it...
+2014-03-12T19:40:13  <mark0n> superbee: thanks
+2014-03-12T19:40:16  <superbee> np
 2014-03-12T19:41:12  <dstufft> kiall: possibly!
 2014-03-12T19:42:14  <openstackgerrit> Michael Krotscheck proposed a change to openstack-infra/storyboard: Go back to alembic migrations  https://review.openstack.org/79208
 2014-03-12T19:42:20  <mordred> foobio: so - in any case, I didn't want kiall to go have fun this weekend porting gerritbot to be an errbot plugin only to have us tell him to go away
@@ -2300,11 +2300,11 @@
 2014-03-12T19:43:05  <mordred> foobio: if, otoh, we tell him to go away before hand and he does that work anyway - it's at least a conscious choice
 2014-03-12T19:43:20  <foobio> come up with some sort of translation for the common methods supported by both that and the xmpp backend...
 2014-03-12T19:43:39  *** thuc has quit IRC
-2014-03-12T19:43:45  <clarkb> I'd be onboard with it if we can add ssl support
+2014-03-12T19:43:45  <superbee> I'd be onboard with it if we can add ssl support
 2014-03-12T19:44:02  <openstackgerrit> Michael Krotscheck proposed a change to openstack-infra/storyboard: Missing security decorators added  https://review.openstack.org/79895
 2014-03-12T19:44:03  *** thuc has joined #openstack-infra
 2014-03-12T19:44:17  <foobio> mordred: well, my biggest concern, as with a lot of these sorts of contributions of features we don't use, is that gerritbot has no testing so we could easily break that feature and not know about it if it didn't break our very specific use case
-2014-03-12T19:44:29  <kiall> clarkb: SSL is baked into it as of 4 months ago.. https://github.com/gbin/err/commit/93ff296483d13c0097341101637bd3c5d1776489
+2014-03-12T19:44:29  <kiall> superbee: SSL is baked into it as of 4 months ago.. https://github.com/gbin/err/commit/93ff296483d13c0097341101637bd3c5d1776489
 2014-03-12T19:44:44  <openstackgerrit> Michael Krotscheck proposed a change to openstack-infra/storyboard: Fill the last_login field  https://review.openstack.org/79887
 2014-03-12T19:45:04  <mordred> kiall: well that certainly seems handy
 2014-03-12T19:45:38  <foobio> and one thing gerritbot *does* have going for it, is that it's not using twisted-python
@@ -2313,7 +2313,7 @@
 2014-03-12T19:46:18  <foobio> dstufft: yes i know. but it also comes with a lot of baggage
 2014-03-12T19:46:50  <mordred> and I, for one, don't know how to debug twisted applications. I hear great thigns about them though
 2014-03-12T19:46:53  <openstackgerrit> Michael Krotscheck proposed a change to openstack-infra/storyboard: Logging in with a pre-existing user saves details  https://review.openstack.org/79705
-2014-03-12T19:47:01  <clarkb> and no ipv6
+2014-03-12T19:47:01  <superbee> and no ipv6
 2014-03-12T19:47:03  <foobio> dstufft: and things like, you can't use ipv6 and ssl/tls together
 2014-03-12T19:47:06  <foobio> that
 2014-03-12T19:47:47  <kiall> foobio: I don't see twisted as a dep? At least for the IRC parts (no clue what the XMPP etc backends rely on)
@@ -2324,30 +2324,30 @@
 2014-03-12T19:48:56  <kiall> Oh.. Fair enough. supybot always felt like eggdrop to me.. Extended beyond it's design without a re-factoring.. ;)
 2014-03-12T19:49:03  <foobio> i was just taking the opportunity to make an undeserved dig at twisted
 2014-03-12T19:49:30  <foobio> eggdrop's fine as long as you have a time machine which can take your brain back to tcl syntax
-2014-03-12T19:49:48  <clarkb> foobio did you catch the ghub fix?
+2014-03-12T19:49:48  <superbee> foobio did you catch the ghub fix?
 2014-03-12T19:49:49  <dstufft> mordred: heh
-2014-03-12T19:50:05  <clarkb> we need to add read:orgs perms to the token
+2014-03-12T19:50:05  <superbee> we need to add read:orgs perms to the token
 2014-03-12T19:50:06  <dstufft> mordred: debugging twisted apps is like 100x easier thand ebugging eventlet/gevent at least :|
 2014-03-12T19:50:24  *** SumitNaiksatam has quit IRC
 2014-03-12T19:50:26  *** SumitNaiksatam_ is now known as SumitNaiksatam
-2014-03-12T19:50:28  <foobio> clarkb: oh! did they add that as a new permission?
-2014-03-12T19:51:00  <clarkb> apparently
-2014-03-12T19:51:00  <foobio> clarkb: because we haven't touched the perms for that account on the github side in, like, well and embarrassingly long time i think
-2014-03-12T19:51:08  <clarkb> dstufft lol
-2014-03-12T19:51:19  <clarkb> our brains must work differently
+2014-03-12T19:50:28  <foobio> superbee: oh! did they add that as a new permission?
+2014-03-12T19:51:00  <superbee> apparently
+2014-03-12T19:51:00  <foobio> superbee: because we haven't touched the perms for that account on the github side in, like, well and embarrassingly long time i think
+2014-03-12T19:51:08  <superbee> dstufft lol
+2014-03-12T19:51:19  <superbee> our brains must work differently
 2014-03-12T19:51:43  <foobio> dstufft: in twisted-python, apps debug you!
-2014-03-12T19:51:55  <dstufft> clarkb: the problem with eventlet/grevent is that the context switch can happen at any point, so you get a combinatorial number of states the software can be
+2014-03-12T19:51:55  <dstufft> superbee: the problem with eventlet/grevent is that the context switch can happen at any point, so you get a combinatorial number of states the software can be
 2014-03-12T19:52:16  <dstufft> with twisted the context switch happens at very defined points
-2014-03-12T19:52:19  <clarkb> dstufft thats true of any threads
+2014-03-12T19:52:19  <superbee> dstufft thats true of any threads
 2014-03-12T19:52:22  <dstufft> yes
 2014-03-12T19:52:32  <dstufft> threads are horrible to debug too
-2014-03-12T19:52:36  <clarkb> which means I have lots of practice
+2014-03-12T19:52:36  <superbee> which means I have lots of practice
 2014-03-12T19:52:47  <dstufft> that just means your brain is pre-broken :D
-2014-03-12T19:52:52  <clarkb> they arent that bad. hard yes but not terrible
+2014-03-12T19:52:52  <superbee> they arent that bad. hard yes but not terrible
 2014-03-12T19:53:10  * foobio thought it was all so much easier in the pvm/mpich days with explicit message-passing between processes
 2014-03-12T19:53:24  <dstufft> It's probably a result of my primary language being Python, and before that PHP but i've done next to nothing with threads
 2014-03-12T19:53:44  <mordred> dstufft: you know we write a bunch of threaded python code aroudn here, yeah?
-2014-03-12T19:54:00  <clarkb> dstufft ah. /me did C lots of it
+2014-03-12T19:54:00  <superbee> dstufft ah. /me did C lots of it
 2014-03-12T19:54:02  <dstufft> mordred: crazy people
 2014-03-12T19:54:14  <dstufft> pip had some threads
 2014-03-12T19:54:17  <mordred> dstufft: works pretty well...
@@ -2356,14 +2356,14 @@
 2014-03-12T19:54:39  <mordred> I don't know if you know about the scalable gating system controller called zuul we use...
 2014-03-12T19:54:40  <foobio> pip does seem like the sort of tool which doesn't need any threading
 2014-03-12T19:54:45  <mordred> ++
-2014-03-12T19:54:49  <clarkb> there are airplanes flying around with a radio I helped build in them. scary
-2014-03-12T19:55:16  <foobio> clarkb: as long as someone else built the black box, they should eventually be able to blame your work
+2014-03-12T19:54:49  <superbee> there are airplanes flying around with a radio I helped build in them. scary
+2014-03-12T19:55:16  <foobio> superbee: as long as someone else built the black box, they should eventually be able to blame your work
 2014-03-12T19:55:41  <dstufft> well
 2014-03-12T19:55:46  <dstufft> historically pip used threading because
 2014-03-12T19:55:48  <kiall> foobio: I'm not sure that's comforting ;)
 2014-03-12T19:56:09  <dstufft> it has an unbounded number of urls it would hit to discover stuff
 2014-03-12T19:56:11  * kiall starts using the ferry more often
-2014-03-12T19:56:11  <clarkb> dont worry its not certified for commercial jets
+2014-03-12T19:56:11  <superbee> dont worry its not certified for commercial jets
 2014-03-12T19:56:11  <dstufft> or did previously
 2014-03-12T19:56:46  <foobio> dstufft: right, eww
 2014-03-12T19:57:09  <kiall> dstufft: Sure, but pip etc should have stopped what they were doing. Immediately. Once they realized they were building a crawler.
@@ -2371,13 +2371,13 @@
 2014-03-12T19:57:26  <kiall> ;)
 2014-03-12T19:57:27  <dstufft> that's how you install stuff
 2014-03-12T19:57:53  <dstufft> well find stuff to install
-2014-03-12T19:57:53  <clarkb> foobio we have another case of unfamiliar with gerrit but stackforging...
+2014-03-12T19:57:53  <superbee> foobio we have another case of unfamiliar with gerrit but stackforging...
 2014-03-12T19:57:56  <dstufft> :/
-2014-03-12T19:58:02  <clarkb> foobio I can respond to it
-2014-03-12T19:58:22  <kiall> clarkb: no canned response ready to go? ;)
-2014-03-12T19:58:26  <foobio> clarkb: thank you for leaping onto that grenade. remind me to beer you in atlanta or something
-2014-03-12T19:58:26  <clarkb> foobio let me know if you need more eyes on github token stuff
-2014-03-12T19:58:46  <foobio> clarkb: pulling up the bug now, but if i can confirm it, patch on the way
+2014-03-12T19:58:02  <superbee> foobio I can respond to it
+2014-03-12T19:58:22  <kiall> superbee: no canned response ready to go? ;)
+2014-03-12T19:58:26  <foobio> superbee: thank you for leaping onto that grenade. remind me to beer you in atlanta or something
+2014-03-12T19:58:26  <superbee> foobio let me know if you need more eyes on github token stuff
+2014-03-12T19:58:46  <foobio> superbee: pulling up the bug now, but if i can confirm it, patch on the way
 2014-03-12T19:58:52  <jeblair> kiall: can we make gerritbot and statusbot errbot plugins and run them in the same bot?
 2014-03-12T19:59:14  <jeblair> kiall: and then, does errbot have a meetbot plugin?  if not, could we make one of those too?
 2014-03-12T19:59:19  <kiall> jeremyb: yea.. they could be melded into 2 plugins of 1 bot
@@ -2386,11 +2386,11 @@
 2014-03-12T19:59:41  <kiall> lol - that's more than a weekend right there jeblair ;)
 2014-03-12T19:59:48  <jeblair> kiall: there's lots of weekends!
 2014-03-12T20:00:00  *** unicell has quit IRC
-2014-03-12T20:00:05  <clarkb> foobio patch? you should be able to update the token in github I think
+2014-03-12T20:00:05  <superbee> foobio patch? you should be able to update the token in github I think
 2014-03-12T20:00:06  <foobio> i agree it would be beyond awesome not to be managing bots from several disparate codebases
 2014-03-12T20:00:12  <jeblair> kiall: because other irc related problems that would be great to solve are: we have a lot of bots, each of which requires configuration and account management...
 2014-03-12T20:00:14  <mordred> jeblair: from what I see - I betcha all of those things could be put on a roadmpa - so perhaps this would turn in to the beginning of projet "one bot to rule them all"
-2014-03-12T20:00:24  <foobio> clarkb: oh, on the github end. got it. will take a look
+2014-03-12T20:00:24  <foobio> superbee: oh, on the github end. got it. will take a look
 2014-03-12T20:00:48  <jeblair> kiall: and also 'we can't restart meetbot (which is also eavesdrop) to pick up a new configuration during meetings'
 2014-03-12T20:00:51  <kiall> I'm going with No - not because it's not possible.. But because it's way more work than I can offer ;) But.. Yea.. You can load 100 plugins doing different things into it
 2014-03-12T20:00:51  *** unicell has joined #openstack-infra
@@ -2421,7 +2421,7 @@
 2014-03-12T20:09:31  <sdague> so honestly, what the suggestion that foobio made off hand earlier
 2014-03-12T20:09:36  <sdague> to gerrit -> rss
 2014-03-12T20:09:48  <jeblair> sdague: like openstackwatch?
-2014-03-12T20:10:08  <foobio> clarkb: found the permission on the token and added it, rerunning the script now... hasn't died yet either
+2014-03-12T20:10:08  <foobio> superbee: found the permission on the token and added it, rerunning the script now... hasn't died yet either
 2014-03-12T20:10:09  <sdague> I guess, I don't know what that is :)
 2014-03-12T20:10:30  *** caleb_ has quit IRC
 2014-03-12T20:10:36  <sdague> but regardless then bots pull that and off we go
@@ -2462,7 +2462,7 @@
 2014-03-12T20:21:25  <foobio> i think the idea was that once we have more control over gerrit themes, it could get linked as an rss feed from an out-of-the-way part of the ui
 2014-03-12T20:21:29  *** Sukhdev has quit IRC
 2014-03-12T20:21:51  *** mrda_away is now known as mrda
-2014-03-12T20:22:06  <foobio> clarkb: close-pull-requests completed its run with no errors
+2014-03-12T20:22:06  <foobio> superbee: close-pull-requests completed its run with no errors
 2014-03-12T20:23:44  <sdague> coolio
 2014-03-12T20:24:00  *** thuc has quit IRC
 2014-03-12T20:24:27  *** thuc has joined #openstack-infra
@@ -2471,12 +2471,12 @@
 2014-03-12T20:26:38  *** changbl has quit IRC
 2014-03-12T20:27:40  <sdague> jeblair / foobio: I rebased jogo's patch - https://review.openstack.org/#/c/78687/ to free up some dsvm nodes
 2014-03-12T20:28:07  *** mrodden has quit IRC
-2014-03-12T20:28:46  <clarkb> foobio woot
+2014-03-12T20:28:46  <superbee> foobio woot
 2014-03-12T20:28:51  <jeblair> lgtm
-2014-03-12T20:29:08  <foobio> clarkb: spammed us with about 30-60 pr closures
+2014-03-12T20:29:08  <foobio> superbee: spammed us with about 30-60 pr closures
 2014-03-12T20:29:08  *** rossella_s has quit IRC
-2014-03-12T20:29:08  <clarkb> foobio was the token thing through their webui?
-2014-03-12T20:29:14  <foobio> clarkb: yep!
+2014-03-12T20:29:08  <superbee> foobio was the token thing through their webui?
+2014-03-12T20:29:14  <foobio> superbee: yep!
 2014-03-12T20:29:31  <foobio> under settings->applications->personal token access
 2014-03-12T20:29:42  *** rossella_s has joined #openstack-infra
 2014-03-12T20:29:48  <foobio> there's a whole array of permissions you can add/remove in there now
@@ -2518,15 +2518,15 @@
 2014-03-12T20:38:58  <foobio> jogo: 1291440
 2014-03-12T20:39:13  <dstufft> lifeless: did I ever mention that software is the worst
 2014-03-12T20:39:15  <jeblair> OverLimit: Quota exceeded for ram: Requested 16384, but already used 944128 of 960000 ram (HTTP 413) (Request-ID: req-368f5ce0-8211-4acd-9acb-ba002baea11b)
-2014-03-12T20:39:19  <jeblair> foobio, clarkb, lifeless: ^
+2014-03-12T20:39:19  <jeblair> foobio, superbee, lifeless: ^
 2014-03-12T20:39:29  *** VijayTripathi has quit IRC
-2014-03-12T20:39:35  <clarkb> jeblair: which provider is that from?
+2014-03-12T20:39:35  <superbee> jeblair: which provider is that from?
 2014-03-12T20:39:39  <foobio> jeblair: in tripleo?
 2014-03-12T20:39:45  <jeblair> does anyone understand why it is requesting 16384 when it's configured for 8192
-2014-03-12T20:39:45  <clarkb> oh right becaseu 16G nodes
+2014-03-12T20:39:45  <superbee> oh right becaseu 16G nodes
 2014-03-12T20:39:49  <foobio> (i assume because you pinged lifeless)
 2014-03-12T20:39:53  <jeblair> tripleo, yes
-2014-03-12T20:39:59  <clarkb> jeblair: there is no 8192 flavor, so it picks the next bigger
+2014-03-12T20:39:59  <superbee> jeblair: there is no 8192 flavor, so it picks the next bigger
 2014-03-12T20:40:01  <jeblair> that's q.1
 2014-03-12T20:40:03  <jeblair> ok
 2014-03-12T20:40:03  *** e0ne has quit IRC
@@ -2540,12 +2540,12 @@
 2014-03-12T20:41:32  <lifeless> jeblair: memory quota? let me check hypervisor stats
 2014-03-12T20:41:47  <jeblair> lifeless: yes
 2014-03-12T20:41:59  <lifeless> free_ram_mb          | 107624
-2014-03-12T20:42:09  <foobio> clarkb: on that last update to 1291479, you'd think they'd be working more closely with the heat developer community (they did request sbaker as a member of their ptl group)
+2014-03-12T20:42:09  <foobio> superbee: on that last update to 1291479, you'd think they'd be working more closely with the heat developer community (they did request sbaker as a member of their ptl group)
 2014-03-12T20:42:12  <lifeless> | memory_mb            | 966760 |
 2014-03-12T20:42:12  <lifeless> | memory_mb_used       | 859136 |
-2014-03-12T20:42:20  <clarkb> foobio: you would think...
-2014-03-12T20:42:24  <clarkb> foobio: I am going to respond now
-2014-03-12T20:42:40  <clarkb> then figure out puppet module installs
+2014-03-12T20:42:20  <superbee> foobio: you would think...
+2014-03-12T20:42:24  <superbee> foobio: I am going to respond now
+2014-03-12T20:42:40  <superbee> then figure out puppet module installs
 2014-03-12T20:42:41  *** e0ne has joined #openstack-infra
 2014-03-12T20:42:47  <ttx> foobio, jeblair: howdy! Is the world still turning ?
 2014-03-12T20:42:54  <foobio> ttx: still turning
@@ -2577,7 +2577,7 @@
 2014-03-12T20:46:37  <foobio> jogo: i think they all failed on the same point in the list
 2014-03-12T20:46:55  <foobio> jogo: and that's one which definitely won't recur exactly the same way again
 2014-03-12T20:47:17  <openstackgerrit> Joe Gordon proposed a change to openstack-infra/elastic-recheck: Add fingerprint for bug 1291440  https://review.openstack.org/80080
-2014-03-12T20:47:20  <clarkb> ttx: enjoy the snow
+2014-03-12T20:47:20  <superbee> ttx: enjoy the snow
 2014-03-12T20:47:29  *** Sukhdev has joined #openstack-infra
 2014-03-12T20:47:38  * foobio is popping out for dinner... bbl
 2014-03-12T20:47:58  <jogo> foobio: thanks
@@ -2598,28 +2598,28 @@
 2014-03-12T20:52:33  <SergeyLukjanov> jogo, oh, quite a lot
 2014-03-12T20:52:43  <foobio> a lot of those didn't report though
 2014-03-12T20:53:15  <jogo> foobio: that makes sense
-2014-03-12T20:53:22  <clarkb> nibalizer:  Module 'puppetlabs-inifile' (v1.0.3) is already installed
+2014-03-12T20:53:22  <superbee> nibalizer:  Module 'puppetlabs-inifile' (v1.0.3) is already installed
 2014-03-12T20:53:24  <foobio> as soon as sdague pointed them out, we force-merged the fix immediately and i reshuffled the gate to get everything which was still in there but about to die to retest
 2014-03-12T20:53:25  <jogo> I think that caused the recent spike http://jogo.github.io/gate/
 2014-03-12T20:53:44  *** thuc__ has joined #openstack-infra
-2014-03-12T20:53:46  <clarkb> nibalizer: puppet module install should install the modules that it needs as dependencies right? but you want ot install it as no deps?
-2014-03-12T20:53:59  <clarkb> nibalizer: I am slowly debugging this but can't install git on my VM because my apt repo is gone apparently
+2014-03-12T20:53:46  <superbee> nibalizer: puppet module install should install the modules that it needs as dependencies right? but you want ot install it as no deps?
+2014-03-12T20:53:59  <superbee> nibalizer: I am slowly debugging this but can't install git on my VM because my apt repo is gone apparently
 2014-03-12T20:54:05  *** thuc_ has quit IRC
-2014-03-12T20:54:06  <clarkb> nibalizer: I will know a lot more in about 5 minutes
-2014-03-12T20:54:12  <nibalizer> clarkb: okay
+2014-03-12T20:54:06  <superbee> nibalizer: I will know a lot more in about 5 minutes
+2014-03-12T20:54:12  <nibalizer> superbee: okay
 2014-03-12T20:54:12  <foobio> jogo: probably so. shouldn't have happened outside of 12:45-13:30 if memory serves
 2014-03-12T20:54:20  * foobio is really at dinner now ;)
 2014-03-12T20:54:21  <nibalizer> puppet module install brings in deps, yes
 2014-03-12T20:54:26  <SergeyLukjanov> https://review.openstack.org/#/c/80080/ lgtm
-2014-03-12T20:54:58  <nibalizer> clarkb: is this changes that have already landed or a change that I can look at?
-2014-03-12T20:55:06  <clarkb> nibalizer: so I think something is installing 1.0.3 then the specific 1.0.0 version dies
+2014-03-12T20:54:58  <nibalizer> superbee: is this changes that have already landed or a change that I can look at?
+2014-03-12T20:55:06  <superbee> nibalizer: so I think something is installing 1.0.3 then the specific 1.0.0 version dies
 2014-03-12T20:55:08  <nibalizer> also i'm about to go into a work meeting so will be of limited use for an hour or two
-2014-03-12T20:55:13  <clarkb> nibalizer: its tip of master
+2014-03-12T20:55:13  <superbee> nibalizer: its tip of master
 2014-03-12T20:55:17  <nibalizer> greaaat
-2014-03-12T20:55:22  <clarkb> nibalizer: no worries I am debugging now
+2014-03-12T20:55:22  <superbee> nibalizer: no worries I am debugging now
 2014-03-12T20:55:32  <nibalizer> uh well just rollback to 1.0.0 and screw puppetdb, i can fix it later :P
-2014-03-12T20:55:48  <clarkb> I can't rollback that is what it is trying to do :P
-2014-03-12T20:55:53  <clarkb> and failing
+2014-03-12T20:55:48  <superbee> I can't rollback that is what it is trying to do :P
+2014-03-12T20:55:53  <superbee> and failing
 2014-03-12T20:57:07  *** khyati has quit IRC
 2014-03-12T20:57:33  *** malini_afk is now known as malini
 2014-03-12T20:59:31  <openstackgerrit> Joe Gordon proposed a change to openstack-infra/elastic-recheck: Periodic purge of fixed and unseen bugs  https://review.openstack.org/80086
@@ -2654,39 +2654,39 @@
 2014-03-12T21:16:37  *** e0ne has quit IRC
 2014-03-12T21:17:02  *** dkranz has quit IRC
 2014-03-12T21:17:17  *** e0ne has joined #openstack-infra
-2014-03-12T21:19:13  <clarkb> nibalizer: huh it worked fine on my test machine
+2014-03-12T21:19:13  <superbee> nibalizer: huh it worked fine on my test machine
 2014-03-12T21:19:36  *** rfolco has quit IRC
 2014-03-12T21:19:57  <nibalizer> weird
-2014-03-12T21:20:17  <clarkb> nibalizer: is there a reson for explicitly listing 1.0.0 in install_modules? is that so you can install puppetdb module without deps?
-2014-03-12T21:20:27  <clarkb> I am going to give it a try with nodepool again
+2014-03-12T21:20:17  <superbee> nibalizer: is there a reson for explicitly listing 1.0.0 in install_modules? is that so you can install puppetdb module without deps?
+2014-03-12T21:20:27  <superbee> I am going to give it a try with nodepool again
 2014-03-12T21:20:33  *** mfer has quit IRC
-2014-03-12T21:20:42  <clarkb> (I used the same region and base image and everything to test)
+2014-03-12T21:20:42  <superbee> (I used the same region and base image and everything to test)
 2014-03-12T21:20:52  *** nati_ueno has quit IRC
 2014-03-12T21:21:44  *** denis_makogon_ is now known as denis_makogon
 2014-03-12T21:23:15  *** zns has joined #openstack-infra
 2014-03-12T21:23:25  <openstackgerrit> Matt Riedemann proposed a change to openstack-infra/elastic-recheck: Add query for nova unit test bug 1291620  https://review.openstack.org/80091
 2014-03-12T21:23:36  *** hogepodge has quit IRC
 2014-03-12T21:24:02  *** rlandy__ is now known as rlandy
-2014-03-12T21:24:03  <clarkb> I will try a different provider too
+2014-03-12T21:24:03  <superbee> I will try a different provider too
 2014-03-12T21:24:10  *** hogepodge has joined #openstack-infra
-2014-03-12T21:25:27  <nibalizer> clarkb: no inifile can have any 1.x release
+2014-03-12T21:25:27  <nibalizer> superbee: no inifile can have any 1.x release
 2014-03-12T21:25:38  <nibalizer> as far as puppetdb is concerned
 2014-03-12T21:25:48  *** sweston has joined #openstack-infra
 2014-03-12T21:26:07  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Use unbound  https://review.openstack.org/80092
-2014-03-12T21:26:17  <nibalizer> clarkb: you can bump inifile to 1.0.3 if that makes problems go away
-2014-03-12T21:26:19  <clarkb> nibalizer: ok it just worked
+2014-03-12T21:26:17  <nibalizer> superbee: you can bump inifile to 1.0.3 if that makes problems go away
+2014-03-12T21:26:19  <superbee> nibalizer: ok it just worked
 2014-03-12T21:26:20  <openstackgerrit> Randy Coulman proposed a change to openstack-infra/jenkins-job-builder: Fix typo in ircbot's default matrix-notifier.  https://review.openstack.org/79328
-2014-03-12T21:26:27  <clarkb> nibalizer: I think puppet forge may haev been cranky with us
+2014-03-12T21:26:27  <superbee> nibalizer: I think puppet forge may haev been cranky with us
 2014-03-12T21:26:33  *** cody-somerville- has joined #openstack-infra
 2014-03-12T21:26:35  <nibalizer> puppetdb just wants 1.something
 2014-03-12T21:26:36  <nibalizer> https://github.com/puppetlabs/puppetlabs-puppetdb/blob/master/Modulefile
 2014-03-12T21:26:38  *** jasondotstar has quit IRC
-2014-03-12T21:26:48  <clarkb> nibalizer: so I think we are good, thank you
-2014-03-12T21:26:56  <jeblair> clarkb, foobio, pleia2, mattoliverau: https://review.openstack.org/80092 could use some scrutiny as it has the capability to break everything.  everywhere.  all at once.  :)
-2014-03-12T21:27:03  <clarkb> jeblair: looking
+2014-03-12T21:26:48  <superbee> nibalizer: so I think we are good, thank you
+2014-03-12T21:26:56  <jeblair> superbee, foobio, pleia2, mattoliverau: https://review.openstack.org/80092 could use some scrutiny as it has the capability to break everything.  everywhere.  all at once.  :)
+2014-03-12T21:27:03  <superbee> jeblair: looking
 2014-03-12T21:27:05  <nibalizer> okay
-2014-03-12T21:27:12  <clarkb> jeblair: is that the sort of thing we merge friday afternoon?
-2014-03-12T21:27:25  <jeblair> clarkb: i'm thinking so.
+2014-03-12T21:27:12  <superbee> jeblair: is that the sort of thing we merge friday afternoon?
+2014-03-12T21:27:25  <jeblair> superbee: i'm thinking so.
 2014-03-12T21:28:02  <jeblair> after some dry runs
 2014-03-12T21:28:18  *** rcarrillocruz has joined #openstack-infra
 2014-03-12T21:28:54  *** caleb_ has joined #openstack-infra
@@ -2703,37 +2703,37 @@
 2014-03-12T21:31:10  *** sweston has joined #openstack-infra
 2014-03-12T21:31:18  *** caleb_ has joined #openstack-infra
 2014-03-12T21:33:02  *** nati_ueno has joined #openstack-infra
-2014-03-12T21:35:06  <clarkb> jeblair: reviewed
+2014-03-12T21:35:06  <superbee> jeblair: reviewed
 2014-03-12T21:38:05  <openstackgerrit> Randy Coulman proposed a change to openstack-infra/jenkins-job-builder: Fix typo in ircbot's default matrix-notifier.  https://review.openstack.org/79328
 2014-03-12T21:42:32  <openstackgerrit> Michael Krotscheck proposed a change to openstack-infra/storyboard: Logging in with a pre-existing user saves details  https://review.openstack.org/79705
-2014-03-12T21:43:17  * clarkb wait for vmdk to finish downloading so that we can have new hpcloud region b image
-2014-03-12T21:44:04  <clarkb> sdague: ^ about that
+2014-03-12T21:43:17  * superbee wait for vmdk to finish downloading so that we can have new hpcloud region b image
+2014-03-12T21:44:04  <superbee> sdague: ^ about that
 2014-03-12T21:44:14  *** thedodd has quit IRC
-2014-03-12T21:44:17  <clarkb> sdague: I think the discussion yesterday was that anyone can have bigger images if they want them
+2014-03-12T21:44:17  <superbee> sdague: I think the discussion yesterday was that anyone can have bigger images if they want them
 2014-03-12T21:44:53  *** CaptTofu has quit IRC
-2014-03-12T21:44:54  <sdague> clarkb: I think that whatever parses devstack should be smarter about that
-2014-03-12T21:44:54  <clarkb> sdague: and we do download an ubuntu image. None of that takes forever
-2014-03-12T21:44:58  <clarkb> the vmdk takes forever
+2014-03-12T21:44:54  <sdague> superbee: I think that whatever parses devstack should be smarter about that
+2014-03-12T21:44:54  <superbee> sdague: and we do download an ubuntu image. None of that takes forever
+2014-03-12T21:44:58  <superbee> the vmdk takes forever
 2014-03-12T21:45:09  <sdague> because there is no reason that vmdk is in that image at all
-2014-03-12T21:45:27  <clarkb> sdague: its there because devstack may useit
+2014-03-12T21:45:27  <superbee> sdague: its there because devstack may useit
 2014-03-12T21:45:30  *** mriedem has quit IRC
-2014-03-12T21:45:31  <clarkb> because its in the devstack config
+2014-03-12T21:45:31  <superbee> because its in the devstack config
 2014-03-12T21:45:53  <sdague> but you know which hypervisors you are going to support in that image
 2014-03-12T21:46:03  <sdague> and all of those are hidden behind hypervisor ifs
 2014-03-12T21:46:18  *** smarcet has left #openstack-infra
 2014-03-12T21:46:18  <sdague> so instead of parsing that, eval it
 2014-03-12T21:46:26  <openstackgerrit> A change was merged to openstack-infra/elastic-recheck: Add fingerprint for bug 1291440  https://review.openstack.org/80080
 2014-03-12T21:46:28  <openstackgerrit> A change was merged to openstack-infra/elastic-recheck: Periodic purge of fixed and unseen bugs  https://review.openstack.org/80086
-2014-03-12T21:46:41  <clarkb> sdague: the image creator can't eval it with a high degree of certainty about which case will be hit
-2014-03-12T21:46:59  <clarkb> sdague: because we could xen or kvm cirros or ubuntu
+2014-03-12T21:46:41  <superbee> sdague: the image creator can't eval it with a high degree of certainty about which case will be hit
+2014-03-12T21:46:59  <superbee> sdague: because we could xen or kvm cirros or ubuntu
 2014-03-12T21:47:02  <openstackgerrit> A change was merged to openstack-infra/storyboard: Missing security decorators added  https://review.openstack.org/79895
 2014-03-12T21:47:21  *** khyati has joined #openstack-infra
 2014-03-12T21:47:48  <mark0n> I'm using gerrit for the first time. I submitted a patch and jenkins discovered a minor style issues. How am I supposed to resubmit? git commit --amend && git review or git commit && git review?
 2014-03-12T21:47:48  <openstackgerrit> Michael Krotscheck proposed a change to openstack-infra/storyboard: Logging in with a pre-existing user saves details  https://review.openstack.org/79705
 2014-03-12T21:48:03  *** thomasem has quit IRC
-2014-03-12T21:48:12  <clarkb> mark0n: if you need to update a change you already pushed do git commit --amend && git review
-2014-03-12T21:48:20  <clarkb> mark0n: git commit && git review will give you a second change
-2014-03-12T21:48:55  <mark0n> clarkb: ok, thanks
+2014-03-12T21:48:12  <superbee> mark0n: if you need to update a change you already pushed do git commit --amend && git review
+2014-03-12T21:48:20  <superbee> mark0n: git commit && git review will give you a second change
+2014-03-12T21:48:55  <mark0n> superbee: ok, thanks
 2014-03-12T21:50:11  <mattoliverau> jeblair: looking now, sorry, had a lot of scroll back to read :)
 2014-03-12T21:51:27  <jeblair> sdague: yeah, so i suggested mordred propose that change to spark a conversation about that...
 2014-03-12T21:51:35  *** rlandy has quit IRC
@@ -2744,20 +2744,20 @@
 2014-03-12T21:53:26  <sdague> jeblair: so that's probably a can of worms in politics that will take us a while to get there
 2014-03-12T21:53:32  <sdague> because it's an in tree driver for nova
 2014-03-12T21:53:41  <sdague> which is fair game
-2014-03-12T21:54:10  <sdague> clarkb: and I disagree with the high degree of certainty issue
-2014-03-12T21:54:27  <clarkb> sdague: how can nodepool image builder know if it needs cirros or ubunut image or xen
+2014-03-12T21:54:10  <sdague> superbee: and I disagree with the high degree of certainty issue
+2014-03-12T21:54:27  <superbee> sdague: how can nodepool image builder know if it needs cirros or ubunut image or xen
 2014-03-12T21:54:30  <sdague> http://paste.openstack.org/show/73317/
-2014-03-12T21:54:31  <clarkb> sdague: it can't
+2014-03-12T21:54:31  <superbee> sdague: it can't
 2014-03-12T21:54:43  *** fifieldt has joined #openstack-infra
-2014-03-12T21:54:51  <clarkb> the distinguishing features between cases aren't strong enough
+2014-03-12T21:54:51  <superbee> the distinguishing features between cases aren't strong enough
 2014-03-12T21:54:57  <sdague> you should have a config for nodepool to decide what hypervisor list you want to support
 2014-03-12T21:55:03  <sdague> and just drop vmware from that list
-2014-03-12T21:55:25  <clarkb> whcih means we need to udpate devstack-gate anytime you want a new hypervisor
-2014-03-12T21:55:32  <clarkb> which we don't need today
+2014-03-12T21:55:25  <superbee> whcih means we need to udpate devstack-gate anytime you want a new hypervisor
+2014-03-12T21:55:32  <superbee> which we don't need today
 2014-03-12T21:55:39  <sdague> sure
-2014-03-12T21:55:46  <jeblair> clarkb: not devstack-gate, nodepool config
-2014-03-12T21:55:53  <clarkb> jeblair: oh right this is nodepool config now
-2014-03-12T21:55:59  <clarkb> I am thinking of the old thing
+2014-03-12T21:55:46  <jeblair> superbee: not devstack-gate, nodepool config
+2014-03-12T21:55:53  <superbee> jeblair: oh right this is nodepool config now
+2014-03-12T21:55:59  <superbee> I am thinking of the old thing
 2014-03-12T21:56:00  <sdague> but your alternative is to impose policy into devstack because you don't want something in the gate
 2014-03-12T21:56:05  <sdague> which I think is the wrong thing
 2014-03-12T21:56:07  <jeblair> sdague: whoah whoah
@@ -2776,15 +2776,15 @@
 2014-03-12T21:59:30  <sdague> honestly I think devstack should provide more of those
 2014-03-12T21:59:39  <jeblair> sdague: i'm starting to regret that now that i've been accused of trying to 'impose policy'
 2014-03-12T22:00:00  <sdague> jeblair: ok, well mordred's patch was basically delete the vmdk because it's slow :)
-2014-03-12T22:00:18  <sdague> which is what I heard from clarkb as well
+2014-03-12T22:00:18  <sdague> which is what I heard from superbee as well
 2014-03-12T22:00:24  <sdague> so maybe I misheard
 2014-03-12T22:00:40  <mordred> sdague: two different patches
 2014-03-12T22:00:54  <mordred> sdague: I made a patch to devstack which was "delete the ref to the vmdk" - and I did that to start the discussion
 2014-03-12T22:01:10  <mordred> sdague: I also made a patch to devstack-gate which trims the vmdk out of the list of images we pre-download
 2014-03-12T22:01:22  <mordred> sdague: which would work, but puts more not less logic in d-g
-2014-03-12T22:01:31  <clarkb> mordred: nodepool
-2014-03-12T22:01:36  <mordred> clarkb: yah
-2014-03-12T22:01:50  <clarkb> mordred: I keep confusingthem too because d-g was the cacher. One day I will remember
+2014-03-12T22:01:31  <superbee> mordred: nodepool
+2014-03-12T22:01:36  <mordred> superbee: yah
+2014-03-12T22:01:50  <superbee> mordred: I keep confusingthem too because d-g was the cacher. One day I will remember
 2014-03-12T22:02:02  <mordred> sdague: my view, fwiw, is that if it's not tested, it's broken - and we don't test the vmdk in the gate, so I dont' know why it's in devstack
 2014-03-12T22:02:07  <lifeless> finally!
 2014-03-12T22:02:08  <lifeless> Cloud Images is currently in Limited Availability. It will allow you to import properly prepared images. We expect to open it to all customers before the end of March.
@@ -2801,14 +2801,14 @@
 2014-03-12T22:03:42  <mordred> mornign jhesketh__
 2014-03-12T22:04:12  *** mwagner_lap has quit IRC
 2014-03-12T22:04:49  *** zul has joined #openstack-infra
-2014-03-12T22:04:52  <clarkb> sdague: we noticed the thing because it is slow to cache
-2014-03-12T22:05:07  <clarkb> I think more than half our image build time is downloadingthat image
+2014-03-12T22:04:52  <superbee> sdague: we noticed the thing because it is slow to cache
+2014-03-12T22:05:07  <superbee> I think more than half our image build time is downloadingthat image
 2014-03-12T22:05:16  *** zul has quit IRC
-2014-03-12T22:06:08  <clarkb> not saying you can't have large images. (and the ubuntu image is evidence of that unless I am missing something)
+2014-03-12T22:06:08  <superbee> not saying you can't have large images. (and the ubuntu image is evidence of that unless I am missing something)
 2014-03-12T22:07:51  <jeblair> why is it a different image in the first place?
 2014-03-12T22:08:26  <jeblair> i mean, can you not run cirros on esx?
 2014-03-12T22:09:07  <jeblair> (and sure, if you want to have a full os instead of cirros that's fine -- couldn't you run the same full os on kvm and esx?)
-2014-03-12T22:09:13  <mtreinish> foobio, clarkb, jeblair: have you guys seen this before?: http://logs.openstack.org/72/79572/1/check/gate-tempest-python27/f099c44/console.html#_2014-03-11_10_02_35_372
+2014-03-12T22:09:13  <mtreinish> foobio, superbee, jeblair: have you guys seen this before?: http://logs.openstack.org/72/79572/1/check/gate-tempest-python27/f099c44/console.html#_2014-03-11_10_02_35_372
 2014-03-12T22:09:58  <jeblair> mtreinish: unit tests aren't allowed to sudo
 2014-03-12T22:10:04  <openstackgerrit> Joe Gordon proposed a change to openstack-infra/elastic-recheck: If not posting IRC comment for unrecognized error, log something  https://review.openstack.org/78801
 2014-03-12T22:10:05  <openstackgerrit> Joe Gordon proposed a change to openstack-infra/elastic-recheck: Make IRC bot list which failures were seen in which job.  https://review.openstack.org/78790
@@ -2820,15 +2820,15 @@
 2014-03-12T22:13:46  <mtreinish> jogo: it was't my thing I was fine without the tests. I was just trying to get mriedman to stand up for himself :)
 2014-03-12T22:14:07  *** maxbit has joined #openstack-infra
 2014-03-12T22:15:09  *** rcleere has quit IRC
-2014-03-12T22:15:28  <clarkb> how do we feel about merging mordred nodepool change? (I am still waiting for this new image, makes it really hard to iterate on this stuff)
-2014-03-12T22:15:54  <clarkb> I don't understand if garyk is saying they are using nodepool or only devstack
+2014-03-12T22:15:28  <superbee> how do we feel about merging mordred nodepool change? (I am still waiting for this new image, makes it really hard to iterate on this stuff)
+2014-03-12T22:15:54  <superbee> I don't understand if garyk is saying they are using nodepool or only devstack
 2014-03-12T22:15:57  <jogo> mtreinish: well it was a valid point, that code needed tests
 2014-03-12T22:16:43  <mtreinish> jogo: yeah but we've kind of just ignored it for most things in the past
 2014-03-12T22:17:10  <jogo> mtreinish: heh i noticed
-2014-03-12T22:17:50  <jeblair> clarkb: wfm
+2014-03-12T22:17:50  <jeblair> superbee: wfm
 2014-03-12T22:18:38  *** lcostantino has quit IRC
 2014-03-12T22:19:21  <sdague> sorry, got pulled away
-2014-03-12T22:19:22  <clarkb> jeblair: were you able to parse garyk's statement? I can't tell if the nodepool change will breka him or not
+2014-03-12T22:19:22  <superbee> jeblair: were you able to parse garyk's statement? I can't tell if the nodepool change will breka him or not
 2014-03-12T22:19:49  <sdague> mordred: I think it's in devstack because the vmware system does test it
 2014-03-12T22:19:53  <sdague> in their CI
 2014-03-12T22:20:06  <sdague> we can confirm and call them on that
@@ -2839,19 +2839,19 @@
 2014-03-12T22:20:57  <mordred> ok. then  I can buy it being decently valid - and I'd vote for us filtering in d-g - since they are one of the first ones who stepped up to the 3rd party gate strongly
 2014-03-12T22:21:27  <mordred> if it was "a dev might want to do vmware stuff" my opinion is different
 2014-03-12T22:21:41  <sdague> mordred: ok, fair.
-2014-03-12T22:22:34  <clarkb> is garyk usually on irc? /me would like to clarify comment on https://review.openstack.org/#/c/79537/1 before approving
+2014-03-12T22:22:34  <superbee> is garyk usually on irc? /me would like to clarify comment on https://review.openstack.org/#/c/79537/1 before approving
 2014-03-12T22:22:58  *** yassine has joined #openstack-infra
 2014-03-12T22:23:19  <sdague> so I guess it begs a second question, which is I'd like to add fedora20 and ubuntu(something) cloud images into devstack to make it more useful to people for dev (as that's one of the first things I add)
 2014-03-12T22:23:44  <sdague> so we should figure out if that's going to cause issues here, or if there is some other way we want to mark the images
-2014-03-12T22:23:56  <clarkb> sdague: I don't think it is going to cause issues. see my earlier statements
+2014-03-12T22:23:56  <superbee> sdague: I don't think it is going to cause issues. see my earlier statements
 2014-03-12T22:24:00  <sdague> ok
-2014-03-12T22:24:00  <clarkb> the existing ubuntu image is fine
+2014-03-12T22:24:00  <superbee> the existing ubuntu image is fine
 2014-03-12T22:24:24  <sdague> the lxc one?
 2014-03-12T22:24:26  *** lukego has quit IRC
-2014-03-12T22:24:28  <clarkb> openvz
+2014-03-12T22:24:28  <superbee> openvz
 2014-03-12T22:24:30  <sdague> ok
 2014-03-12T22:24:46  <sdague> now, openvz, that I could get behind deleting entirely :)
-2014-03-12T22:24:50  <clarkb> ++
+2014-03-12T22:24:50  <superbee> ++
 2014-03-12T22:24:56  <sdague> because, no one is using it in the gate
 2014-03-12T22:25:06  <sdague> but we'll wait until the docker drop
 2014-03-12T22:25:07  *** e0ne has quit IRC
@@ -2859,20 +2859,20 @@
 2014-03-12T22:25:31  *** e0ne has joined #openstack-infra
 2014-03-12T22:25:35  *** e0ne has quit IRC
 2014-03-12T22:26:01  *** jgrimm has quit IRC
-2014-03-12T22:26:09  <clarkb> ermagherd
+2014-03-12T22:26:09  <superbee> ermagherd
 2014-03-12T22:26:13  <openstackgerrit> Joe Gordon proposed a change to openstack-infra/elastic-recheck: If not posting IRC comment for unrecognized error, log something  https://review.openstack.org/78801
-2014-03-12T22:26:20  <clarkb> the image cacher is downloading the same image over and over
+2014-03-12T22:26:20  <superbee> the image cacher is downloading the same image over and over
 2014-03-12T22:26:25  <sdague> hah
-2014-03-12T22:26:36  * clarkb looks at fixing that
+2014-03-12T22:26:36  * superbee looks at fixing that
 2014-03-12T22:27:14  <sdague> so, I do think it is probably worth while to figure out why vmware needs a custom image. I will put that on a list, because I'd really like to get us to people pulling fairly standard upstream cloud images (fedora and ubuntu)
 2014-03-12T22:27:19  <sdague> as that seems more useful
 2014-03-12T22:27:29  *** mgagne has quit IRC
-2014-03-12T22:27:30  <clarkb> ++
+2014-03-12T22:27:30  <superbee> ++
 2014-03-12T22:28:46  *** rpodolyaka has quit IRC
-2014-03-12T22:29:25  <sdague> clarkb: do you have the vmware bot id ?
+2014-03-12T22:29:25  <sdague> superbee: do you have the vmware bot id ?
 2014-03-12T22:29:34  <sdague> so I could find some runs in gerrit to confirm what they are doing
 2014-03-12T22:30:17  *** rpodolyaka has joined #openstack-infra
-2014-03-12T22:30:28  <mordred> clarkb, sdague how about we figure out a way to flag images that the gate doesn't need to download some how?
+2014-03-12T22:30:28  <mordred> superbee, sdague how about we figure out a way to flag images that the gate doesn't need to download some how?
 2014-03-12T22:30:59  *** harlowja has quit IRC
 2014-03-12T22:31:00  <jgriffith> foobio: that wasn't nice BTW :)
 2014-03-12T22:31:06  <sdague> mordred: right, well I was thinking about that in terms of evaling with hypervisor
@@ -2890,49 +2890,49 @@
 2014-03-12T22:33:25  <sdague> jeblair: sure, well we could also provide the script in devstack
 2014-03-12T22:33:33  <mordred> hell - I'd say we just do that snippet above ^^
 2014-03-12T22:33:45  <mordred> and just do it for libvirt - since d-g doesn't do xenserver either
-2014-03-12T22:34:06  <clarkb> mordred: no
+2014-03-12T22:34:06  <superbee> mordred: no
 2014-03-12T22:34:07  <sdague> mordred: yeh, that was my suggestion. There is probably one other variable for heat that's needed as well
 2014-03-12T22:34:11  <mordred> and as soon as d-g does xenserver or lxc or anything else, we can add a thing to VIRT_DRIVERS
 2014-03-12T22:34:13  <jeblair> mordred: not yet; it might possibly could, and actually that could get a lot easier with glance
 2014-03-12T22:34:19  <mordred> yah
-2014-03-12T22:34:23  <clarkb> I don't like it I don't want to update nodepool each time we need a new hypervisor
+2014-03-12T22:34:23  <superbee> I don't like it I don't want to update nodepool each time we need a new hypervisor
 2014-03-12T22:34:23  <jeblair> there are people working on that
 2014-03-12T22:34:26  <mordred> but as long as it's just a list
-2014-03-12T22:34:28  <clarkb> docker, xen, etc are all waiting
-2014-03-12T22:34:36  <clarkb> and if they have to wait for new images thats a huge delay
+2014-03-12T22:34:28  <superbee> docker, xen, etc are all waiting
+2014-03-12T22:34:36  <superbee> and if they have to wait for new images thats a huge delay
 2014-03-12T22:34:43  <mordred> jeblair: I'm quite excited about glance
-2014-03-12T22:34:44  <clarkb> if we can just download some sane images then we are set
+2014-03-12T22:34:44  <superbee> if we can just download some sane images then we are set
 2014-03-12T22:34:47  <sdague> jeblair: so what if we provided a devstack tool that let you declare a list of hypervisors you care about on the command line
 2014-03-12T22:34:58  <sdague> and it dumps image urls yuo need
 2014-03-12T22:35:07  <jeblair> sdague: and make that tool name/command like argument the stable api?
 2014-03-12T22:35:11  <sdague> instead of the parser, which I know I broke you guys
 2014-03-12T22:35:13  <sdague> jeblair: yep
 2014-03-12T22:35:18  <mordred> ++
-2014-03-12T22:35:25  <jeblair> sdague: sounds lovely if we can get clarkb on board with the idea :)
+2014-03-12T22:35:25  <jeblair> sdague: sounds lovely if we can get superbee on board with the idea :)
 2014-03-12T22:35:29  <sdague> we'll put it in devstack and backport it
-2014-03-12T22:35:31  <clarkb> that still requires a huge turn around delay on getting support for new stuff
-2014-03-12T22:35:34  <mordred> clarkb: what don't you like it?
-2014-03-12T22:35:47  <sdague> so, I've got something else which will make clarkb happy immediately
-2014-03-12T22:35:48  <clarkb> mordred: beacuse you are talking days of waiting, get image in devstack, get nodepool to update, wait for images
+2014-03-12T22:35:31  <superbee> that still requires a huge turn around delay on getting support for new stuff
+2014-03-12T22:35:34  <mordred> superbee: what don't you like it?
+2014-03-12T22:35:47  <sdague> so, I've got something else which will make superbee happy immediately
+2014-03-12T22:35:48  <superbee> mordred: beacuse you are talking days of waiting, get image in devstack, get nodepool to update, wait for images
 2014-03-12T22:35:58  *** jergerber has joined #openstack-infra
-2014-03-12T22:36:03  <jeblair> clarkb: it's worth noting that devstack does work with a cache miss in this system
+2014-03-12T22:36:03  <jeblair> superbee: it's worth noting that devstack does work with a cache miss in this system
 2014-03-12T22:36:06  <sdague> turns out vmware doesn't use this image in their CI - http://208.91.1.172/logs/77736/5/console.txt
-2014-03-12T22:36:06  <clarkb> with the current system docker/xen/whoever could just start doing stuff
+2014-03-12T22:36:06  <superbee> with the current system docker/xen/whoever could just start doing stuff
 2014-03-12T22:36:14  <sdague> they use a cirros image from the same url
 2014-03-12T22:36:18  <sdague> which will be tons smaller
-2014-03-12T22:36:31  <mordred> clarkb: what?
-2014-03-12T22:36:42  <mordred> clarkb: I'm not trying to troll - I am not following what you are talking about at all
-2014-03-12T22:36:45  <jeblair> clarkb: so you can actually start doing your devstack work etc before updating the image cacher to add your hypervisor
-2014-03-12T22:36:59  <clarkb> jeblair: with a potentially massive delay as we are seeing
-2014-03-12T22:37:04  <jeblair> clarkb: and, tbh, in 3 years we still haven't added a hypervisor.
-2014-03-12T22:37:10  <clarkb> jeblair: thats fair
-2014-03-12T22:37:16  <clarkb> jeblair: but, docker and xen are wanting to
-2014-03-12T22:37:21  <clarkb> and I expect them to in juno
-2014-03-12T22:37:45  <jeblair> clarkb: we could go ahead and put them in our initial list
-2014-03-12T22:39:00  <sdague> clarkb: https://review.openstack.org/80101
+2014-03-12T22:36:31  <mordred> superbee: what?
+2014-03-12T22:36:42  <mordred> superbee: I'm not trying to troll - I am not following what you are talking about at all
+2014-03-12T22:36:45  <jeblair> superbee: so you can actually start doing your devstack work etc before updating the image cacher to add your hypervisor
+2014-03-12T22:36:59  <superbee> jeblair: with a potentially massive delay as we are seeing
+2014-03-12T22:37:04  <jeblair> superbee: and, tbh, in 3 years we still haven't added a hypervisor.
+2014-03-12T22:37:10  <superbee> jeblair: thats fair
+2014-03-12T22:37:16  <superbee> jeblair: but, docker and xen are wanting to
+2014-03-12T22:37:21  <superbee> and I expect them to in juno
+2014-03-12T22:37:45  <jeblair> superbee: we could go ahead and put them in our initial list
+2014-03-12T22:39:00  <sdague> superbee: https://review.openstack.org/80101
 2014-03-12T22:39:15  *** malini is now known as malini_afk
 2014-03-12T22:39:26  <sdague> so that will make you immediately more happy.
-2014-03-12T22:39:43  <jeblair> clarkb: moreover, with glance we might end up having 'devstack-foo-xen' 'devstack-foo-kvm' images anyway, with the nodepool scripts having a bit more knowledge of hypervisors...
+2014-03-12T22:39:43  <jeblair> superbee: moreover, with glance we might end up having 'devstack-foo-xen' 'devstack-foo-kvm' images anyway, with the nodepool scripts having a bit more knowledge of hypervisors...
 2014-03-12T22:40:25  *** jamielennox|away is now known as jamielennox
 2014-03-12T22:41:12  <sdague> ok, so I need to run away. if we want a tool in devstack that takes hypervisors and spits out images, I am happy to do that
 2014-03-12T22:41:23  *** jergerber has quit IRC
@@ -2940,11 +2940,11 @@
 2014-03-12T22:41:44  <sdague> regardless we should be able to fix the giant debian image issue in the short term
 2014-03-12T22:41:50  <sdague> per patch above
 2014-03-12T22:42:32  <openstackgerrit> Clark Boylan proposed a change to openstack-infra/config: Download each cached image once.  https://review.openstack.org/80102
-2014-03-12T22:42:36  <clarkb> jeblair: mordred ^ you will like that
-2014-03-12T22:43:44  <clarkb> and I think that fixes a majority of the problem here
-2014-03-12T22:45:32  <sdague> clarkb: well dtroyer just approved the switch to cirros as well
+2014-03-12T22:42:36  <superbee> jeblair: mordred ^ you will like that
+2014-03-12T22:43:44  <superbee> and I think that fixes a majority of the problem here
+2014-03-12T22:45:32  <sdague> superbee: well dtroyer just approved the switch to cirros as well
 2014-03-12T22:45:36  <sdague> so that will also help
-2014-03-12T22:45:40  <clarkb> woot
+2014-03-12T22:45:40  <superbee> woot
 2014-03-12T22:45:44  *** MarkAtwood has quit IRC
 2014-03-12T22:45:51  <sdague> ok, running away for real, have a good night
 2014-03-12T22:46:13  *** sarob__ has joined #openstack-infra
@@ -2958,59 +2958,59 @@
 2014-03-12T22:53:23  *** hogepodge has quit IRC
 2014-03-12T22:53:51  *** MarkAtwood has joined #openstack-infra
 2014-03-12T22:55:13  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Use unbound  https://review.openstack.org/80092
-2014-03-12T22:55:16  <clarkb> jeblair: mordred foobio SergeyLukjanov I held 15.126.230.111 it booted off of the hpcloud-region-b image. It came up with 8GB of RAM and no non standard apt lists
-2014-03-12T22:55:31  <clarkb> figured I would give folks an opportunity to take a look but it seems happy
-2014-03-12T22:55:50  <jeblair> clarkb, pleia2, mattoliverau: ^ i responded to your comments; maybe we should have further discussion here?
-2014-03-12T22:55:58  <clarkb> jeblair: let me look
+2014-03-12T22:55:16  <superbee> jeblair: mordred foobio SergeyLukjanov I held 15.126.230.111 it booted off of the hpcloud-region-b image. It came up with 8GB of RAM and no non standard apt lists
+2014-03-12T22:55:31  <superbee> figured I would give folks an opportunity to take a look but it seems happy
+2014-03-12T22:55:50  <jeblair> superbee, pleia2, mattoliverau: ^ i responded to your comments; maybe we should have further discussion here?
+2014-03-12T22:55:58  <superbee> jeblair: let me look
 2014-03-12T22:56:07  *** alex-out is now known as Alexandra
 2014-03-12T22:56:27  <jeblair> oh, i guess gerrit doesn't order those things...
 2014-03-12T22:56:47  *** Daviey has joined #openstack-infra
 2014-03-12T22:57:04  <jeblair> um, let me know if you have trouble matching my response to your comment.  :)
-2014-03-12T22:57:35  <clarkb> jeblair: for the centos thing, puppet will set resolve.conf to 127.0.0.1
-2014-03-12T22:57:42  <mordred> clarkb: woot
-2014-03-12T22:57:59  <jeblair> clarkb: my response to you was "I tested this on a centos node. Can you point me at where you're talking about?"
-2014-03-12T22:58:01  <clarkb> jeblair: then the nodepool script addition will run and make the unbound talk to localhost instead of external resolver
-2014-03-12T22:58:23  <jeblair> clarkb: oh, you're talking about my own change...
+2014-03-12T22:57:35  <superbee> jeblair: for the centos thing, puppet will set resolve.conf to 127.0.0.1
+2014-03-12T22:57:42  <mordred> superbee: woot
+2014-03-12T22:57:59  <jeblair> superbee: my response to you was "I tested this on a centos node. Can you point me at where you're talking about?"
+2014-03-12T22:58:01  <superbee> jeblair: then the nodepool script addition will run and make the unbound talk to localhost instead of external resolver
+2014-03-12T22:58:23  <jeblair> superbee: oh, you're talking about my own change...
 2014-03-12T22:58:27  <jeblair> that makes sense.  :)
-2014-03-12T22:58:39  <clarkb> jeblair: https://review.openstack.org/#/c/80092/1/modules/unbound/manifests/init.pp line 50
-2014-03-12T22:58:53  <clarkb> yup
+2014-03-12T22:58:39  <superbee> jeblair: https://review.openstack.org/#/c/80092/1/modules/unbound/manifests/init.pp line 50
+2014-03-12T22:58:53  <superbee> yup
 2014-03-12T22:58:58  *** _sweston_ has joined #openstack-infra
 2014-03-12T22:59:41  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Use unbound  https://review.openstack.org/80092
-2014-03-12T22:59:49  <jeblair> clarkb: thank you, that was a very nice "doh!" catch.  :)
+2014-03-12T22:59:49  <jeblair> superbee: thank you, that was a very nice "doh!" catch.  :)
 2014-03-12T22:59:59  *** sweston has quit IRC
-2014-03-12T23:00:30  <clarkb> np
+2014-03-12T23:00:30  <superbee> np
 2014-03-12T23:00:45  <openstackgerrit> Tom Fifield proposed a change to openstack-infra/config: Enable Welcome Message to post review comments  https://review.openstack.org/80111
-2014-03-12T23:00:47  <jeblair> clarkb: so as to your suggestion about getting a list of nameservers... where should we get them?
+2014-03-12T23:00:47  <jeblair> superbee: so as to your suggestion about getting a list of nameservers... where should we get them?
 2014-03-12T23:00:54  <jeblair> mattoliverau: ^ goes to your comment too...
-2014-03-12T23:01:05  <clarkb> now the other thing to worry about
-2014-03-12T23:01:15  <clarkb> will dhcp update the nameserver for us?
-2014-03-12T23:01:30  <jeblair> clarkb: what dhcp?
-2014-03-12T23:01:33  <clarkb> because that would be annoying
-2014-03-12T23:01:43  <clarkb> jeblair: the dhcp run by the cloud provider to set things when VMs come up
-2014-03-12T23:01:59  <clarkb> iirc nova has a really low lease time so we would be picking up new leases at least a few times during a test
+2014-03-12T23:01:05  <superbee> now the other thing to worry about
+2014-03-12T23:01:15  <superbee> will dhcp update the nameserver for us?
+2014-03-12T23:01:30  <jeblair> superbee: what dhcp?
+2014-03-12T23:01:33  <superbee> because that would be annoying
+2014-03-12T23:01:43  <superbee> jeblair: the dhcp run by the cloud provider to set things when VMs come up
+2014-03-12T23:01:59  <superbee> iirc nova has a really low lease time so we would be picking up new leases at least a few times during a test
 2014-03-12T23:02:08  <openstackgerrit> A change was merged to openstack-infra/config: Download each cached image once.  https://review.openstack.org/80102
 2014-03-12T23:02:19  *** dims_ has quit IRC
-2014-03-12T23:02:19  <clarkb> jeblair: this is easy to test, I will change the nameserver on one of my hpcloud instances
-2014-03-12T23:02:36  <clarkb> then wait and see if a new lease updates it (can rpobably also look in /var/log/dhclient/leases*
-2014-03-12T23:02:50  <jeblair> clarkb: well, rackspace writes /etc/network/interfaces
-2014-03-12T23:02:56  <jeblair> clarkb: and uses a static config
-2014-03-12T23:03:01  <clarkb> huh no dhclient, maybe that is how hpcloud does it too
+2014-03-12T23:02:19  <superbee> jeblair: this is easy to test, I will change the nameserver on one of my hpcloud instances
+2014-03-12T23:02:36  <superbee> then wait and see if a new lease updates it (can rpobably also look in /var/log/dhclient/leases*
+2014-03-12T23:02:50  <jeblair> superbee: well, rackspace writes /etc/network/interfaces
+2014-03-12T23:02:56  <jeblair> superbee: and uses a static config
+2014-03-12T23:03:01  <superbee> huh no dhclient, maybe that is how hpcloud does it too
 2014-03-12T23:03:25  *** hogepodge has joined #openstack-infra
-2014-03-12T23:03:25  <clarkb> ah /var/lib
+2014-03-12T23:03:25  <superbee> ah /var/lib
 2014-03-12T23:03:26  *** adalbas has quit IRC
-2014-03-12T23:03:39  <jeblair> clarkb: ?
-2014-03-12T23:03:54  <clarkb> jeblair: option domain-name-servers 8.8.4.4,8.8.8.8; is set in the hpcloud lease
-2014-03-12T23:04:25  <clarkb> jeblair: we can do something to ignore that option. I am trying to remember what; haven't had to do it in years
+2014-03-12T23:03:39  <jeblair> superbee: ?
+2014-03-12T23:03:54  <superbee> jeblair: option domain-name-servers 8.8.4.4,8.8.8.8; is set in the hpcloud lease
+2014-03-12T23:04:25  <superbee> jeblair: we can do something to ignore that option. I am trying to remember what; haven't had to do it in years
 2014-03-12T23:04:43  *** melwitt has quit IRC
-2014-03-12T23:04:51  <jeblair> clarkb: so hpcloud does run dhclient?
-2014-03-12T23:05:08  <clarkb> option dhcp-rebinding-time 151200; is not as short as I thought it may be
+2014-03-12T23:04:51  <jeblair> superbee: so hpcloud does run dhclient?
+2014-03-12T23:05:08  <superbee> option dhcp-rebinding-time 151200; is not as short as I thought it may be
 2014-03-12T23:05:13  *** mark0n has quit IRC
-2014-03-12T23:05:14  <clarkb> jeblair: yup
-2014-03-12T23:05:21  <jeblair> clarkb: also, hpcloud uses google for their dns servers ?!?!?!
+2014-03-12T23:05:14  <superbee> jeblair: yup
+2014-03-12T23:05:21  <jeblair> superbee: also, hpcloud uses google for their dns servers ?!?!?!
 2014-03-12T23:05:21  <pleia2> jeblair: so I just manually edited /etc/resolv.conf on an hpcloud ubuntu instance, when I rebooted it had reset back to the old one
-2014-03-12T23:05:29  <clarkb> jeblair: apparently
-2014-03-12T23:05:36  <clarkb> pleia2: ya because dhcp
-2014-03-12T23:05:44  <clarkb> pleia2: check your leases in /var/lib/dhcp/
+2014-03-12T23:05:29  <superbee> jeblair: apparently
+2014-03-12T23:05:36  <superbee> pleia2: ya because dhcp
+2014-03-12T23:05:44  <superbee> pleia2: check your leases in /var/lib/dhcp/
 2014-03-12T23:05:50  <pleia2> yep, as I mentioned in my comment
 2014-03-12T23:06:14  <jeblair> pleia2: your comment was about a bit of code that didn't write to /etc/resolv.conf
 2014-03-12T23:06:53  <jeblair> pleia2: nothing i did in that patch writes to /etc/resolv.conf on ubuntu
@@ -3018,81 +3018,81 @@
 2014-03-12T23:07:19  <jeblair> pleia2: instead, unbound tells resolvconf about itself and so resolvconf writes /etc/resolv.conf with the localhost value
 2014-03-12T23:07:22  <pleia2> jeblair: oh, ugh, I misread :(
 2014-03-12T23:07:51  <pleia2> yeah
-2014-03-12T23:08:15  <clarkb> jeblair: /etc/dhcp/dhclient-enter-hooks.d/resolvconf pushes this information to resolvconf. So resolvconf may do the right thing if unbound wins over dhcp
-2014-03-12T23:08:24  <clarkb> which honestly I think dhcp should win in a properly designed env
+2014-03-12T23:08:15  <superbee> jeblair: /etc/dhcp/dhclient-enter-hooks.d/resolvconf pushes this information to resolvconf. So resolvconf may do the right thing if unbound wins over dhcp
+2014-03-12T23:08:24  <superbee> which honestly I think dhcp should win in a properly designed env
 2014-03-12T23:08:24  *** maxbit_ has quit IRC
-2014-03-12T23:08:47  <jeblair> clarkb: you think dhcp should override a locally configured resolver?
-2014-03-12T23:08:58  <jeblair> clarkb: i strongly disagree
-2014-03-12T23:09:00  <clarkb> jeblair: yes, because dhcp's job is to configure stuff
-2014-03-12T23:09:10  <jeblair> clarkb: dhcp doesn't have the right context to make that decision
+2014-03-12T23:08:47  <jeblair> superbee: you think dhcp should override a locally configured resolver?
+2014-03-12T23:08:58  <jeblair> superbee: i strongly disagree
+2014-03-12T23:09:00  <superbee> jeblair: yes, because dhcp's job is to configure stuff
+2014-03-12T23:09:10  <jeblair> superbee: dhcp doesn't have the right context to make that decision
 2014-03-12T23:09:12  *** maxbit has quit IRC
-2014-03-12T23:09:15  <clarkb> you start having rogue devices otherwise
-2014-03-12T23:09:24  <clarkb> jeblair: sure it does, you control dhcp server and clients
+2014-03-12T23:09:15  <superbee> you start having rogue devices otherwise
+2014-03-12T23:09:24  <superbee> jeblair: sure it does, you control dhcp server and clients
 2014-03-12T23:09:26  *** mriedem has joined #openstack-infra
-2014-03-12T23:09:26  <clarkb> usually
-2014-03-12T23:09:30  <jeblair> clarkb: if a sysadmin installs a local recursive resolver, it _clearly_ should be used
-2014-03-12T23:09:42  <jeblair> clarkb: you may not have noticed that we do not control the dhcp server
-2014-03-12T23:09:52  <jeblair> clarkb: and the people who do are making really bad decisions about dns
-2014-03-12T23:09:52  <clarkb> jeblair: right hence my comment about proper env
-2014-03-12T23:09:55  <clarkb> cloud is special
+2014-03-12T23:09:26  <superbee> usually
+2014-03-12T23:09:30  <jeblair> superbee: if a sysadmin installs a local recursive resolver, it _clearly_ should be used
+2014-03-12T23:09:42  <jeblair> superbee: you may not have noticed that we do not control the dhcp server
+2014-03-12T23:09:52  <jeblair> superbee: and the people who do are making really bad decisions about dns
+2014-03-12T23:09:52  <superbee> jeblair: right hence my comment about proper env
+2014-03-12T23:09:55  <superbee> cloud is special
 2014-03-12T23:10:10  <jeblair> so, anyway... back to getting this working
-2014-03-12T23:10:28  <jeblair> clarkb: when i look at an hpcloud centos node, i see nameserver 10.6.0.1 in resolv.conf
+2014-03-12T23:10:28  <jeblair> superbee: when i look at an hpcloud centos node, i see nameserver 10.6.0.1 in resolv.conf
 2014-03-12T23:10:30  *** mrodden has joined #openstack-infra
-2014-03-12T23:10:32  <clarkb> jeblair: I can isntall unbound on my test box and reboot it to see what happens
-2014-03-12T23:10:46  <jeblair> clarkb: that does not seem to equal 8.8.8.8
-2014-03-12T23:10:50  <clarkb> jeblair: right I think the lease time is long enough we will only see trouble at boot
-2014-03-12T23:11:36  <jeblair> clarkb: i'm not following
+2014-03-12T23:10:32  <superbee> jeblair: I can isntall unbound on my test box and reboot it to see what happens
+2014-03-12T23:10:46  <jeblair> superbee: that does not seem to equal 8.8.8.8
+2014-03-12T23:10:50  <superbee> jeblair: right I think the lease time is long enough we will only see trouble at boot
+2014-03-12T23:11:36  <jeblair> superbee: i'm not following
 2014-03-12T23:11:52  *** nati_ueno has quit IRC
-2014-03-12T23:12:00  <clarkb> jeblair: when we boot off of the image you have made with that nameserver, it will ask for a dhcp lease
-2014-03-12T23:12:09  <clarkb> if resolvconf lets dhcp win then we have a problem
-2014-03-12T23:12:13  <jeblair> clarkb: if you see 8.8.8.8 in the lease and i see 10.6.0.1 in resolv.conf, that suggests to me that resolv.conf is not affected by dhcp at all :/
+2014-03-12T23:12:00  <superbee> jeblair: when we boot off of the image you have made with that nameserver, it will ask for a dhcp lease
+2014-03-12T23:12:09  <superbee> if resolvconf lets dhcp win then we have a problem
+2014-03-12T23:12:13  <jeblair> superbee: if you see 8.8.8.8 in the lease and i see 10.6.0.1 in resolv.conf, that suggests to me that resolv.conf is not affected by dhcp at all :/
 2014-03-12T23:12:21  *** nati_ueno has joined #openstack-infra
-2014-03-12T23:12:29  <clarkb> jeblair: but have you rebooted that machine
-2014-03-12T23:12:40  <jeblair> clarkb: i'm not talking about an image with any of the new unbound stuff
-2014-03-12T23:12:45  <jeblair> clarkb: i'm just talking about what we have now
-2014-03-12T23:12:47  <clarkb> oh
-2014-03-12T23:12:49  <clarkb> huh
+2014-03-12T23:12:29  <superbee> jeblair: but have you rebooted that machine
+2014-03-12T23:12:40  <jeblair> superbee: i'm not talking about an image with any of the new unbound stuff
+2014-03-12T23:12:45  <jeblair> superbee: i'm just talking about what we have now
+2014-03-12T23:12:47  <superbee> oh
+2014-03-12T23:12:49  <superbee> huh
 2014-03-12T23:13:13  *** melwitt has joined #openstack-infra
-2014-03-12T23:13:13  <clarkb> jeblair: my resolv.conf is google
-2014-03-12T23:13:22  <clarkb> this is a node in hpcloud-region-b
-2014-03-12T23:13:34  <jeblair> clarkb: oh i used azx
+2014-03-12T23:13:13  <superbee> jeblair: my resolv.conf is google
+2014-03-12T23:13:22  <superbee> this is a node in hpcloud-region-b
+2014-03-12T23:13:34  <jeblair> superbee: oh i used azx
 2014-03-12T23:14:04  <jeblair> i can't tell you how excited i am that we have 6 combinations to test.
-2014-03-12T23:14:52  <jeblair> clarkb: is dhclient running on your region b node?
-2014-03-12T23:15:06  <clarkb> jeblair: yes
-2014-03-12T23:15:31  * clarkb sets to dyndns and reboots
+2014-03-12T23:14:52  <jeblair> superbee: is dhclient running on your region b node?
+2014-03-12T23:15:06  <superbee> jeblair: yes
+2014-03-12T23:15:31  * superbee sets to dyndns and reboots
 2014-03-12T23:16:06  *** dims_ has joined #openstack-infra
-2014-03-12T23:17:10  <clarkb> jeblair: yup dhcp reset my nameserver. Now I am going to try unbound
+2014-03-12T23:17:10  <superbee> jeblair: yup dhcp reset my nameserver. Now I am going to try unbound
 2014-03-12T23:17:12  <jeblair> okay, so it seems like hpcloud has dhclient running in both clouds, and sends 10.6.0.1 in old and google in new.
-2014-03-12T23:18:33  <jeblair> clarkb: the answer is probably different with centos and ubuntu too -- there's a chance resolvconf will do the right thing and leave it on ubuntu; but i'm assuming dhclient writes resolv.conf directly on hpcloud centos.
+2014-03-12T23:18:33  <jeblair> superbee: the answer is probably different with centos and ubuntu too -- there's a chance resolvconf will do the right thing and leave it on ubuntu; but i'm assuming dhclient writes resolv.conf directly on hpcloud centos.
 2014-03-12T23:18:46  <foobio> jgriffith: cinder isn't deserving my *my* ire at all! i can't help if some irc bot decides to take out a vendetta ;)
 2014-03-12T23:19:07  <jeblair> i <3 cinder
-2014-03-12T23:19:20  <foobio> jeblair: clarkb: most dhcp clients allow you to configure which options to request, which options to ignore, and which list options you might want to apprend/prepend to
+2014-03-12T23:19:20  <foobio> jeblair: superbee: most dhcp clients allow you to configure which options to request, which options to ignore, and which list options you might want to apprend/prepend to
 2014-03-12T23:20:05  <foobio> i will just about guarantee i can find you a config option to let you override the dhcp-suggested resolver list
 2014-03-12T23:20:17  <jeblair> foobio: yeah, it seems like we might need to reconfigure dhclient on hpcloud, and do nothing on raxspace (which uses static config)
 2014-03-12T23:20:18  * foobio looks to see which client hpcloud is installing
 2014-03-12T23:20:49  <jeblair> /sbin/dhclient -1 -q -cf /etc/dhcp/dhclient-eth0.conf -lf /var/lib/dhclient/dhclient-eth0.leases -pf /var/run/dhclient-eth0.pid eth0
-2014-03-12T23:20:58  <clarkb> foobio: yes I know I was suggesting we do that
+2014-03-12T23:20:58  <superbee> foobio: yes I know I was suggesting we do that
 2014-03-12T23:21:08  <jeblair> dhclient3 -e IF_METRIC=100 -pf /var/run/dhclient.eth0.pid -lf /var/lib/dhcp/dhclient.eth0.leases -1 eth0
 2014-03-12T23:21:09  <foobio> oh, that's what i get for skimmingh
 2014-03-12T23:21:12  <foobio> skimming
 2014-03-12T23:21:17  <jeblair> centos and ubuntu, respectively
-2014-03-12T23:21:24  <clarkb> I have unbound resolving on my test box
-2014-03-12T23:21:31  <clarkb> rebooting now to see what happens to resolv.conf
+2014-03-12T23:21:24  <superbee> I have unbound resolving on my test box
+2014-03-12T23:21:31  <superbee> rebooting now to see what happens to resolv.conf
 2014-03-12T23:21:37  *** atiwari has joined #openstack-infra
-2014-03-12T23:22:07  <clarkb> jeblair: looks like unbound won on precise hpcloud
+2014-03-12T23:22:07  <superbee> jeblair: looks like unbound won on precise hpcloud
 2014-03-12T23:23:11  <jeblair> yeah, so i think we're set on precise everywhere thanks to resolvconf.  i never thought i'd say that.
 2014-03-12T23:23:19  *** yassine has quit IRC
 2014-03-12T23:23:37  <jeblair> then on rax-centos, we just write /etc/resolv.conf, and on hpcloud-centos, we reconfigure dhclient?
-2014-03-12T23:24:02  <clarkb> jeblair: should be safe to reconfigure dhclient on all nodes and not think to hard about it
-2014-03-12T23:24:20  <clarkb> not sure if we want to be specific or not if one node type doesn't deal with this properly
+2014-03-12T23:24:02  <superbee> jeblair: should be safe to reconfigure dhclient on all nodes and not think to hard about it
+2014-03-12T23:24:20  <superbee> not sure if we want to be specific or not if one node type doesn't deal with this properly
 2014-03-12T23:24:33  *** gyee has joined #openstack-infra
-2014-03-12T23:24:38  <jeblair> clarkb: would be good to avoid it since currently puppet has no idea if we're on hpcloud or rax.
+2014-03-12T23:24:38  <jeblair> superbee: would be good to avoid it since currently puppet has no idea if we're on hpcloud or rax.
 2014-03-12T23:24:45  <foobio> dhclient-4.1.1-38.P1.el6.centos.x86_64 on centos6, config is in /etc/dhcp/dhclient-eth0.conf with a /etc/dhcp/dhclient.d run-parts dir
 2014-03-12T23:24:46  *** atiwari has quit IRC
-2014-03-12T23:25:32  <jeblair> foobio, clarkb: that same version is also installed on rax
-2014-03-12T23:26:05  <jeblair> clarkb: so yeah, seems like the idea of 'just reconfigure dhclient everywhere' should work
+2014-03-12T23:25:32  <jeblair> foobio, superbee: that same version is also installed on rax
+2014-03-12T23:26:05  <jeblair> superbee: so yeah, seems like the idea of 'just reconfigure dhclient everywhere' should work
 2014-03-12T23:26:29  <jeblair> or at least, for all centos
-2014-03-12T23:26:32  <clarkb> ya
+2014-03-12T23:26:32  <superbee> ya
 2014-03-12T23:26:33  *** wchrisj has quit IRC
 2014-03-12T23:27:19  <foobio> isc-dhcp-client on precise with /etc/dhcp/dhclient.conf and dhclient-enter-hooks.d and dhclient-exit-hooks.dm run-parts dirs
 2014-03-12T23:27:57  <foobio> we want to 'prepend domain-name-servers 127.0.0.1;'
@@ -3107,7 +3107,7 @@
 2014-03-12T23:30:27  <jeblair> i'm going broke
 2014-03-12T23:30:31  *** dcramer__ has quit IRC
 2014-03-12T23:31:00  * foobio spent all his twenty-five cent words on cheap booze
-2014-03-12T23:31:13  <jeblair> foobio, clarkb: do we need to append that to /etc/dhcp/dhclient-eth0.conf ?
+2014-03-12T23:31:13  <jeblair> foobio, superbee: do we need to append that to /etc/dhcp/dhclient-eth0.conf ?
 2014-03-12T23:32:16  *** denis_makogon has quit IRC
 2014-03-12T23:32:16  <foobio> that should work fine. anywhere in the global scope, just not inside other config scope blocks like lease{}; or alias{};
 2014-03-12T23:32:26  *** maxbit has joined #openstack-infra
@@ -3120,8 +3120,8 @@
 2014-03-12T23:33:07  <jeblair> i'm not sure what we should do with puppet in that case?
 2014-03-12T23:33:08  <foobio> yeah, the centos one is wonderfully terse. the precise one has a lot more to ir
 2014-03-12T23:33:11  <foobio> to it
-2014-03-12T23:33:18  <clarkb> jeblair: dump a file in the .d dir?
-2014-03-12T23:33:30  <clarkb> with one line overriding nameservers?
+2014-03-12T23:33:18  <superbee> jeblair: dump a file in the .d dir?
+2014-03-12T23:33:30  <superbee> with one line overriding nameservers?
 2014-03-12T23:33:36  <foobio> for centos there's just the one run-parts dir so that ought to work
 2014-03-12T23:33:47  <jeblair> i thought that just ran scripts
 2014-03-12T23:33:51  <jeblair> i didn't think it was included config
@@ -3129,8 +3129,8 @@
 2014-03-12T23:34:05  <jeblair> dhclient.d/ntp.sh
 2014-03-12T23:34:12  <foobio> yep, script
 2014-03-12T23:34:20  <foobio> so we do need to append to the config
-2014-03-12T23:34:38  <clarkb> ah
-2014-03-12T23:34:40  <clarkb> :/
+2014-03-12T23:34:38  <superbee> ah
+2014-03-12T23:34:40  <superbee> :/
 2014-03-12T23:34:49  *** wenlock has quit IRC
 2014-03-12T23:34:50  *** wenlock_ has joined #openstack-infra
 2014-03-12T23:34:55  *** wenlock_ is now known as wenlock
@@ -3149,19 +3149,19 @@
 2014-03-12T23:39:41  *** david_lyle_ has joined #openstack-infra
 2014-03-12T23:39:48  <foobio> i've probably just never gotten to witness some of the myriad of ways that can go horribly wrong
 2014-03-12T23:40:44  *** VijayTripathi has joined #openstack-infra
-2014-03-12T23:40:56  <clarkb> there is parsed file
-2014-03-12T23:41:02  <clarkb> which is clunky
+2014-03-12T23:40:56  <superbee> there is parsed file
+2014-03-12T23:41:02  <superbee> which is clunky
 2014-03-12T23:41:11  *** david-lyle has quit IRC
 2014-03-12T23:41:25  <foobio> i wonder whether completely normalizing the dhclient config between platforms/providers would present new problems
 2014-03-12T23:42:10  <jeblair> this is another "multi cloud is hard" moment.
 2014-03-12T23:42:45  *** sweston has quit IRC
 2014-03-12T23:43:00  *** dcramer__ has joined #openstack-infra
-2014-03-12T23:45:28  <clarkb> does centos not do resolvconf?
+2014-03-12T23:45:28  <superbee> does centos not do resolvconf?
 2014-03-12T23:46:07  <foobio> i thought resolvconf was an ubuntuism which got up-ported into debian, though i could be wrong
 2014-03-12T23:46:17  *** CaptTofu has joined #openstack-infra
 2014-03-12T23:46:51  <jeblair> yum search resolvconf comes up empty
 2014-03-12T23:46:53  <foobio> starting as basically a hackish dhcp client hook script which made in-place edits to your resolv.conf file
-2014-03-12T23:47:07  <clarkb> gotcha
+2014-03-12T23:47:07  <superbee> gotcha
 2014-03-12T23:47:27  <foobio> one of those innovations to ease linux adoption in the average joe desktop market
 2014-03-12T23:48:08  *** SumitNaiksatam has joined #openstack-infra
 2014-03-12T23:48:54  *** wchrisj has joined #openstack-infra
@@ -3170,12 +3170,12 @@
 2014-03-12T23:49:56  <jeblair> okay, so that change should do the dhclient thing (i think)...
 2014-03-12T23:50:05  <jeblair> one more thing while we're brainstorming though...
 2014-03-12T23:50:16  <foobio> indeed
-2014-03-12T23:50:21  <jeblair> clarkb and mattoliverau: both suggested having puppet configure the forward ips
+2014-03-12T23:50:21  <jeblair> superbee and mattoliverau: both suggested having puppet configure the forward ips
 2014-03-12T23:50:29  *** CaptTofu has quit IRC
 2014-03-12T23:50:30  *** yamahata has joined #openstack-infra
 2014-03-12T23:50:49  <jeblair> i chose not to do that because i figured reading /etc/resolv.conf would give us the ips on all os/provider combinations...
 2014-03-12T23:50:54  <jeblair> i think that's still the case, yeah?
-2014-03-12T23:51:02  <clarkb> jeblair: yes, that should still be the case
+2014-03-12T23:51:02  <superbee> jeblair: yes, that should still be the case
 2014-03-12T23:51:05  <openstackgerrit> Arnaud Legendre proposed a change to openstack/requirements: Update oslo.vmware to be >= 0.3  https://review.openstack.org/80120
 2014-03-12T23:51:12  <jeblair> given what we know, would it make sense to do it in puppet?
 2014-03-12T23:51:12  <mattoliverau> sorry, been in a meeting.. reading scroll back
@@ -3183,17 +3183,17 @@
 2014-03-12T23:51:54  <jeblair> i mean, i think the fact would have to read the dhcp lease on hpcloud and the /etc/network/interfaces or /etc/system/whatever files on rax
 2014-03-12T23:51:58  <jeblair> right?
 2014-03-12T23:52:29  <jeblair> so that's at least 3 different files (with different syntaxes) that we would need to parse
-2014-03-12T23:52:43  <clarkb> jeblair: probably. I think we can start with what you have there. Mostly my concern is/was that if you run puppet on a machine without the nodepool script you will get a half configured node
-2014-03-12T23:53:07  <clarkb> jeblair: for things related to image building thats fine (boot parameters and so on) but the unbound service is configured half in pupet and half in nodepool
-2014-03-12T23:53:21  <jeblair> clarkb: actually we will run the puppet on all machines
+2014-03-12T23:52:43  <superbee> jeblair: probably. I think we can start with what you have there. Mostly my concern is/was that if you run puppet on a machine without the nodepool script you will get a half configured node
+2014-03-12T23:53:07  <superbee> jeblair: for things related to image building thats fine (boot parameters and so on) but the unbound service is configured half in pupet and half in nodepool
+2014-03-12T23:53:21  <jeblair> superbee: actually we will run the puppet on all machines
 2014-03-12T23:53:23  *** Alexandra is now known as alex-afk
-2014-03-12T23:53:44  <jeblair> clarkb: that's going to run on servers too, and configure unbound, and the nodepool bit is not going to run
-2014-03-12T23:54:04  <jeblair> clarkb: which is fine, because that will give us unbound in the default recursive resolver config, which is what we want on servers
+2014-03-12T23:53:44  <jeblair> superbee: that's going to run on servers too, and configure unbound, and the nodepool bit is not going to run
+2014-03-12T23:54:04  <jeblair> superbee: which is fine, because that will give us unbound in the default recursive resolver config, which is what we want on servers
 2014-03-12T23:54:33  *** resker has quit IRC
-2014-03-12T23:54:38  <clarkb> oh right, nodepool is just doing forwarding config for us
+2014-03-12T23:54:38  <superbee> oh right, nodepool is just doing forwarding config for us
 2014-03-12T23:54:44  *** gokrokve_ has quit IRC
-2014-03-12T23:54:50  <jeblair> clarkb: so it's sort of like every host (nodepoor or not) gets unbound, then nodepool hosts drop in a forwarding config
-2014-03-12T23:54:56  <clarkb> wfm
+2014-03-12T23:54:50  <jeblair> superbee: so it's sort of like every host (nodepoor or not) gets unbound, then nodepool hosts drop in a forwarding config
+2014-03-12T23:54:56  <superbee> wfm
 2014-03-12T23:55:07  <foobio> that feels safe enough
 2014-03-12T23:55:08  *** esker has joined #openstack-infra
 2014-03-12T23:55:08  <jeblair> (nodepoor is what we are right now)
@@ -3203,5 +3203,5 @@
 2014-03-12T23:55:43  *** SumitNaiksatam has quit IRC
 2014-03-12T23:56:06  *** SumitNaiksatam has joined #openstack-infra
 2014-03-12T23:59:12  *** gokrokve has quit IRC
-2014-03-12T23:59:18  <jogo> clarkb: 1291440 isn't showing up in the  e-r even though the pages have regenerated
+2014-03-12T23:59:18  <jogo> superbee: 1291440 isn't showing up in the  e-r even though the pages have regenerated
 2014-03-12T23:59:26  *** esker has quit IRC

@@ -672,8 +672,8 @@
 2014-05-01T15:07:35  <jeblair> 2014-04-22T22:16:51  <mordred> there's no real reason that our current paste should be slow ... oh, except there is no buffer pool configured
 2014-05-01T15:07:36  <jeblair> 2014-04-22T22:16:54  <mordred> *facepalm*
 2014-05-01T15:07:47  <hughsaunders> is it using innodb?
-2014-05-01T15:07:50  <jeblair> 2014-04-22T22:17:27  <clarkb> mordred: does that mean you are going to fix it?
-2014-05-01T15:07:54  <jeblair> 2014-04-22T22:17:42  <mordred> clarkb: well, by "fix it" first I mean" move it to trove"
+2014-05-01T15:07:50  <jeblair> 2014-04-22T22:17:27  <superbee> mordred: does that mean you are going to fix it?
+2014-05-01T15:07:54  <jeblair> 2014-04-22T22:17:42  <mordred> superbee: well, by "fix it" first I mean" move it to trove"
 2014-05-01T15:08:00  <jeblair> foobio: http://eavesdrop.openstack.org/irclogs/%23openstack-infra/%23openstack-infra.2014-04-22.log
 2014-05-01T15:08:08  <foobio> jeblair: great context, thanks
 2014-05-01T15:08:34  <foobio> also, since we have cacti after all, i'm seeing that zuul is about to run out of space on / again
@@ -1281,7 +1281,7 @@
 2014-05-01T20:23:10  <foobio> that's the one i was thinking of. also looks very safe to backport
 2014-05-01T20:23:16  <mriedem> i'll propose it
 2014-05-01T20:23:18  <jeblair> also sdague did I04ff2f0650f1e6035d8de5c5802b96ce4294891b
-2014-05-01T20:24:00  <SergeyLukjanov> jeblair, foobio, clarkb, mordred, sdague, I'll be traveling for the next few days, will be available starting from saturday afternoon and completely alive (hopefully) since monday pst (I'll be in CA before the summit)
+2014-05-01T20:24:00  <SergeyLukjanov> jeblair, foobio, superbee, mordred, sdague, I'll be traveling for the next few days, will be available starting from saturday afternoon and completely alive (hopefully) since monday pst (I'll be in CA before the summit)
 2014-05-01T20:24:12  *** flaper87|afk is now known as flaper87
 2014-05-01T20:24:26  <foobio> SergeyLukjanov: i hope someone told you ca is nowhere near the summit ;)
 2014-05-01T20:24:48  <foobio> safe travels!
@@ -1808,12 +1808,12 @@
 2014-05-01T23:16:36  <jeblair> mordred: those are the values in the current db (short answer, no, subm stays the same)
 2014-05-01T23:16:37  <mordred> thanks
 2014-05-01T23:16:50  <mordred> that's great.
-2014-05-01T23:16:51  <clarkb> hg is terrible. bzr > hg. that is all back to afk
-2014-05-01T23:17:08  <foobio> clarkb: go back to your vacation. i DID NOT see you in here
+2014-05-01T23:16:51  <superbee> hg is terrible. bzr > hg. that is all back to afk
+2014-05-01T23:17:08  <foobio> superbee: go back to your vacation. i DID NOT see you in here
 2014-05-01T23:17:16  <jeblair> there's no arguing with that :)
 2014-05-01T23:17:49  <openstackgerrit> A change was merged to openstack-infra/elastic-recheck: Remove Closed bugs that haven't been seen in two weeks  https://review.openstack.org/91695
 2014-05-01T23:18:44  *** mikal is now known as stillbert
-2014-05-01T23:19:23  <mordred> clarkb: ++
+2014-05-01T23:19:23  <mordred> superbee: ++
 2014-05-01T23:19:42  <foobio> anyway, we should all just be thankful. i have a friend who runs infotech at epic games, and he has to support their perforce revision control server cluster
 2014-05-01T23:20:01  *** moted has quit IRC
 2014-05-01T23:20:34  <foobio> pretty much all he does is whine about how he wishes they could just switch to *any* modern open/free-developed dvcs
@@ -1827,7 +1827,7 @@
 2014-05-01T23:21:46  <jeblair> just waiting on the go from foobio (no rush)
 2014-05-01T23:22:16  <foobio> jeblair: i'm still staring. i switched computers so took me a minute to re-find the etherpad
 2014-05-01T23:22:42  <foobio> evening and all
-2014-05-01T23:22:44  <morganfainberg> jeblair, clarkb, ping wanted to ask if there was a serious issue if keystone under mod_wsgi produced a slightly different format for the log.  notably, apache 2.2 prepends some... data that can't be customized to the log line
+2014-05-01T23:22:44  <morganfainberg> jeblair, superbee, ping wanted to ask if there was a serious issue if keystone under mod_wsgi produced a slightly different format for the log.  notably, apache 2.2 prepends some... data that can't be customized to the log line
 2014-05-01T23:23:14  <mordred> morganfainberg: got examples?
 2014-05-01T23:23:27  <morganfainberg> mordred, yeah [Thu May 01 16:22:52 2014] [error] 2014-05-01 16:22:52.092 32280 DEBUG keystone.common.wsgi [-] arg_dict: {} __call__ /opt/stack/keystone/keystone/common/wsgi.py:181
 2014-05-01T23:23:34  <Alex_Gaynor> So there's a revision at the top of the gate pipeline, and one if it's jobs hasn't started, and there's no obvious reason why not
@@ -1887,7 +1887,7 @@
 2014-05-01T23:31:28  *** mestery has quit IRC
 2014-05-01T23:31:58  <morganfainberg> sdague, i'll work on some stuff to get this going and consistent one way or another, we can discuss further once i get a proposed fix in gerrit.
 2014-05-01T23:32:03  <sdague> morganfainberg: so honestly, if we are going to use apache this way, then probably you just want to change the log format line for 2.2 and drop the date
-2014-05-01T23:32:04  <jlk> clarkb: with j-j-b, have you dealt with creating some sort of singular job grouping, that you can use in a publisher trigger, so that you can trigger one thing, rather than 20?
+2014-05-01T23:32:04  <jlk> superbee: with j-j-b, have you dealt with creating some sort of singular job grouping, that you can use in a publisher trigger, so that you can trigger one thing, rather than 20?
 2014-05-01T23:32:26  <sdague> I think making rsyslog a requirement for apache is differently od
 2014-05-01T23:32:28  <morganfainberg> sdague, oh the keystone log format?
 2014-05-01T23:32:38  <jeblair> Alex_Gaynor: i'm trying one more thing
@@ -1903,7 +1903,7 @@
 2014-05-01T23:34:53  <Alex_Gaynor> jeblair: funtimes, sorry :-(
 2014-05-01T23:35:11  <jeblair> i'm mostly just sorry i don't get to put the logging changes in yet :(
 2014-05-01T23:35:28  *** hogepodge has quit IRC
-2014-05-01T23:35:36  <jlk> clarkb: and is there any way to manage jenkins views from j-j-b?
+2014-05-01T23:35:36  <jlk> superbee: and is there any way to manage jenkins views from j-j-b?
 2014-05-01T23:35:59  *** andreykurilin_ has quit IRC
 2014-05-01T23:36:33  *** luisg_ has quit IRC
 2014-05-01T23:36:46  <Alex_Gaynor> jeblair: do we need to "recheck no bug" everything now?

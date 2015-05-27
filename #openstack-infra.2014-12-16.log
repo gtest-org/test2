@@ -1,24 +1,24 @@
-2014-12-16T00:00:22  <clarkb> jeblair so I think we can do that it just requires upgrading all services on onehost/venv together
+2014-12-16T00:00:22  <superbee> jeblair so I think we can do that it just requires upgrading all services on onehost/venv together
 2014-12-16T00:00:23  <jeblair> jogo: 2) because it prohibits us from placing version caps on stable branches in the case that we can not find an overlapping dependency that works with both
 2014-12-16T00:00:25  *** zz_avozza is now known as avozza
-2014-12-16T00:00:30  <jeblair> clarkb: i think we're all in agreement on that
-2014-12-16T00:00:35  <clarkb> which sdague was opposed to when we talked about it
-2014-12-16T00:00:39  <jeblair> clarkb: the wrinkle is ncpu partial upgrade
-2014-12-16T00:00:52  <jeblair> clarkb: apparently grenade used to work like that, which makes sense to me.
-2014-12-16T00:00:58  <clarkb> +1
-2014-12-16T00:01:26  <clarkb> (I was aproponent for this a little while back but was the only one)
+2014-12-16T00:00:30  <jeblair> superbee: i think we're all in agreement on that
+2014-12-16T00:00:35  <superbee> which sdague was opposed to when we talked about it
+2014-12-16T00:00:39  <jeblair> superbee: the wrinkle is ncpu partial upgrade
+2014-12-16T00:00:52  <jeblair> superbee: apparently grenade used to work like that, which makes sense to me.
+2014-12-16T00:00:58  <superbee> +1
+2014-12-16T00:01:26  <superbee> (I was aproponent for this a little while back but was the only one)
 2014-12-16T00:01:32  *** bradjones has joined #openstack-infra
-2014-12-16T00:01:36  <jeblair> clarkb: so partial upgrades need per-component environments, and each environment needs a full shutdown/upgrade/start
-2014-12-16T00:02:16  <jeblair> clarkb: all-in-one upgrades, it doesn't matter whether we use per-component envs or not.  but regardless of the number of envs (one or many) it or they need a full stop/upgrade/start
-2014-12-16T00:02:46  <jeblair> clarkb: yeah, it does not seem feasible to me to handle the partial upgrade case without environments/containers/equiv
-2014-12-16T00:03:04  <clarkb> yup
+2014-12-16T00:01:36  <jeblair> superbee: so partial upgrades need per-component environments, and each environment needs a full shutdown/upgrade/start
+2014-12-16T00:02:16  <jeblair> superbee: all-in-one upgrades, it doesn't matter whether we use per-component envs or not.  but regardless of the number of envs (one or many) it or they need a full stop/upgrade/start
+2014-12-16T00:02:46  <jeblair> superbee: yeah, it does not seem feasible to me to handle the partial upgrade case without environments/containers/equiv
+2014-12-16T00:03:04  <superbee> yup
 2014-12-16T00:03:09  <anteaya> notmyname: zaro is probably the best person to talk to about gerrit
-2014-12-16T00:03:11  <jeblair> clarkb: i still very much think that at the end of the process, each release of openstack should function with the same deps.  but we can ensure that with requirements check jobs and testing
-2014-12-16T00:03:27  <jeblair> clarkb: including perhaps the simple install-only all-in-one devstack test
+2014-12-16T00:03:11  <jeblair> superbee: i still very much think that at the end of the process, each release of openstack should function with the same deps.  but we can ensure that with requirements check jobs and testing
+2014-12-16T00:03:27  <jeblair> superbee: including perhaps the simple install-only all-in-one devstack test
 2014-12-16T00:04:24  *** yfried|afk is now known as yfried
 2014-12-16T00:04:26  <jogo> jeblair: I was thinking standard devstack wouldn't use venvs
 2014-12-16T00:04:29  <jogo> and grenade jobs would
-2014-12-16T00:04:48  <mordred> clarkb: I split 141677 and also added https://review.openstack.org/141946
+2014-12-16T00:04:48  <mordred> superbee: I split 141677 and also added https://review.openstack.org/141946
 2014-12-16T00:06:07  *** zz_zz_zz_sabari is now known as sabari
 2014-12-16T00:06:16  <dtroyer> jogo: that'll be hard as grenade just calls the devstack functions to do the start of new services, so devstack has to run either way in that case
 2014-12-16T00:06:40  <jogo> dtroyer: right, step 1 is teach grenade about venvs
@@ -47,10 +47,10 @@
 2014-12-16T00:17:06  *** bitblt has quit IRC
 2014-12-16T00:17:12  *** dannywilson has quit IRC
 2014-12-16T00:17:12  *** Masahiro has quit IRC
-2014-12-16T00:20:25  <anteaya> clarkb foobio jeblair any reason to hold off +A'ing clarks make prerelease and release pipelines match pep440 patch? https://review.openstack.org/#/c/141831/1
+2014-12-16T00:20:25  <anteaya> superbee foobio jeblair any reason to hold off +A'ing clarks make prerelease and release pipelines match pep440 patch? https://review.openstack.org/#/c/141831/1
 2014-12-16T00:20:43  <openstackgerrit> Merged openstack-infra/elastic-recheck: Bugs _in_ this project go in StoryBoard now  https://review.openstack.org/139120
 2014-12-16T00:20:44  *** sputnik1_ is now known as sputnik13
-2014-12-16T00:21:46  <clarkb> anteaya its probably worth getting eyes on
+2014-12-16T00:21:46  <superbee> anteaya its probably worth getting eyes on
 2014-12-16T00:21:57  <anteaya> I will just review then and not +A
 2014-12-16T00:27:34  *** sabari is now known as zz_sabari
 2014-12-16T00:27:55  *** mtanino has quit IRC
@@ -1122,13 +1122,13 @@
 2014-12-16T15:18:24  <ttx> also, neutron-*aas has stable branches defined (probably a by-product of the git-filter) while they don't make sense there, would be better to just remove them.
 2014-12-16T15:19:11  *** jcoufal_ has joined #openstack-infra
 2014-12-16T15:19:16  *** wenlock has quit IRC
-2014-12-16T15:19:41  <foobio> ttx: clarkb had lobbied pretty strongly to keep the branches for discoverability purposes, but maybe just tagging the tips with something instead and deleting the branches would be an acceptable compromise
+2014-12-16T15:19:41  <foobio> ttx: superbee had lobbied pretty strongly to keep the branches for discoverability purposes, but maybe just tagging the tips with something instead and deleting the branches would be an acceptable compromise
 2014-12-16T15:20:08  <ttx> foobio: yeah.. I just don't want people to get excited and propose changes there
 2014-12-16T15:20:13  <foobio> also i thought there was already a change proposed to add the server release jobs to the neutron advanced services projects... double-checking real quick
 2014-12-16T15:20:29  <ttx> since stable/juno changes to fwaas should just be proposed to openstack/neutron
 2014-12-16T15:20:41  <foobio> ttx: yep, i agree it could cause trouble
-2014-12-16T15:20:56  <foobio> i'll confirm with clarkb and we'll come up with a suitable tag pattern
-2014-12-16T15:21:03  <ttx> not sure I understand why you need to "discover" them, but can clarify with clarkb
+2014-12-16T15:20:56  <foobio> i'll confirm with superbee and we'll come up with a suitable tag pattern
+2014-12-16T15:21:03  <ttx> not sure I understand why you need to "discover" them, but can clarify with superbee
 2014-12-16T15:21:24  *** david-lyle has joined #openstack-infra
 2014-12-16T15:21:30  <foobio> it was for purposes of being able to easily diff the kilo and juno versions of a file from one of the drivers, for example
 2014-12-16T15:21:37  *** jcoufal has quit IRC
@@ -1176,7 +1176,7 @@
 2014-12-16T15:33:55  <rgerganov> foobio: let me know if you need more info
 2014-12-16T15:34:27  *** mpaolino has quit IRC
 2014-12-16T15:36:18  *** yamamoto has quit IRC
-2014-12-16T15:36:38  <clarkb> foobio ttx yup mostly wanted to make sure we werent losing history on the assumption we dont need it today. tags are fine
+2014-12-16T15:36:38  <superbee> foobio ttx yup mostly wanted to make sure we werent losing history on the assumption we dont need it today. tags are fine
 2014-12-16T15:38:47  *** hdd has joined #openstack-infra
 2014-12-16T15:39:54  *** jerryz has quit IRC
 2014-12-16T15:40:20  *** wenlock has joined #openstack-infra
@@ -1190,31 +1190,31 @@
 2014-12-16T15:45:39  *** mpaolino has joined #openstack-infra
 2014-12-16T15:45:51  *** nikil22 has quit IRC
 2014-12-16T15:46:38  *** erikwilson has joined #openstack-infra
-2014-12-16T15:47:55  <clarkb> what is wrong with the newer requirements in oslo.db?
-2014-12-16T15:48:22  <dhellmann> clarkb: ?
-2014-12-16T15:48:29  <foobio> clarkb: requirements integration tests are what's wrong
-2014-12-16T15:48:32  <clarkb> reading scrollback
-2014-12-16T15:48:49  <clarkb> sdague says "new oslo.db" requirements bad
-2014-12-16T15:49:01  <clarkb> I think that means 1.3.0
+2014-12-16T15:47:55  <superbee> what is wrong with the newer requirements in oslo.db?
+2014-12-16T15:48:22  <dhellmann> superbee: ?
+2014-12-16T15:48:29  <foobio> superbee: requirements integration tests are what's wrong
+2014-12-16T15:48:32  <superbee> reading scrollback
+2014-12-16T15:48:49  <superbee> sdague says "new oslo.db" requirements bad
+2014-12-16T15:49:01  <superbee> I think that means 1.3.0
 2014-12-16T15:49:03  *** carl_baldwin has quit IRC
-2014-12-16T15:49:24  <foobio> clarkb: we want to release an oslo.db compatible with stable/juno's global-requirements.txt, so the sqla version specified in 1.3.0 needs to be rolled back first
+2014-12-16T15:49:24  <foobio> superbee: we want to release an oslo.db compatible with stable/juno's global-requirements.txt, so the sqla version specified in 1.3.0 needs to be rolled back first
 2014-12-16T15:50:13  *** erikmwilson has quit IRC
 2014-12-16T15:50:18  *** erikwilson is now known as erikmwilson
 2014-12-16T15:50:26  <openstackgerrit> Merged openstack-infra/jenkins-job-builder: deprecate postbuildscript onsuccess and onfailure parameter names  https://review.openstack.org/139257
 2014-12-16T15:50:37  *** talluri has quit IRC
-2014-12-16T15:50:42  <clarkb> because of how grenade tests? or because pinning oslo.db isnt working?
+2014-12-16T15:50:42  <superbee> because of how grenade tests? or because pinning oslo.db isnt working?
 2014-12-16T15:51:30  *** erikwilson has joined #openstack-infra
-2014-12-16T15:51:36  <foobio> clarkb: i believe where we got to was _before_ dropping sqla 0.8 support in oslo.db release one which has a requirements file compatible with setuptools 8
+2014-12-16T15:51:36  <foobio> superbee: i believe where we got to was _before_ dropping sqla 0.8 support in oslo.db release one which has a requirements file compatible with setuptools 8
 2014-12-16T15:51:58  <openstackgerrit> Thierry Carrez proposed openstack-infra/project-config: Generate tarballs for neutron-*aas on tags  https://review.openstack.org/142126
 2014-12-16T15:52:19  <ttx> sorry about that ^ -- missed the merge-tags job definition
 2014-12-16T15:52:21  *** david-lyle has quit IRC
 2014-12-16T15:52:46  <foobio> so roll back to the current stable/juno sqlalchemy requirement, cut a new oslo.db 1.4.0 with that, then drop sqlalchemy 0.8 support in master and pin stable/juno's oslo.db requirement <1.5
-2014-12-16T15:53:09  <clarkb> foobio: gotcha
+2014-12-16T15:53:09  <superbee> foobio: gotcha
 2014-12-16T15:53:55  <foobio> because the only reason 1.3.0 was incompatible with stable/juno was that we "ostensibly" dropped sqlalchemy 0.8 support some people might still be using
 2014-12-16T15:54:43  <garyk> AJaeger: you around?
-2014-12-16T15:55:20  <clarkb> however the requirements do overlap so I don't think that should be a problem
-2014-12-16T15:55:27  <clarkb> eg we didn't remove an upgrade path for anyone
-2014-12-16T15:55:27  <sdague> clarkb: just got back from errand, here is the bullet points
+2014-12-16T15:55:20  <superbee> however the requirements do overlap so I don't think that should be a problem
+2014-12-16T15:55:27  <superbee> eg we didn't remove an upgrade path for anyone
+2014-12-16T15:55:27  <sdague> superbee: just got back from errand, here is the bullet points
 2014-12-16T15:55:39  <sdague> the requirements overlap isn't actually required
 2014-12-16T15:56:02  <foobio> ttx: aha, i missed that we didn't put merge-tags in the server-release-jobs template
 2014-12-16T15:56:17  <foobio> good catch
@@ -1223,25 +1223,25 @@
 2014-12-16T15:57:03  *** reed has joined #openstack-infra
 2014-12-16T15:57:06  <foobio> oh, hah
 2014-12-16T15:57:08  <sdague> we do need everything that's going to install in a branch to have roughly the same requirements
-2014-12-16T15:57:16  <clarkb> sdague: right (we have discussed this before and I was strongly on not bothering with that but everyone else thought it was important)
+2014-12-16T15:57:16  <superbee> sdague: right (we have discussed this before and I was strongly on not bothering with that but everyone else thought it was important)
 2014-12-16T15:57:17  *** achanda has joined #openstack-infra
-2014-12-16T15:57:39  <sdague> clarkb: so we were arguing slightly different things
+2014-12-16T15:57:39  <sdague> superbee: so we were arguing slightly different things
 2014-12-16T15:58:30  <sdague> I still think services should be able to upgrade one at a time, right now ceilometer is the only thing which violates that
 2014-12-16T15:58:36  <foobio> ttx: actually, i think it's the other way around... the jenkins job template for {name}-merge-release-tags needs to be instantiated in jenkins/jobs/projects.yaml
 2014-12-16T15:58:46  <sdague> https://review.openstack.org/#/c/142075/ changes upgrade order accordingly
 2014-12-16T15:58:49  <sdague> with a bug reference
-2014-12-16T15:59:23  <clarkb> sdague: so how is oslo.db 1.3.0 whihc is a "kilo" release dropping sqlalchemy 0.8 a problem for juno which allows 0.8 and 0.9?
+2014-12-16T15:59:23  <superbee> sdague: so how is oslo.db 1.3.0 whihc is a "kilo" release dropping sqlalchemy 0.8 a problem for juno which allows 0.8 and 0.9?
 2014-12-16T15:59:24  *** dustins has quit IRC
-2014-12-16T15:59:41  <clarkb> sdague: when kil should use 1.2.1 of oslo.db that allows oth 0.8 and 0.9?
+2014-12-16T15:59:41  <superbee> sdague: when kil should use 1.2.1 of oslo.db that allows oth 0.8 and 0.9?
 2014-12-16T15:59:47  <sdague> because juno allowed oslo db
 2014-12-16T15:59:50  <sdague> 1.3
-2014-12-16T16:00:04  <foobio> clarkb: because we still need some way to backport a fix for this to something before 1.3 if we cap it <1.3 in stable/juno
+2014-12-16T16:00:04  <foobio> superbee: because we still need some way to backport a fix for this to something before 1.3 if we cap it <1.3 in stable/juno
 2014-12-16T16:00:16  *** markmcclain has quit IRC
-2014-12-16T16:00:20  <clarkb> but we were going to pin oslo.db
+2014-12-16T16:00:20  <superbee> but we were going to pin oslo.db
 2014-12-16T16:00:31  <sdague> which apparently didn't happen
-2014-12-16T16:00:45  <clarkb> foobio: not really since we are currently oeprating in weird realm of setuptools 7
+2014-12-16T16:00:45  <superbee> foobio: not really since we are currently oeprating in weird realm of setuptools 7
 2014-12-16T16:00:46  *** dustins has joined #openstack-infra
-2014-12-16T16:00:52  <foobio> clarkb: right, but our branching ideas fell short without significant rework on how we test those library backport branches
+2014-12-16T16:00:52  <foobio> superbee: right, but our branching ideas fell short without significant rework on how we test those library backport branches
 2014-12-16T16:01:02  <jeblair_> i am told the oslo.db pin didn't happen because of the grenade failure
 2014-12-16T16:01:06  <sdague> until this morning when dhellmann pushed it
 2014-12-16T16:01:20  <sdague> no, it passed grenade
@@ -1291,27 +1291,27 @@
 2014-12-16T16:09:27  <foobio> so we should totally get rid of that check now
 2014-12-16T16:09:36  <jeblair_> foobio: luckily launchpad remembered
 2014-12-16T16:09:42  <dhellmann> shall I self-approve that, or do we have some other people here with +2 on requirements?
-2014-12-16T16:09:46  <clarkb> so reading this I am still not sure why we need 141927
-2014-12-16T16:10:00  <clarkb> indication seems to be we can pin stable/juno requirements which allows 0.8 and 0.9
-2014-12-16T16:10:07  <clarkb> then master can use 0.9?
+2014-12-16T16:09:46  <superbee> so reading this I am still not sure why we need 141927
+2014-12-16T16:10:00  <superbee> indication seems to be we can pin stable/juno requirements which allows 0.8 and 0.9
+2014-12-16T16:10:07  <superbee> then master can use 0.9?
 2014-12-16T16:10:14  *** AJaeger has quit IRC
 2014-12-16T16:10:18  <openstackgerrit> Steven Weston proposed openstack-infra/infra-specs: Third Party CI Dashboard Spec  https://review.openstack.org/135170
 2014-12-16T16:10:19  <foobio> jeblair_: hah
-2014-12-16T16:10:38  <dhellmann> clarkb: we have a job that forbids that. We can turn that off, but that's a bigger change than just making the ranges overlap again.
+2014-12-16T16:10:38  <dhellmann> superbee: we have a job that forbids that. We can turn that off, but that's a bigger change than just making the ranges overlap again.
 2014-12-16T16:10:50  * jeblair_ is making that change now
 2014-12-16T16:10:59  *** lttrl has quit IRC
-2014-12-16T16:11:02  <foobio> clarkb: the change to oslo.db gets tested against master requirements
+2014-12-16T16:11:02  <foobio> superbee: the change to oslo.db gets tested against master requirements
 2014-12-16T16:11:08  *** lttrl has joined #openstack-infra
 2014-12-16T16:11:18  <sdague> yeh, I'm not sure I know why we'd do 141927
-2014-12-16T16:11:19  <clarkb> foobio: OOOHHHH thats what I was missing
+2014-12-16T16:11:19  <superbee> foobio: OOOHHHH thats what I was missing
 2014-12-16T16:11:27  <dhellmann> oh, I looked away, are we dropping that requirements range thing?
-2014-12-16T16:11:29  <clarkb> ok /me feels caught up now
+2014-12-16T16:11:29  <superbee> ok /me feels caught up now
 2014-12-16T16:12:02  <dhellmann> I guess that means I don't need https://review.openstack.org/#/c/142131/ either
 2014-12-16T16:12:08  <sdague> so... why isn't oslo.db just coming on the stable/juno branch of oslo.db?
 2014-12-16T16:12:13  <dhellmann> or a new oslo.db release?
-2014-12-16T16:12:23  <foobio> clarkb: unless we want to do something about the fact that the oslo.db stable/juno branch is based on 1.0 even though we want to be able to use newer than 1.0 in stable/juno servers
+2014-12-16T16:12:23  <foobio> superbee: unless we want to do something about the fact that the oslo.db stable/juno branch is based on 1.0 even though we want to be able to use newer than 1.0 in stable/juno servers
 2014-12-16T16:12:26  <dhellmann> the stable/juno branch of oslo.db was from the 1.0 series
-2014-12-16T16:12:30  <clarkb> foobio: right
+2014-12-16T16:12:30  <superbee> foobio: right
 2014-12-16T16:12:49  <jeblair_> foobio: why do we want to use something newer than 1.0/
 2014-12-16T16:12:51  <jeblair_> ?
 2014-12-16T16:12:58  <jeblair_> i mean, we want to use 1.0.1...
@@ -1370,7 +1370,7 @@
 2014-12-16T16:23:37  *** dannywil_ has quit IRC
 2014-12-16T16:23:51  <openstackgerrit> Dave Walker proposed openstack-dev/pbr: Ignore non-release related tags  https://review.openstack.org/142144
 2014-12-16T16:24:08  *** dannywilson has joined #openstack-infra
-2014-12-16T16:24:22  <clarkb> I think now that I grok where 1.4 comes from I am ok with moving forward on that and improving this process later when we are not under pressure of coming pip release
+2014-12-16T16:24:22  <superbee> I think now that I grok where 1.4 comes from I am ok with moving forward on that and improving this process later when we are not under pressure of coming pip release
 2014-12-16T16:24:42  <dhellmann> sdague, foobio, jeblair_ : ?
 2014-12-16T16:25:26  *** koolhead17 has quit IRC
 2014-12-16T16:25:29  <jeblair_> dhellmann: i'm trying to make it so that we can work on the stable/juno branch to release a library version that fixes a stable/juno problem since i think that's the right way to solve this in general.  it's broken now, and i'm happy to do whatever we think is most expeditious.
@@ -1389,10 +1389,10 @@
 2014-12-16T16:28:54  *** yolanda has joined #openstack-infra
 2014-12-16T16:29:01  <dhellmann> we did agree at the summit that we wanted to cap versions in the stable branches, but we ran into issues with the upgrade test jobs breaking
 2014-12-16T16:29:02  *** Masahiro has joined #openstack-infra
-2014-12-16T16:29:08  <clarkb> sdague: sort of. We can still explode it with a solver
+2014-12-16T16:29:08  <superbee> sdague: sort of. We can still explode it with a solver
 2014-12-16T16:29:15  <foobio> where this gets tricky is that we need to cap these even if they don't (yet) have stable branches, because they may need one later
-2014-12-16T16:29:19  <sdague> clarkb: but at least we'd explode early
-2014-12-16T16:29:28  <clarkb> true
+2014-12-16T16:29:19  <sdague> superbee: but at least we'd explode early
+2014-12-16T16:29:28  <superbee> true
 2014-12-16T16:29:38  <sdague> right now the pip silent fail ... oh things are great... kaboom
 2014-12-16T16:29:45  <sdague> is really problematic
 2014-12-16T16:29:49  <dhellmann> jeblair_: if we're going to cap it permanently, I'd say <1.1 because that lets us avoid releasing fixes of 1.1, 1.2, and 1.3 with the requirements for sqla that work with setuptools
@@ -1411,24 +1411,24 @@
 2014-12-16T16:32:06  <jeblair_> sdague: would creating clean environments on upgrade help us here?  ie, re-install everything into a new {system,venv,container} on upgrade?  that way pip does the same thing on new install as upgrade?
 2014-12-16T16:32:19  <sdague> jeblair_: no, it just reduces the surface
 2014-12-16T16:32:20  <dhellmann> sdague: that's a good question, but I think foobio's point about CD sites probably already having 1.2 trumps it
-2014-12-16T16:32:21  <clarkb> one issue with mordreds plan is that we shift a lot of effort to the deployers if/when we do that. We essentially say don't install from source (which tripleo does for example) and everyone needs to build packages
+2014-12-16T16:32:21  <superbee> one issue with mordreds plan is that we shift a lot of effort to the deployers if/when we do that. We essentially say don't install from source (which tripleo does for example) and everyone needs to build packages
 2014-12-16T16:32:53  <sdague> because pip's lack of solver still can put us in these binds
 2014-12-16T16:32:54  <jeblair_> sdague: but it makes upgrade == install; so it reduces it to the minimum we can if we support installing with pip at all, right?
-2014-12-16T16:33:24  <dhellmann> clarkb: we talked about using something like fpm to build "dumb" packages that aren't necessarily compliant. I'd rather find some resources to help fix the pip resolver, though
+2014-12-16T16:33:24  <dhellmann> superbee: we talked about using something like fpm to build "dumb" packages that aren't necessarily compliant. I'd rather find some resources to help fix the pip resolver, though
 2014-12-16T16:33:48  <sdague> jeblair_: so... it it was a venv that did not allow system packages, it would make for a small fail surface, but it would still be there
-2014-12-16T16:33:51  <clarkb> dhellmann: yup and iirc mordred said "no one should use these packages but us" so we would really expect everyone to start building them
+2014-12-16T16:33:51  <superbee> dhellmann: yup and iirc mordred said "no one should use these packages but us" so we would really expect everyone to start building them
 2014-12-16T16:33:57  *** david-lyle has quit IRC
 2014-12-16T16:34:01  *** Masahiro has quit IRC
 2014-12-16T16:34:01  *** nfedotov has quit IRC
-2014-12-16T16:34:07  <dhellmann> clarkb: I'm not sure I follow
+2014-12-16T16:34:07  <dhellmann> superbee: I'm not sure I follow
 2014-12-16T16:34:18  *** EmilienM is now known as EmilienM|afk
 2014-12-16T16:34:35  <sdague> package 1.0 depends on foo>=1.0
 2014-12-16T16:34:46  <sdague> foo 1.0 depends on bar>=1.3
-2014-12-16T16:34:47  <clarkb> dhellmann: today many people deploy from source. eg tripleo. They can do this because upstream of deployment we have taken on a lot of work of curating package dependencies and making sure you can install from source
+2014-12-16T16:34:47  <superbee> dhellmann: today many people deploy from source. eg tripleo. They can do this because upstream of deployment we have taken on a lot of work of curating package dependencies and making sure you can install from source
 2014-12-16T16:34:58  <sdague> if bar != installed
 2014-12-16T16:35:21  <dstufft> urgh
-2014-12-16T16:35:23  <dhellmann> clarkb: oh, I see what you mean
-2014-12-16T16:35:25  <clarkb> dhellmann: if we switch to system packages that are built only for testing then we essentially are telling all of these downstream deployers that installing from source is at their own risk (and we know it is risky) or you all need to build packages
+2014-12-16T16:35:23  <dhellmann> superbee: oh, I see what you mean
+2014-12-16T16:35:25  <superbee> dhellmann: if we switch to system packages that are built only for testing then we essentially are telling all of these downstream deployers that installing from source is at their own risk (and we know it is risky) or you all need to build packages
 2014-12-16T16:35:27  <sdague> pip install -e ./package  drags in foo, and bar >= 1.3
 2014-12-16T16:35:31  <jeblair_> sdague: yeah, i understand -- i read all the scrollback :)
 2014-12-16T16:35:35  <sdague> jeblair_: ok
@@ -1436,7 +1436,7 @@
 2014-12-16T16:36:06  <jeblair_> sdague: i'm just saying that currently "install openstack via pip" has a behavior; replacing the env during upgrade at least makes the upgrade dependency resolution (such that it is) the same as installation
 2014-12-16T16:36:14  <jeblair_> sdague: which as you point out, is problematic still :)
 2014-12-16T16:36:17  <sdague> right
-2014-12-16T16:36:42  <clarkb> that doesn't rule out system packages, its just a thing to consider
+2014-12-16T16:36:42  <superbee> that doesn't rule out system packages, its just a thing to consider
 2014-12-16T16:36:53  *** yamamoto has joined #openstack-infra
 2014-12-16T16:36:58  *** reed has quit IRC
 2014-12-16T16:37:05  <jeblair_> okay.  so i guess if we think that upgrade!=install is a problem, we could look into that.  if we're more concerned with install!=ideal, then we should just do packages or fix pip.
@@ -1504,57 +1504,57 @@
 2014-12-16T16:50:12  <sdague> https://twitter.com/sdague/status/544896798725513216
 2014-12-16T16:50:23  <jeblair_> sdague: oh :)
 2014-12-16T16:50:33  <foobio> dolphm: mostly http://git.openstack.org/cgit/openstack-infra/project-config/tree/jenkins/jobs/requirements.yaml
-2014-12-16T16:51:01  <clarkb> ok so, now that we have rehashed and seem to grok the situation as it is today :) what can I do to help move things along?
-2014-12-16T16:51:05  <clarkb> dhellmann: ^
+2014-12-16T16:51:01  <superbee> ok so, now that we have rehashed and seem to grok the situation as it is today :) what can I do to help move things along?
+2014-12-16T16:51:05  <superbee> dhellmann: ^
 2014-12-16T16:51:05  *** vigneshvar has joined #openstack-infra
 2014-12-16T16:51:10  <dolphm> foobio: awesome, thanks
-2014-12-16T16:51:22  * clarkb is throwing him self into the fire because this stuff is important
-2014-12-16T16:51:58  <dhellmann> clarkb: I still feel more comfortable going ahead with a 1.4 release, then capping juno to use that (skipping the broken versions 1.1, 1.2, and 1.3. It's not clear to me that we have consensus on that, though.
-2014-12-16T16:52:01  <clarkb> mordred: still around? your pbr changes fail pep8 again. Also, do we want to hold off on the second one to drop shas to hear back on dstufft's inding?
+2014-12-16T16:51:22  * superbee is throwing him self into the fire because this stuff is important
+2014-12-16T16:51:58  <dhellmann> superbee: I still feel more comfortable going ahead with a 1.4 release, then capping juno to use that (skipping the broken versions 1.1, 1.2, and 1.3. It's not clear to me that we have consensus on that, though.
+2014-12-16T16:52:01  <superbee> mordred: still around? your pbr changes fail pep8 again. Also, do we want to hold off on the second one to drop shas to hear back on dstufft's inding?
 2014-12-16T16:52:09  *** mrmartin has joined #openstack-infra
-2014-12-16T16:52:24  <mordred> clarkb: I'm actually kinda convinced we should just drop them
-2014-12-16T16:52:26  <clarkb> s/inding/findings/
+2014-12-16T16:52:24  <mordred> superbee: I'm actually kinda convinced we should just drop them
+2014-12-16T16:52:26  <superbee> s/inding/findings/
 2014-12-16T16:52:29  <dstufft> jeblair_: though I'm still pretty happy overalll. I know setuptools 8 is causing some issues here, and a few other places, but overall I think it's gone about as good as changes to this could have gone
-2014-12-16T16:52:38  <mordred> clarkb: but I'd also be easy to convince to hold off
-2014-12-16T16:52:44  <jeblair_> clarkb: i believe this is dhellman's plan etherpad: https://etherpad.openstack.org/p/cloL2FzTRd
-2014-12-16T16:53:07  <clarkb> jeblair_: thanks I have that open now
-2014-12-16T16:53:20  <clarkb> I am +1 on releaseing a 1.4
-2014-12-16T16:53:31  <dhellmann> clarkb: because even though jeblair_ found that we're not running the requirements overlap job, foobio pointed out that CD environments are probably already running 1.2, so I don't want to make the pin lower than that
-2014-12-16T16:53:32  <clarkb> if others agree I will review the requirements change
+2014-12-16T16:52:38  <mordred> superbee: but I'd also be easy to convince to hold off
+2014-12-16T16:52:44  <jeblair_> superbee: i believe this is dhellman's plan etherpad: https://etherpad.openstack.org/p/cloL2FzTRd
+2014-12-16T16:53:07  <superbee> jeblair_: thanks I have that open now
+2014-12-16T16:53:20  <superbee> I am +1 on releaseing a 1.4
+2014-12-16T16:53:31  <dhellmann> superbee: because even though jeblair_ found that we're not running the requirements overlap job, foobio pointed out that CD environments are probably already running 1.2, so I don't want to make the pin lower than that
+2014-12-16T16:53:32  <superbee> if others agree I will review the requirements change
 2014-12-16T16:53:35  *** e0ne is now known as e0ne_
-2014-12-16T16:53:38  <clarkb> dhellmann: yup
+2014-12-16T16:53:38  <superbee> dhellmann: yup
 2014-12-16T16:53:55  *** e0ne_ is now known as e0ne
-2014-12-16T16:54:03  <dstufft> clarkb: mordred fwiw I have some meetings today but I plan to get some numbers for the normalization rule after that, if it looks like it won't do anything bad to what we parse as a version thne I'll propose ammending PEP 440 with it on distutils-sig. I don't suspect anyone will fight me on it
+2014-12-16T16:54:03  <dstufft> superbee: mordred fwiw I have some meetings today but I plan to get some numbers for the normalization rule after that, if it looks like it won't do anything bad to what we parse as a version thne I'll propose ammending PEP 440 with it on distutils-sig. I don't suspect anyone will fight me on it
 2014-12-16T16:54:17  <mordred> k.
-2014-12-16T16:54:35  <clarkb> dstufft: ok, and assuming all that the change to not emit normalized versions in setuptools is also non controversial?
+2014-12-16T16:54:35  <superbee> dstufft: ok, and assuming all that the change to not emit normalized versions in setuptools is also non controversial?
 2014-12-16T16:54:44  <jeblair_> what's the normalization rule?
 2014-12-16T16:54:47  <dhellmann> jeblair_: do you mean cap the dependencies in versions with stable branches, or cap the oslo lib versions with stable branches?
-2014-12-16T16:54:55  <dstufft> clarkb: Most likely I'll just make it so pbr can turn off the normalization
+2014-12-16T16:54:55  <dstufft> superbee: Most likely I'll just make it so pbr can turn off the normalization
 2014-12-16T16:54:57  <openstackgerrit> Merged openstack-infra/project-config: Fix publishing rally html results  https://review.openstack.org/140296
 2014-12-16T16:55:05  <dstufft> not that setuptools won't in general emit then normalized
-2014-12-16T16:55:08  <clarkb> dstufft: toggleable flag? that should work too
-2014-12-16T16:55:12  <dstufft> clarkb: yea
-2014-12-16T16:55:21  <mordred> clarkb: pushed fixed patch - sorry bout that
+2014-12-16T16:55:08  <superbee> dstufft: toggleable flag? that should work too
+2014-12-16T16:55:12  <dstufft> superbee: yea
+2014-12-16T16:55:21  <mordred> superbee: pushed fixed patch - sorry bout that
 2014-12-16T16:55:35  *** alexpilotti has quit IRC
-2014-12-16T16:55:43  <clarkb> jeblair_: basically dstufft's proposal is treat a trailing .[:alnum:] string as string sorted not number sorted. This would get normalized to +[:alnum:]
+2014-12-16T16:55:43  <superbee> jeblair_: basically dstufft's proposal is treat a trailing .[:alnum:] string as string sorted not number sorted. This would get normalized to +[:alnum:]
 2014-12-16T16:55:45  <dstufft> jeblair_: take a final trailing .alphanumeric (not .alphanumeric.alphanumerc, or anything else, one dot, and alpha num and normalize it to +alphanum)
-2014-12-16T16:56:12  <clarkb> jeblair_: the problem right now is that setuptools emits the normalized form (+[:alnum:]) in the package it creates so older setuptools would still be broken
+2014-12-16T16:56:12  <superbee> jeblair_: the problem right now is that setuptools emits the normalized form (+[:alnum:]) in the package it creates so older setuptools would still be broken
 2014-12-16T16:56:18  *** koolhead17 has quit IRC
 2014-12-16T16:56:27  <dstufft> we had something similar to that in the course of testing variations of PEP 440 but I don't think we ever tested it on it's own
 2014-12-16T16:56:35  <dstufft> I think it also came with some other rules that we ultimately dropped
 2014-12-16T16:56:37  *** MaxV has quit IRC
 2014-12-16T16:56:39  <dstufft> like an implicit leading zero
-2014-12-16T16:56:43  <clarkb> jeblair_: so we would need some way of disabling that to stick with .[:alnum:] then let normalization happen only internal to setuptools. Otherwse we are not forward and backward compat
+2014-12-16T16:56:43  <superbee> jeblair_: so we would need some way of disabling that to stick with .[:alnum:] then let normalization happen only internal to setuptools. Otherwse we are not forward and backward compat
 2014-12-16T16:56:47  <jeblair_> dhellmann: i'm trying to say "try to do the thing we agreed to do at the summit and attempted and failed to do", which i think is "for every project with a stable branch, cap the version of that project to the latest that currently meets the spec for the project in that branch"
 2014-12-16T16:56:50  <dstufft> which meant that we got some relaly bad version parses
 2014-12-16T16:56:51  *** sputnik13 has joined #openstack-infra
 2014-12-16T16:57:08  <dstufft> like object object repr()s that got parsed as 0+<object repr>
 2014-12-16T16:57:18  <jeblair_> dhellmann: or put another way: do what would have been needed for us to be able to release 1.0.1 here
 2014-12-16T16:57:25  <dstufft> so I just need to make sure that the rule won't allow something crazy
-2014-12-16T16:57:26  <mordred> clarkb: the idea of having a normalization that we somehow disable
+2014-12-16T16:57:26  <mordred> superbee: the idea of having a normalization that we somehow disable
 2014-12-16T16:57:36  <dhellmann> jeblair_: ok. That ship may have sailed for many of the oslo libs, though. We are currently testing juno against releases made during kilo and as foobio pointed out that may mean CD sites have them, too. We would be forcing downgrades on them.
-2014-12-16T16:57:43  <mordred> clarkb: sounds like something thats going to increase the amount of strangenes and confusion over time
-2014-12-16T16:57:57  <clarkb> mordred: it might and is generally why I am on baord with dropping the shas completely
+2014-12-16T16:57:43  <mordred> superbee: sounds like something thats going to increase the amount of strangenes and confusion over time
+2014-12-16T16:57:57  <superbee> mordred: it might and is generally why I am on baord with dropping the shas completely
 2014-12-16T16:58:14  <dhellmann> jeblair_: I suppose we could have made a 1.0.3 or whatever that had the sqlalchemy settings specified in a way that worked for setuptools 8
 2014-12-16T16:58:14  <dstufft> mordred: to be clear, you're only controlling whether setuptools is going to emit the normalized version, not controlling whether normalization happens on the installee end
 2014-12-16T16:58:15  <mordred> from what I can tell, most of the CD deployers munge the versions themselves anyway
@@ -1563,17 +1563,17 @@
 2014-12-16T16:58:39  <dhellmann> jeblair_: yes, definitely, I'm just trying to figure out what exactly we want to do :-)
 2014-12-16T16:58:51  *** garyk has quit IRC
 2014-12-16T16:59:02  *** sarob has joined #openstack-infra
-2014-12-16T16:59:07  <clarkb> dstufft: right since old setuptools wouldn't normalize at all and just work (tm) then new setuptools could normalize during its install
+2014-12-16T16:59:07  <superbee> dstufft: right since old setuptools wouldn't normalize at all and just work (tm) then new setuptools could normalize during its install
 2014-12-16T16:59:11  <dstufft> mordred: essentially letting you act as if for dist creation you're not using setuptools 8
-2014-12-16T16:59:27  <clarkb> dstufft: the important bit is that the intermediate step of a whl or sdist artifact not normalize so that it is portable
-2014-12-16T16:59:32  <dstufft> clarkb: yea
+2014-12-16T16:59:27  <superbee> dstufft: the important bit is that the intermediate step of a whl or sdist artifact not normalize so that it is portable
+2014-12-16T16:59:32  <dstufft> superbee: yea
 2014-12-16T16:59:35  <mordred> yes. I get that
 2014-12-16T16:59:37  <mordred> EXCEPT
 2014-12-16T16:59:44  <mordred> that it takes a lot of mental effort for me to get that
 2014-12-16T16:59:51  <mordred> so it's tripping me "we're making this too hard" alarm
 2014-12-16T16:59:54  <mordred> my
 2014-12-16T16:59:58  *** dtantsur is now known as dtantsur|afk
-2014-12-16T17:00:05  <clarkb> mordred: agreed. I really do like your solution :)
+2014-12-16T17:00:05  <superbee> mordred: agreed. I really do like your solution :)
 2014-12-16T17:00:10  <mordred> I would prefer to lessen the number of things that only 4 of us understand
 2014-12-16T17:00:22  *** cnesa has joined #openstack-infra
 2014-12-16T17:00:27  <dhellmann> jeblair_: to cap to something <1.3 (the current highest release, which is broken), we need a way to release a 1.2.1. Going with 1.4 seemed expedient, since the code in 1.3 should work fine, it's just the dependencies that are broken.
@@ -1581,16 +1581,16 @@
 2014-12-16T17:01:10  * anteaya is trying to follow along, is totally lost
 2014-12-16T17:01:31  <dstufft> mordred: my life is series of things that 4 people understand at this point :V
 2014-12-16T17:02:00  <anteaya> dstufft: you are on my list of people to understand, alas not today
-2014-12-16T17:02:03  <dstufft> clarkb mordred: I would prefer not to add that normalization rule fwiw, but I'm not opposed to doing it if we can
-2014-12-16T17:02:35  <clarkb> mordred: dstufft: maybe it is more productive on the whole to just not worry about it. accept that lifeless would rather we not go down this path, apologize, then merge mordred's changes?
-2014-12-16T17:02:50  <mordred> clarkb: I vote for that
+2014-12-16T17:02:03  <dstufft> superbee mordred: I would prefer not to add that normalization rule fwiw, but I'm not opposed to doing it if we can
+2014-12-16T17:02:35  <superbee> mordred: dstufft: maybe it is more productive on the whole to just not worry about it. accept that lifeless would rather we not go down this path, apologize, then merge mordred's changes?
+2014-12-16T17:02:50  <mordred> superbee: I vote for that
 2014-12-16T17:02:55  <mordred> jeblair_, dhellmann: ^^ ?
 2014-12-16T17:04:01  * dhellmann doesn't understand the question
 2014-12-16T17:04:01  *** hashar has joined #openstack-infra
-2014-12-16T17:04:48  <dhellmann> mordred, clarkb : which patch?
-2014-12-16T17:04:55  <clarkb> dhellmann: 141667
+2014-12-16T17:04:48  <dhellmann> mordred, superbee : which patch?
+2014-12-16T17:04:55  <superbee> dhellmann: 141667
 2014-12-16T17:04:59  <mordred> dhellmann: we're debating dropping the git sha from the intra-release generated versions from pbr
-2014-12-16T17:05:04  <clarkb> dhellmann: the one you asked for more comments on which I am not opposed to adding :)
+2014-12-16T17:05:04  <superbee> dhellmann: the one you asked for more comments on which I am not opposed to adding :)
 2014-12-16T17:05:07  <dstufft> dhellmann: when creating a dev version, pbr currently puts a git sha in the version. That doens't work with the current PEP 440. the choices are a) drop shas from the version string (they will be recorded elsewhere) or b) I go and see about adding some normalization rules to PEP 440 to make it work again
 2014-12-16T17:05:14  <mordred> dhellmann: however, if you need your head in the other problem, feel free to ignore us
 2014-12-16T17:06:00  <dhellmann> mordred: yeah, I'm really trying to get a resolution on the sqlalchemy issue first, but I give zero toots about shas in version numbers if we can have a "patch number since last tag" or something
@@ -1601,7 +1601,7 @@
 2014-12-16T17:07:04  <mordred> only if they jump around
 2014-12-16T17:07:19  <mordred> there might be two different things that are different that have version 1.2.3.4
 2014-12-16T17:07:30  <mordred> in that that's two different things that are 4 patches patst 1.2.3
-2014-12-16T17:07:32  <clarkb> where 4 is the patch level
+2014-12-16T17:07:32  <superbee> where 4 is the patch level
 2014-12-16T17:07:34  <mordred> I don't really care
 2014-12-16T17:07:37  *** ChuckC has quit IRC
 2014-12-16T17:07:46  <mordred> at that point, they're doing crazypants and I can't help them anyway
@@ -1644,14 +1644,14 @@
 2014-12-16T17:17:12  <dstufft> yes
 2014-12-16T17:17:21  <dstufft> if you create it with setuptools 8+
 2014-12-16T17:17:22  <ttx> hmmm, ok
-2014-12-16T17:17:29  <clarkb> speaking of
+2014-12-16T17:17:29  <superbee> speaking of
 2014-12-16T17:17:30  *** sputnik13 has quit IRC
 2014-12-16T17:17:32  <zaro> morning
 2014-12-16T17:17:33  *** enikanorov has quit IRC
-2014-12-16T17:17:37  <clarkb> mordred: https://review.openstack.org/#/c/141831/ your thoughts on that are also appreciated
-2014-12-16T17:17:43  <clarkb> mordred: it is related to ttx's questions above
-2014-12-16T17:17:57  <ttx> clarkb: any hint on whether I should do .b1 or b1 ?
-2014-12-16T17:18:02  <clarkb> ttx: note that 141831 would prevent a tag of 2015.1.b1
+2014-12-16T17:17:37  <superbee> mordred: https://review.openstack.org/#/c/141831/ your thoughts on that are also appreciated
+2014-12-16T17:17:43  <superbee> mordred: it is related to ttx's questions above
+2014-12-16T17:17:57  <ttx> superbee: any hint on whether I should do .b1 or b1 ?
+2014-12-16T17:18:02  <superbee> ttx: note that 141831 would prevent a tag of 2015.1.b1
 2014-12-16T17:18:14  <dstufft> I think that's a hint to do b1
 2014-12-16T17:18:16  <dstufft> lol
 2014-12-16T17:18:16  <ttx> yep
@@ -1660,7 +1660,7 @@
 2014-12-16T17:18:42  *** tonytan4ever has joined #openstack-infra
 2014-12-16T17:18:56  <ttx> better than changing in the middle of the cycle
 2014-12-16T17:18:56  *** sputnik13 has joined #openstack-infra
-2014-12-16T17:19:08  <clarkb> ttx: +1, lets see what mordred thinks about that if he is still around
+2014-12-16T17:19:08  <superbee> ttx: +1, lets see what mordred thinks about that if he is still around
 2014-12-16T17:19:08  <zaro> notmyname: i think you and edwin are talking about 2 different things when you are referring to a 'custom dashboar'.  i think edwin is referring to the custom dashboard feature while you are referring to a custom query.
 2014-12-16T17:19:38  *** ChuckC_ has quit IRC
 2014-12-16T17:19:47  <zaro> notmyname: this is an example of a custom dashboard: https://review.openstack.org/#/projects/All-Projects,dashboards/important-changes:important-changes-dashboard
@@ -1669,17 +1669,17 @@
 2014-12-16T17:21:06  <sdague> what's up with the zuul event graphs?
 2014-12-16T17:21:12  <pleia2> morning
 2014-12-16T17:21:19  <notmyname> zaro: ah. right. I'm referring to eg what http://goo.gl/r2mxbe resolves to
-2014-12-16T17:21:20  <clarkb> dhellmann: would it be ok if I put non oslo.db related setuptools 8.0 things on your etherpad too?
+2014-12-16T17:21:20  <superbee> dhellmann: would it be ok if I put non oslo.db related setuptools 8.0 things on your etherpad too?
 2014-12-16T17:21:31  *** achanda has quit IRC
-2014-12-16T17:21:37  <dhellmann> clarkb: sure
+2014-12-16T17:21:37  <dhellmann> superbee: sure
 2014-12-16T17:22:50  *** carl_baldwin has quit IRC
 2014-12-16T17:23:01  *** sarob has quit IRC
 2014-12-16T17:23:05  *** dims has quit IRC
 2014-12-16T17:23:07  *** sarob_ has joined #openstack-infra
-2014-12-16T17:23:28  <mordred> clarkb: looking
+2014-12-16T17:23:28  <mordred> superbee: looking
 2014-12-16T17:23:35  *** dmsimard is now known as dmsimard_away
 2014-12-16T17:23:41  *** dims has joined #openstack-infra
-2014-12-16T17:23:46  <dstufft> clarkb: I think you can also update PEP 440 but still emit normalized things, it would just mean that CD operators need to be setuptools 8+
+2014-12-16T17:23:46  <dstufft> superbee: I think you can also update PEP 440 but still emit normalized things, it would just mean that CD operators need to be setuptools 8+
 2014-12-16T17:23:57  <zaro> notmyname: yeah, i think what you want is to be able to share just an arbitrary query.
 2014-12-16T17:24:00  *** yamamoto has joined #openstack-infra
 2014-12-16T17:24:04  <dstufft> if that's a better option for y'all in confusion terroritory wise
@@ -1688,20 +1688,20 @@
 2014-12-16T17:24:32  <notmyname> zaro: thanks. I'll try to clarify that
 2014-12-16T17:24:41  *** achanda_ has joined #openstack-infra
 2014-12-16T17:25:10  <jeblair_> sdague: i believe it's hitting timeouts; i landed a fix to address that
-2014-12-16T17:25:16  <jeblair_> clarkb, foobio: ^ maybe we should restart zuul now
+2014-12-16T17:25:16  <jeblair_> superbee, foobio: ^ maybe we should restart zuul now
 2014-12-16T17:25:29  *** dmsimard_away is now known as dmsimard
-2014-12-16T17:25:34  <clarkb> jeblair_: the fix was to bump the timeout locally again?
-2014-12-16T17:25:42  <mordred> clarkb: so pep440 wants us to make 2015.1.1b1 if we were good little chickens?
-2014-12-16T17:25:48  <jeblair_> clarkb: yeah, though this time it's in a real change to zuul
+2014-12-16T17:25:34  <superbee> jeblair_: the fix was to bump the timeout locally again?
+2014-12-16T17:25:42  <mordred> superbee: so pep440 wants us to make 2015.1.1b1 if we were good little chickens?
+2014-12-16T17:25:48  <jeblair_> superbee: yeah, though this time it's in a real change to zuul
 2014-12-16T17:25:56  <dstufft> mordred: 2015.1b1
-2014-12-16T17:26:01  <clarkb> mordred: correct, and if you do something else it will normalize to that and thats the version in your sdist
+2014-12-16T17:26:01  <superbee> mordred: correct, and if you do something else it will normalize to that and thats the version in your sdist
 2014-12-16T17:26:03  <dstufft> if you want the normalized version
 2014-12-16T17:26:07  <dstufft> oh
 2014-12-16T17:26:10  <dstufft> I missed the second .1
-2014-12-16T17:26:13  <clarkb> dstufft: I think 2014.1.1b1 is also allowed
+2014-12-16T17:26:13  <superbee> dstufft: I think 2014.1.1b1 is also allowed
 2014-12-16T17:26:27  <dstufft> yea it Is, I just didn't read close enough and thought mordred was repeating ttx's version
 2014-12-16T17:26:42  <ttx> mordred: I tagged Swift 2.2.1.rc1 and that cvreated swift-2.2.1c1.tar.gz, so we backtracked and tagged Swift 2.2.1c1
-2014-12-16T17:26:53  <clarkb> mordred: so in the interest of reducing confusion I assert the tag should match pep440 as well
+2014-12-16T17:26:53  <superbee> mordred: so in the interest of reducing confusion I assert the tag should match pep440 as well
 2014-12-16T17:26:57  <ttx> mordred: now I need to push kilo-1 tags... used to be 2015.1.b1
 2014-12-16T17:26:58  <dstufft> note that 2015.1.1b1 is newer than 2015.1
 2014-12-16T17:27:10  <dstufft> 2015.1.0b1 is equiv though
@@ -1709,16 +1709,16 @@
 2014-12-16T17:27:18  <ttx> mordred: but 2015.1b1 sounds liek the way to get tags matching tarballs
 2014-12-16T17:27:25  *** derekh has quit IRC
 2014-12-16T17:27:37  *** shashankhegde has joined #openstack-infra
-2014-12-16T17:27:41  <clarkb> dstufft: noted
+2014-12-16T17:27:41  <superbee> dstufft: noted
 2014-12-16T17:27:50  *** sarob_ is now known as sarob
 2014-12-16T17:27:51  <ttx> If everyone agrees, I'll tag kilo-1 as 2015.1b1
 2014-12-16T17:27:51  <mordred> ttx: yes. except then we've got two different regexes - can we just mkae the servers 2015.1.0b1 so that we can have one and only one regex we accept?
 2014-12-16T17:27:56  *** alexpilotti has joined #openstack-infra
 2014-12-16T17:27:59  *** jcoufal_ has quit IRC
 2014-12-16T17:28:05  *** dims_ has joined #openstack-infra
-2014-12-16T17:28:08  <clarkb> mordred: my regex accepts both
+2014-12-16T17:28:08  <superbee> mordred: my regex accepts both
 2014-12-16T17:28:11  <mordred> right.
-2014-12-16T17:28:26  <clarkb> mordred: I don't think I follow "two different regexes"
+2014-12-16T17:28:26  <superbee> mordred: I don't think I follow "two different regexes"
 2014-12-16T17:28:30  <mordred> but I don't want to accept a letter in the second stanza for most things - that's a server ideosyncracy
 2014-12-16T17:28:31  *** achanda_ has quit IRC
 2014-12-16T17:28:37  *** dims has quit IRC
@@ -1727,18 +1727,18 @@
 2014-12-16T17:29:07  *** sarob_ has joined #openstack-infra
 2014-12-16T17:29:10  *** achanda has joined #openstack-infra
 2014-12-16T17:29:13  <mordred> why not go ahead and make it at least fit the stricter regex
-2014-12-16T17:29:13  <clarkb> mordred: so my intent was to match PEP440 as closely as possible
-2014-12-16T17:29:20  <clarkb> mordred: and not proscribe anything atop that
+2014-12-16T17:29:13  <superbee> mordred: so my intent was to match PEP440 as closely as possible
+2014-12-16T17:29:20  <superbee> mordred: and not proscribe anything atop that
 2014-12-16T17:29:25  <mordred> oh, I don't want to do that
 2014-12-16T17:29:30  <mordred> I want to proscribe on top of it
 2014-12-16T17:29:36  <dstufft> pep 440 allows some crazy versions
-2014-12-16T17:29:37  <clarkb> because that additional stuff is what is biting us today
+2014-12-16T17:29:37  <superbee> because that additional stuff is what is biting us today
 2014-12-16T17:29:46  <mordred> because there is no good reason to allow 1.0 instead of 1.0.0
 2014-12-16T17:29:48  <dstufft> accepting a subset of pep 440 is recommended
 2014-12-16T17:29:52  <mordred> dstufft: ++
-2014-12-16T17:30:05  <clarkb> mordred: ok so you want to require three digit sections?
+2014-12-16T17:30:05  <superbee> mordred: ok so you want to require three digit sections?
 2014-12-16T17:30:07  <mordred> yes
-2014-12-16T17:30:13  <clarkb> ok let me update regexes
+2014-12-16T17:30:13  <superbee> ok let me update regexes
 2014-12-16T17:30:16  <mordred> because then there is just a rule
 2014-12-16T17:30:18  *** ihrachyshka has joined #openstack-infra
 2014-12-16T17:30:20  <ttx> mordred: and tag finazl as 2015.1.0 ?
@@ -1749,7 +1749,7 @@
 2014-12-16T17:31:17  <ttx> I'm not sure I follow the "only 3 digit sections" rationale
 2014-12-16T17:31:39  <dstufft> semver says you have to have 3 digits
 2014-12-16T17:31:41  <dstufft> semver.org
-2014-12-16T17:31:56  <clarkb> we did not enforce that before, but I am happy to enforce it now
+2014-12-16T17:31:56  <superbee> we did not enforce that before, but I am happy to enforce it now
 2014-12-16T17:31:57  <ttx> dstufft: sure but here we are talking date-based versioning
 2014-12-16T17:32:16  *** yamamoto has quit IRC
 2014-12-16T17:32:25  *** sarob has quit IRC
@@ -1776,7 +1776,7 @@
 2014-12-16T17:34:34  <dstufft> mordred: not future compatible with 2100!!!
 2014-12-16T17:34:54  <mordred> dstufft: not my problem :)
 2014-12-16T17:34:56  <ttx> we always had "2014.2" like things
-2014-12-16T17:35:09  <dhellmann> clarkb, foobio: new plan, line 29 of https://etherpad.openstack.org/p/cloL2FzTRd
+2014-12-16T17:35:09  <dhellmann> superbee, foobio: new plan, line 29 of https://etherpad.openstack.org/p/cloL2FzTRd
 2014-12-16T17:35:16  *** tonytan4ever has quit IRC
 2014-12-16T17:35:17  <ttx> althouigh swift used "2.0.0" so I guess there is precedent
 2014-12-16T17:35:44  *** carl_baldwin has joined #openstack-infra
@@ -1784,91 +1784,91 @@
 2014-12-16T17:36:28  <ttx> mordred: ok, I think we can leave with that
 2014-12-16T17:36:31  <ttx> or live
 2014-12-16T17:37:00  *** _nadya_ has quit IRC
-2014-12-16T17:37:01  <clarkb> dhellmann: that also works for me
+2014-12-16T17:37:01  <superbee> dhellmann: that also works for me
 2014-12-16T17:37:04  *** ssam2_ has joined #openstack-infra
 2014-12-16T17:37:08  *** garyk has joined #openstack-infra
 2014-12-16T17:37:10  *** franred has joined #openstack-infra
-2014-12-16T17:37:15  <clarkb> dhellmann: will need to read through what foobio and you discussed to understand why but I am fine with that too
-2014-12-16T17:37:39  <ttx> clarkb: if I tag 2015.1.0b1 ... will the current regexp catch it in pre-release ?
-2014-12-16T17:38:01  <ttx> clarkb: and setuptools won't barf on me either ?
-2014-12-16T17:38:01  <clarkb> ttx: good question, I think so but let me check
+2014-12-16T17:37:15  <superbee> dhellmann: will need to read through what foobio and you discussed to understand why but I am fine with that too
+2014-12-16T17:37:39  <ttx> superbee: if I tag 2015.1.0b1 ... will the current regexp catch it in pre-release ?
+2014-12-16T17:38:01  <ttx> superbee: and setuptools won't barf on me either ?
+2014-12-16T17:38:01  <superbee> ttx: good question, I think so but let me check
 2014-12-16T17:38:25  <dstufft> ttx: setuptools will be perfectly happy with that in any version I've ever seen
 2014-12-16T17:39:15  <foobio> right, so 2015.1.0b1 sorts earlier than 2015.1.0 (which sorts equivalent to 2015.1)
-2014-12-16T17:39:15  <clarkb> looks like our regex allows both .bX and XbY to trail a version
-2014-12-16T17:39:23  <clarkb> ttx: so the verison you have above should work fine
+2014-12-16T17:39:15  <superbee> looks like our regex allows both .bX and XbY to trail a version
+2014-12-16T17:39:23  <superbee> ttx: so the verison you have above should work fine
 2014-12-16T17:39:34  <ttx> ok, just need to update my scripts
 2014-12-16T17:40:01  *** andreaf has quit IRC
 2014-12-16T17:40:07  <foobio> and setuptools isn't going to renormalize either of 2015.1.0 or 2015.1
 2014-12-16T17:40:07  *** tonytan4ever has quit IRC
 2014-12-16T17:40:13  <dstufft> foobio: correct
-2014-12-16T17:40:14  <clarkb> I will update my regex changes to require 3 digit things
+2014-12-16T17:40:14  <superbee> I will update my regex changes to require 3 digit things
 2014-12-16T17:40:24  *** andreaf has joined #openstack-infra
-2014-12-16T17:40:43  <clarkb> mordred: ttx do we want to allow more than 3 or 3 only?
-2014-12-16T17:40:51  <clarkb> iirc semver requires at least 3 but allows you to do more
+2014-12-16T17:40:43  <superbee> mordred: ttx do we want to allow more than 3 or 3 only?
+2014-12-16T17:40:51  <superbee> iirc semver requires at least 3 but allows you to do more
 2014-12-16T17:40:56  <dhellmann> sdague: do you have any feedback on the plans outlined in https://etherpad.openstack.org/p/cloL2FzTRd ?
 2014-12-16T17:41:01  *** erikmwil_ has joined #openstack-infra
 2014-12-16T17:41:01  * dhellmann goes for lunch
-2014-12-16T17:41:08  <mordred> clarkb: 3 only
+2014-12-16T17:41:08  <mordred> superbee: 3 only
 2014-12-16T17:41:10  *** erikmwil_ has quit IRC
-2014-12-16T17:41:13  <mordred> clarkb: semver == 3 and only three
+2014-12-16T17:41:13  <mordred> superbee: semver == 3 and only three
 2014-12-16T17:41:41  *** erikmwil_ has joined #openstack-infra
 2014-12-16T17:42:08  <ttx> [ Tagging fd0966935e5ac5007560d0032f7dee1fe5f660dc as 2015.1.0b1 ]
 2014-12-16T17:42:18  <ttx> we are a go
 2014-12-16T17:42:32  *** erikmwilson has quit IRC
-2014-12-16T17:42:57  <clarkb> mordred: are you sure? I thought semver allowed more
-2014-12-16T17:43:06  <foobio> mordred: clarkb: so tempest will no longer get to use incrementing integer versions i guess?
-2014-12-16T17:43:21  <clarkb> foobio: it will but will have to use 4.0.0
+2014-12-16T17:42:57  <superbee> mordred: are you sure? I thought semver allowed more
+2014-12-16T17:43:06  <foobio> mordred: superbee: so tempest will no longer get to use incrementing integer versions i guess?
+2014-12-16T17:43:21  <superbee> foobio: it will but will have to use 4.0.0
 2014-12-16T17:43:25  *** kragwhale is now known as kragniz
 2014-12-16T17:43:28  <foobio> or is this only for alpha/beta/candidate pre-releases?
-2014-12-16T17:43:59  <mordred> clarkb: "
+2014-12-16T17:43:59  <mordred> superbee: "
 2014-12-16T17:44:01  <mordred> Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format."
 2014-12-16T17:44:01  *** erikmwil_ is now known as erikmwilson
-2014-12-16T17:44:04  <clarkb> mordred: now that I reread the only extentions are for the alpha and beta things
-2014-12-16T17:44:09  <clarkb> mordred: ya
+2014-12-16T17:44:04  <superbee> mordred: now that I reread the only extentions are for the alpha and beta things
+2014-12-16T17:44:09  <superbee> mordred: ya
 2014-12-16T17:44:09  <foobio> i could see some reason to require a minimum number of version components in a pre-release version string but not in a release version string
 2014-12-16T17:44:10  <mordred> yah
-2014-12-16T17:44:30  <clarkb> foobio: I think the reason is because semver
-2014-12-16T17:44:37  <clarkb> foobio: basically being good software citizens
+2014-12-16T17:44:30  <superbee> foobio: I think the reason is because semver
+2014-12-16T17:44:37  <superbee> foobio: basically being good software citizens
 2014-12-16T17:44:50  <mordred> I mean, it's still not totally right
 2014-12-16T17:44:57  <mordred> because of their -alpha obsession
 2014-12-16T17:45:06  *** armax has joined #openstack-infra
-2014-12-16T17:45:36  <foobio> clarkb: okay, but tempest doesn't actually have semantics around its versions in that way, so it's sort of a shoehorning into a mismatched release management scheme which is ultimately meaningless there
+2014-12-16T17:45:36  <foobio> superbee: okay, but tempest doesn't actually have semantics around its versions in that way, so it's sort of a shoehorning into a mismatched release management scheme which is ultimately meaningless there
 2014-12-16T17:46:19  <foobio> if we limit our tag matches like that in layout.yaml, we're forcing that part of semver on everyone using our release automation, stackforge projects even
-2014-12-16T17:47:25  <clarkb> foobio: they actually do, its an assertion of non backward compat from that point forward beacuse $release support goes away
-2014-12-16T17:47:36  <clarkb> foobio: so each major version tag is proper under semver
+2014-12-16T17:47:25  <superbee> foobio: they actually do, its an assertion of non backward compat from that point forward beacuse $release support goes away
+2014-12-16T17:47:36  <superbee> foobio: so each major version tag is proper under semver
 2014-12-16T17:47:49  *** ChuckC_ has joined #openstack-infra
 2014-12-16T17:47:55  <foobio> i can see limiting release automation for python projects to only version strings which are pep-440 compliant, but going further and forcing semver itself on everyone is a bigger leap
 2014-12-16T17:48:43  <dstufft> For the record here is the regex that parses all available PEP 440 versions: https://github.com/pypa/packaging/blob/master/packaging/version.py#L162-L198 (including those not normalized)
 2014-12-16T17:49:06  *** erikmwilson has quit IRC
-2014-12-16T17:49:14  <clarkb> dstufft: I explicitly want to limit to normalized to avoid confusion when tag != version
+2014-12-16T17:49:14  <superbee> dstufft: I explicitly want to limit to normalized to avoid confusion when tag != version
 2014-12-16T17:49:14  <asselin> Hi, I'm trying to create single use jenkins nodepool image and running into this error. Any tips? http://paste.openstack.org/show/151952/
 2014-12-16T17:49:34  *** erikmwilson has joined #openstack-infra
-2014-12-16T17:49:41  <dstufft> clarkb: makes sense, I don't have a regex that allows all possible versions of that, but it shouldn't be terribly hard to do
+2014-12-16T17:49:41  <dstufft> superbee: makes sense, I don't have a regex that allows all possible versions of that, but it shouldn't be terribly hard to do
 2014-12-16T17:49:53  <openstackgerrit> Mauro Rodrigues proposed openstack-infra/elastic-recheck: Update Bug #1365046 query  https://review.openstack.org/142169
 2014-12-16T17:49:54  <uvirtbot> Launchpad bug 1365046 in openstack-gate "Job failed due to no devstack directory" [Undecided,Confirmed] https://launchpad.net/bugs/1365046
-2014-12-16T17:49:55  <clarkb> dstufft: it isn't the normalized grammar is simple and regular
+2014-12-16T17:49:55  <superbee> dstufft: it isn't the normalized grammar is simple and regular
 2014-12-16T17:50:13  *** e0ne has quit IRC
-2014-12-16T17:50:22  <clarkb> mordred: ^ want to respond to foobio?
+2014-12-16T17:50:22  <superbee> mordred: ^ want to respond to foobio?
 2014-12-16T17:50:41  <dstufft> some people are apparently mad that we did c isntead of rc (though I have no idea why we did c, I just didn't care)
 2014-12-16T17:51:18  <mordred> dstufft: I think it's because "c" is not a thing that anyone has actually used to convey that meaning _ever_
 2014-12-16T17:51:38  <dstufft> I think it comes from the old PEP
 2014-12-16T17:51:47  <dstufft> which is 5 years old at this point and predates me
-2014-12-16T17:51:49  <mordred> clarkb, foobio: I can see that - I can give up on it
+2014-12-16T17:51:49  <mordred> superbee, foobio: I can see that - I can give up on it
 2014-12-16T17:52:03  <mordred> honestly, it's not a hard stance on my part
-2014-12-16T17:52:10  <clarkb> mordred: foobio: maybe we start with just matching the pep440 normalized form as in my current change
-2014-12-16T17:52:27  <clarkb> mordred: foobio: and bring up semver enforcement as future improvement since that isn't tied to making things better in the post 440 world
-2014-12-16T17:52:33  <mordred> clarkb: ++
+2014-12-16T17:52:10  <superbee> mordred: foobio: maybe we start with just matching the pep440 normalized form as in my current change
+2014-12-16T17:52:27  <superbee> mordred: foobio: and bring up semver enforcement as future improvement since that isn't tied to making things better in the post 440 world
+2014-12-16T17:52:33  <mordred> superbee: ++
 2014-12-16T17:52:36  <dstufft> mordred: do you think I should see about ammending PEP 440 to switch c with rc
 2014-12-16T17:52:47  <foobio> i'm guessing "c" was suggested by someone obsessed with consistency who wanted to shorten "rc" to the same length as "a" and "b" and liked that they came as a progression in a certain (technically wrong) alphabet
 2014-12-16T17:52:49  <mordred> dstufft: it might make people happier
 2014-12-16T17:53:16  <dstufft> foobio: probably, that old PEP also put dev after a, b and c
 2014-12-16T17:53:26  <dstufft> my first change was arguing that was insane
 2014-12-16T17:53:34  <foobio> dstufft: right, i wondered why not shorten "dev" to "d" in that case
-2014-12-16T17:54:05  <clarkb> ok I think my change is ready for review and merging then
+2014-12-16T17:54:05  <superbee> ok I think my change is ready for review and merging then
 2014-12-16T17:54:17  *** BobBall is now known as BobBall_AWOL
 2014-12-16T17:54:19  *** ChuckC_ has quit IRC
 2014-12-16T17:54:21  *** marcusvrn has joined #openstack-infra
-2014-12-16T17:54:49  <clarkb> I am reviewing the pbr changes now
+2014-12-16T17:54:49  <superbee> I am reviewing the pbr changes now
 2014-12-16T17:55:16  *** sarob_ is now known as sarob
 2014-12-16T17:55:27  <cody-somerville> Is it possible to get historical data on core memberships across OpenStack?
 2014-12-16T17:55:36  *** shashankhegde has quit IRC
@@ -1877,8 +1877,8 @@
 2014-12-16T17:56:10  *** dustins has joined #openstack-infra
 2014-12-16T17:56:15  *** shashankhegde has joined #openstack-infra
 2014-12-16T17:56:25  *** achanda has joined #openstack-infra
-2014-12-16T17:56:31  <clarkb> in theory that will change when gerrit drops the db as everything will be in git
-2014-12-16T17:56:35  <clarkb> but hasn't happened yet
+2014-12-16T17:56:31  <superbee> in theory that will change when gerrit drops the db as everything will be in git
+2014-12-16T17:56:35  <superbee> but hasn't happened yet
 2014-12-16T17:56:37  <foobio> cody-somerville: we could _start_ tracking it fairly easily (i have a script, it could dump into a git repo daily or something) but today that's not the case
 2014-12-16T17:56:45  <mordred> you might get close with stackalytics - they don't look at actual core but instead track who has used a +2 vote
 2014-12-16T17:56:46  *** ChuckC_ has joined #openstack-infra
@@ -1888,11 +1888,11 @@
 2014-12-16T17:57:23  <mordred> dstufft: ++
 2014-12-16T17:57:57  <cody-somerville> mordred: foobio: Ah, ok. Kudos for the pointers.
 2014-12-16T17:59:02  *** arxcruz has quit IRC
-2014-12-16T17:59:59  <clarkb> mordred: see comments on https://review.openstack.org/#/c/141667/ basicaly putting other peoples comments that I have heard on that patchset so you can see them easily
-2014-12-16T18:00:07  <jeblair_> clarkb, foobio: any objections to my restarting zuul now?
-2014-12-16T18:00:25  <clarkb> jeblair_: none from me
+2014-12-16T17:59:59  <superbee> mordred: see comments on https://review.openstack.org/#/c/141667/ basicaly putting other peoples comments that I have heard on that patchset so you can see them easily
+2014-12-16T18:00:07  <jeblair_> superbee, foobio: any objections to my restarting zuul now?
+2014-12-16T18:00:25  <superbee> jeblair_: none from me
 2014-12-16T18:01:16  <foobio> jeblair_: no, i agree it's a good idea to go ahead and get that timeout increased
-2014-12-16T18:01:27  <clarkb> mordred: oh ignore the comment about git descibe output you capture that in the second change
+2014-12-16T18:01:27  <superbee> mordred: oh ignore the comment about git descibe output you capture that in the second change
 2014-12-16T18:01:37  *** jp_at_hp has quit IRC
 2014-12-16T18:01:45  *** dustins has quit IRC
 2014-12-16T18:02:14  *** garyk has quit IRC
@@ -1903,40 +1903,40 @@
 2014-12-16T18:03:38  *** garyk has joined #openstack-infra
 2014-12-16T18:03:42  *** dustins has joined #openstack-infra
 2014-12-16T18:03:51  *** hashar has quit IRC
-2014-12-16T18:04:12  <jeblair_> clarkb, foobio: restarted; also did a full nodepool flush
+2014-12-16T18:04:12  <jeblair_> superbee, foobio: restarted; also did a full nodepool flush
 2014-12-16T18:04:16  *** jeblair_ is now known as jeblair
-2014-12-16T18:04:39  <clarkb> mordred: and I am -1 on https://review.openstack.org/#/c/141946/ due to a bug
-2014-12-16T18:05:01  <jeblair> clarkb: also we need to delete old nodepool and rename in dns
+2014-12-16T18:04:39  <superbee> mordred: and I am -1 on https://review.openstack.org/#/c/141946/ due to a bug
+2014-12-16T18:05:01  <jeblair> superbee: also we need to delete old nodepool and rename in dns
 2014-12-16T18:05:17  *** sputnik13 has quit IRC
-2014-12-16T18:05:35  <clarkb> jeblair: yup I think new nodepool has proven to be stable
+2014-12-16T18:05:35  <superbee> jeblair: yup I think new nodepool has proven to be stable
 2014-12-16T18:05:38  *** rmcall has joined #openstack-infra
 2014-12-16T18:05:40  *** sputnik13 has joined #openstack-infra
-2014-12-16T18:05:42  <clarkb> jeblair: should I go ahead and delete images on old nodepool now?
-2014-12-16T18:05:53  <jeblair> clarkb: ++
+2014-12-16T18:05:42  <superbee> jeblair: should I go ahead and delete images on old nodepool now?
+2014-12-16T18:05:53  <jeblair> superbee: ++
 2014-12-16T18:06:05  *** k4n0 has quit IRC
 2014-12-16T18:06:13  *** rmcall has quit IRC
 2014-12-16T18:06:28  *** tonytan4ever has joined #openstack-infra
-2014-12-16T18:06:29  <mordred> clarkb: thanks. nice catch. that's what I get for tryin to respond to a review comment ...
+2014-12-16T18:06:29  <mordred> superbee: thanks. nice catch. that's what I get for tryin to respond to a review comment ...
 2014-12-16T18:06:31  <mordred> :)
 2014-12-16T18:06:35  *** fandi has joined #openstack-infra
 2014-12-16T18:08:11  *** jamielennox|away is now known as jamielennox
 2014-12-16T18:08:18  *** rmcall has joined #openstack-infra
-2014-12-16T18:08:24  <clarkb> ok image deletion is running
+2014-12-16T18:08:24  <superbee> ok image deletion is running
 2014-12-16T18:09:02  <foobio> dstufft: new suggestion. pep 440 should be amended to properly normalize alpha, beta, rc and dev to α, β, γ and δ respectively
-2014-12-16T18:09:10  <mordred> clarkb: patches update
-2014-12-16T18:09:13  <mordred> clarkb: thanks!
+2014-12-16T18:09:10  <mordred> superbee: patches update
+2014-12-16T18:09:13  <mordred> superbee: thanks!
 2014-12-16T18:09:15  <dstufft> foobio: agreed, doing that now
-2014-12-16T18:09:18  <clarkb> mordred: thank you looking now
+2014-12-16T18:09:18  <superbee> mordred: thank you looking now
 2014-12-16T18:09:56  <foobio> dstufft: also we want unicode snowman for a revision control hash designator
 2014-12-16T18:10:09  <anteaya> we do
 2014-12-16T18:10:11  <dstufft> foobio: :pileofpoop:
-2014-12-16T18:10:14  <clarkb> mordred: my only other concern is what if I have a tag called banana then it won't do the right thing. but I think in cases like that we just laugh
+2014-12-16T18:10:14  <superbee> mordred: my only other concern is what if I have a tag called banana then it won't do the right thing. but I think in cases like that we just laugh
 2014-12-16T18:10:16  <foobio> bwahaha
 2014-12-16T18:10:26  <anteaya> like that?
 2014-12-16T18:10:55  *** tonytan4ever has quit IRC
 2014-12-16T18:11:23  <openstackgerrit> Michael Krotscheck proposed openstack-infra/system-config: Added manifest for storyboard-dev.openstack.org  https://review.openstack.org/140466
 2014-12-16T18:11:50  <nibalizer> so, this is a thing now , i guess https://golang.org/doc/contribute.html#tmp_6
-2014-12-16T18:12:03  <mordred> clarkb: yup. it will break
+2014-12-16T18:12:03  <mordred> superbee: yup. it will break
 2014-12-16T18:12:06  <nibalizer> jeblair: mordred i guess go now has a tool called 'git-review' that interacts with gerrit
 2014-12-16T18:12:06  *** Ryan_Lane has joined #openstack-infra
 2014-12-16T18:12:25  *** achanda has quit IRC
@@ -1965,18 +1965,18 @@
 2014-12-16T18:15:52  <nibalizer> gais, gais stahp
 2014-12-16T18:16:27  <ryanpetrello> I'm seeing a bunch of git clone failures for OpenStack cgit
 2014-12-16T18:16:32  *** dizquierdo has quit IRC
-2014-12-16T18:16:37  <clarkb> ryanpetrello: can you link examples?
+2014-12-16T18:16:37  <superbee> ryanpetrello: can you link examples?
 2014-12-16T18:16:44  <ryanpetrello> https://review.openstack.org/#/c/141172/
 2014-12-16T18:17:01  <ryanpetrello> namely that review
-2014-12-16T18:17:09  <clarkb> oh don't clone from cgit/
+2014-12-16T18:17:09  <superbee> oh don't clone from cgit/
 2014-12-16T18:17:21  <ryanpetrello> I figured it was just a fluke last night, but re-ran a check this morning and still seeing the same issue
-2014-12-16T18:17:43  <clarkb> I am not sure cgit/ was ever intended to be a place to clone from. It does caching and weirdness. If you drop the cgit/ from the path you get apache/git daemon and it should be much better
+2014-12-16T18:17:43  <superbee> I am not sure cgit/ was ever intended to be a place to clone from. It does caching and weirdness. If you drop the cgit/ from the path you get apache/git daemon and it should be much better
 2014-12-16T18:17:53  *** Masahiro has joined #openstack-infra
 2014-12-16T18:17:55  <jeblair> wait, why is a job cloning?
-2014-12-16T18:18:17  <clarkb> jeblair: because stackforge
+2014-12-16T18:18:17  <superbee> jeblair: because stackforge
 2014-12-16T18:18:26  <ryanpetrello> jeblair: pecan has jobs where I clone projects that depend on pecan
 2014-12-16T18:18:34  *** tonytan4ever has joined #openstack-infra
-2014-12-16T18:18:36  <clarkb> jeblair: I think it was written before zuul cloner existed but would be a perfect place to zuul cloner
+2014-12-16T18:18:36  <superbee> jeblair: I think it was written before zuul cloner existed but would be a perfect place to zuul cloner
 2014-12-16T18:18:40  <ryanpetrello> and then run their tests w/ the pecan patchset installed into the virtualenv
 2014-12-16T18:18:52  <jeblair> yeah, we should use zuul cloner, and in a config that will use the local git cache instead of a full clone
 2014-12-16T18:19:04  <jeblair> ryanpetrello: what does the actual cloning?
@@ -1992,19 +1992,19 @@
 2014-12-16T18:21:27  *** markmcclain1 has quit IRC
 2014-12-16T18:21:29  <anteaya> asselin: keep anythign you need, let's just make sure it is current
 2014-12-16T18:21:31  <nibalizer> ya, kelsey told me to bring it up with golang-dev
-2014-12-16T18:21:33  <ryanpetrello> clarkb: I'll remove the cgit and give that a shot
+2014-12-16T18:21:33  <ryanpetrello> superbee: I'll remove the cgit and give that a shot
 2014-12-16T18:21:43  *** markmcclain has joined #openstack-infra
 2014-12-16T18:21:45  <nibalizer> i haven't exactly found the right thread to respond to
 2014-12-16T18:21:49  <pleia2> nibalizer: yeah, I saw the thread on twitter, that's kind of even worse :)
-2014-12-16T18:21:56  <clarkb> ryanpetrello: I would at least start with that, there may be other underlying problems but I was always wary of cgit's caching for git operations
+2014-12-16T18:21:56  <superbee> ryanpetrello: I would at least start with that, there may be other underlying problems but I was always wary of cgit's caching for git operations
 2014-12-16T18:22:05  <pleia2> they took a well-established project name, now that it's been pointed out they should just fix it
 2014-12-16T18:22:07  <nibalizer> well kelsey is a go user, not a go dev so i think it was fair
 2014-12-16T18:22:14  <pleia2> ah, fair enough
 2014-12-16T18:22:24  <nibalizer> so ya probably we should post to godev-lang
-2014-12-16T18:22:28  <clarkb> clearly we should've been python-git-review
+2014-12-16T18:22:28  <superbee> clearly we should've been python-git-review
 2014-12-16T18:22:30  *** Masahiro has quit IRC
 2014-12-16T18:22:40  <nibalizer> and by we probably jim has the most authority ? but i leave that up to others to decide
-2014-12-16T18:22:40  <clarkb> so that every language can reinvent this wheel without name collisions
+2014-12-16T18:22:40  <superbee> so that every language can reinvent this wheel without name collisions
 2014-12-16T18:22:52  <pleia2> nibalizer: s/we/nibalizer - thanks :D
 2014-12-16T18:22:53  *** sputnik13 has quit IRC
 2014-12-16T18:23:03  *** shashankhegde has joined #openstack-infra
@@ -2012,13 +2012,13 @@
 2014-12-16T18:23:29  *** sputnik13 has joined #openstack-infra
 2014-12-16T18:23:45  *** ChuckC_ is now known as ChuckC
 2014-12-16T18:23:50  <pleia2> foobio: go people are allergic to python
-2014-12-16T18:23:58  <clarkb> foobio: I think that when you write a new programming language one of the things you are required to do is to rewrite everything in that language
+2014-12-16T18:23:58  <superbee> foobio: I think that when you write a new programming language one of the things you are required to do is to rewrite everything in that language
 2014-12-16T18:24:02  <foobio> i mean, we also submit shell scripts with it, so should we have a version rewritten in bash too?
-2014-12-16T18:24:04  <clarkb> even if the utility of a thing is as a tool not a lib
+2014-12-16T18:24:04  <superbee> even if the utility of a thing is as a tool not a lib
 2014-12-16T18:24:07  *** yamamoto has joined #openstack-infra
-2014-12-16T18:24:21  <jeblair> clarkb, ryanpetrello: so we should avoid cloning from git at all; there are more efficient and resilient ways of doing it...
+2014-12-16T18:24:21  <jeblair> superbee, ryanpetrello: so we should avoid cloning from git at all; there are more efficient and resilient ways of doing it...
 2014-12-16T18:24:28  <jeblair> ryanpetrello: let me get you a link
-2014-12-16T18:24:30  <clarkb> jeblair: agreed
+2014-12-16T18:24:30  <superbee> jeblair: agreed
 2014-12-16T18:24:40  *** patrickeast has joined #openstack-infra
 2014-12-16T18:25:20  *** rmcall has quit IRC
 2014-12-16T18:25:27  <jeblair> ryanpetrello: http://git.openstack.org/cgit/openstack-infra/system-config/tree/tools/apply-test.sh#n52
@@ -2041,7 +2041,7 @@
 2014-12-16T18:28:40  <ryanpetrello> I'll clean this up as soon as I get the chance
 2014-12-16T18:28:46  <jeblair> cool, thanks!
 2014-12-16T18:29:35  *** rmcall has quit IRC
-2014-12-16T18:29:59  <jeblair> clarkb: what if gertty actually had a threaded view of changes so you could visually see the dependencies?
+2014-12-16T18:29:59  <jeblair> superbee: what if gertty actually had a threaded view of changes so you could visually see the dependencies?
 2014-12-16T18:31:17  *** gyee has joined #openstack-infra
 2014-12-16T18:32:46  *** shashankhegde has quit IRC
 2014-12-16T18:33:04  *** zz_avozza is now known as avozza
@@ -2087,7 +2087,7 @@
 2014-12-16T18:49:05  *** HenryG has joined #openstack-infra
 2014-12-16T18:49:32  *** HeOS has quit IRC
 2014-12-16T18:49:36  <anteaya> AJaeger: thanks for fixing that
-2014-12-16T18:50:03  <clarkb> jeblair: that would be really cool
+2014-12-16T18:50:03  <superbee> jeblair: that would be really cool
 2014-12-16T18:50:21  *** rmcall has joined #openstack-infra
 2014-12-16T18:50:21  <anteaya> yay jaypipes for your e-r submission
 2014-12-16T18:50:39  *** koolhead17 has joined #openstack-infra
@@ -2109,8 +2109,8 @@
 2014-12-16T18:52:48  <openstackgerrit> Merged openstack-infra/project-config: Generate tarballs for neutron-*aas on tags  https://review.openstack.org/142126
 2014-12-16T18:53:17  *** gokrokve has joined #openstack-infra
 2014-12-16T18:53:20  <jeblair> nibalizer, pleia2: golang git-review does not have anything like our .gitreview file parsing; so you have to clone from gerrit or manually set your origin remote
-2014-12-16T18:53:47  <clarkb> we are down to 6 troublesome images on old nodepool
-2014-12-16T18:53:50  * clarkb tries to delete them again
+2014-12-16T18:53:47  <superbee> we are down to 6 troublesome images on old nodepool
+2014-12-16T18:53:50  * superbee tries to delete them again
 2014-12-16T18:54:06  *** _nadya_ has quit IRC
 2014-12-16T18:54:23  <AJaeger> anteaya: to further continue with the Gerrit ACL checks (https://review.openstack.org/#/c/140821/), we need to have https://review.openstack.org/#/c/141860/ in. Reviews are welcome but nothing urgent.
 2014-12-16T18:54:24  <dstufft> adam_g: I'm honetly not sure. I'd need to dig into that. One problem that would need to be solved is that if a later dependency on foo forces you to switch what version of foo you install, then you have to "undo" any versions you added because of foo so you download a different foo and see what versions it depends on
@@ -2123,8 +2123,8 @@
 2014-12-16T18:56:07  <AJaeger> anteaya: the first patch for that series is in (with the error that 142179 fixed), so we can continue.
 2014-12-16T18:56:16  <AJaeger> anteaya: thanks!
 2014-12-16T18:56:30  <armax> AJaeger: apologies for the brainfart
-2014-12-16T18:56:30  <clarkb> ConnectionError: HTTPSConnectionPool(host='ci-overcloud.tripleo.org', port=13000): Max retries exceeded with url: /v2.0/tokens (Caused by <class 'socket.error'>: [Errno 110] Connection timed out)
-2014-12-16T18:56:40  <clarkb> I get that on the remaining 4 images (I got it down to 4 \o/
+2014-12-16T18:56:30  <superbee> ConnectionError: HTTPSConnectionPool(host='ci-overcloud.tripleo.org', port=13000): Max retries exceeded with url: /v2.0/tokens (Caused by <class 'socket.error'>: [Errno 110] Connection timed out)
+2014-12-16T18:56:40  <superbee> I get that on the remaining 4 images (I got it down to 4 \o/
 2014-12-16T18:56:42  <armax> those yaml files can be intimidating for the untrained eye
 2014-12-16T18:57:08  <jogo> jeblair dhellmann: so I am very confused about https://review.openstack.org/#/c/141952/2/specs/non-overlapping-dependency-upgrades.rst,cm bow
 2014-12-16T18:57:10  <jogo> now
@@ -2150,18 +2150,18 @@
 2014-12-16T18:59:51  <dhellmann> jeblair: are you sure? because I'm pretty sure I got an error from that job not long after I capped the oslo lib versions in juno
 2014-12-16T19:00:17  <jeblair> dhellmann: if you can find the change where you capped those versions, it would probably be good for us to look at the failures for that at the time
 2014-12-16T19:00:19  <mriedem> blarg, trove logs aren't indexed by logstash?
-2014-12-16T19:00:39  <clarkb> mriedem: you have to be more specific than that, also the specific list is always available let mdig it up
+2014-12-16T19:00:39  <superbee> mriedem: you have to be more specific than that, also the specific list is always available let mdig it up
 2014-12-16T19:00:53  <foobio> meeting time!
-2014-12-16T19:00:53  <mriedem> clarkb: http://logs.openstack.org/21/140121/8/gate//gate-trove-functional-dsvm-mysql/29dacef/logs/screen-tr-api.txt.gz#_2014-12-16_07_55_08_717
-2014-12-16T19:00:59  <mriedem> clarkb: http://status.openstack.org/elastic-recheck/data/uncategorized.html#gate-trove-functional-dsvm-mysql
+2014-12-16T19:00:53  <mriedem> superbee: http://logs.openstack.org/21/140121/8/gate//gate-trove-functional-dsvm-mysql/29dacef/logs/screen-tr-api.txt.gz#_2014-12-16_07_55_08_717
+2014-12-16T19:00:59  <mriedem> superbee: http://status.openstack.org/elastic-recheck/data/uncategorized.html#gate-trove-functional-dsvm-mysql
 2014-12-16T19:01:03  <mriedem> https://review.openstack.org/#/c/141564/
 2014-12-16T19:01:10  <mriedem> some trove gate job is busted
 2014-12-16T19:01:14  *** sarob has quit IRC
-2014-12-16T19:01:20  <clarkb> mriedem: https://git.openstack.org/cgit/openstack-infra/system-config/tree/modules/openstack_project/files/logstash/jenkins-log-client.yaml#n23
+2014-12-16T19:01:20  <superbee> mriedem: https://git.openstack.org/cgit/openstack-infra/system-config/tree/modules/openstack_project/files/logstash/jenkins-log-client.yaml#n23
 2014-12-16T19:01:21  <mtreinish> mriedem: just add it the list
 2014-12-16T19:01:30  <mriedem> mtreinish: the list of busted stuff?
-2014-12-16T19:01:32  <mriedem> clarkb: thanks
-2014-12-16T19:01:44  <mtreinish> the list of indexed files (the one clarkb just linked)
+2014-12-16T19:01:32  <mriedem> superbee: thanks
+2014-12-16T19:01:44  <mtreinish> the list of indexed files (the one superbee just linked)
 2014-12-16T19:01:53  <mriedem> mtreinish: yeah, doing that now
 2014-12-16T19:01:57  <mriedem> gawd! :)
 2014-12-16T19:02:08  <jogo> mriedem: example patch Ic3b2e33177bdc65fe294ddddd581a93de6c1cb60
@@ -2202,10 +2202,10 @@
 2014-12-16T19:11:45  * jogo wonders off to nova land
 2014-12-16T19:12:00  <openstackgerrit> Matt Riedemann proposed openstack-infra/system-config: Index trove logs for logstash goodness  https://review.openstack.org/142193
 2014-12-16T19:12:03  <mriedem> SlickNik: ^
-2014-12-16T19:12:05  <clarkb> mordred: fyi one last pep8 issue on your pbr changes
-2014-12-16T19:12:16  <clarkb> mordred: if you can update that so we can get shiny +1's then possibly merge that would be excellent
+2014-12-16T19:12:05  <superbee> mordred: fyi one last pep8 issue on your pbr changes
+2014-12-16T19:12:16  <superbee> mordred: if you can update that so we can get shiny +1's then possibly merge that would be excellent
 2014-12-16T19:12:18  <mriedem> jogo: ^
-2014-12-16T19:13:32  <dstufft> clarkb: mordred did y'all decide not to want the sha normalization thing in the PEP?
+2014-12-16T19:13:32  <dstufft> superbee: mordred did y'all decide not to want the sha normalization thing in the PEP?
 2014-12-16T19:13:46  *** otter768 has quit IRC
 2014-12-16T19:14:12  <mordred> dstufft: yah. we're just going to remove them
 2014-12-16T19:14:25  <dstufft> mordred: okay
@@ -2312,10 +2312,10 @@
 2014-12-16T20:04:08  <pleia2> until we can integrate with reviewday
 2014-12-16T20:04:37  <pleia2> foobio: long term we want to integrate it with reviewday, so no new puppet module needed, probably just changes to the current reviewday one
 2014-12-16T20:04:53  <pleia2> but that's not going to happen before her server goes away
-2014-12-16T20:04:54  <sdague> clarkb: on https://review.openstack.org/#/c/141831/1/zuul/layout.yaml,cm  is there a limit to the # of \. ?
+2014-12-16T20:04:54  <sdague> superbee: on https://review.openstack.org/#/c/141831/1/zuul/layout.yaml,cm  is there a limit to the # of \. ?
 2014-12-16T20:05:20  *** e0ne has joined #openstack-infra
 2014-12-16T20:05:25  <jeblair> pleia2: i see no reason why we can't run an additional service if people find it useful.  what we run is controlled by puppet, so someone would need to write some code to handle the new service
-2014-12-16T20:05:34  <clarkb> sdague: not other than each set of digits must be prepended with . except for the first
+2014-12-16T20:05:34  <superbee> sdague: not other than each set of digits must be prepended with . except for the first
 2014-12-16T20:05:36  *** MaxV has joined #openstack-infra
 2014-12-16T20:05:39  <jeblair> but anyone is free to do that at any time.
 2014-12-16T20:05:40  *** sabeen1 has quit IRC
@@ -2339,45 +2339,45 @@
 2014-12-16T20:08:22  *** aysyd has quit IRC
 2014-12-16T20:08:33  <anteaya> oh sorry
 2014-12-16T20:09:21  *** lttrl has joined #openstack-infra
-2014-12-16T20:09:43  <clarkb> mordred: any chance we can get pep8 fixed on the pbr change?
+2014-12-16T20:09:43  <superbee> mordred: any chance we can get pep8 fixed on the pbr change?
 2014-12-16T20:11:04  *** Masahiro has quit IRC
 2014-12-16T20:11:21  <openstackgerrit> Merged openstack-infra/elastic-recheck: Add query for devstack/trove bug 1402227  https://review.openstack.org/142197
 2014-12-16T20:11:22  <uvirtbot> Launchpad bug 1402227 in devstack "trove configuration is broken" [Undecided,In progress] https://launchpad.net/bugs/1402227
-2014-12-16T20:11:47  <mordred> clarkb: I have re-uploaded
+2014-12-16T20:11:47  <mordred> superbee: I have re-uploaded
 2014-12-16T20:12:37  *** yamamoto has quit IRC
-2014-12-16T20:12:41  <clarkb> mordred: I don't see it
+2014-12-16T20:12:41  <superbee> mordred: I don't see it
 2014-12-16T20:13:02  *** shashankhegde has quit IRC
-2014-12-16T20:13:18  <clarkb> mordred: I am leaving a ocmment on the line
+2014-12-16T20:13:18  <superbee> mordred: I am leaving a ocmment on the line
 2014-12-16T20:13:22  <foobio> there are two versions of it, right? the backport and the master tip
-2014-12-16T20:13:30  <clarkb> mordred: its on 141667
+2014-12-16T20:13:30  <superbee> mordred: its on 141667
 2014-12-16T20:14:37  <foobio> oh, and 141666 is failing too, but a lot worse
 2014-12-16T20:16:27  * mordred is not touching tip for now
 2014-12-16T20:16:41  <mordred> until we get feature/0.10 _sorted_
 2014-12-16T20:16:51  *** MaxV_ has joined #openstack-infra
-2014-12-16T20:17:01  <clarkb> +1
+2014-12-16T20:17:01  <superbee> +1
 2014-12-16T20:17:07  *** esker has quit IRC
-2014-12-16T20:17:34  <clarkb> mordred: ok jenkins commented too so 141667 should hae the info you need to fix
+2014-12-16T20:17:34  <superbee> mordred: ok jenkins commented too so 141667 should hae the info you need to fix
 2014-12-16T20:18:03  *** dims has joined #openstack-infra
-2014-12-16T20:18:29  <mordred> clarkb: oh - I didn't type yet
+2014-12-16T20:18:29  <mordred> superbee: oh - I didn't type yet
 2014-12-16T20:18:31  <mordred> yes
 2014-12-16T20:18:37  <mordred> new version should be up now
 2014-12-16T20:19:37  *** MaxV has quit IRC
-2014-12-16T20:19:50  <clarkb> mordred foobio jeblair: https://storyboard.openstack.org/#!/story/2000082 is the new bug I discovered cleaning up old nodepool
+2014-12-16T20:19:50  <superbee> mordred foobio jeblair: https://storyboard.openstack.org/#!/story/2000082 is the new bug I discovered cleaning up old nodepool
 2014-12-16T20:19:53  *** emagana has joined #openstack-infra
 2014-12-16T20:20:23  *** MaxV_ has quit IRC
 2014-12-16T20:20:45  *** MaxV has joined #openstack-infra
-2014-12-16T20:20:56  <clarkb> old nodepool is down to 4 stubborn tripleo rh1 images. all nodes are deleted though
-2014-12-16T20:21:08  <clarkb> we can likely shut it down as is and deal with those images separately
+2014-12-16T20:20:56  <superbee> old nodepool is down to 4 stubborn tripleo rh1 images. all nodes are deleted though
+2014-12-16T20:21:08  <superbee> we can likely shut it down as is and deal with those images separately
 2014-12-16T20:21:37  *** koolhead17 has joined #openstack-infra
-2014-12-16T20:23:11  <clarkb> mordred: thank you I am +2 on both now
-2014-12-16T20:23:23  <foobio> clarkb: wow, really? that could account for some of the alien node "leaks" i was seeing previously
-2014-12-16T20:24:01  <clarkb> foobio: I also see that many alien nodes are simply in the process of being deleted by the provider so show up in nova listings
-2014-12-16T20:24:07  <clarkb> foobio: but then go away after a short while
-2014-12-16T20:24:13  <clarkb> though it is harless to delete those again
+2014-12-16T20:23:11  <superbee> mordred: thank you I am +2 on both now
+2014-12-16T20:23:23  <foobio> superbee: wow, really? that could account for some of the alien node "leaks" i was seeing previously
+2014-12-16T20:24:01  <superbee> foobio: I also see that many alien nodes are simply in the process of being deleted by the provider so show up in nova listings
+2014-12-16T20:24:07  <superbee> foobio: but then go away after a short while
+2014-12-16T20:24:13  <superbee> though it is harless to delete those again
 2014-12-16T20:24:52  *** dizquierdo has joined #openstack-infra
-2014-12-16T20:25:01  <foobio> clarkb: yep, my search for alien nodes involves generating the list, then sleeping for 10 minutes, then generating the list again and only recording the instance uuids which were present in both
-2014-12-16T20:25:26  <clarkb> so the rh1 cloud is really unhappy with us
-2014-12-16T20:25:33  <clarkb> even listing alien nodes I get that token error
+2014-12-16T20:25:01  <foobio> superbee: yep, my search for alien nodes involves generating the list, then sleeping for 10 minutes, then generating the list again and only recording the instance uuids which were present in both
+2014-12-16T20:25:26  <superbee> so the rh1 cloud is really unhappy with us
+2014-12-16T20:25:33  <superbee> even listing alien nodes I get that token error
 2014-12-16T20:25:46  *** andreykurilin_ has joined #openstack-infra
 2014-12-16T20:26:08  *** koolhead17 has quit IRC
 2014-12-16T20:27:29  *** dstufft has quit IRC
@@ -2392,35 +2392,35 @@
 2014-12-16T20:39:02  <pc_m> dhellmann: ping
 2014-12-16T20:40:20  *** ddieterly has joined #openstack-infra
 2014-12-16T20:40:52  *** franred has quit IRC
-2014-12-16T20:41:03  <clarkb> ok rh1 is not cooperative so I think we don't wait on that to remove old nodepool.o.o. My vote is to delete it now but would be good to get at least one other set of eyes to look at it quickly
-2014-12-16T20:41:36  <foobio> clarkb: checking it out now
-2014-12-16T20:42:10  <foobio> clarkb: tripleo-test-cloud is the old hp1 not rh1, righth?
-2014-12-16T20:42:21  <clarkb> foobio: yes that sounds right.
+2014-12-16T20:41:03  <superbee> ok rh1 is not cooperative so I think we don't wait on that to remove old nodepool.o.o. My vote is to delete it now but would be good to get at least one other set of eyes to look at it quickly
+2014-12-16T20:41:36  <foobio> superbee: checking it out now
+2014-12-16T20:42:10  <foobio> superbee: tripleo-test-cloud is the old hp1 not rh1, righth?
+2014-12-16T20:42:21  <superbee> foobio: yes that sounds right.
 2014-12-16T20:42:27  <foobio> i believe there's a nodepool config change pending to connect us to the new hp1
 2014-12-16T20:42:54  <pc_m> Can anyone tell me where we are with the grenade issue (SQLAlchemy version)? I saw mention of 141927, but the comments seem to indicate another approach being taken?
-2014-12-16T20:43:02  <foobio> clarkb: okay, the old precise nodepool.o.o looks safe to tear down
-2014-12-16T20:43:44  <foobio> clarkb: pretty sure those remaining instances no longer exist because the cloud it thinks they're still in has been rebuilt from scratch a while ago
+2014-12-16T20:43:02  <foobio> superbee: okay, the old precise nodepool.o.o looks safe to tear down
+2014-12-16T20:43:44  <foobio> superbee: pretty sure those remaining instances no longer exist because the cloud it thinks they're still in has been rebuilt from scratch a while ago
 2014-12-16T20:43:49  <foobio> s/instances/images/
 2014-12-16T20:44:16  *** pelix has quit IRC
 2014-12-16T20:44:33  *** doug-fish has joined #openstack-infra
 2014-12-16T20:44:42  *** mrunge_gone has quit IRC
 2014-12-16T20:45:02  <openstackgerrit> Clark Boylan proposed openstack-infra/system-config: Remove nodepool-dev as it is becoming nodepool.o.o  https://review.openstack.org/142216
 2014-12-16T20:45:03  <openstackgerrit> Steve Baker proposed openstack-infra/project-config: Don't run check-heat-dsvm-functional-mysql in stable/juno  https://review.openstack.org/142217
-2014-12-16T20:45:27  <clarkb> foobio: gotcha
+2014-12-16T20:45:27  <superbee> foobio: gotcha
 2014-12-16T20:45:29  <foobio> pc_m: there is an oslo.db 1.0.3 release about an hour ago, and a requirements pin in flight for pinning oslo.db to <1.1 in stable/juno
-2014-12-16T20:45:45  <clarkb> 142216 is part of the nodepool cleanup too
+2014-12-16T20:45:45  <superbee> 142216 is part of the nodepool cleanup too
 2014-12-16T20:46:09  *** ChuckC has quit IRC
-2014-12-16T20:46:11  <clarkb> jeblair: when you finish with meeting let me know if you concur that old nodepool.o.o can be deleted
+2014-12-16T20:46:11  <superbee> jeblair: when you finish with meeting let me know if you concur that old nodepool.o.o can be deleted
 2014-12-16T20:46:17  <pc_m> foobio: nice! Do you know the commit # for the requirements pin?
-2014-12-16T20:46:32  <clarkb> I am going to go ahead and update dns now
+2014-12-16T20:46:32  <superbee> I am going to go ahead and update dns now
 2014-12-16T20:46:44  <foobio> pc_m: https://review.openstack.org/142180
-2014-12-16T20:46:50  <foobio> clarkb: sounds good
+2014-12-16T20:46:50  <foobio> superbee: sounds good
 2014-12-16T20:46:52  <pc_m> foobio: Thanks!
-2014-12-16T20:47:13  <clarkb> hrm I actually need to go catch a bus nowish if I am going to make it to this openstack hacking thing
+2014-12-16T20:47:13  <superbee> hrm I actually need to go catch a bus nowish if I am going to make it to this openstack hacking thing
 2014-12-16T20:47:24  <foobio> which is about to finish in the check pipeline and could stand one more +2 and an approval
-2014-12-16T20:47:24  <clarkb> so I will do that then cleanup nodepool from there
+2014-12-16T20:47:24  <superbee> so I will do that then cleanup nodepool from there
 2014-12-16T20:47:53  <foobio> k
-2014-12-16T20:48:06  <clarkb> foobio: approved the reqs change
+2014-12-16T20:48:06  <superbee> foobio: approved the reqs change
 2014-12-16T20:49:03  *** HeOS has joined #openstack-infra
 2014-12-16T20:49:25  *** ddieterly has quit IRC
 2014-12-16T20:49:59  <foobio> thanks!
@@ -2444,7 +2444,7 @@
 2014-12-16T20:54:58  <anteaya> AJaeger: they are on my list
 2014-12-16T20:55:11  <AJaeger> thanks, anteaya
 2014-12-16T20:55:53  *** carl_baldwin has joined #openstack-infra
-2014-12-16T20:57:10  <jeblair> clarkb: ++del nodepool
+2014-12-16T20:57:10  <jeblair> superbee: ++del nodepool
 2014-12-16T20:57:11  *** _nadya_ has quit IRC
 2014-12-16T20:58:53  <armax> AJaeger: I may need to tweak the normalize_acl script to include other formatting exceptions
 2014-12-16T20:59:18  *** Rockyg has quit IRC
@@ -2522,10 +2522,10 @@
 2014-12-16T21:36:40  *** julim has quit IRC
 2014-12-16T21:36:41  <dkranz> foobio: I see the juno problem has cleared. Is the grenade issue supposed to be fixed? My patch is failing grenade but in theory my change could be at fault.
 2014-12-16T21:37:19  *** MaxV has quit IRC
-2014-12-16T21:37:28  <clarkb> I approved the reqs change. if that merged we shouldbe working
+2014-12-16T21:37:28  <superbee> I approved the reqs change. if that merged we shouldbe working
 2014-12-16T21:37:35  *** ddieterly has joined #openstack-infra
 2014-12-16T21:38:42  <openstackgerrit> Merged openstack-infra/project-config: Check that Gerrit ACL files are normalized  https://review.openstack.org/140821
-2014-12-16T21:41:54  <foobio> clarkb: there are 18 changes ahead of it in the gate
+2014-12-16T21:41:54  <foobio> superbee: there are 18 changes ahead of it in the gate
 2014-12-16T21:42:06  *** emagana has joined #openstack-infra
 2014-12-16T21:43:17  *** dprince has joined #openstack-infra
 2014-12-16T21:43:37  *** baoli has quit IRC
@@ -2538,7 +2538,7 @@
 2014-12-16T21:46:31  <foobio> i think there were quite a few actually for the stable branch management split out too
 2014-12-16T21:46:32  <anteaya> morning jhesketh
 2014-12-16T21:47:15  *** mrmartin has quit IRC
-2014-12-16T21:50:17  <jeblair> nibalizer, foobio, clarkb, asselin: so there's a whole slew of changes to get rid of hardcoded variables in the openstack_project module.  see https://review.openstack.org/#/q/topic:mosi,n,z
+2014-12-16T21:50:17  <jeblair> nibalizer, foobio, superbee, asselin: so there's a whole slew of changes to get rid of hardcoded variables in the openstack_project module.  see https://review.openstack.org/#/q/topic:mosi,n,z
 2014-12-16T21:51:03  *** sputnik13 has quit IRC
 2014-12-16T21:51:11  *** sputnik1_ has joined #openstack-infra
 2014-12-16T21:51:38  <jeblair> SergeyLukjanov and company are proposing them; i'm assuming it's from an effort to make openstack_project itself more reusable
@@ -2590,7 +2590,7 @@
 2014-12-16T22:02:58  *** bswartz has quit IRC
 2014-12-16T22:03:02  *** rmcall has joined #openstack-infra
 2014-12-16T22:03:10  <mriedem> foobio: i got what i needed, i wrote a little yaml parser to separate out max-servers per provider in nodepool.yaml and rax/hp is obvious, i just wasn't sure about triple-o
-2014-12-16T22:03:17  <dhellmann> foobio, clarkb : thanks for reviewing that requirements patch for stable/juno
+2014-12-16T22:03:17  <dhellmann> foobio, superbee : thanks for reviewing that requirements patch for stable/juno
 2014-12-16T22:03:23  *** sputnik1_ is now known as sputnik13
 2014-12-16T22:04:26  *** ayoung has quit IRC
 2014-12-16T22:04:51  <jeblair> or this one: https://review.openstack.org/#/c/133710/
@@ -2607,10 +2607,10 @@
 2014-12-16T22:08:21  *** ivar-lazzaro has joined #openstack-infra
 2014-12-16T22:08:26  <jeblair> (and that was step 1)
 2014-12-16T22:09:07  *** gmurphy has joined #openstack-infra
-2014-12-16T22:09:19  <clarkb> ok back
-2014-12-16T22:09:28  <clarkb> I am going to do nodepool things now
+2014-12-16T22:09:19  <superbee> ok back
+2014-12-16T22:09:28  <superbee> I am going to do nodepool things now
 2014-12-16T22:09:29  <jeblair> step 2 is in progress (module split) and step 3 is mostly done, project-config split
-2014-12-16T22:09:49  <clarkb> jeblair: I haven't looked closely at those changes but in general I agree I think its mixing order
+2014-12-16T22:09:49  <superbee> jeblair: I haven't looked closely at those changes but in general I agree I think its mixing order
 2014-12-16T22:10:06  *** dimtruck is now known as zz_dimtruck
 2014-12-16T22:10:55  <jeblair> basically, i think we know that having too much stuff in openstack_project is a problem
 2014-12-16T22:11:20  <nibalizer> jeblair: i dont see the advantage of those patches
@@ -2627,11 +2627,11 @@
 2014-12-16T22:18:23  <jeblair> SergeyLukjanov: do you think we could WIP them for now and write a spec first?
 2014-12-16T22:19:11  <asselin> jeblair, but, in the example of a ci "log server", there is no puppet module. Do we create one? It's really a collection of misc items put together to build a server.
 2014-12-16T22:19:47  <jeblair> asselin: yeah, that and also a 'zuul+nodepool' are good examples of things that we have assembled that should be reusable.  so maybe we should create puppet modules for those things and then use them
-2014-12-16T22:20:01  <clarkb> nodepool.o.o A and AAAA records are updated. TTL is 5 minutes
-2014-12-16T22:20:25  <clarkb> removing nodepool-dev.o.o records now
+2014-12-16T22:20:01  <superbee> nodepool.o.o A and AAAA records are updated. TTL is 5 minutes
+2014-12-16T22:20:25  <superbee> removing nodepool-dev.o.o records now
 2014-12-16T22:20:42  <asselin> jeblair, right, but creating a puppet module for each seems overkill to me. I was thinking of having one puppet module to contain all of those.
 2014-12-16T22:21:03  *** hashar has joined #openstack-infra
-2014-12-16T22:21:08  <clarkb> thats all done. Now to delete the old node completely
+2014-12-16T22:21:08  <superbee> thats all done. Now to delete the old node completely
 2014-12-16T22:21:28  *** dkliban is now known as dkliban_afk
 2014-12-16T22:22:25  *** markmcclain has quit IRC
 2014-12-16T22:22:40  <jeblair> asselin: on the one hand, we're getting good at creating puppet modules (thanks ;), on the other hand, maybe "openstack_infra::nifty_log_system" and "openstack_infra::really_cool_ci_system" might be more convenient.
@@ -2641,7 +2641,7 @@
 2014-12-16T22:23:59  <foobio> rather than "i want to piecemeal a bunch of modules and classes together with my own manifests"
 2014-12-16T22:24:02  *** lttrl has quit IRC
 2014-12-16T22:24:08  *** markmcclain has quit IRC
-2014-12-16T22:24:08  <clarkb> ok delete submitted now we wait
+2014-12-16T22:24:08  <superbee> ok delete submitted now we wait
 2014-12-16T22:24:25  *** markmcclain has joined #openstack-infra
 2014-12-16T22:24:29  <foobio> not sure that's a realistic goal, but it's where that change series is focused
 2014-12-16T22:24:33  <jeblair> foobio: yeah, but that's use-case that sort of embeds the solution to an implied problem in it, rather than expressing the problem :)
@@ -2652,11 +2652,11 @@
 2014-12-16T22:25:10  *** asettle has joined #openstack-infra
 2014-12-16T22:25:10  <jeblair> and repeat myself
 2014-12-16T22:25:18  <foobio> i can only assume this spun out from the mirantis effort to offer openstack-infra-as-a-service
-2014-12-16T22:25:39  <clarkb> old one is gone
+2014-12-16T22:25:39  <superbee> old one is gone
 2014-12-16T22:25:40  <asselin> foobio, if we split out the resuable components correctly, the openstack_project is really just a bunch of configurations like project-config
 2014-12-16T22:25:43  *** markmcclain has quit IRC
 2014-12-16T22:25:44  *** asettle has quit IRC
-2014-12-16T22:25:54  <clarkb> ok now to catch up on everything else
+2014-12-16T22:25:54  <superbee> ok now to catch up on everything else
 2014-12-16T22:25:59  *** amitgandhinz has quit IRC
 2014-12-16T22:26:01  *** markmcclain has joined #openstack-infra
 2014-12-16T22:26:15  <foobio> my guess is that it's an internal fork they're running now, and want to upstream as much of as they can, but doesn't necessarily match our proposal for decomposing and making all this ultimately reusable for other use cases
@@ -2670,10 +2670,10 @@
 2014-12-16T22:27:39  *** vigneshvar has quit IRC
 2014-12-16T22:27:40  <SergeyLukjanov> foobio, it's enovance
 2014-12-16T22:27:40  <foobio> SergeyLukjanov: oh, that's right. mirantis is using a lot of it internally
-2014-12-16T22:27:44  <clarkb> I have a bunch of +2 on https://review.openstack.org/#/c/141831/ any opposition to me self approving?
+2014-12-16T22:27:44  <superbee> I have a bunch of +2 on https://review.openstack.org/#/c/141831/ any opposition to me self approving?
 2014-12-16T22:27:44  *** alex7376 is now known as asettle
 2014-12-16T22:28:02  <nibalizer> jeblair: agee
-2014-12-16T22:28:03  <jeblair> clarkb: go for it
+2014-12-16T22:28:03  <jeblair> superbee: go for it
 2014-12-16T22:28:27  <SergeyLukjanov> foobio, in fact it includes stuff like 3rd party CIs (sahara, murano, trove probably)
 2014-12-16T22:29:10  <SergeyLukjanov> jeblair, re spec - do you mean to push some kind of "extract hardcoded hostnames and urls" spec?
 2014-12-16T22:29:18  *** doug-fish1 has joined #openstack-infra
@@ -2697,13 +2697,13 @@
 2014-12-16T22:36:17  *** cnesa has quit IRC
 2014-12-16T22:36:50  *** pc_m has quit IRC
 2014-12-16T22:38:29  <mordred> jeblair: yes - that was fixed by something a while ago
-2014-12-16T22:38:44  * mordred can't remember the root cause/fix ... clarkb ^^^ do you remember?
+2014-12-16T22:38:44  * mordred can't remember the root cause/fix ... superbee ^^^ do you remember?
 2014-12-16T22:38:49  <EmilienM> foobio: are you talking about software factory?
 2014-12-16T22:39:02  *** Rockyg has quit IRC
 2014-12-16T22:39:04  <EmilienM> tristanC: ^
 2014-12-16T22:39:06  <foobio> EmilienM: possibly. i didn't remember the name of it
-2014-12-16T22:39:08  <clarkb> mordred: uh
-2014-12-16T22:39:10  <asselin> nibalizer, anteaya clarkb foobio, is this a good time to discuss the pre puppet module split proposal?
+2014-12-16T22:39:08  <superbee> mordred: uh
+2014-12-16T22:39:10  <asselin> nibalizer, anteaya superbee foobio, is this a good time to discuss the pre puppet module split proposal?
 2014-12-16T22:39:20  <EmilienM> foobio: if you talk about OpenStack CI as a service, yes.
 2014-12-16T22:39:39  <nibalizer> im available
 2014-12-16T22:40:00  <EmilienM> foobio: https://github.com/enovance/software-factory
@@ -2715,37 +2715,37 @@
 2014-12-16T22:41:04  <asselin> anteaya, nibalizer ok, let's just start with us and go from there
 2014-12-16T22:41:16  <anteaya> okay
 2014-12-16T22:41:23  * anteaya listens to asselin
-2014-12-16T22:41:29  <clarkb> mordred: no I do not recall, but I seem to remember that we needed to update testtools
-2014-12-16T22:41:35  <clarkb> mordred: so maybe jeblair has stale venvs?
+2014-12-16T22:41:29  <superbee> mordred: no I do not recall, but I seem to remember that we needed to update testtools
+2014-12-16T22:41:35  <superbee> mordred: so maybe jeblair has stale venvs?
 2014-12-16T22:41:44  * mordred lookng at zuul tree
-2014-12-16T22:41:56  <jeblair> clarkb: rm -rf .tox was the first thing i tried
+2014-12-16T22:41:56  <jeblair> superbee: rm -rf .tox was the first thing i tried
 2014-12-16T22:41:57  *** dprince has quit IRC
 2014-12-16T22:42:08  <asselin> so the idea is to simplify the process a bit since there are quite a few modules to do
-2014-12-16T22:42:40  <boris-42> clarkb: hi there
+2014-12-16T22:42:40  <boris-42> superbee: hi there
 2014-12-16T22:43:05  <mordred> jeblair: any chance you wound up with testtools 1.2.0 installed in the venv?
-2014-12-16T22:43:05  <boris-42> clarkb: recently (seems like not more than few days) we start getting such warnings http://paste.openstack.org/show/152045/
-2014-12-16T22:43:17  <boris-42> clarkb: do you know something about that?
+2014-12-16T22:43:05  <boris-42> superbee: recently (seems like not more than few days) we start getting such warnings http://paste.openstack.org/show/152045/
+2014-12-16T22:43:17  <boris-42> superbee: do you know something about that?
 2014-12-16T22:43:17  <asselin> nibalizer, anteaya I can understand the contention on the 2nd patch: https://review.openstack.org/#/c/140548/ especially w.r.t merge conflicts
 2014-12-16T22:43:31  <mordred> jeblair: we added an exclude: testtools>=0.9.36,!=1.2.0
 2014-12-16T22:43:33  <mordred> for other things
-2014-12-16T22:43:34  <boris-42> clarkb: seems like not only related to rally
+2014-12-16T22:43:34  <boris-42> superbee: seems like not only related to rally
 2014-12-16T22:43:36  <mordred> because of evil
 2014-12-16T22:43:39  *** changbl has quit IRC
 2014-12-16T22:43:44  <nibalizer> so one idea is we could just laeve 140548 up as a review
 2014-12-16T22:43:52  <nibalizer> and copy/paste stuff out of it when we need to
 2014-12-16T22:43:56  <asselin> nibalizer, anteaya but I think the first patch should be lower-risk and straight-forward: https://review.openstack.org/#/c/140523/
-2014-12-16T22:44:05  <nibalizer> the problem that clarkb brought up is valid
+2014-12-16T22:44:05  <nibalizer> the problem that superbee brought up is valid
 2014-12-16T22:44:07  <asselin> nibalizer, that's a good idea
 2014-12-16T22:44:13  <nibalizer> which is that thats a huge patch and hard to reviews
-2014-12-16T22:44:19  <clarkb> boris-42: ya you need to downgrade setuptools
+2014-12-16T22:44:19  <superbee> boris-42: ya you need to downgrade setuptools
 2014-12-16T22:44:19  <nibalizer> isn't there a middle ground?
-2014-12-16T22:44:28  <clarkb> boris-42: until we get a release of pbr out that fixes this
+2014-12-16T22:44:28  <superbee> boris-42: until we get a release of pbr out that fixes this
 2014-12-16T22:44:40  <anteaya> asselin: two items brought up at the infra meeting today
-2014-12-16T22:44:50  <boris-42> clarkb: Oh thank you sir!
+2014-12-16T22:44:50  <boris-42> superbee: Oh thank you sir!
 2014-12-16T22:44:52  <jeblair> mordred: Source in ./.tox/py27/build/testtools has version 1.5.0, which satisfies requirement testtools>=0.9.32
 2014-12-16T22:44:55  <nibalizer> instead of 1 module at a time and all modulues at a time, we could pick 10 modules to do in a 2 week period and do those?
 2014-12-16T22:45:01  <anteaya> asselin: 1) we need to follow the spec and only include the projects identified in the spec
-2014-12-16T22:45:13  <clarkb> boris-42: you want <8.0
+2014-12-16T22:45:13  <superbee> boris-42: you want <8.0
 2014-12-16T22:45:22  <anteaya> asselin: 2) names with both hyphens and underscores are currently a blocker
 2014-12-16T22:45:37  <mordred> jeblair: k. well, I just ran tox -epy27 -r locally in zuul and it worked
 2014-12-16T22:45:38  <anteaya> asselin: can you spin up a new patch that addresses those two points?
@@ -2817,7 +2817,7 @@
 2014-12-16T22:53:13  <anteaya> follow the spec, repos with hyphens
 2014-12-16T22:53:27  <anteaya> even if we only merge that that is still substantial
 2014-12-16T22:53:36  <mordred> I also can't see anywhere in openstack where we are importing unittest2
-2014-12-16T22:53:40  <clarkb> mordred: jeblair: is there a link to the error someplace?
+2014-12-16T22:53:40  <superbee> mordred: jeblair: is there a link to the error someplace?
 2014-12-16T22:53:48  <jeblair> anteaya: let's try to understand the technical issue related to naming and figure out a solution
 2014-12-16T22:53:52  <mordred> so if we used that as a workaround at one point, we don't seem to be doing it anymore
 2014-12-16T22:54:01  <anteaya> jeblair: we can do that too
@@ -2861,21 +2861,21 @@
 2014-12-16T23:04:13  <jeblair> nibalizer: the stackforge puppet modules have a mixture
 2014-12-16T23:04:20  <jeblair> nibalizer: http://git.openstack.org/cgit/stackforge/puppet-openstack-cloud/tree/
 2014-12-16T23:04:28  <anteaya> any way of creating something to point at for the cargo culters that says that hyphens and underscores are only permissible for puppet modules
-2014-12-16T23:04:40  <clarkb> ok we have all of the setuptools fixes in except for pbr
-2014-12-16T23:04:46  <clarkb> mordred: ^ can you address foobio's -1?
+2014-12-16T23:04:40  <superbee> ok we have all of the setuptools fixes in except for pbr
+2014-12-16T23:04:46  <superbee> mordred: ^ can you address foobio's -1?
 2014-12-16T23:04:56  <anteaya> since I am seeing this in job names and non puppet stackforge repo names
-2014-12-16T23:04:58  * clarkb would really like to push up a rvert of setuptools pin to devstack to see what breaks
+2014-12-16T23:04:58  * superbee would really like to push up a rvert of setuptools pin to devstack to see what breaks
 2014-12-16T23:05:05  <anteaya> and anything one project does, they all copy
-2014-12-16T23:05:06  <clarkb> but need to fix pbr first otherwise pbr will break
+2014-12-16T23:05:06  <superbee> but need to fix pbr first otherwise pbr will break
 2014-12-16T23:05:12  <mordred> foobio: how would you like that addressed?
 2014-12-16T23:05:37  <mordred> foobio: you seem to have summed it up in that comment - should I just acknowledge that comment?
-2014-12-16T23:05:43  <foobio> mordred: clarkb: either an update to the commit message or a comment in the review. just something recording this as the decision rather than merely that the concerns were ignored (which they weren't)
+2014-12-16T23:05:43  <foobio> mordred: superbee: either an update to the commit message or a comment in the review. just something recording this as the decision rather than merely that the concerns were ignored (which they weren't)
 2014-12-16T23:05:51  <jeblair> nibalizer: dow does puppet-openstack-cloud work?
 2014-12-16T23:05:54  <foobio> mordred: yep, that would be fine
 2014-12-16T23:05:56  <mordred> ok
 2014-12-16T23:06:02  <foobio> then i'm happy to approve'
 2014-12-16T23:06:14  *** hashar has quit IRC
-2014-12-16T23:06:37  <jeblair> clarkb, foobio, mordred: http://paste.openstack.org/show/152047/
+2014-12-16T23:06:37  <jeblair> superbee, foobio, mordred: http://paste.openstack.org/show/152047/
 2014-12-16T23:06:54  *** gokrokve has quit IRC
 2014-12-16T23:07:02  *** dims has quit IRC
 2014-12-16T23:07:19  *** rmcall has joined #openstack-infra
@@ -2884,32 +2884,32 @@
 2014-12-16T23:07:28  *** gokrokve has joined #openstack-infra
 2014-12-16T23:07:32  <jogo> mordred: http://logs.openstack.org/52/134052/5/check//gate-hacking-integration-nova/c4d107b/console.html#_2014-12-16_22_38_03_070
 2014-12-16T23:07:33  <mordred> jogo: that's WAY too broad of a question
-2014-12-16T23:07:35  <foobio> clarkb: also the proposed stable/juno patches which just updated to all projects using oslo.db need to merge, yeah?
+2014-12-16T23:07:35  <foobio> superbee: also the proposed stable/juno patches which just updated to all projects using oslo.db need to merge, yeah?
 2014-12-16T23:07:36  *** dims has joined #openstack-infra
 2014-12-16T23:07:42  <foobio> mordred: thanks--approving
-2014-12-16T23:08:11  <clarkb> wow testools setup.py depends on unittest2
+2014-12-16T23:08:11  <superbee> wow testools setup.py depends on unittest2
 2014-12-16T23:08:13  <foobio> mordred: also a change from pip freeze to pbr freeze in all jobs would be helpful
 2014-12-16T23:08:17  *** dims has quit IRC
 2014-12-16T23:08:23  <foobio> mordred: i can hack that up if you haven't started
 2014-12-16T23:08:30  *** dims has joined #openstack-infra
-2014-12-16T23:08:34  <mordred> jogo, clarkb: might have to do with the setuptools mess?
+2014-12-16T23:08:34  <mordred> jogo, superbee: might have to do with the setuptools mess?
 2014-12-16T23:08:34  <asselin> anteaya, are you good with mixed case? or would you prefer to consider it more as a separate patch set?
 2014-12-16T23:08:36  <anteaya> nibalizer jeblair the make an exception for me argument, just becomes "hey look what your future looks like"
-2014-12-16T23:08:37  <clarkb> foobio: that will need to merge but not to test a revert of the setuptools pin because we patch all reqs from global reqs
+2014-12-16T23:08:37  <superbee> foobio: that will need to merge but not to test a revert of the setuptools pin because we patch all reqs from global reqs
 2014-12-16T23:08:38  <mordred> foobio: I can get it
-2014-12-16T23:08:51  <foobio> clarkb: oh, great point
-2014-12-16T23:08:52  <clarkb> mordred: jeblair maybe? what version of setuptools is in there?
+2014-12-16T23:08:51  <foobio> superbee: oh, great point
+2014-12-16T23:08:52  <superbee> mordred: jeblair maybe? what version of setuptools is in there?
 2014-12-16T23:08:54  <nibalizer> jeblair: that module is actually called (from metadata.json) "eNovance-cloud",
-2014-12-16T23:09:00  <mordred> clarkb: no - jogo's thing
-2014-12-16T23:09:35  <clarkb> oh maybe?
+2014-12-16T23:09:00  <mordred> superbee: no - jogo's thing
+2014-12-16T23:09:35  <superbee> oh maybe?
 2014-12-16T23:09:39  <EmilienM> jeblair: it works in production for us. If you have any question, I'm a main contributor
 2014-12-16T23:09:40  <jogo> mordred: hmm
 2014-12-16T23:09:46  <EmilienM> jeblair: (puppet-openstack-cloud)
-2014-12-16T23:09:50  <clarkb> except that pbr is running on what is basically 0.10.0 now
+2014-12-16T23:09:50  <superbee> except that pbr is running on what is basically 0.10.0 now
 2014-12-16T23:09:55  <anteaya> EmilienM: we are talking about repo names
 2014-12-16T23:09:56  *** yamamoto has quit IRC
 2014-12-16T23:09:58  <jeblair> EmilienM: i'm told puppet modules can't have hyphens in their names
-2014-12-16T23:09:58  <clarkb> so pbr changes wouldn't be related but setuptools mihgt be
+2014-12-16T23:09:58  <superbee> so pbr changes wouldn't be related but setuptools mihgt be
 2014-12-16T23:10:04  *** sigmavirus24 has joined #openstack-infra
 2014-12-16T23:10:15  <anteaya> EmilienM: and nibalizer is making the point that they have to be called puppet-foo_bar
 2014-12-16T23:10:15  <jeblair> EmilienM: that it is a restriction in puppet
@@ -2921,25 +2921,25 @@
 2014-12-16T23:10:41  *** otter768 has joined #openstack-infra
 2014-12-16T23:10:41  <nibalizer> jeblair: see http://git.openstack.org/cgit/stackforge/puppet-openstack-cloud/tree/manifests/cache.pp#n31 they use just cloud in their module name
 2014-12-16T23:10:45  <EmilienM> we already have puppet-neutron, etc
-2014-12-16T23:10:49  <clarkb> EmilienM: puppet specifically says that names may not have -'s in them
+2014-12-16T23:10:49  <superbee> EmilienM: puppet specifically says that names may not have -'s in them
 2014-12-16T23:10:52  <anteaya> EmilienM: we are curious
 2014-12-16T23:11:01  <EmilienM> anteaya: I know you are :P
-2014-12-16T23:11:02  <clarkb> EmilienM: puppet-neutron is fine because that is renamed to neutron in puppet right?
-2014-12-16T23:11:15  <clarkb> EmilienM: you don't use neutron::thing { 'stuff':
-2014-12-16T23:11:19  <clarkb> er
-2014-12-16T23:11:27  <clarkb> puppet-neutron::thing { 'stuff':
+2014-12-16T23:11:02  <superbee> EmilienM: puppet-neutron is fine because that is renamed to neutron in puppet right?
+2014-12-16T23:11:15  <superbee> EmilienM: you don't use neutron::thing { 'stuff':
+2014-12-16T23:11:19  <superbee> er
+2014-12-16T23:11:27  <superbee> puppet-neutron::thing { 'stuff':
 2014-12-16T23:11:28  <jogo> mordred: yeah pbr/util hasn't been touched in months :/
 2014-12-16T23:11:46  *** e0ne has quit IRC
 2014-12-16T23:11:51  <jeblair> nibalizer: oh, in the _code_ not in the directory?
-2014-12-16T23:11:52  <EmilienM> clarkb: ok. While we use "cloud::" thing I see your point
+2014-12-16T23:11:52  <EmilienM> superbee: ok. While we use "cloud::" thing I see your point
 2014-12-16T23:12:09  <mordred> jogo: well, the setuptools stuff would have the potential to break name resolution
 2014-12-16T23:12:26  <jogo> sigmavirus24: ^
 2014-12-16T23:12:27  <jeblair> nibalizer: but then, would you have to install puppet-openstack-cloud into /puppet/module/directory/cloud for it to work?
 2014-12-16T23:12:29  <jeblair> EmilienM: ^?
-2014-12-16T23:12:38  <mordred> clarkb, foobio: do we have anything that tests with tox and doesn't use pbr?
+2014-12-16T23:12:38  <mordred> superbee, foobio: do we have anything that tests with tox and doesn't use pbr?
 2014-12-16T23:12:38  <jogo> mordred: doh
 2014-12-16T23:12:41  <nibalizer> jeblair: yes
-2014-12-16T23:12:57  <mordred> clarkb, foobio: because if we do, then the jobs to do the pip freeze -> pbr freeze are going to have to get more complex
+2014-12-16T23:12:57  <mordred> superbee, foobio: because if we do, then the jobs to do the pip freeze -> pbr freeze are going to have to get more complex
 2014-12-16T23:13:01  <foobio> mordred: at one point i would have said git-review but that's no longer the case
 2014-12-16T23:13:14  <sigmavirus24> mordred: I didn't think there were any entry point related changes in 8.x
 2014-12-16T23:13:31  *** emagana has quit IRC
@@ -2963,11 +2963,11 @@
 2014-12-16T23:14:55  <EmilienM> but it works ^^
 2014-12-16T23:14:55  <jogo> sigmavirus24: did that
 2014-12-16T23:15:19  <anteaya> or are we going to have to accept everything being named with hyphens and underscores henceforth
-2014-12-16T23:15:27  <clarkb> foobio: mordred I think we do [ -e .tox/venv/py27/pbr ] && pbr freese
-2014-12-16T23:15:35  <clarkb> I don't think we need to make it more complex than that
+2014-12-16T23:15:27  <superbee> foobio: mordred I think we do [ -e .tox/venv/py27/pbr ] && pbr freese
+2014-12-16T23:15:35  <superbee> I don't think we need to make it more complex than that
 2014-12-16T23:15:41  *** otter768 has quit IRC
-2014-12-16T23:15:58  <mordred> clarkb: [ -e .tox/venv/py27/pbr ] && pbr freeze || pip freeze
-2014-12-16T23:16:06  <clarkb> mordred: ya that
+2014-12-16T23:15:58  <mordred> superbee: [ -e .tox/venv/py27/pbr ] && pbr freeze || pip freeze
+2014-12-16T23:16:06  <superbee> mordred: ya that
 2014-12-16T23:16:32  *** gondoi is now known as zz_gondoi
 2014-12-16T23:17:24  *** ddieterly has quit IRC
 2014-12-16T23:17:26  <jeblair> anteaya: many systems are going to have specific naming requirements.  oslo.foo for example.  i think we're going to have to be flexible.  try to point out potential typos or areas for improvement, but otherwise, bend.  :)
@@ -2990,7 +2990,7 @@
 2014-12-16T23:20:42  * sigmavirus24 upgrades
 2014-12-16T23:20:45  <mordred> ah. ok
 2014-12-16T23:20:58  *** mfink has quit IRC
-2014-12-16T23:20:59  <jeblair> clarkb: do you understand the testtools error i'm seeing?
+2014-12-16T23:20:59  <jeblair> superbee: do you understand the testtools error i'm seeing?
 2014-12-16T23:21:01  <mordred> well, me needs to afk for a few - would LOVE more infos
 2014-12-16T23:21:47  <jogo> sigmavirus24: setuptools.__version__
 2014-12-16T23:21:50  <jogo> '3.6'
@@ -3002,16 +3002,16 @@
 2014-12-16T23:22:38  <mordred> jeblair: and in the mean time I'll keep trying to figure out why this is affecting you and not me and what the root cause is
 2014-12-16T23:22:41  <openstackgerrit> Armando Migliaccio proposed openstack-infra/project-config: Extend ACL checks to OpenStack namespace.  https://review.openstack.org/142230
 2014-12-16T23:22:42  <openstackgerrit> Armando Migliaccio proposed openstack-infra/project-config: Fix the OSSA ACL config  https://review.openstack.org/142258
-2014-12-16T23:23:11  <clarkb> jeblair: not really just that it seems to need unittest2 to be installed for its setup.py to run
+2014-12-16T23:23:11  <superbee> jeblair: not really just that it seems to need unittest2 to be installed for its setup.py to run
 2014-12-16T23:23:12  <mordred> jeblair: OOOOOHHHHHHHHHH
 2014-12-16T23:23:13  <mordred> I get it
-2014-12-16T23:23:13  <clarkb> jeblair: which is odd
+2014-12-16T23:23:13  <superbee> jeblair: which is odd
 2014-12-16T23:23:24  <mordred> it will take a bit more jiggering to reproduce
 2014-12-16T23:23:27  <jogo> sigmavirus24 mordred: well I saw this fail on infra
 2014-12-16T23:23:48  *** bdpayne has joined #openstack-infra
-2014-12-16T23:23:50  <clarkb> mordred: can you explain more than that?
+2014-12-16T23:23:50  <superbee> mordred: can you explain more than that?
 2014-12-16T23:23:54  <jogo> so I don't think its just our local boxes  http://logs.openstack.org/52/134052/5/check//gate-hacking-integration-nova/c4d107b/console.html#_2014-12-16_22_38_03_070
-2014-12-16T23:23:55  <mordred> jeblair, clarkb: but this is the "setup_requires downloads an egg which causes install_requires to not need to install something even though it _Does_ need to install it" bug
+2014-12-16T23:23:55  <mordred> jeblair, superbee: but this is the "setup_requires downloads an egg which causes install_requires to not need to install something even though it _Does_ need to install it" bug
 2014-12-16T23:23:59  *** dmsimard is now known as dmsimard_away
 2014-12-16T23:24:01  <mordred> it was fixed in upstream pip iirc
 2014-12-16T23:24:05  <nibalizer> so does that mean asselin can add the underscore projects in to his patch?
@@ -3036,38 +3036,38 @@
 2014-12-16T23:28:47  *** gokrokve has quit IRC
 2014-12-16T23:30:19  *** andreykurilin_ has quit IRC
 2014-12-16T23:31:05  <openstackgerrit> James Carey  proposed openstack-dev/hacking: Add optional hacking checks  https://review.openstack.org/134052
-2014-12-16T23:31:49  <jeblair> clarkb, mordred: adding unittest2 to the beginning of test-requirements avoids the problem
+2014-12-16T23:31:49  <jeblair> superbee, mordred: adding unittest2 to the beginning of test-requirements avoids the problem
 2014-12-16T23:32:52  <openstackgerrit> James Carey  proposed openstack-dev/hacking: Add optional hacking checks  https://review.openstack.org/134052
-2014-12-16T23:33:10  <jeblair> clarkb, mordred: so do i need a newer pip?
+2014-12-16T23:33:10  <jeblair> superbee, mordred: so do i need a newer pip?
 2014-12-16T23:34:05  *** dimtruck is now known as zz_dimtruck
-2014-12-16T23:34:15  <jeblair> clarkb, mordred: https://github.com/testing-cabal/testtools/commit/6f12789a398a99fc39e4380bd063af841a262c62
-2014-12-16T23:35:18  <clarkb> maybe I still don't quite get what mordred is saying
-2014-12-16T23:35:27  <jeblair> clarkb, mordred: so it switched to using setup_requires
-2014-12-16T23:35:29  <clarkb> jeblair: however your tox bundles pip
-2014-12-16T23:35:39  <clarkb> jeblair: so its likely related to your tox version if pip version matters
-2014-12-16T23:36:09  <jeblair> clarkb: mordred tried using my version of tox and it worked for him
-2014-12-16T23:36:28  <clarkb> so likely not related to pip version
-2014-12-16T23:36:42  <clarkb> let me give reproduction a go. just `tox -epy27`?
+2014-12-16T23:34:15  <jeblair> superbee, mordred: https://github.com/testing-cabal/testtools/commit/6f12789a398a99fc39e4380bd063af841a262c62
+2014-12-16T23:35:18  <superbee> maybe I still don't quite get what mordred is saying
+2014-12-16T23:35:27  <jeblair> superbee, mordred: so it switched to using setup_requires
+2014-12-16T23:35:29  <superbee> jeblair: however your tox bundles pip
+2014-12-16T23:35:39  <superbee> jeblair: so its likely related to your tox version if pip version matters
+2014-12-16T23:36:09  <jeblair> superbee: mordred tried using my version of tox and it worked for him
+2014-12-16T23:36:28  <superbee> so likely not related to pip version
+2014-12-16T23:36:42  <superbee> let me give reproduction a go. just `tox -epy27`?
 2014-12-16T23:36:48  <jeblair> yep
 2014-12-16T23:38:25  *** fandi has joined #openstack-infra
 2014-12-16T23:38:49  *** fandi has quit IRC
 2014-12-16T23:41:07  *** zz_dimtruck is now known as dimtruck
 2014-12-16T23:41:10  *** e0ne has joined #openstack-infra
 2014-12-16T23:41:22  <foobio> tox -repy27 with zuul master works for me (using tox 1.8.1)
-2014-12-16T23:42:12  <clarkb> wow running tox like that killed the battery very quickly :)
-2014-12-16T23:42:16  <clarkb> thankfully I can plug in
+2014-12-16T23:42:12  <superbee> wow running tox like that killed the battery very quickly :)
+2014-12-16T23:42:16  <superbee> thankfully I can plug in
 2014-12-16T23:44:06  *** erikmwilson has quit IRC
 2014-12-16T23:44:12  *** Masahiro has joined #openstack-infra
-2014-12-16T23:44:57  <clarkb> but unable to reproduce with tox 1.6.1
+2014-12-16T23:44:57  <superbee> but unable to reproduce with tox 1.6.1
 2014-12-16T23:46:36  *** MarkAtwood has quit IRC
 2014-12-16T23:47:08  *** e0ne has quit IRC
 2014-12-16T23:47:10  <openstackgerrit> Ramy Asselin proposed openstack-infra/project-config: Prepare project-config for puppet module split #1  https://review.openstack.org/140523
 2014-12-16T23:47:36  <asselin> nibalizer, anteaya ^^
 2014-12-16T23:47:55  *** amotoki has quit IRC
 2014-12-16T23:48:37  *** Masahiro has quit IRC
-2014-12-16T23:48:56  <clarkb> woot I did not see that foobio approved pbr changes \o/ I am excited
-2014-12-16T23:49:21  <foobio> clarkb: yeah, now we need a 0.10.3 tag
-2014-12-16T23:49:43  <clarkb> well it needs to merge but its in process
+2014-12-16T23:48:56  <superbee> woot I did not see that foobio approved pbr changes \o/ I am excited
+2014-12-16T23:49:21  <foobio> superbee: yeah, now we need a 0.10.3 tag
+2014-12-16T23:49:43  <superbee> well it needs to merge but its in process
 2014-12-16T23:49:47  <foobio> mordred: ^ would you like to do the honors this time?
 2014-12-16T23:49:57  <foobio> oh, right, gating feh
 2014-12-16T23:50:19  <foobio> details details
@@ -3076,7 +3076,7 @@
 2014-12-16T23:52:17  <foobio> according to https://github.com/openstack/openstack/graphs/commit-activity week before last we merged more openstack/openstack changes than, well, ever
 2014-12-16T23:52:19  *** rmcall has quit IRC
 2014-12-16T23:52:49  *** lttrl has joined #openstack-infra
-2014-12-16T23:52:51  <clarkb> wow
+2014-12-16T23:52:51  <superbee> wow
 2014-12-16T23:52:55  <foobio> 554 commits the week of november 30
 2014-12-16T23:53:09  <pleia2> wow
 2014-12-16T23:53:31  <nibalizer> jeblair: pleia2 so do we want to give some kind of ping to the golang folks?
@@ -3095,9 +3095,9 @@
 2014-12-16T23:56:31  <mordred> timrc: yah - but it's a review tool for _Gerrit_
 2014-12-16T23:56:34  * anteaya 's tox just failed on No module named unittest2 and is reading backscroll
 2014-12-16T23:56:50  <mordred> timrc: like, it literally does the same thing, except less generally and written in go
-2014-12-16T23:56:58  <clarkb> anteaya: cool you can reproduce. what version of tox do you have?
+2014-12-16T23:56:58  <superbee> anteaya: cool you can reproduce. what version of tox do you have?
 2014-12-16T23:57:04  <greghaynes> I submit https://code.google.com/p/go/issues/detail?id=9 as evidence they may not care
-2014-12-16T23:57:06  <clarkb> would be interesting if your version is different than jeblairs
+2014-12-16T23:57:06  <superbee> would be interesting if your version is different than jeblairs
 2014-12-16T23:57:16  <mordred> ooh!
 2014-12-16T23:57:17  <timrc> mordred, Aye.
 2014-12-16T23:57:21  <mordred> anteaya broke too
@@ -3109,7 +3109,7 @@
 2014-12-16T23:58:21  <nibalizer> foobio: this is an easeir to parse list https://github.com/golang/review/graphs/contributors
 2014-12-16T23:58:40  <pleia2> greghaynes: wow, I hadn't seen that before, pretty epic, "There's no law against being rude" x_x
 2014-12-16T23:58:52  <anteaya> mordred: I'm glad my breaking makes you happy
-2014-12-16T23:58:54  <mordred> clarkb: are we _certain_ that tox is bundling virtualenv?
+2014-12-16T23:58:54  <mordred> superbee: are we _certain_ that tox is bundling virtualenv?
 2014-12-16T23:59:04  <mordred> pleia2: can you tell me pip --version and virtualenv --version too?
 2014-12-16T23:59:04  <anteaya> here I was trying to do reviews to accomplish that
 2014-12-16T23:59:22  <mordred> gah
@@ -3117,6 +3117,6 @@
 2014-12-16T23:59:32  * anteaya gets versions
 2014-12-16T23:59:39  <mordred> pleia2: I do not need to nkow your pip --version and virtualenv --version
 2014-12-16T23:59:41  <foobio> mordred: i think dstufft suggested that tox merely installs virtualenv
-2014-12-16T23:59:43  <clarkb> mordred: ya well at least it did in the past
+2014-12-16T23:59:43  <superbee> mordred: ya well at least it did in the past
 2014-12-16T23:59:44  <pleia2> :)
-2014-12-16T23:59:58  <clarkb> mordred: I can say it definitely vendored virtualenv a year ago
+2014-12-16T23:59:58  <superbee> mordred: I can say it definitely vendored virtualenv a year ago

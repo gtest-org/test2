@@ -100,7 +100,7 @@
 2013-10-28T01:59:08  *** rakhmerov has quit IRC
 2013-10-28T02:00:26  *** sdake has joined #openstack-infra
 2013-10-28T02:00:55  *** wenlock has joined #openstack-infra
-2013-10-28T02:01:34  <mordred> foobio, clarkb: fyi - I have released a new pbr version so that the windows guys won't be screwed anymore
+2013-10-28T02:01:34  <mordred> foobio, superbee: fyi - I have released a new pbr version so that the windows guys won't be screwed anymore
 2013-10-28T02:01:39  *** dims has joined #openstack-infra
 2013-10-28T02:01:43  <mordred> it SHOULD not break anything
 2013-10-28T02:01:46  <mordred> but heads up anyway
@@ -209,13 +209,13 @@
 2013-10-28T02:46:24  <mordred> (I do not have a strong opinion on this one)
 2013-10-28T02:46:33  <mordred> so it's an honest question
 2013-10-28T02:46:38  <mordred> lifeless: ^^ (we're talking about you)
-2013-10-28T02:46:42  <clarkb> mailmap is for deduping right?
-2013-10-28T02:46:47  <clarkb> do we need to bother?
-2013-10-28T02:46:48  <mordred> clarkb: yes.
-2013-10-28T02:46:54  <clarkb> the list is correct without dedup
-2013-10-28T02:47:16  <mordred> clarkb: sure. but it's a little ugly, and we do have the dedup machinery
+2013-10-28T02:46:42  <superbee> mailmap is for deduping right?
+2013-10-28T02:46:47  <superbee> do we need to bother?
+2013-10-28T02:46:48  <mordred> superbee: yes.
+2013-10-28T02:46:54  <superbee> the list is correct without dedup
+2013-10-28T02:47:16  <mordred> superbee: sure. but it's a little ugly, and we do have the dedup machinery
 2013-10-28T02:47:28  <mordred> I certainly don't think we should replace the mailmap files with nothing
-2013-10-28T02:47:43  <clarkb> it seems to solve all the problems but uglyness :)
+2013-10-28T02:47:43  <superbee> it seems to solve all the problems but uglyness :)
 2013-10-28T02:47:54  <mordred> I think there are a few different options
 2013-10-28T02:48:05  *** harlowja_at_home has quit IRC
 2013-10-28T02:48:10  <notmyname> I'm a fan of keeping .mailmap local to a project, if for nothing else to keep the dependency trees shorter when building packages and running stuff
@@ -251,11 +251,11 @@
 2013-10-28T02:57:58  <notmyname> good. we agree on that :-)
 2013-10-28T02:58:12  *** matsuhashi has quit IRC
 2013-10-28T02:58:41  <mordred> I believe the mechanism choices are "do we havea  mechanism to mupdate the currently existing mailmap file  automatically"
-2013-10-28T02:58:47  <clarkb> notmyname: curious about the pbr not being a build time dependency. aiui that is pbr's reason for existence
+2013-10-28T02:58:47  <superbee> notmyname: curious about the pbr not being a build time dependency. aiui that is pbr's reason for existence
 2013-10-28T02:58:50  <mordred> or "do we inject a mailmap file on the build hosts"
 2013-10-28T02:59:23  <mordred> if we do the second thing, it would mean that poeple other than us making sdist tarballs would have a different and possibly less featureful experience
 2013-10-28T02:59:24  <notmyname> so we make an -infra jenkins-ish thingy to create a .mailmap file. how do people who want to know who did what get along? they have to pull from the centralized jenkins-ish thingy?
-2013-10-28T02:59:41  <notmyname> clarkb: happy to talk about that, but I'm only smart enough for one fun conversation at a time ;-)
+2013-10-28T02:59:41  <notmyname> superbee: happy to talk about that, but I'm only smart enough for one fun conversation at a time ;-)
 2013-10-28T02:59:54  <lifeless> mordred: you're talking about me?
 2013-10-28T03:00:01  <mordred> notmyname: yah. that's ultimately the problem with not committing the changes to the repo
 2013-10-28T03:00:01  <lifeless> mordred: I will review those things for you
@@ -290,12 +290,12 @@
 2013-10-28T03:05:20  <notmyname> lifeless: "should be"? why?
 2013-10-28T03:05:37  <mordred> it has crossproject functional effects on the testing of openstack
 2013-10-28T03:05:40  *** guohliu has joined #openstack-infra
-2013-10-28T03:05:47  <clarkb> notmyname: because gerrit
+2013-10-28T03:05:47  <superbee> notmyname: because gerrit
 2013-10-28T03:05:48  <notmyname> mordred: well, I started this topic by saying it's less contentious
 2013-10-28T03:05:52  <mordred> authors file contents is - less important
 2013-10-28T03:05:55  <mordred> notmyname:  :)
-2013-10-28T03:05:58  <clarkb> gerrit does enforce it to a degree
-2013-10-28T03:06:28  <notmyname> clarkb: hmm...good point.
+2013-10-28T03:05:58  <superbee> gerrit does enforce it to a degree
+2013-10-28T03:06:28  <notmyname> superbee: hmm...good point.
 2013-10-28T03:06:57  <lifeless> notmyname: what aspect of having the same mailmap as nova (either same for the same people, or same verbatim) would make you/swift unhappy?
 2013-10-28T03:07:08  <mordred> lifeless: it would be commits that potentially suggest changes to their local file that are not relevant to their repo
 2013-10-28T03:07:14  <notmyname> while I'd be mildly annoyed at having hundreds/thousands of lines in a .mailmap file in swift for people who have never even looked at the code, syncling that isn't worth too much of a fight at this point IMO
@@ -325,10 +325,10 @@
 2013-10-28T03:11:43  <lifeless> STAB STAB STAB STAB
 2013-10-28T03:12:11  * mordred fixes this problem by committing with the same email address everywhere
 2013-10-28T03:12:11  <notmyname> ya, the metrics and the foundation seems that they could benefit, but isn't that info already in gerrit anyway? shouldn't they pull from there rather than git shortlog?
-2013-10-28T03:12:29  <clarkb> the foundation webpage is what got me to thinking we could just stop carring (there are tons of dups on the havana release page)
+2013-10-28T03:12:29  <superbee> the foundation webpage is what got me to thinking we could just stop carring (there are tons of dups on the havana release page)
 2013-10-28T03:12:30  <mordred> notmyname: oh - the metrics systems should pull from somewhere else for sure
 2013-10-28T03:12:33  <lifeless> notmyname: well, I'd like to have just one source of all this info
-2013-10-28T03:12:41  <mordred> clarkb: well, god only knows where the foundation got that data
+2013-10-28T03:12:41  <mordred> superbee: well, god only knows where the foundation got that data
 2013-10-28T03:12:49  <mordred> it certainly wasn't from ANY system managed by the project
 2013-10-28T03:12:57  <lifeless> notmyname: and clear instructions on the new contributor signup page saying 'do X to set this up, and Y if you change affiliation || email in future'
 2013-10-28T03:13:02  <notmyname> lifeless: agreed. IMO the foundation (and gerrit) is or should be tracking all that and have the authoritative source
@@ -460,25 +460,25 @@
 2013-10-28T03:48:00  <mordred> but I've automated all of the things that were the source of my commits in the last cycle - I've got some up with _something_ to keep my commit count high! ;)
 2013-10-28T03:48:26  <mordred> else people might think I've turned into a manager
 2013-10-28T03:48:38  <notmyname> horror!
-2013-10-28T03:48:45  <notmyname> clarkb: so pbr as not a build-time dependency...
+2013-10-28T03:48:45  <notmyname> superbee: so pbr as not a build-time dependency...
 2013-10-28T03:48:51  <mordred> speaking of - python-glanceclient does not seem to be using the openstack sphinx theme...
 2013-10-28T03:49:03  * mordred sits back to watch this one
-2013-10-28T03:49:25  <clarkb> ya, mostly just curious how that would work
-2013-10-28T03:49:33  <clarkb> since pbr is python build reasonableness
-2013-10-28T03:49:45  <notmyname> clarkb: in my ideal world, pbr would be a tool that is used to build stuff (specifically for pip, not packages), similar to debuild for debian. ie feed a repo in and get out a thing that can be installed
+2013-10-28T03:49:25  <superbee> ya, mostly just curious how that would work
+2013-10-28T03:49:33  <superbee> since pbr is python build reasonableness
+2013-10-28T03:49:45  <notmyname> superbee: in my ideal world, pbr would be a tool that is used to build stuff (specifically for pip, not packages), similar to debuild for debian. ie feed a repo in and get out a thing that can be installed
 2013-10-28T03:50:56  <notmyname> I think it's most egregious in client libraries (where it becomes another dependency to install when especially for clients we should be _reducing_ these things)
 2013-10-28T03:51:21  <mordred> notmyname: that's actually possible, but I thnk it would REALY piss off the packagers working from git and not from tarballs we generate
 2013-10-28T03:51:37  <notmyname> mordred: how so?
-2013-10-28T03:51:44  <clarkb> notmyname: I think we may have some philosophical differences about that :) (I think swiftclient should include its "optional" dependencies at least when installing from pip
+2013-10-28T03:51:44  <superbee> notmyname: I think we may have some philosophical differences about that :) (I think swiftclient should include its "optional" dependencies at least when installing from pip
 2013-10-28T03:51:57  <mordred> notmyname: because it would be a tool you'd HAVE to use to interact with the source code repository
 2013-10-28T03:52:15  <mordred> whereas right now you can interact with setup.py like other python projects do
 2013-10-28T03:52:21  <notmyname> mordred: it wouldn't be `pbr /path/to/some/git/repo`?
 2013-10-28T03:52:29  <mordred> yup. THAT would work
 2013-10-28T03:52:53  <mordred> but you'd need pbr at build time still
-2013-10-28T03:53:12  <notmyname> clarkb: python-*client should run anywhere. our APIs are HTTP! we should be runnable on py2.0 on every computer ever made
+2013-10-28T03:53:12  <notmyname> superbee: python-*client should run anywhere. our APIs are HTTP! we should be runnable on py2.0 on every computer ever made
 2013-10-28T03:53:23  <mordred> notmyname: we are
 2013-10-28T03:53:27  <mordred> pbr does not prevent that
-2013-10-28T03:53:28  <clarkb> notmyname: I agree, but that doesn't rule out dependencies
+2013-10-28T03:53:28  <superbee> notmyname: I agree, but that doesn't rule out dependencies
 2013-10-28T03:53:39  <mordred> it ONLY prevents using pre-secure pip
 2013-10-28T03:53:47  <mordred> and I do not feel the need to support that
 2013-10-28T03:53:51  <mordred> as it's a horrible idea
@@ -488,13 +488,13 @@
 2013-10-28T03:54:46  <mordred> you could remove the need for pbr at pip install time
 2013-10-28T03:54:47  <mordred> BUT
 2013-10-28T03:54:50  <mordred> you'd increase the surface area of people who woul dhave to learn about pbr directly
-2013-10-28T03:54:53  <notmyname> clarkb: sure, but as a general idea in client libs (for any project), less deps >> more deps
+2013-10-28T03:54:53  <notmyname> superbee: sure, but as a general idea in client libs (for any project), less deps >> more deps
 2013-10-28T03:54:56  <mordred> because every single person wanting to install from git
 2013-10-28T03:55:00  <mordred> would have to learn about running pbr
-2013-10-28T03:55:16  <clarkb> notmyname: but broken features isn't good either
+2013-10-28T03:55:16  <superbee> notmyname: but broken features isn't good either
 2013-10-28T03:55:28  <notmyname> mordred: that's what I don't get yet. why? I don't need debuild to run from source on a debian machine?
-2013-10-28T03:55:34  <clarkb> it is really ocnfusing when you just want swiftclient to push objects to $publiccloud and it can't in a default install
-2013-10-28T03:55:47  <notmyname> clarkb: nobody is promoting broken features
+2013-10-28T03:55:34  <superbee> it is really ocnfusing when you just want swiftclient to push objects to $publiccloud and it can't in a default install
+2013-10-28T03:55:47  <notmyname> superbee: nobody is promoting broken features
 2013-10-28T03:55:48  <mordred> you DO need it to build debian packages though
 2013-10-28T03:56:10  <mordred> and the way pip and friends work right now
 2013-10-28T03:56:17  <mordred> is via source-level installs
@@ -1003,7 +1003,7 @@
 2013-10-28T12:58:41  <jog0> ci devstack qa?
 2013-10-28T12:58:49  <sdague> qa
 2013-10-28T12:59:16  <sdague> the reality is it's me and dtroyer, and whoever else I can con into helping :)
-2013-10-28T12:59:17  <ArxCruz> clarkb: foobio can you guys help me with a zuul/jenkins issue ?
+2013-10-28T12:59:17  <ArxCruz> superbee: foobio can you guys help me with a zuul/jenkins issue ?
 2013-10-28T13:00:07  <sdague> that set of ci stats for openstack really made the rounds yesterday
 2013-10-28T13:00:22  <jog0> sdague: I may have conned myself into helping -- I want to get the RPC / rolling upgrade test up
 2013-10-28T13:00:50  <jog0> but using grenade will be a bit of a burdon at least at first
@@ -1360,7 +1360,7 @@
 2013-10-28T15:31:03  <foobio> try again. there's really no reason we shouldn't make the list of bot accounts in our gerrit public
 2013-10-28T15:31:05  <ArxCruz> will became more easy if in the future need to change something
 2013-10-28T15:31:07  *** SergeyLukjanov has joined #openstack-infra
-2013-10-28T15:31:46  <mordred> foobio, clarkb: ^^ thoughts on moving jjb things from files to templates?
+2013-10-28T15:31:46  <mordred> foobio, superbee: ^^ thoughts on moving jjb things from files to templates?
 2013-10-28T15:31:52  *** davidhadas has joined #openstack-infra
 2013-10-28T15:32:02  <mordred> does directory inclusion work on templates? or do we have to list each one individually?
 2013-10-28T15:32:48  <foobio> mordred: i don't think it does. at least that was the reason i assumed we were using flat directories for templates in our modules
@@ -1440,7 +1440,7 @@
 2013-10-28T16:20:01  *** DinaBelova has quit IRC
 2013-10-28T16:20:21  <mattymo> foobio, done
 2013-10-28T16:20:30  *** esheffield_ has joined #openstack-infra
-2013-10-28T16:23:56  <anteaya> mattymo just to give you a sense, foobio clarkb mordred and jeblair (who is on holidays this week) are all infra-core
+2013-10-28T16:23:56  <anteaya> mattymo just to give you a sense, foobio superbee mordred and jeblair (who is on holidays this week) are all infra-core
 2013-10-28T16:24:26  <anteaya> myself pleia2 and zaro are also infra team members though not infra-core, but pleia2 and zaro are core on other projects
 2013-10-28T16:24:35  <anteaya> and we are all paid to be here
 2013-10-28T16:26:30  *** ben_duyujie has joined #openstack-infra
@@ -1502,7 +1502,7 @@
 2013-10-28T16:48:02  <mattymo> and it has gerritbot
 2013-10-28T16:48:21  *** guohliu has joined #openstack-infra
 2013-10-28T16:48:52  <ryanpetrello> https://review.openstack.org/#/c/42393/ anybody want to finally push this one through :)?
-2013-10-28T16:50:31  <clarkb> morning
+2013-10-28T16:50:31  <superbee> morning
 2013-10-28T16:50:40  <foobio> mattymo: i think it was recently realized that if that's not done pretty much as soon as the channel is registered, it becomes much, much harder for us to get access later. apparently jeblair has a backlog of channels he's trying to get founder status on so we can help troubleshoot issues with the bots we're managing on them
 2013-10-28T16:51:18  *** lnxnut has joined #openstack-infra
 2013-10-28T16:51:24  <mattymo> foobio, ok
@@ -1510,11 +1510,11 @@
 2013-10-28T16:51:55  <mattymo> foobio, so can it be finished today and pushed through? are we waiting on him?
 2013-10-28T16:52:10  <mattymo> foobio, and I trust you folks to be the benevolent dictators)
 2013-10-28T16:53:05  *** vipul has quit IRC
-2013-10-28T16:53:26  <foobio> mattymo: since i was able to confirm it in jeblair's absence (he's vacationing at the moment), if clarkb wants to get a double-check in on it we can probably put it through
+2013-10-28T16:53:26  <foobio> mattymo: since i was able to confirm it in jeblair's absence (he's vacationing at the moment), if superbee wants to get a double-check in on it we can probably put it through
 2013-10-28T16:53:35  *** vipul has joined #openstack-infra
 2013-10-28T16:53:41  *** dcramer_ has quit IRC
 2013-10-28T16:54:51  *** ArxCruz has quit IRC
-2013-10-28T16:55:08  <mattymo> clarkb, are you feeling generous today?
+2013-10-28T16:55:08  <mattymo> superbee, are you feeling generous today?
 2013-10-28T16:55:23  <foobio> https://review.openstack.org/53656 being the change we're talking about
 2013-10-28T16:55:35  *** ArxCruz has joined #openstack-infra
 2013-10-28T16:55:35  *** dcramer_ has joined #openstack-infra
@@ -1527,8 +1527,8 @@
 2013-10-28T16:58:54  <openstackgerrit> A change was merged to openstack-infra/config: Add IRC bot to #openstack-climate for all Gerrit changes  https://review.openstack.org/52085
 2013-10-28T16:59:06  <foobio> not sure why #openstack-climate didn't need our intervention to register though. i wonder whether freenode staff are selectively enforcing namespace registrations?
 2013-10-28T17:00:20  *** ArxCruz has quit IRC
-2013-10-28T17:00:28  <clarkb> mattymo: foobio: looking
-2013-10-28T17:00:40  <clarkb> foobio: may have been registered before the restrictions
+2013-10-28T17:00:28  <superbee> mattymo: foobio: looking
+2013-10-28T17:00:40  <superbee> foobio: may have been registered before the restrictions
 2013-10-28T17:00:49  <foobio> good point
 2013-10-28T17:01:01  <mordred> tsufiev: well, that's definitley a bug - but not the bug you think it is :)
 2013-10-28T17:01:08  *** dcramer_ has quit IRC
@@ -1559,7 +1559,7 @@
 2013-10-28T17:12:31  <foobio> mordred: SpamapS: mmm, so i think maybe the "warning: LocalManifestMaker: standard file '-c' not found [...] error: No such file or directory" could be related after all. trying to see where it's picking up a -c
 2013-10-28T17:12:32  *** yassine has quit IRC
 2013-10-28T17:14:09  <SpamapS> foobio: thanks for investigating.
-2013-10-28T17:14:09  <clarkb> mattymo: foobio: approved
+2013-10-28T17:14:09  <superbee> mattymo: foobio: approved
 2013-10-28T17:15:03  *** esheffield_ has joined #openstack-infra
 2013-10-28T17:15:08  *** dkliban has quit IRC
 2013-10-28T17:15:09  *** Ryan_Lane has joined #openstack-infra
@@ -1604,7 +1604,7 @@
 2013-10-28T17:37:29  *** mgagne has joined #openstack-infra
 2013-10-28T17:38:15  <tsufiev> mordred: that was fast :)
 2013-10-28T17:39:39  *** fbo is now known as fbo_away
-2013-10-28T17:41:16  <ogelbukh> foobio: mordred: clarkb: gentlemen, could you please tell me what's needed to move a project to stackforge from public github repo?
+2013-10-28T17:41:16  <ogelbukh> foobio: mordred: superbee: gentlemen, could you please tell me what's needed to move a project to stackforge from public github repo?
 2013-10-28T17:41:41  *** reed has quit IRC
 2013-10-28T17:41:46  <ogelbukh> i filed a change request already to the config repo: https://review.openstack.org/#/c/53858/
 2013-10-28T17:42:03  <pleia2> ogelbukh: have you seen http://ci.openstack.org/stackforge.html
@@ -1620,7 +1620,7 @@
 2013-10-28T17:44:35  <pleia2> ogelbukh: but that's after your change has merged, so as foobio says - time :)
 2013-10-28T17:45:13  <ogelbukh> foobio: fair, thamnk you!
 2013-10-28T17:45:19  <ogelbukh> -m
-2013-10-28T17:48:23  <clarkb> foobio: ogelbukh: ya this week is going to be hard to get "real" work done
+2013-10-28T17:48:23  <superbee> foobio: ogelbukh: ya this week is going to be hard to get "real" work done
 2013-10-28T17:48:34  *** reed has joined #openstack-infra
 2013-10-28T17:49:17  <foobio> interesting statistic... 189 projects in review.openstack.org. 42% stackforge, 35% openstack, 18% openstack-infra, 5% openstack-dev
 2013-10-28T17:49:42  <pleia2> stackforge sure has grown
@@ -1635,24 +1635,24 @@
 2013-10-28T18:02:46  <sdague> foobio: so I think https://review.openstack.org/53940 is functionally right, we just need to do this lockstep thing with the grenade upgrade
 2013-10-28T18:03:10  <sdague> so I need to make it run grizzly as stable on master until we get working havana => master grenade
 2013-10-28T18:03:58  <foobio> can that be phased, or will both changes have to be force-merged in tandem?
-2013-10-28T18:04:57  <clarkb> sdague: I am reviewing 53490
+2013-10-28T18:04:57  <superbee> sdague: I am reviewing 53490
 2013-10-28T18:06:04  * foobio is as well
 2013-10-28T18:07:26  <klrmn> lifeless: testresources does not work out-of-the-box with nose, i had to write a nose plugin to force it to use the OptimisingTestSuite. i'll let you know when i publish the plugin…first it has to survive the fire that will be refactoring all my tests to use it
 2013-10-28T18:07:57  <lifeless> klrmn: cool
-2013-10-28T18:09:13  <clarkb> sdague: reviewed
+2013-10-28T18:09:13  <superbee> sdague: reviewed
 2013-10-28T18:09:49  <bodepd_> foobio: thanks foobio. I didn't even realize those branches were there. Looking into it now
-2013-10-28T18:11:24  <sdague> clarkb: thanks, good catches
+2013-10-28T18:11:24  <sdague> superbee: thanks, good catches
 2013-10-28T18:11:37  <sdague> I'm going to let this run to completion to see if the grenade job actually worked this time
-2013-10-28T18:11:49  <clarkb> wfm
+2013-10-28T18:11:49  <superbee> wfm
 2013-10-28T18:12:09  <sdague> foobio: yes, so the attempt as phasing it is doing the wrong thing in this change and setting old=grizzly for master
 2013-10-28T18:12:15  <sdague> then fixing grenade
 2013-10-28T18:12:24  <sdague> then fixing this to old=havana for master
-2013-10-28T18:13:27  <sdague> clarkb: my comments on your comments there. On missed variable, and one bad merge :)
+2013-10-28T18:13:27  <sdague> superbee: my comments on your comments there. On missed variable, and one bad merge :)
 2013-10-28T18:15:09  <foobio> completely unrelated, but i confirmed you can get git tab completion to do some nasty local code execution tricks by backticking a command in a tag name, as long as you respect git's limitations on what characters are valid for a tag
 2013-10-28T18:15:28  <foobio> it's actually pretty funny
 2013-10-28T18:15:32  *** dcramer_ has joined #openstack-infra
 2013-10-28T18:16:38  *** ruhe has joined #openstack-infra
-2013-10-28T18:17:14  <clarkb> foobio: your idea of funny is disturbing :)
+2013-10-28T18:17:14  <superbee> foobio: your idea of funny is disturbing :)
 2013-10-28T18:17:18  <foobio> for example, create a backdoor.sh (doing something like "touch pwnd") script in your repo and make it executable, then tag a commit as `./backdoor.sh` and try tab-completing git branch -D
 2013-10-28T18:17:38  *** adalbas has joined #openstack-infra
 2013-10-28T18:19:00  <foobio> this cropped up from some earlier work i did on trying to inject arbitrary code in tags we reference in our release jobs, which turned out not to be viable but the side effect was that i started getting file-not-found errors when tab-completing refnames in that checkout. only just noticed it
@@ -1662,11 +1662,11 @@
 2013-10-28T18:20:26  *** _SergeyLukjanov has quit IRC
 2013-10-28T18:21:00  *** DinaBelova has quit IRC
 2013-10-28T18:22:33  *** DinaBelova has joined #openstack-infra
-2013-10-28T18:23:19  <clarkb> foobio: that is pretty funny. are '$'s allowed in tag names?
-2013-10-28T18:23:59  <clarkb> something like `echo "Hello, $USER this is git. Nice to meet you."` would be an excellent tag name
-2013-10-28T18:24:12  <foobio> clarkb: well, the biggest trick is that spaces aren't allowed
-2013-10-28T18:24:23  <clarkb> well we use underscores then!
-2013-10-28T18:24:36  <clarkb> and not echo
+2013-10-28T18:23:19  <superbee> foobio: that is pretty funny. are '$'s allowed in tag names?
+2013-10-28T18:23:59  <superbee> something like `echo "Hello, $USER this is git. Nice to meet you."` would be an excellent tag name
+2013-10-28T18:24:12  <foobio> superbee: well, the biggest trick is that spaces aren't allowed
+2013-10-28T18:24:23  <superbee> well we use underscores then!
+2013-10-28T18:24:36  <superbee> and not echo
 2013-10-28T18:24:45  <foobio> but you could stuff that echo into a script in the repo and have the tag exec it
 2013-10-28T18:25:37  *** ruhe has quit IRC
 2013-10-28T18:26:28  *** katyafervent has quit IRC
@@ -1719,7 +1719,7 @@
 2013-10-28T19:27:33  *** danger_fo_away has quit IRC
 2013-10-28T19:28:37  *** nicedice__ has joined #openstack-infra
 2013-10-28T19:29:13  <sdague> foobio: did you have any other comments on this - https://review.openstack.org/#/c/53940/ ?
-2013-10-28T19:29:30  <sdague> before I respin with the fixes clarkb suggested
+2013-10-28T19:29:30  <sdague> before I respin with the fixes superbee suggested
 2013-10-28T19:29:39  <sdague> as I managed to get it to pass grenade... yay!
 2013-10-28T19:29:58  *** dstufft has quit IRC
 2013-10-28T19:30:28  *** dstufft has joined #openstack-infra
@@ -1739,16 +1739,16 @@
 2013-10-28T19:35:04  *** mtreinish has quit IRC
 2013-10-28T19:35:44  <openstackgerrit> Joe Gordon proposed a change to openstack-dev/hacking: Continue reserving H6xx namespace for calling methods  https://review.openstack.org/54165
 2013-10-28T19:36:10  <foobio> side note, we have rather many branch variables in devstack-gate scripts. wish there were better ways to distinguish them'
-2013-10-28T19:36:18  <jog0> clarkb, sdague:  ^^ last patch before ready to cut hacking 0.8.0
+2013-10-28T19:36:18  <jog0> superbee, sdague:  ^^ last patch before ready to cut hacking 0.8.0
 2013-10-28T19:36:19  *** markwash has quit IRC
 2013-10-28T19:36:20  *** markwash_ is now known as markwash
 2013-10-28T19:40:13  *** mtreinish has joined #openstack-infra
-2013-10-28T19:48:40  <foobio> clarkb: good news on the git tag tab completion command injection front... can't seem to reproduce running debian's 1.8.4~rc3-1 package
+2013-10-28T19:48:40  <foobio> superbee: good news on the git tag tab completion command injection front... can't seem to reproduce running debian's 1.8.4~rc3-1 package
 2013-10-28T19:48:59  <sdague> foobio: yes, for sure, something maybe to think about in the grenade session
 2013-10-28T19:49:03  <foobio> hopefully the old bash tab completion file was screwy
 2013-10-28T19:53:42  <openstackgerrit> Sean Dague proposed a change to openstack-infra/devstack-gate: Let us gate grenade forward  https://review.openstack.org/53940
 2013-10-28T19:55:25  <foobio> yeah, i can reproduce it on precise :(
-2013-10-28T19:59:45  <sdague> ok, so that should be good to go. foobio / clarkb you guys ok with the refactor patches under it?
+2013-10-28T19:59:45  <sdague> ok, so that should be good to go. foobio / superbee you guys ok with the refactor patches under it?
 2013-10-28T19:59:54  <sdague> or should I rebase that on master?
 2013-10-28T20:01:01  <openstackgerrit> Anita Kuno proposed a change to openstack-infra/config: Create a seafile instance.  https://review.openstack.org/54030
 2013-10-28T20:01:10  *** mrodden1 has quit IRC
@@ -1798,43 +1798,43 @@
 2013-10-28T20:34:40  <wenlock> ahh yes, we had forked that file, forgot to post on the forum that it broke us :P
 2013-10-28T20:34:50  <wenlock> i mean irc
 2013-10-28T20:36:54  *** changbl has joined #openstack-infra
-2013-10-28T20:37:13  <clarkb> gerrit defaults to non visible groups. I think we just negelected to make them visible
+2013-10-28T20:37:13  <superbee> gerrit defaults to non visible groups. I think we just negelected to make them visible
 2013-10-28T20:37:44  *** ericloo has joined #openstack-infra
-2013-10-28T20:38:04  <wenlock> clarkb, so they should all be visible?  I mean the groups we create by hand per this site: http://ci.openstack.org/gerrit.html  (groups section)
-2013-10-28T20:38:54  <clarkb> wenlock: I think so, there might be a small argument that Project Bootstrappers shouldn't be
+2013-10-28T20:38:04  <wenlock> superbee, so they should all be visible?  I mean the groups we create by hand per this site: http://ci.openstack.org/gerrit.html  (groups section)
+2013-10-28T20:38:54  <superbee> wenlock: I think so, there might be a small argument that Project Bootstrappers shouldn't be
 2013-10-28T20:39:01  *** sarob has quit IRC
 2013-10-28T20:39:07  *** denis_makogon has joined #openstack-infra
-2013-10-28T20:39:45  <wenlock> clarkb: ok, cool.  i was improving my changes for gerrit server setup to bootstrap gerrit without doing all the manual setup
+2013-10-28T20:39:45  <wenlock> superbee: ok, cool.  i was improving my changes for gerrit server setup to bootstrap gerrit without doing all the manual setup
 2013-10-28T20:40:56  *** changbl has quit IRC
 2013-10-28T20:41:42  *** openstackgerrit has quit IRC
 2013-10-28T20:41:58  *** openstackgerrit has joined #openstack-infra
 2013-10-28T20:42:36  *** sarob has joined #openstack-infra
-2013-10-28T20:44:10  <clarkb> sdague: I think we may need to sort out when to setup the workspace
-2013-10-28T20:44:36  <clarkb> sdague: I think it needs to happen before the reexec in order to make sure the new d-g is abailable to reexec
-2013-10-28T20:45:26  <clarkb> sdague: what if you put the branch selection and setup of new workspace before reexec?
-2013-10-28T20:45:43  <clarkb> I think that gives us maximum coverage of the reexec testing
+2013-10-28T20:44:10  <superbee> sdague: I think we may need to sort out when to setup the workspace
+2013-10-28T20:44:36  <superbee> sdague: I think it needs to happen before the reexec in order to make sure the new d-g is abailable to reexec
+2013-10-28T20:45:26  <superbee> sdague: what if you put the branch selection and setup of new workspace before reexec?
+2013-10-28T20:45:43  <superbee> I think that gives us maximum coverage of the reexec testing
 2013-10-28T20:45:58  *** davidhadas has joined #openstack-infra
 2013-10-28T20:46:50  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Don't pass mysql passwords to project gerrit class  https://review.openstack.org/54177
-2013-10-28T20:46:55  <foobio> clarkb: that could stand some ninja ^
-2013-10-28T20:47:04  <clarkb> foobio: looking
+2013-10-28T20:46:55  <foobio> superbee: that could stand some ninja ^
+2013-10-28T20:47:04  <superbee> foobio: looking
 2013-10-28T20:47:26  <foobio> it was correct in review_dev.pp but not in review.pp, so testing on review-dev didn't expose it
-2013-10-28T20:47:43  <clarkb> foobio: how does review.o.o know its mysql info?
-2013-10-28T20:48:06  <foobio> clarkb: up in the gerrit::mysql block
-2013-10-28T20:48:45  <clarkb> foobio: gotcha
+2013-10-28T20:47:43  <superbee> foobio: how does review.o.o know its mysql info?
+2013-10-28T20:48:06  <foobio> superbee: up in the gerrit::mysql block
+2013-10-28T20:48:45  <superbee> foobio: gotcha
 2013-10-28T20:48:57  <foobio> it's a brown bag fix from something which got missed in 6a2e31d
-2013-10-28T20:49:04  <clarkb> foobio: lgtm, feel free to push through
+2013-10-28T20:49:04  <superbee> foobio: lgtm, feel free to push through
 2013-10-28T20:52:25  <openstackgerrit> A change was merged to openstack-infra/config: Don't pass mysql passwords to project gerrit class  https://review.openstack.org/54177
 2013-10-28T20:52:34  <foobio> fwiw, that ^ got "tested" in production (applying it un-broke puppet on review.o.o)
-2013-10-28T20:52:39  <clarkb> k
-2013-10-28T20:52:42  <sdague> clarkb: ok, I thought you wanted me to move it up. I can move it back down to after the workspaces
-2013-10-28T20:52:42  <clarkb> I figured you had done that
-2013-10-28T20:52:51  <clarkb> sdague: I think we need something in the middle
-2013-10-28T20:53:18  <clarkb> sdague: we want the section that reexecs to happen as early as possible, but it must happen after the new workspace is configured
+2013-10-28T20:52:39  <superbee> k
+2013-10-28T20:52:42  <sdague> superbee: ok, I thought you wanted me to move it up. I can move it back down to after the workspaces
+2013-10-28T20:52:42  <superbee> I figured you had done that
+2013-10-28T20:52:51  <superbee> sdague: I think we need something in the middle
+2013-10-28T20:53:18  <superbee> sdague: we want the section that reexecs to happen as early as possible, but it must happen after the new workspace is configured
 2013-10-28T20:54:12  <foobio> basically anything which runs before the reexec is not self-tested
 2013-10-28T20:54:43  <sdague> ok
 2013-10-28T20:55:24  *** luhrs1 has joined #openstack-infra
-2013-10-28T20:55:27  <clarkb> there may be some way to just deal with d-g repo first then check reexec then setup workspaces proper
-2013-10-28T20:55:33  <clarkb> do something like gerrit git prep just for d-g
+2013-10-28T20:55:27  <superbee> there may be some way to just deal with d-g repo first then check reexec then setup workspaces proper
+2013-10-28T20:55:33  <superbee> do something like gerrit git prep just for d-g
 2013-10-28T20:56:07  *** moted_ has joined #openstack-infra
 2013-10-28T20:56:14  *** hashar_ has joined #openstack-infra
 2013-10-28T20:56:23  <ArxCruz> foobio: https://review.openstack.org/#/c/54160/ i believe the failure in gate-config-layout it's because I move the devstack-gate jobs is it possible to you verify ? I remove all the blank and tabs spaces :)
@@ -1847,43 +1847,43 @@
 2013-10-28T20:57:34  *** che-arne has quit IRC
 2013-10-28T20:58:26  <ArxCruz> foobio: take your time :)
 2013-10-28T20:59:56  *** aspiers has joined #openstack-infra
-2013-10-28T21:00:27  <sdague> clarkb: so, in patchset 9 - https://review.openstack.org/#/c/53940/9/devstack-vm-gate-wrap.sh I had this down after the workspace setup
+2013-10-28T21:00:27  <sdague> superbee: so, in patchset 9 - https://review.openstack.org/#/c/53940/9/devstack-vm-gate-wrap.sh I had this down after the workspace setup
 2013-10-28T21:00:35  <sdague> just go back to that?
 2013-10-28T21:01:38  *** ^d has joined #openstack-infra
 2013-10-28T21:02:16  *** changbl has joined #openstack-infra
-2013-10-28T21:02:23  <clarkb> ArxCruz: foobio: why do shell scripts in jenkins jobs need to know where ZUUL is located? I think it might be better to supply that info from zuul itself
-2013-10-28T21:02:29  <clarkb> sdague: we can go back to that, it would nice if there is something in between that we can do
+2013-10-28T21:02:23  <superbee> ArxCruz: foobio: why do shell scripts in jenkins jobs need to know where ZUUL is located? I think it might be better to supply that info from zuul itself
+2013-10-28T21:02:29  <superbee> sdague: we can go back to that, it would nice if there is something in between that we can do
 2013-10-28T21:03:03  *** Ajaeger1 has joined #openstack-infra
 2013-10-28T21:03:06  <sdague> ok, let's start there, and we can make it better later
-2013-10-28T21:03:06  <clarkb> sdague: do the bare minimum to sort out branches, then setup workspace/new, check reexec then setup workspace old
-2013-10-28T21:03:11  <ArxCruz> clarkb: oh...
-2013-10-28T21:03:30  <sdague> clarkb: so what's the concern on setting up workspace old before it?
-2013-10-28T21:03:41  <clarkb> ArxCruz: it might need a patch to zuul to do that, but I think since zuul is driving the whole thing it can just inject that into the build parameter list
-2013-10-28T21:03:43  <ArxCruz> clarkb: thanks for make a lot of ctrl+c ctrl+v useless
+2013-10-28T21:03:06  <superbee> sdague: do the bare minimum to sort out branches, then setup workspace/new, check reexec then setup workspace old
+2013-10-28T21:03:11  <ArxCruz> superbee: oh...
+2013-10-28T21:03:30  <sdague> superbee: so what's the concern on setting up workspace old before it?
+2013-10-28T21:03:41  <superbee> ArxCruz: it might need a patch to zuul to do that, but I think since zuul is driving the whole thing it can just inject that into the build parameter list
+2013-10-28T21:03:43  <ArxCruz> superbee: thanks for make a lot of ctrl+c ctrl+v useless
 2013-10-28T21:03:48  <sdague> just that it's slow?
 2013-10-28T21:03:54  <ArxCruz> :)
 2013-10-28T21:03:58  *** mrodden has joined #openstack-infra
-2013-10-28T21:04:08  <clarkb> sdague: no, changes to d-g won't be self tested on their ability to setup workspace old
-2013-10-28T21:04:26  <ArxCruz> clarkb: yes, zuul is better, I didn't though that
+2013-10-28T21:04:08  <superbee> sdague: no, changes to d-g won't be self tested on their ability to setup workspace old
+2013-10-28T21:04:26  <ArxCruz> superbee: yes, zuul is better, I didn't though that
 2013-10-28T21:04:27  <foobio> ArxCruz: yes, i think you're right about the failing layout and comparison jobs... they'd need extra intelligence to deal with one of the config files being a puppet template
-2013-10-28T21:04:51  <foobio> ArxCruz: clarkb: and yes, if we can supply that from zuul directly, all the better
-2013-10-28T21:04:52  <ArxCruz> clarkb: but zuul send ZUUL_URL info ?
+2013-10-28T21:04:51  <foobio> ArxCruz: superbee: and yes, if we can supply that from zuul directly, all the better
+2013-10-28T21:04:52  <ArxCruz> superbee: but zuul send ZUUL_URL info ?
 2013-10-28T21:05:20  <foobio> didn't even think of that earlier when discussing it with ArxCruz and mordred
-2013-10-28T21:05:31  <clarkb> ArxCruz: yeah, zuul is triggering these jobs and injecting environment variables, rather than pass that data through in weird third party places, just do it directly
+2013-10-28T21:05:31  <superbee> ArxCruz: yeah, zuul is triggering these jobs and injecting environment variables, rather than pass that data through in weird third party places, just do it directly
 2013-10-28T21:05:52  <Ajaeger1> infra team, we're splitting up the install guide and I would love some good review on this patch https://review.openstack.org/54076, please
-2013-10-28T21:05:53  <clarkb> then you can point at different zuuls without any configuration changes
-2013-10-28T21:06:00  <sdague> clarkb: ok, so what we really need is devstack-gate setting itself up independently, ok, let me slice this again.
-2013-10-28T21:06:12  <clarkb> sdague: ya that would be the proper fix
-2013-10-28T21:06:23  <clarkb> sdague: fwiw if that is terrible I am fine doing what patchset 9 did for now
-2013-10-28T21:07:08  <ArxCruz> clarkb: so, if pass ZUUL_URL in zuul, it will export the variable correctly without the need of changes in jjb ?
+2013-10-28T21:05:53  <superbee> then you can point at different zuuls without any configuration changes
+2013-10-28T21:06:00  <sdague> superbee: ok, so what we really need is devstack-gate setting itself up independently, ok, let me slice this again.
+2013-10-28T21:06:12  <superbee> sdague: ya that would be the proper fix
+2013-10-28T21:06:23  <superbee> sdague: fwiw if that is terrible I am fine doing what patchset 9 did for now
+2013-10-28T21:07:08  <ArxCruz> superbee: so, if pass ZUUL_URL in zuul, it will export the variable correctly without the need of changes in jjb ?
 2013-10-28T21:07:22  <sdague> so, honestly, I think the proper fix requires a lot more refactoring of setup_workspace so that it can take a project as a param
 2013-10-28T21:07:54  <sdague> so I think, given that we wedged ourself this morning on a novaclient change, I'd like to get the patch 9 version moving forward now
-2013-10-28T21:08:14  <clarkb> ArxCruz: correct if you look at https://jenkins02.openstack.org/job/check-tempest-devstack-vm-full/3598/parameters/? you see there are parameters that are being directly passed into the job from zuul
+2013-10-28T21:08:14  <superbee> ArxCruz: correct if you look at https://jenkins02.openstack.org/job/check-tempest-devstack-vm-full/3598/parameters/? you see there are parameters that are being directly passed into the job from zuul
 2013-10-28T21:08:15  <sdague> because we have real possible breaks happening. Then we do this right later.
 2013-10-28T21:08:35  *** beagles has quit IRC
 2013-10-28T21:08:39  *** thomasem has quit IRC
-2013-10-28T21:08:46  <ArxCruz> clarkb: okay, cool
-2013-10-28T21:08:50  <clarkb> sdague: sounds good to me, sorry I didn't fully grasp why it was moved initially. Want to push up a thing with the other fix in patchset 10 that is otherwise patchset 9?
+2013-10-28T21:08:46  <ArxCruz> superbee: okay, cool
+2013-10-28T21:08:50  <superbee> sdague: sounds good to me, sorry I didn't fully grasp why it was moved initially. Want to push up a thing with the other fix in patchset 10 that is otherwise patchset 9?
 2013-10-28T21:09:15  <ArxCruz> foobio: so, can I just abandon https://review.openstack.org/#/c/54160/ ?
 2013-10-28T21:09:25  *** yamahata has quit IRC
 2013-10-28T21:09:51  <foobio> ArxCruz: yeah, there is definitely a better, more elegant way
@@ -1891,20 +1891,20 @@
 2013-10-28T21:09:58  <ArxCruz> :)
 2013-10-28T21:10:45  <ArxCruz> okay, hacking zuul now...
 2013-10-28T21:11:15  <openstackgerrit> Sean Dague proposed a change to openstack-infra/devstack-gate: Let us gate grenade forward  https://review.openstack.org/53940
-2013-10-28T21:11:27  <sdague> clarkb: yeh, I split it a little bit to do the old setup after
+2013-10-28T21:11:27  <sdague> superbee: yeh, I split it a little bit to do the old setup after
 2013-10-28T21:11:41  <sdague> and left a big comment
-2013-10-28T21:13:14  <sdague> clarkb: also, per previous question, that's sitting on top of 2 refactoring clean ups. Would be good to know if you are good with those as well, as I think it would be good to get this whole series in soon, so we can actually land the havana => master grenade changes, then get that switched on
+2013-10-28T21:13:14  <sdague> superbee: also, per previous question, that's sitting on top of 2 refactoring clean ups. Would be good to know if you are good with those as well, as I think it would be good to get this whole series in soon, so we can actually land the havana => master grenade changes, then get that switched on
 2013-10-28T21:13:45  *** beagles has joined #openstack-infra
 2013-10-28T21:14:30  *** misterpink has joined #openstack-infra
 2013-10-28T21:15:07  *** misterpink has quit IRC
 2013-10-28T21:18:25  *** misterpink has joined #openstack-infra
 2013-10-28T21:19:12  *** fbo_away is now known as fbo
 2013-10-28T21:19:51  <zul> i think we should turn on the gate for py3 for cinderclient/novaclient
-2013-10-28T21:21:09  <clarkb> zul: It should be on for novaclient
+2013-10-28T21:21:09  <superbee> zul: It should be on for novaclient
 2013-10-28T21:21:34  <zul> sweet
-2013-10-28T21:24:26  <clarkb> zul: but we should do cinderclient too if it is ready
+2013-10-28T21:24:26  <superbee> zul: but we should do cinderclient too if it is ready
 2013-10-28T21:25:33  *** dcramer_ has joined #openstack-infra
-2013-10-28T21:25:36  <zul> clarkb:  its ready ill do it tonight
+2013-10-28T21:25:36  <zul> superbee:  its ready ill do it tonight
 2013-10-28T21:28:46  *** mrodden1 has joined #openstack-infra
 2013-10-28T21:30:52  *** jhesketh has joined #openstack-infra
 2013-10-28T21:31:13  *** mrodden has quit IRC
@@ -1912,10 +1912,10 @@
 2013-10-28T21:34:29  *** dkranz has quit IRC
 2013-10-28T21:41:33  <foobio> jgriffith: python-cinderclient works and passes tests on python 3.3 now?
 2013-10-28T21:41:40  <foobio> zul: that's awesome news, btw
-2013-10-28T21:41:41  <clarkb> jog0: sdague: do we expect py33 and pypi tests to not pass for hacking https://review.openstack.org/#/c/54165/1 I ask because novaclient and soon cinderclient are gating on py33 and while flake8 isn't run on them with py33 it isn't far fetched that someone may try that
+2013-10-28T21:41:41  <superbee> jog0: sdague: do we expect py33 and pypi tests to not pass for hacking https://review.openstack.org/#/c/54165/1 I ask because novaclient and soon cinderclient are gating on py33 and while flake8 isn't run on them with py33 it isn't far fetched that someone may try that
 2013-10-28T21:41:53  *** ruhe has joined #openstack-infra
 2013-10-28T21:42:43  <foobio> i thought they did pass at one point and then regressed?
-2013-10-28T21:42:58  <clarkb> yeah I think that may be what happened, just checking that it is ok
+2013-10-28T21:42:58  <superbee> yeah I think that may be what happened, just checking that it is ok
 2013-10-28T21:43:01  *** mriedem has quit IRC
 2013-10-28T21:43:04  * foobio could be misremembering
 2013-10-28T21:43:04  *** ruhe has quit IRC
@@ -1934,7 +1934,7 @@
 2013-10-28T21:52:53  *** pcm_ has quit IRC
 2013-10-28T21:53:08  <openstackgerrit> Arx Cruz proposed a change to openstack-infra/zuul: Add the possibility to pass the zuul url  https://review.openstack.org/54196
 2013-10-28T21:53:18  <Ajaeger1> foobio, I can only offer virtual beers and will throw a virtual round for reviews ;) - but it's really good German beer ;)
-2013-10-28T21:53:39  <ArxCruz> clarkb: foobio I think I did it right now ^
+2013-10-28T21:53:39  <ArxCruz> superbee: foobio I think I did it right now ^
 2013-10-28T21:53:54  *** slong has joined #openstack-infra
 2013-10-28T21:54:01  <foobio> Ajaeger1: if it comes in liter steins, i'll start looking for plane tickets ;)
 2013-10-28T21:54:21  <foobio> ArxCruz: lookin'
@@ -1942,17 +1942,17 @@
 2013-10-28T21:54:39  *** dcramer_ has quit IRC
 2013-10-28T21:55:52  <SpamapS> foobio: did anything ever come of the pbr bug noted this morning?
 2013-10-28T21:56:57  *** weshay has quit IRC
-2013-10-28T21:57:35  <clarkb> ArxCruz: that change looks good to me other than the pep8 failure
+2013-10-28T21:57:35  <superbee> ArxCruz: that change looks good to me other than the pep8 failure
 2013-10-28T21:57:36  <foobio> SpamapS: we... think? it's trove-setup-specific?
 2013-10-28T21:57:44  *** Ajaeger1 has quit IRC
 2013-10-28T21:57:55  <foobio> SpamapS: were you able to recreate it by installing via pip?
-2013-10-28T21:59:04  <ArxCruz> clarkb: it's really annoying these blank lines
+2013-10-28T21:59:04  <ArxCruz> superbee: it's really annoying these blank lines
 2013-10-28T21:59:04  <foobio> neither mordred nor i had any luck coming up with a trivial test case to cause that error (note: redstack mysql kickstart doesn't count as "trivial")
 2013-10-28T21:59:04  *** esker has quit IRC
 2013-10-28T21:59:42  <anteaya> I feel soiled having to type the code I have to type. like being forced 2 tp lik ts
 2013-10-28T21:59:47  <anteaya> *shudder*
 2013-10-28T21:59:54  <openstackgerrit> Arx Cruz proposed a change to openstack-infra/zuul: Add the possibility to pass the zuul url  https://review.openstack.org/54196
-2013-10-28T22:00:16  <clarkb> anteaya: huh? did you end up in AIM land?
+2013-10-28T22:00:16  <superbee> anteaya: huh? did you end up in AIM land?
 2013-10-28T22:00:25  <anteaya> ew
 2013-10-28T22:00:29  <foobio> i thought her keyboard started rebelling
 2013-10-28T22:00:43  <anteaya> reading how to puppet downloading and unpacking a tarball
@@ -1981,11 +1981,11 @@
 2013-10-28T22:05:14  <andrew_plunk> ahaha hello
 2013-10-28T22:05:17  *** ^d has joined #openstack-infra
 2013-10-28T22:05:21  <foobio> anteaya: you'd use it to clone their git repository and then follow their installation from source instructions (but write a script to encode them)
-2013-10-28T22:05:33  <clarkb> anteaya: there are a couple of archive puppet modules on puppet forge that look like they may make the situation more san
+2013-10-28T22:05:33  <superbee> anteaya: there are a couple of archive puppet modules on puppet forge that look like they may make the situation more san
 2013-10-28T22:05:36  <anteaya> okay, let me try that
-2013-10-28T22:05:37  <clarkb> *sane
+2013-10-28T22:05:37  <superbee> *sane
 2013-10-28T22:05:48  <foobio> andrew_plunk: many thanks for responsible and detailed bug reporting!
-2013-10-28T22:05:59  <anteaya> clarkb: the puppet forge modules are named archive?
+2013-10-28T22:05:59  <anteaya> superbee: the puppet forge modules are named archive?
 2013-10-28T22:06:08  <andrew_plunk> np foobio: I was just trying to follow the instructions on launchpad
 2013-10-28T22:06:30  <anteaya> all hail andrew_plunk's responsible and detailed bug reporting
 2013-10-28T22:06:52  <anteaya> I haven't read it yet myself, I'm trusting foobio's judgment here
@@ -1998,7 +1998,7 @@
 2013-10-28T22:08:56  <foobio> looks vaguely like a pypi problem...
 2013-10-28T22:09:39  * anteaya goes back to puppet examples
 2013-10-28T22:09:41  <anteaya> sigh
-2013-10-28T22:09:47  <ArxCruz> clarkb: foobio jenkins gave the +1 so if you guys don't mind, go there and gave your blessings :D
+2013-10-28T22:09:47  <ArxCruz> superbee: foobio jenkins gave the +1 so if you guys don't mind, go there and gave your blessings :D
 2013-10-28T22:10:13  <foobio> ArxCruz: did that work on your systems? (just curious)
 2013-10-28T22:10:41  <ArxCruz> foobio: I'm still waiting some job who uses that :/
 2013-10-28T22:10:59  <ArxCruz> unless there's a way to force the job
@@ -2012,17 +2012,17 @@
 2013-10-28T22:14:24  *** lnxnut_ has joined #openstack-infra
 2013-10-28T22:14:32  *** andrew_plunk has quit IRC
 2013-10-28T22:14:39  <sdague> foobio: yep, that was going to be my first test after that's merged, revert the revert
-2013-10-28T22:14:51  <anteaya> clarkb: what are the names of the puppet modules to which you refer?
+2013-10-28T22:14:51  <anteaya> superbee: what are the names of the puppet modules to which you refer?
 2013-10-28T22:15:06  <anteaya> so far I haven't seen them myself
 2013-10-28T22:16:42  *** dkliban has joined #openstack-infra
-2013-10-28T22:17:19  <jog0> clarkb: foobio is correct, pypi  passed but there was a regression
-2013-10-28T22:18:04  <jog0> clarkb: I agree both should pass, just waiting for someone to pick it up
+2013-10-28T22:17:19  <jog0> superbee: foobio is correct, pypi  passed but there was a regression
+2013-10-28T22:18:04  <jog0> superbee: I agree both should pass, just waiting for someone to pick it up
 2013-10-28T22:18:05  *** lnxnut has quit IRC
 2013-10-28T22:18:08  *** rakhmerov has joined #openstack-infra
 2013-10-28T22:18:16  *** rcleere has quit IRC
 2013-10-28T22:19:42  *** senk1 has quit IRC
-2013-10-28T22:20:33  <clarkb> anteaya: something/archive. it looks like there are several of them
-2013-10-28T22:20:37  <clarkb> probably all forks of each other
+2013-10-28T22:20:33  <superbee> anteaya: something/archive. it looks like there are several of them
+2013-10-28T22:20:37  <superbee> probably all forks of each other
 2013-10-28T22:20:43  <anteaya> k thanks
 2013-10-28T22:21:52  <anteaya> looks worth a look: http://forge.puppetlabs.com/smarchive/archive
 2013-10-28T22:22:00  <anteaya> appears to be worth a look
@@ -2034,9 +2034,9 @@
 2013-10-28T22:26:12  *** senk has joined #openstack-infra
 2013-10-28T22:26:32  <openstackgerrit> Clark Boylan proposed a change to openstack-infra/elastic-recheck: Better end of console log indexing detection.  https://review.openstack.org/53487
 2013-10-28T22:26:35  *** UtahDave has quit IRC
-2013-10-28T22:27:51  <jog0> clarkb: I will respin 54165 because of the H903 typo
-2013-10-28T22:27:55  <clarkb> jog0: ok
-2013-10-28T22:28:24  <clarkb> 53487 has been rebased on sdague's e-r changes. I still haven't quite tested it, but left a comment in the review about testing (want ot make sure I set up the functional tests properly)
+2013-10-28T22:27:51  <jog0> superbee: I will respin 54165 because of the H903 typo
+2013-10-28T22:27:55  <superbee> jog0: ok
+2013-10-28T22:28:24  <superbee> 53487 has been rebased on sdague's e-r changes. I still haven't quite tested it, but left a comment in the review about testing (want ot make sure I set up the functional tests properly)
 2013-10-28T22:28:47  *** beagles has quit IRC
 2013-10-28T22:29:03  *** senk1 has joined #openstack-infra
 2013-10-28T22:30:02  <lifeless> mordred: so, changelog and pbr
@@ -2051,13 +2051,13 @@
 2013-10-28T22:44:57  *** adalbas has quit IRC
 2013-10-28T22:45:21  <harlowja> btw, bumped https://pypi.python.org/pypi/gerrit-view with czuul , comments/feedback welcome
 2013-10-28T22:45:36  <harlowja> https://github.com/harlowja/gerrit_view/#czuul (screenshot there)
-2013-10-28T22:49:07  <clarkb> foobio: don't let me forget but we should sort out the puppet running on puppetmaster stuff this week as it may make applying keys or removing them summit time interesting
-2013-10-28T22:51:40  <foobio> clarkb: very good point (i have a pending change i need to push for that myself tonight too)
+2013-10-28T22:49:07  <superbee> foobio: don't let me forget but we should sort out the puppet running on puppetmaster stuff this week as it may make applying keys or removing them summit time interesting
+2013-10-28T22:51:40  <foobio> superbee: very good point (i have a pending change i need to push for that myself tonight too)
 2013-10-28T22:52:16  <foobio> harlowja: i did actually start playing around with it last night, but no feedback yet
 2013-10-28T22:52:20  <harlowja> np
 2013-10-28T22:52:23  <harlowja> its pretty basic, ha
 2013-10-28T22:52:57  <foobio> i tend to work in traditional 80x25 terminals (yay greenscreen nostalgia), so some of it seemed a bit cramped
-2013-10-28T22:52:57  <clarkb> foobio: yeah I need to push one too
+2013-10-28T22:52:57  <superbee> foobio: yeah I need to push one too
 2013-10-28T22:53:15  <harlowja> hmmm, ya the 25 part is tough
 2013-10-28T22:53:20  <harlowja> only so much u can do with 25 :-P
 2013-10-28T22:53:59  * foobio does a lot in 25 lines x a dozen terminals on his monitor, but yeah, understood
@@ -2065,19 +2065,19 @@
 2013-10-28T22:54:20  <harlowja> ha
 2013-10-28T22:54:51  *** lnxnut_ has quit IRC
 2013-10-28T22:55:25  *** lnxnut has joined #openstack-infra
-2013-10-28T22:55:29  <sdague> clarkb: on this - https://review.openstack.org/#/c/53487/2 - that's matching success runs as well now right? that intentional?
+2013-10-28T22:55:29  <sdague> superbee: on this - https://review.openstack.org/#/c/53487/2 - that's matching success runs as well now right? that intentional?
 2013-10-28T22:55:51  *** dims has joined #openstack-infra
-2013-10-28T22:56:30  <clarkb> sdague: no, I should add a filter on build_status, thanks
+2013-10-28T22:56:30  <superbee> sdague: no, I should add a filter on build_status, thanks
 2013-10-28T22:56:46  <sdague> yep, that should do it
-2013-10-28T22:56:49  <clarkb> sdague: basically need something that happens at the end of every console log and the line where it copies itself works
-2013-10-28T22:56:55  <clarkb> but I should filter on build_status
+2013-10-28T22:56:49  <superbee> sdague: basically need something that happens at the end of every console log and the line where it copies itself works
+2013-10-28T22:56:55  <superbee> but I should filter on build_status
 2013-10-28T22:57:44  <sdague> yep
 2013-10-28T22:58:00  <sdague> heh, I should go -1 it and leave the feedback there as well :)
 2013-10-28T22:59:26  *** lnxnut has quit IRC
 2013-10-28T22:59:35  *** DennyZhang has joined #openstack-infra
 2013-10-28T22:59:57  <openstackgerrit> Clark Boylan proposed a change to openstack-infra/elastic-recheck: Better end of console log indexing detection.  https://review.openstack.org/53487
-2013-10-28T23:00:01  <clarkb> sdague: ^ that should fix it
-2013-10-28T23:00:06  <clarkb> thanks
+2013-10-28T23:00:01  <superbee> sdague: ^ that should fix it
+2013-10-28T23:00:06  <superbee> thanks
 2013-10-28T23:02:20  *** sarob_ has joined #openstack-infra
 2013-10-28T23:02:25  <sdague> +2
 2013-10-28T23:02:46  *** sarob_ has quit IRC
@@ -2086,48 +2086,48 @@
 2013-10-28T23:03:16  *** sarob_ has joined #openstack-infra
 2013-10-28T23:06:19  *** sarob has quit IRC
 2013-10-28T23:07:28  *** sarob_ has quit IRC
-2013-10-28T23:10:01  <lifeless> clarkb: your https://review.openstack.org/#/c/52689/ has inventory :)
-2013-10-28T23:10:18  <clarkb> lifeless: thanks
+2013-10-28T23:10:01  <lifeless> superbee: your https://review.openstack.org/#/c/52689/ has inventory :)
+2013-10-28T23:10:18  <superbee> lifeless: thanks
 2013-10-28T23:11:17  *** dkliban has quit IRC
 2013-10-28T23:12:27  <openstackgerrit> Adrian Otto proposed a change to openstack-infra/config: Adding project Solum to StackForge  https://review.openstack.org/53151
-2013-10-28T23:13:25  <clarkb> lifeless: fwiw the file specific comments are common around these parts
+2013-10-28T23:13:25  <superbee> lifeless: fwiw the file specific comments are common around these parts
 2013-10-28T23:13:55  <openstackgerrit> Anita Kuno proposed a change to openstack-infra/config: Create a seafile instance.  https://review.openstack.org/54030
-2013-10-28T23:14:13  <lifeless> clarkb: -infra ?
-2013-10-28T23:14:17  <clarkb> lifeless: yes
-2013-10-28T23:14:48  <lifeless> clarkb: huh, well up to you guys :)
-2013-10-28T23:15:05  <clarkb> the other thing should defnitely be fixed though
-2013-10-28T23:15:24  <lifeless> clarkb: with the focus on one-concept changes and why-over-what, I don't think anyone else feels the need for per-file-comments.
+2013-10-28T23:14:13  <lifeless> superbee: -infra ?
+2013-10-28T23:14:17  <superbee> lifeless: yes
+2013-10-28T23:14:48  <lifeless> superbee: huh, well up to you guys :)
+2013-10-28T23:15:05  <superbee> the other thing should defnitely be fixed though
+2013-10-28T23:15:24  <lifeless> superbee: with the focus on one-concept changes and why-over-what, I don't think anyone else feels the need for per-file-comments.
 2013-10-28T23:15:27  <lifeless> but shrug
-2013-10-28T23:15:34  <lifeless> clarkb: also a test, I realised I hadn't asked for one.
-2013-10-28T23:15:55  <clarkb> lifeless: that captures why and what
-2013-10-28T23:16:34  <lifeless> clarkb: right, I know you did :)
-2013-10-28T23:16:41  <lifeless> clarkb: if you haven't I would have also whined about hat
+2013-10-28T23:15:34  <lifeless> superbee: also a test, I realised I hadn't asked for one.
+2013-10-28T23:15:55  <superbee> lifeless: that captures why and what
+2013-10-28T23:16:34  <lifeless> superbee: right, I know you did :)
+2013-10-28T23:16:41  <lifeless> superbee: if you haven't I would have also whined about hat
 2013-10-28T23:16:43  <lifeless> s/hat/that/
-2013-10-28T23:17:12  <clarkb> also test, good point (I whipped the change up after dealing with the issue as a way to remind myself to make it so, I should add a test now)
+2013-10-28T23:17:12  <superbee> also test, good point (I whipped the change up after dealing with the issue as a way to remind myself to make it so, I should add a test now)
 2013-10-28T23:17:54  *** ^d has quit IRC
-2013-10-28T23:21:04  <jerryz> clarkb: i see in the code that e-r queries elastic search based on change id and patch id. but if i use recheck to trigger a second build if the first fails due to a known bug, e-r will comment with two bugs if the second build fails due to a different known bug.
+2013-10-28T23:21:04  <jerryz> superbee: i see in the code that e-r queries elastic search based on change id and patch id. but if i use recheck to trigger a second build if the first fails due to a known bug, e-r will comment with two bugs if the second build fails due to a different known bug.
 2013-10-28T23:22:25  *** oubiwann has quit IRC
-2013-10-28T23:22:40  <jerryz> clarkb: is this  by design or could build uuid be part of the query?
+2013-10-28T23:22:40  <jerryz> superbee: is this  by design or could build uuid be part of the query?
 2013-10-28T23:23:12  *** rakhmerov has joined #openstack-infra
-2013-10-28T23:23:23  <clarkb> jerryz: build_uuid should be part of the query
-2013-10-28T23:23:40  <clarkb> jerryz: or log_url which includes part of the build_uuid
+2013-10-28T23:23:23  <superbee> jerryz: build_uuid should be part of the query
+2013-10-28T23:23:40  <superbee> jerryz: or log_url which includes part of the build_uuid
 2013-10-28T23:24:03  <openstackgerrit> Anita Kuno proposed a change to openstack-infra/config: Create a seafile instance.  https://review.openstack.org/54030
 2013-10-28T23:24:17  <reed> guys, is the sched for the DEsign Summit sessions ready?
 2013-10-28T23:24:52  <openstackgerrit> Adrian Otto proposed a change to openstack-infra/config: Adding project Solum to StackForge  https://review.openstack.org/53151
-2013-10-28T23:25:04  <jerryz> clarkb:     def classify(self, change_number, patch_number, comment):
-2013-10-28T23:25:06  <clarkb> reed: I think the schedule for infra is ready, not sure about the other projects
-2013-10-28T23:25:15  <clarkb> jerryz: comment is the magic bit that includes the uuid
+2013-10-28T23:25:04  <jerryz> superbee:     def classify(self, change_number, patch_number, comment):
+2013-10-28T23:25:06  <superbee> reed: I think the schedule for infra is ready, not sure about the other projects
+2013-10-28T23:25:15  <superbee> jerryz: comment is the magic bit that includes the uuid
 2013-10-28T23:25:39  *** hashar has joined #openstack-infra
 2013-10-28T23:26:05  <anteaya> hey hot and rainy in hk next week
-2013-10-28T23:26:18  <reed> clarkb, thanks
-2013-10-28T23:26:19  <clarkb> woot
+2013-10-28T23:26:18  <reed> superbee, thanks
+2013-10-28T23:26:19  <superbee> woot
 2013-10-28T23:27:00  <pleia2> reed: I am both amused and depressed by your sched tweets today (I feel your pain)
 2013-10-28T23:27:16  <pleia2> reed: if you do find an ical integration mechanism, you'll be my bff
-2013-10-28T23:27:22  <jerryz> clarkb: i don't quit understand. uuid is a part of the comment for jenkins log_url
+2013-10-28T23:27:22  <jerryz> superbee: i don't quit understand. uuid is a part of the comment for jenkins log_url
 2013-10-28T23:27:28  *** rakhmerov has quit IRC
-2013-10-28T23:27:36  <jerryz> clarkb: but not part of the elastic-recheck comment
+2013-10-28T23:27:36  <jerryz> superbee: but not part of the elastic-recheck comment
 2013-10-28T23:28:04  <reed> pleia2, unfortunately I found no way without loosing the possibility to sync the actual source of data
-2013-10-28T23:28:11  <clarkb> jerryz: if you look at the mechanism around that comment variable it is checking that the log_url left in the gerrit comment by zuul/jenkins matches the log_url in elasticsearch
+2013-10-28T23:28:11  <superbee> jerryz: if you look at the mechanism around that comment variable it is checking that the log_url left in the gerrit comment by zuul/jenkins matches the log_url in elasticsearch
 2013-10-28T23:28:14  <pleia2> reed: sigh
 2013-10-28T23:28:34  <openstackgerrit> Anita Kuno proposed a change to openstack-infra/config: Create a seafile instance.  https://review.openstack.org/54030
 2013-10-28T23:28:50  <reed> pleia2, even with how Sched suggests to operate (add the personal calendar to google), google pulls only once a day
@@ -2147,62 +2147,62 @@
 2013-10-28T23:31:42  <reed> honestly, I am starting to think that it messes up with the calendars
 2013-10-28T23:31:44  <anteaya> 5.0.4
 2013-10-28T23:31:56  <reed> hard to diagnose though as my brain may be as buggy
-2013-10-28T23:31:58  <clarkb> lifeless: I think I may need to bug jeblair about testing that change. It looks like TestScheduler overrides zuul.merger's init mechanism
+2013-10-28T23:31:58  <superbee> lifeless: I think I may need to bug jeblair about testing that change. It looks like TestScheduler overrides zuul.merger's init mechanism
 2013-10-28T23:32:06  <anteaya> we I'm pounding away on seafile now, we had better all like seafile
-2013-10-28T23:32:13  <clarkb> lifeless: not sure if that should be torn out or if we need to do something more silly
+2013-10-28T23:32:13  <superbee> lifeless: not sure if that should be torn out or if we need to do something more silly
 2013-10-28T23:32:14  <pleia2> I'll probably just end up using the sched inteface again on my tablet, hope for the best with things on my other calendar (whatever, people know I'm traveling, I can miss things :))
-2013-10-28T23:32:25  <clarkb> lifeless: but I definitely think we should have a test (as my discovery shows)
+2013-10-28T23:32:25  <superbee> lifeless: but I definitely think we should have a test (as my discovery shows)
 2013-10-28T23:32:45  <reed> anteaya, trying to update... it fails with no discernible error
-2013-10-28T23:33:01  <clarkb> reed: clearly the solution is printouts
+2013-10-28T23:33:01  <superbee> reed: clearly the solution is printouts
 2013-10-28T23:33:10  <anteaya> yeah, I couldn't update owncloud from the admin page on owncloud either
-2013-10-28T23:33:12  <clarkb> reed: I am probably going to print out a schedule just beacuse
+2013-10-28T23:33:12  <superbee> reed: I am probably going to print out a schedule just beacuse
 2013-10-28T23:33:16  *** dcramer_ has joined #openstack-infra
-2013-10-28T23:33:17  <jerryz> clarkb: this is what i see in the debug log about the query: Making a request equivalent to this: curl -XGET 'http://10.145.81.231:9200/_search?size=10' -d '{"sort": {"@timestamp": {"order": "desc"}}, "query": {"query_string": {"query": "( @message:\" 503\" OR message:\" 503\" ) AND filename:\"logs/syslog.txt\" AND syslog_program:\"proxy-server\"\n AND build_change:\"34951\" AND build_patchset:\"1\""}}}'
-2013-10-28T23:33:19  <reed> clarkb, why didn't I think of that? :)
+2013-10-28T23:33:17  <jerryz> superbee: this is what i see in the debug log about the query: Making a request equivalent to this: curl -XGET 'http://10.145.81.231:9200/_search?size=10' -d '{"sort": {"@timestamp": {"order": "desc"}}, "query": {"query_string": {"query": "( @message:\" 503\" OR message:\" 503\" ) AND filename:\"logs/syslog.txt\" AND syslog_program:\"proxy-server\"\n AND build_change:\"34951\" AND build_patchset:\"1\""}}}'
+2013-10-28T23:33:19  <reed> superbee, why didn't I think of that? :)
 2013-10-28T23:33:22  <anteaya> never updated, no output
 2013-10-28T23:33:25  *** b3nt_pin has joined #openstack-infra
-2013-10-28T23:33:47  <reed> clarkb, unfortunately not a solution for me: I need to be able to see in *one* place all of my appointments
-2013-10-28T23:33:57  <clarkb> jerryz: right, the matching happens in e-r (it can probably be done in elasticsearch proper but isn't today)
+2013-10-28T23:33:47  <reed> superbee, unfortunately not a solution for me: I need to be able to see in *one* place all of my appointments
+2013-10-28T23:33:57  <superbee> jerryz: right, the matching happens in e-r (it can probably be done in elasticsearch proper but isn't today)
 2013-10-28T23:34:09  <reed> sessions I *have to* be in and personal meetings
-2013-10-28T23:34:13  <clarkb> reed: ah
+2013-10-28T23:34:13  <superbee> reed: ah
 2013-10-28T23:34:17  <reed> if things are not on my calendar they don't happen
-2013-10-28T23:34:23  <clarkb> yeah if you have more than just sessions to juggle then printouts will be hard
+2013-10-28T23:34:23  <superbee> yeah if you have more than just sessions to juggle then printouts will be hard
 2013-10-28T23:34:42  <reed> and given that walking from one side to another in HK may take as long as 15 minutes...
-2013-10-28T23:34:55  <foobio> reed: clarkb: my solution is a text file with a list of where i intend to go when ;)
+2013-10-28T23:34:55  <foobio> reed: superbee: my solution is a text file with a list of where i intend to go when ;)
 2013-10-28T23:35:04  <reed> I need to have a very *solid* system or I'll miss lots of meetings
 2013-10-28T23:35:37  <foobio> granted, my text file doesn't beep at me to let me know when something is coming up
-2013-10-28T23:35:46  <clarkb> foobio: you'll be surprised at how hard it is to edit a simple txt file on chromeos. It is the biggest flaw so far
+2013-10-28T23:35:46  <superbee> foobio: you'll be surprised at how hard it is to edit a simple txt file on chromeos. It is the biggest flaw so far
 2013-10-28T23:35:51  <reed> foobio, a paper agenda would work too... but it doesn't ring to remind me to get the hell out of the meeting and run to a session
 2013-10-28T23:35:55  <reed> or viceversa :)
 2013-10-28T23:36:05  <reed> i don't like to trust my brain
-2013-10-28T23:36:10  <clarkb> like seriously how hard can it be to expose the vi(m) that must be on the system
-2013-10-28T23:36:56  <reed> clarkb, are you taking a disposable chrome os?
-2013-10-28T23:37:03  <clarkb> reed: yup
+2013-10-28T23:36:10  <superbee> like seriously how hard can it be to expose the vi(m) that must be on the system
+2013-10-28T23:36:56  <reed> superbee, are you taking a disposable chrome os?
+2013-10-28T23:37:03  <superbee> reed: yup
 2013-10-28T23:37:10  <reed> damn, you paranoid
 2013-10-28T23:37:20  <foobio> that would risk exposing ways to risk rooting and installing of non-googOS[TM]
 2013-10-28T23:37:28  <reed> now you make me feel like I'll be out there like naked in the snow
-2013-10-28T23:37:41  <clarkb> well "disposable" I am not super paranoid about it but need a light machine with good battery life that isn't completely insecure
-2013-10-28T23:38:11  <foobio> clarkb: i'm bringing tamper-evident evidence bags, evidence-tape and foil stickers, in case you want to partake (i'll have plenty to go around)
-2013-10-28T23:38:13  <reed> clarkb, did you have to sign your soul to google to use it?
-2013-10-28T23:38:20  <clarkb> reed: yes
+2013-10-28T23:37:41  <superbee> well "disposable" I am not super paranoid about it but need a light machine with good battery life that isn't completely insecure
+2013-10-28T23:38:11  <foobio> superbee: i'm bringing tamper-evident evidence bags, evidence-tape and foil stickers, in case you want to partake (i'll have plenty to go around)
+2013-10-28T23:38:13  <reed> superbee, did you have to sign your soul to google to use it?
+2013-10-28T23:38:20  <superbee> reed: yes
 2013-10-28T23:38:28  *** SergeyLukjanov is now known as _SergeyLukjanov
-2013-10-28T23:38:31  <reed> clarkb, good :)
+2013-10-28T23:38:31  <reed> superbee, good :)
 2013-10-28T23:38:38  * reed feels better now
-2013-10-28T23:38:39  <clarkb> none of my other machiens have secure boot
+2013-10-28T23:38:39  <superbee> none of my other machiens have secure boot
 2013-10-28T23:38:43  <foobio> good for when you don't trust the hotel room safe and want to leave your disposable hardware while you dine
-2013-10-28T23:38:51  <clarkb> which is sort of necessary to trust disk encryption
+2013-10-28T23:38:51  <superbee> which is sort of necessary to trust disk encryption
 2013-10-28T23:38:51  <reed> foobio, geez
 2013-10-28T23:38:58  *** _SergeyLukjanov has quit IRC
 2013-10-28T23:39:07  <reed> they can tamper your laptops once they stole it :)
-2013-10-28T23:39:08  <clarkb> foobio: nice, I may have to partake
+2013-10-28T23:39:08  <superbee> foobio: nice, I may have to partake
 2013-10-28T23:39:19  *** dcramer_ has quit IRC
 2013-10-28T23:39:31  <foobio> reed: if they steal it, good riddance. i just want to know if they try to put it back after
 2013-10-28T23:39:33  <anteaya> my syntax is okay with puppet lint and that is all I can do tonight, I still haven't run it, if anyone has a boatload of spare time and can't wait to give me the benefit of their time, I welcome your comments or I'll just keep on it tomorrow
 2013-10-28T23:39:40  <reed> :)
 2013-10-28T23:39:41  <anteaya> https://review.openstack.org/#/c/54030/18
-2013-10-28T23:40:21  <clarkb> reed: it has a decent IPS display which makes me want an IPS display on everything now
+2013-10-28T23:40:21  <superbee> reed: it has a decent IPS display which makes me want an IPS display on everything now
 2013-10-28T23:40:29  <reed> seafile seems interesting... does it store files in swift or just git?
-2013-10-28T23:40:35  <clarkb> and ~6 hour battery life which is about 4 hours better than the alternatives
+2013-10-28T23:40:35  <superbee> and ~6 hour battery life which is about 4 hours better than the alternatives
 2013-10-28T23:40:48  <anteaya> storage on the my beta is mysql
 2013-10-28T23:40:54  *** mrodden1 has quit IRC
 2013-10-28T23:40:58  <reed> wikipedia:IPS_display
@@ -2217,9 +2217,9 @@
 2013-10-28T23:43:46  *** jhesketh_ has joined #openstack-infra
 2013-10-28T23:43:48  <reed> on different ports, too... very easy, no need to mess up with openvpn or ipsec
 2013-10-28T23:45:35  *** jhesketh has quit IRC
-2013-10-28T23:45:49  <clarkb> reed: fwiw I would not use a chromebook for daily use
+2013-10-28T23:45:49  <superbee> reed: fwiw I would not use a chromebook for daily use
 2013-10-28T23:45:57  *** b3nt_pin is now known as beagles
-2013-10-28T23:45:59  <clarkb> but as a travel device it seems decent
+2013-10-28T23:45:59  <superbee> but as a travel device it seems decent
 2013-10-28T23:46:38  *** nati_ueno has quit IRC
 2013-10-28T23:47:15  *** beagles has quit IRC
 2013-10-28T23:47:23  *** yamahata has quit IRC

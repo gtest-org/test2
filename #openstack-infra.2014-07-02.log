@@ -1,83 +1,83 @@
-2014-07-02T00:00:55  <jhesketh> clarkb: in the interest of moving things forward, do you think it'd be better to just trial jenkins07 and if it fails undo it?
-2014-07-02T00:01:16  <clarkb> jhesketh: yes, and I don't expect it to be a problem because gearman deals with those env vars directly
+2014-07-02T00:00:55  <jhesketh> superbee: in the interest of moving things forward, do you think it'd be better to just trial jenkins07 and if it fails undo it?
+2014-07-02T00:01:16  <superbee> jhesketh: yes, and I don't expect it to be a problem because gearman deals with those env vars directly
 2014-07-02T00:01:27  *** unicell has joined #openstack-infra
-2014-07-02T00:01:30  <clarkb> jhesketh: to me the tricky bit were the changes you already wrote and I approved to make the job not use the plugin
+2014-07-02T00:01:30  <superbee> jhesketh: to me the tricky bit were the changes you already wrote and I approved to make the job not use the plugin
 2014-07-02T00:01:41  <jhesketh> cool
 2014-07-02T00:01:44  *** wenlock has quit IRC
-2014-07-02T00:01:48  <jhesketh> clarkb: okay, when's a good time to do this?
-2014-07-02T00:02:23  <clarkb> jhesketh: I can probably take a stab at that tomorrow
-2014-07-02T00:02:32  <clarkb> jhesketh: this evening isn't good beacuse EMELTING
-2014-07-02T00:02:45  <clarkb> and I am already babysitting a pvmove and image rebuilds
+2014-07-02T00:01:48  <jhesketh> superbee: okay, when's a good time to do this?
+2014-07-02T00:02:23  <superbee> jhesketh: I can probably take a stab at that tomorrow
+2014-07-02T00:02:32  <superbee> jhesketh: this evening isn't good beacuse EMELTING
+2014-07-02T00:02:45  <superbee> and I am already babysitting a pvmove and image rebuilds
 2014-07-02T00:03:37  <jhesketh> all good
-2014-07-02T00:03:39  <jhesketh> thanks clarkb :-)
+2014-07-02T00:03:39  <jhesketh> thanks superbee :-)
 2014-07-02T00:05:03  *** david-lyle has quit IRC
 2014-07-02T00:05:03  *** mmaglana has quit IRC
 2014-07-02T00:06:04  *** david-lyle has joined #openstack-infra
 2014-07-02T00:06:15  *** msabramo has quit IRC
-2014-07-02T00:06:48  <clarkb> mordred: I don't know why run_all.sh is skipping review.o.o
+2014-07-02T00:06:48  <superbee> mordred: I don't know why run_all.sh is skipping review.o.o
 2014-07-02T00:06:51  *** anode has quit IRC
-2014-07-02T00:06:56  <clarkb> mordred: any chance you know why that is happening?
+2014-07-02T00:06:56  <superbee> mordred: any chance you know why that is happening?
 2014-07-02T00:07:10  *** chuckC has quit IRC
-2014-07-02T00:07:18  <arosen> clarkb: after this merged: https://review.openstack.org/#/c/102697/ I'm not able to push to:  ssh://arosen@review.openstack.org:29418/stackforge/python-congressclient.git yet
+2014-07-02T00:07:18  <arosen> superbee: after this merged: https://review.openstack.org/#/c/102697/ I'm not able to push to:  ssh://arosen@review.openstack.org:29418/stackforge/python-congressclient.git yet
 2014-07-02T00:07:26  <arosen> I guess it might take a little time?
-2014-07-02T00:07:32  <clarkb> arosen: yes the project hasn't been created for some reason
+2014-07-02T00:07:32  <superbee> arosen: yes the project hasn't been created for some reason
 2014-07-02T00:07:32  *** atiwari has quit IRC
-2014-07-02T00:07:38  <clarkb> arosen: because puppet hasn't run on review.openstack.org
+2014-07-02T00:07:38  <superbee> arosen: because puppet hasn't run on review.openstack.org
 2014-07-02T00:07:43  <arosen> ah okay.
 2014-07-02T00:07:44  <arosen> thanks
 2014-07-02T00:07:45  <jesusaurus> is run_all.sh new? how does that get triggered?
-2014-07-02T00:07:49  <clarkb> its the thing I am hoping mordred will look into above because its breaking me now too
-2014-07-02T00:07:57  <clarkb> jesusaurus: its new ish been around for a few weeks. and cron
-2014-07-02T00:08:17  <clarkb> I really wish puppet agent --disable was a bit more clear about whether or not it is disabled
+2014-07-02T00:07:49  <superbee> its the thing I am hoping mordred will look into above because its breaking me now too
+2014-07-02T00:07:57  <superbee> jesusaurus: its new ish been around for a few weeks. and cron
+2014-07-02T00:08:17  <superbee> I really wish puppet agent --disable was a bit more clear about whether or not it is disabled
 2014-07-02T00:08:30  *** msabramo has joined #openstack-infra
-2014-07-02T00:09:26  <jeblair> clarkb: puppet agent --disable is dangerous on any git-related machines because of the ordering
-2014-07-02T00:10:08  <jeblair> clarkb: that's why i'm updating the project rename instructions to indicate that the run_all cron should be stopped
-2014-07-02T00:10:19  <clarkb> jeblair: ya  Ithink I merged that change
+2014-07-02T00:09:26  <jeblair> superbee: puppet agent --disable is dangerous on any git-related machines because of the ordering
+2014-07-02T00:10:08  <jeblair> superbee: that's why i'm updating the project rename instructions to indicate that the run_all cron should be stopped
+2014-07-02T00:10:19  <superbee> jeblair: ya  Ithink I merged that change
 2014-07-02T00:10:26  <jeblair> (there is not a good way to do that now, we need to make that better)
-2014-07-02T00:10:27  <clarkb> jeblair: but I don't even know if puppet is disabled
-2014-07-02T00:10:38  <clarkb> all I know is it has been 48ish minutes since puppet ran on review.o.o
+2014-07-02T00:10:27  <superbee> jeblair: but I don't even know if puppet is disabled
+2014-07-02T00:10:38  <superbee> all I know is it has been 48ish minutes since puppet ran on review.o.o
 2014-07-02T00:10:44  *** david-lyle has quit IRC
-2014-07-02T00:10:46  <clarkb> and mordred was the last person to report working on this stuff
-2014-07-02T00:10:47  <jeblair> clarkb: check syslog?
+2014-07-02T00:10:46  <superbee> and mordred was the last person to report working on this stuff
+2014-07-02T00:10:47  <jeblair> superbee: check syslog?
 2014-07-02T00:11:03  *** zehicle_at_dell has quit IRC
-2014-07-02T00:11:31  <clarkb> syslog only shows the 2319 catalog run complete message
-2014-07-02T00:12:06  <clarkb> puppet is running on other nodes on a 15 minutes interval
-2014-07-02T00:12:20  <clarkb> maybe I should just try running it manually with --noop. maybe error reporting is broken? /me does this
-2014-07-02T00:12:54  <jeblair> clarkb: it may not be running on review.o.o if it's breaking on a git host
-2014-07-02T00:13:17  <clarkb> jeblair: oh
-2014-07-02T00:13:25  <clarkb> also --noop on review.o.o was clean /me checks git01
-2014-07-02T00:13:33  <melwitt> clarkb: what does it mean to add the hudson-openstack account to the nova bug team? (https://bugs.launchpad.net/python-novaclient/+bug/1326503)
+2014-07-02T00:11:31  <superbee> syslog only shows the 2319 catalog run complete message
+2014-07-02T00:12:06  <superbee> puppet is running on other nodes on a 15 minutes interval
+2014-07-02T00:12:20  <superbee> maybe I should just try running it manually with --noop. maybe error reporting is broken? /me does this
+2014-07-02T00:12:54  <jeblair> superbee: it may not be running on review.o.o if it's breaking on a git host
+2014-07-02T00:13:17  <superbee> jeblair: oh
+2014-07-02T00:13:25  <superbee> also --noop on review.o.o was clean /me checks git01
+2014-07-02T00:13:33  <melwitt> superbee: what does it mean to add the hudson-openstack account to the nova bug team? (https://bugs.launchpad.net/python-novaclient/+bug/1326503)
 2014-07-02T00:13:34  <uvirtbot> Launchpad bug 1326503 in python-novaclient "hudson-openstack not working for python-novaclient" [Undecided,New]
-2014-07-02T00:13:53  <clarkb> puppet on git01.openstack.org failed with return code: 1 thats it
-2014-07-02T00:14:48  <clarkb> melwitt: its a launchpad groups membership permissions thing
-2014-07-02T00:15:01  <clarkb> melwitt: some projects have oepn bug and allow gerrit to assign bugs with no issues
-2014-07-02T00:15:17  <clarkb> melwitt: but if the project isn't open then you need to explicitly give the user gerrit uses permissions to do operations like that
-2014-07-02T00:15:30  <clarkb> err: Could not retrieve catalog from remote server: Error 400 on SERVER: Duplicate declaration: File[/etc/httpd/conf/httpd.conf]
-2014-07-02T00:15:38  <clarkb> I think we must've udpated apache module?
-2014-07-02T00:15:54  <clarkb> maybe I should've been meaner with my vote on that...
-2014-07-02T00:16:20  <melwitt> clarkb: okay. I was trying to see if I could add it but I don't see a way. I'm not a admin of nova-bugs but I am a member
+2014-07-02T00:13:53  <superbee> puppet on git01.openstack.org failed with return code: 1 thats it
+2014-07-02T00:14:48  <superbee> melwitt: its a launchpad groups membership permissions thing
+2014-07-02T00:15:01  <superbee> melwitt: some projects have oepn bug and allow gerrit to assign bugs with no issues
+2014-07-02T00:15:17  <superbee> melwitt: but if the project isn't open then you need to explicitly give the user gerrit uses permissions to do operations like that
+2014-07-02T00:15:30  <superbee> err: Could not retrieve catalog from remote server: Error 400 on SERVER: Duplicate declaration: File[/etc/httpd/conf/httpd.conf]
+2014-07-02T00:15:38  <superbee> I think we must've udpated apache module?
+2014-07-02T00:15:54  <superbee> maybe I should've been meaner with my vote on that...
+2014-07-02T00:16:20  <melwitt> superbee: okay. I was trying to see if I could add it but I don't see a way. I'm not a admin of nova-bugs but I am a member
 2014-07-02T00:16:33  <sdague> hmmm... the requirements fix didn't seem to do a thing - http://logs.openstack.org/60/103960/1/check/gate-oslo-incubator-python33/31f5d50/console.html
-2014-07-02T00:17:09  <clarkb> sdague: we don't enforce requirements on unittests
-2014-07-02T00:17:13  <clarkb> sdague: so the update has to merge first
-2014-07-02T00:17:36  <clarkb> jesusaurus: ^ any chance you have time to debug the apache moduelthing?
-2014-07-02T00:17:48  <sdague> clarkb: which update?
+2014-07-02T00:17:09  <superbee> sdague: we don't enforce requirements on unittests
+2014-07-02T00:17:13  <superbee> sdague: so the update has to merge first
+2014-07-02T00:17:36  <superbee> jesusaurus: ^ any chance you have time to debug the apache moduelthing?
+2014-07-02T00:17:48  <sdague> superbee: which update?
 2014-07-02T00:17:57  *** melwitt has quit IRC
-2014-07-02T00:17:59  <clarkb> sdague: the requirements file update in oslo-incubator
+2014-07-02T00:17:59  <superbee> sdague: the requirements file update in oslo-incubator
 2014-07-02T00:18:04  <sdague> oh
 2014-07-02T00:18:08  <sdague> gotcha
 2014-07-02T00:18:19  *** dangers is now known as dangers_away
-2014-07-02T00:19:21  <jeblair> clarkb, mordred: okay, so we've been trying to adopt this policy where we approve potentially disruptive puppet patches when their authors are around to monitor and fix changes
-2014-07-02T00:19:30  <jeblair> clarkb, mordred: we don't seem to actually be doing that
-2014-07-02T00:20:08  <jesusaurus> clarkb: sure, did that "revert" get merged?
+2014-07-02T00:19:21  <jeblair> superbee, mordred: okay, so we've been trying to adopt this policy where we approve potentially disruptive puppet patches when their authors are around to monitor and fix changes
+2014-07-02T00:19:30  <jeblair> superbee, mordred: we don't seem to actually be doing that
+2014-07-02T00:20:08  <jesusaurus> superbee: sure, did that "revert" get merged?
 2014-07-02T00:20:21  <jesusaurus> ah, so it did
-2014-07-02T00:20:46  <clarkb> jeblair: yes I dunno who approved it or when
-2014-07-02T00:20:48  <jesusaurus> clarkb: do you have a link of the error for me?
-2014-07-02T00:20:57  <clarkb> but I failed at -1ing so :(
+2014-07-02T00:20:46  <superbee> jeblair: yes I dunno who approved it or when
+2014-07-02T00:20:48  <jesusaurus> superbee: do you have a link of the error for me?
+2014-07-02T00:20:57  <superbee> but I failed at -1ing so :(
 2014-07-02T00:21:06  <jeblair> https://review.openstack.org/#/c/103258/
 2014-07-02T00:21:10  <jeblair> mordred: approved it
-2014-07-02T00:21:26  <clarkb> jesusaurus only what I pasted above. puppetboard may have more
+2014-07-02T00:21:26  <superbee> jesusaurus only what I pasted above. puppetboard may have more
 2014-07-02T00:21:29  <jeblair> and neither monitored it himself nor mode sure that jesusaurus was around to do so :(
-2014-07-02T00:22:02  <mtreinish> clarkb: yes, I'd support pacman everywhere :)
+2014-07-02T00:22:02  <mtreinish> superbee: yes, I'd support pacman everywhere :)
 2014-07-02T00:22:03  *** msabramo has quit IRC
 2014-07-02T00:22:14  <marun> in job yaml, I'm assuming there is an 80 char limit?  how would you suggest I format the following?
 2014-07-02T00:22:16  <marun> sudo -H -u stack OS_SUDO_TESTING=1 OS_ROOTWRAP_CMD='sudo /usr/local/bin/neutron-rootwrap /etc/neutron/rootwrap.conf' tox -e functional
@@ -95,8 +95,8 @@
 2014-07-02T00:28:10  <ianw> mordred: re https://review.openstack.org/#/c/88479/27 what environment do you use for local testing?
 2014-07-02T00:29:12  <jeblair> ianw: i think a change in that series made a doc update about how to run it?
 2014-07-02T00:31:16  <ianw> jeblair: https://review.openstack.org/#/c/88479/29/modules/openstack_project/files/nodepool/elements/README.rst i assume ubuntu trusty?
-2014-07-02T00:32:47  <clarkb> ianw: tools/build-image.sh is what you want
-2014-07-02T00:33:01  <jesusaurus> clarkb: okay, it looks like the two templates (one from the cgit module and one from the upgraded apache module) have some significant differences
+2014-07-02T00:32:47  <superbee> ianw: tools/build-image.sh is what you want
+2014-07-02T00:33:01  <jesusaurus> superbee: okay, it looks like the two templates (one from the cgit module and one from the upgraded apache module) have some significant differences
 2014-07-02T00:33:17  <jesusaurus> and theres no simple way to just turn off the one in the apache module
 2014-07-02T00:33:31  <jesusaurus> so we should probably revert back to 0.0.4
 2014-07-02T00:37:37  *** Ryan_Lane has quit IRC
@@ -105,7 +105,7 @@
 2014-07-02T00:40:29  *** signed8bit is now known as signed8bit_ZZZzz
 2014-07-02T00:41:27  *** HACKING-TWITTER has quit IRC
 2014-07-02T00:43:05  *** dims__ has joined #openstack-infra
-2014-07-02T00:43:11  <mordred> jeblair, clarkb: sorry - my bad - I failed to flag that in my brain as potentially disruptive.
+2014-07-02T00:43:11  <mordred> jeblair, superbee: sorry - my bad - I failed to flag that in my brain as potentially disruptive.
 2014-07-02T00:43:32  *** HACKING-TWITTER has joined #openstack-infra
 2014-07-02T00:44:26  <mordred> although in retrospect, how I could have possibly thought that was non-disruptive is beyond me
 2014-07-02T00:44:39  <jeblair> mordred: 'revert' something seems like a nice safe thing to do, but really it should have been "try upgrading apache module again"
@@ -125,18 +125,18 @@
 2014-07-02T00:50:44  *** dstanek is now known as dstanek_zzz
 2014-07-02T00:51:41  *** yaguang has joined #openstack-infra
 2014-07-02T00:53:09  * jesusaurus begins the 30 minute commute home
-2014-07-02T00:54:37  <clarkb> pvmove complete
+2014-07-02T00:54:37  <superbee> pvmove complete
 2014-07-02T00:58:35  *** xianghui has joined #openstack-infra
 2014-07-02T00:59:18  *** bdpayne has quit IRC
 2014-07-02T00:59:59  *** nati_ueno has quit IRC
 2014-07-02T01:01:16  *** nati_ueno has joined #openstack-infra
 2014-07-02T01:06:17  *** talluri has joined #openstack-infra
 2014-07-02T01:07:55  <harlowja> anyone aware of a bug for 'Routes is in an unsupported or invalid wheel' issue?
-2014-07-02T01:08:32  <clarkb> harlowja: yes they have a bad wheel
-2014-07-02T01:08:43  <clarkb> harlowja: a requirements change was pushed and merged to remove that version
+2014-07-02T01:08:32  <superbee> harlowja: yes they have a bad wheel
+2014-07-02T01:08:43  <superbee> harlowja: a requirements change was pushed and merged to remove that version
 2014-07-02T01:08:49  <harlowja> kk, thx
 2014-07-02T01:08:51  *** jp_at_hp has joined #openstack-infra
-2014-07-02T01:09:15  <harlowja> guess thats still filtering out to the other projects, thx clarkb
+2014-07-02T01:09:15  <harlowja> guess thats still filtering out to the other projects, thx superbee
 2014-07-02T01:09:45  *** nati_ueno has quit IRC
 2014-07-02T01:10:06  *** nati_ueno has joined #openstack-infra
 2014-07-02T01:13:06  <sdague> harlowja: you need to sync manually for unit tests
@@ -169,12 +169,12 @@
 2014-07-02T01:35:47  <mordred> jhesketh: if we start now, we could have it ready by next april fool's
 2014-07-02T01:36:35  *** yaguang has quit IRC
 2014-07-02T01:37:20  <StevenK> I don't know if I like reviewing turning into a drinking game ...
-2014-07-02T01:38:12  <clarkb> StevenK: embrace the liver damage
-2014-07-02T01:38:23  <clarkb> jhesketh: if you ever make it to portland I have kegs >_>
-2014-07-02T01:38:36  <jhesketh> clarkb: you only say that because of how many drinks I owe you ;-)
+2014-07-02T01:38:12  <superbee> StevenK: embrace the liver damage
+2014-07-02T01:38:23  <superbee> jhesketh: if you ever make it to portland I have kegs >_>
+2014-07-02T01:38:36  <jhesketh> superbee: you only say that because of how many drinks I owe you ;-)
 2014-07-02T01:38:38  <jhesketh> oh shiny! :-)
 2014-07-02T01:38:58  *** Ryan_Lane has quit IRC
-2014-07-02T01:39:04  <clarkb> jhesketh: maybe I will just make you help me brew the next beer to fill the kegs while we drink the ones already kegged
+2014-07-02T01:39:04  <superbee> jhesketh: maybe I will just make you help me brew the next beer to fill the kegs while we drink the ones already kegged
 2014-07-02T01:39:39  *** MarkAtwood has joined #openstack-infra
 2014-07-02T01:39:55  <jhesketh> I'm all up for learning :-)
 2014-07-02T01:42:05  *** markwash has quit IRC
@@ -224,13 +224,13 @@
 2014-07-02T02:06:12  *** signed8bit_ZZZzz is now known as signed8bit
 2014-07-02T02:06:42  *** signed8bit is now known as signed8bit_ZZZzz
 2014-07-02T02:07:39  *** nati_ueno has quit IRC
-2014-07-02T02:08:36  <clarkb> ianw: its not just you
-2014-07-02T02:08:46  <clarkb> puppet isn't running on the git farm right now
+2014-07-02T02:08:36  <superbee> ianw: its not just you
+2014-07-02T02:08:46  <superbee> puppet isn't running on the git farm right now
 2014-07-02T02:10:16  *** nati_ueno has joined #openstack-infra
 2014-07-02T02:12:24  *** otherwiseguy has joined #openstack-infra
-2014-07-02T02:14:46  <ianw> clarkb: is that a known issue?
-2014-07-02T02:16:20  <clarkb> ya it came up in scrollback around 0000UTC
-2014-07-02T02:16:32  <clarkb> I am currently melting so trying to avoid hot computer with keys to do more fixing
+2014-07-02T02:14:46  <ianw> superbee: is that a known issue?
+2014-07-02T02:16:20  <superbee> ya it came up in scrollback around 0000UTC
+2014-07-02T02:16:32  <superbee> I am currently melting so trying to avoid hot computer with keys to do more fixing
 2014-07-02T02:18:52  *** MarkAtwood has quit IRC
 2014-07-02T02:21:17  *** nati_ueno has quit IRC
 2014-07-02T02:21:43  *** nati_ueno has joined #openstack-infra
@@ -394,22 +394,22 @@
 2014-07-02T06:09:46  *** akuznetsova has joined #openstack-infra
 2014-07-02T06:10:10  *** mrmartin has quit IRC
 2014-07-02T06:11:10  *** Sukhdev has quit IRC
-2014-07-02T06:13:58  <clarkb> FYI re gerrit release "There is a major regression in 2.8.6 that causes exceptions in database transactions."
-2014-07-02T06:14:21  <StevenK> clarkb: ... Yay?
-2014-07-02T06:14:34  <clarkb> StevenK: it probably won't affect us
-2014-07-02T06:14:46  <clarkb> because we don't upgrade quickly
-2014-07-02T06:14:55  <clarkb> but there was talk at one point of maybe upgraded soonish
+2014-07-02T06:13:58  <superbee> FYI re gerrit release "There is a major regression in 2.8.6 that causes exceptions in database transactions."
+2014-07-02T06:14:21  <StevenK> superbee: ... Yay?
+2014-07-02T06:14:34  <superbee> StevenK: it probably won't affect us
+2014-07-02T06:14:46  <superbee> because we don't upgrade quickly
+2014-07-02T06:14:55  <superbee> but there was talk at one point of maybe upgraded soonish
 2014-07-02T06:15:42  *** dstanek is now known as dstanek_zzz
 2014-07-02T06:16:03  *** HACKING-TWITTER has quit IRC
 2014-07-02T06:16:21  <akuznetsova> Hi all, I updated requirement in one repository due to global-requirements from master branch and got this http://logs.openstack.org/08/103908/1/check/gate-mistral-pep8/2016953/console.html
 2014-07-02T06:16:37  *** nati_ueno has joined #openstack-infra
 2014-07-02T06:16:43  <akuznetsova> Can somebody explain me what the problem is?
-2014-07-02T06:17:36  <clarkb> akuznetsova: ideally you shouldn't depend on pep8 and flake8 directly. instead hacking will pull it what it needs
-2014-07-02T06:17:52  <clarkb> akuznetsova: I believe the problem is the version specified there is different that what hacking specifies
-2014-07-02T06:18:17  <clarkb> or flake8
+2014-07-02T06:17:36  <superbee> akuznetsova: ideally you shouldn't depend on pep8 and flake8 directly. instead hacking will pull it what it needs
+2014-07-02T06:17:52  <superbee> akuznetsova: I believe the problem is the version specified there is different that what hacking specifies
+2014-07-02T06:18:17  <superbee> or flake8
 2014-07-02T06:18:34  <akuznetsova> should I just remove pep8 and flake8 from my requirements?
-2014-07-02T06:18:47  <clarkb> yes I think so
-2014-07-02T06:19:28  <akuznetsova> clarkb, thanks, I will try
+2014-07-02T06:18:47  <superbee> yes I think so
+2014-07-02T06:19:28  <akuznetsova> superbee, thanks, I will try
 2014-07-02T06:27:27  *** jdahlin has quit IRC
 2014-07-02T06:29:39  *** gokrokve has quit IRC
 2014-07-02T06:32:00  *** HACKING-TWITTER has joined #openstack-infra
@@ -1118,7 +1118,7 @@
 2014-07-02T15:40:43  <hashar> good morning!
 2014-07-02T15:41:00  <hashar> if you ever heard of Gerrit hash mismatch bug of doom.  We apparently got the solution https://bugzilla.wikimedia.org/show_bug.cgi?id=53895#c28
 2014-07-02T15:41:25  <hashar> Apache Mina SSHD needs to be updated.   pelix told me he was going to try a new version of Gerrit that got that bugfix
-2014-07-02T15:42:00  <zaro> jhesketh, clarkb : i believe nodepool is on jenkins-dev https://review.openstack.org/#/c/88026
+2014-07-02T15:42:00  <zaro> jhesketh, superbee : i believe nodepool is on jenkins-dev https://review.openstack.org/#/c/88026
 2014-07-02T15:42:10  *** jcoufal has quit IRC
 2014-07-02T15:42:14  *** otherwiseguy has joined #openstack-infra
 2014-07-02T15:43:17  *** yfried has joined #openstack-infra
@@ -1141,7 +1141,7 @@
 2014-07-02T15:55:22  <foobio> zaro: hashar: actually we run into it all the time in our git-review functional testing
 2014-07-02T15:55:26  *** pballand has joined #openstack-infra
 2014-07-02T15:55:40  *** msabramo has joined #openstack-infra
-2014-07-02T15:56:02  <jeblair> clarkb, jhesketh: i've put jenkins07 in shutdown mode (maybe jobs will be closer to being done when clarkb comes online)
+2014-07-02T15:56:02  <jeblair> superbee, jhesketh: i've put jenkins07 in shutdown mode (maybe jobs will be closer to being done when superbee comes online)
 2014-07-02T15:56:14  <foobio> zaro: hashar: the reason we don't see it in public is that if you have bouncy castle loaded the problem method seems to not be in the code path any longer (presumably one of the routines offloaded to bc)
 2014-07-02T15:56:21  <pelix> zaro: hashar: the latest gerrit 2.8.6 has the fix, but broke other stuff (namely DB transactions), but it may still work for the unit tests
 2014-07-02T15:56:25  <foobio> s/public/production/
@@ -1411,11 +1411,11 @@
 2014-07-02T17:33:03  *** mbacchi has quit IRC
 2014-07-02T17:33:36  <mgagne> Does it bother anyone that program names aren't consistent across programs? "Queue service", "Block Storage", "DNS Services", etc.
 2014-07-02T17:35:02  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Revert "Fixing deprecation warnings"  https://review.openstack.org/104269
-2014-07-02T17:35:04  <clarkb> o/
+2014-07-02T17:35:04  <superbee> o/
 2014-07-02T17:35:08  <jeblair> nibalizer: ^
 2014-07-02T17:35:36  <foobio> ruhe: hopefully we can just get a workaround in place to grab the things the mirror software is missing for whatever reason
-2014-07-02T17:35:37  <clarkb> today is not my day
-2014-07-02T17:35:43  <clarkb> jeblair: thank you for starting 07
+2014-07-02T17:35:37  <superbee> today is not my day
+2014-07-02T17:35:43  <superbee> jeblair: thank you for starting 07
 2014-07-02T17:35:45  <Ajaeger> mgagne: The documentation team had already some fun with the capitalization of Service ;)
 2014-07-02T17:35:52  *** mwagner_ has quit IRC
 2014-07-02T17:36:11  <foobio> mgagne: i used to be that ocd, but then i started treating it with regular doses of alcohol
@@ -1437,7 +1437,7 @@
 2014-07-02T17:40:33  *** UtahDave has joined #openstack-infra
 2014-07-02T17:40:46  <foobio> Ajaeger: the first one is our new full pypi mirror, the second one is our old partial mirror
 2014-07-02T17:41:10  *** dstanek is now known as dstanek_lunch
-2014-07-02T17:41:15  <nibalizer> clarkb: a pupetboard challenger appeared today: https://github.com/spotify/puppetexplorer
+2014-07-02T17:41:15  <nibalizer> superbee: a pupetboard challenger appeared today: https://github.com/spotify/puppetexplorer
 2014-07-02T17:41:16  *** pballand has quit IRC
 2014-07-02T17:41:46  <Ajaeger> foobio: thanks for the explanation
 2014-07-02T17:41:53  <lifeless> dhellmann: want me to look again at whatever it was you invoked my name w.r.t. ?
@@ -1457,7 +1457,7 @@
 2014-07-02T17:51:18  *** denis_makogon has quit IRC
 2014-07-02T17:51:21  *** denis_makogon_ is now known as denis_makogon
 2014-07-02T17:51:36  *** dmakogon_ has joined #openstack-infra
-2014-07-02T17:51:51  <clarkb> nibalizer: neat. That seems more data query driven and less dashboardy
+2014-07-02T17:51:51  <superbee> nibalizer: neat. That seems more data query driven and less dashboardy
 2014-07-02T17:53:58  * Ajaeger just cloned the new docs-specs  - thanks jeblair!
 2014-07-02T17:54:20  *** annegent_ has joined #openstack-infra
 2014-07-02T17:54:56  *** otherwiseguy has joined #openstack-infra
@@ -1485,7 +1485,7 @@
 2014-07-02T18:00:35  <anteaya> foobio: the doc-specs project need an openstack-doc-specs-core gerrit group, with the openstack-doc-ptl in it, please
 2014-07-02T18:00:48  <anteaya> Ajaeger: I can't, I was just clarifying
 2014-07-02T18:01:27  <anteaya> foobio: http://git.openstack.org/cgit/openstack-infra/config/tree/modules/openstack_project/files/gerrit/acls/openstack/docs-specs.config
-2014-07-02T18:01:48  <jeblair> clarkb, foobio, mordred, SergeyLukjanov, jhesketh: http://lists.openstack.org/pipermail/openstack-infra/2014-July/001486.html
+2014-07-02T18:01:48  <jeblair> superbee, foobio, mordred, SergeyLukjanov, jhesketh: http://lists.openstack.org/pipermail/openstack-infra/2014-July/001486.html
 2014-07-02T18:01:49  <Ajaeger> anteaya: thanks for the help ;)
 2014-07-02T18:01:54  <anteaya> Ajaeger: sure :D
 2014-07-02T18:02:07  <dstufft> foobio: sounds like a bandersnatch bug, if if it's reporting that the mirror was successful and it wasn't
@@ -1494,7 +1494,7 @@
 2014-07-02T18:02:41  <foobio> dstufft: yeah, definitely seemed like a bug, just wasn't sure if you happened to know a good way to isolate and debug
 2014-07-02T18:02:50  <foobio> or potential workarounds
 2014-07-02T18:02:51  <openstackgerrit> Michael Krotscheck proposed a change to openstack-infra/storyboard-webclient: Cleaned up autoresize_width directive.  https://review.openstack.org/104275
-2014-07-02T18:03:06  <clarkb> jeblair: lgtm
+2014-07-02T18:03:06  <superbee> jeblair: lgtm
 2014-07-02T18:03:08  *** otherwiseguy has quit IRC
 2014-07-02T18:03:21  <dstufft> foobio: not offhand, you can delete the state file to get bandersnatch to to a complete sync instead of an incremental sync tho
 2014-07-02T18:03:23  <openstackgerrit> Michael Krotscheck proposed a change to openstack-infra/storyboard-webclient: Added search interface  https://review.openstack.org/99975
@@ -1521,11 +1521,11 @@
 2014-07-02T18:06:10  <foobio> anteaya: Ajaeger: yeah, that's what i thought too, but manage-projects seems to no longer be in progress so it must have thought it did what it needed. perhaps another run will fix it, or produce some error message i can act on
 2014-07-02T18:06:46  <Ajaeger> foobio: ok, let's wait and monitor ;)
 2014-07-02T18:06:58  <anteaya> kk
-2014-07-02T18:07:05  <clarkb> jeblair: foobio mordred I will kick off image rebuilds shortly to complete the pypi mirror switchover unless you want ot wait for further bandersnatch debugging
+2014-07-02T18:07:05  <superbee> jeblair: foobio mordred I will kick off image rebuilds shortly to complete the pypi mirror switchover unless you want ot wait for further bandersnatch debugging
 2014-07-02T18:07:17  *** shayneburgess has joined #openstack-infra
 2014-07-02T18:07:22  *** changbl has joined #openstack-infra
 2014-07-02T18:07:24  <anteaya> Alex_Gaynor: was there ever any discussion bringing livegrep under stackforge and therefore git.o.o?
-2014-07-02T18:07:25  <clarkb> as those builds should complete now with the projects that were just created
+2014-07-02T18:07:25  <superbee> as those builds should complete now with the projects that were just created
 2014-07-02T18:07:39  <anteaya> Alex_Gaynor: and do you have any thoughts on this?
 2014-07-02T18:08:20  <jeblair> foobio: http://paste.openstack.org/show/85341/
 2014-07-02T18:08:26  <Alex_Gaynor> anteaya: I don't think the author of livegrep really has any interest in moving it under stackforge, he's not involved in openstack
@@ -1533,18 +1533,18 @@
 2014-07-02T18:08:39  <anteaya> Alex_Gaynor: okay
 2014-07-02T18:08:48  <anteaya> Alex_Gaynor: just thought I would ask
 2014-07-02T18:08:52  <Alex_Gaynor> sure
-2014-07-02T18:08:58  <clarkb> also it is Go :P
+2014-07-02T18:08:58  <superbee> also it is Go :P
 2014-07-02T18:09:05  <anteaya> ah
-2014-07-02T18:09:05  <clarkb> though with trusty maybe that isn't so bad anymore
-2014-07-02T18:09:09  <clarkb> Go on precise was funky
+2014-07-02T18:09:05  <superbee> though with trusty maybe that isn't so bad anymore
+2014-07-02T18:09:09  <superbee> Go on precise was funky
 2014-07-02T18:09:19  <foobio> jeblair: thanks! i'll see if i can find the corresponding gerrit service logs for that api call
 2014-07-02T18:09:29  <foobio> hopefully there's something useful
-2014-07-02T18:09:46  <clarkb> aiui Go on precise reached a point where it worked for juju so they stopped updating it?
+2014-07-02T18:09:46  <superbee> aiui Go on precise reached a point where it worked for juju so they stopped updating it?
 2014-07-02T18:10:40  <Alex_Gaynor> Nice.
 2014-07-02T18:10:43  <openstackgerrit> Michael Krotscheck proposed a change to openstack-infra/storyboard-webclient: Moved template files into related modules  https://review.openstack.org/103181
 2014-07-02T18:10:51  *** mestery has joined #openstack-infra
 2014-07-02T18:11:40  *** ociuhandu has quit IRC
-2014-07-02T18:11:45  <anteaya> clarkb: ha ha ha
+2014-07-02T18:11:45  <anteaya> superbee: ha ha ha
 2014-07-02T18:12:01  <anteaya> the works for juju standard
 2014-07-02T18:12:41  <foobio> here's what the gerrit error log has... http://paste.openstack.org/show/85342/
 2014-07-02T18:12:48  *** Shrews has joined #openstack-infra
@@ -1581,7 +1581,7 @@
 2014-07-02T18:19:55  *** packet has joined #openstack-infra
 2014-07-02T18:20:00  <anteaya> Alex_Gaynor: kk, I'll let you decide which ones you want to add
 2014-07-02T18:20:07  *** ChanServ sets mode: +o jeblair
-2014-07-02T18:20:27  <mordred> jeblair, clarkb: catch me up - was on the phone -- where are we with the mirror?
+2014-07-02T18:20:27  <mordred> jeblair, superbee: catch me up - was on the phone -- where are we with the mirror?
 2014-07-02T18:20:27  <Alex_Gaynor> anteaya: Do you mind if I just wait until all the rest of the issues are dealt with before trying to update teh list?
 2014-07-02T18:20:28  <anteaya> bet it won't take long to find out where the RAM issue kicks in
 2014-07-02T18:20:33  <anteaya> Alex_Gaynor: oh sure
@@ -1593,7 +1593,7 @@
 2014-07-02T18:21:11  <anteaya> Ajaeger: send a patch
 2014-07-02T18:21:21  <anteaya> the tc has a chat about it and takes a vote
 2014-07-02T18:21:26  <anteaya> should be an easy merge
-2014-07-02T18:21:33  <clarkb> mordred: I think dstufft may have suggested doing another full mirror run
+2014-07-02T18:21:33  <superbee> mordred: I think dstufft may have suggested doing another full mirror run
 2014-07-02T18:21:36  *** ChanServ sets mode: +o jeblair
 2014-07-02T18:21:36  *** mestery_ has quit IRC
 2014-07-02T18:21:42  <anteaya> it wasn't listed since we just created it
@@ -1655,7 +1655,7 @@
 2014-07-02T18:32:17  <mordred> speaking of - I need to fix my current pull requesst
 2014-07-02T18:32:33  <dstufft> ok
 2014-07-02T18:32:36  <dstufft> so I see what's happening
-2014-07-02T18:32:51  <clarkb> hurray dstufft to the rescue
+2014-07-02T18:32:51  <superbee> hurray dstufft to the rescue
 2014-07-02T18:32:55  <mordred> woot
 2014-07-02T18:33:08  <dstufft> basically when bandersnatch runs, asusming the last run was successful (or it's your first run), it builds up a list of packages that need to be synced, and saves those to a todo list
 2014-07-02T18:33:19  <dstufft> it then attempts to fetch all of those, greedily
@@ -1668,15 +1668,15 @@
 2014-07-02T18:35:20  *** hashar has joined #openstack-infra
 2014-07-02T18:35:32  *** mestery_ has joined #openstack-infra
 2014-07-02T18:35:37  *** mestery has quit IRC
-2014-07-02T18:35:42  <clarkb> that seems like a bad case of premature optimization
+2014-07-02T18:35:42  <superbee> that seems like a bad case of premature optimization
 2014-07-02T18:36:04  <dstufft> which part
-2014-07-02T18:36:18  <clarkb> the I am going to try the bits I know fail over and over until they don't fail
+2014-07-02T18:36:18  <superbee> the I am going to try the bits I know fail over and over until they don't fail
 2014-07-02T18:36:48  <dstufft> well you have to keep retrying them, because if you just skip them then the mirror will be missing packages forever
 2014-07-02T18:37:02  <dstufft> mirroring doesn't work like rsync where it compares two trees and makes them equal
 2014-07-02T18:37:07  <dstufft> it's a journal
 2014-07-02T18:37:09  <dstufft> like a database
-2014-07-02T18:37:17  <clarkb> sure but you are skipping everything else in the mean time
-2014-07-02T18:37:21  <clarkb> when you know you will probably fail
+2014-07-02T18:37:17  <superbee> sure but you are skipping everything else in the mean time
+2014-07-02T18:37:21  <superbee> when you know you will probably fail
 2014-07-02T18:37:29  <dstufft> correct, it could move the "target serial" out
 2014-07-02T18:37:40  *** dims__ has quit IRC
 2014-07-02T18:37:45  <dstufft> so that it just expands the range it's trying to sync
@@ -1699,27 +1699,27 @@
 2014-07-02T18:41:41  *** amitpp has quit IRC
 2014-07-02T18:41:54  <dstufft> that'll instruct the Fastly varnish to drop the cached objects for that url
 2014-07-02T18:42:38  <dstufft> in this case, the log lines looked like -> 2014-07-02 16:40:02,475 DEBUG: Expected PyPI serial 1143447 for request https://pypi.python.org/pypi/skll/json but got 1143446, so you'd do curl -X https://pypi.python.org/pypi/skll/json
-2014-07-02T18:42:57  <clarkb> should bandersnatch try that instead of just failing?
-2014-07-02T18:43:04  <clarkb> would that be a good patch to write?
+2014-07-02T18:42:57  <superbee> should bandersnatch try that instead of just failing?
+2014-07-02T18:43:04  <superbee> would that be a good patch to write?
 2014-07-02T18:44:29  <dstufft> I'd rather not have every single bandersnatch mirror issue a purge, the real solution is probably to stop using RQ and switch to celery so we can have the purge task retry as many times as needed until it actually successfully purges (and likely some sort of alert if it wasn't able to purge within some time frame)
 2014-07-02T18:44:50  *** nati_ueno has quit IRC
 2014-07-02T18:45:04  <dstufft> it's ok for y'all to do it for now as a work around though
-2014-07-02T18:45:20  <clarkb> gotcha
+2014-07-02T18:45:20  <superbee> gotcha
 2014-07-02T18:45:22  *** nati_ueno has joined #openstack-infra
 2014-07-02T18:46:11  *** NikitaKo_ has joined #openstack-infra
 2014-07-02T18:46:13  <dstufft> you can tell when the last successful mirror run was on your mirror by looking at the last modified file btw
 2014-07-02T18:46:41  <dstufft> http://pypi.openstack.org/last-modified
-2014-07-02T18:47:00  <clarkb> so it was just now
+2014-07-02T18:47:00  <superbee> so it was just now
 2014-07-02T18:47:00  *** devkulkarni has joined #openstack-infra
-2014-07-02T18:47:09  <clarkb> that means everything should be happy?
+2014-07-02T18:47:09  <superbee> that means everything should be happy?
 2014-07-02T18:47:50  <dstufft> yes
 2014-07-02T18:47:51  *** dims__ has joined #openstack-infra
 2014-07-02T18:49:29  *** james_li has quit IRC
-2014-07-02T18:49:44  <clarkb> and we have 0.25 of skll now in both sdist and wheel form
-2014-07-02T18:49:57  <clarkb> foobio: mordred ^ are you guys happy with that?
-2014-07-02T18:50:02  <clarkb> and should I work on image rebuilds now?
-2014-07-02T18:50:28  <clarkb> I can do that while I do jenkins07 after lunch
-2014-07-02T18:50:33  <clarkb> because somehow it is time for food nowish already
+2014-07-02T18:49:44  <superbee> and we have 0.25 of skll now in both sdist and wheel form
+2014-07-02T18:49:57  <superbee> foobio: mordred ^ are you guys happy with that?
+2014-07-02T18:50:02  <superbee> and should I work on image rebuilds now?
+2014-07-02T18:50:28  <superbee> I can do that while I do jenkins07 after lunch
+2014-07-02T18:50:33  <superbee> because somehow it is time for food nowish already
 2014-07-02T18:52:20  <foobio> dstufft: thanks for the explanation! that makes a lot more sense now
 2014-07-02T18:53:22  *** mfer has quit IRC
 2014-07-02T18:53:27  <foobio> so basically if someone complains that the mirror is behind, we can check the bandersnatch log, see what's breaking it, issue the purge call for it to fastly, then make sure the next run is successful
@@ -1830,7 +1830,7 @@
 2014-07-02T19:33:58  *** dims__ has quit IRC
 2014-07-02T19:34:12  *** mmaglana has joined #openstack-infra
 2014-07-02T19:34:23  <dhellmann> lifeless: you had questions on the spec for cross-project testing - https://review.openstack.org/95885
-2014-07-02T19:34:32  <foobio> clarkb: you might be interested by https://review.openstack.org/104249
+2014-07-02T19:34:32  <foobio> superbee: you might be interested by https://review.openstack.org/104249
 2014-07-02T19:38:31  *** mestery_ is now known as mestery
 2014-07-02T19:40:06  <openstackgerrit> Kashyap Chamarthy proposed a change to openstack-infra/elastic-recheck: Add query for Ceilometer timeout - bug 1336755  https://review.openstack.org/104160
 2014-07-02T19:40:08  <uvirtbot> Launchpad bug 1336755 in ceilometer "telemetry_notification_api.py test times out waiting for Nova notification" [Undecided,New] https://launchpad.net/bugs/1336755
@@ -1846,7 +1846,7 @@
 2014-07-02T19:48:25  *** dims_ has joined #openstack-infra
 2014-07-02T19:48:49  <dhellmann> Ajaeger: +2
 2014-07-02T19:48:52  <foobio> mrmartin: i think puppetboard is probably not great for looking at historical reports...
-2014-07-02T19:48:58  <foobio> nibalizer: clarkb: ^?
+2014-07-02T19:48:58  <foobio> nibalizer: superbee: ^?
 2014-07-02T19:49:09  <mrmartin> something happened inside the groups-dev, and I think it could be some race-condition in my puppet config
 2014-07-02T19:49:27  <SlickNik> Sukhdev / anteaya: I was following the steps in the google document but ran into some issues compiling the particular fork of gerrit-trigger-plugin that the doc mentions.
 2014-07-02T19:49:33  <Ajaeger> thanks, dhellmann
@@ -1919,20 +1919,20 @@
 2014-07-02T20:02:27  *** marcoemorais has quit IRC
 2014-07-02T20:02:28  <jeblair> nibalizer: okay, taking a look
 2014-07-02T20:02:43  *** marcoemorais has joined #openstack-infra
-2014-07-02T20:02:55  <hashar> clarkb: zaro: hey! I would like Marc Abramowitz to be added to python-jenkins. I have mailed -infra and -dev last week and you both seem to agree.  I am wondering what is the next step, does that need a puppet change?
+2014-07-02T20:02:55  <hashar> superbee: zaro: hey! I would like Marc Abramowitz to be added to python-jenkins. I have mailed -infra and -dev last week and you both seem to agree.  I am wondering what is the next step, does that need a puppet change?
 2014-07-02T20:03:00  *** marcoemorais has quit IRC
-2014-07-02T20:03:13  <clarkb> hashar: it is not a puppet change, instead we just need to add folks to gerrit groups
+2014-07-02T20:03:13  <superbee> hashar: it is not a puppet change, instead we just need to add folks to gerrit groups
 2014-07-02T20:03:20  *** marcoemorais has joined #openstack-infra
 2014-07-02T20:03:30  <hashar> should I be bold and just do it then reply back on the original email proposing the nomination?
 2014-07-02T20:03:33  *** ociuhandu has joined #openstack-infra
-2014-07-02T20:03:41  <clarkb> foobio: thanks, I will -1 it now with a link to the change telling people to not use that version
-2014-07-02T20:03:48  <clarkb> er not change to the mail thread
-2014-07-02T20:04:02  <clarkb> hashar: that wouldn't bother me but jeblair may want to do it
+2014-07-02T20:03:41  <superbee> foobio: thanks, I will -1 it now with a link to the change telling people to not use that version
+2014-07-02T20:03:48  <superbee> er not change to the mail thread
+2014-07-02T20:04:02  <superbee> hashar: that wouldn't bother me but jeblair may want to do it
 2014-07-02T20:04:07  <jeblair> hashar: go for it :)
 2014-07-02T20:04:16  <hashar> doing so thanks!
-2014-07-02T20:04:24  <clarkb> great
-2014-07-02T20:04:46  <jeblair> clarkb: want to take a quick look at https://review.openstack.org/#/c/83678/17 ?
-2014-07-02T20:05:03  <clarkb> sure
+2014-07-02T20:04:24  <superbee> great
+2014-07-02T20:04:46  <jeblair> superbee: want to take a quick look at https://review.openstack.org/#/c/83678/17 ?
+2014-07-02T20:05:03  <superbee> sure
 2014-07-02T20:05:04  *** dims_ has quit IRC
 2014-07-02T20:05:21  *** marcoemorais has quit IRC
 2014-07-02T20:05:41  *** marcoemorais has joined #openstack-infra
@@ -1940,29 +1940,29 @@
 2014-07-02T20:06:51  <hashar> jeblair: also JJB could use Darragh Bailey and Marc Abramowitz (again) as core reviewers.  +1 ed by a whole bunch of people including mighty Monty
 2014-07-02T20:06:58  *** pballand has quit IRC
 2014-07-02T20:07:39  <jeblair> hashar: thx, i'll finish that up this week
-2014-07-02T20:08:32  <foobio> clarkb: yep, was more just thrilled that the mina-sshd update seems to have done the trick
-2014-07-02T20:08:58  <clarkb> foobio: awesome. so ya I said in the review that it is a soft -1 and I think it would probably be ok to use 2.8.6 for git review testing
+2014-07-02T20:08:32  <foobio> superbee: yep, was more just thrilled that the mina-sshd update seems to have done the trick
+2014-07-02T20:08:58  <superbee> foobio: awesome. so ya I said in the review that it is a soft -1 and I think it would probably be ok to use 2.8.6 for git review testing
 2014-07-02T20:09:07  <foobio> will mark wip pending 2.8.7
-2014-07-02T20:09:11  <clarkb> foobio: my big concern there being 2.8.6 is essentially a dead version that no one should use
-2014-07-02T20:09:15  <clarkb> which makes it less than ideal for testing
-2014-07-02T20:09:28  <foobio> clarkb: 100%agree
+2014-07-02T20:09:11  <superbee> foobio: my big concern there being 2.8.6 is essentially a dead version that no one should use
+2014-07-02T20:09:15  <superbee> which makes it less than ideal for testing
+2014-07-02T20:09:28  <foobio> superbee: 100%agree
 2014-07-02T20:09:37  *** harlowja is now known as harlowja_away
 2014-07-02T20:10:55  *** thedodd has joined #openstack-infra
 2014-07-02T20:12:05  *** d34dh0r53 has joined #openstack-infra
 2014-07-02T20:12:24  *** weshay has quit IRC
 2014-07-02T20:12:42  *** weshay has joined #openstack-infra
-2014-07-02T20:12:49  <clarkb> jeblair: nibalizer two small things noted inline
+2014-07-02T20:12:49  <superbee> jeblair: nibalizer two small things noted inline
 2014-07-02T20:13:06  *** pballand has joined #openstack-infra
 2014-07-02T20:13:12  *** Sukhdev has quit IRC
 2014-07-02T20:13:38  *** radez is now known as radez_g0n3
 2014-07-02T20:14:56  <nibalizer> kk will fix
-2014-07-02T20:15:52  <clarkb> ok I am going to start spinning up image rebuilds now
-2014-07-02T20:16:02  <clarkb> then I am going to remove envinject from jenkins07 to see what happens
-2014-07-02T20:19:13  <nibalizer> clarkb: can you look back at https://review.openstack.org/#/c/83678/17 I think you misread on the first comment?
+2014-07-02T20:15:52  <superbee> ok I am going to start spinning up image rebuilds now
+2014-07-02T20:16:02  <superbee> then I am going to remove envinject from jenkins07 to see what happens
+2014-07-02T20:19:13  <nibalizer> superbee: can you look back at https://review.openstack.org/#/c/83678/17 I think you misread on the first comment?
 2014-07-02T20:20:49  <openstackgerrit> Spencer Krum proposed a change to openstack-infra/config: Add node def for puppet3 master  https://review.openstack.org/83678
 2014-07-02T20:21:02  <nibalizer> there ^^ is a fix for the second issue
-2014-07-02T20:21:31  <clarkb> nibalizer: you are missing the period
-2014-07-02T20:21:40  <clarkb> nibalizer: because 1.* != 1*
+2014-07-02T20:21:31  <superbee> nibalizer: you are missing the period
+2014-07-02T20:21:40  <superbee> nibalizer: because 1.* != 1*
 2014-07-02T20:21:57  *** UtahDave has joined #openstack-infra
 2014-07-02T20:22:01  *** Ryan_Lane has joined #openstack-infra
 2014-07-02T20:22:11  *** james_li has quit IRC
@@ -1971,44 +1971,44 @@
 2014-07-02T20:22:36  <nibalizer> does it need to be '1.*' ?
 2014-07-02T20:22:47  <arosen> I got a silly question here: http://logs.openstack.org/24/104324/1/check/gate-python-congressclient-pep8/5defc7c/console.html I'm getting some pep8 errors but it seems like we never enforce these in any of the openstack projects. Just curious if there is something i need to change in the cookiecutter template?
 2014-07-02T20:23:05  <arosen> Looking at .tox.ini it seems the same as python-neutronclient which doesn't enforce these.
-2014-07-02T20:23:05  <clarkb> nibalizer: yes beacuse 1.* means match only version 1.x. But 1* matches versions 1,10,11,12,et al
+2014-07-02T20:23:05  <superbee> nibalizer: yes beacuse 1.* means match only version 1.x. But 1* matches versions 1,10,11,12,et al
 2014-07-02T20:23:26  <nibalizer> okay
 2014-07-02T20:23:32  <nibalizer> okay i didn't see that the * is added in by the template
 2014-07-02T20:23:36  <nibalizer> okay i'll fix it all up
-2014-07-02T20:23:41  <clarkb> arosen: check the flake8 section in tox.ini?
-2014-07-02T20:23:57  <clarkb> we should declare war on editors that don't put newlines at the end of files though
+2014-07-02T20:23:41  <superbee> arosen: check the flake8 section in tox.ini?
+2014-07-02T20:23:57  <superbee> we should declare war on editors that don't put newlines at the end of files though
 2014-07-02T20:24:10  <openstackgerrit> Marton Kiss proposed a change to openstack-infra/config: Add groups.openstack.org instance  https://review.openstack.org/104332
 2014-07-02T20:24:12  <nibalizer> so doesn't that mean the 2.7 shoud be 2.7. on the line above?
-2014-07-02T20:24:34  <jeblair> clarkb, arosen: cookiecutter bizarrely strips newlines from its templates
-2014-07-02T20:24:42  <clarkb> nibalizer: possibly. I was more interested in keeping the pin file contents identical to the old contents
-2014-07-02T20:24:47  <clarkb> nibalizer: and the old one uses 2.7* iirc
+2014-07-02T20:24:34  <jeblair> superbee, arosen: cookiecutter bizarrely strips newlines from its templates
+2014-07-02T20:24:42  <superbee> nibalizer: possibly. I was more interested in keeping the pin file contents identical to the old contents
+2014-07-02T20:24:47  <superbee> nibalizer: and the old one uses 2.7* iirc
 2014-07-02T20:25:20  <openstackgerrit> Spencer Krum proposed a change to openstack-infra/config: Add node def for puppet3 master  https://review.openstack.org/83678
 2014-07-02T20:25:43  <nibalizer> so does 2.7 match 2.7.26?
-2014-07-02T20:25:52  <clarkb> nibalizer: yes
-2014-07-02T20:25:57  <clarkb> well with the *
+2014-07-02T20:25:52  <superbee> nibalizer: yes
+2014-07-02T20:25:57  <superbee> well with the *
 2014-07-02T20:26:01  <nibalizer> i guess it must, since it works everywhere
 2014-07-02T20:26:06  <nibalizer> yea 2.7* is what I meant
 2014-07-02T20:26:11  <arosen> jeblair: ah i see interesting. thaks!
 2014-07-02T20:26:24  *** Hal_ has quit IRC
-2014-07-02T20:26:36  <clarkb> jeblair: oh fun
+2014-07-02T20:26:36  <superbee> jeblair: oh fun
 2014-07-02T20:26:49  <nibalizer> okay so tthat changest adds 2.7.* as the pinning for default and 3.4.* as the pinning for hosts running 3. does that work or do you want it to be 2.7* on the old hosts?
-2014-07-02T20:27:42  <clarkb> nibalizer: I am fine with 2.7.
-2014-07-02T20:27:44  <clarkb> foobio: jeblair ^
+2014-07-02T20:27:42  <superbee> nibalizer: I am fine with 2.7.
+2014-07-02T20:27:44  <superbee> foobio: jeblair ^
 2014-07-02T20:28:37  <jeblair> ++
-2014-07-02T20:29:04  * clarkb reviews
-2014-07-02T20:29:43  <clarkb> +2
+2014-07-02T20:29:04  * superbee reviews
+2014-07-02T20:29:43  <superbee> +2
 2014-07-02T20:30:26  *** mestery_ has joined #openstack-infra
 2014-07-02T20:31:34  *** alexpilotti has quit IRC
-2014-07-02T20:32:45  <mtreinish> clarkb, foobio: you guys are still adding new projects on Fridays right?
-2014-07-02T20:34:06  <clarkb> mtreinish: we add them whenever
-2014-07-02T20:34:24  <clarkb> the system works well enough that we don't do it on a particular day anymore
+2014-07-02T20:32:45  <mtreinish> superbee, foobio: you guys are still adding new projects on Fridays right?
+2014-07-02T20:34:06  <superbee> mtreinish: we add them whenever
+2014-07-02T20:34:24  <superbee> the system works well enough that we don't do it on a particular day anymore
 2014-07-02T20:34:42  <jeblair> except i won't be adding them this friday ;)
-2014-07-02T20:35:17  <mtreinish> clarkb: ahh, ok
+2014-07-02T20:35:17  <mtreinish> superbee: ahh, ok
 2014-07-02T20:35:23  <mtreinish> jeblair: heh, fair enough :)
 2014-07-02T20:39:04  *** harlowja_away is now known as harlowja
-2014-07-02T20:40:47  <Ajaeger> jeblair, clarkb: This patch was approved and needed a rebase: https://review.openstack.org/103646 I'd love to see it go on soonish if you have some minutes later...
-2014-07-02T20:41:36  * clarkb looks while fighting nodepool image builds
-2014-07-02T20:42:27  <Ajaeger> clarkb: the nodepool images are much more important ;) Thanks!
+2014-07-02T20:40:47  <Ajaeger> jeblair, superbee: This patch was approved and needed a rebase: https://review.openstack.org/103646 I'd love to see it go on soonish if you have some minutes later...
+2014-07-02T20:41:36  * superbee looks while fighting nodepool image builds
+2014-07-02T20:42:27  <Ajaeger> superbee: the nodepool images are much more important ;) Thanks!
 2014-07-02T20:43:06  <jeblair> nibalizer: 83678 aprvd
 2014-07-02T20:43:57  *** marun is now known as marun_afk
 2014-07-02T20:44:08  *** denis_makogon has quit IRC
@@ -2035,7 +2035,7 @@
 2014-07-02T20:53:04  *** miqui has quit IRC
 2014-07-02T20:53:10  *** shashank has joined #openstack-infra
 2014-07-02T20:53:52  <Sukhdev> SlickNik: Looks like you are gone
-2014-07-02T20:53:59  <zaro> clarkb: would you be able to help move this along? https://review.openstack.org/#/c/94675
+2014-07-02T20:53:59  <zaro> superbee: would you be able to help move this along? https://review.openstack.org/#/c/94675
 2014-07-02T20:54:09  <Sukhdev> I have a Dr. appt and I have to go
 2014-07-02T20:54:42  <Sukhdev> SlickNik: shashank is looking at your error and will provide you help.
 2014-07-02T20:54:53  <nibalizer> jeblair: well don't we need to slave it so that it picks up an ssl cert, and all the stuff in openstack_project::server that makes it an openstack-infra machine?
@@ -2089,7 +2089,7 @@
 2014-07-02T21:05:31  <jeblair> nibalizer: or does "ca_server =" cause it to do that validation over the network?  (and if so, how?)
 2014-07-02T21:06:03  *** adalbas has quit IRC
 2014-07-02T21:06:05  *** atiwari has quit IRC
-2014-07-02T21:06:25  <clarkb> ok I am removing envinject plugin from jenkins07 now
+2014-07-02T21:06:25  <superbee> ok I am removing envinject plugin from jenkins07 now
 2014-07-02T21:06:26  *** markwash has quit IRC
 2014-07-02T21:06:29  *** gokrokve has quit IRC
 2014-07-02T21:07:21  <nibalizer> jeblair: so the new puppetmaster will need its own cert, we can't re-use the cert from ci-puppetmaster
@@ -2123,12 +2123,12 @@
 2014-07-02T21:13:25  <nibalizer> jeblair: so if you look in that file there is a section that allows unauthenticated clients to submit certificate signing requests
 2014-07-02T21:13:50  *** dims_ has joined #openstack-infra
 2014-07-02T21:13:56  <nibalizer> we could presumably remove that to get the behaviour you spoke of a bit ago: rejecting certificate requests
-2014-07-02T21:14:29  <clarkb> shutting down jenkins07 now
+2014-07-02T21:14:29  <superbee> shutting down jenkins07 now
 2014-07-02T21:14:32  <jeblair> nibalizer: i don't see that option immediately, but that might be nice, yeah.  but we can worry about it later
 2014-07-02T21:14:50  *** mmaglana has quit IRC
 2014-07-02T21:14:52  <jeblair> nibalizer: so should we just copy the ci-puppetmaster ca files (cert and key) over to the new puppetmaster?
 2014-07-02T21:15:09  *** dims has quit IRC
-2014-07-02T21:15:38  <clarkb> and starting now
+2014-07-02T21:15:38  <superbee> and starting now
 2014-07-02T21:15:42  *** julim has quit IRC
 2014-07-02T21:16:14  <nibalizer> jeblair: no
 2014-07-02T21:16:37  <nibalizer> we should puppet cert generate puppetmaster.o.o , then copy those files over, as well as the ca.pem from the CA and the CRL
@@ -2136,8 +2136,8 @@
 2014-07-02T21:17:27  *** r1chardj0n3s_afk is now known as r1chardj0n3s
 2014-07-02T21:17:40  <nibalizer> so we'll have to add logic to detect and handle that in our puppetmaster vhost template
 2014-07-02T21:17:42  <jeblair> nibalizer: sorry, i was only asking about the ca.  so yes, agreed that the machine cert itself should be unique for the new server, but as for the CA -- copy it over completely?
-2014-07-02T21:17:47  <clarkb> https://jenkins07.openstack.org/job/gate-horizon-selenium/922/parameters/? jobs are running and we still list parameters
-2014-07-02T21:17:53  <clarkb> so hopefully this really does fix it :)
+2014-07-02T21:17:47  <superbee> https://jenkins07.openstack.org/job/gate-horizon-selenium/922/parameters/? jobs are running and we still list parameters
+2014-07-02T21:17:53  <superbee> so hopefully this really does fix it :)
 2014-07-02T21:18:41  *** gyee has quit IRC
 2014-07-02T21:18:44  *** annegent_ has joined #openstack-infra
 2014-07-02T21:18:46  <nibalizer> jeblair: no no, we can't copy it over
@@ -2160,34 +2160,34 @@
 2014-07-02T21:23:24  <openstackgerrit> Ben Nemec proposed a change to openstack-infra/config: Use tripleo-core for dib-utils  https://review.openstack.org/104349
 2014-07-02T21:23:28  <jeblair> nibalizer: i expect that it comes from the .deb
 2014-07-02T21:23:31  *** signed8bit_ZZZzz is now known as signed8b_
-2014-07-02T21:23:46  <jeblair> clarkb: erm, that screen was supposed to go away
+2014-07-02T21:23:46  <jeblair> superbee: erm, that screen was supposed to go away
 2014-07-02T21:23:47  <nibalizer> oh the puppetmaster-passenger package, that makes sense
-2014-07-02T21:24:43  <clarkb> jeblair: yes I think jenkins provides that screen
+2014-07-02T21:24:43  <superbee> jeblair: yes I think jenkins provides that screen
 2014-07-02T21:24:46  <nibalizer> jeblair: yes, probably the post-install(and start) script of the puppemaster-passenger package will generate a ca
-2014-07-02T21:24:47  <clarkb> jeblair: I don't think the plugin does
-2014-07-02T21:24:54  <jeblair> clarkb: jenkins-dev does not have it
+2014-07-02T21:24:47  <superbee> jeblair: I don't think the plugin does
+2014-07-02T21:24:54  <jeblair> superbee: jenkins-dev does not have it
 2014-07-02T21:25:07  <nibalizer> but a combination of putting ca=false in the [master] section of puppet.conf and rm -fr /var/lib/puppet/ssl will take care of that
-2014-07-02T21:25:19  <clarkb> jeblair: oh
+2014-07-02T21:25:19  <superbee> jeblair: oh
 2014-07-02T21:25:19  <nibalizer> then you can copy over the four files you need from ci-puppetmaster.o.o
-2014-07-02T21:25:25  <clarkb> jeblair: the plugin is definitely uninstalled
+2014-07-02T21:25:25  <superbee> jeblair: the plugin is definitely uninstalled
 2014-07-02T21:25:41  *** abhishek__ has joined #openstack-infra
 2014-07-02T21:26:04  <abhishek__> hi all
 2014-07-02T21:26:29  <abhishek__> can any one review this patch?
 2014-07-02T21:26:29  <abhishek__> https://review.openstack.org/#/c/102215/
 2014-07-02T21:26:34  <abhishek__> thank you
 2014-07-02T21:26:42  *** mmaglana has quit IRC
-2014-07-02T21:26:56  <jeblair> clarkb: i wonder if 'rebuild plugin' is responsible?
+2014-07-02T21:26:56  <jeblair> superbee: i wonder if 'rebuild plugin' is responsible?
 2014-07-02T21:27:25  *** jp_at_hp has quit IRC
-2014-07-02T21:27:27  <clarkb> jeblair: /me looks
+2014-07-02T21:27:27  <superbee> jeblair: /me looks
 2014-07-02T21:27:51  *** sgordon has quit IRC
 2014-07-02T21:28:23  <jeblair> oh, hrm.  some jobs do have it...
 2014-07-02T21:28:34  <jeblair> on jenkins-dev
 2014-07-02T21:28:45  <foobio> i've not been reviewing the puppetmaster^3 changes closely enough... how do we address hiera sync from the old master? entry at a time? wholesale copying of the hiera file?
-2014-07-02T21:28:47  <clarkb> oh weird
-2014-07-02T21:29:04  <clarkb> jeblair: I think removal of that screen is less pressing
-2014-07-02T21:29:19  <clarkb> it would have been nice to have but the more important thing is getting the env vars in without modifying them
+2014-07-02T21:28:47  <superbee> oh weird
+2014-07-02T21:29:04  <superbee> jeblair: I think removal of that screen is less pressing
+2014-07-02T21:29:19  <superbee> it would have been nice to have but the more important thing is getting the env vars in without modifying them
 2014-07-02T21:29:36  <pleia2> foobio: I had assumed wholesale copying
-2014-07-02T21:29:45  <jeblair> clarkb: yeah
+2014-07-02T21:29:45  <jeblair> superbee: yeah
 2014-07-02T21:30:05  <pleia2> shouldn't change that much
 2014-07-02T21:30:16  <jeblair> pleia2, foobio: yeah, i think we probably just double our work there for a while :)
 2014-07-02T21:30:50  <pleia2> some of our dependencies are a bit tangled up (referenceing gerrit pubkey on a few servers, for instance) so I think chopping it up for the move is more work
@@ -2195,12 +2195,12 @@
 2014-07-02T21:31:17  <jeblair> nibalizer: or go aheand and launch it, and fix it up with the update later?
 2014-07-02T21:31:34  *** dims has joined #openstack-infra
 2014-07-02T21:32:44  *** SumitNaiksatam has quit IRC
-2014-07-02T21:32:46  <clarkb> arg I think centos6 builds are broken again due to facter
-2014-07-02T21:35:05  <clarkb> fix incoming
+2014-07-02T21:32:46  <superbee> arg I think centos6 builds are broken again due to facter
+2014-07-02T21:35:05  <superbee> fix incoming
 2014-07-02T21:36:23  *** mrmartin has quit IRC
 2014-07-02T21:36:27  <openstackgerrit> Clark Boylan proposed a change to openstack-infra/config: Readd facter-2* exclude on centos6.  https://review.openstack.org/104351
 2014-07-02T21:36:32  <nibalizer> jeblair: as you pointed out
-2014-07-02T21:36:32  <clarkb> jeblair: nibalizer ^
+2014-07-02T21:36:32  <superbee> jeblair: nibalizer ^
 2014-07-02T21:37:07  <nibalizer> whatever i do with ca = false is moot because the pacakge is gonna go do things anyways cus its 'helping'
 2014-07-02T21:37:13  <nibalizer> im about to submit the patch
 2014-07-02T21:37:34  <openstackgerrit> Spencer Krum proposed a change to openstack-infra/config: Allow site.pp to manage ca and ca_sever in puppet.conf  https://review.openstack.org/104352
@@ -2211,16 +2211,16 @@
 2014-07-02T21:39:08  <jeblair> reed: cool
 2014-07-02T21:39:51  <jeblair> nibalizer: lgtm
 2014-07-02T21:40:08  *** rcarrill` has quit IRC
-2014-07-02T21:40:24  <jeblair> clarkb: lgtm
-2014-07-02T21:40:39  <jeblair> clarkb: and i'll trade you https://review.openstack.org/#/c/104352/ :)
+2014-07-02T21:40:24  <jeblair> superbee: lgtm
+2014-07-02T21:40:39  <jeblair> superbee: and i'll trade you https://review.openstack.org/#/c/104352/ :)
 2014-07-02T21:41:07  *** signed8b_ is now known as signed8bit_ZZZzz
 2014-07-02T21:41:30  <openstackgerrit> A change was merged to stackforge/python-jenkins: Use pbr, pep8 checks & fixes, add "doc" tox target  https://review.openstack.org/90455
 2014-07-02T21:42:03  *** ociuhandu has quit IRC
-2014-07-02T21:44:13  <clarkb> jeblair: nibalizer that change failed testing
+2014-07-02T21:44:13  <superbee> jeblair: nibalizer that change failed testing
 2014-07-02T21:45:17  *** signed8bit_ZZZzz is now known as signed8b_
 2014-07-02T21:45:35  <openstackgerrit> Spencer Krum proposed a change to openstack-infra/config: Allow site.pp to manage ca and ca_sever in puppet.conf  https://review.openstack.org/104352
 2014-07-02T21:46:32  <openstackgerrit> A change was merged to openstack-infra/config: Readd facter-2* exclude on centos6.  https://review.openstack.org/104351
-2014-07-02T21:46:33  <nibalizer> clarkb: ya, just posted a fix
+2014-07-02T21:46:33  <nibalizer> superbee: ya, just posted a fix
 2014-07-02T21:46:33  <nibalizer> sorry i needed to verify that undef works how I think it does
 2014-07-02T21:52:51  *** sweston has joined #openstack-infra
 2014-07-02T21:53:38  *** chianingwang has quit IRC
@@ -2266,7 +2266,7 @@
 2014-07-02T22:20:06  <zaro> msabramo: tribunal would be interesting, but i think newbie pass is ok this time :)
 2014-07-02T22:21:19  <zaro> hashar: ++, will do tomorrow maybe.
 2014-07-02T22:21:39  <hashar> zaro: left a note on the pbr change . Thanks!
-2014-07-02T22:21:43  <nibalizer> jeblair: clarkb want to review https://review.openstack.org/#/c/104358/ ?
+2014-07-02T22:21:43  <nibalizer> jeblair: superbee want to review https://review.openstack.org/#/c/104358/ ?
 2014-07-02T22:21:44  <hashar> crashing to bed. Have fun folks
 2014-07-02T22:21:47  *** otherwiseguy has quit IRC
 2014-07-02T22:22:11  <nibalizer> turns out you HAVE to use the <% -%> syntax if you dont' provide any string output
@@ -2290,88 +2290,88 @@
 2014-07-02T22:28:39  *** melwitt has quit IRC
 2014-07-02T22:30:46  *** shashankhegde has quit IRC
 2014-07-02T22:31:40  <msabramo> yeah I agree with 0.3.0 for next version of python-jenkins without pbr and then 0.4.0 for pbr
-2014-07-02T22:32:01  <clarkb> err: /Stage[main]/Openstack_project::Thick_slave/Package[python-requests]/ensure: change from 1.1.0-4.el6 to absent failed: Execution of '/bin/rpm -e python-requests-1.1.0-4.el6.noarch' returned 1: error: Failed dependencies:
+2014-07-02T22:32:01  <superbee> err: /Stage[main]/Openstack_project::Thick_slave/Package[python-requests]/ensure: change from 1.1.0-4.el6 to absent failed: Execution of '/bin/rpm -e python-requests-1.1.0-4.el6.noarch' returned 1: error: Failed dependencies:
 2014-07-02T22:32:03  <msabramo> even without pbr, it changed quite a lot and changed maintainership and everything
-2014-07-02T22:32:07  <clarkb> python-requests is needed by (installed) cloud-init-0.7.4-2.el6.noarch
-2014-07-02T22:32:24  <clarkb> I think yum is trying to tell me it couldn't upgrade python-requests because the version of cloud init that is installed dpeends on the version it already has?
+2014-07-02T22:32:07  <superbee> python-requests is needed by (installed) cloud-init-0.7.4-2.el6.noarch
+2014-07-02T22:32:24  <superbee> I think yum is trying to tell me it couldn't upgrade python-requests because the version of cloud init that is installed dpeends on the version it already has?
 2014-07-02T22:32:28  <ianw> jeblair: https://review.openstack.org/#/c/101110/ acquired a few more reviews; any more issues?
 2014-07-02T22:32:41  <anteaya> so more rain, right now we are at 6.5 inches in 48 hours, not sure but it might break a record
 2014-07-02T22:33:09  <jeblair> ianw: aprvd
-2014-07-02T22:33:10  <clarkb> anteaya: are you commuting by boat yet?
-2014-07-02T22:33:42  <clarkb> jeblair: so should we move forward on envinject or do a bit more sluething to remove the parameters page first?
-2014-07-02T22:33:53  <clarkb> jeblair: I guess we should also run a job on 07 to check that it really does fix the parameters
+2014-07-02T22:33:10  <superbee> anteaya: are you commuting by boat yet?
+2014-07-02T22:33:42  <superbee> jeblair: so should we move forward on envinject or do a bit more sluething to remove the parameters page first?
+2014-07-02T22:33:53  <superbee> jeblair: I guess we should also run a job on 07 to check that it really does fix the parameters
 2014-07-02T22:34:06  <ianw> jeblair: thanks!
-2014-07-02T22:34:28  <jeblair> clarkb: i'd move forward on that to solve the error and regroup on the parameters page since it's less critical
-2014-07-02T22:34:49  <clarkb> ok I am going to put 06 and 05 in shutdown mode now
-2014-07-02T22:34:56  <anteaya> clarkb: no commute
+2014-07-02T22:34:28  <jeblair> superbee: i'd move forward on that to solve the error and regroup on the parameters page since it's less critical
+2014-07-02T22:34:49  <superbee> ok I am going to put 06 and 05 in shutdown mode now
+2014-07-02T22:34:56  <anteaya> superbee: no commute
 2014-07-02T22:34:57  *** annegent_ has quit IRC
 2014-07-02T22:35:07  <anteaya> but I am sizing up the available timber for the ark
 2014-07-02T22:35:24  <anteaya> I should be in good shape
 2014-07-02T22:35:36  <anteaya> the deck posts will be my beams
-2014-07-02T22:35:57  <clarkb> and done put in shutdown mode
+2014-07-02T22:35:57  <superbee> and done put in shutdown mode
 2014-07-02T22:36:12  *** hashar has quit IRC
 2014-07-02T22:36:55  *** otherwiseguy has joined #openstack-infra
 2014-07-02T22:37:32  *** jgrimm has quit IRC
 2014-07-02T22:37:34  *** zzelle has quit IRC
 2014-07-02T22:38:50  *** melwitt1 has quit IRC
-2014-07-02T22:39:08  <jeblair> clarkb: quick question on your zuul poll patch...
-2014-07-02T22:39:37  <jeblair> clarkb: would it be possible to get the test cases from the other class?  it looks like just code duplication there...
+2014-07-02T22:39:08  <jeblair> superbee: quick question on your zuul poll patch...
+2014-07-02T22:39:37  <jeblair> superbee: would it be possible to get the test cases from the other class?  it looks like just code duplication there...
 2014-07-02T22:40:34  *** r1chardj0n3s_afk is now known as r1chardj0n3s
 2014-07-02T22:41:17  *** signed8b_ is now known as signed8bit_ZZZzz
 2014-07-02T22:41:18  <openstackgerrit> A change was merged to openstack-infra/nodepool: Track last allocations to ensure forward-progress  https://review.openstack.org/101110
-2014-07-02T22:42:06  <clarkb> jeblair: maybe?
-2014-07-02T22:42:14  <clarkb> it has been a while I would haveto go reread
-2014-07-02T22:42:23  <clarkb> I think the reason for that was we didn't want to run all of the tests from the other class
-2014-07-02T22:43:05  <clarkb> jhesketh: jeblair https://jenkins07.openstack.org/job/experimental-swift-logs-config-pep8/9/console
+2014-07-02T22:42:06  <superbee> jeblair: maybe?
+2014-07-02T22:42:14  <superbee> it has been a while I would haveto go reread
+2014-07-02T22:42:23  <superbee> I think the reason for that was we didn't want to run all of the tests from the other class
+2014-07-02T22:43:05  <superbee> jhesketh: jeblair https://jenkins07.openstack.org/job/experimental-swift-logs-config-pep8/9/console
 2014-07-02T22:43:28  *** anode has quit IRC
-2014-07-02T22:43:28  <clarkb> that still isn't quite working right and it appears that maybe jenkins without envinject truncates the variable?
-2014-07-02T22:43:31  <clarkb> so much :(
+2014-07-02T22:43:28  <superbee> that still isn't quite working right and it appears that maybe jenkins without envinject truncates the variable?
+2014-07-02T22:43:31  <superbee> so much :(
 2014-07-02T22:44:38  *** anode has joined #openstack-infra
 2014-07-02T22:44:52  *** pballand has quit IRC
 2014-07-02T22:45:12  *** shashankhegde has joined #openstack-infra
-2014-07-02T22:45:22  <clarkb> jeblair: I remember now. The sleeps are what is important
-2014-07-02T22:45:31  <jeblair> clarkb: oh, ok.  thx.
-2014-07-02T22:45:34  <clarkb> jeblair: those tests are different and have artificial waits that force the polling to occur
-2014-07-02T22:45:40  <clarkb> similar but differnet
-2014-07-02T22:46:07  <jeblair> clarkb: er, any chance we can make those a bit faster? :)
-2014-07-02T22:46:25  <clarkb> we have 1 second precision, so 2 seconds maybe?
-2014-07-02T22:46:34  <jeblair> clarkb: for the timer tests i do tenths of a second
+2014-07-02T22:45:22  <superbee> jeblair: I remember now. The sleeps are what is important
+2014-07-02T22:45:31  <jeblair> superbee: oh, ok.  thx.
+2014-07-02T22:45:34  <superbee> jeblair: those tests are different and have artificial waits that force the polling to occur
+2014-07-02T22:45:40  <superbee> similar but differnet
+2014-07-02T22:46:07  <jeblair> superbee: er, any chance we can make those a bit faster? :)
+2014-07-02T22:46:25  <superbee> we have 1 second precision, so 2 seconds maybe?
+2014-07-02T22:46:34  <jeblair> superbee: for the timer tests i do tenths of a second
 2014-07-02T22:46:44  <openstackgerrit> A change was merged to openstack-infra/config: Move oslo default test node to trusty.  https://review.openstack.org/103660
-2014-07-02T22:47:04  <clarkb> jeblair: I think that may end up being shorter than gits fetch time
+2014-07-02T22:47:04  <superbee> jeblair: I think that may end up being shorter than gits fetch time
 2014-07-02T22:47:32  <openstackgerrit> A change was merged to openstack-infra/config: Move trove default test node to trusty.  https://review.openstack.org/103678
-2014-07-02T22:47:34  <jeblair> clarkb: if we depend on something happening in a sleep, then it's a racy test anyway
-2014-07-02T22:48:02  <clarkb> jeblair: it shouldn't be racy because we open the flood gates after the wait
-2014-07-02T22:48:34  <clarkb> the self.update_repo() calls make it sanish
+2014-07-02T22:47:34  <jeblair> superbee: if we depend on something happening in a sleep, then it's a racy test anyway
+2014-07-02T22:48:02  <superbee> jeblair: it shouldn't be racy because we open the flood gates after the wait
+2014-07-02T22:48:34  <superbee> the self.update_repo() calls make it sanish
 2014-07-02T22:49:46  <openstackgerrit> Michael Krotscheck proposed a change to openstack-infra/infra-specs: StoryBoard Permissions Specifications  https://review.openstack.org/103667
-2014-07-02T22:50:00  <sweston> clarkb:  foobio:  hello.  Would either of you have a few minutes to provide some direction on how to get console logs out of Jenkins?
+2014-07-02T22:50:00  <sweston> superbee:  foobio:  hello.  Would either of you have a few minutes to provide some direction on how to get console logs out of Jenkins?
 2014-07-02T22:50:03  *** maxbit has joined #openstack-infra
-2014-07-02T22:50:15  <clarkb> sweston: can you be a little bit more specific? what are you trying to do?
-2014-07-02T22:50:31  <sweston> clarkb: sure.
+2014-07-02T22:50:15  <superbee> sweston: can you be a little bit more specific? what are you trying to do?
+2014-07-02T22:50:31  <sweston> superbee: sure.
 2014-07-02T22:51:05  <anteaya> he is trying to get utc timestamps into logs for third party ci
-2014-07-02T22:51:16  <sweston> clarkb:  trying to get the output for the dsvm-tempest-full job
-2014-07-02T22:51:16  <clarkb> we use a plugin to do that
+2014-07-02T22:51:16  <sweston> superbee:  trying to get the output for the dsvm-tempest-full job
+2014-07-02T22:51:16  <superbee> we use a plugin to do that
 2014-07-02T22:51:25  <sweston> is it the html publisher?
-2014-07-02T22:52:13  <clarkb> no
-2014-07-02T22:52:15  <clarkb> one sec
+2014-07-02T22:52:13  <superbee> no
+2014-07-02T22:52:15  <superbee> one sec
 2014-07-02T22:52:21  <sweston> kk
 2014-07-02T22:52:44  <foobio> anteaya: you have my sympathies. next island south of us is currently under a mandatory evacuation order and this is only the first cyclone of the season (hopefully we get a pass on this one)
-2014-07-02T22:52:45  <clarkb> sweston: https://wiki.jenkins-ci.org/display/JENKINS/Timestamper is what we use at version 1.3.1
+2014-07-02T22:52:45  <superbee> sweston: https://wiki.jenkins-ci.org/display/JENKINS/Timestamper is what we use at version 1.3.1
 2014-07-02T22:53:18  *** david-lyle has quit IRC
-2014-07-02T22:53:55  <jeblair> clarkb: point being, even with sleep(3) we can't be certain it's actually polled and failed; what would be nice is looping with a small sleep until at least one poll failure has happened.  that probably means adding some instrumentation; possibly monkeypatching.  but then we can be assured the test dtrt, and can speed it up.
+2014-07-02T22:53:55  <jeblair> superbee: point being, even with sleep(3) we can't be certain it's actually polled and failed; what would be nice is looping with a small sleep until at least one poll failure has happened.  that probably means adding some instrumentation; possibly monkeypatching.  but then we can be assured the test dtrt, and can speed it up.
 2014-07-02T22:54:17  *** devkulkarni has quit IRC
 2014-07-02T22:54:18  <anteaya> foobio: :(
 2014-07-02T22:54:27  *** david-lyle has joined #openstack-infra
 2014-07-02T22:54:37  <anteaya> foobio: where do they go? and how secure are their houses when they evacuate?
-2014-07-02T22:54:39  <clarkb> jeblair: sure. I think jhesketh asked for something ismilar but I don't think we do any of that in zuul's test frame work today
+2014-07-02T22:54:39  <superbee> jeblair: sure. I think jhesketh asked for something ismilar but I don't think we do any of that in zuul's test frame work today
 2014-07-02T22:54:51  <anteaya> foobio: where would you go if you had to? you just arrived
-2014-07-02T22:54:55  <clarkb> jeblair: its very functional testing and not mock testing
-2014-07-02T22:55:07  <jeblair> clarkb: yeah, i don't want to change that
+2014-07-02T22:54:55  <superbee> jeblair: its very functional testing and not mock testing
+2014-07-02T22:55:07  <jeblair> superbee: yeah, i don't want to change that
 2014-07-02T22:55:26  *** dimtruck is now known as zz_dimtruck
-2014-07-02T22:55:27  <jeblair> clarkb: however, we go to great lengths to functional test as quickly as possible
+2014-07-02T22:55:27  <jeblair> superbee: however, we go to great lengths to functional test as quickly as possible
 2014-07-02T22:55:31  <foobio> anteaya: we "go west"
 2014-07-02T22:55:58  *** krtaylor has joined #openstack-infra
 2014-07-02T22:56:07  <jeblair> foobio: go far enough and you hit a desert :)
-2014-07-02T22:56:12  <clarkb> jeblair: do you have suggestions on how you would do mock like functional testing here? monkeypatch in the poll functions with one that sets a flag?
+2014-07-02T22:56:12  <superbee> jeblair: do you have suggestions on how you would do mock like functional testing here? monkeypatch in the poll functions with one that sets a flag?
 2014-07-02T22:56:17  <foobio> jeblair: indeed
 2014-07-02T22:56:17  <anteaya> foobio: got that wagon packed, just in case?
 2014-07-02T22:56:30  *** msabramo has quit IRC
@@ -2380,20 +2380,20 @@
 2014-07-02T22:56:55  <foobio> anteaya: we just go visit family in the mountains for a few days if it comes to it. not really a huge hassle
 2014-07-02T22:57:14  <anteaya> foobio: kk, glad you have a plan if need be
 2014-07-02T22:57:19  *** camunoz_gone is now known as camunoz
-2014-07-02T22:57:24  <sweston> clarkb: ok.  right now I am using version 1.5.12, and it is configured from the scp publisher defined in macros.yaml file here: https://github.com/openstack-infra/config/blob/master/modules/openstack_project/files/jenkins_job_builder/config/macros.yaml
+2014-07-02T22:57:24  <sweston> superbee: ok.  right now I am using version 1.5.12, and it is configured from the scp publisher defined in macros.yaml file here: https://github.com/openstack-infra/config/blob/master/modules/openstack_project/files/jenkins_job_builder/config/macros.yaml
 2014-07-02T22:57:25  <anteaya> I'm on top of a hill so pretty safe
 2014-07-02T22:57:51  <anteaya> I'm in the place everyone else comes to in times of bad things happening
-2014-07-02T22:58:02  <clarkb> sweston: I think that newer versions may not work because they split the data out or something silly
-2014-07-02T22:58:09  <clarkb> sweston: also you haev to set the format in your global config
+2014-07-02T22:58:02  <superbee> sweston: I think that newer versions may not work because they split the data out or something silly
+2014-07-02T22:58:09  <superbee> sweston: also you haev to set the format in your global config
 2014-07-02T22:58:30  *** virmitio has quit IRC
-2014-07-02T22:58:34  <sweston> clarkb: ah, ok.  I will look into that.
+2014-07-02T22:58:34  <sweston> superbee: ah, ok.  I will look into that.
 2014-07-02T22:58:57  <anteaya> sweston: and keep notes please so you can share at a future meeting
 2014-07-02T22:59:06  <anteaya> and so we can add to docs
 2014-07-02T22:59:06  *** devkulkarni has joined #openstack-infra
 2014-07-02T22:59:23  *** david-lyle has quit IRC
-2014-07-02T22:59:48  <clarkb> ok all of the rax images that matter have been updated
-2014-07-02T22:59:51  <clarkb> hpcloud is in progress
-2014-07-02T23:00:31  <sweston> clarkb: anteaya: yes, absolutely.  at some point I'd like to have a discussion with infra about how to adapt the infra's puppet manifests in the config repo to run third party infrastructure.  this is what I've been working on for the last several weeks.
+2014-07-02T22:59:48  <superbee> ok all of the rax images that matter have been updated
+2014-07-02T22:59:51  <superbee> hpcloud is in progress
+2014-07-02T23:00:31  <sweston> superbee: anteaya: yes, absolutely.  at some point I'd like to have a discussion with infra about how to adapt the infra's puppet manifests in the config repo to run third party infrastructure.  this is what I've been working on for the last several weeks.
 2014-07-02T23:01:03  <jeblair> sweston: are you attending the qa/infra meetup in germany?
 2014-07-02T23:01:10  *** ociuhandu has joined #openstack-infra
 2014-07-02T23:01:43  *** blamar_ has joined #openstack-infra
@@ -2411,26 +2411,26 @@
 2014-07-02T23:04:43  <sweston> jeblair:  ok.
 2014-07-02T23:04:48  *** blamar has quit IRC
 2014-07-02T23:05:16  <sweston> jeblair:  suggestions on where/how to get started?
-2014-07-02T23:05:23  <clarkb> jhesketh: hello
-2014-07-02T23:05:39  <clarkb> jhesketh: please see https://jenkins07.openstack.org/job/experimental-swift-logs-config-pep8/9/console
-2014-07-02T23:05:42  <clarkb> that ran without envinject
+2014-07-02T23:05:23  <superbee> jhesketh: hello
+2014-07-02T23:05:39  <superbee> jhesketh: please see https://jenkins07.openstack.org/job/experimental-swift-logs-config-pep8/9/console
+2014-07-02T23:05:42  <superbee> that ran without envinject
 2014-07-02T23:05:48  *** amcrn has joined #openstack-infra
 2014-07-02T23:05:54  *** otherwiseguy has quit IRC
 2014-07-02T23:06:04  <anteaya> sweston: have you reviewed all open patches with topic:third-party ? https://review.openstack.org/#/q/status:open+project:openstack-infra/config+branch:master+topic:third-party,n,z
 2014-07-02T23:06:34  <sweston> anteaya: no, first time I've seen these
-2014-07-02T23:06:44  <jhesketh> clarkb: yeah just saw that
+2014-07-02T23:06:44  <jhesketh> superbee: yeah just saw that
 2014-07-02T23:06:54  <jhesketh> that's kind of disappointing
 2014-07-02T23:07:12  <anteaya> sweston: great, let's start there
-2014-07-02T23:07:39  <jhesketh> clarkb: it looks like it's truncated at the \n
+2014-07-02T23:07:39  <jhesketh> superbee: it looks like it's truncated at the \n
 2014-07-02T23:07:58  <sweston> anteaya:  happy to.  I will start on the patch review this evening.
 2014-07-02T23:08:19  *** sigmavirus24 has quit IRC
-2014-07-02T23:08:19  <jhesketh> clarkb, jeblair: Maybe for a work around for being unable to send multiple line variables to Jenkins I could patch zuul to also send "SWIFT_logs_HMAC_BODY_PART{1,4}"
+2014-07-02T23:08:19  <jhesketh> superbee, jeblair: Maybe for a work around for being unable to send multiple line variables to Jenkins I could patch zuul to also send "SWIFT_logs_HMAC_BODY_PART{1,4}"
 2014-07-02T23:08:22  <jhesketh> what do you think?
 2014-07-02T23:08:48  <anteaya> sweston: thanks
 2014-07-02T23:09:32  <anteaya> I just checked the annual rainfall stats, we doubled the usual monthy rainfall for june in two days
-2014-07-02T23:09:51  <sweston> anteaya: yw.  clarkb:, jeblair: thanks for the guidance.  looking forward to working with you all some more :-)
+2014-07-02T23:09:51  <sweston> anteaya: yw.  superbee:, jeblair: thanks for the guidance.  looking forward to working with you all some more :-)
 2014-07-02T23:09:58  <anteaya> usual is 86 mm, or 3.25 inches
-2014-07-02T23:10:00  <jeblair> jhesketh, clarkb: the "ZUUL_CHANGES" parameter that zuul sends separates them with '^' for that reason; back when gerrit-git-prep used it (a loooong time ago), it did some sed magic or something to split it on that char
+2014-07-02T23:10:00  <jeblair> jhesketh, superbee: the "ZUUL_CHANGES" parameter that zuul sends separates them with '^' for that reason; back when gerrit-git-prep used it (a loooong time ago), it did some sed magic or something to split it on that char
 2014-07-02T23:10:03  *** msabramo has joined #openstack-infra
 2014-07-02T23:10:08  <anteaya> for a month
 2014-07-02T23:10:57  <jhesketh> jeblair: right, except the hmac body is in the format that the signature used
@@ -2439,19 +2439,19 @@
 2014-07-02T23:11:33  <jeblair> jhesketh: yup, just adding information :)
 2014-07-02T23:11:39  <jhesketh> cool :-)
 2014-07-02T23:12:02  *** annegent_ has joined #openstack-infra
-2014-07-02T23:12:41  <clarkb> I would be on board with either approach
-2014-07-02T23:12:53  <clarkb> I have 05 and 06 in shutdown mode still
-2014-07-02T23:13:02  <clarkb> I don't see any reason to leave envinject in place as we wanted it gone
-2014-07-02T23:13:09  <clarkb> so I will probably continue on my path of removing it
-2014-07-02T23:13:11  <jeblair> clarkb, jhesketh: is upgrading envinject to the new version a solution?
+2014-07-02T23:12:41  <superbee> I would be on board with either approach
+2014-07-02T23:12:53  <superbee> I have 05 and 06 in shutdown mode still
+2014-07-02T23:13:02  <superbee> I don't see any reason to leave envinject in place as we wanted it gone
+2014-07-02T23:13:09  <superbee> so I will probably continue on my path of removing it
+2014-07-02T23:13:11  <jeblair> superbee, jhesketh: is upgrading envinject to the new version a solution?
 2014-07-02T23:13:39  *** maxbit has quit IRC
-2014-07-02T23:14:13  <clarkb> jeblair: yes I think that was an alternative
+2014-07-02T23:14:13  <superbee> jeblair: yes I think that was an alternative
 2014-07-02T23:14:38  *** whoops has quit IRC
 2014-07-02T23:14:40  <jhesketh> :-( that was what I wanted to do last week
 2014-07-02T23:14:52  <jhesketh> we've done well to remove the envinject stuff, I think adding it back in would be a step backwards
-2014-07-02T23:14:58  <clarkb> ya
+2014-07-02T23:14:58  <superbee> ya
 2014-07-02T23:15:11  <jeblair> jhesketh: well, that was based on the understanding that the problem was that envinject was corrupting data; that seems to be falso
-2014-07-02T23:15:29  <clarkb> jeblair: it was corrupting the data
+2014-07-02T23:15:29  <superbee> jeblair: it was corrupting the data
 2014-07-02T23:16:03  <jeblair> we definitely don't want to use it in jobs
 2014-07-02T23:16:23  <jhesketh> I'm actually unsure why we don't want it to be used?
 2014-07-02T23:16:28  <jeblair> however, if it helps the transition to not-jenkins, i'm fine keeping it around
@@ -2460,34 +2460,34 @@
 2014-07-02T23:16:51  <jeblair> jhesketh: yes
 2014-07-02T23:17:38  <jhesketh> I'm more inclined to have the workaround in zuul, but that would add 4 more variables to the gearman work data that may have performance effects
 2014-07-02T23:19:31  <phschwartz> :( my brain hurts. This is the worst day I have had coding in about 12 years. I made the stupid decision to move monday from Vi due to non-stop plugin issue and sick of my 3k line config to emacs after not using it for almost 10 years. Then I had yesterday off for jury duty. Talking about making your life hell.
-2014-07-02T23:20:22  <clarkb> phschwartz: the answer is to just stick with vim
-2014-07-02T23:20:39  <clarkb> I had similar problems with vim on saucy crashing on yaml files due to segfault in regex engine
+2014-07-02T23:20:22  <superbee> phschwartz: the answer is to just stick with vim
+2014-07-02T23:20:39  <superbee> I had similar problems with vim on saucy crashing on yaml files due to segfault in regex engine
 2014-07-02T23:20:40  <SlickNik> phschwartz: evil mode :)
-2014-07-02T23:20:47  <clarkb> I tried evil but it is no where close enough
-2014-07-02T23:20:47  <jeblair> jhesketh, clarkb: i think the issue may be in gearman-plugin
-2014-07-02T23:20:49  <clarkb> too many things break
-2014-07-02T23:20:53  <clarkb> jeblair: oooh
-2014-07-02T23:20:58  <clarkb> interesting
+2014-07-02T23:20:47  <superbee> I tried evil but it is no where close enough
+2014-07-02T23:20:47  <jeblair> jhesketh, superbee: i think the issue may be in gearman-plugin
+2014-07-02T23:20:49  <superbee> too many things break
+2014-07-02T23:20:53  <superbee> jeblair: oooh
+2014-07-02T23:20:58  <superbee> interesting
 2014-07-02T23:21:13  <jeblair> i'll have more in a sec
-2014-07-02T23:21:29  <phschwartz>  clarkb: I have been having a mix of that and YCM dying non-stop on my 14.04 installs. It has been driving me insane.
-2014-07-02T23:21:46  <phschwartz> clarkb: Which spawned the change.
-2014-07-02T23:21:51  <clarkb> trusty has been fine with me but I avoid plugins for hte most part
-2014-07-02T23:22:01  <clarkb> too many habits from when I had to have working vim on all the platforms
+2014-07-02T23:21:29  <phschwartz>  superbee: I have been having a mix of that and YCM dying non-stop on my 14.04 installs. It has been driving me insane.
+2014-07-02T23:21:46  <phschwartz> superbee: Which spawned the change.
+2014-07-02T23:21:51  <superbee> trusty has been fine with me but I avoid plugins for hte most part
+2014-07-02T23:22:01  <superbee> too many habits from when I had to have working vim on all the platforms
 2014-07-02T23:22:02  <jeblair> http://git.openstack.org/cgit/openstack-infra/gearman-plugin/tree/src/main/java/hudson/plugins/gearman/StartJobWorker.java#n144
 2014-07-02T23:22:26  <jeblair> https://github.com/jenkinsci/parameterized-trigger-plugin/pull/36
 2014-07-02T23:22:42  *** Sukhdev has joined #openstack-infra
-2014-07-02T23:22:42  <clarkb> jeblair: interesting
-2014-07-02T23:22:48  <clarkb> but also a simplish fix
+2014-07-02T23:22:42  <superbee> jeblair: interesting
+2014-07-02T23:22:48  <superbee> but also a simplish fix
 2014-07-02T23:22:58  <jeblair> http://javadoc.jenkins-ci.org/hudson/model/TextParameterValue.html
-2014-07-02T23:23:19  <clarkb> I should probably continue to remove envinject then?
-2014-07-02T23:23:41  <clarkb> 05 and 06 are close to being done and I can do whatever
+2014-07-02T23:23:19  <superbee> I should probably continue to remove envinject then?
+2014-07-02T23:23:41  <superbee> 05 and 06 are close to being done and I can do whatever
 2014-07-02T23:24:32  *** alexandra has joined #openstack-infra
 2014-07-02T23:25:10  *** rlandy has quit IRC
 2014-07-02T23:25:11  *** alexandra is now known as asettle
 2014-07-02T23:25:30  <Sukhdev> SlickNik: ping
-2014-07-02T23:25:35  <jeblair> clarkb, jhesketh: it's not yet clear to me if that will change behavior in our case
-2014-07-02T23:25:50  <clarkb> looking at the logstash worker queue graph for today I want to declare success on that front and I should probably move on to do ssds on all the nodes
-2014-07-02T23:25:54  <clarkb> jeblair: roger
+2014-07-02T23:25:35  <jeblair> superbee, jhesketh: it's not yet clear to me if that will change behavior in our case
+2014-07-02T23:25:50  <superbee> looking at the logstash worker queue graph for today I want to declare success on that front and I should probably move on to do ssds on all the nodes
+2014-07-02T23:25:54  <superbee> jeblair: roger
 2014-07-02T23:25:57  *** r1chardj0n3s has left #openstack-infra
 2014-07-02T23:25:59  <SlickNik>  Sukhdev: Spoke to shashank, and he offerred a workaround.
 2014-07-02T23:26:08  <SlickNik> Sukhdev: I haven't had a chance to try it out yet.
@@ -2505,7 +2505,7 @@
 2014-07-02T23:27:31  <anteaya> please keep notes to so we can use them for getting this patch upstreamed please
 2014-07-02T23:27:38  <anteaya> I'd like that to happen if possible
 2014-07-02T23:27:55  <jhesketh> jeblair: hmm, it seems like a good lead
-2014-07-02T23:28:31  <jeblair> jhesketh, clarkb: i should be able to test it in a few mins
+2014-07-02T23:28:31  <jeblair> jhesketh, superbee: i should be able to test it in a few mins
 2014-07-02T23:28:32  <Sukhdev> anteaya: once SlickNik confirms the fix, I'll update the document so that others can benefit from it
 2014-07-02T23:28:42  <jhesketh> jeblair: you're patching it up then ? :-)
 2014-07-02T23:28:43  <shashankhegde> anteaya: It still requires a bit of work before I can push it upstream
@@ -2533,38 +2533,38 @@
 2014-07-02T23:33:15  <anteaya> back in a while
 2014-07-02T23:34:33  *** signed8bit has quit IRC
 2014-07-02T23:35:20  *** UtahDave has quit IRC
-2014-07-02T23:39:38  <jeblair> jhesketh, clarkb: i see the problem
-2014-07-02T23:39:46  <jeblair> clarkb: yes, please proceed with removing envinject
-2014-07-02T23:41:38  <clarkb> ok will do
+2014-07-02T23:39:38  <jeblair> jhesketh, superbee: i see the problem
+2014-07-02T23:39:46  <jeblair> superbee: yes, please proceed with removing envinject
+2014-07-02T23:41:38  <superbee> ok will do
 2014-07-02T23:42:32  *** atiwari has joined #openstack-infra
-2014-07-02T23:42:41  <clarkb> 06 is ready so I am going ahead with it. 05 has one job left
+2014-07-02T23:42:41  <superbee> 06 is ready so I am going ahead with it. 05 has one job left
 2014-07-02T23:42:48  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Fix env var interpretation in zuul swift upload  https://review.openstack.org/104376
-2014-07-02T23:42:53  <jeblair> clarkb, jhesketh: ^
-2014-07-02T23:43:35  <clarkb> jeblair: will that actually fix it though? on the parameters page it looks like the value is truncated?
-2014-07-02T23:43:38  <clarkb> jeblair: I agree that is a bug
-2014-07-02T23:44:12  <jeblair> clarkb: why do you think it's truncated?
+2014-07-02T23:42:53  <jeblair> superbee, jhesketh: ^
+2014-07-02T23:43:35  <superbee> jeblair: will that actually fix it though? on the parameters page it looks like the value is truncated?
+2014-07-02T23:43:38  <superbee> jeblair: I agree that is a bug
+2014-07-02T23:44:12  <jeblair> superbee: why do you think it's truncated?
 2014-07-02T23:44:24  <jeblair> i mean, it looks like it has multiple values strung together...
-2014-07-02T23:44:28  <clarkb> jeblair: because it doesn't show the parameter on multiple lines
-2014-07-02T23:44:43  <clarkb> and I think when I tested it on jenkins-dev it showed me multiple lines
-2014-07-02T23:45:14  <clarkb> I would haveto double check that though
-2014-07-02T23:45:19  <jeblair> clarkb: the newlines don't seem to be displayed, but my local testing suggests they are there.
+2014-07-02T23:44:28  <superbee> jeblair: because it doesn't show the parameter on multiple lines
+2014-07-02T23:44:43  <superbee> and I think when I tested it on jenkins-dev it showed me multiple lines
+2014-07-02T23:45:14  <superbee> I would haveto double check that though
+2014-07-02T23:45:19  <jeblair> superbee: the newlines don't seem to be displayed, but my local testing suggests they are there.
 2014-07-02T23:45:21  *** oomichi has joined #openstack-infra
-2014-07-02T23:45:24  <clarkb> jeblair: ah ok
-2014-07-02T23:45:29  <clarkb> anyways +2 on the fix
-2014-07-02T23:45:35  <jeblair> clarkb: it's possible the string -> text change may change the display of that on the parameter listing page
-2014-07-02T23:45:45  <clarkb> ohhhh ya good point
-2014-07-02T23:46:01  <clarkb> a rendering vs content thing
-2014-07-02T23:46:19  <jeblair> clarkb: however, i haven't done that yet -- i just set up the base test case locally and noticed it worked :)
+2014-07-02T23:45:24  <superbee> jeblair: ah ok
+2014-07-02T23:45:29  <superbee> anyways +2 on the fix
+2014-07-02T23:45:35  <jeblair> superbee: it's possible the string -> text change may change the display of that on the parameter listing page
+2014-07-02T23:45:45  <superbee> ohhhh ya good point
+2014-07-02T23:46:01  <superbee> a rendering vs content thing
+2014-07-02T23:46:19  <jeblair> superbee: however, i haven't done that yet -- i just set up the base test case locally and noticed it worked :)
 2014-07-02T23:46:39  <jhesketh> jeblair: +A since your testing works.. however I'm wondering how it got there in the first place
 2014-07-02T23:46:58  <jhesketh> ie I tested that script :-s
 2014-07-02T23:47:55  <jeblair> jhesketh: i actually have not tested that script, i just tested the gearman->jenkins path to make sure the env variable looks correct;  so i'm pretty sure that's the problem
 2014-07-02T23:48:19  <jhesketh> maybe I fat-fingered it after the test
 2014-07-02T23:48:37  *** jcoufal has quit IRC
-2014-07-02T23:48:41  <clarkb> 06 is done
+2014-07-02T23:48:41  <superbee> 06 is done
 2014-07-02T23:48:43  *** devkulkarni has joined #openstack-infra
 2014-07-02T23:49:43  *** nati_uen_ has quit IRC
 2014-07-02T23:50:00  <openstackgerrit> A change was merged to openstack-infra/config: Fix env var interpretation in zuul swift upload  https://review.openstack.org/104376
-2014-07-02T23:50:06  <jeblair> jhesketh, clarkb: yes, changing to TextParameter causes jenkins to display it in a multiline field
+2014-07-02T23:50:06  <jeblair> jhesketh, superbee: yes, changing to TextParameter causes jenkins to display it in a multiline field
 2014-07-02T23:50:25  <jeblair> (well, causes everything to display in a multiline field, which is a little awkward)
 2014-07-02T23:50:58  <jeblair> this may be a good general improvement to gearman-plugin, for folks who would want to see such info, or possibly when interacting with other plugins (like rebuild, which uses saved data)
 2014-07-02T23:51:13  <jeblair> maybe it should scan the value for '\n' and chose string or text appropriately
@@ -2573,17 +2573,17 @@
 2014-07-02T23:52:40  <openstackgerrit> A change was merged to openstack/requirements: Update openstack-doc-tools  https://review.openstack.org/104171
 2014-07-02T23:53:25  *** shayneburgess has quit IRC
 2014-07-02T23:53:38  *** unicell has quit IRC
-2014-07-02T23:54:03  <clarkb> ok 05 is ready now
+2014-07-02T23:54:03  <superbee> ok 05 is ready now
 2014-07-02T23:54:39  <openstackgerrit> James E. Blair proposed a change to openstack-infra/gearman-plugin: Use TextParameterValue instead of String  https://review.openstack.org/104386
 2014-07-02T23:54:44  <jeblair> in case we decide we want that^
 2014-07-02T23:55:26  <jeblair> but yeah, doing a "python -c" command on a parameter with a newline works either way
 2014-07-02T23:55:27  *** shashankhegde has quit IRC
 2014-07-02T23:55:51  <jhesketh> jeblair: I don't mind the scan option... it's probably a good idea since it'll allow people to see all the hmac lines if they need
-2014-07-02T23:55:56  <clarkb> 05 restarted
-2014-07-02T23:56:38  <clarkb> putting 04 and 03 in shutdown mode now then probably walking home and picking up from there
+2014-07-02T23:55:56  <superbee> 05 restarted
+2014-07-02T23:56:38  <superbee> putting 04 and 03 in shutdown mode now then probably walking home and picking up from there
 2014-07-02T23:56:50  <openstackgerrit> K Jonathan Harker proposed a change to openstack-infra/config: Export prepare_node variables rather than pass them around  https://review.openstack.org/104387
 2014-07-02T23:56:51  <openstackgerrit> K Jonathan Harker proposed a change to openstack-infra/config: Add path to installing puppet 3 on nodepool nodes  https://review.openstack.org/104388
-2014-07-02T23:57:42  <clarkb> ok thats done
+2014-07-02T23:57:42  <superbee> ok thats done
 2014-07-02T23:59:23  *** prad has quit IRC
 2014-07-02T23:59:32  *** wenlock has quit IRC
 2014-07-02T23:59:51  *** msabramo has quit IRC
