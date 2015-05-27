@@ -1,0 +1,1130 @@
+2014-05-03T00:00:30  <jerryz_> fungi: thanks. do i need file a bug in ci-infra when we decide to create a feature branch?
+2014-05-03T00:01:06  *** msabramo has joined #openstack-infra
+2014-05-03T00:03:01  <fungi> jerryz_: i believe if you make your acl grant create privileges for your -ptl group on refs/* then you should be able to create a branch on the project
+2014-05-03T00:03:55  <dstufft> mordred: wat
+2014-05-03T00:04:11  <dstufft> mordred: how are feature branches the opposite of CI
+2014-05-03T00:04:22  <dstufft> that's like saying Trucks are the opposite of Apples :V
+2014-05-03T00:04:59  <mordred> dstufft: continuous integration is the process of continuously integrating work
+2014-05-03T00:05:06  *** aconrad has quit IRC
+2014-05-03T00:05:14  <dstufft> mordred: sure, when it's ready to be integrated
+2014-05-03T00:05:18  <mordred> dstufft: feature branches are a technique for doing parallel work efforts and then integrating later
+2014-05-03T00:05:37  *** packet has quit IRC
+2014-05-03T00:05:37  *** manishg has joined #openstack-infra
+2014-05-03T00:05:52  <mordred> which typically comes at a higher cost due to the larger amount of work needed to be done at each integration window
+2014-05-03T00:06:17  <dstufft> not using feature branches means you're always working on mainline, which means you end up with stuff just sitting uncommitted in your current directory because it's not ready to be integrated yet
+2014-05-03T00:06:57  <mordred> or you do your work in smaller chunks so that it can be integrated sooner
+2014-05-03T00:08:10  <mordred> http://martinfowler.com/bliki/FeatureBranch.html
+2014-05-03T00:08:15  *** manishg_ has joined #openstack-infra
+2014-05-03T00:09:38  *** manishg has quit IRC
+2014-05-03T00:09:38  *** manishg_ is now known as manishg
+2014-05-03T00:11:59  <mordred> mind you - I'm not saying that feature branches may not be a good idea depending on the team size and the project- but quite literally CI was developed in the first place to deal with the problem of merge hell that arose from feature branches
+2014-05-03T00:13:19  <dstufft> I'm generally for small feature branches so that you can integrate it sooner sure, but going by that defintion it seems to mean you can't use any branches at all
+2014-05-03T00:13:55  <mordred> I think there is a difference between long-lived shared feature branches
+2014-05-03T00:14:13  <mordred> and short-lived small feature branches
+2014-05-03T00:14:21  <mordred> which are really just "branches"
+2014-05-03T00:14:28  <mordred> I use those like crazy
+2014-05-03T00:14:38  <openstackgerrit> John Griffith proposed a change to openstack-infra/config: Create cinder-specs git repo  https://review.openstack.org/91723
+2014-05-03T00:14:50  <fungi> stable release branches aren't necessarily at odds with ci either
+2014-05-03T00:14:50  *** ArxCruz has joined #openstack-infra
+2014-05-03T00:14:53  <mordred> right
+2014-05-03T00:14:54  *** ArxCruz has quit IRC
+2014-05-03T00:15:26  <dstufft> mordred: going by this defintion of CI it seems like code reviews are impossible too
+2014-05-03T00:15:47  <fungi> branches make sense when you're branching your development effort off in different directions... it's when you need to bring those branches back together again that things get ugly. trees don't often reintegrate branches in nature either ;)
+2014-05-03T00:15:48  *** manishg has quit IRC
+2014-05-03T00:16:44  <fungi> and yes, gerrit's code review model really is like having lots of little feature branches you reintegrate asap
+2014-05-03T00:17:06  *** msabramo has quit IRC
+2014-05-03T00:17:12  *** PaulHend has joined #openstack-infra
+2014-05-03T00:17:16  <mordred> dstufft: I'm not sure I agree - I think the underlying idea is that you don't want to go off and do multi-weeks of work without landing things
+2014-05-03T00:17:24  <openstackgerrit> John Griffith proposed a change to openstack-infra/config: Create cinder-specs git repo  https://review.openstack.org/91723
+2014-05-03T00:17:43  <mordred> whether you accomplish that with branches, patches or direct-commits to master is an impl detail
+2014-05-03T00:18:03  <fungi> finding out as soon as possible that your work is in conflict with one of the hundreds of other developers on your project tends to be a time saver
+2014-05-03T00:18:45  <dstufft> mordred: so I just read the martin fowler article, and going by his defintion of CI it's something I never ever want to use.
+2014-05-03T00:19:02  *** manishg has joined #openstack-infra
+2014-05-03T00:19:58  <dstufft> I generally agree with the idea that you don't want to do multi weeks work of things without landing it, and that you should strive to make your feature branches as small as possible
+2014-05-03T00:20:09  <mordred> dstufft: well, yeah - that's the crazy-pants theory guy
+2014-05-03T00:20:19  <mordred> dstufft: I don't want to do that eiter :)
+2014-05-03T00:20:33  <dstufft> Like I don't think his defintion of CI is useful in any way
+2014-05-03T00:20:35  *** wenlock has quit IRC
+2014-05-03T00:20:44  <dstufft> or of feature branch
+2014-05-03T00:23:01  *** packet has joined #openstack-infra
+2014-05-03T00:23:10  <fungi> the more toned down suggestion there is that it's potentially safer, assuming you have *extensive* testing of the project, to develop code behind feature flags on mainline and continuously test that you're not breaking mainline in the process
+2014-05-03T00:23:40  <fungi> and also have tests that enable your feature and exercise it
+2014-05-03T00:24:01  *** manishg has quit IRC
+2014-05-03T00:24:04  *** praneshp has quit IRC
+2014-05-03T00:24:20  <fungi> and that way everyone's developing with your code in progress already landed, so the chances of divergence are significantly lessened
+2014-05-03T00:24:23  *** manishg has joined #openstack-infra
+2014-05-03T00:25:38  <fungi> as opposed to having 50 feature branches, and just before release everyone wants to integrate them at the same time and discovers all sorts of reasons why they interact negatively
+2014-05-03T00:25:48  <dstufft> sounds like a good way to end up with lots of churn on the mainline, unless people write software completely differently than I do
+2014-05-03T00:27:08  <dstufft> trying to land 50 changes at once sounds like a receipe for pain no matter how you do it :)
+2014-05-03T00:27:45  *** aconrad has joined #openstack-infra
+2014-05-03T00:28:24  <fungi> i'm looking to see what the rough commit merge cadence on openstack/nova is
+2014-05-03T00:28:43  *** manishg has quit IRC
+2014-05-03T00:28:55  <dstufft> (I also think that shipping software with options that essentially say, break this software because the feature is half done is bad form)
+2014-05-03T00:29:41  *** markmcclain has quit IRC
+2014-05-03T00:29:44  *** manishg has joined #openstack-infra
+2014-05-03T00:29:49  *** ArxCruz has joined #openstack-infra
+2014-05-03T00:29:54  *** ArxCruz has quit IRC
+2014-05-03T00:30:06  *** che-arne_afk has joined #openstack-infra
+2014-05-03T00:30:19  <fungi> eh, nova gets up around 20 commits a day during the week and falls off on weekends
+2014-05-03T00:30:32  *** che-arne has quit IRC
+2014-05-03T00:30:44  *** jhesketh_ has joined #openstack-infra
+2014-05-03T00:31:04  <fungi> experimental features which aren't enabled by default (and are clearly marked as dangerous) don't seem bad to me
+2014-05-03T00:31:15  *** jhesketh_ is now known as jhesketh
+2014-05-03T00:31:33  <jhesketh> Morning
+2014-05-03T00:32:25  <fungi> and testing bob's, betty's and bill's features in progress simultaneously is a lot easier if it just means enabling several experimental options rather than trying to solve merge commits between all their individual feature branches
+2014-05-03T00:32:47  <fungi> s/simultaneously/together/
+2014-05-03T00:33:09  <dstufft> fungi: I think there's a difference between experimental (which implies the feature is in some sort of working state but maybe has some corner cases) and is always going to be broken because half the functionality isn't there yet
+2014-05-03T00:34:17  <fungi> well, that goes back to not developing in huge chunks. land bits which work by themselves, even if they don't necessarily do much, and build up to the full feature
+2014-05-03T00:34:25  <fungi> rather than landing broken code
+2014-05-03T00:34:25  *** manishg has quit IRC
+2014-05-03T00:34:37  *** andreykurilin_ has joined #openstack-infra
+2014-05-03T00:35:09  *** manishg has joined #openstack-infra
+2014-05-03T00:35:20  <dstufft> its not clear to me how that actually works with any feature that is in any way complex at all
+2014-05-03T00:35:54  *** moted has joined #openstack-infra
+2014-05-03T00:36:48  <fungi> more that you stub out or mock the parts you'll flesh out later, acting as no-ops and so on, rather than just leaving dangling breakage
+2014-05-03T00:37:23  <dstufft> well that's half broken :) the end user don't care
+2014-05-03T00:37:56  *** SumitNaiksatam has joined #openstack-infra
+2014-05-03T00:38:35  <fungi> i think it's a question of audience. if the end user wants bleeding-edge-pull-from-github-on-every-commit software, then those are the sorts of rough edges i thing would be expected
+2014-05-03T00:38:50  <fungi> er, think
+2014-05-03T00:39:33  *** manishg has quit IRC
+2014-05-03T00:40:19  <fungi> you can always start a release branch and continue cherry-picking the remaining parts of in progress features (or disengaging/disabling them) before releasing to the other audience who expects the fully-baked experience
+2014-05-03T00:40:46  <dstufft> Well in that case your mainline branch isn't actually always in a releaseable state, you just pretend it is because your tests happen to pass
+2014-05-03T00:40:47  *** manishg has joined #openstack-infra
+2014-05-03T00:42:18  *** andreykurilin_ has quit IRC
+2014-05-03T00:43:12  <fungi> yeah, i'm just saying i think that having your features out-of-tree and then dumping them into mainline just before release isn't necessarily "always releasable" either
+2014-05-03T00:43:44  <fungi> of course mainline seems "still releasable" if you never add new commits to it until release time rolls around
+2014-05-03T00:43:44  *** pcrews_ has quit IRC
+2014-05-03T00:44:04  <dstufft> do people actually do that? Just hold open N feature branches until it's time to release
+2014-05-03T00:44:14  <fungi> but then there wouldn't be any point in running from mainline anyway if it was no different from the last release
+2014-05-03T00:44:19  *** marcoemorais has quit IRC
+2014-05-03T00:44:30  <dstufft> Every place I've ever seen would open a feature branch, complete the feature, merge it in
+2014-05-03T00:44:49  *** ArxCruz has joined #openstack-infra
+2014-05-03T00:44:54  *** ArxCruz has quit IRC
+2014-05-03T00:45:10  <dstufft> the feature branch might be open 10 minutes, or 10 days, wahtever it takes to complete the feature
+2014-05-03T00:45:28  *** manishg has quit IRC
+2014-05-03T00:45:43  <dstufft> so things land in a staggered fashion
+2014-05-03T00:45:48  *** aconrad has quit IRC
+2014-05-03T00:46:48  <fungi> it's not so much the idea that mainline is always releasable, but rather that every commit on mainline is a release, and releasing continuously on a complex project tends to require either a compromise of developers not working within one another's contexts, or landing partial features which are disabled by default and marked as being in progress
+2014-05-03T00:46:54  *** packet has quit IRC
+2014-05-03T00:47:21  <fungi> at least those are the two approaches i've seen with any regularity
+2014-05-03T00:48:16  <fungi> also, i am more a fan of good old-fashioned releases, but i gather that ci is fashionable in this fast-paced new devops utopia where the users are often also the developers
+2014-05-03T00:48:45  <dstufft> sure i've seen both approaches too, but the "partial features" approach i've seen don't fall under martin fowler's defintion of CI either, because they were done in a branch, might have taken a few days to write, and were reviewed before they were integrated
+2014-05-03T00:49:08  *** manishg has joined #openstack-infra
+2014-05-03T00:49:23  <dstufft> his CI seems to require just everyone commiting straight to master
+2014-05-03T00:50:03  <dstufft> (I'm not sure how you'd do his CI on an OSS project at all TBH)
+2014-05-03T00:50:40  <fungi> yeah, i think the idea of "topic branches" falls in between chaos and feature branches. i would consider the way we handle code review of one or a small stack of commits in gerrit to be topical rather than feature-oriented
+2014-05-03T00:52:12  <fungi> consider the lkml... i'm not sure i'd actually call an e-mail thread a "branch" in the revision control sense, but it's basically the same idea
+2014-05-03T00:52:26  <dstufft> fungi: would you approve a changeset that had half a feature with some guards around the new feature and a promise to submit a second patch later?
+2014-05-03T00:52:48  <fungi> with a well-written and approved design to back it up, yeah
+2014-05-03T00:53:07  <dstufft> so what do you do if the second patch never comes
+2014-05-03T00:53:18  *** manishg has quit IRC
+2014-05-03T00:53:58  <fungi> that's technical debt, but in all likelihood no worse than the technical debt of resolving the merge conflicts if it had been landed as one giant series in parallel with several others which tried to touch the same bits of the repository
+2014-05-03T00:54:08  *** manishg has joined #openstack-infra
+2014-05-03T00:54:42  <fungi> either you've got merge conflicts to resolve on the incoming feature branches or you've got revert conflicts to resolve ripping the dead code back out again
+2014-05-03T00:54:49  <dstufft> well except one is mandatory to resolve or else you can't actually do the merge, and the other isn't and most projects are not very good at managing techincal deb and going back and removing things
+2014-05-03T00:55:24  <dstufft> the second one can be poliically dificult too, because you end up with people who don't want that code ripped out but also don't want to actually finish the damn feature themselves ;)
+2014-05-03T00:55:58  *** rhsu has quit IRC
+2014-05-03T00:56:14  <fungi> in all probability i'd take the history of development work within the project for that committer into account when deciding whether the code needed to be fully baked or could be landed in several iterations
+2014-05-03T00:56:16  *** lakshmiS has quit IRC
+2014-05-03T00:57:39  <fungi> we've definitely had plenty of success with large features which were landed incrementally with multiple supporting changes which didn't all have to land in one shotgun blast to the head
+2014-05-03T00:58:28  <dstufft> (I completely agree with the idea of breaking things down into smaller chunks to reduce the length of time to integration, even breaking down larger features into smaller features where possible, but each change should stand on it's own without needing guards to protect against that code running)
+2014-05-03T00:58:43  <dstufft> It might be the smaller feature isn't particularly useful without something to consume it
+2014-05-03T00:59:02  <fungi> from a code review perspective it's a time saver, because re-reviewing large patch series every time they're rebased on fast-moving projects eats a lot of time
+2014-05-03T00:59:07  *** manishg has quit IRC
+2014-05-03T00:59:48  *** ArxCruz has joined #openstack-infra
+2014-05-03T00:59:54  *** ArxCruz has quit IRC
+2014-05-03T00:59:56  *** manishg has joined #openstack-infra
+2014-05-03T01:00:03  <fungi> if i can review one piece, and that lands, and then review the next piece, and that lands, and so on, the rebasing is kept to a minimum
+2014-05-03T01:00:43  <fungi> as are the chances of errors introduced from botched rebases
+2014-05-03T01:02:54  <dstufft> fungi: sure, breaking things into smaller stand alone features are good ;) my assertion is that breaking it into smaller half features is not ;P
+2014-05-03T01:03:13  <dstufft> I do a lot of the first
+2014-05-03T01:03:15  <dstufft> none of the second
+2014-05-03T01:03:20  *** pcrews_ has joined #openstack-infra
+2014-05-03T01:04:08  *** manishg has quit IRC
+2014-05-03T01:04:41  <fungi> the first is definitely preferable, and the second is when i might end up weighing that option against the possibility of a slightly-longer-lived topic branch which verges on being a feature branch while not really being declared so formally as such
+2014-05-03T01:05:21  <dstufft> I'd rather work on a feature branch than have half a feature in mainline
+2014-05-03T01:05:21  *** manishg has joined #openstack-infra
+2014-05-03T01:05:26  <dstufft> rebasing isn't that hard
+2014-05-03T01:06:37  <fungi> rebasing isn't itself hard, but rebasing repeatedly while trying to get a larger branch through review eats a lot of reviewers' time, so there's a trade-off
+2014-05-03T01:06:37  *** praneshp has joined #openstack-infra
+2014-05-03T01:07:41  *** praneshp_ has joined #openstack-infra
+2014-05-03T01:10:10  *** manishg has quit IRC
+2014-05-03T01:10:42  *** manishg has joined #openstack-infra
+2014-05-03T01:11:06  *** praneshp has quit IRC
+2014-05-03T01:11:07  *** praneshp_ is now known as praneshp
+2014-05-03T01:12:29  <dstufft> Sure, though I think that's largely a function of how long a change sits and how many other changes land in the mean time. iow it's not clear to me that it would actually make anything better in say Openstack to land half features because you'd have (theortically) easier to review patches, but the number of merges would go up thus increasing the time between when a change is approved and when it is actually merged
+2014-05-03T01:12:42  <dstufft> since how long it takes to run the tests is a fixed cost
+2014-05-03T01:12:46  <dstufft> and that has to be done serially
+2014-05-03T01:12:54  <dstufft> whereas reviewing can be done in parallel :D
+2014-05-03T01:13:33  <dstufft> so in many ways you might end up increasing the rebasing
+2014-05-03T01:14:48  *** ArxCruz has joined #openstack-infra
+2014-05-03T01:14:54  *** ArxCruz has quit IRC
+2014-05-03T01:14:58  *** manishg has quit IRC
+2014-05-03T01:15:53  *** manishg has joined #openstack-infra
+2014-05-03T01:17:51  *** prad has joined #openstack-infra
+2014-05-03T01:19:03  *** prad has quit IRC
+2014-05-03T01:20:34  *** manishg has quit IRC
+2014-05-03T01:20:59  *** manishg has joined #openstack-infra
+2014-05-03T01:23:30  *** pcrews_ has quit IRC
+2014-05-03T01:24:57  *** rhsu has joined #openstack-infra
+2014-05-03T01:25:23  *** manishg has quit IRC
+2014-05-03T01:25:58  *** saschpe has quit IRC
+2014-05-03T01:27:13  *** saschpe has joined #openstack-infra
+2014-05-03T01:29:08  <fungi> entirely possible. it may also just be that i quickly get bored reviewing large changes ;)
+2014-05-03T01:29:20  *** dims has quit IRC
+2014-05-03T01:29:50  *** ArxCruz has joined #openstack-infra
+2014-05-03T01:29:55  *** ArxCruz has quit IRC
+2014-05-03T01:36:50  *** gyee has quit IRC
+2014-05-03T01:44:49  *** ArxCruz has joined #openstack-infra
+2014-05-03T01:44:54  *** ArxCruz has quit IRC
+2014-05-03T01:45:22  *** mriedem has joined #openstack-infra
+2014-05-03T01:46:19  *** moted has quit IRC
+2014-05-03T01:49:12  *** marun has quit IRC
+2014-05-03T01:51:02  *** sdake_ has joined #openstack-infra
+2014-05-03T01:52:37  *** SumitNaiksatam has quit IRC
+2014-05-03T01:59:49  *** ArxCruz has joined #openstack-infra
+2014-05-03T01:59:54  *** ArxCruz has quit IRC
+2014-05-03T02:00:08  *** morganfainberg is now known as morganfainberg_Z
+2014-05-03T02:02:29  *** giustoXricordarl has quit IRC
+2014-05-03T02:05:54  *** atiwari has quit IRC
+2014-05-03T02:09:00  *** mriedem has quit IRC
+2014-05-03T02:14:50  *** ArxCruz has joined #openstack-infra
+2014-05-03T02:14:54  *** ArxCruz has quit IRC
+2014-05-03T02:20:51  *** wenlock has joined #openstack-infra
+2014-05-03T02:28:31  *** prad has joined #openstack-infra
+2014-05-03T02:28:52  *** prad has quit IRC
+2014-05-03T02:29:49  *** ArxCruz has joined #openstack-infra
+2014-05-03T02:29:55  *** ArxCruz has quit IRC
+2014-05-03T02:43:18  <openstackgerrit> James E. Blair proposed a change to stackforge/gertty: Add a Quit dialog  https://review.openstack.org/91932
+2014-05-03T02:43:30  <jeblair> harlowja, anteaya: ^
+2014-05-03T02:43:54  <harlowja> ah cool
+2014-05-03T02:44:49  *** ArxCruz has joined #openstack-infra
+2014-05-03T02:44:55  *** ArxCruz has quit IRC
+2014-05-03T02:44:56  <jeblair> harlowja: i built it on your change -- i added some things and removed a couple; let me know what you think
+2014-05-03T02:45:05  <harlowja> looks fine
+2014-05-03T02:45:31  <jeblair> now starts the long process of un-learning "ctrl-\ quits" :)
+2014-05-03T02:45:49  <harlowja> i was trying it out yesterday, and made the sqlite db have enabled for taskflow, am slightly unsure how to use it, but its a start :-P
+2014-05-03T02:45:55  <harlowja> it did seem to try to suck down the taskflow reviews
+2014-05-03T02:45:58  <harlowja> *i think
+2014-05-03T02:45:58  <harlowja> ha
+2014-05-03T02:46:28  <harlowja> like i see sync doing stuff, and openstack/taskflow on the main page
+2014-05-03T02:46:57  <harlowja> but no reviews, should there be?
+2014-05-03T02:47:46  <jeblair> the basic idea is that when you select taskflow, you should see a list of changes you need to review, and once you review them, they should be hidden (but you can show/hide them, or mark/unmark them at will, kind of like email)
+2014-05-03T02:48:12  *** moted has joined #openstack-infra
+2014-05-03T02:48:27  <jeblair> i haven't quite gotten the semantics right around which things it should automatically consider reviewed yet.. but it errs on the side of considering them unreviewed...
+2014-05-03T02:48:41  <harlowja> hmmm, ya, so first problem i had, was how to enable taskflow
+2014-05-03T02:48:45  <jeblair> so i'd sort of expect you to see some changes
+2014-05-03T02:48:53  <harlowja> i had to go into the sqlite db and enable it, lol
+2014-05-03T02:49:00  <jeblair> yeah, the start with empty screen isn't a good ux.  :)
+2014-05-03T02:49:11  <harlowja> hehe
+2014-05-03T02:49:29  <jeblair> the idea there is you should hit "l" to list all the projects, then "s" to subscribe to the ones you want
+2014-05-03T02:49:52  <harlowja> ahhh, there it goes
+2014-05-03T02:49:56  <harlowja> no i see them
+2014-05-03T02:50:09  <harlowja> *now
+2014-05-03T02:50:38  <jeblair> all the screens have (at least a little bit) of help on f1, that sholud help you figure some of it out
+2014-05-03T02:50:54  <harlowja> ya, mac f1 is weird, have to do function + f1, ha
+2014-05-03T02:51:19  <jeblair> oh man.  that's like the one thing terminals should never screw up.  :(
+2014-05-03T02:51:19  *** sweston has joined #openstack-infra
+2014-05-03T02:51:26  <harlowja> :)
+2014-05-03T02:51:36  <harlowja> ok, got to never sync nova, bad idea, lol
+2014-05-03T02:51:52  <jeblair> haha, yeah i have not tried that.  :)
+2014-05-03T02:52:00  <harlowja> ya, i shouldn't have :-P
+2014-05-03T02:52:21  <jeblair> for now, we should probably just have it display the initial help screen if you start it with no subscribed projects
+2014-05-03T02:52:32  <jeblair> that will at least make things a little bit discoverable
+2014-05-03T02:52:52  <harlowja> or just start with listing all projects if never subscribed  to anything before?
+2014-05-03T02:52:59  <jeblair> and we can put a note in there saying you might need to splat-f1 or alt-f1 etc...
+2014-05-03T02:53:20  <jeblair> well, then i'm worried people might not pick up on the 'subscribe' paradigm
+2014-05-03T02:54:10  <harlowja> hmmm, or u can get all fancy, and have a tab that has all the projects, and tabs for each subscribed one
+2014-05-03T02:54:11  <harlowja> haha
+2014-05-03T02:54:34  <harlowja> maybe thats to much
+2014-05-03T02:55:48  <jeblair> that's not a bad idea, we might end up with something like that later, especially once it grows things like gerrit's dashboards (custom queries)
+2014-05-03T02:59:50  *** ArxCruz has joined #openstack-infra
+2014-05-03T02:59:55  *** ArxCruz has quit IRC
+2014-05-03T02:59:56  <harlowja> ya, could be nice, but involves more urwid mastery, lol
+2014-05-03T03:02:24  <harlowja> is pretty neat though
+2014-05-03T03:02:41  <harlowja> for those console lovers out there
+2014-05-03T03:03:24  <jeblair> i'm pretty conversant in gtk and qt -- urwid is just close enough to them to make it seem easy, but just far enough away that it's actually quite hard...
+2014-05-03T03:03:34  <harlowja> right
+2014-05-03T03:03:48  <harlowja> i had similar feelings, ha
+2014-05-03T03:04:14  <harlowja> better than using ncurses directly was my end feeling
+2014-05-03T03:04:16  <harlowja> :)
+2014-05-03T03:04:55  <jeblair> i reviewed about 50 changes in gertty on wednesday -- i can't do everything in it yet, but after developing just a little bit of muscle memory, it was so much faster than using the web
+2014-05-03T03:05:14  <jeblair> and more pleasant too.  single page diff view ftw.  :)
+2014-05-03T03:05:25  <harlowja> :)
+2014-05-03T03:05:54  <jeblair> (i've actually found myself going back too the change view in gertty a couple times looking for the next file to review only to realize i had already reviewed everything)
+2014-05-03T03:06:47  *** mriedem has joined #openstack-infra
+2014-05-03T03:07:04  <harlowja> ya, i'm gonna try to use it more, see how it works out
+2014-05-03T03:08:31  <jeblair> biggest gotchas right now are that it doesn't show dependencies, and if there are comments outside of the diffs, they aren't shown
+2014-05-03T03:09:20  <harlowja> and it doesn't match my terminal colors :-P
+2014-05-03T03:09:22  <harlowja> ha
+2014-05-03T03:10:05  *** mriedem has quit IRC
+2014-05-03T03:12:31  <jeblair> oh, yeah, i figured we could add a theming option -- i think urwid makes that sort of thing pretty easy
+2014-05-03T03:12:42  <harlowja> ya, i think so
+2014-05-03T03:14:50  *** ArxCruz has joined #openstack-infra
+2014-05-03T03:14:55  *** ArxCruz has quit IRC
+2014-05-03T03:15:35  <openstackgerrit> James E. Blair proposed a change to stackforge/gertty: Make all of the change view scrollable  https://review.openstack.org/91934
+2014-05-03T03:16:03  <jeblair> that was also bugging me -- that should make it a lot nicer at smaller terminal sizes
+2014-05-03T03:21:09  *** ArxCruz has joined #openstack-infra
+2014-05-03T03:22:36  <harlowja> ah, cool
+2014-05-03T03:22:50  <harlowja> figuring out the 'pack' and such magic was a pita, lol
+2014-05-03T03:23:00  <harlowja> when pack, when weight...
+2014-05-03T03:23:35  *** SumitNaiksatam has joined #openstack-infra
+2014-05-03T03:23:56  <openstackgerrit> A change was merged to stackforge/gertty: Handle exiting more gracefully  https://review.openstack.org/91504
+2014-05-03T03:24:04  <openstackgerrit> A change was merged to stackforge/gertty: Add a Quit dialog  https://review.openstack.org/91932
+2014-05-03T03:26:43  <harlowja> if https://github.com/harlowja/gerrit_view/ goes on stackforge (maybe i should just do that), then we can have like a gerrit powertools package or something, ha
+2014-05-03T03:35:23  *** ArxCruz has quit IRC
+2014-05-03T03:38:27  <openstackgerrit> James E. Blair proposed a change to stackforge/gertty: Add a welcome screen  https://review.openstack.org/91936
+2014-05-03T03:38:45  <jeblair> harlowja: ^ based on your ux feedback! :)
+2014-05-03T03:38:51  <harlowja> ha
+2014-05-03T03:39:01  <harlowja> cool
+2014-05-03T03:39:56  <openstackgerrit> A change was merged to stackforge/gertty: Make all of the change view scrollable  https://review.openstack.org/91934
+2014-05-03T03:40:12  <openstackgerrit> A change was merged to stackforge/gertty: Add a welcome screen  https://review.openstack.org/91936
+2014-05-03T03:40:57  <jeblair> harlowja: that's it for me tonight, thanks for your help!
+2014-05-03T03:41:01  <harlowja> np :)
+2014-05-03T03:42:49  *** ArxCruz has joined #openstack-infra
+2014-05-03T03:42:54  *** ArxCruz has quit IRC
+2014-05-03T03:49:35  *** moted has quit IRC
+2014-05-03T03:53:20  *** PaulHend has quit IRC
+2014-05-03T03:55:01  *** Ryan_Lane1 has quit IRC
+2014-05-03T04:06:18  *** arnaud__ has quit IRC
+2014-05-03T04:15:48  *** tteggel has quit IRC
+2014-05-03T04:15:48  *** jraim has quit IRC
+2014-05-03T04:16:04  *** Alex_Gaynor has quit IRC
+2014-05-03T04:16:13  *** simonmcc has quit IRC
+2014-05-03T04:16:23  *** serverascode has quit IRC
+2014-05-03T04:16:59  *** wenlock has quit IRC
+2014-05-03T04:29:49  *** jraim has joined #openstack-infra
+2014-05-03T04:30:18  *** clayg has joined #openstack-infra
+2014-05-03T04:30:31  <clayg> can anyone merge https://review.openstack.org/#/c/91815 ???
+2014-05-03T04:34:50  *** tteggel has joined #openstack-infra
+2014-05-03T04:36:39  *** simonmcc has joined #openstack-infra
+2014-05-03T04:37:53  *** serverascode has joined #openstack-infra
+2014-05-03T04:39:37  *** Alex_Gaynor has joined #openstack-infra
+2014-05-03T04:48:43  *** hogepodge has quit IRC
+2014-05-03T04:50:12  *** harlowja is now known as harlowja_away
+2014-05-03T04:52:22  *** hogepodge has joined #openstack-infra
+2014-05-03T04:53:14  *** msabramo has joined #openstack-infra
+2014-05-03T04:58:18  *** sdake_ has quit IRC
+2014-05-03T05:11:01  *** talluri has joined #openstack-infra
+2014-05-03T05:12:19  *** Ryan_Lane1 has joined #openstack-infra
+2014-05-03T05:18:28  *** imcsk8 has quit IRC
+2014-05-03T05:18:59  *** imcsk8 has joined #openstack-infra
+2014-05-03T05:25:03  *** Ryan_Lane1 has quit IRC
+2014-05-03T05:35:36  *** chandan_kumar has joined #openstack-infra
+2014-05-03T05:44:57  *** pcrews_ has joined #openstack-infra
+2014-05-03T05:47:04  *** chandan_kumar has quit IRC
+2014-05-03T05:53:28  *** oomichi has joined #openstack-infra
+2014-05-03T05:53:53  *** jhesketh has quit IRC
+2014-05-03T05:54:14  *** rhsu has quit IRC
+2014-05-03T05:54:14  *** rhsu1 has joined #openstack-infra
+2014-05-03T06:04:51  *** pcrews_ has quit IRC
+2014-05-03T06:11:46  *** Alex_Gaynor has quit IRC
+2014-05-03T06:19:34  *** asettle has quit IRC
+2014-05-03T06:21:53  *** arnaud__ has joined #openstack-infra
+2014-05-03T06:26:12  *** Alex_Gaynor has joined #openstack-infra
+2014-05-03T06:31:55  *** asettle has joined #openstack-infra
+2014-05-03T06:46:39  *** talluri has quit IRC
+2014-05-03T06:55:19  *** lcheng_ has joined #openstack-infra
+2014-05-03T06:55:37  *** lcheng_ has quit IRC
+2014-05-03T07:03:03  *** rhsu1 has quit IRC
+2014-05-03T07:04:55  *** chandan_kumar has joined #openstack-infra
+2014-05-03T07:09:41  *** jhesketh has joined #openstack-infra
+2014-05-03T07:31:51  *** andreykurilin_ has joined #openstack-infra
+2014-05-03T07:36:13  *** andreykurilin_ has quit IRC
+2014-05-03T07:36:59  *** andreykurilin_ has joined #openstack-infra
+2014-05-03T07:45:02  *** yolanda has quit IRC
+2014-05-03T08:01:14  *** JayF has quit IRC
+2014-05-03T08:02:16  *** maxbit has quit IRC
+2014-05-03T08:08:52  *** isviridov has quit IRC
+2014-05-03T08:08:52  *** flaper87|afk has quit IRC
+2014-05-03T08:08:52  *** chandan_kumar has quit IRC
+2014-05-03T08:08:52  *** Alex_Gaynor has quit IRC
+2014-05-03T08:08:52  *** msabramo has quit IRC
+2014-05-03T08:08:53  *** openstackgerrit has quit IRC
+2014-05-03T08:08:53  *** Ryan_Lane has quit IRC
+2014-05-03T08:08:53  *** medieval1 has quit IRC
+2014-05-03T08:08:53  *** mattoliverau has quit IRC
+2014-05-03T08:08:53  *** kevinbenton has quit IRC
+2014-05-03T08:08:53  *** lifeless has quit IRC
+2014-05-03T08:08:53  *** odyi has quit IRC
+2014-05-03T08:08:53  *** clarkb has quit IRC
+2014-05-03T08:08:53  *** pfallenop has quit IRC
+2014-05-03T08:08:53  *** yamahata_ has quit IRC
+2014-05-03T08:08:53  *** zhiyan_ has quit IRC
+2014-05-03T08:08:53  *** yjiang5_away has quit IRC
+2014-05-03T08:08:53  *** SergeyLukjanov has quit IRC
+2014-05-03T08:08:53  *** NikitaKonovalov has quit IRC
+2014-05-03T08:08:53  *** plars has quit IRC
+2014-05-03T08:08:53  *** spiffxp has quit IRC
+2014-05-03T08:08:53  *** gaelL has quit IRC
+2014-05-03T08:08:53  *** ptoohill has quit IRC
+2014-05-03T08:08:53  *** vipul has quit IRC
+2014-05-03T08:08:53  *** shardy has quit IRC
+2014-05-03T08:08:53  *** Ng has quit IRC
+2014-05-03T08:08:53  *** sbadia has quit IRC
+2014-05-03T08:08:54  *** Hunner has quit IRC
+2014-05-03T08:08:54  *** bodepd has quit IRC
+2014-05-03T08:08:54  *** zaro has quit IRC
+2014-05-03T08:08:54  *** therve has quit IRC
+2014-05-03T08:08:54  *** devananda has quit IRC
+2014-05-03T08:08:54  *** SlickNik has quit IRC
+2014-05-03T08:08:54  *** clayg has quit IRC
+2014-05-03T08:08:54  *** exz has quit IRC
+2014-05-03T08:08:54  *** mancdaz has quit IRC
+2014-05-03T08:08:54  *** johnthetubaguy has quit IRC
+2014-05-03T08:08:54  *** ekarlso has quit IRC
+2014-05-03T08:08:54  *** sabari has quit IRC
+2014-05-03T08:08:55  *** akscram has quit IRC
+2014-05-03T08:08:55  *** harlowja_away has quit IRC
+2014-05-03T08:08:55  *** primeministerp has quit IRC
+2014-05-03T08:08:55  *** hartsocks has quit IRC
+2014-05-03T08:08:55  *** BobBall has quit IRC
+2014-05-03T08:08:55  *** mika has quit IRC
+2014-05-03T08:08:55  *** tristanC has quit IRC
+2014-05-03T08:08:55  *** uvirtbot has quit IRC
+2014-05-03T08:08:55  *** ttx has quit IRC
+2014-05-03T08:08:55  *** pbelanyi has quit IRC
+2014-05-03T08:08:55  *** koolhead17 has quit IRC
+2014-05-03T08:08:55  *** dragondm has quit IRC
+2014-05-03T08:08:55  *** ChanServ has quit IRC
+2014-05-03T08:08:55  *** amotoki has quit IRC
+2014-05-03T08:08:55  *** blkperl has quit IRC
+2014-05-03T08:08:55  *** Mithrandir has quit IRC
+2014-05-03T08:08:55  *** tru_tru_ has quit IRC
+2014-05-03T08:08:55  *** michchap has quit IRC
+2014-05-03T08:08:55  *** sdake has quit IRC
+2014-05-03T08:08:55  *** miarmak has quit IRC
+2014-05-03T08:08:55  *** afazekas has quit IRC
+2014-05-03T08:08:56  *** dripton has quit IRC
+2014-05-03T08:08:56  *** med_ has quit IRC
+2014-05-03T08:08:56  *** gabriel-bezerra has quit IRC
+2014-05-03T08:08:56  *** jlk has quit IRC
+2014-05-03T08:08:56  *** grantbow has quit IRC
+2014-05-03T08:08:56  *** paul-- has quit IRC
+2014-05-03T08:08:56  *** jerryz_ has quit IRC
+2014-05-03T08:08:56  *** nithya_g has quit IRC
+2014-05-03T08:08:56  *** boris-42 has quit IRC
+2014-05-03T08:08:56  *** briancline has quit IRC
+2014-05-03T08:08:56  *** zul has quit IRC
+2014-05-03T08:08:56  *** morgabra has quit IRC
+2014-05-03T08:08:56  *** thingee has quit IRC
+2014-05-03T08:08:56  *** EmilienM has quit IRC
+2014-05-03T08:08:56  *** StevenK has quit IRC
+2014-05-03T08:08:57  *** Clabbe has quit IRC
+2014-05-03T08:08:57  *** maurosr has quit IRC
+2014-05-03T08:08:57  *** rossella_s has quit IRC
+2014-05-03T08:08:57  *** phschwartz has quit IRC
+2014-05-03T08:08:57  *** bearhands has quit IRC
+2014-05-03T08:08:57  *** russell_h has quit IRC
+2014-05-03T08:08:57  *** antonym has quit IRC
+2014-05-03T08:08:57  *** alaski has quit IRC
+2014-05-03T08:08:57  *** pvo has quit IRC
+2014-05-03T08:08:57  *** Guest37432 has quit IRC
+2014-05-03T08:08:57  *** zz_gondoi has quit IRC
+2014-05-03T08:08:57  *** jbryce has quit IRC
+2014-05-03T08:08:57  *** andreykurilin_ has quit IRC
+2014-05-03T08:08:58  *** julim_ has quit IRC
+2014-05-03T08:08:58  *** krtaylor has quit IRC
+2014-05-03T08:08:58  *** salv-orlando has quit IRC
+2014-05-03T08:08:58  *** sdague has quit IRC
+2014-05-03T08:08:58  *** xchu has quit IRC
+2014-05-03T08:08:58  *** loquacities has quit IRC
+2014-05-03T08:08:58  *** sahid has quit IRC
+2014-05-03T08:08:58  *** mugsie has quit IRC
+2014-05-03T08:08:58  *** locke105 has quit IRC
+2014-05-03T08:08:58  *** sahumada has quit IRC
+2014-05-03T08:08:58  *** mnaser has quit IRC
+2014-05-03T08:08:58  *** jamespd has quit IRC
+2014-05-03T08:08:58  *** jomara has quit IRC
+2014-05-03T08:08:58  *** ryanpetrello has quit IRC
+2014-05-03T08:08:58  *** spredzy has quit IRC
+2014-05-03T08:08:58  *** jeremyb has quit IRC
+2014-05-03T08:08:58  *** msuriar has quit IRC
+2014-05-03T08:08:58  *** davidlenwell has quit IRC
+2014-05-03T08:08:58  *** dkliban has quit IRC
+2014-05-03T08:08:58  *** ruhe has quit IRC
+2014-05-03T08:08:58  *** DinaBelova has quit IRC
+2014-05-03T08:08:58  *** SpamapS has quit IRC
+2014-05-03T08:08:58  *** anteaya has quit IRC
+2014-05-03T08:08:59  *** jgriffith has quit IRC
+2014-05-03T08:08:59  *** mburned has quit IRC
+2014-05-03T08:08:59  *** tteggel has quit IRC
+2014-05-03T08:08:59  *** zehicle_at_dell has quit IRC
+2014-05-03T08:08:59  *** jgrimm has quit IRC
+2014-05-03T08:08:59  *** dkehn has quit IRC
+2014-05-03T08:08:59  *** cyeoh has quit IRC
+2014-05-03T08:08:59  *** dguerri has quit IRC
+2014-05-03T08:08:59  *** gnuoy` has quit IRC
+2014-05-03T08:08:59  *** hdd has quit IRC
+2014-05-03T08:08:59  *** mwagner_lap has quit IRC
+2014-05-03T08:08:59  *** YorikSar has quit IRC
+2014-05-03T08:08:59  *** jamielennox|away has quit IRC
+2014-05-03T08:08:59  *** mtreinish has quit IRC
+2014-05-03T08:09:00  *** ewindisch has quit IRC
+2014-05-03T08:09:00  *** soren has quit IRC
+2014-05-03T08:09:00  *** jeblair has quit IRC
+2014-05-03T08:09:00  *** proffalken has quit IRC
+2014-05-03T08:09:00  *** Daviey has quit IRC
+2014-05-03T08:09:00  *** nijaba has quit IRC
+2014-05-03T08:09:00  *** adarazs has quit IRC
+2014-05-03T08:09:00  *** ilyashakhat has quit IRC
+2014-05-03T08:09:00  *** esmute has quit IRC
+2014-05-03T08:09:00  *** hogepodge has quit IRC
+2014-05-03T08:09:00  *** serverascode has quit IRC
+2014-05-03T08:09:00  *** simonmcc has quit IRC
+2014-05-03T08:09:00  *** SumitNaiksatam has quit IRC
+2014-05-03T08:09:00  *** praneshp has quit IRC
+2014-05-03T08:09:00  *** rcarrillocruz has quit IRC
+2014-05-03T08:09:00  *** wayneeseguin has quit IRC
+2014-05-03T08:09:01  *** bradm1 has quit IRC
+2014-05-03T08:09:01  *** Kiall has quit IRC
+2014-05-03T08:09:01  *** nibalize1 has quit IRC
+2014-05-03T08:09:01  *** krotscheck has quit IRC
+2014-05-03T08:09:01  *** NobodyCam has quit IRC
+2014-05-03T08:09:01  *** greghaynes has quit IRC
+2014-05-03T08:09:01  *** mestery has quit IRC
+2014-05-03T08:09:01  *** ogelbukh has quit IRC
+2014-05-03T08:09:01  *** dteselkin_ has quit IRC
+2014-05-03T08:09:01  *** Vivek has quit IRC
+2014-05-03T08:09:01  *** plomakin has quit IRC
+2014-05-03T08:09:01  *** jd__ has quit IRC
+2014-05-03T08:09:01  *** asettle has quit IRC
+2014-05-03T08:09:01  *** arnaud__ has quit IRC
+2014-05-03T08:09:01  *** imcsk8 has quit IRC
+2014-05-03T08:09:01  *** sweston has quit IRC
+2014-05-03T08:09:01  *** saschpe has quit IRC
+2014-05-03T08:09:01  *** sandywalsh has quit IRC
+2014-05-03T08:09:01  *** timrc has quit IRC
+2014-05-03T08:09:02  *** Alexei_987 has quit IRC
+2014-05-03T08:09:02  *** LarsN has quit IRC
+2014-05-03T08:09:02  *** dkehnx has quit IRC
+2014-05-03T08:09:02  *** stevebaker has quit IRC
+2014-05-03T08:09:02  *** wendar has quit IRC
+2014-05-03T08:09:02  *** cp16net has quit IRC
+2014-05-03T08:09:02  *** portante has quit IRC
+2014-05-03T08:09:02  *** mgagne has quit IRC
+2014-05-03T08:09:03  *** adam_g has quit IRC
+2014-05-03T08:09:03  *** pabelanger has quit IRC
+2014-05-03T08:09:03  *** roaet_ has quit IRC
+2014-05-03T08:09:03  *** daenney has quit IRC
+2014-05-03T08:09:03  *** jhesketh has quit IRC
+2014-05-03T08:09:03  *** oomichi has quit IRC
+2014-05-03T08:09:03  *** jraim has quit IRC
+2014-05-03T08:09:03  *** ociuhandu has quit IRC
+2014-05-03T08:09:03  *** kmartin has quit IRC
+2014-05-03T08:09:03  *** yamahata has quit IRC
+2014-05-03T08:09:03  *** asselin has quit IRC
+2014-05-03T08:09:03  *** dkranz has quit IRC
+2014-05-03T08:09:03  *** mattymo has quit IRC
+2014-05-03T08:09:03  *** beekneemech has quit IRC
+2014-05-03T08:09:04  *** bogdando has quit IRC
+2014-05-03T08:09:04  *** kashyap has quit IRC
+2014-05-03T08:09:04  *** dosaboy has quit IRC
+2014-05-03T08:09:04  *** blamar has quit IRC
+2014-05-03T08:09:04  *** jamespage has quit IRC
+2014-05-03T08:09:04  *** psedlak has quit IRC
+2014-05-03T08:09:04  *** dangers_away has quit IRC
+2014-05-03T08:09:04  *** tchaypo has quit IRC
+2014-05-03T08:09:04  *** gothicmindfood has quit IRC
+2014-05-03T08:09:04  *** dstanek has quit IRC
+2014-05-03T08:09:04  *** superdan has quit IRC
+2014-05-03T08:09:04  *** hughsaunders has quit IRC
+2014-05-03T08:09:04  *** lxsli has quit IRC
+2014-05-03T08:09:04  *** chmouel has quit IRC
+2014-05-03T08:09:04  *** gpocentek has quit IRC
+2014-05-03T08:09:04  *** notmyname has quit IRC
+2014-05-03T08:09:05  *** cody-somerville has quit IRC
+2014-05-03T08:09:05  *** Shrews has quit IRC
+2014-05-03T08:09:05  *** bknudson has quit IRC
+2014-05-03T08:09:05  *** enikanorov has quit IRC
+2014-05-03T08:09:05  *** changbl has quit IRC
+2014-05-03T08:09:05  *** luisg_ has quit IRC
+2014-05-03T08:09:05  *** mkerrin has quit IRC
+2014-05-03T08:09:05  *** GheRivero has quit IRC
+2014-05-03T08:09:05  *** mdenny has quit IRC
+2014-05-03T08:09:05  *** saper has quit IRC
+2014-05-03T08:09:05  *** skraynev has quit IRC
+2014-05-03T08:09:05  *** jpeeler has quit IRC
+2014-05-03T08:09:05  *** katyafervent has quit IRC
+2014-05-03T08:09:05  *** jogo has quit IRC
+2014-05-03T08:09:05  *** vladan has quit IRC
+2014-05-03T08:09:06  *** dtroyer has quit IRC
+2014-05-03T08:09:06  *** pleia2 has quit IRC
+2014-05-03T08:09:06  *** JoshNang has quit IRC
+2014-05-03T08:09:06  *** mikal has quit IRC
+2014-05-03T08:09:06  *** dricco has quit IRC
+2014-05-03T08:09:06  *** juice has quit IRC
+2014-05-03T08:09:28  *** tnurlygayanov has quit IRC
+2014-05-03T08:09:28  *** morganfainberg_Z has quit IRC
+2014-05-03T08:12:19  *** juice has joined #openstack-infra
+2014-05-03T08:12:19  *** mikal has joined #openstack-infra
+2014-05-03T08:12:19  *** JoshNang has joined #openstack-infra
+2014-05-03T08:12:19  *** pleia2 has joined #openstack-infra
+2014-05-03T08:12:19  *** dtroyer has joined #openstack-infra
+2014-05-03T08:12:19  *** vladan has joined #openstack-infra
+2014-05-03T08:12:19  *** jogo has joined #openstack-infra
+2014-05-03T08:12:19  *** dricco has joined #openstack-infra
+2014-05-03T08:12:19  *** katyafervent has joined #openstack-infra
+2014-05-03T08:12:19  *** jpeeler has joined #openstack-infra
+2014-05-03T08:12:19  *** skraynev has joined #openstack-infra
+2014-05-03T08:12:19  *** saper has joined #openstack-infra
+2014-05-03T08:12:19  *** mdenny has joined #openstack-infra
+2014-05-03T08:12:19  *** GheRivero has joined #openstack-infra
+2014-05-03T08:12:19  *** mkerrin has joined #openstack-infra
+2014-05-03T08:12:19  *** luisg_ has joined #openstack-infra
+2014-05-03T08:12:19  *** changbl has joined #openstack-infra
+2014-05-03T08:12:19  *** enikanorov has joined #openstack-infra
+2014-05-03T08:12:19  *** bknudson has joined #openstack-infra
+2014-05-03T08:12:19  *** Shrews has joined #openstack-infra
+2014-05-03T08:12:19  *** cody-somerville has joined #openstack-infra
+2014-05-03T08:12:19  *** flaper87|afk has joined #openstack-infra
+2014-05-03T08:12:19  *** isviridov has joined #openstack-infra
+2014-05-03T08:12:19  *** JayF_ has joined #openstack-infra
+2014-05-03T08:12:19  *** andreykurilin_ has joined #openstack-infra
+2014-05-03T08:12:19  *** jhesketh has joined #openstack-infra
+2014-05-03T08:12:19  *** chandan_kumar has joined #openstack-infra
+2014-05-03T08:12:19  *** asettle has joined #openstack-infra
+2014-05-03T08:12:19  *** Alex_Gaynor has joined #openstack-infra
+2014-05-03T08:12:19  *** oomichi has joined #openstack-infra
+2014-05-03T08:12:19  *** imcsk8 has joined #openstack-infra
+2014-05-03T08:12:19  *** msabramo has joined #openstack-infra
+2014-05-03T08:12:19  *** hogepodge has joined #openstack-infra
+2014-05-03T08:12:19  *** serverascode has joined #openstack-infra
+2014-05-03T08:12:19  *** simonmcc has joined #openstack-infra
+2014-05-03T08:12:19  *** tteggel has joined #openstack-infra
+2014-05-03T08:12:19  *** clayg has joined #openstack-infra
+2014-05-03T08:12:19  *** jraim has joined #openstack-infra
+2014-05-03T08:12:19  *** SumitNaiksatam has joined #openstack-infra
+2014-05-03T08:12:19  *** sweston has joined #openstack-infra
+2014-05-03T08:12:19  *** saschpe has joined #openstack-infra
+2014-05-03T08:12:19  *** praneshp has joined #openstack-infra
+2014-05-03T08:12:19  *** sandywalsh has joined #openstack-infra
+2014-05-03T08:12:19  *** timrc has joined #openstack-infra
+2014-05-03T08:12:19  *** ociuhandu has joined #openstack-infra
+2014-05-03T08:12:19  *** zehicle_at_dell has joined #openstack-infra
+2014-05-03T08:12:19  *** rcarrillocruz has joined #openstack-infra
+2014-05-03T08:12:19  *** julim_ has joined #openstack-infra
+2014-05-03T08:12:19  *** kmartin has joined #openstack-infra
+2014-05-03T08:12:19  *** yamahata has joined #openstack-infra
+2014-05-03T08:12:19  *** asselin has joined #openstack-infra
+2014-05-03T08:12:19  *** krtaylor has joined #openstack-infra
+2014-05-03T08:12:19  *** salv-orlando has joined #openstack-infra
+2014-05-03T08:12:19  *** openstackgerrit has joined #openstack-infra
+2014-05-03T08:12:19  *** jgrimm has joined #openstack-infra
+2014-05-03T08:12:19  *** dkranz has joined #openstack-infra
+2014-05-03T08:12:19  *** Alexei_987 has joined #openstack-infra
+2014-05-03T08:12:19  *** Ryan_Lane has joined #openstack-infra
+2014-05-03T08:12:19  *** mattymo has joined #openstack-infra
+2014-05-03T08:12:19  *** LarsN has joined #openstack-infra
+2014-05-03T08:12:19  *** amotoki has joined #openstack-infra
+2014-05-03T08:12:19  *** wayneeseguin has joined #openstack-infra
+2014-05-03T08:12:19  *** bradm1 has joined #openstack-infra
+2014-05-03T08:12:19  *** Kiall has joined #openstack-infra
+2014-05-03T08:12:19  *** blkperl has joined #openstack-infra
+2014-05-03T08:12:19  *** dkehn has joined #openstack-infra
+2014-05-03T08:12:19  *** nibalize1 has joined #openstack-infra
+2014-05-03T08:12:19  *** beekneemech has joined #openstack-infra
+2014-05-03T08:12:19  *** cyeoh has joined #openstack-infra
+2014-05-03T08:12:19  *** krotscheck has joined #openstack-infra
+2014-05-03T08:12:19  *** Mithrandir has joined #openstack-infra
+2014-05-03T08:12:19  *** NobodyCam has joined #openstack-infra
+2014-05-03T08:12:19  *** tru_tru_ has joined #openstack-infra
+2014-05-03T08:12:19  *** dguerri has joined #openstack-infra
+2014-05-03T08:12:19  *** greghaynes has joined #openstack-infra
+2014-05-03T08:12:19  *** gnuoy` has joined #openstack-infra
+2014-05-03T08:12:19  *** michchap has joined #openstack-infra
+2014-05-03T08:12:19  *** mestery has joined #openstack-infra
+2014-05-03T08:12:19  *** sdake has joined #openstack-infra
+2014-05-03T08:12:19  *** hdd has joined #openstack-infra
+2014-05-03T08:12:19  *** dstanek has joined #openstack-infra
+2014-05-03T08:12:19  *** dkehnx has joined #openstack-infra
+2014-05-03T08:12:19  *** bogdando has joined #openstack-infra
+2014-05-03T08:12:19  *** miarmak has joined #openstack-infra
+2014-05-03T08:12:19  *** afazekas has joined #openstack-infra
+2014-05-03T08:12:19  *** mwagner_lap has joined #openstack-infra
+2014-05-03T08:12:19  *** sdague has joined #openstack-infra
+2014-05-03T08:12:19  *** gabriel-bezerra has joined #openstack-infra
+2014-05-03T08:12:19  *** dripton has joined #openstack-infra
+2014-05-03T08:12:19  *** med_ has joined #openstack-infra
+2014-05-03T08:12:19  *** grantbow has joined #openstack-infra
+2014-05-03T08:12:19  *** plars has joined #openstack-infra
+2014-05-03T08:12:19  *** proffalken has joined #openstack-infra
+2014-05-03T08:12:19  *** medieval1 has joined #openstack-infra
+2014-05-03T08:12:19  *** ekarlso has joined #openstack-infra
+2014-05-03T08:12:19  *** Daviey has joined #openstack-infra
+2014-05-03T08:12:19  *** zul has joined #openstack-infra
+2014-05-03T08:12:19  *** kashyap has joined #openstack-infra
+2014-05-03T08:12:19  *** ptoohill has joined #openstack-infra
+2014-05-03T08:12:19  *** stevebaker has joined #openstack-infra
+2014-05-03T08:12:19  *** morgabra has joined #openstack-infra
+2014-05-03T08:12:19  *** dosaboy has joined #openstack-infra
+2014-05-03T08:12:19  *** jlk has joined #openstack-infra
+2014-05-03T08:12:19  *** sabari has joined #openstack-infra
+2014-05-03T08:12:19  *** wendar has joined #openstack-infra
+2014-05-03T08:12:19  *** blamar has joined #openstack-infra
+2014-05-03T08:12:19  *** mnaser has joined #openstack-infra
+2014-05-03T08:12:19  *** xchu has joined #openstack-infra
+2014-05-03T08:12:19  *** jamespage has joined #openstack-infra
+2014-05-03T08:12:19  *** psedlak has joined #openstack-infra
+2014-05-03T08:12:19  *** loquacities has joined #openstack-infra
+2014-05-03T08:12:19  *** jamespd has joined #openstack-infra
+2014-05-03T08:12:19  *** sahid has joined #openstack-infra
+2014-05-03T08:12:19  *** dangers_away has joined #openstack-infra
+2014-05-03T08:12:19  *** exz has joined #openstack-infra
+2014-05-03T08:12:19  *** tristanC has joined #openstack-infra
+2014-05-03T08:12:19  *** akscram has joined #openstack-infra
+2014-05-03T08:12:19  *** tchaypo has joined #openstack-infra
+2014-05-03T08:12:19  *** mattoliverau has joined #openstack-infra
+2014-05-03T08:12:19  *** paul-- has joined #openstack-infra
+2014-05-03T08:12:19  *** thingee has joined #openstack-infra
+2014-05-03T08:12:19  *** kevinbenton has joined #openstack-infra
+2014-05-03T08:12:19  *** EmilienM has joined #openstack-infra
+2014-05-03T08:12:19  *** StevenK has joined #openstack-infra
+2014-05-03T08:12:19  *** johnthetubaguy has joined #openstack-infra
+2014-05-03T08:12:19  *** mancdaz has joined #openstack-infra
+2014-05-03T08:12:19  *** nijaba has joined #openstack-infra
+2014-05-03T08:12:19  *** yjiang5_away has joined #openstack-infra
+2014-05-03T08:12:19  *** lifeless has joined #openstack-infra
+2014-05-03T08:12:19  *** odyi has joined #openstack-infra
+2014-05-03T08:12:19  *** clarkb has joined #openstack-infra
+2014-05-03T08:12:19  *** pfallenop has joined #openstack-infra
+2014-05-03T08:12:19  *** hartsocks has joined #openstack-infra
+2014-05-03T08:12:19  *** gothicmindfood has joined #openstack-infra
+2014-05-03T08:12:19  *** adarazs has joined #openstack-infra
+2014-05-03T08:12:19  *** Clabbe has joined #openstack-infra
+2014-05-03T08:12:19  *** yamahata_ has joined #openstack-infra
+2014-05-03T08:12:19  *** harlowja_away has joined #openstack-infra
+2014-05-03T08:12:19  *** zhiyan_ has joined #openstack-infra
+2014-05-03T08:12:19  *** primeministerp has joined #openstack-infra
+2014-05-03T08:12:19  *** jerryz_ has joined #openstack-infra
+2014-05-03T08:12:19  *** mugsie has joined #openstack-infra
+2014-05-03T08:12:19  *** lxsli has joined #openstack-infra
+2014-05-03T08:12:19  *** nithya_g has joined #openstack-infra
+2014-05-03T08:12:19  *** ilyashakhat has joined #openstack-infra
+2014-05-03T08:12:19  *** locke105 has joined #openstack-infra
+2014-05-03T08:12:19  *** BobBall has joined #openstack-infra
+2014-05-03T08:12:19  *** sahumada has joined #openstack-infra
+2014-05-03T08:12:19  *** maurosr has joined #openstack-infra
+2014-05-03T08:12:19  *** ogelbukh has joined #openstack-infra
+2014-05-03T08:12:19  *** cp16net has joined #openstack-infra
+2014-05-03T08:12:19  *** portante has joined #openstack-infra
+2014-05-03T08:12:19  *** dteselkin_ has joined #openstack-infra
+2014-05-03T08:12:19  *** ewindisch has joined #openstack-infra
+2014-05-03T08:12:19  *** mgagne has joined #openstack-infra
+2014-05-03T08:12:19  *** YorikSar has joined #openstack-infra
+2014-05-03T08:12:19  *** jamielennox|away has joined #openstack-infra
+2014-05-03T08:12:19  *** boris-42 has joined #openstack-infra
+2014-05-03T08:12:19  *** mtreinish has joined #openstack-infra
+2014-05-03T08:12:19  *** Vivek has joined #openstack-infra
+2014-05-03T08:12:19  *** jomara has joined #openstack-infra
+2014-05-03T08:12:19  *** spredzy has joined #openstack-infra
+2014-05-03T08:12:19  *** ryanpetrello has joined #openstack-infra
+2014-05-03T08:12:19  *** rossella_s has joined #openstack-infra
+2014-05-03T08:12:19  *** jeremyb has joined #openstack-infra
+2014-05-03T08:12:19  *** soren has joined #openstack-infra
+2014-05-03T08:12:19  *** adam_g has joined #openstack-infra
+2014-05-03T08:12:19  *** SlickNik has joined #openstack-infra
+2014-05-03T08:12:19  *** devananda has joined #openstack-infra
+2014-05-03T08:12:19  *** therve has joined #openstack-infra
+2014-05-03T08:12:19  *** zaro has joined #openstack-infra
+2014-05-03T08:12:19  *** bodepd has joined #openstack-infra
+2014-05-03T08:12:19  *** Hunner has joined #openstack-infra
+2014-05-03T08:12:19  *** sbadia has joined #openstack-infra
+2014-05-03T08:12:19  *** Ng has joined #openstack-infra
+2014-05-03T08:12:19  *** shardy has joined #openstack-infra
+2014-05-03T08:12:19  *** vipul has joined #openstack-infra
+2014-05-03T08:12:19  *** spiffxp has joined #openstack-infra
+2014-05-03T08:12:19  *** gaelL has joined #openstack-infra
+2014-05-03T08:12:19  *** NikitaKonovalov has joined #openstack-infra
+2014-05-03T08:12:19  *** SergeyLukjanov has joined #openstack-infra
+2014-05-03T08:12:19  *** superdan has joined #openstack-infra
+2014-05-03T08:12:19  *** hughsaunders has joined #openstack-infra
+2014-05-03T08:12:19  *** chmouel has joined #openstack-infra
+2014-05-03T08:12:19  *** notmyname has joined #openstack-infra
+2014-05-03T08:12:19  *** gpocentek has joined #openstack-infra
+2014-05-03T08:12:19  *** plomakin has joined #openstack-infra
+2014-05-03T08:12:19  *** jd__ has joined #openstack-infra
+2014-05-03T08:12:19  *** pabelanger has joined #openstack-infra
+2014-05-03T08:12:19  *** roaet_ has joined #openstack-infra
+2014-05-03T08:12:19  *** daenney has joined #openstack-infra
+2014-05-03T08:12:19  *** esmute has joined #openstack-infra
+2014-05-03T08:12:19  *** jeblair has joined #openstack-infra
+2014-05-03T08:12:19  *** phschwartz has joined #openstack-infra
+2014-05-03T08:12:19  *** bearhands has joined #openstack-infra
+2014-05-03T08:12:19  *** russell_h has joined #openstack-infra
+2014-05-03T08:12:19  *** antonym has joined #openstack-infra
+2014-05-03T08:12:19  *** alaski has joined #openstack-infra
+2014-05-03T08:12:19  *** zz_gondoi has joined #openstack-infra
+2014-05-03T08:12:19  *** pvo has joined #openstack-infra
+2014-05-03T08:12:19  *** Guest37432 has joined #openstack-infra
+2014-05-03T08:12:19  *** jbryce has joined #openstack-infra
+2014-05-03T08:12:20  *** msuriar has joined #openstack-infra
+2014-05-03T08:12:20  *** davidlenwell has joined #openstack-infra
+2014-05-03T08:12:20  *** dkliban has joined #openstack-infra
+2014-05-03T08:12:20  *** ruhe has joined #openstack-infra
+2014-05-03T08:12:20  *** DinaBelova has joined #openstack-infra
+2014-05-03T08:12:20  *** SpamapS has joined #openstack-infra
+2014-05-03T08:12:20  *** anteaya has joined #openstack-infra
+2014-05-03T08:12:20  *** jgriffith has joined #openstack-infra
+2014-05-03T08:12:20  *** mburned has joined #openstack-infra
+2014-05-03T08:12:20  *** briancline has joined #openstack-infra
+2014-05-03T08:12:20  *** ChanServ has joined #openstack-infra
+2014-05-03T08:12:20  *** mika has joined #openstack-infra
+2014-05-03T08:12:20  *** uvirtbot has joined #openstack-infra
+2014-05-03T08:12:20  *** ttx has joined #openstack-infra
+2014-05-03T08:12:20  *** pbelanyi has joined #openstack-infra
+2014-05-03T08:12:20  *** koolhead17 has joined #openstack-infra
+2014-05-03T08:12:20  *** dragondm has joined #openstack-infra
+2014-05-03T08:12:20  *** dickson.freenode.net sets mode: +oo jeblair ChanServ
+2014-05-03T08:13:07  *** tnurlygayanov has joined #openstack-infra
+2014-05-03T08:13:07  *** morganfainberg_Z has joined #openstack-infra
+2014-05-03T08:14:45  *** talluri has joined #openstack-infra
+2014-05-03T08:15:11  *** _nadya_ has joined #openstack-infra
+2014-05-03T08:17:57  *** jeblair has quit IRC
+2014-05-03T08:17:58  *** jamespd has quit IRC
+2014-05-03T08:18:17  *** jamespd has joined #openstack-infra
+2014-05-03T08:19:41  *** jeblair has joined #openstack-infra
+2014-05-03T08:33:07  *** talluri has quit IRC
+2014-05-03T08:35:10  *** talluri has joined #openstack-infra
+2014-05-03T08:35:15  *** praneshp has quit IRC
+2014-05-03T08:37:43  <openstackgerrit> A change was merged to stackforge/python-jenkins: Add .gitignore  https://review.openstack.org/90188
+2014-05-03T08:40:46  *** yamahata has quit IRC
+2014-05-03T08:41:15  *** yamahata has joined #openstack-infra
+2014-05-03T09:00:59  *** _nadya_ has quit IRC
+2014-05-03T09:02:03  *** talluri has quit IRC
+2014-05-03T09:02:16  *** alexpilotti has joined #openstack-infra
+2014-05-03T09:02:21  *** talluri has joined #openstack-infra
+2014-05-03T09:03:28  *** talluri has quit IRC
+2014-05-03T09:03:42  *** talluri has joined #openstack-infra
+2014-05-03T09:03:43  *** talluri has quit IRC
+2014-05-03T09:03:57  *** talluri has joined #openstack-infra
+2014-05-03T09:04:14  *** talluri has quit IRC
+2014-05-03T09:04:37  *** talluri has joined #openstack-infra
+2014-05-03T09:09:32  *** talluri has quit IRC
+2014-05-03T09:12:08  *** talluri has joined #openstack-infra
+2014-05-03T09:21:37  *** _nadya_ has joined #openstack-infra
+2014-05-03T09:26:12  *** _nadya_ has quit IRC
+2014-05-03T09:26:54  *** zhiyan_ is now known as zhiyan
+2014-05-03T09:34:23  *** talluri has quit IRC
+2014-05-03T09:36:05  *** zhiyan is now known as zhiyan_
+2014-05-03T09:36:12  *** oomichi has quit IRC
+2014-05-03T09:38:54  *** _nadya_ has joined #openstack-infra
+2014-05-03T09:42:00  *** zhiyan_ is now known as zhiyan
+2014-05-03T09:42:42  *** wendle has joined #openstack-infra
+2014-05-03T09:43:13  *** _nadya_ has quit IRC
+2014-05-03T10:16:09  *** mdenny has quit IRC
+2014-05-03T10:16:38  *** kmartin has quit IRC
+2014-05-03T10:19:48  *** jerryz_ has quit IRC
+2014-05-03T10:21:57  *** SumitNaiksatam has quit IRC
+2014-05-03T10:24:17  *** zhiyan is now known as zhiyan_
+2014-05-03T10:25:01  *** _nadya_ has joined #openstack-infra
+2014-05-03T10:28:31  <openstackgerrit> Sean Dague proposed a change to openstack-infra/os-loganalyze: fix highlighting on console.html files  https://review.openstack.org/91953
+2014-05-03T10:37:20  *** rcarrill` has joined #openstack-infra
+2014-05-03T10:39:11  *** rcarrillocruz has quit IRC
+2014-05-03T10:51:43  *** jooools has joined #openstack-infra
+2014-05-03T11:00:08  *** _nadya_ has quit IRC
+2014-05-03T11:02:22  *** _nadya_ has joined #openstack-infra
+2014-05-03T11:05:51  *** _nadya_ has quit IRC
+2014-05-03T11:15:08  *** chandan_kumar has quit IRC
+2014-05-03T11:16:17  *** dizquierdo has joined #openstack-infra
+2014-05-03T11:25:52  *** giustoXricordarl has joined #openstack-infra
+2014-05-03T11:26:11  <Adri2000> I'm not familiar with selenium logs, this one is timing out: http://logs.openstack.org/34/89534/1/check/gate-horizon-selenium/4c53078/console.html.gz any idea?
+2014-05-03T11:28:42  *** giustoXricordarl has quit IRC
+2014-05-03T11:29:19  *** giustoXricordarl has joined #openstack-infra
+2014-05-03T11:29:24  *** jooools has quit IRC
+2014-05-03T11:30:13  *** ociuhandu has quit IRC
+2014-05-03T11:32:46  *** giustoXricordarl has quit IRC
+2014-05-03T11:33:22  *** giustoXricordarl has joined #openstack-infra
+2014-05-03T11:37:17  *** ihrachyshka has joined #openstack-infra
+2014-05-03T11:52:51  *** alexpilotti has quit IRC
+2014-05-03T12:16:07  *** rcarrillocruz has joined #openstack-infra
+2014-05-03T12:17:30  *** rcarrill` has quit IRC
+2014-05-03T12:21:26  *** ihrachyshka has quit IRC
+2014-05-03T12:25:13  *** _nadya_ has joined #openstack-infra
+2014-05-03T12:27:19  *** ihrachyshka has joined #openstack-infra
+2014-05-03T12:27:56  *** _nadya_ has quit IRC
+2014-05-03T12:31:50  *** flaper87|afk is now known as flaper87
+2014-05-03T12:36:50  *** mriedem has joined #openstack-infra
+2014-05-03T12:40:54  *** dizquierdo has quit IRC
+2014-05-03T12:51:36  *** pblaho has joined #openstack-infra
+2014-05-03T12:53:00  *** dims has joined #openstack-infra
+2014-05-03T12:53:30  *** pblaho has quit IRC
+2014-05-03T13:01:20  <openstackgerrit> Matt Riedemann proposed a change to openstack-infra/elastic-recheck: Add query for nova bug 1315668  https://review.openstack.org/91958
+2014-05-03T13:01:21  <uvirtbot> Launchpad bug 1315668 in nova "test_security_group_rules_create_with_optional_arguments fails: This result object does not return rows. It has been closed automatically." [Undecided,New] https://launchpad.net/bugs/1315668
+2014-05-03T13:06:57  *** dims has quit IRC
+2014-05-03T13:09:03  <openstackgerrit> A change was merged to openstack-infra/elastic-recheck: Add query for nova bug 1315668  https://review.openstack.org/91958
+2014-05-03T13:09:04  <uvirtbot> Launchpad bug 1315668 in nova "test_security_group_rules_create_with_optional_arguments fails: This result object does not return rows. It has been closed automatically." [Undecided,New] https://launchpad.net/bugs/1315668
+2014-05-03T13:16:33  *** otherwiseguy has joined #openstack-infra
+2014-05-03T13:38:05  *** ihrachyshka has quit IRC
+2014-05-03T13:46:39  *** mengxd has joined #openstack-infra
+2014-05-03T13:48:06  <openstackgerrit> Darragh Bailey proposed a change to openstack-infra/jenkins-job-builder: Test creation of multiple jobs from templates  https://review.openstack.org/91960
+2014-05-03T13:49:38  *** mengxd has quit IRC
+2014-05-03T14:03:58  *** andreykurilin_ has quit IRC
+2014-05-03T14:04:38  *** andreykurilin_ has joined #openstack-infra
+2014-05-03T14:24:45  *** wenlock has joined #openstack-infra
+2014-05-03T14:27:05  *** plars has quit IRC
+2014-05-03T14:28:06  *** plars has joined #openstack-infra
+2014-05-03T14:39:04  *** mfer has joined #openstack-infra
+2014-05-03T14:43:25  *** ramashri has joined #openstack-infra
+2014-05-03T14:45:54  *** otherwiseguy has quit IRC
+2014-05-03T14:47:43  *** ramashri has quit IRC
+2014-05-03T14:58:08  *** mfer has quit IRC
+2014-05-03T15:02:30  *** mfer has joined #openstack-infra
+2014-05-03T15:10:27  *** wenlock has quit IRC
+2014-05-03T15:11:06  *** blamar has quit IRC
+2014-05-03T15:11:41  *** mfer has quit IRC
+2014-05-03T15:16:11  *** blamar has joined #openstack-infra
+2014-05-03T15:28:07  *** _nadya_ has joined #openstack-infra
+2014-05-03T15:30:29  *** wenlock has joined #openstack-infra
+2014-05-03T15:41:55  *** ociuhandu has joined #openstack-infra
+2014-05-03T15:42:11  *** wenlock has quit IRC
+2014-05-03T15:42:30  *** wenlock has joined #openstack-infra
+2014-05-03T15:46:58  *** mriedem has quit IRC
+2014-05-03T15:48:07  *** rhsu has joined #openstack-infra
+2014-05-03T15:55:58  *** wenlock has quit IRC
+2014-05-03T16:05:17  *** _nadya_ has quit IRC
+2014-05-03T16:18:03  *** wenlock has joined #openstack-infra
+2014-05-03T16:24:25  *** rhsu has quit IRC
+2014-05-03T16:24:32  *** rhsu has joined #openstack-infra
+2014-05-03T16:26:40  *** zns has joined #openstack-infra
+2014-05-03T16:27:10  *** zns has quit IRC
+2014-05-03T16:27:46  *** zns has joined #openstack-infra
+2014-05-03T16:27:58  *** giustoXricordarl has quit IRC
+2014-05-03T16:31:31  *** e0ne has joined #openstack-infra
+2014-05-03T16:40:55  *** zns has quit IRC
+2014-05-03T16:42:14  *** e0ne has quit IRC
+2014-05-03T16:43:50  *** imcsk8 has quit IRC
+2014-05-03T16:44:10  *** imcsk8 has joined #openstack-infra
+2014-05-03T16:46:25  *** pcrews_ has joined #openstack-infra
+2014-05-03T16:47:26  *** zns has joined #openstack-infra
+2014-05-03T16:48:19  *** e0ne has joined #openstack-infra
+2014-05-03T16:50:31  *** _nadya_ has joined #openstack-infra
+2014-05-03T16:51:34  *** pcrews_ has quit IRC
+2014-05-03T16:58:43  *** rcarrill` has joined #openstack-infra
+2014-05-03T16:59:26  *** moted has joined #openstack-infra
+2014-05-03T17:01:06  *** rcarrillocruz has quit IRC
+2014-05-03T17:01:18  *** moted has quit IRC
+2014-05-03T17:04:44  *** yfried has joined #openstack-infra
+2014-05-03T17:11:47  *** wenlock has quit IRC
+2014-05-03T17:14:51  <openstackgerrit> Matthew Treinish proposed a change to openstack-infra/devstack-gate: Capture *.failure logs from $BASE/status/stack  https://review.openstack.org/91965
+2014-05-03T17:17:08  <fungi> test volume seems minimal, so i'm taking this opportunity to resize nodepool.o.o from a 2gb instance to 8gb. once it restarts i'll probably have to bump nodepoold again on it to get reporting to graphite to resume (based on prior experiences) and do a little cleanup on lost nodes, but in general it should all pass unnoticed unless you're staring at graphs
+2014-05-03T17:21:15  *** rhsu has quit IRC
+2014-05-03T17:21:19  *** _nadya_ has quit IRC
+2014-05-03T17:21:40  *** rcarrillocruz has joined #openstack-infra
+2014-05-03T17:22:18  <ildikov_> fungi: thanks for approving the netifaces patch and replying on the bug report
+2014-05-03T17:23:54  *** rcarrill` has quit IRC
+2014-05-03T17:32:00  <fungi> ildikov_: yw
+2014-05-03T17:33:26  *** wenlock has joined #openstack-infra
+2014-05-03T17:41:55  <ildikov_> fungi: BTW: the patch is failing because of this error on the gate now: error: Namespace package problem: sphinxcontrib ... :(
+2014-05-03T17:42:15  <fungi> ildikov_: oh, fun!
+2014-05-03T17:42:41  <ildikov_> fungi: log: https://jenkins03.openstack.org/job/gate-requirements-integration-dsvm/143/console
+2014-05-03T17:43:22  <fungi> yep, was already looking at the error... i wonder if we've hit something else newly releasing brokenness now
+2014-05-03T17:44:14  <fungi> in unrelated news, the nodepool.o.o resize stopped a few minutes in and left the instance in an error state (at least nodepool is still up and running!). i've opened a support case with rackspace so they can look into it
+2014-05-03T17:48:44  <ildikov_> thanks fo rthe news, we have a bit bit too much for a Saturday or I'm just new to infra insides
+2014-05-03T17:49:10  <fungi> nah, this is a "slow" saturday ;)
+2014-05-03T17:49:58  <openstackgerrit> Joshua Harlow proposed a change to stackforge/gertty: Add a pbr compatible setup  https://review.openstack.org/91967
+2014-05-03T17:50:12  <fungi> mordred: dhellmann: if either of you are around, this mysterious namespace package error may be of interest... http://logs.openstack.org/15/91815/4/gate/gate-requirements-integration-dsvm/44d6cdf/console.html
+2014-05-03T17:50:32  <ildikov_> nice :)
+2014-05-03T17:50:45  <fungi> "error: Namespace package problem: sphinxcontrib is a namespace package, but its __init__.py does not call declare_namespace()! Please fix it."
+2014-05-03T17:52:39  <ildikov_> that sphinxcontrib issue seems to be pretty new and sphinxcontrib-docbookrestapi was not updated nowadays as I saw
+2014-05-03T17:53:01  <fungi> yeah, not since december
+2014-05-03T17:53:06  <fungi> i have a theroy...
+2014-05-03T17:53:09  <fungi> theory too
+2014-05-03T17:53:44  <fungi> nope, already disproved what i was suspecting
+2014-05-03T17:53:48  <fungi> back to the drawing board
+2014-05-03T17:55:04  *** zns has quit IRC
+2014-05-03T17:56:03  <fungi> aha!
+2014-05-03T17:56:08  <fungi> setuptools strikes again!
+2014-05-03T17:56:16  <fungi> setuptools 3.5 released today
+2014-05-03T17:56:20  <fungi> https://pypi.python.org/pypi/setuptools
+2014-05-03T17:57:04  <ildikov_> well, it was included in the error message that check setuptools doc..., so I could have thought immediately
+2014-05-03T17:57:43  *** wenlock has quit IRC
+2014-05-03T17:57:43  <fungi> yeah, but they've had so many releases recently i guess i secretly hoped they'd have settled down finally for a while
+2014-05-03T17:58:38  <ildikov_> that pypy gate problem was also a setuptools issue, right? or something close to it
+2014-05-03T17:59:26  *** etoews_ has joined #openstack-infra
+2014-05-03T17:59:30  <ildikov_> as for netifaces it was finally set as <=0.8 to be sure that we allow installing the latest version if it finally seems stable...
+2014-05-03T17:59:43  *** wenlock has joined #openstack-infra
+2014-05-03T17:59:59  <fungi> ildikov_: it seemed like it at first, but later turned out to be different setuptools releases causing ordering differences which were sometimes either exposing or hiding the issue. the actual problem we had with pypy testing had to do with some py3k patches backported to pypy in the debian/ubuntu packaging
+2014-05-03T18:00:18  *** etoews has quit IRC
+2014-05-03T18:01:23  <openstackgerrit> Joshua Harlow proposed a change to stackforge/gertty: Add a pbr compatible setup  https://review.openstack.org/91967
+2014-05-03T18:02:15  <ildikov_> a-ha, I see, I did not follow closely the news about it after the job was set to be non-voting
+2014-05-03T18:04:12  <yfried> fungi: jesusaurus: clarkb: I have some more logstash questions. anyone here to answer?
+2014-05-03T18:08:48  <fungi> yfried: maybe. the others grok it a little better than i do, but i may be the only one around
+2014-05-03T18:10:57  *** mriedem has joined #openstack-infra
+2014-05-03T18:11:27  <fungi> that was quick. rackspace got the nodepool.o.o resize back on track
+2014-05-03T18:11:31  <fungi> fanatical ;)
+2014-05-03T18:11:35  <yfried> fungi: better you. I'm looking for some more details to what you explained befoer
+2014-05-03T18:11:38  <fungi> looks like it's rebooting now
+2014-05-03T18:12:55  <ildikov_> fungi: \o/ :)
+2014-05-03T18:15:10  <fungi> ildikov_: oh, it's also possible this is slightly older setuptools differences being exposed by new pip/virtualenv (also released today)
+2014-05-03T18:16:07  <fungi> so it may take some more digging to untangle which of those releases (if any) is exposing the issue in sphinxcontrib-docbookrestapi
+2014-05-03T18:17:55  <ildikov_> and I naively thought that this tiny little ptach will finally get landed soon...
+2014-05-03T18:21:16  *** mrodden has joined #openstack-infra
+2014-05-03T18:22:38  *** etoews_ has quit IRC
+2014-05-03T18:24:05  *** _nadya_ has joined #openstack-infra
+2014-05-03T18:27:09  *** andreykurilin_ has quit IRC
+2014-05-03T18:37:06  *** harlowja_at_home has joined #openstack-infra
+2014-05-03T18:37:40  <harlowja_at_home> jeblair, https://review.openstack.org/#/c/91967/ should be much easier to install now
+2014-05-03T18:44:04  <jeblair> harlowja_at_home: thanks!  that's great.  i left a couple of suggestions about some imports inline
+2014-05-03T18:44:10  <harlowja_at_home> kk
+2014-05-03T18:44:57  *** _nadya_ has quit IRC
+2014-05-03T18:53:17  *** bearhands is now known as comstud
+2014-05-03T18:54:36  *** mfer has joined #openstack-infra
+2014-05-03T18:55:04  <openstackgerrit> Joshua Harlow proposed a change to stackforge/gertty: Add a pbr compatible setup  https://review.openstack.org/91967
+2014-05-03T18:56:21  *** mfer has quit IRC
+2014-05-03T18:58:42  <openstackgerrit> A change was merged to stackforge/gertty: Add a pbr compatible setup  https://review.openstack.org/91967
+2014-05-03T18:58:54  <jeblair> harlowja_at_home: woot
+2014-05-03T18:59:01  <harlowja_at_home> thx, there u go
+2014-05-03T18:59:06  <harlowja_at_home> good deed for today, ha
+2014-05-03T18:59:51  <jeblair> harlowja_at_home: it installs AND can exit!  it's starting to look like a real app!
+2014-05-03T18:59:54  <harlowja_at_home> jeblair, btw i noticed u have jeblair@openstack.org as email, how do i get such an email :-P
+2014-05-03T19:00:06  <jeblair> harlowja_at_home: well, i work for the foundation
+2014-05-03T19:00:11  <harlowja_at_home> hmmm
+2014-05-03T19:00:35  <fungi> ildikov_: found the fix for https://bitbucket.org/al45tair/netifaces/issue/1/gcc-fails-while-installing-0100-0101 so hopefully if the maintainer agrees it'll show up in netifaces 0.10.2
+2014-05-03T19:01:23  <harlowja_at_home> did mark mclain or any others bug u guys about DMARC again, seems to be causing probelms for some (at least at yahoo)
+2014-05-03T19:01:25  <ildikov_> fungi: I've just checked my mails a minute ago, nice catch
+2014-05-03T19:03:24  <fungi> harlowja_at_home: yeah, a bit. general consensus is that you should not post to technical mailing lists from addresses at corporate mtas or mass hosting grinders which implement strong dmarc enforcement
+2014-05-03T19:03:30  *** superdan is now known as dansmith
+2014-05-03T19:03:36  <harlowja_at_home> fungi,  boo, lol
+2014-05-03T19:04:11  <fungi> harlowja_at_home: an incorrect dkim signature is supposed to be treated no differently than a missing one, per the rfc
+2014-05-03T19:05:07  <fungi> harlowja_at_home: so while we could consider stripping dkim headers entirely from messages, or munging the sender address to be the listserv, or a number of other unsavory workarounds, i'm unconvinced it's in the best interests of the project to do so
+2014-05-03T19:05:45  <harlowja_at_home> fungi,  understood, to u know what other mailing lists are doing (it would seem to be a common issue thats popping up nowadays)
+2014-05-03T19:05:48  <harlowja_at_home> *do u know
+2014-05-03T19:06:17  <ildikov_> fungi: it seems that the netifaces fix can be ready before getting the quickfix patch landed...
+2014-05-03T19:07:44  <fungi> harlowja_at_home: i'd have to go back and pull some specific examples of which lists were doing what to address it, but those were the basic options chosen among them
+2014-05-03T19:07:57  <harlowja_at_home> fungi,  np (more just curious)
+2014-05-03T19:10:10  <fungi> harlowja_at_home: the dmarc faq has some suggestions... http://dmarc.org/faq.html#s_3 (we could frame any more formal discussion around those if there's interest)
+2014-05-03T19:11:10  <fungi> basically it serves as a concise list of the various compromises you, as a list operator, can engage in to cripple your mailing list features in one way or another
+2014-05-03T19:11:11  <harlowja_at_home> intersting
+2014-05-03T19:11:25  <harlowja_at_home> fungi, ya, it seems like that :)
+2014-05-03T19:11:26  *** rhsu has joined #openstack-infra
+2014-05-03T19:13:11  *** rhsu has quit IRC
+2014-05-03T19:13:21  <harlowja_at_home> although 3.C there seems the least problematic/intrusive (i guess)
+2014-05-03T19:14:05  <fungi> yeah, though the cons are such that i'm not sure i want to have to maintain that solution :/
+2014-05-03T19:14:34  <clarkb> use a gmail address ;)
+2014-05-03T19:14:45  <fungi> i suppose if there's a plugin for mailman somewhere which takes care of that behind the scenes, then it could be considered
+2014-05-03T19:14:54  *** rhsu has joined #openstack-infra
+2014-05-03T19:14:59  <harlowja_at_home> clarkb, ya i know, its just a pita to have to do all that :-P
+2014-05-03T19:16:20  <harlowja_at_home> but i guess its a pita all the ways
+2014-05-03T19:17:53  <fungi> companies which implement dmarc and enforce it on their mail gateways are basically making a statement that they don't want to participate in the public e-mail network any longer, and want to stick to using it solely for internal, b2b or mass advertising
+2014-05-03T19:19:38  *** mriedem has quit IRC
+2014-05-03T19:20:34  <harlowja_at_home> fungi, i reason its a little to early to tell; i think it has somewhat good intentions (sender verification and such), but might need a few more iterations to become truely 'correct'
+2014-05-03T19:21:38  <harlowja_at_home> but idk, i'm not really an expert :-P
+2014-05-03T19:22:20  <fungi> well, it's not really verifying senders, it's verifying mailservers, which i think is part of my problem with the whole idea
+2014-05-03T19:22:57  <harlowja_at_home> ah, good point, true
+2014-05-03T19:23:06  <fungi> from the earliest vestiges of domainkeys and spf, they were being pushed by the mass-mail hosters to reduce the volume of undeliverable bounces they were getting flooded with because of spoofed spam and joe-jobs
+2014-05-03T19:23:57  <fungi> dmarc effectively consists of solutions engineered to save mass mail hosters money
+2014-05-03T19:29:21  *** _nadya_ has joined #openstack-infra
+2014-05-03T19:29:50  <ildikov_> fungi: your suggested netifaces fix was just approved by the author so one problem will be solved with a new release soon
+2014-05-03T19:32:52  <fungi> ildikov_: i saw! though we still need to work out what's doing on with sphinxcontrib-docbookrestapi and the namespace package error. i'll try to recreate that with a more refined test case momentarily
+2014-05-03T19:34:38  <ildikov_> fungi: yes, I know, the Murphy factor in this that a new patch should be uploaded for netifaces too as the current one on the gate contains <=0.8
+2014-05-03T19:34:40  *** _nadya_ has quit IRC
+2014-05-03T19:36:17  <fungi> yeah, options there are to either ignore that there were a couple of broken netifaces releases the first two days of may, or explicitly append ,!=0.10.0,!=0.10.1 just in case someone ever tries to use those for some reason
+2014-05-03T19:37:52  <ildikov_> fungi: you mean checking which latest version can be the cause of that issue?
+2014-05-03T19:37:53  *** lnxnut has joined #openstack-infra
+2014-05-03T19:38:39  <fungi> ildikov_: well, first trying to reproduce it simply (could be as easy as trying to install sphinxcontrib-docbookrestapi in a fresh virtualenv)
+2014-05-03T19:38:52  <ildikov_> fungi: I would go for the latter one, just to be sure, it does not worth another bug report
+2014-05-03T19:39:17  <fungi> sounds fine to me
+2014-05-03T19:42:00  <ildikov_> fungi: the new version is released, on Monday I can propose a new patch with these limitations
+2014-05-03T19:42:46  <fungi> ildikov_: the reason i'm somewhat indifferent to those two options is that this wasn't really a "openstack doesn't work with those versions" bug, it was a "those versions are broken and uninstallable on some common platforms" bug
+2014-05-03T19:43:19  <ildikov_> fungi: is that requirements gate job the only one that tries to install sphinxcontrib-docbookrestapi?
+2014-05-03T19:43:20  <fungi> so i'm fine with whatever option gets picked
+2014-05-03T19:44:41  <fungi> ildikov_: i'm not sure. that job may be an early warning in this case because it bypasses our pypi mirror, so it's potentially running into behaviors in new releases of things (setuptools, pip, virtualenv) which we aren't running in other jobs (yet)
+2014-05-03T19:45:12  <ildikov_> fungi: that sounds reasonable
+2014-05-03T19:47:02  *** harlowja_at_home has quit IRC
+2014-05-03T19:47:19  <ildikov_> fungi: I've just wanted to ask that is there any chance to "filter out" these new version issues somehow :)
+2014-05-03T19:47:23  *** ArxCruz has joined #openstack-infra
+2014-05-03T19:48:06  <fungi> ildikov_: we've discussed that at a few summits now, and the consensus has been that by doing that we potentially blind ourselves to waiting problems
+2014-05-03T19:49:21  <fungi> the best suggestion i've heard, though nobody's implemented it yet, is to have a reactionary periodic job which can find breakage like this on the already merged (and presumed working) state of projects, automatically opening bugs to alert us
+2014-05-03T19:50:07  <fungi> and if possible, diffing the installed package list against previous runs to identify contenders (perhaps with further iterations downgrading one or more of those until the actual culprit is confirmed)
+2014-05-03T19:52:15  <ildikov_> fungi: yeap, I was thinking about something similar, but I'm not surprised that nobody has implemented it yet
+2014-05-03T19:53:27  <fungi> ildikov_: and the pain that we endure from testing the latest releases of so many popular python modules on multiple platforms is actually a great benefit to the wider community
+2014-05-03T19:54:08  <fungi> bugs get reported upstream in a timely manner, and fixes get implemented hopefully before it actually impacts anyone in a production situation
+2014-05-03T19:57:22  <ildikov_> fungi: yes, I was smiling on it today, when you said that not just setuptools was updated recently that there is an already reported bug on a newly released package, now the new release is out
+2014-05-03T19:58:28  <ildikov_> fungi: and also there are the new issues already on the gate  on the day of the new release
+2014-05-03T19:59:43  <ildikov_> fungi: so our gate does not only test OpenStack itself, which thing I knew, I just wasn't aware that how big the impact is
+2014-05-03T20:00:14  <fungi> ildikov_: pretty much
+2014-05-03T20:00:35  <fungi> ildikov_: so on the sphinxcontrib-docbookrestapi front, it's not setuptools 3.5 complaining
+2014-05-03T20:00:49  *** Ryan_Lane has quit IRC
+2014-05-03T20:00:52  <fungi> it's setuptools 3.4.4 (brought in by the new pip 1.5.5) complaining
+2014-05-03T20:01:13  <fungi> just confirmed by playing around with a couple of virtualenvs
+2014-05-03T20:03:07  <ildikov_> fungi: I saw that version number in the doc, at least setuptools itself was a good guess
+2014-05-03T20:03:15  <fungi> also, i've confirmed the nodepool.o.o resize, everything is back up and running cleanly. i'll remove any cruft nodes later once i see which are sticking around and not deleting on their own
+2014-05-03T20:03:22  *** Ryan_Lane has joined #openstack-infra
+2014-05-03T20:04:32  *** lnxnut has quit IRC
+2014-05-03T20:05:58  *** markwash has joined #openstack-infra
+2014-05-03T20:06:16  <ildikov_> sounds good :)
+2014-05-03T20:08:19  <fungi> and yep, confirmed that earlier setuptools (2.2) was complaining about this for sphinxcontrib-docbookrestapi... http://paste.openstack.org/show/78623/
+2014-05-03T20:08:30  *** rcarrill` has joined #openstack-infra
+2014-05-03T20:09:05  <fungi> i wonder if cyril hangs out in any openstack irc channels
+2014-05-03T20:09:54  <ildikov_> fungi: nice...
+2014-05-03T20:14:49  *** luisg_ has quit IRC
+2014-05-03T20:15:30  <ildikov_> fungi: I do not know, I had some fixes in another sphinxcontrib extension and discussed the details with dhellmann then
+2014-05-03T20:16:34  *** rcarrillocruz has quit IRC
+2014-05-03T20:17:44  <fungi> ildikov_: yeah, i'm just going to take a stab at fixing it and propose a patch, then hunt down cyril since he's the only one who can officially approve patches on that stackforge project (its core reviewer group has but one lonely entry)
+2014-05-03T20:19:23  <ildikov_> fungi: yeap, I've just checked it
+2014-05-03T20:21:09  <ildikov_> fungi: and here I'm giving it up for today :)
+2014-05-03T20:21:14  <fungi> __import__('pkg_resources').declare_namespace(__name__)
+2014-05-03T20:21:25  <fungi> in sphinxcontrib/__init__.py
+2014-05-03T20:21:32  <fungi> that's all it needed
+2014-05-03T20:21:34  <fungi> proposing now
+2014-05-03T20:21:41  <fungi> have a good weekend ildikov_!
+2014-05-03T20:23:02  <ildikov_> fungi: pretty easy fix :)
+2014-05-03T20:23:50  <ildikov_> fungi: have a nice weekend too!
+2014-05-03T20:24:33  *** rhsu1 has joined #openstack-infra
+2014-05-03T20:24:33  *** rhsu has quit IRC
+2014-05-03T20:27:06  <fungi> so easy, there was already a fix proposed to it over a month ago. perhaps the latest breakage will spur cyril into reviewing/approving it
+2014-05-03T20:33:06  <ildikov_> uh, well it seems to be the result of that lonely entry, hopefully it will be extended with at least one more
+2014-05-03T20:33:33  *** luisg_ has joined #openstack-infra
+2014-05-03T20:33:41  <fungi> i'll make sure to drum up some noise and get someone at enovance to bring it to his attention
+2014-05-03T20:34:12  *** andreykurilin_ has joined #openstack-infra
+2014-05-03T20:37:10  <ildikov_> fair enough as it blocks the gate now too
+2014-05-03T20:38:30  <openstackgerrit> Matthew Treinish proposed a change to openstack-infra/devstack-gate: Capture *.failure logs from $BASE/status/stack  https://review.openstack.org/91965
+2014-05-03T20:52:45  *** ildikov has joined #openstack-infra
+2014-05-03T20:55:54  *** ildikov_ has quit IRC
+2014-05-03T21:06:13  <sdague> man, it is way too much scrollback here for a saturday
+2014-05-03T21:09:47  *** markwash_ has joined #openstack-infra
+2014-05-03T21:09:58  *** markwash has quit IRC
+2014-05-03T21:09:58  *** markwash_ is now known as markwash
+2014-05-03T21:17:52  *** mriedem has joined #openstack-infra
+2014-05-03T21:30:52  *** wenlock has quit IRC
+2014-05-03T21:31:14  *** ArxCruz has quit IRC
+2014-05-03T21:37:25  *** ArxCruz has joined #openstack-infra
+2014-05-03T21:37:30  *** ArxCruz has quit IRC
+2014-05-03T21:40:55  *** praneshp has joined #openstack-infra
+2014-05-03T21:41:41  *** markwash has quit IRC
+2014-05-03T21:57:36  <openstackgerrit> Matthew Treinish proposed a change to openstack-infra/devstack-gate: Capture *.failure logs from $BASE/status/stack  https://review.openstack.org/91965
+2014-05-03T22:13:30  *** yamahata has quit IRC
+2014-05-03T22:15:32  *** yamahata has joined #openstack-infra
+2014-05-03T22:29:42  *** wenlock has joined #openstack-infra
+2014-05-03T22:35:14  *** _nadya_ has joined #openstack-infra
+2014-05-03T22:38:46  *** andreykurilin_ has quit IRC
+2014-05-03T22:39:18  *** _nadya_ has quit IRC
+2014-05-03T22:39:23  *** andreykurilin_ has joined #openstack-infra
+2014-05-03T22:42:51  <jeblair> fungi: ping
+2014-05-03T22:44:40  <jeblair> fungi: i see you have already resized nodepool.  thanks!
+2014-05-03T22:48:32  *** dripton has quit IRC
+2014-05-03T22:49:12  <fungi> jeblair: i have--anything else? travel going well?
+2014-05-03T22:49:37  <jeblair> nope, just checking in to see if i could help with that
+2014-05-03T22:49:49  <fungi> mostly been beating my head on gate bugs today, not really infra-related
+2014-05-03T22:50:00  <jeblair> (i'm traveling on monday)
+2014-05-03T22:50:35  <fungi> oh, cool. well, enjoy your weekend in that case!
+2014-05-03T22:51:12  <jeblair> thanks, you too (but if you're working on gate bugs, i'm starting to wonder... ;)
+2014-05-03T22:53:04  <fungi> nah, about to hack some more on evacuating virtual machines from my basement to a service provider so i don't have to take all this beat-up old hardware with me to the outer banks in a month
+2014-05-03T22:57:52  *** sweston has quit IRC
+2014-05-03T23:03:46  *** ArxCruz has joined #openstack-infra
+2014-05-03T23:04:24  *** sweston has joined #openstack-infra
+2014-05-03T23:05:04  *** andreykurilin_ has quit IRC
+2014-05-03T23:05:46  *** changbl has quit IRC
+2014-05-03T23:07:47  *** zhiyan_ is now known as zhiyan
+2014-05-03T23:08:55  *** ArxCruz has quit IRC
+2014-05-03T23:09:07  *** ArxCruz has joined #openstack-infra
+2014-05-03T23:12:48  *** rhsu1 has quit IRC
+2014-05-03T23:13:58  *** andreykurilin_ has joined #openstack-infra
+2014-05-03T23:14:45  *** praneshp has quit IRC
+2014-05-03T23:19:52  *** dripton has joined #openstack-infra
+2014-05-03T23:24:48  *** changbl has joined #openstack-infra
+2014-05-03T23:28:04  *** morganfainberg_Z is now known as morganfainberg
+2014-05-03T23:28:49  *** zhiyan is now known as zhiyan_
+2014-05-03T23:40:52  *** Ryan_Lane1 has joined #openstack-infra
+2014-05-03T23:44:07  *** andreykurilin_ has quit IRC

@@ -1,0 +1,803 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Wednesday, 2014-12-31</title>
+  <link rel="stylesheet" href="irclog.css" />
+  <meta name="generator" content="irclog2html.py 2.14.0 by Marius Gedminas" />
+  <meta name="version" content="2.14.0 - 2014-12-12" />
+</head>
+<body>
+<h1>Wednesday, 2014-12-31</h1>
+<div class="navigation"> <a href="%23openstack-infra.2014-12-30.log.html">&#171; Tuesday, 2014-12-30</a> <a href="index.html">Index</a> <a href="%23openstack-infra.2015-01-01.log.html">Thursday, 2015-01-01 &#187;</a> </div>
+<table class="irclog">
+<tr id="t2014-12-31T00:00:24"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">ya reading docs supposedly it should shove everything in vendor/ but I got a framework/ and cms/ for silverstripe among other things</td><td class="time"><a href="#t2014-12-31T00:00:24" class="time">00:00</a></td></tr>
+<tr id="t2014-12-31T00:02:17"><th class="nick" style="background: #42427e">jroll</th><td class="text" style="color: #42427e">oh, silverstripe might be doing crazy things, if those are also silverstripe modules</td><td class="time"><a href="#t2014-12-31T00:02:17" class="time">00:02</a></td></tr>
+<tr id="t2014-12-31T00:02:24"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">they are</td><td class="time"><a href="#t2014-12-31T00:02:24" class="time">00:02</a></td></tr>
+<tr id="t2014-12-31T00:02:30"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">but not all of them</td><td class="time"><a href="#t2014-12-31T00:02:30" class="time">00:02</a></td></tr>
+<tr id="t2014-12-31T00:02:54"><th class="nick" style="background: #42427e">jroll</th><td class="text" style="color: #42427e">strange</td><td class="time"><a href="#t2014-12-31T00:02:54" class="time">00:02</a></td></tr>
+<tr id="t2014-12-31T00:03:12"><th class="nick" style="background: #42427e">jroll</th><td class="text" style="color: #42427e">I've only used composer for installing deps, I know about as much as you do :P</td><td class="time"><a href="#t2014-12-31T00:03:12" class="time">00:03</a></td></tr>
+<tr id="t2014-12-31T00:04:28"><th class="nick" style="background: #818144">reed</th><td class="text" style="color: #818144">jeblair, there is a gale warning for the next two days in the bay, looks like fun but too cold for me to sail</td><td class="time"><a href="#t2014-12-31T00:04:28" class="time">00:04</a></td></tr>
+<tr id="t2014-12-31T00:05:17"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">dstufft: because I ran into this with composer, I hope that pip running without a $HOME envvar doesn't make it fail. Instead hopefully it just doesn't cache anything</td><td class="time"><a href="#t2014-12-31T00:05:17" class="time">00:05</a></td></tr>
+<tr id="t2014-12-31T00:08:00"><th class="nick" style="background: #42427e">jroll</th><td class="text" style="color: #42427e">some tox weirdness here, anyone ever seen something like this? <a href="https://gist.github.com/jimrollenhagen/c844bc437853c93834dd" rel="nofollow">https://gist.github.com/jimrollenhagen/c844bc437853c93834dd</a></td><td class="time"><a href="#t2014-12-31T00:08:00" class="time">00:08</a></td></tr>
+<tr id="t2014-12-31T00:08:23"><th class="nick" style="background: #42427e">jroll</th><td class="text" style="color: #42427e">trying to make the pep8 test run on python files without a .py extension, open to better ways</td><td class="time"><a href="#t2014-12-31T00:08:23" class="time">00:08</a></td></tr>
+<tr id="t2014-12-31T00:08:36"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">do we want openstackweb notifications in here?</td><td class="time"><a href="#t2014-12-31T00:08:36" class="time">00:08</a></td></tr>
+<tr id="t2014-12-31T00:09:20"><th class="nick" style="background: #42427e">jroll</th><td class="text" style="color: #42427e">I'm just going to enumerate both files in bin/ for now, would rather not though</td><td class="time"><a href="#t2014-12-31T00:09:20" class="time">00:09</a></td></tr>
+<tr id="t2014-12-31T00:09:51"><td class="join" colspan="2">*** mriedem has joined #openstack-infra</td><td><a href="#t2014-12-31T00:09:51" class="time">00:09</a></td></tr>
+<tr id="t2014-12-31T00:11:13"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">jroll: it doesn't run in a shell so you could do something like bash -c 'flake8 bin/*'</td><td class="time"><a href="#t2014-12-31T00:11:13" class="time">00:11</a></td></tr>
+<tr id="t2014-12-31T00:11:23"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">I am not sure if flake8 has a better way to do that</td><td class="time"><a href="#t2014-12-31T00:11:23" class="time">00:11</a></td></tr>
+<tr id="t2014-12-31T00:11:37"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">pleia2: probably though I don't think they are using our repo just yet</td><td class="time"><a href="#t2014-12-31T00:11:37" class="time">00:11</a></td></tr>
+<tr id="t2014-12-31T00:11:39"><td class="part" colspan="2">*** nijaba has quit IRC</td><td><a href="#t2014-12-31T00:11:39" class="time">00:11</a></td></tr>
+<tr id="t2014-12-31T00:12:06"><th class="nick" style="background: #42427e">jroll</th><td class="text" style="color: #42427e">clarkb: mmm, true</td><td class="time"><a href="#t2014-12-31T00:12:06" class="time">00:12</a></td></tr>
+<tr id="t2014-12-31T00:12:10"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">ok installing phpmailer with composer under smtpmailer didn't help</td><td class="time"><a href="#t2014-12-31T00:12:10" class="time">00:12</a></td></tr>
+<tr id="t2014-12-31T00:12:12"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">clarkb: ah, ok</td><td class="time"><a href="#t2014-12-31T00:12:12" class="time">00:12</a></td></tr>
+<tr id="t2014-12-31T00:12:26"><td class="join" colspan="2">*** teran_ has joined #openstack-infra</td><td><a href="#t2014-12-31T00:12:26" class="time">00:12</a></td></tr>
+<tr id="t2014-12-31T00:12:27"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">but I think because the file paths are still wrong becuse it puts it in vendor/phpmailer/phpmailer</td><td class="time"><a href="#t2014-12-31T00:12:27" class="time">00:12</a></td></tr>
+<tr id="t2014-12-31T00:13:17"><th class="nick" style="background: #42427e">jroll</th><td class="text" style="color: #42427e">WARNING:test command found but not installed in testenv</td><td class="time"><a href="#t2014-12-31T00:13:17" class="time">00:13</a></td></tr>
+<tr id="t2014-12-31T00:13:18"><th class="nick" style="background: #42427e">jroll</th><td class="text" style="color: #42427e">&nbsp;&nbsp;cmd: /bin/bash</td><td class="time"><a href="#t2014-12-31T00:13:18" class="time">00:13</a></td></tr>
+<tr id="t2014-12-31T00:13:20"><th class="nick" style="background: #42427e">jroll</th><td class="text" style="color: #42427e">hehehe</td><td class="time"><a href="#t2014-12-31T00:13:20" class="time">00:13</a></td></tr>
+<tr id="t2014-12-31T00:13:24"><th class="nick" style="background: #42427e">jroll</th><td class="text" style="color: #42427e">it works though, thanks clarkb</td><td class="time"><a href="#t2014-12-31T00:13:24" class="time">00:13</a></td></tr>
+<tr id="t2014-12-31T00:14:01"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">jroll: there is a way to whitelist things like that I forget specifics though</td><td class="time"><a href="#t2014-12-31T00:14:01" class="time">00:14</a></td></tr>
+<tr id="t2014-12-31T00:14:04"><td class="part" colspan="2">*** kevinbenton_ has quit IRC</td><td><a href="#t2014-12-31T00:14:04" class="time">00:14</a></td></tr>
+<tr id="t2014-12-31T00:14:04"><td class="part" colspan="2">*** sdake has quit IRC</td><td><a href="#t2014-12-31T00:14:04" class="time">00:14</a></td></tr>
+<tr id="t2014-12-31T00:14:07"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">basically you list the commands that can run outside the venv</td><td class="time"><a href="#t2014-12-31T00:14:07" class="time">00:14</a></td></tr>
+<tr id="t2014-12-31T00:14:15"><th class="nick" style="background: #42427e">jroll</th><td class="text" style="color: #42427e">ah, ok, I'll poke around</td><td class="time"><a href="#t2014-12-31T00:14:15" class="time">00:14</a></td></tr>
+<tr id="t2014-12-31T00:14:19"><td class="join" colspan="2">*** kevinbenton has joined #openstack-infra</td><td><a href="#t2014-12-31T00:14:19" class="time">00:14</a></td></tr>
+<tr id="t2014-12-31T00:15:09"><th class="nick" style="background: #42427e">jroll</th><td class="text" style="color: #42427e">whitelist_externals = bash, for the record</td><td class="time"><a href="#t2014-12-31T00:15:09" class="time">00:15</a></td></tr>
+<tr id="t2014-12-31T00:16:45"><td class="part" colspan="2">*** teran has quit IRC</td><td><a href="#t2014-12-31T00:16:45" class="time">00:16</a></td></tr>
+<tr id="t2014-12-31T00:19:58"><td class="join" colspan="2">*** nijaba has joined #openstack-infra</td><td><a href="#t2014-12-31T00:19:58" class="time">00:19</a></td></tr>
+<tr id="t2014-12-31T00:19:58"><td class="join" colspan="2">*** nijaba has joined #openstack-infra</td><td><a href="#t2014-12-31T00:19:58" class="time">00:19</a></td></tr>
+<tr id="t2014-12-31T00:22:26"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2014-12-31T00:22:26" class="time">00:22</a></td></tr>
+<tr id="t2014-12-31T00:27:05"><th class="nick" style="background: #488888">dstufft</th><td class="text" style="color: #488888">clarkb: os.path.expanduser will look things up in the user db</td><td class="time"><a href="#t2014-12-31T00:27:05" class="time">00:27</a></td></tr>
+<tr id="t2014-12-31T00:28:18"><th class="nick" style="background: #488888">dstufft</th><td class="text" style="color: #488888">clarkb: &quot;On Unix, an initial ~ is replaced by the environment variable HOME if it is set; otherwise the current user’s home directory is looked up in the password directory through the built-in module pwd.&quot;</td><td class="time"><a href="#t2014-12-31T00:28:18" class="time">00:28</a></td></tr>
+<tr id="t2014-12-31T00:31:35"><td class="nickchange" colspan="2">*** sabari is now known as zz_sabari</td><td><a href="#t2014-12-31T00:31:35" class="time">00:31</a></td></tr>
+<tr id="t2014-12-31T00:35:45"><td class="join" colspan="2">*** dims__ has joined #openstack-infra</td><td><a href="#t2014-12-31T00:35:45" class="time">00:35</a></td></tr>
+<tr id="t2014-12-31T00:40:42"><td class="part" colspan="2">*** dims__ has quit IRC</td><td><a href="#t2014-12-31T00:40:42" class="time">00:40</a></td></tr>
+<tr id="t2014-12-31T00:41:01"><td class="join" colspan="2">*** Masahiro has joined #openstack-infra</td><td><a href="#t2014-12-31T00:41:01" class="time">00:41</a></td></tr>
+<tr id="t2014-12-31T00:41:32"><th class="nick" style="background: #488888">dstufft</th><td class="text" style="color: #488888">fungi: clarkb mordred <a href="https://github.com/pypa/pip/pull/2291" rel="nofollow">https://github.com/pypa/pip/pull/2291</a></td><td class="time"><a href="#t2014-12-31T00:41:32" class="time">00:41</a></td></tr>
+<tr id="t2014-12-31T00:41:33"><td class="part" colspan="2">*** sweston has quit IRC</td><td><a href="#t2014-12-31T00:41:33" class="time">00:41</a></td></tr>
+<tr id="t2014-12-31T00:43:21"><td class="part" colspan="2">*** mriedem has quit IRC</td><td><a href="#t2014-12-31T00:43:21" class="time">00:43</a></td></tr>
+<tr id="t2014-12-31T00:45:06"><td class="part" colspan="2">*** Masahiro has quit IRC</td><td><a href="#t2014-12-31T00:45:06" class="time">00:45</a></td></tr>
+<tr id="t2014-12-31T00:46:43"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2014-12-31T00:46:43" class="time">00:46</a></td></tr>
+<tr id="t2014-12-31T00:54:20"><td class="join" colspan="2">*** ryanpetrello has joined #openstack-infra</td><td><a href="#t2014-12-31T00:54:20" class="time">00:54</a></td></tr>
+<tr id="t2014-12-31T00:58:44"><td class="part" colspan="2">*** ZZelle has quit IRC</td><td><a href="#t2014-12-31T00:58:44" class="time">00:58</a></td></tr>
+<tr id="t2014-12-31T01:00:45"><td class="part" colspan="2">*** jamespage has quit IRC</td><td><a href="#t2014-12-31T01:00:45" class="time">01:00</a></td></tr>
+<tr id="t2014-12-31T01:00:45"><td class="part" colspan="2">*** gnuoy has quit IRC</td><td><a href="#t2014-12-31T01:00:45" class="time">01:00</a></td></tr>
+<tr id="t2014-12-31T01:01:31"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2014-12-31T01:01:31" class="time">01:01</a></td></tr>
+<tr id="t2014-12-31T01:04:49"><th class="nick" style="background: #8c4a4a">openstackgerrit</th><td class="text" style="color: #8c4a4a">James E. Blair proposed openstack-infra/zuul: Make needs_change plural&nbsp;&nbsp;<a href="https://review.openstack.org/144554" rel="nofollow">https://review.openstack.org/144554</a></td><td class="time"><a href="#t2014-12-31T01:04:49" class="time">01:04</a></td></tr>
+<tr id="t2014-12-31T01:04:50"><th class="nick" style="background: #8c4a4a">openstackgerrit</th><td class="text" style="color: #8c4a4a">James E. Blair proposed openstack-infra/zuul: Support cross-repo-dependencies in dependent pipelines&nbsp;&nbsp;<a href="https://review.openstack.org/144555" rel="nofollow">https://review.openstack.org/144555</a></td><td class="time"><a href="#t2014-12-31T01:04:50" class="time">01:04</a></td></tr>
+<tr id="t2014-12-31T01:04:50"><th class="nick" style="background: #8c4a4a">openstackgerrit</th><td class="text" style="color: #8c4a4a">James E. Blair proposed openstack-infra/zuul: Support cross-repo-dependencies in independent pipelines&nbsp;&nbsp;<a href="https://review.openstack.org/144556" rel="nofollow">https://review.openstack.org/144556</a></td><td class="time"><a href="#t2014-12-31T01:04:50" class="time">01:04</a></td></tr>
+<tr id="t2014-12-31T01:05:01"><th class="nick" style="background: #4b904b">jeblair</th><td class="text" style="color: #4b904b">clarkb, fungi, mordred: ^</td><td class="time"><a href="#t2014-12-31T01:05:01" class="time">01:05</a></td></tr>
+<tr id="t2014-12-31T01:07:14"><th class="nick" style="background: #4b904b">jeblair</th><td class="text" style="color: #4b904b">also, i'm somewhat sad to say that i optimized out the code with the comment &quot;non-live items have synthetic heads&quot;.&nbsp;&nbsp;but that's probably better for everyone.</td><td class="time"><a href="#t2014-12-31T01:07:14" class="time">01:07</a></td></tr>
+<tr id="t2014-12-31T01:07:53"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">:)</td><td class="time"><a href="#t2014-12-31T01:07:53" class="time">01:07</a></td></tr>
+<tr id="t2014-12-31T01:09:26"><th class="nick" style="background: #4d4d93">mordred</th><td class="text" style="color: #4d4d93">jeblair: nice</td><td class="time"><a href="#t2014-12-31T01:09:26" class="time">01:09</a></td></tr>
+<tr id="t2014-12-31T01:12:19"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">mordred you should fix php for me</td><td class="time"><a href="#t2014-12-31T01:12:19" class="time">01:12</a></td></tr>
+<tr id="t2014-12-31T01:12:51"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">your stories of crazy apache make me believe you understand it beteer than me</td><td class="time"><a href="#t2014-12-31T01:12:51" class="time">01:12</a></td></tr>
+<tr id="t2014-12-31T01:13:15"><td class="join" colspan="2">*** sdake has joined #openstack-infra</td><td><a href="#t2014-12-31T01:13:15" class="time">01:13</a></td></tr>
+<tr id="t2014-12-31T01:13:15"><td class="part" colspan="2">*** sdake has quit IRC</td><td><a href="#t2014-12-31T01:13:15" class="time">01:13</a></td></tr>
+<tr id="t2014-12-31T01:13:15"><td class="join" colspan="2">*** sdake has joined #openstack-infra</td><td><a href="#t2014-12-31T01:13:15" class="time">01:13</a></td></tr>
+<tr id="t2014-12-31T01:17:59"><td class="part" colspan="2">*** fandi has quit IRC</td><td><a href="#t2014-12-31T01:17:59" class="time">01:17</a></td></tr>
+<tr id="t2014-12-31T01:21:45"><td class="part" colspan="2">*** ryanpetrello has quit IRC</td><td><a href="#t2014-12-31T01:21:45" class="time">01:21</a></td></tr>
+<tr id="t2014-12-31T01:23:53"><td class="join" colspan="2">*** ryanpetrello has joined #openstack-infra</td><td><a href="#t2014-12-31T01:23:53" class="time">01:23</a></td></tr>
+<tr id="t2014-12-31T01:28:39"><td class="part" colspan="2">*** ryanpetrello has quit IRC</td><td><a href="#t2014-12-31T01:28:39" class="time">01:28</a></td></tr>
+<tr id="t2014-12-31T01:30:22"><th class="nick" style="background: #4d4d93">mordred</th><td class="text" style="color: #4d4d93">clarkb: ok</td><td class="time"><a href="#t2014-12-31T01:30:22" class="time">01:30</a></td></tr>
+<tr id="t2014-12-31T01:42:28"><td class="join" colspan="2">*** gnuoy has joined #openstack-infra</td><td><a href="#t2014-12-31T01:42:28" class="time">01:42</a></td></tr>
+<tr id="t2014-12-31T01:46:04"><td class="part" colspan="2">*** bdpayne has quit IRC</td><td><a href="#t2014-12-31T01:46:04" class="time">01:46</a></td></tr>
+<tr id="t2014-12-31T01:51:29"><td class="join" colspan="2">*** dims__ has joined #openstack-infra</td><td><a href="#t2014-12-31T01:51:29" class="time">01:51</a></td></tr>
+<tr id="t2014-12-31T01:51:48"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">mordred seiously though help is appreciated as I am not quite sure how these php projects fit together</td><td class="time"><a href="#t2014-12-31T01:51:48" class="time">01:51</a></td></tr>
+<tr id="t2014-12-31T01:52:24"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2014-12-31T01:52:24" class="time">01:52</a></td></tr>
+<tr id="t2014-12-31T01:53:25"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">clarkb: I'll dig in with the code in a VM tomorrow morning if you're still stuck, have a date with hot chocolate now</td><td class="time"><a href="#t2014-12-31T01:53:25" class="time">01:53</a></td></tr>
+<tr id="t2014-12-31T01:54:25"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">pleia2 that would be great enjoy the hot drink</td><td class="time"><a href="#t2014-12-31T01:54:25" class="time">01:54</a></td></tr>
+<tr id="t2014-12-31T02:08:57"><td class="part" colspan="2">*** salv-orlando has quit IRC</td><td><a href="#t2014-12-31T02:08:57" class="time">02:08</a></td></tr>
+<tr id="t2014-12-31T02:13:20"><td class="join" colspan="2">*** barra204_ has joined #openstack-infra</td><td><a href="#t2014-12-31T02:13:20" class="time">02:13</a></td></tr>
+<tr id="t2014-12-31T02:21:52"><td class="part" colspan="2">*** marun has quit IRC</td><td><a href="#t2014-12-31T02:21:52" class="time">02:21</a></td></tr>
+<tr id="t2014-12-31T02:23:16"><td class="part" colspan="2">*** dims__ has quit IRC</td><td><a href="#t2014-12-31T02:23:16" class="time">02:23</a></td></tr>
+<tr id="t2014-12-31T02:29:45"><td class="join" colspan="2">*** Masahiro has joined #openstack-infra</td><td><a href="#t2014-12-31T02:29:45" class="time">02:29</a></td></tr>
+<tr id="t2014-12-31T02:32:13"><td class="join" colspan="2">*** yaguang has joined #openstack-infra</td><td><a href="#t2014-12-31T02:32:13" class="time">02:32</a></td></tr>
+<tr id="t2014-12-31T02:34:02"><td class="part" colspan="2">*** Masahiro has quit IRC</td><td><a href="#t2014-12-31T02:34:02" class="time">02:34</a></td></tr>
+<tr id="t2014-12-31T02:35:32"><td class="join" colspan="2">*** jerryz has joined #openstack-infra</td><td><a href="#t2014-12-31T02:35:32" class="time">02:35</a></td></tr>
+<tr id="t2014-12-31T02:39:10"><td class="join" colspan="2">*** mwagner_lap has joined #openstack-infra</td><td><a href="#t2014-12-31T02:39:10" class="time">02:39</a></td></tr>
+<tr id="t2014-12-31T02:41:31"><th class="nick" style="background: #97974f">jhesketh</th><td class="text" style="color: #97974f">jeblair: if you're looking at zuul, my patches would enjoy some review love if you have time ;-)</td><td class="time"><a href="#t2014-12-31T02:41:31" class="time">02:41</a></td></tr>
+<tr id="t2014-12-31T02:41:42"><th class="nick" style="background: #97974f">jhesketh</th><td class="text" style="color: #97974f">clarkb: what php projects are you looking at</td><td class="time"><a href="#t2014-12-31T02:41:42" class="time">02:41</a></td></tr>
+<tr id="t2014-12-31T02:41:47"><td class="action" colspan="2">* jhesketh comes from a dark world of drupal dev</td><td><a href="#t2014-12-31T02:41:47" class="time">02:41</a></td></tr>
+<tr id="t2014-12-31T02:46:37"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">jhesketh www.o.i</td><td class="time"><a href="#t2014-12-31T02:46:37" class="time">02:46</a></td></tr>
+<tr id="t2014-12-31T02:46:59"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">er www.o.o trying to spin up a dev server</td><td class="time"><a href="#t2014-12-31T02:46:59" class="time">02:46</a></td></tr>
+<tr id="t2014-12-31T02:47:41"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2014-12-31T02:47:41" class="time">02:47</a></td></tr>
+<tr id="t2014-12-31T02:48:04"><th class="nick" style="background: #97974f">jhesketh</th><td class="text" style="color: #97974f">clarkb: righto, let me know if I can help</td><td class="time"><a href="#t2014-12-31T02:48:04" class="time">02:48</a></td></tr>
+<tr id="t2014-12-31T02:48:10"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40"><a href="https://review.openstack.org/#/c/141571/" rel="nofollow">https://review.openstack.org/#/c/141571/</a></td><td class="time"><a href="#t2014-12-31T02:48:10" class="time">02:48</a></td></tr>
+<tr id="t2014-12-31T02:48:38"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">that fails due to dependency issues. not quite sure what next step is as installing that dep fails</td><td class="time"><a href="#t2014-12-31T02:48:38" class="time">02:48</a></td></tr>
+<tr id="t2014-12-31T02:48:57"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">but I also know little of php so likely pebkac</td><td class="time"><a href="#t2014-12-31T02:48:57" class="time">02:48</a></td></tr>
+<tr id="t2014-12-31T02:49:20"><td class="join" colspan="2">*** wenchma has joined #openstack-infra</td><td><a href="#t2014-12-31T02:49:20" class="time">02:49</a></td></tr>
+<tr id="t2014-12-31T02:49:56"><td class="join" colspan="2">*** wenchma_ has joined #openstack-infra</td><td><a href="#t2014-12-31T02:49:56" class="time">02:49</a></td></tr>
+<tr id="t2014-12-31T02:51:56"><th class="nick" style="background: #97974f">jhesketh</th><td class="text" style="color: #97974f">clarkb: which dependencies?</td><td class="time"><a href="#t2014-12-31T02:51:56" class="time">02:51</a></td></tr>
+<tr id="t2014-12-31T02:51:56"><td class="part" colspan="2">*** wenchma_ has quit IRC</td><td><a href="#t2014-12-31T02:51:56" class="time">02:51</a></td></tr>
+<tr id="t2014-12-31T02:51:57"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2014-12-31T02:51:57" class="time">02:51</a></td></tr>
+<tr id="t2014-12-31T02:52:27"><td class="part" colspan="2">*** wenchma has quit IRC</td><td><a href="#t2014-12-31T02:52:27" class="time">02:52</a></td></tr>
+<tr id="t2014-12-31T02:52:38"><td class="join" colspan="2">*** wenchma has joined #openstack-infra</td><td><a href="#t2014-12-31T02:52:38" class="time">02:52</a></td></tr>
+<tr id="t2014-12-31T02:55:05"><td class="join" colspan="2">*** jpeeler has joined #openstack-infra</td><td><a href="#t2014-12-31T02:55:05" class="time">02:55</a></td></tr>
+<tr id="t2014-12-31T02:56:39"><td class="join" colspan="2">*** mriedem has joined #openstack-infra</td><td><a href="#t2014-12-31T02:56:39" class="time">02:56</a></td></tr>
+<tr id="t2014-12-31T03:06:34"><td class="join" colspan="2">*** pcrews has joined #openstack-infra</td><td><a href="#t2014-12-31T03:06:34" class="time">03:06</a></td></tr>
+<tr id="t2014-12-31T03:09:28"><td class="join" colspan="2">*** salv-orlando has joined #openstack-infra</td><td><a href="#t2014-12-31T03:09:28" class="time">03:09</a></td></tr>
+<tr id="t2014-12-31T03:13:36"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">phpmail</td><td class="time"><a href="#t2014-12-31T03:13:36" class="time">03:13</a></td></tr>
+<tr id="t2014-12-31T03:13:41"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">sorry had dinner</td><td class="time"><a href="#t2014-12-31T03:13:41" class="time">03:13</a></td></tr>
+<tr id="t2014-12-31T03:17:31"><td class="part" colspan="2">*** salv-orlando has quit IRC</td><td><a href="#t2014-12-31T03:17:31" class="time">03:17</a></td></tr>
+<tr id="t2014-12-31T03:19:01"><td class="part" colspan="2">*** teran_ has quit IRC</td><td><a href="#t2014-12-31T03:19:01" class="time">03:19</a></td></tr>
+<tr id="t2014-12-31T03:23:54"><td class="join" colspan="2">*** dims__ has joined #openstack-infra</td><td><a href="#t2014-12-31T03:23:54" class="time">03:23</a></td></tr>
+<tr id="t2014-12-31T03:28:55"><td class="part" colspan="2">*** dims__ has quit IRC</td><td><a href="#t2014-12-31T03:28:55" class="time">03:28</a></td></tr>
+<tr id="t2014-12-31T03:32:39"><th class="nick" style="background: #97974f">jhesketh</th><td class="text" style="color: #97974f">clarkb: you mean the inbuilt mail function?</td><td class="time"><a href="#t2014-12-31T03:32:39" class="time">03:32</a></td></tr>
+<tr id="t2014-12-31T03:32:56"><th class="nick" style="background: #97974f">jhesketh</th><td class="text" style="color: #97974f">(you'll probably just need postfix installed as an outgoing smtp)</td><td class="time"><a href="#t2014-12-31T03:32:56" class="time">03:32</a></td></tr>
+<tr id="t2014-12-31T03:35:12"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">its trying to require it from a vendor/ path</td><td class="time"><a href="#t2014-12-31T03:35:12" class="time">03:35</a></td></tr>
+<tr id="t2014-12-31T03:35:20"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">so I dont think its inbuilt</td><td class="time"><a href="#t2014-12-31T03:35:20" class="time">03:35</a></td></tr>
+<tr id="t2014-12-31T03:35:56"><td class="part" colspan="2">*** mestery has quit IRC</td><td><a href="#t2014-12-31T03:35:56" class="time">03:35</a></td></tr>
+<tr id="t2014-12-31T03:36:23"><td class="part" colspan="2">*** sdake has quit IRC</td><td><a href="#t2014-12-31T03:36:23" class="time">03:36</a></td></tr>
+<tr id="t2014-12-31T03:36:25"><td class="join" colspan="2">*** mestery has joined #openstack-infra</td><td><a href="#t2014-12-31T03:36:25" class="time">03:36</a></td></tr>
+<tr id="t2014-12-31T03:36:43"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2014-12-31T03:36:43" class="time">03:36</a></td></tr>
+<tr id="t2014-12-31T03:36:57"><td class="join" colspan="2">*** fandi has joined #openstack-infra</td><td><a href="#t2014-12-31T03:36:57" class="time">03:36</a></td></tr>
+<tr id="t2014-12-31T03:37:03"><th class="nick" style="background: #97974f">jhesketh</th><td class="text" style="color: #97974f">weird, which part has the dependency?</td><td class="time"><a href="#t2014-12-31T03:37:03" class="time">03:37</a></td></tr>
+<tr id="t2014-12-31T03:37:18"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">smtpsomething</td><td class="time"><a href="#t2014-12-31T03:37:18" class="time">03:37</a></td></tr>
+<tr id="t2014-12-31T03:37:32"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">its in the openstackweb project</td><td class="time"><a href="#t2014-12-31T03:37:32" class="time">03:37</a></td></tr>
+<tr id="t2014-12-31T03:37:48"><th class="nick" style="background: #97974f">jhesketh</th><td class="text" style="color: #97974f">clarkb: do you know where in the puppet stuff?</td><td class="time"><a href="#t2014-12-31T03:37:48" class="time">03:37</a></td></tr>
+<tr id="t2014-12-31T03:38:19"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">oh its not in the puppet stuff really. I run puppet then get 500 errors from apache</td><td class="time"><a href="#t2014-12-31T03:38:19" class="time">03:38</a></td></tr>
+<tr id="t2014-12-31T03:38:23"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">let me link bug</td><td class="time"><a href="#t2014-12-31T03:38:23" class="time">03:38</a></td></tr>
+<tr id="t2014-12-31T03:38:45"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40"><a href="https://bugs.launchpad.net/openstack-org/+bug/1406662" rel="nofollow">https://bugs.launchpad.net/openstack-org/+bug/1406662</a></td><td class="time"><a href="#t2014-12-31T03:38:45" class="time">03:38</a></td></tr>
+<tr id="t2014-12-31T03:38:47"><th class="nick" style="background: #9b519b">uvirtbot</th><td class="text" style="color: #9b519b">Launchpad bug 1406662 in openstack-org &quot;PHPMailer not found by smtpmailer bundled in public.openstack-org&quot; [Undecided,New]</td><td class="time"><a href="#t2014-12-31T03:38:47" class="time">03:38</a></td></tr>
+<tr id="t2014-12-31T03:41:15"><td class="part" colspan="2">*** mestery has quit IRC</td><td><a href="#t2014-12-31T03:41:15" class="time">03:41</a></td></tr>
+<tr id="t2014-12-31T03:44:11"><td class="nickchange" colspan="2">*** zz_sabari is now known as sabari</td><td><a href="#t2014-12-31T03:44:11" class="time">03:44</a></td></tr>
+<tr id="t2014-12-31T03:44:18"><td class="part" colspan="2">*** Ryan_Lane has quit IRC</td><td><a href="#t2014-12-31T03:44:18" class="time">03:44</a></td></tr>
+<tr id="t2014-12-31T03:45:32"><td class="join" colspan="2">*** Masahiro has joined #openstack-infra</td><td><a href="#t2014-12-31T03:45:32" class="time">03:45</a></td></tr>
+<tr id="t2014-12-31T03:48:22"><td class="join" colspan="2">*** dhritishikhar has joined #openstack-infra</td><td><a href="#t2014-12-31T03:48:22" class="time">03:48</a></td></tr>
+<tr id="t2014-12-31T03:49:49"><th class="nick" style="background: #97974f">jhesketh</th><td class="text" style="color: #97974f">clarkb: it nearly looks like it expects you to drop <a href="https://github.com/PHPMailer/PHPMailer" rel="nofollow">https://github.com/PHPMailer/PHPMailer</a> into the code/vendor folder</td><td class="time"><a href="#t2014-12-31T03:49:49" class="time">03:49</a></td></tr>
+<tr id="t2014-12-31T03:50:05"><th class="nick" style="background: #97974f">jhesketh</th><td class="text" style="color: #97974f">however looking at the source, class SmtpMailer extends Mailer</td><td class="time"><a href="#t2014-12-31T03:50:05" class="time">03:50</a></td></tr>
+<tr id="t2014-12-31T03:50:06"><td class="part" colspan="2">*** Masahiro has quit IRC</td><td><a href="#t2014-12-31T03:50:06" class="time">03:50</a></td></tr>
+<tr id="t2014-12-31T03:50:26"><th class="nick" style="background: #97974f">jhesketh</th><td class="text" style="color: #97974f">and class.phpmailer.php only has PHPMailer in it</td><td class="time"><a href="#t2014-12-31T03:50:26" class="time">03:50</a></td></tr>
+<tr id="t2014-12-31T03:50:33"><th class="nick" style="background: #97974f">jhesketh</th><td class="text" style="color: #97974f">so maybe its a different version</td><td class="time"><a href="#t2014-12-31T03:50:33" class="time">03:50</a></td></tr>
+<tr id="t2014-12-31T03:50:50"><th class="nick" style="background: #97974f">jhesketh</th><td class="text" style="color: #97974f">either way I think your bug description is right.. you're missing some install scripts (and/or not all the files have been committed into the public repo)</td><td class="time"><a href="#t2014-12-31T03:50:50" class="time">03:50</a></td></tr>
+<tr id="t2014-12-31T03:51:06"><th class="nick" style="background: #97974f">jhesketh</th><td class="text" style="color: #97974f">(possibly because the phpmailer looked like a subgit repo)</td><td class="time"><a href="#t2014-12-31T03:51:06" class="time">03:51</a></td></tr>
+<tr id="t2014-12-31T03:52:02"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2014-12-31T03:52:02" class="time">03:52</a></td></tr>
+<tr id="t2014-12-31T03:56:10"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">thanks for confirming</td><td class="time"><a href="#t2014-12-31T03:56:10" class="time">03:56</a></td></tr>
+<tr id="t2014-12-31T03:59:25"><td class="join" colspan="2">*** Longgeek has joined #openstack-infra</td><td><a href="#t2014-12-31T03:59:25" class="time">03:59</a></td></tr>
+<tr id="t2014-12-31T04:00:17"><td class="nickchange" colspan="2">*** david-lyle is now known as david-lyle_afk</td><td><a href="#t2014-12-31T04:00:17" class="time">04:00</a></td></tr>
+<tr id="t2014-12-31T04:19:54"><td class="join" colspan="2">*** teran has joined #openstack-infra</td><td><a href="#t2014-12-31T04:19:54" class="time">04:19</a></td></tr>
+<tr id="t2014-12-31T04:21:53"><td class="join" colspan="2">*** Sukhdev has joined #openstack-infra</td><td><a href="#t2014-12-31T04:21:53" class="time">04:21</a></td></tr>
+<tr id="t2014-12-31T04:22:50"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2014-12-31T04:22:50" class="time">04:22</a></td></tr>
+<tr id="t2014-12-31T04:24:16"><th class="nick" style="background: #539e9e">Sukhdev</th><td class="text" style="color: #539e9e">Infra folks, I just did a very first patch submission for my new stackforge project and it is failing - wonder if I missed some step. Can somebody provide any insight please? <a href="https://review.openstack.org/#/c/144557/" rel="nofollow">https://review.openstack.org/#/c/144557/</a></td><td class="time"><a href="#t2014-12-31T04:24:16" class="time">04:24</a></td></tr>
+<tr id="t2014-12-31T04:25:24"><td class="join" colspan="2">*** dims__ has joined #openstack-infra</td><td><a href="#t2014-12-31T04:25:24" class="time">04:25</a></td></tr>
+<tr id="t2014-12-31T04:26:31"><td class="part" colspan="2">*** teran has quit IRC</td><td><a href="#t2014-12-31T04:26:31" class="time">04:26</a></td></tr>
+<tr id="t2014-12-31T04:26:57"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2014-12-31T04:26:57" class="time">04:26</a></td></tr>
+<tr id="t2014-12-31T04:27:30"><td class="part" colspan="2">*** dhritishikhar has quit IRC</td><td><a href="#t2014-12-31T04:27:30" class="time">04:27</a></td></tr>
+<tr id="t2014-12-31T04:29:52"><td class="part" colspan="2">*** dims__ has quit IRC</td><td><a href="#t2014-12-31T04:29:52" class="time">04:29</a></td></tr>
+<tr id="t2014-12-31T04:31:23"><td class="nickchange" colspan="2">*** sabari is now known as zz_sabari</td><td><a href="#t2014-12-31T04:31:23" class="time">04:31</a></td></tr>
+<tr id="t2014-12-31T04:31:42"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">I think the packagename doesnt match your files</td><td class="time"><a href="#t2014-12-31T04:31:42" class="time">04:31</a></td></tr>
+<tr id="t2014-12-31T04:31:49"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">so it fails to install anything</td><td class="time"><a href="#t2014-12-31T04:31:49" class="time">04:31</a></td></tr>
+<tr id="t2014-12-31T04:31:57"><td class="join" colspan="2">*** armax has joined #openstack-infra</td><td><a href="#t2014-12-31T04:31:57" class="time">04:31</a></td></tr>
+<tr id="t2014-12-31T04:31:58"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">you can test locally by running tox</td><td class="time"><a href="#t2014-12-31T04:31:58" class="time">04:31</a></td></tr>
+<tr id="t2014-12-31T04:32:33"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2014-12-31T04:32:33" class="time">04:32</a></td></tr>
+<tr id="t2014-12-31T04:35:07"><td class="nickchange" colspan="2">*** zz_sabari is now known as sabari</td><td><a href="#t2014-12-31T04:35:07" class="time">04:35</a></td></tr>
+<tr id="t2014-12-31T04:37:15"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2014-12-31T04:37:15" class="time">04:37</a></td></tr>
+<tr id="t2014-12-31T04:42:52"><td class="nickchange" colspan="2">*** sabari is now known as zz_sabari</td><td><a href="#t2014-12-31T04:42:52" class="time">04:42</a></td></tr>
+<tr id="t2014-12-31T04:43:21"><td class="part" colspan="2">*** mriedem has quit IRC</td><td><a href="#t2014-12-31T04:43:21" class="time">04:43</a></td></tr>
+<tr id="t2014-12-31T04:49:15"><td class="join" colspan="2">*** dhritishikhar has joined #openstack-infra</td><td><a href="#t2014-12-31T04:49:15" class="time">04:49</a></td></tr>
+<tr id="t2014-12-31T04:54:08"><td class="part" colspan="2">*** mtreinish has quit IRC</td><td><a href="#t2014-12-31T04:54:08" class="time">04:54</a></td></tr>
+<tr id="t2014-12-31T04:58:10"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2014-12-31T04:58:10" class="time">04:58</a></td></tr>
+<tr id="t2014-12-31T05:08:54"><td class="part" colspan="2">*** dhritishikhar has quit IRC</td><td><a href="#t2014-12-31T05:08:54" class="time">05:08</a></td></tr>
+<tr id="t2014-12-31T05:09:09"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2014-12-31T05:09:09" class="time">05:09</a></td></tr>
+<tr id="t2014-12-31T05:12:17"><td class="join" colspan="2">*** nikil22 has joined #openstack-infra</td><td><a href="#t2014-12-31T05:12:17" class="time">05:12</a></td></tr>
+<tr id="t2014-12-31T05:15:50"><td class="nickchange" colspan="2">*** zz_sabari is now known as sabari</td><td><a href="#t2014-12-31T05:15:50" class="time">05:15</a></td></tr>
+<tr id="t2014-12-31T05:22:48"><td class="join" colspan="2">*** teran has joined #openstack-infra</td><td><a href="#t2014-12-31T05:22:48" class="time">05:22</a></td></tr>
+<tr id="t2014-12-31T05:27:22"><td class="part" colspan="2">*** yfried has quit IRC</td><td><a href="#t2014-12-31T05:27:22" class="time">05:27</a></td></tr>
+<tr id="t2014-12-31T05:27:43"><td class="part" colspan="2">*** teran has quit IRC</td><td><a href="#t2014-12-31T05:27:43" class="time">05:27</a></td></tr>
+<tr id="t2014-12-31T05:28:21"><td class="part" colspan="2">*** armax has quit IRC</td><td><a href="#t2014-12-31T05:28:21" class="time">05:28</a></td></tr>
+<tr id="t2014-12-31T05:29:55"><td class="nickchange" colspan="2">*** sabari is now known as zz_sabari</td><td><a href="#t2014-12-31T05:29:55" class="time">05:29</a></td></tr>
+<tr id="t2014-12-31T05:29:58"><td class="part" colspan="2">*** pcrews has quit IRC</td><td><a href="#t2014-12-31T05:29:58" class="time">05:29</a></td></tr>
+<tr id="t2014-12-31T05:32:41"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2014-12-31T05:32:41" class="time">05:32</a></td></tr>
+<tr id="t2014-12-31T05:32:50"><td class="part" colspan="2">*** jpeeler has quit IRC</td><td><a href="#t2014-12-31T05:32:50" class="time">05:32</a></td></tr>
+<tr id="t2014-12-31T05:33:08"><td class="join" colspan="2">*** jpeeler has joined #openstack-infra</td><td><a href="#t2014-12-31T05:33:08" class="time">05:33</a></td></tr>
+<tr id="t2014-12-31T05:33:08"><td class="join" colspan="2">*** jpeeler has joined #openstack-infra</td><td><a href="#t2014-12-31T05:33:08" class="time">05:33</a></td></tr>
+<tr id="t2014-12-31T05:33:34"><td class="join" colspan="2">*** bdpayne has joined #openstack-infra</td><td><a href="#t2014-12-31T05:33:34" class="time">05:33</a></td></tr>
+<tr id="t2014-12-31T05:33:40"><td class="join" colspan="2">*** mtreinish has joined #openstack-infra</td><td><a href="#t2014-12-31T05:33:40" class="time">05:33</a></td></tr>
+<tr id="t2014-12-31T05:34:06"><td class="part" colspan="2">*** bdpayne has quit IRC</td><td><a href="#t2014-12-31T05:34:06" class="time">05:34</a></td></tr>
+<tr id="t2014-12-31T05:37:10"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2014-12-31T05:37:10" class="time">05:37</a></td></tr>
+<tr id="t2014-12-31T05:39:00"><td class="part" colspan="2">*** jpeeler has quit IRC</td><td><a href="#t2014-12-31T05:39:00" class="time">05:39</a></td></tr>
+<tr id="t2014-12-31T05:39:54"><td class="join" colspan="2">*** jpeeler has joined #openstack-infra</td><td><a href="#t2014-12-31T05:39:54" class="time">05:39</a></td></tr>
+<tr id="t2014-12-31T05:40:19"><td class="part" colspan="2">*** asettle has quit IRC</td><td><a href="#t2014-12-31T05:40:19" class="time">05:40</a></td></tr>
+<tr id="t2014-12-31T05:43:57"><td class="part" colspan="2">*** dkliban_afk has quit IRC</td><td><a href="#t2014-12-31T05:43:57" class="time">05:43</a></td></tr>
+<tr id="t2014-12-31T05:47:21"><td class="join" colspan="2">*** dkliban_afk has joined #openstack-infra</td><td><a href="#t2014-12-31T05:47:21" class="time">05:47</a></td></tr>
+<tr id="t2014-12-31T05:52:10"><th class="nick" style="background: #a25555">nikil22</th><td class="text" style="color: #a25555">i keep getting error in my zuul.log &quot;<a href="http://10.39.18.27:8080/#/c/11/" rel="nofollow">http://10.39.18.27:8080/#/c/11/</a>&quot;&nbsp;&nbsp;I am not still clear with the error message. After this error automatically it pushes -1 as verified and jenkins job doesn't trigger</td><td class="time"><a href="#t2014-12-31T05:52:10" class="time">05:52</a></td></tr>
+<tr id="t2014-12-31T06:18:35"><td class="join" colspan="2">*** salv-orlando has joined #openstack-infra</td><td><a href="#t2014-12-31T06:18:35" class="time">06:18</a></td></tr>
+<tr id="t2014-12-31T06:19:21"><td class="join" colspan="2">*** hdd has joined #openstack-infra</td><td><a href="#t2014-12-31T06:19:21" class="time">06:19</a></td></tr>
+<tr id="t2014-12-31T06:21:47"><td class="part" colspan="2">*** Sukhdev has quit IRC</td><td><a href="#t2014-12-31T06:21:47" class="time">06:21</a></td></tr>
+<tr id="t2014-12-31T06:22:55"><td class="join" colspan="2">*** Sukhdev has joined #openstack-infra</td><td><a href="#t2014-12-31T06:22:55" class="time">06:22</a></td></tr>
+<tr id="t2014-12-31T06:23:36"><td class="join" colspan="2">*** teran has joined #openstack-infra</td><td><a href="#t2014-12-31T06:23:36" class="time">06:23</a></td></tr>
+<tr id="t2014-12-31T06:23:40"><th class="nick" style="background: #539e9e">Sukhdev</th><td class="text" style="color: #539e9e">clarkb: You are correct - the filename was incorrect. I fixed and it all working fine now. Thanks</td><td class="time"><a href="#t2014-12-31T06:23:40" class="time">06:23</a></td></tr>
+<tr id="t2014-12-31T06:25:04"><td class="part" colspan="2">*** salv-orlando has quit IRC</td><td><a href="#t2014-12-31T06:25:04" class="time">06:25</a></td></tr>
+<tr id="t2014-12-31T06:25:35"><td class="part" colspan="2">*** radez_g0n3 has quit IRC</td><td><a href="#t2014-12-31T06:25:35" class="time">06:25</a></td></tr>
+<tr id="t2014-12-31T06:26:47"><th class="nick" style="background: #8c4a4a">openstackgerrit</th><td class="text" style="color: #8c4a4a">Stefano Maffulli 'reed' proposed openstack-infra/infra-manual: Clarify that Change-Id should not be modified&nbsp;&nbsp;<a href="https://review.openstack.org/144586" rel="nofollow">https://review.openstack.org/144586</a></td><td class="time"><a href="#t2014-12-31T06:26:47" class="time">06:26</a></td></tr>
+<tr id="t2014-12-31T06:26:53"><td class="part" colspan="2">*** dkliban_afk has quit IRC</td><td><a href="#t2014-12-31T06:26:53" class="time">06:26</a></td></tr>
+<tr id="t2014-12-31T06:27:36"><td class="join" colspan="2">*** radez_g0n3 has joined #openstack-infra</td><td><a href="#t2014-12-31T06:27:36" class="time">06:27</a></td></tr>
+<tr id="t2014-12-31T06:28:10"><td class="part" colspan="2">*** teran has quit IRC</td><td><a href="#t2014-12-31T06:28:10" class="time">06:28</a></td></tr>
+<tr id="t2014-12-31T06:29:07"><td class="nickchange" colspan="2">*** zz_sabari is now known as sabari</td><td><a href="#t2014-12-31T06:29:07" class="time">06:29</a></td></tr>
+<tr id="t2014-12-31T06:30:30"><td class="join" colspan="2">*** salv-orlando has joined #openstack-infra</td><td><a href="#t2014-12-31T06:30:30" class="time">06:30</a></td></tr>
+<tr id="t2014-12-31T06:30:46"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2014-12-31T06:30:46" class="time">06:30</a></td></tr>
+<tr id="t2014-12-31T06:32:32"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2014-12-31T06:32:32" class="time">06:32</a></td></tr>
+<tr id="t2014-12-31T06:32:57"><td class="part" colspan="2">*** jpeeler has quit IRC</td><td><a href="#t2014-12-31T06:32:57" class="time">06:32</a></td></tr>
+<tr id="t2014-12-31T06:35:59"><th class="nick" style="background: #a25555">nikil22</th><td class="text" style="color: #a25555">HI in my above message i have given wrong link. &quot;<a href="http://paste.openstack.org/show/155229/" rel="nofollow">http://paste.openstack.org/show/155229/</a>&quot; error i keep gettin in zuul log. Could some one let me know what is this error about</td><td class="time"><a href="#t2014-12-31T06:35:59" class="time">06:35</a></td></tr>
+<tr id="t2014-12-31T06:36:57"><td class="part" colspan="2">*** salv-orlando has quit IRC</td><td><a href="#t2014-12-31T06:36:57" class="time">06:36</a></td></tr>
+<tr id="t2014-12-31T06:37:08"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2014-12-31T06:37:08" class="time">06:37</a></td></tr>
+<tr id="t2014-12-31T06:40:13"><td class="part" colspan="2">*** nikil22 has quit IRC</td><td><a href="#t2014-12-31T06:40:13" class="time">06:40</a></td></tr>
+<tr id="t2014-12-31T06:40:22"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">zuul is pretty explicit. It wanted the refs listed at that url and the connection was refused</td><td class="time"><a href="#t2014-12-31T06:40:22" class="time">06:40</a></td></tr>
+<tr id="t2014-12-31T06:40:31"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">:/</td><td class="time"><a href="#t2014-12-31T06:40:31" class="time">06:40</a></td></tr>
+<tr id="t2014-12-31T06:40:55"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">if you read the logs I would check that connsctivity manually</td><td class="time"><a href="#t2014-12-31T06:40:55" class="time">06:40</a></td></tr>
+<tr id="t2014-12-31T06:41:13"><td class="part" colspan="2">*** reed has quit IRC</td><td><a href="#t2014-12-31T06:41:13" class="time">06:41</a></td></tr>
+<tr id="t2014-12-31T06:49:52"><td class="part" colspan="2">*** hdd has quit IRC</td><td><a href="#t2014-12-31T06:49:52" class="time">06:49</a></td></tr>
+<tr id="t2014-12-31T06:53:22"><td class="nickchange" colspan="2">*** sabari is now known as zz_sabari</td><td><a href="#t2014-12-31T06:53:22" class="time">06:53</a></td></tr>
+<tr id="t2014-12-31T06:53:50"><td class="join" colspan="2">*** dkliban_afk has joined #openstack-infra</td><td><a href="#t2014-12-31T06:53:50" class="time">06:53</a></td></tr>
+<tr id="t2014-12-31T06:54:10"><td class="join" colspan="2">*** garyk has joined #openstack-infra</td><td><a href="#t2014-12-31T06:54:10" class="time">06:54</a></td></tr>
+<tr id="t2014-12-31T07:01:04"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2014-12-31T07:01:04" class="time">07:01</a></td></tr>
+<tr id="t2014-12-31T07:01:13"><td class="join" colspan="2">*** nikil22 has joined #openstack-infra</td><td><a href="#t2014-12-31T07:01:13" class="time">07:01</a></td></tr>
+<tr id="t2014-12-31T07:01:33"><td class="join" colspan="2">*** yfried has joined #openstack-infra</td><td><a href="#t2014-12-31T07:01:33" class="time">07:01</a></td></tr>
+<tr id="t2014-12-31T07:07:03"><th class="nick" style="background: #a25555">nikil22</th><td class="text" style="color: #a25555">could some one tell me what is this error message is about in zuul log &quot;<a href="http://paste.openstack.org/show/155229/" rel="nofollow">http://paste.openstack.org/show/155229/</a>&quot;</td><td class="time"><a href="#t2014-12-31T07:07:03" class="time">07:07</a></td></tr>
+<tr id="t2014-12-31T07:09:02"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">yes I think zuul is trying to list refs in gerrit and that connection fails</td><td class="time"><a href="#t2014-12-31T07:09:02" class="time">07:09</a></td></tr>
+<tr id="t2014-12-31T07:09:16"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">you can manually fetch that url to see if it works</td><td class="time"><a href="#t2014-12-31T07:09:16" class="time">07:09</a></td></tr>
+<tr id="t2014-12-31T07:16:38"><th class="nick" style="background: #a25555">nikil22</th><td class="text" style="color: #a25555">clarbb: yes you are right git fetch for all patch sets is failling may be its related to gerrit configuration. I need to look into gerrit setup and not in zuul config . thanks</td><td class="time"><a href="#t2014-12-31T07:16:38" class="time">07:16</a></td></tr>
+<tr id="t2014-12-31T07:23:00"><td class="join" colspan="2">*** Masahiro has joined #openstack-infra</td><td><a href="#t2014-12-31T07:23:00" class="time">07:23</a></td></tr>
+<tr id="t2014-12-31T07:24:21"><td class="join" colspan="2">*** teran has joined #openstack-infra</td><td><a href="#t2014-12-31T07:24:21" class="time">07:24</a></td></tr>
+<tr id="t2014-12-31T07:24:33"><th class="nick" style="background: #a25555">nikil22</th><td class="text" style="color: #a25555">clarkb: Create project from gerrit is successfully and i am able to clone that project also. But any the patch set submitted for review is not able to fetch&nbsp;&nbsp;. Any idea why this could happen ?</td><td class="time"><a href="#t2014-12-31T07:24:33" class="time">07:24</a></td></tr>
+<tr id="t2014-12-31T07:24:56"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">permissions possibly</td><td class="time"><a href="#t2014-12-31T07:24:56" class="time">07:24</a></td></tr>
+<tr id="t2014-12-31T07:28:03"><td class="part" colspan="2">*** Masahiro has quit IRC</td><td><a href="#t2014-12-31T07:28:03" class="time">07:28</a></td></tr>
+<tr id="t2014-12-31T07:29:19"><td class="part" colspan="2">*** teran has quit IRC</td><td><a href="#t2014-12-31T07:29:19" class="time">07:29</a></td></tr>
+<tr id="t2014-12-31T07:32:32"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2014-12-31T07:32:32" class="time">07:32</a></td></tr>
+<tr id="t2014-12-31T07:33:36"><td class="join" colspan="2">*** salv-orlando has joined #openstack-infra</td><td><a href="#t2014-12-31T07:33:36" class="time">07:33</a></td></tr>
+<tr id="t2014-12-31T07:34:51"><th class="nick" style="background: #a25555">nikil22</th><td class="text" style="color: #a25555">clarkb : i am wrong . create project successfull. then clone success full. I have to 'cd project' then did git fetch and i get this &quot;<a href="http://paste.openstack.org/show/155236/" rel="nofollow">http://paste.openstack.org/show/155236/</a>&quot; . last time i did fetch without cd to project it was my fault . i see my commit messages but still the files are not visible. But if i do git pull with ref then i see my commited file</td><td class="time"><a href="#t2014-12-31T07:34:51" class="time">07:34</a></td></tr>
+<tr id="t2014-12-31T07:36:53"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2014-12-31T07:36:53" class="time">07:36</a></td></tr>
+<tr id="t2014-12-31T07:38:03"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2014-12-31T07:38:03" class="time">07:38</a></td></tr>
+<tr id="t2014-12-31T07:38:25"><td class="part" colspan="2">*** salv-orlando has quit IRC</td><td><a href="#t2014-12-31T07:38:25" class="time">07:38</a></td></tr>
+<tr id="t2014-12-31T07:43:10"><td class="join" colspan="2">*** teran has joined #openstack-infra</td><td><a href="#t2014-12-31T07:43:10" class="time">07:43</a></td></tr>
+<tr id="t2014-12-31T07:45:29"><td class="join" colspan="2">*** isaacb has joined #openstack-infra</td><td><a href="#t2014-12-31T07:45:29" class="time">07:45</a></td></tr>
+<tr id="t2014-12-31T07:52:39"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2014-12-31T07:52:39" class="time">07:52</a></td></tr>
+<tr id="t2014-12-31T07:57:21"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2014-12-31T07:57:21" class="time">07:57</a></td></tr>
+<tr id="t2014-12-31T08:03:04"><td class="join" colspan="2">*** dims__ has joined #openstack-infra</td><td><a href="#t2014-12-31T08:03:04" class="time">08:03</a></td></tr>
+<tr id="t2014-12-31T08:07:16"><td class="part" colspan="2">*** Sukhdev has quit IRC</td><td><a href="#t2014-12-31T08:07:16" class="time">08:07</a></td></tr>
+<tr id="t2014-12-31T08:07:22"><td class="part" colspan="2">*** dims__ has quit IRC</td><td><a href="#t2014-12-31T08:07:22" class="time">08:07</a></td></tr>
+<tr id="t2014-12-31T08:11:51"><td class="join" colspan="2">*** yolanda has joined #openstack-infra</td><td><a href="#t2014-12-31T08:11:51" class="time">08:11</a></td></tr>
+<tr id="t2014-12-31T08:12:29"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2014-12-31T08:12:29" class="time">08:12</a></td></tr>
+<tr id="t2014-12-31T08:17:59"><td class="part" colspan="2">*** jyuso has quit IRC</td><td><a href="#t2014-12-31T08:17:59" class="time">08:17</a></td></tr>
+<tr id="t2014-12-31T08:18:52"><td class="join" colspan="2">*** teran_ has joined #openstack-infra</td><td><a href="#t2014-12-31T08:18:52" class="time">08:18</a></td></tr>
+<tr id="t2014-12-31T08:21:23"><td class="part" colspan="2">*** teran has quit IRC</td><td><a href="#t2014-12-31T08:21:23" class="time">08:21</a></td></tr>
+<tr id="t2014-12-31T08:27:50"><td class="part" colspan="2">*** Longgeek has quit IRC</td><td><a href="#t2014-12-31T08:27:50" class="time">08:27</a></td></tr>
+<tr id="t2014-12-31T08:32:38"><td class="part" colspan="2">*** stevemar has quit IRC</td><td><a href="#t2014-12-31T08:32:38" class="time">08:32</a></td></tr>
+<tr id="t2014-12-31T08:47:46"><td class="join" colspan="2">*** Longgeek has joined #openstack-infra</td><td><a href="#t2014-12-31T08:47:46" class="time">08:47</a></td></tr>
+<tr id="t2014-12-31T08:51:48"><td class="join" colspan="2">*** teran has joined #openstack-infra</td><td><a href="#t2014-12-31T08:51:48" class="time">08:51</a></td></tr>
+<tr id="t2014-12-31T08:51:57"><td class="part" colspan="2">*** dkehn has quit IRC</td><td><a href="#t2014-12-31T08:51:57" class="time">08:51</a></td></tr>
+<tr id="t2014-12-31T08:53:26"><td class="join" colspan="2">*** teran__ has joined #openstack-infra</td><td><a href="#t2014-12-31T08:53:26" class="time">08:53</a></td></tr>
+<tr id="t2014-12-31T08:55:14"><td class="part" colspan="2">*** teran_ has quit IRC</td><td><a href="#t2014-12-31T08:55:14" class="time">08:55</a></td></tr>
+<tr id="t2014-12-31T08:56:29"><td class="part" colspan="2">*** teran has quit IRC</td><td><a href="#t2014-12-31T08:56:29" class="time">08:56</a></td></tr>
+<tr id="t2014-12-31T08:57:37"><td class="join" colspan="2">*** HeOS has joined #openstack-infra</td><td><a href="#t2014-12-31T08:57:37" class="time">08:57</a></td></tr>
+<tr id="t2014-12-31T08:58:12"><td class="join" colspan="2">*** dkehn has joined #openstack-infra</td><td><a href="#t2014-12-31T08:58:12" class="time">08:58</a></td></tr>
+<tr id="t2014-12-31T09:00:06"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2014-12-31T09:00:06" class="time">09:00</a></td></tr>
+<tr id="t2014-12-31T09:00:54"><td class="part" colspan="2">*** coolsvap has quit IRC</td><td><a href="#t2014-12-31T09:00:54" class="time">09:00</a></td></tr>
+<tr id="t2014-12-31T09:02:27"><td class="part" colspan="2">*** isaacb has quit IRC</td><td><a href="#t2014-12-31T09:02:27" class="time">09:02</a></td></tr>
+<tr id="t2014-12-31T09:05:33"><td class="join" colspan="2">*** andreykurilin has joined #openstack-infra</td><td><a href="#t2014-12-31T09:05:33" class="time">09:05</a></td></tr>
+<tr id="t2014-12-31T09:06:30"><td class="part" colspan="2">*** teran__ has quit IRC</td><td><a href="#t2014-12-31T09:06:30" class="time">09:06</a></td></tr>
+<tr id="t2014-12-31T09:10:12"><td class="join" colspan="2">*** coolsvap has joined #openstack-infra</td><td><a href="#t2014-12-31T09:10:12" class="time">09:10</a></td></tr>
+<tr id="t2014-12-31T09:11:44"><td class="join" colspan="2">*** Masahiro has joined #openstack-infra</td><td><a href="#t2014-12-31T09:11:44" class="time">09:11</a></td></tr>
+<tr id="t2014-12-31T09:15:33"><td class="join" colspan="2">*** isaacb has joined #openstack-infra</td><td><a href="#t2014-12-31T09:15:33" class="time">09:15</a></td></tr>
+<tr id="t2014-12-31T09:15:41"><td class="join" colspan="2">*** dizquierdo has joined #openstack-infra</td><td><a href="#t2014-12-31T09:15:41" class="time">09:15</a></td></tr>
+<tr id="t2014-12-31T09:16:05"><td class="part" colspan="2">*** Masahiro has quit IRC</td><td><a href="#t2014-12-31T09:16:05" class="time">09:16</a></td></tr>
+<tr id="t2014-12-31T09:18:41"><td class="part" colspan="2">*** Longgeek has quit IRC</td><td><a href="#t2014-12-31T09:18:41" class="time">09:18</a></td></tr>
+<tr id="t2014-12-31T09:21:16"><td class="join" colspan="2">*** amuller has joined #openstack-infra</td><td><a href="#t2014-12-31T09:21:16" class="time">09:21</a></td></tr>
+<tr id="t2014-12-31T09:28:11"><th class="nick" style="background: #a25555">nikil22</th><td class="text" style="color: #a25555">Hi clarkb it was url issue basically insted of http i was using https and it got fixed. Still i see merger issue in zuul log &quot;<a href="http://paste.openstack.org/show/155256/" rel="nofollow">http://paste.openstack.org/show/155256/</a>&quot;</td><td class="time"><a href="#t2014-12-31T09:28:11" class="time">09:28</a></td></tr>
+<tr id="t2014-12-31T09:35:59"><td class="part" colspan="2">*** andreykurilin has quit IRC</td><td><a href="#t2014-12-31T09:35:59" class="time">09:35</a></td></tr>
+<tr id="t2014-12-31T09:36:18"><td class="join" colspan="2">*** wuhg has joined #openstack-infra</td><td><a href="#t2014-12-31T09:36:18" class="time">09:36</a></td></tr>
+<tr id="t2014-12-31T09:39:11"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2014-12-31T09:39:11" class="time">09:39</a></td></tr>
+<tr id="t2014-12-31T09:41:04"><td class="part" colspan="2">*** HeOS has quit IRC</td><td><a href="#t2014-12-31T09:41:04" class="time">09:41</a></td></tr>
+<tr id="t2014-12-31T09:42:57"><th class="nick" style="background: #a25555">nikil22</th><td class="text" style="color: #a25555">could some one tell me why this merge failure happens in zuul-merger. Here is the zuul log <a href="http://paste.openstack.org/show/155256/" rel="nofollow">http://paste.openstack.org/show/155256/</a> . Because of this jenkins job is not starting</td><td class="time"><a href="#t2014-12-31T09:42:57" class="time">09:42</a></td></tr>
+<tr id="t2014-12-31T09:43:17"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2014-12-31T09:43:17" class="time">09:43</a></td></tr>
+<tr id="t2014-12-31T09:46:54"><td class="join" colspan="2">*** Longgeek has joined #openstack-infra</td><td><a href="#t2014-12-31T09:46:54" class="time">09:46</a></td></tr>
+<tr id="t2014-12-31T09:51:53"><td class="join" colspan="2">*** _nadya_ has joined #openstack-infra</td><td><a href="#t2014-12-31T09:51:53" class="time">09:51</a></td></tr>
+<tr id="t2014-12-31T09:52:13"><td class="join" colspan="2">*** HeOS has joined #openstack-infra</td><td><a href="#t2014-12-31T09:52:13" class="time">09:52</a></td></tr>
+<tr id="t2014-12-31T09:52:15"><td class="join" colspan="2">*** lttrl has joined #openstack-infra</td><td><a href="#t2014-12-31T09:52:15" class="time">09:52</a></td></tr>
+<tr id="t2014-12-31T09:54:43"><td class="join" colspan="2">*** salv-orlando has joined #openstack-infra</td><td><a href="#t2014-12-31T09:54:43" class="time">09:54</a></td></tr>
+<tr id="t2014-12-31T10:06:26"><td class="nickchange" colspan="2">*** yfried is now known as yfried|afk</td><td><a href="#t2014-12-31T10:06:26" class="time">10:06</a></td></tr>
+<tr id="t2014-12-31T10:06:39"><td class="part" colspan="2">*** _nadya_ has quit IRC</td><td><a href="#t2014-12-31T10:06:39" class="time">10:06</a></td></tr>
+<tr id="t2014-12-31T10:15:14"><td class="join" colspan="2">*** _nadya_ has joined #openstack-infra</td><td><a href="#t2014-12-31T10:15:14" class="time">10:15</a></td></tr>
+<tr id="t2014-12-31T10:18:41"><td class="nickchange" colspan="2">*** yfried|afk is now known as yfried</td><td><a href="#t2014-12-31T10:18:41" class="time">10:18</a></td></tr>
+<tr id="t2014-12-31T10:18:57"><td class="part" colspan="2">*** _nadya_ has quit IRC</td><td><a href="#t2014-12-31T10:18:57" class="time">10:18</a></td></tr>
+<tr id="t2014-12-31T10:19:33"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2014-12-31T10:19:33" class="time">10:19</a></td></tr>
+<tr id="t2014-12-31T10:29:11"><td class="nickchange" colspan="2">*** yfried is now known as yfried|afk</td><td><a href="#t2014-12-31T10:29:11" class="time">10:29</a></td></tr>
+<tr id="t2014-12-31T10:37:52"><td class="part" colspan="2">*** amuller has quit IRC</td><td><a href="#t2014-12-31T10:37:52" class="time">10:37</a></td></tr>
+<tr id="t2014-12-31T10:39:45"><td class="join" colspan="2">*** andreaf has joined #openstack-infra</td><td><a href="#t2014-12-31T10:39:45" class="time">10:39</a></td></tr>
+<tr id="t2014-12-31T10:49:22"><td class="nickchange" colspan="2">*** yfried|afk is now known as yfried</td><td><a href="#t2014-12-31T10:49:22" class="time">10:49</a></td></tr>
+<tr id="t2014-12-31T10:50:33"><td class="join" colspan="2">*** e0ne has joined #openstack-infra</td><td><a href="#t2014-12-31T10:50:33" class="time">10:50</a></td></tr>
+<tr id="t2014-12-31T10:50:33"><td class="nickchange" colspan="2">*** e0ne is now known as e0ne_</td><td><a href="#t2014-12-31T10:50:33" class="time">10:50</a></td></tr>
+<tr id="t2014-12-31T10:55:16"><td class="part" colspan="2">*** andreaf has quit IRC</td><td><a href="#t2014-12-31T10:55:16" class="time">10:55</a></td></tr>
+<tr id="t2014-12-31T10:55:38"><td class="nickchange" colspan="2">*** e0ne_ is now known as e0ne</td><td><a href="#t2014-12-31T10:55:38" class="time">10:55</a></td></tr>
+<tr id="t2014-12-31T11:00:33"><td class="join" colspan="2">*** Masahiro has joined #openstack-infra</td><td><a href="#t2014-12-31T11:00:33" class="time">11:00</a></td></tr>
+<tr id="t2014-12-31T11:02:10"><td class="join" colspan="2">*** unicell has joined #openstack-infra</td><td><a href="#t2014-12-31T11:02:10" class="time">11:02</a></td></tr>
+<tr id="t2014-12-31T11:04:18"><td class="join" colspan="2">*** _nadya_ has joined #openstack-infra</td><td><a href="#t2014-12-31T11:04:18" class="time">11:04</a></td></tr>
+<tr id="t2014-12-31T11:05:31"><td class="part" colspan="2">*** Masahiro has quit IRC</td><td><a href="#t2014-12-31T11:05:31" class="time">11:05</a></td></tr>
+<tr id="t2014-12-31T11:10:40"><td class="join" colspan="2">*** andreaf has joined #openstack-infra</td><td><a href="#t2014-12-31T11:10:40" class="time">11:10</a></td></tr>
+<tr id="t2014-12-31T11:15:59"><td class="nickchange" colspan="2">*** e0ne is now known as e0ne_</td><td><a href="#t2014-12-31T11:15:59" class="time">11:15</a></td></tr>
+<tr id="t2014-12-31T11:16:39"><td class="nickchange" colspan="2">*** e0ne_ is now known as e0ne</td><td><a href="#t2014-12-31T11:16:39" class="time">11:16</a></td></tr>
+<tr id="t2014-12-31T11:19:39"><td class="part" colspan="2">*** garyk has quit IRC</td><td><a href="#t2014-12-31T11:19:39" class="time">11:19</a></td></tr>
+<tr id="t2014-12-31T11:27:48"><td class="part" colspan="2">*** HeOS has quit IRC</td><td><a href="#t2014-12-31T11:27:48" class="time">11:27</a></td></tr>
+<tr id="t2014-12-31T11:37:43"><td class="join" colspan="2">*** garyk has joined #openstack-infra</td><td><a href="#t2014-12-31T11:37:43" class="time">11:37</a></td></tr>
+<tr id="t2014-12-31T11:39:51"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2014-12-31T11:39:51" class="time">11:39</a></td></tr>
+<tr id="t2014-12-31T11:43:56"><td class="part" colspan="2">*** lttrl has quit IRC</td><td><a href="#t2014-12-31T11:43:56" class="time">11:43</a></td></tr>
+<tr id="t2014-12-31T11:44:05"><td class="join" colspan="2">*** lttrl has joined #openstack-infra</td><td><a href="#t2014-12-31T11:44:05" class="time">11:44</a></td></tr>
+<tr id="t2014-12-31T11:44:22"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2014-12-31T11:44:22" class="time">11:44</a></td></tr>
+<tr id="t2014-12-31T11:45:18"><td class="part" colspan="2">*** lttrl has quit IRC</td><td><a href="#t2014-12-31T11:45:18" class="time">11:45</a></td></tr>
+<tr id="t2014-12-31T11:58:14"><td class="join" colspan="2">*** amuller has joined #openstack-infra</td><td><a href="#t2014-12-31T11:58:14" class="time">11:58</a></td></tr>
+<tr id="t2014-12-31T11:59:16"><td class="nickchange" colspan="2">*** yfried is now known as yfried|afk</td><td><a href="#t2014-12-31T11:59:16" class="time">11:59</a></td></tr>
+<tr id="t2014-12-31T12:02:11"><td class="nickchange" colspan="2">*** yfried|afk is now known as yfried</td><td><a href="#t2014-12-31T12:02:11" class="time">12:02</a></td></tr>
+<tr id="t2014-12-31T12:04:49"><td class="part" colspan="2">*** Longgeek has quit IRC</td><td><a href="#t2014-12-31T12:04:49" class="time">12:04</a></td></tr>
+<tr id="t2014-12-31T12:07:33"><td class="join" colspan="2">*** Longgeek has joined #openstack-infra</td><td><a href="#t2014-12-31T12:07:33" class="time">12:07</a></td></tr>
+<tr id="t2014-12-31T12:08:37"><td class="part" colspan="2">*** jaypipes has quit IRC</td><td><a href="#t2014-12-31T12:08:37" class="time">12:08</a></td></tr>
+<tr id="t2014-12-31T12:11:31"><td class="join" colspan="2">*** koolhead17 has joined #openstack-infra</td><td><a href="#t2014-12-31T12:11:31" class="time">12:11</a></td></tr>
+<tr id="t2014-12-31T12:12:05"><td class="part" colspan="2">*** koolhead17 has quit IRC</td><td><a href="#t2014-12-31T12:12:05" class="time">12:12</a></td></tr>
+<tr id="t2014-12-31T12:12:32"><td class="nickchange" colspan="2">*** yfried is now known as yfried|afk</td><td><a href="#t2014-12-31T12:12:32" class="time">12:12</a></td></tr>
+<tr id="t2014-12-31T12:13:26"><td class="part" colspan="2">*** dizquierdo has quit IRC</td><td><a href="#t2014-12-31T12:13:26" class="time">12:13</a></td></tr>
+<tr id="t2014-12-31T12:15:33"><td class="nickchange" colspan="2">*** yfried|afk is now known as yfried</td><td><a href="#t2014-12-31T12:15:33" class="time">12:15</a></td></tr>
+<tr id="t2014-12-31T12:16:30"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2014-12-31T12:16:30" class="time">12:16</a></td></tr>
+<tr id="t2014-12-31T12:24:42"><td class="join" colspan="2">*** Adri2000 has joined #openstack-infra</td><td><a href="#t2014-12-31T12:24:42" class="time">12:24</a></td></tr>
+<tr id="t2014-12-31T12:26:12"><td class="part" colspan="2">*** Longgeek has quit IRC</td><td><a href="#t2014-12-31T12:26:12" class="time">12:26</a></td></tr>
+<tr id="t2014-12-31T12:29:06"><td class="join" colspan="2">*** Longgeek has joined #openstack-infra</td><td><a href="#t2014-12-31T12:29:06" class="time">12:29</a></td></tr>
+<tr id="t2014-12-31T12:32:06"><td class="nickchange" colspan="2">*** e0ne is now known as e0ne_</td><td><a href="#t2014-12-31T12:32:06" class="time">12:32</a></td></tr>
+<tr id="t2014-12-31T12:42:09"><td class="part" colspan="2">*** e0ne_ has quit IRC</td><td><a href="#t2014-12-31T12:42:09" class="time">12:42</a></td></tr>
+<tr id="t2014-12-31T12:42:19"><td class="part" colspan="2">*** Longgeek has quit IRC</td><td><a href="#t2014-12-31T12:42:19" class="time">12:42</a></td></tr>
+<tr id="t2014-12-31T12:42:22"><td class="join" colspan="2">*** e0ne has joined #openstack-infra</td><td><a href="#t2014-12-31T12:42:22" class="time">12:42</a></td></tr>
+<tr id="t2014-12-31T12:43:25"><td class="join" colspan="2">*** ZZelle has joined #openstack-infra</td><td><a href="#t2014-12-31T12:43:25" class="time">12:43</a></td></tr>
+<tr id="t2014-12-31T12:44:49"><td class="join" colspan="2">*** Longgeek has joined #openstack-infra</td><td><a href="#t2014-12-31T12:44:49" class="time">12:44</a></td></tr>
+<tr id="t2014-12-31T12:44:58"><td class="join" colspan="2">*** f13o has joined #openstack-infra</td><td><a href="#t2014-12-31T12:44:58" class="time">12:44</a></td></tr>
+<tr id="t2014-12-31T12:45:40"><td class="part" colspan="2">*** f13o has quit IRC</td><td><a href="#t2014-12-31T12:45:40" class="time">12:45</a></td></tr>
+<tr id="t2014-12-31T12:46:11"><td class="join" colspan="2">*** mase_x200 has joined #openstack-infra</td><td><a href="#t2014-12-31T12:46:11" class="time">12:46</a></td></tr>
+<tr id="t2014-12-31T12:47:01"><td class="join" colspan="2">*** lttrl has joined #openstack-infra</td><td><a href="#t2014-12-31T12:47:01" class="time">12:47</a></td></tr>
+<tr id="t2014-12-31T12:47:04"><td class="join" colspan="2">*** jaypipes has joined #openstack-infra</td><td><a href="#t2014-12-31T12:47:04" class="time">12:47</a></td></tr>
+<tr id="t2014-12-31T12:49:17"><td class="join" colspan="2">*** Masahiro has joined #openstack-infra</td><td><a href="#t2014-12-31T12:49:17" class="time">12:49</a></td></tr>
+<tr id="t2014-12-31T12:49:54"><td class="join" colspan="2">*** pc_m has joined #openstack-infra</td><td><a href="#t2014-12-31T12:49:54" class="time">12:49</a></td></tr>
+<tr id="t2014-12-31T12:50:48"><td class="join" colspan="2">*** pc_m has joined #openstack-infra</td><td><a href="#t2014-12-31T12:50:48" class="time">12:50</a></td></tr>
+<tr id="t2014-12-31T12:53:13"><td class="part" colspan="2">*** ZZelle has quit IRC</td><td><a href="#t2014-12-31T12:53:13" class="time">12:53</a></td></tr>
+<tr id="t2014-12-31T12:54:03"><td class="part" colspan="2">*** Masahiro has quit IRC</td><td><a href="#t2014-12-31T12:54:03" class="time">12:54</a></td></tr>
+<tr id="t2014-12-31T12:59:51"><td class="part" colspan="2">*** ilyashakhat has quit IRC</td><td><a href="#t2014-12-31T12:59:51" class="time">12:59</a></td></tr>
+<tr id="t2014-12-31T13:03:42"><td class="part" colspan="2">*** isaacb has quit IRC</td><td><a href="#t2014-12-31T13:03:42" class="time">13:03</a></td></tr>
+<tr id="t2014-12-31T13:10:26"><td class="nickchange" colspan="2">*** e0ne is now known as e0ne_</td><td><a href="#t2014-12-31T13:10:26" class="time">13:10</a></td></tr>
+<tr id="t2014-12-31T13:16:07"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2014-12-31T13:16:07" class="time">13:16</a></td></tr>
+<tr id="t2014-12-31T13:16:32"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2014-12-31T13:16:32" class="time">13:16</a></td></tr>
+<tr id="t2014-12-31T13:20:27"><td class="part" colspan="2">*** e0ne_ has quit IRC</td><td><a href="#t2014-12-31T13:20:27" class="time">13:20</a></td></tr>
+<tr id="t2014-12-31T13:24:17"><td class="join" colspan="2">*** isaacb has joined #openstack-infra</td><td><a href="#t2014-12-31T13:24:17" class="time">13:24</a></td></tr>
+<tr id="t2014-12-31T13:26:01"><td class="join" colspan="2">*** dims__ has joined #openstack-infra</td><td><a href="#t2014-12-31T13:26:01" class="time">13:26</a></td></tr>
+<tr id="t2014-12-31T13:28:45"><td class="join" colspan="2">*** ryanpetrello has joined #openstack-infra</td><td><a href="#t2014-12-31T13:28:45" class="time">13:28</a></td></tr>
+<tr id="t2014-12-31T13:28:50"><td class="join" colspan="2">*** e0ne has joined #openstack-infra</td><td><a href="#t2014-12-31T13:28:50" class="time">13:28</a></td></tr>
+<tr id="t2014-12-31T13:30:46"><td class="part" colspan="2">*** dims__ has quit IRC</td><td><a href="#t2014-12-31T13:30:46" class="time">13:30</a></td></tr>
+<tr id="t2014-12-31T13:40:44"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2014-12-31T13:40:44" class="time">13:40</a></td></tr>
+<tr id="t2014-12-31T13:42:46"><td class="join" colspan="2">*** HeOS has joined #openstack-infra</td><td><a href="#t2014-12-31T13:42:46" class="time">13:42</a></td></tr>
+<tr id="t2014-12-31T13:45:16"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2014-12-31T13:45:16" class="time">13:45</a></td></tr>
+<tr id="t2014-12-31T13:49:46"><td class="part" colspan="2">*** Longgeek has quit IRC</td><td><a href="#t2014-12-31T13:49:46" class="time">13:49</a></td></tr>
+<tr id="t2014-12-31T14:07:31"><td class="part" colspan="2">*** nikil22 has quit IRC</td><td><a href="#t2014-12-31T14:07:31" class="time">14:07</a></td></tr>
+<tr id="t2014-12-31T14:14:16"><td class="part" colspan="2">*** isaacb has quit IRC</td><td><a href="#t2014-12-31T14:14:16" class="time">14:14</a></td></tr>
+<tr id="t2014-12-31T14:24:23"><td class="nickchange" colspan="2">*** yfried is now known as yfried|afk</td><td><a href="#t2014-12-31T14:24:23" class="time">14:24</a></td></tr>
+<tr id="t2014-12-31T14:24:34"><td class="part" colspan="2">*** jaypipes has quit IRC</td><td><a href="#t2014-12-31T14:24:34" class="time">14:24</a></td></tr>
+<tr id="t2014-12-31T14:27:15"><td class="join" colspan="2">*** amitgandhinz has joined #openstack-infra</td><td><a href="#t2014-12-31T14:27:15" class="time">14:27</a></td></tr>
+<tr id="t2014-12-31T14:30:12"><td class="join" colspan="2">*** dims__ has joined #openstack-infra</td><td><a href="#t2014-12-31T14:30:12" class="time">14:30</a></td></tr>
+<tr id="t2014-12-31T14:34:01"><td class="part" colspan="2">*** wuhg has quit IRC</td><td><a href="#t2014-12-31T14:34:01" class="time">14:34</a></td></tr>
+<tr id="t2014-12-31T14:37:03"><td class="nickchange" colspan="2">*** yfried|afk is now known as yfried</td><td><a href="#t2014-12-31T14:37:03" class="time">14:37</a></td></tr>
+<tr id="t2014-12-31T14:38:02"><td class="join" colspan="2">*** Masahiro has joined #openstack-infra</td><td><a href="#t2014-12-31T14:38:02" class="time">14:38</a></td></tr>
+<tr id="t2014-12-31T14:39:08"><td class="join" colspan="2">*** adalbas has joined #openstack-infra</td><td><a href="#t2014-12-31T14:39:08" class="time">14:39</a></td></tr>
+<tr id="t2014-12-31T14:42:42"><td class="part" colspan="2">*** Masahiro has quit IRC</td><td><a href="#t2014-12-31T14:42:42" class="time">14:42</a></td></tr>
+<tr id="t2014-12-31T14:44:30"><td class="join" colspan="2">*** andreykurilin has joined #openstack-infra</td><td><a href="#t2014-12-31T14:44:30" class="time">14:44</a></td></tr>
+<tr id="t2014-12-31T14:50:31"><td class="join" colspan="2">*** isaacb has joined #openstack-infra</td><td><a href="#t2014-12-31T14:50:31" class="time">14:50</a></td></tr>
+<tr id="t2014-12-31T14:51:27"><td class="part" colspan="2">*** _nadya_ has quit IRC</td><td><a href="#t2014-12-31T14:51:27" class="time">14:51</a></td></tr>
+<tr id="t2014-12-31T14:52:54"><td class="nickchange" colspan="2">*** e0ne is now known as e0ne_</td><td><a href="#t2014-12-31T14:52:54" class="time">14:52</a></td></tr>
+<tr id="t2014-12-31T15:01:29"><td class="join" colspan="2">*** markmcclain has joined #openstack-infra</td><td><a href="#t2014-12-31T15:01:29" class="time">15:01</a></td></tr>
+<tr id="t2014-12-31T15:01:52"><td class="part" colspan="2">*** barra204_ has quit IRC</td><td><a href="#t2014-12-31T15:01:52" class="time">15:01</a></td></tr>
+<tr id="t2014-12-31T15:02:33"><td class="nickchange" colspan="2">*** sigmavirus24_awa is now known as sigmavirus24</td><td><a href="#t2014-12-31T15:02:33" class="time">15:02</a></td></tr>
+<tr id="t2014-12-31T15:03:23"><td class="join" colspan="2">*** _nadya_ has joined #openstack-infra</td><td><a href="#t2014-12-31T15:03:23" class="time">15:03</a></td></tr>
+<tr id="t2014-12-31T15:03:29"><td class="part" colspan="2">*** e0ne_ has quit IRC</td><td><a href="#t2014-12-31T15:03:29" class="time">15:03</a></td></tr>
+<tr id="t2014-12-31T15:04:52"><td class="part" colspan="2">*** amuller has quit IRC</td><td><a href="#t2014-12-31T15:04:52" class="time">15:04</a></td></tr>
+<tr id="t2014-12-31T15:06:03"><td class="join" colspan="2">*** markmcclain1 has joined #openstack-infra</td><td><a href="#t2014-12-31T15:06:03" class="time">15:06</a></td></tr>
+<tr id="t2014-12-31T15:09:49"><td class="part" colspan="2">*** markmcclain has quit IRC</td><td><a href="#t2014-12-31T15:09:49" class="time">15:09</a></td></tr>
+<tr id="t2014-12-31T15:10:17"><td class="part" colspan="2">*** adalbas has quit IRC</td><td><a href="#t2014-12-31T15:10:17" class="time">15:10</a></td></tr>
+<tr id="t2014-12-31T15:11:30"><td class="nickchange" colspan="2">*** yfried is now known as yfried|afk</td><td><a href="#t2014-12-31T15:11:30" class="time">15:11</a></td></tr>
+<tr id="t2014-12-31T15:16:42"><td class="join" colspan="2">*** e0ne has joined #openstack-infra</td><td><a href="#t2014-12-31T15:16:42" class="time">15:16</a></td></tr>
+<tr id="t2014-12-31T15:16:43"><td class="part" colspan="2">*** markmcclain1 has quit IRC</td><td><a href="#t2014-12-31T15:16:43" class="time">15:16</a></td></tr>
+<tr id="t2014-12-31T15:17:03"><td class="join" colspan="2">*** Longgeek has joined #openstack-infra</td><td><a href="#t2014-12-31T15:17:03" class="time">15:17</a></td></tr>
+<tr id="t2014-12-31T15:17:05"><td class="join" colspan="2">*** markmcclain has joined #openstack-infra</td><td><a href="#t2014-12-31T15:17:05" class="time">15:17</a></td></tr>
+<tr id="t2014-12-31T15:19:58"><td class="nickchange" colspan="2">*** yfried|afk is now known as yfried</td><td><a href="#t2014-12-31T15:19:58" class="time">15:19</a></td></tr>
+<tr id="t2014-12-31T15:22:45"><td class="part" colspan="2">*** e0ne has quit IRC</td><td><a href="#t2014-12-31T15:22:45" class="time">15:22</a></td></tr>
+<tr id="t2014-12-31T15:29:49"><td class="part" colspan="2">*** wenchma has quit IRC</td><td><a href="#t2014-12-31T15:29:49" class="time">15:29</a></td></tr>
+<tr id="t2014-12-31T15:31:16"><td class="join" colspan="2">*** mrmartin has joined #openstack-infra</td><td><a href="#t2014-12-31T15:31:16" class="time">15:31</a></td></tr>
+<tr id="t2014-12-31T15:38:57"><td class="part" colspan="2">*** _nadya_ has quit IRC</td><td><a href="#t2014-12-31T15:38:57" class="time">15:38</a></td></tr>
+<tr id="t2014-12-31T15:41:35"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2014-12-31T15:41:35" class="time">15:41</a></td></tr>
+<tr id="t2014-12-31T15:44:19"><td class="part" colspan="2">*** HeOS has quit IRC</td><td><a href="#t2014-12-31T15:44:19" class="time">15:44</a></td></tr>
+<tr id="t2014-12-31T15:46:29"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2014-12-31T15:46:29" class="time">15:46</a></td></tr>
+<tr id="t2014-12-31T15:48:18"><td class="part" colspan="2">*** Longgeek has quit IRC</td><td><a href="#t2014-12-31T15:48:18" class="time">15:48</a></td></tr>
+<tr id="t2014-12-31T15:49:48"><td class="join" colspan="2">*** Longgeek has joined #openstack-infra</td><td><a href="#t2014-12-31T15:49:48" class="time">15:49</a></td></tr>
+<tr id="t2014-12-31T15:52:47"><td class="part" colspan="2">*** mase_x200 has quit IRC</td><td><a href="#t2014-12-31T15:52:47" class="time">15:52</a></td></tr>
+<tr id="t2014-12-31T15:52:53"><td class="nickchange" colspan="2">*** david-lyle_afk is now known as david-lyle</td><td><a href="#t2014-12-31T15:52:53" class="time">15:52</a></td></tr>
+<tr id="t2014-12-31T15:53:25"><td class="join" colspan="2">*** harlowja_at_home has joined #openstack-infra</td><td><a href="#t2014-12-31T15:53:25" class="time">15:53</a></td></tr>
+<tr id="t2014-12-31T15:53:33"><td class="join" colspan="2">*** ryanpetrello_ has joined #openstack-infra</td><td><a href="#t2014-12-31T15:53:33" class="time">15:53</a></td></tr>
+<tr id="t2014-12-31T15:56:54"><td class="part" colspan="2">*** ryanpetrello has quit IRC</td><td><a href="#t2014-12-31T15:56:54" class="time">15:56</a></td></tr>
+<tr id="t2014-12-31T15:56:54"><td class="nickchange" colspan="2">*** ryanpetrello_ is now known as ryanpetrello</td><td><a href="#t2014-12-31T15:56:54" class="time">15:56</a></td></tr>
+<tr id="t2014-12-31T16:04:04"><td class="join" colspan="2">*** bcourt has joined #openstack-infra</td><td><a href="#t2014-12-31T16:04:04" class="time">16:04</a></td></tr>
+<tr id="t2014-12-31T16:04:52"><td class="part" colspan="2">*** jbryce has quit IRC</td><td><a href="#t2014-12-31T16:04:52" class="time">16:04</a></td></tr>
+<tr id="t2014-12-31T16:04:52"><td class="part" colspan="2">*** simonmcc_ has quit IRC</td><td><a href="#t2014-12-31T16:04:52" class="time">16:04</a></td></tr>
+<tr id="t2014-12-31T16:04:52"><td class="part" colspan="2">*** ctracey has quit IRC</td><td><a href="#t2014-12-31T16:04:52" class="time">16:04</a></td></tr>
+<tr id="t2014-12-31T16:04:59"><td class="join" colspan="2">*** jbryce has joined #openstack-infra</td><td><a href="#t2014-12-31T16:04:59" class="time">16:04</a></td></tr>
+<tr id="t2014-12-31T16:05:05"><td class="part" colspan="2">*** zz_gondoi has quit IRC</td><td><a href="#t2014-12-31T16:05:05" class="time">16:05</a></td></tr>
+<tr id="t2014-12-31T16:05:30"><td class="part" colspan="2">*** mgagne has quit IRC</td><td><a href="#t2014-12-31T16:05:30" class="time">16:05</a></td></tr>
+<tr id="t2014-12-31T16:05:43"><td class="part" colspan="2">*** persia has quit IRC</td><td><a href="#t2014-12-31T16:05:43" class="time">16:05</a></td></tr>
+<tr id="t2014-12-31T16:05:50"><td class="join" colspan="2">*** persia has joined #openstack-infra</td><td><a href="#t2014-12-31T16:05:50" class="time">16:05</a></td></tr>
+<tr id="t2014-12-31T16:05:50"><td class="part" colspan="2">*** persia has quit IRC</td><td><a href="#t2014-12-31T16:05:50" class="time">16:05</a></td></tr>
+<tr id="t2014-12-31T16:05:50"><td class="join" colspan="2">*** persia has joined #openstack-infra</td><td><a href="#t2014-12-31T16:05:50" class="time">16:05</a></td></tr>
+<tr id="t2014-12-31T16:06:08"><td class="part" colspan="2">*** Ng has quit IRC</td><td><a href="#t2014-12-31T16:06:08" class="time">16:06</a></td></tr>
+<tr id="t2014-12-31T16:06:11"><td class="nickchange" colspan="2">*** zxiiro_ is now known as zxiiro</td><td><a href="#t2014-12-31T16:06:11" class="time">16:06</a></td></tr>
+<tr id="t2014-12-31T16:06:24"><td class="join" colspan="2">*** simonmcc has joined #openstack-infra</td><td><a href="#t2014-12-31T16:06:24" class="time">16:06</a></td></tr>
+<tr id="t2014-12-31T16:06:30"><td class="join" colspan="2">*** ctracey has joined #openstack-infra</td><td><a href="#t2014-12-31T16:06:30" class="time">16:06</a></td></tr>
+<tr id="t2014-12-31T16:06:45"><td class="part" colspan="2">*** boris-42 has quit IRC</td><td><a href="#t2014-12-31T16:06:45" class="time">16:06</a></td></tr>
+<tr id="t2014-12-31T16:06:46"><td class="part" colspan="2">*** dtroyer has quit IRC</td><td><a href="#t2014-12-31T16:06:46" class="time">16:06</a></td></tr>
+<tr id="t2014-12-31T16:06:46"><td class="part" colspan="2">*** serverascode____ has quit IRC</td><td><a href="#t2014-12-31T16:06:46" class="time">16:06</a></td></tr>
+<tr id="t2014-12-31T16:06:46"><td class="part" colspan="2">*** ameade_ has quit IRC</td><td><a href="#t2014-12-31T16:06:46" class="time">16:06</a></td></tr>
+<tr id="t2014-12-31T16:06:46"><td class="part" colspan="2">*** JayF has quit IRC</td><td><a href="#t2014-12-31T16:06:46" class="time">16:06</a></td></tr>
+<tr id="t2014-12-31T16:07:01"><td class="part" colspan="2">*** vponomaryov has left #openstack-infra</td><td><a href="#t2014-12-31T16:07:01" class="time">16:07</a></td></tr>
+<tr id="t2014-12-31T16:07:12"><td class="join" colspan="2">*** mgagne has joined #openstack-infra</td><td><a href="#t2014-12-31T16:07:12" class="time">16:07</a></td></tr>
+<tr id="t2014-12-31T16:07:39"><td class="join" colspan="2">*** boris-42 has joined #openstack-infra</td><td><a href="#t2014-12-31T16:07:39" class="time">16:07</a></td></tr>
+<tr id="t2014-12-31T16:07:56"><td class="join" colspan="2">*** ameade_ has joined #openstack-infra</td><td><a href="#t2014-12-31T16:07:56" class="time">16:07</a></td></tr>
+<tr id="t2014-12-31T16:07:59"><td class="join" colspan="2">*** dtroyer has joined #openstack-infra</td><td><a href="#t2014-12-31T16:07:59" class="time">16:07</a></td></tr>
+<tr id="t2014-12-31T16:08:19"><td class="join" colspan="2">*** JayF has joined #openstack-infra</td><td><a href="#t2014-12-31T16:08:19" class="time">16:08</a></td></tr>
+<tr id="t2014-12-31T16:08:27"><td class="join" colspan="2">*** gondoi has joined #openstack-infra</td><td><a href="#t2014-12-31T16:08:27" class="time">16:08</a></td></tr>
+<tr id="t2014-12-31T16:08:34"><td class="join" colspan="2">*** Ng has joined #openstack-infra</td><td><a href="#t2014-12-31T16:08:34" class="time">16:08</a></td></tr>
+<tr id="t2014-12-31T16:08:48"><td class="join" colspan="2">*** serverascode____ has joined #openstack-infra</td><td><a href="#t2014-12-31T16:08:48" class="time">16:08</a></td></tr>
+<tr id="t2014-12-31T16:09:14"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2014-12-31T16:09:14" class="time">16:09</a></td></tr>
+<tr id="t2014-12-31T16:09:53"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2014-12-31T16:09:53" class="time">16:09</a></td></tr>
+<tr id="t2014-12-31T16:14:37"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2014-12-31T16:14:37" class="time">16:14</a></td></tr>
+<tr id="t2014-12-31T16:14:54"><td class="part" colspan="2">*** isaacb has quit IRC</td><td><a href="#t2014-12-31T16:14:54" class="time">16:14</a></td></tr>
+<tr id="t2014-12-31T16:16:58"><td class="part" colspan="2">*** harlowja_at_home has quit IRC</td><td><a href="#t2014-12-31T16:16:58" class="time">16:16</a></td></tr>
+<tr id="t2014-12-31T16:17:09"><td class="part" colspan="2">*** hamzy_vacation has quit IRC</td><td><a href="#t2014-12-31T16:17:09" class="time">16:17</a></td></tr>
+<tr id="t2014-12-31T16:17:27"><td class="join" colspan="2">*** mestery has joined #openstack-infra</td><td><a href="#t2014-12-31T16:17:27" class="time">16:17</a></td></tr>
+<tr id="t2014-12-31T16:17:38"><td class="join" colspan="2">*** erikwilson has joined #openstack-infra</td><td><a href="#t2014-12-31T16:17:38" class="time">16:17</a></td></tr>
+<tr id="t2014-12-31T16:18:07"><td class="nickchange" colspan="2">*** erikwilson is now known as erikmwilson_</td><td><a href="#t2014-12-31T16:18:07" class="time">16:18</a></td></tr>
+<tr id="t2014-12-31T16:18:54"><td class="part" colspan="2">*** erikmwilson has quit IRC</td><td><a href="#t2014-12-31T16:18:54" class="time">16:18</a></td></tr>
+<tr id="t2014-12-31T16:19:08"><td class="nickchange" colspan="2">*** erikmwilson_ is now known as erikmmwilson</td><td><a href="#t2014-12-31T16:19:08" class="time">16:19</a></td></tr>
+<tr id="t2014-12-31T16:19:22"><td class="nickchange" colspan="2">*** erikmmwilson is now known as erikmwilson</td><td><a href="#t2014-12-31T16:19:22" class="time">16:19</a></td></tr>
+<tr id="t2014-12-31T16:20:03"><td class="join" colspan="2">*** erikwilson has joined #openstack-infra</td><td><a href="#t2014-12-31T16:20:03" class="time">16:20</a></td></tr>
+<tr id="t2014-12-31T16:24:43"><td class="part" colspan="2">*** smoser has quit IRC</td><td><a href="#t2014-12-31T16:24:43" class="time">16:24</a></td></tr>
+<tr id="t2014-12-31T16:26:47"><td class="join" colspan="2">*** Masahiro has joined #openstack-infra</td><td><a href="#t2014-12-31T16:26:47" class="time">16:26</a></td></tr>
+<tr id="t2014-12-31T16:28:44"><td class="join" colspan="2">*** smoser has joined #openstack-infra</td><td><a href="#t2014-12-31T16:28:44" class="time">16:28</a></td></tr>
+<tr id="t2014-12-31T16:29:30"><td class="part" colspan="2">*** andreykurilin has quit IRC</td><td><a href="#t2014-12-31T16:29:30" class="time">16:29</a></td></tr>
+<tr id="t2014-12-31T16:31:21"><td class="part" colspan="2">*** Masahiro has quit IRC</td><td><a href="#t2014-12-31T16:31:21" class="time">16:31</a></td></tr>
+<tr id="t2014-12-31T16:31:40"><td class="part" colspan="2">*** yfried has quit IRC</td><td><a href="#t2014-12-31T16:31:40" class="time">16:31</a></td></tr>
+<tr id="t2014-12-31T16:32:11"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2014-12-31T16:32:11" class="time">16:32</a></td></tr>
+<tr id="t2014-12-31T16:34:49"><td class="part" colspan="2">*** erikmwilson has quit IRC</td><td><a href="#t2014-12-31T16:34:49" class="time">16:34</a></td></tr>
+<tr id="t2014-12-31T16:36:22"><td class="join" colspan="2">*** erikmwilson has joined #openstack-infra</td><td><a href="#t2014-12-31T16:36:22" class="time">16:36</a></td></tr>
+<tr id="t2014-12-31T16:42:26"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">good morning</td><td class="time"><a href="#t2014-12-31T16:42:26" class="time">16:42</a></td></tr>
+<tr id="t2014-12-31T16:44:06"><th class="nick" style="background: #57a657">Mithrandir</th><td class="text" style="color: #57a657">hey pleia2</td><td class="time"><a href="#t2014-12-31T16:44:06" class="time">16:44</a></td></tr>
+<tr id="t2014-12-31T16:45:46"><td class="part" colspan="2">*** ryanpetrello has quit IRC</td><td><a href="#t2014-12-31T16:45:46" class="time">16:45</a></td></tr>
+<tr id="t2014-12-31T16:46:18"><td class="join" colspan="2">*** ryanpetrello has joined #openstack-infra</td><td><a href="#t2014-12-31T16:46:18" class="time">16:46</a></td></tr>
+<tr id="t2014-12-31T16:47:41"><th class="nick" style="background: #8c4a4a">openstackgerrit</th><td class="text" style="color: #8c4a4a">Stefano Maffulli 'reed' proposed openstack-infra/infra-manual: Clarify that Change-Id should not be modified&nbsp;&nbsp;<a href="https://review.openstack.org/144586" rel="nofollow">https://review.openstack.org/144586</a></td><td class="time"><a href="#t2014-12-31T16:47:41" class="time">16:47</a></td></tr>
+<tr id="t2014-12-31T16:55:51"><th class="nick" style="background: #5959a9">zaro</th><td class="text" style="color: #5959a9">morning</td><td class="time"><a href="#t2014-12-31T16:55:51" class="time">16:55</a></td></tr>
+<tr id="t2014-12-31T16:57:37"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2014-12-31T16:57:37" class="time">16:57</a></td></tr>
+<tr id="t2014-12-31T16:58:12"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2014-12-31T16:58:12" class="time">16:58</a></td></tr>
+<tr id="t2014-12-31T17:01:04"><td class="part" colspan="2">*** garyk has quit IRC</td><td><a href="#t2014-12-31T17:01:04" class="time">17:01</a></td></tr>
+<tr id="t2014-12-31T17:01:17"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">good morning</td><td class="time"><a href="#t2014-12-31T17:01:17" class="time">17:01</a></td></tr>
+<tr id="t2014-12-31T17:01:26"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">I have the fireplace going</td><td class="time"><a href="#t2014-12-31T17:01:26" class="time">17:01</a></td></tr>
+<tr id="t2014-12-31T17:01:35"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">nice :)</td><td class="time"><a href="#t2014-12-31T17:01:35" class="time">17:01</a></td></tr>
+<tr id="t2014-12-31T17:01:37"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">cold?</td><td class="time"><a href="#t2014-12-31T17:01:37" class="time">17:01</a></td></tr>
+<tr id="t2014-12-31T17:02:09"><td class="join" colspan="2">*** bradjones has joined #openstack-infra</td><td><a href="#t2014-12-31T17:02:09" class="time">17:02</a></td></tr>
+<tr id="t2014-12-31T17:02:18"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">ya its 20 something in murican units</td><td class="time"><a href="#t2014-12-31T17:02:18" class="time">17:02</a></td></tr>
+<tr id="t2014-12-31T17:02:29"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">negative number in C</td><td class="time"><a href="#t2014-12-31T17:02:29" class="time">17:02</a></td></tr>
+<tr id="t2014-12-31T17:02:31"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2014-12-31T17:02:31" class="time">17:02</a></td></tr>
+<tr id="t2014-12-31T17:02:42"><td class="join" colspan="2">*** hdd has joined #openstack-infra</td><td><a href="#t2014-12-31T17:02:42" class="time">17:02</a></td></tr>
+<tr id="t2014-12-31T17:02:52"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">phone says 23F</td><td class="time"><a href="#t2014-12-31T17:02:52" class="time">17:02</a></td></tr>
+<tr id="t2014-12-31T17:03:01"><td class="part" colspan="2">*** markmcclain has quit IRC</td><td><a href="#t2014-12-31T17:03:01" class="time">17:03</a></td></tr>
+<tr id="t2014-12-31T17:03:03"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">46 here</td><td class="time"><a href="#t2014-12-31T17:03:03" class="time">17:03</a></td></tr>
+<tr id="t2014-12-31T17:03:39"><th class="nick" style="background: #adad5b">sigmavirus24</th><td class="text" style="color: #adad5b">clarkb: it's -1F here which is rougly -18C</td><td class="time"><a href="#t2014-12-31T17:03:39" class="time">17:03</a></td></tr>
+<tr id="t2014-12-31T17:04:46"><th class="nick" style="background: #57a657">Mithrandir</th><td class="text" style="color: #57a657">sounds nice and pleasant</td><td class="time"><a href="#t2014-12-31T17:04:46" class="time">17:04</a></td></tr>
+<tr id="t2014-12-31T17:05:52"><th class="nick" style="background: #adad5b">sigmavirus24</th><td class="text" style="color: #adad5b">It is</td><td class="time"><a href="#t2014-12-31T17:05:52" class="time">17:05</a></td></tr>
+<tr id="t2014-12-31T17:05:54"><td class="part" colspan="2">*** yolanda has quit IRC</td><td><a href="#t2014-12-31T17:05:54" class="time">17:05</a></td></tr>
+<tr id="t2014-12-31T17:06:01"><th class="nick" style="background: #adad5b">sigmavirus24</th><td class="text" style="color: #adad5b">With a good wind it's about -15F</td><td class="time"><a href="#t2014-12-31T17:06:01" class="time">17:06</a></td></tr>
+<tr id="t2014-12-31T17:06:24"><td class="join" colspan="2">*** e0ne has joined #openstack-infra</td><td><a href="#t2014-12-31T17:06:24" class="time">17:06</a></td></tr>
+<tr id="t2014-12-31T17:06:44"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">clarkb: how were you going about applying all these manifests in your patch? (I've tackled this more piecemeal in the past)</td><td class="time"><a href="#t2014-12-31T17:06:44" class="time">17:06</a></td></tr>
+<tr id="t2014-12-31T17:07:48"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">pleia2 take the site.pp edits remove the outer node {} then add mysql to that</td><td class="time"><a href="#t2014-12-31T17:07:48" class="time">17:07</a></td></tr>
+<tr id="t2014-12-31T17:07:58"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">let me copy pasta my test.pp</td><td class="time"><a href="#t2014-12-31T17:07:58" class="time">17:07</a></td></tr>
+<tr id="t2014-12-31T17:08:02"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">thanks</td><td class="time"><a href="#t2014-12-31T17:08:02" class="time">17:08</a></td></tr>
+<tr id="t2014-12-31T17:09:23"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">pleia2: <a href="http://paste.openstack.org/show/155283/" rel="nofollow">http://paste.openstack.org/show/155283/</a></td><td class="time"><a href="#t2014-12-31T17:09:23" class="time">17:09</a></td></tr>
+<tr id="t2014-12-31T17:09:28"><td class="part" colspan="2">*** e0ne has quit IRC</td><td><a href="#t2014-12-31T17:09:28" class="time">17:09</a></td></tr>
+<tr id="t2014-12-31T17:10:14"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">I wonder if a generic db class would be useful for us when testing</td><td class="time"><a href="#t2014-12-31T17:10:14" class="time">17:10</a></td></tr>
+<tr id="t2014-12-31T17:10:37"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">wrapped the mysql module and made assumptions about what you want for a local db</td><td class="time"><a href="#t2014-12-31T17:10:37" class="time">17:10</a></td></tr>
+<tr id="t2014-12-31T17:11:13"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">I think it would</td><td class="time"><a href="#t2014-12-31T17:11:13" class="time">17:11</a></td></tr>
+<tr id="t2014-12-31T17:12:48"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">then I just did `puppet apply --test --modulepath=$PWD/modules:/etc/puppet/modules test.pp from within the system-config repo</td><td class="time"><a href="#t2014-12-31T17:12:48" class="time">17:12</a></td></tr>
+<tr id="t2014-12-31T17:13:17"><td class="action" colspan="2">* pleia2 nods</td><td><a href="#t2014-12-31T17:13:17" class="time">17:13</a></td></tr>
+<tr id="t2014-12-31T17:13:43"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2014-12-31T17:13:43" class="time">17:13</a></td></tr>
+<tr id="t2014-12-31T17:13:47"><th class="nick" style="background: #8c4a4a">openstackgerrit</th><td class="text" style="color: #8c4a4a">Jeremy Stanley proposed openstack-infra/puppet-storyboard: Allow overriding the cert/key file paths&nbsp;&nbsp;<a href="https://review.openstack.org/144367" rel="nofollow">https://review.openstack.org/144367</a></td><td class="time"><a href="#t2014-12-31T17:13:47" class="time">17:13</a></td></tr>
+<tr id="t2014-12-31T17:13:56"><td class="action" colspan="2">* pleia2 lets that chug away for a bit</td><td><a href="#t2014-12-31T17:13:56" class="time">17:13</a></td></tr>
+<tr id="t2014-12-31T17:16:39"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2014-12-31T17:16:39" class="time">17:16</a></td></tr>
+<tr id="t2014-12-31T17:18:01"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2014-12-31T17:18:01" class="time">17:18</a></td></tr>
+<tr id="t2014-12-31T17:20:06"><td class="nickchange" colspan="2">*** zz_dimtruck is now known as dimtruck</td><td><a href="#t2014-12-31T17:20:06" class="time">17:20</a></td></tr>
+<tr id="t2014-12-31T17:24:37"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">pleia2: any luck?</td><td class="time"><a href="#t2014-12-31T17:24:37" class="time">17:24</a></td></tr>
+<tr id="t2014-12-31T17:25:19"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2014-12-31T17:25:19" class="time">17:25</a></td></tr>
+<tr id="t2014-12-31T17:25:29"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">clarkb: yep, I have your errors replicated now</td><td class="time"><a href="#t2014-12-31T17:25:29" class="time">17:25</a></td></tr>
+<tr id="t2014-12-31T17:25:43"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">woot</td><td class="time"><a href="#t2014-12-31T17:25:43" class="time">17:25</a></td></tr>
+<tr id="t2014-12-31T17:25:53"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2014-12-31T17:25:53" class="time">17:25</a></td></tr>
+<tr id="t2014-12-31T17:26:36"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2014-12-31T17:26:36" class="time">17:26</a></td></tr>
+<tr id="t2014-12-31T17:26:49"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2014-12-31T17:26:49" class="time">17:26</a></td></tr>
+<tr id="t2014-12-31T17:29:43"><td class="nickchange" colspan="2">*** dimtruck is now known as zz_dimtruck</td><td><a href="#t2014-12-31T17:29:43" class="time">17:29</a></td></tr>
+<tr id="t2014-12-31T17:32:15"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">clarkb: so, by installing libphp-phpmailer and manually editing /opt/openstackweb/smtpmailer/code/SmtpMailer.php to point to its /usr/share/php/libphp-phpmailer/class.phpmailer.php (rather than the local vendor/blah stuff) it works</td><td class="time"><a href="#t2014-12-31T17:32:15" class="time">17:32</a></td></tr>
+<tr id="t2014-12-31T17:32:39"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">still need to solve the actual problem, but I can confirm that's the issue and the site seems ok otherwise</td><td class="time"><a href="#t2014-12-31T17:32:39" class="time">17:32</a></td></tr>
+<tr id="t2014-12-31T17:32:55"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">pleia2: can you paste what that edit looks like?</td><td class="time"><a href="#t2014-12-31T17:32:55" class="time">17:32</a></td></tr>
+<tr id="t2014-12-31T17:33:03"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">pleia2: and does that make the site load?</td><td class="time"><a href="#t2014-12-31T17:33:03" class="time">17:33</a></td></tr>
+<tr id="t2014-12-31T17:33:10"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">it does</td><td class="time"><a href="#t2014-12-31T17:33:10" class="time">17:33</a></td></tr>
+<tr id="t2014-12-31T17:33:19"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">line three, comment out the current require_once and use:</td><td class="time"><a href="#t2014-12-31T17:33:19" class="time">17:33</a></td></tr>
+<tr id="t2014-12-31T17:33:23"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">require_once('/usr/share/php/libphp-phpmailer/class.phpmailer.php');</td><td class="time"><a href="#t2014-12-31T17:33:23" class="time">17:33</a></td></tr>
+<tr id="t2014-12-31T17:33:35"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">awesome</td><td class="time"><a href="#t2014-12-31T17:33:35" class="time">17:33</a></td></tr>
+<tr id="t2014-12-31T17:36:35"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">so I think the question is why <a href="https://git.openstack.org/cgit/openstack-infra/openstackweb/tree/smtpmailer/code/SmtpMailer.php" rel="nofollow">https://git.openstack.org/cgit/openstack-infra/openstackweb/tree/smtpmailer/code/SmtpMailer.php</a> wants the local vendor version of class.phpmailer.php, and whether it's ok to replace it with the ubuntu packaged version and edit that file accordingly</td><td class="time"><a href="#t2014-12-31T17:36:35" class="time">17:36</a></td></tr>
+<tr id="t2014-12-31T17:37:14"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">and if it does want that vendor location version, where does it come from (since it clearly doesn't exist with the installation docs we have)</td><td class="time"><a href="#t2014-12-31T17:37:14" class="time">17:37</a></td></tr>
+<tr id="t2014-12-31T17:37:30"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">ya</td><td class="time"><a href="#t2014-12-31T17:37:30" class="time">17:37</a></td></tr>
+<tr id="t2014-12-31T17:38:11"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">cool I got back an index.html that looks correct</td><td class="time"><a href="#t2014-12-31T17:38:11" class="time">17:38</a></td></tr>
+<tr id="t2014-12-31T17:38:23"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">\o/</td><td class="time"><a href="#t2014-12-31T17:38:23" class="time">17:38</a></td></tr>
+<tr id="t2014-12-31T17:39:02"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">shall I update the bug report?</td><td class="time"><a href="#t2014-12-31T17:39:02" class="time">17:39</a></td></tr>
+<tr id="t2014-12-31T17:39:04"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">pleia2: I can update <a href="https://bugs.launchpad.net/openstack-org/+bug/1406662" rel="nofollow">https://bugs.launchpad.net/openstack-org/+bug/1406662</a> unless you would like to</td><td class="time"><a href="#t2014-12-31T17:39:04" class="time">17:39</a></td></tr>
+<tr id="t2014-12-31T17:39:06"><th class="nick" style="background: #9b519b">uvirtbot</th><td class="text" style="color: #9b519b">Launchpad bug 1406662 in openstack-org &quot;PHPMailer not found by smtpmailer bundled in public.openstack-org&quot; [Undecided,New]</td><td class="time"><a href="#t2014-12-31T17:39:06" class="time">17:39</a></td></tr>
+<tr id="t2014-12-31T17:39:06"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">ya go for it</td><td class="time"><a href="#t2014-12-31T17:39:06" class="time">17:39</a></td></tr>
+<tr id="t2014-12-31T17:39:17"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">on it</td><td class="time"><a href="#t2014-12-31T17:39:17" class="time">17:39</a></td></tr>
+<tr id="t2014-12-31T17:40:01"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">I don't actually have any proper content thoug but I think that is because I am missing the DB dump</td><td class="time"><a href="#t2014-12-31T17:40:01" class="time">17:40</a></td></tr>
+<tr id="t2014-12-31T17:40:05"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">which is the other bug I opened</td><td class="time"><a href="#t2014-12-31T17:40:05" class="time">17:40</a></td></tr>
+<tr id="t2014-12-31T17:40:22"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">yeah, same</td><td class="time"><a href="#t2014-12-31T17:40:22" class="time">17:40</a></td></tr>
+<tr id="t2014-12-31T17:40:59"><th class="nick" style="background: #b15db1">fungi</th><td class="text" style="color: #b15db1">hrm... can someone remind me how to wrap a long conditional in a puppet manifest?</td><td class="time"><a href="#t2014-12-31T17:40:59" class="time">17:40</a></td></tr>
+<tr id="t2014-12-31T17:41:27"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">fungi: to stay under 80 chars? iirc you can't sanely dothat</td><td class="time"><a href="#t2014-12-31T17:41:27" class="time">17:41</a></td></tr>
+<tr id="t2014-12-31T17:41:29"><td class="part" colspan="2">*** Longgeek has quit IRC</td><td><a href="#t2014-12-31T17:41:29" class="time">17:41</a></td></tr>
+<tr id="t2014-12-31T17:41:36"><th class="nick" style="background: #b15db1">fungi</th><td class="text" style="color: #b15db1">grrr</td><td class="time"><a href="#t2014-12-31T17:41:36" class="time">17:41</a></td></tr>
+<tr id="t2014-12-31T17:41:40"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">we turned off that lint check in most projects because it's hard</td><td class="time"><a href="#t2014-12-31T17:41:40" class="time">17:41</a></td></tr>
+<tr id="t2014-12-31T17:42:00"><th class="nick" style="background: #b15db1">fungi</th><td class="text" style="color: #b15db1">i'll edit down someone else's somewhat verbose variable names</td><td class="time"><a href="#t2014-12-31T17:42:00" class="time">17:42</a></td></tr>
+<tr id="t2014-12-31T17:42:16"><td class="nickchange" colspan="2">*** zz_dimtruck is now known as dimtruck</td><td><a href="#t2014-12-31T17:42:16" class="time">17:42</a></td></tr>
+<tr id="t2014-12-31T17:42:52"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">I am impressed with how well it renders in w3m</td><td class="time"><a href="#t2014-12-31T17:42:52" class="time">17:42</a></td></tr>
+<tr id="t2014-12-31T17:47:36"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2014-12-31T17:47:36" class="time">17:47</a></td></tr>
+<tr id="t2014-12-31T17:48:45"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2014-12-31T17:48:45" class="time">17:48</a></td></tr>
+<tr id="t2014-12-31T17:50:40"><th class="nick" style="background: #8c4a4a">openstackgerrit</th><td class="text" style="color: #8c4a4a">Jeremy Stanley proposed openstack-infra/puppet-storyboard: Allow overriding the cert/key file paths&nbsp;&nbsp;<a href="https://review.openstack.org/144367" rel="nofollow">https://review.openstack.org/144367</a></td><td class="time"><a href="#t2014-12-31T17:50:40" class="time">17:50</a></td></tr>
+<tr id="t2014-12-31T17:51:33"><th class="nick" style="background: #b15db1">fungi</th><td class="text" style="color: #b15db1">clarkb: try elinks</td><td class="time"><a href="#t2014-12-31T17:51:33" class="time">17:51</a></td></tr>
+<tr id="t2014-12-31T17:51:43"><th class="nick" style="background: #b15db1">fungi</th><td class="text" style="color: #b15db1">clarkb: it even has some limited javascript handling</td><td class="time"><a href="#t2014-12-31T17:51:43" class="time">17:51</a></td></tr>
+<tr id="t2014-12-31T17:53:12"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2014-12-31T17:53:12" class="time">17:53</a></td></tr>
+<tr id="t2014-12-31T17:53:23"><td class="part" colspan="2">*** erikmwilson has quit IRC</td><td><a href="#t2014-12-31T17:53:23" class="time">17:53</a></td></tr>
+<tr id="t2014-12-31T17:54:34"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">elinks uses fewer colors but also renders pretty well</td><td class="time"><a href="#t2014-12-31T17:54:34" class="time">17:54</a></td></tr>
+<tr id="t2014-12-31T17:54:58"><td class="join" colspan="2">*** _nadya_ has joined #openstack-infra</td><td><a href="#t2014-12-31T17:54:58" class="time">17:54</a></td></tr>
+<tr id="t2014-12-31T17:56:59"><td class="join" colspan="2">*** armax has joined #openstack-infra</td><td><a href="#t2014-12-31T17:56:59" class="time">17:56</a></td></tr>
+<tr id="t2014-12-31T17:57:00"><td class="part" colspan="2">*** hdd has quit IRC</td><td><a href="#t2014-12-31T17:57:00" class="time">17:57</a></td></tr>
+<tr id="t2014-12-31T17:57:23"><td class="join" colspan="2">*** patrickeast has joined #openstack-infra</td><td><a href="#t2014-12-31T17:57:23" class="time">17:57</a></td></tr>
+<tr id="t2014-12-31T17:58:51"><th class="nick" style="background: #5fb4b4">vishy</th><td class="text" style="color: #5fb4b4">anyone seen this failure before about resource_types? <a href="http://logs.openstack.org/98/144498/2/check/gate-tempest-dsvm-neutron-src-oslo.messaging/3ccf902/console.html" rel="nofollow">http://logs.openstack.org/98/144498/2/check/gate-tempest-dsvm-neutron-src-oslo.messaging/3ccf902/console.html</a></td><td class="time"><a href="#t2014-12-31T17:58:51" class="time">17:58</a></td></tr>
+<tr id="t2014-12-31T18:00:36"><th class="nick" style="background: #b15db1">fungi</th><td class="text" style="color: #b15db1">MismatchError: 'Outputs' not in {...}</td><td class="time"><a href="#t2014-12-31T18:00:36" class="time">18:00</a></td></tr>
+<tr id="t2014-12-31T18:00:38"><th class="nick" style="background: #b15db1">fungi</th><td class="text" style="color: #b15db1">new one on me</td><td class="time"><a href="#t2014-12-31T18:00:38" class="time">18:00</a></td></tr>
+<tr id="t2014-12-31T18:00:56"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">well it looks like heat timed out which led to that I think heat timeouts may be a known thing</td><td class="time"><a href="#t2014-12-31T18:00:56" class="time">18:00</a></td></tr>
+<tr id="t2014-12-31T18:01:08"><td class="part" colspan="2">*** _nadya_ has quit IRC</td><td><a href="#t2014-12-31T18:01:08" class="time">18:01</a></td></tr>
+<tr id="t2014-12-31T18:01:12"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">I had thought we stopped running those tests because they had become to unstable, but the qa team would likely know more</td><td class="time"><a href="#t2014-12-31T18:01:12" class="time">18:01</a></td></tr>
+<tr id="t2014-12-31T18:01:28"><th class="nick" style="background: #b15db1">fungi</th><td class="text" style="color: #b15db1">oh, i missed the TimeoutException just above it</td><td class="time"><a href="#t2014-12-31T18:01:28" class="time">18:01</a></td></tr>
+<tr id="t2014-12-31T18:01:38"><th class="nick" style="background: #b15db1">fungi</th><td class="text" style="color: #b15db1">so, yeah, general chaos at that point</td><td class="time"><a href="#t2014-12-31T18:01:38" class="time">18:01</a></td></tr>
+<tr id="t2014-12-31T18:02:48"><th class="nick" style="background: #b15db1">fungi</th><td class="text" style="color: #b15db1">i remember there was a thread about dropping them in favor of (perhaps as of yet nonexistent) heat functional tests providing the same or better coverage</td><td class="time"><a href="#t2014-12-31T18:02:48" class="time">18:02</a></td></tr>
+<tr id="t2014-12-31T18:03:27"><th class="nick" style="background: #5fb4b4">vishy</th><td class="text" style="color: #5fb4b4">i see a bunch of errors in neutron</td><td class="time"><a href="#t2014-12-31T18:03:27" class="time">18:03</a></td></tr>
+<tr id="t2014-12-31T18:03:33"><th class="nick" style="background: #5fb4b4">vishy</th><td class="text" style="color: #5fb4b4">which may be related</td><td class="time"><a href="#t2014-12-31T18:03:33" class="time">18:03</a></td></tr>
+<tr id="t2014-12-31T18:03:45"><th class="nick" style="background: #5fb4b4">vishy</th><td class="text" style="color: #5fb4b4">i don’t see any errors in heat itself</td><td class="time"><a href="#t2014-12-31T18:03:45" class="time">18:03</a></td></tr>
+<tr id="t2014-12-31T18:05:58"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2014-12-31T18:05:58" class="time">18:05</a></td></tr>
+<tr id="t2014-12-31T18:07:39"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2014-12-31T18:07:39" class="time">18:07</a></td></tr>
+<tr id="t2014-12-31T18:07:42"><th class="nick" style="background: #5fb4b4">vishy</th><td class="text" style="color: #5fb4b4">clarkb: any idea if there is a bug for that somewhere?</td><td class="time"><a href="#t2014-12-31T18:07:42" class="time">18:07</a></td></tr>
+<tr id="t2014-12-31T18:07:45"><td class="join" colspan="2">*** ddieterl_ has joined #openstack-infra</td><td><a href="#t2014-12-31T18:07:45" class="time">18:07</a></td></tr>
+<tr id="t2014-12-31T18:08:54"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">vishy: I typically check the list at <a href="http://status.openstack.org/elastic-recheck/" rel="nofollow">http://status.openstack.org/elastic-recheck/</a></td><td class="time"><a href="#t2014-12-31T18:08:54" class="time">18:08</a></td></tr>
+<tr id="t2014-12-31T18:09:21"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">maybe related to 1403291?</td><td class="time"><a href="#t2014-12-31T18:09:21" class="time">18:09</a></td></tr>
+<tr id="t2014-12-31T18:09:48"><td class="nickchange" colspan="2">*** zz_sabari is now known as sabari</td><td><a href="#t2014-12-31T18:09:48" class="time">18:09</a></td></tr>
+<tr id="t2014-12-31T18:09:49"><td class="part" colspan="2">*** bcourt has quit IRC</td><td><a href="#t2014-12-31T18:09:49" class="time">18:09</a></td></tr>
+<tr id="t2014-12-31T18:10:06"><td class="join" colspan="2">*** markmcclain has joined #openstack-infra</td><td><a href="#t2014-12-31T18:10:06" class="time">18:10</a></td></tr>
+<tr id="t2014-12-31T18:10:31"><td class="part" colspan="2">*** markmcclain has quit IRC</td><td><a href="#t2014-12-31T18:10:31" class="time">18:10</a></td></tr>
+<tr id="t2014-12-31T18:10:41"><th class="nick" style="background: #5fb4b4">vishy</th><td class="text" style="color: #5fb4b4">doesn’t look like it</td><td class="time"><a href="#t2014-12-31T18:10:41" class="time">18:10</a></td></tr>
+<tr id="t2014-12-31T18:12:11"><td class="part" colspan="2">*** ddieterl_ has quit IRC</td><td><a href="#t2014-12-31T18:12:11" class="time">18:12</a></td></tr>
+<tr id="t2014-12-31T18:13:07"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2014-12-31T18:13:07" class="time">18:13</a></td></tr>
+<tr id="t2014-12-31T18:15:29"><td class="join" colspan="2">*** Masahiro has joined #openstack-infra</td><td><a href="#t2014-12-31T18:15:29" class="time">18:15</a></td></tr>
+<tr id="t2014-12-31T18:17:22"><td class="join" colspan="2">*** marun has joined #openstack-infra</td><td><a href="#t2014-12-31T18:17:22" class="time">18:17</a></td></tr>
+<tr id="t2014-12-31T18:19:54"><td class="part" colspan="2">*** Masahiro has quit IRC</td><td><a href="#t2014-12-31T18:19:54" class="time">18:19</a></td></tr>
+<tr id="t2014-12-31T18:20:57"><th class="nick" style="background: #5fb4b4">vishy</th><td class="text" style="color: #5fb4b4">I’d like to rerun the test because it is possible that my changes caused it</td><td class="time"><a href="#t2014-12-31T18:20:57" class="time">18:20</a></td></tr>
+<tr id="t2014-12-31T18:21:26"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">`recheck` will rerun it</td><td class="time"><a href="#t2014-12-31T18:21:26" class="time">18:21</a></td></tr>
+<tr id="t2014-12-31T18:22:10"><td class="part" colspan="2">*** marun has quit IRC</td><td><a href="#t2014-12-31T18:22:10" class="time">18:22</a></td></tr>
+<tr id="t2014-12-31T18:24:31"><td class="join" colspan="2">*** bdpayne has joined #openstack-infra</td><td><a href="#t2014-12-31T18:24:31" class="time">18:24</a></td></tr>
+<tr id="t2014-12-31T18:26:21"><th class="nick" style="background: #5fb4b4">vishy</th><td class="text" style="color: #5fb4b4">clarkb: does “recheck no bug&quot; still work</td><td class="time"><a href="#t2014-12-31T18:26:21" class="time">18:26</a></td></tr>
+<tr id="t2014-12-31T18:26:49"><th class="nick" style="background: #5959a9">zaro</th><td class="text" style="color: #5959a9">clarkb: this change got updated on review-dev <a href="https://review.openstack.org/#/c/134238/" rel="nofollow">https://review.openstack.org/#/c/134238/</a></td><td class="time"><a href="#t2014-12-31T18:26:49" class="time">18:26</a></td></tr>
+<tr id="t2014-12-31T18:27:09"><th class="nick" style="background: #5959a9">zaro</th><td class="text" style="color: #5959a9">clarkb: can i run the puppet script to revert back?</td><td class="time"><a href="#t2014-12-31T18:27:09" class="time">18:27</a></td></tr>
+<tr id="t2014-12-31T18:27:32"><th class="nick" style="background: #b15db1">fungi</th><td class="text" style="color: #b15db1">vishy: that works too</td><td class="time"><a href="#t2014-12-31T18:27:32" class="time">18:27</a></td></tr>
+<tr id="t2014-12-31T18:27:57"><th class="nick" style="background: #b15db1">fungi</th><td class="text" style="color: #b15db1">vishy: but 'recheck [...anything...]' works now, as does just 'recheck'</td><td class="time"><a href="#t2014-12-31T18:27:57" class="time">18:27</a></td></tr>
+<tr id="t2014-12-31T18:28:14"><th class="nick" style="background: #b15db1">fungi</th><td class="text" style="color: #b15db1">vishy: so you can 'recheck to see if this is a recurrent issue' or whatever you like</td><td class="time"><a href="#t2014-12-31T18:28:14" class="time">18:28</a></td></tr>
+<tr id="t2014-12-31T18:28:26"><th class="nick" style="background: #5fb4b4">vishy</th><td class="text" style="color: #5fb4b4">ok cool</td><td class="time"><a href="#t2014-12-31T18:28:26" class="time">18:28</a></td></tr>
+<tr id="t2014-12-31T18:29:22"><td class="part" colspan="2">*** jerryz has quit IRC</td><td><a href="#t2014-12-31T18:29:22" class="time">18:29</a></td></tr>
+<tr id="t2014-12-31T18:31:19"><th class="nick" style="background: #5959a9">zaro</th><td class="text" style="color: #5959a9">clarkb: reason i want to revert is because that change messed up the Gerrit ACLs screen.</td><td class="time"><a href="#t2014-12-31T18:31:19" class="time">18:31</a></td></tr>
+<tr id="t2014-12-31T18:34:39"><td class="part" colspan="2">*** amitgandhinz has quit IRC</td><td><a href="#t2014-12-31T18:34:39" class="time">18:34</a></td></tr>
+<tr id="t2014-12-31T18:35:02"><td class="nickchange" colspan="2">*** sabari is now known as zz_sabari</td><td><a href="#t2014-12-31T18:35:02" class="time">18:35</a></td></tr>
+<tr id="t2014-12-31T18:35:15"><td class="join" colspan="2">*** amitgandhinz has joined #openstack-infra</td><td><a href="#t2014-12-31T18:35:15" class="time">18:35</a></td></tr>
+<tr id="t2014-12-31T18:39:13"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">zaro should be fine</td><td class="time"><a href="#t2014-12-31T18:39:13" class="time">18:39</a></td></tr>
+<tr id="t2014-12-31T18:39:22"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">probably let sdague know though</td><td class="time"><a href="#t2014-12-31T18:39:22" class="time">18:39</a></td></tr>
+<tr id="t2014-12-31T18:39:43"><td class="part" colspan="2">*** amitgandhinz has quit IRC</td><td><a href="#t2014-12-31T18:39:43" class="time">18:39</a></td></tr>
+<tr id="t2014-12-31T18:45:49"><td class="nickchange" colspan="2">*** erikwilson is now known as erikmwilson</td><td><a href="#t2014-12-31T18:45:49" class="time">18:45</a></td></tr>
+<tr id="t2014-12-31T18:50:40"><td class="part" colspan="2">*** lttrl has quit IRC</td><td><a href="#t2014-12-31T18:50:40" class="time">18:50</a></td></tr>
+<tr id="t2014-12-31T18:51:53"><td class="join" colspan="2">*** stevemar has joined #openstack-infra</td><td><a href="#t2014-12-31T18:51:53" class="time">18:51</a></td></tr>
+<tr id="t2014-12-31T19:03:03"><td class="part" colspan="2">*** boris-42 has quit IRC</td><td><a href="#t2014-12-31T19:03:03" class="time">19:03</a></td></tr>
+<tr id="t2014-12-31T19:06:37"><td class="part" colspan="2">*** armax has quit IRC</td><td><a href="#t2014-12-31T19:06:37" class="time">19:06</a></td></tr>
+<tr id="t2014-12-31T19:10:15"><td class="nickchange" colspan="2">*** zz_sabari is now known as sabari</td><td><a href="#t2014-12-31T19:10:15" class="time">19:10</a></td></tr>
+<tr id="t2014-12-31T19:12:07"><td class="nickchange" colspan="2">*** dimtruck is now known as zz_dimtruck</td><td><a href="#t2014-12-31T19:12:07" class="time">19:12</a></td></tr>
+<tr id="t2014-12-31T19:12:57"><td class="join" colspan="2">*** marun has joined #openstack-infra</td><td><a href="#t2014-12-31T19:12:57" class="time">19:12</a></td></tr>
+<tr id="t2014-12-31T19:14:13"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2014-12-31T19:14:13" class="time">19:14</a></td></tr>
+<tr id="t2014-12-31T19:16:36"><td class="join" colspan="2">*** reed has joined #openstack-infra</td><td><a href="#t2014-12-31T19:16:36" class="time">19:16</a></td></tr>
+<tr id="t2014-12-31T19:18:56"><td class="join" colspan="2">*** yfried has joined #openstack-infra</td><td><a href="#t2014-12-31T19:18:56" class="time">19:18</a></td></tr>
+<tr id="t2014-12-31T19:30:13"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2014-12-31T19:30:13" class="time">19:30</a></td></tr>
+<tr id="t2014-12-31T19:30:56"><td class="nickchange" colspan="2">*** sabari is now known as zz_sabari</td><td><a href="#t2014-12-31T19:30:56" class="time">19:30</a></td></tr>
+<tr id="t2014-12-31T19:31:06"><td class="join" colspan="2">*** enikanorov has joined #openstack-infra</td><td><a href="#t2014-12-31T19:31:06" class="time">19:31</a></td></tr>
+<tr id="t2014-12-31T19:38:43"><td class="join" colspan="2">*** sdake has joined #openstack-infra</td><td><a href="#t2014-12-31T19:38:43" class="time">19:38</a></td></tr>
+<tr id="t2014-12-31T19:38:43"><td class="part" colspan="2">*** sdake has quit IRC</td><td><a href="#t2014-12-31T19:38:43" class="time">19:38</a></td></tr>
+<tr id="t2014-12-31T19:38:43"><td class="join" colspan="2">*** sdake has joined #openstack-infra</td><td><a href="#t2014-12-31T19:38:43" class="time">19:38</a></td></tr>
+<tr id="t2014-12-31T19:42:05"><td class="part" colspan="2">*** pc_m has quit IRC</td><td><a href="#t2014-12-31T19:42:05" class="time">19:42</a></td></tr>
+<tr id="t2014-12-31T19:42:24"><td class="nickchange" colspan="2">*** zz_dimtruck is now known as dimtruck</td><td><a href="#t2014-12-31T19:42:24" class="time">19:42</a></td></tr>
+<tr id="t2014-12-31T19:45:53"><td class="join" colspan="2">*** amitgandhinz has joined #openstack-infra</td><td><a href="#t2014-12-31T19:45:53" class="time">19:45</a></td></tr>
+<tr id="t2014-12-31T19:46:13"><td class="part" colspan="2">*** marun has quit IRC</td><td><a href="#t2014-12-31T19:46:13" class="time">19:46</a></td></tr>
+<tr id="t2014-12-31T19:48:10"><td class="part" colspan="2">*** dims__ has quit IRC</td><td><a href="#t2014-12-31T19:48:10" class="time">19:48</a></td></tr>
+<tr id="t2014-12-31T19:48:34"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2014-12-31T19:48:34" class="time">19:48</a></td></tr>
+<tr id="t2014-12-31T19:49:52"><td class="part" colspan="2">*** amitgandhinz has quit IRC</td><td><a href="#t2014-12-31T19:49:52" class="time">19:49</a></td></tr>
+<tr id="t2014-12-31T19:52:57"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2014-12-31T19:52:57" class="time">19:52</a></td></tr>
+<tr id="t2014-12-31T19:53:53"><td class="nickchange" colspan="2">*** dimtruck is now known as zz_dimtruck</td><td><a href="#t2014-12-31T19:53:53" class="time">19:53</a></td></tr>
+<tr id="t2014-12-31T19:54:31"><td class="join" colspan="2">*** Sukhdev has joined #openstack-infra</td><td><a href="#t2014-12-31T19:54:31" class="time">19:54</a></td></tr>
+<tr id="t2014-12-31T19:56:54"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2014-12-31T19:56:54" class="time">19:56</a></td></tr>
+<tr id="t2014-12-31T19:58:23"><td class="join" colspan="2">*** ryanpetrello_ has joined #openstack-infra</td><td><a href="#t2014-12-31T19:58:23" class="time">19:58</a></td></tr>
+<tr id="t2014-12-31T20:00:43"><td class="join" colspan="2">*** adalbas has joined #openstack-infra</td><td><a href="#t2014-12-31T20:00:43" class="time">20:00</a></td></tr>
+<tr id="t2014-12-31T20:00:49"><td class="part" colspan="2">*** ryanpetrello has quit IRC</td><td><a href="#t2014-12-31T20:00:49" class="time">20:00</a></td></tr>
+<tr id="t2014-12-31T20:00:49"><td class="nickchange" colspan="2">*** ryanpetrello_ is now known as ryanpetrello</td><td><a href="#t2014-12-31T20:00:49" class="time">20:00</a></td></tr>
+<tr id="t2014-12-31T20:04:14"><td class="join" colspan="2">*** Masahiro has joined #openstack-infra</td><td><a href="#t2014-12-31T20:04:14" class="time">20:04</a></td></tr>
+<tr id="t2014-12-31T20:08:49"><td class="part" colspan="2">*** Masahiro has quit IRC</td><td><a href="#t2014-12-31T20:08:49" class="time">20:08</a></td></tr>
+<tr id="t2014-12-31T20:11:22"><td class="part" colspan="2">*** andreaf has quit IRC</td><td><a href="#t2014-12-31T20:11:22" class="time">20:11</a></td></tr>
+<tr id="t2014-12-31T20:13:07"><td class="nickchange" colspan="2">*** zz_sabari is now known as sabari</td><td><a href="#t2014-12-31T20:13:07" class="time">20:13</a></td></tr>
+<tr id="t2014-12-31T20:16:55"><td class="join" colspan="2">*** dims__ has joined #openstack-infra</td><td><a href="#t2014-12-31T20:16:55" class="time">20:16</a></td></tr>
+<tr id="t2014-12-31T20:19:29"><th class="nick" style="background: #b15db1">fungi</th><td class="text" style="color: #b15db1">okay, heading out for an appointment. i also don't expect to be online tomorrow but should be back friday</td><td class="time"><a href="#t2014-12-31T20:19:29" class="time">20:19</a></td></tr>
+<tr id="t2014-12-31T20:20:20"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">enjoy</td><td class="time"><a href="#t2014-12-31T20:20:20" class="time">20:20</a></td></tr>
+<tr id="t2014-12-31T20:21:57"><th class="nick" style="background: #407a40">clarkb</th><td class="text" style="color: #407a40">ya I am mostly not here at this point</td><td class="time"><a href="#t2014-12-31T20:21:57" class="time">20:21</a></td></tr>
+<tr id="t2014-12-31T20:22:23"><th class="nick" style="background: #b86161">dims__</th><td class="text" style="color: #b86161">have fun you all, happy new year</td><td class="time"><a href="#t2014-12-31T20:22:23" class="time">20:22</a></td></tr>
+<tr id="t2014-12-31T20:22:44"><th class="nick" style="background: #854685">pleia2</th><td class="text" style="color: #854685">I'll be heading off pretty soon, my husband is off today so we're going to do some city adventures</td><td class="time"><a href="#t2014-12-31T20:22:44" class="time">20:22</a></td></tr>
+<tr id="t2014-12-31T20:33:43"><td class="join" colspan="2">*** andreykurilin has joined #openstack-infra</td><td><a href="#t2014-12-31T20:33:43" class="time">20:33</a></td></tr>
+<tr id="t2014-12-31T20:41:40"><td class="part" colspan="2">*** andreykurilin has quit IRC</td><td><a href="#t2014-12-31T20:41:40" class="time">20:41</a></td></tr>
+<tr id="t2014-12-31T20:41:49"><td class="join" colspan="2">*** andreykurilin has joined #openstack-infra</td><td><a href="#t2014-12-31T20:41:49" class="time">20:41</a></td></tr>
+<tr id="t2014-12-31T20:46:09"><td class="part" colspan="2">*** andreykurilin has quit IRC</td><td><a href="#t2014-12-31T20:46:09" class="time">20:46</a></td></tr>
+<tr id="t2014-12-31T20:46:35"><td class="join" colspan="2">*** andreykurilin has joined #openstack-infra</td><td><a href="#t2014-12-31T20:46:35" class="time">20:46</a></td></tr>
+<tr id="t2014-12-31T20:50:09"><td class="part" colspan="2">*** ryanpetrello has quit IRC</td><td><a href="#t2014-12-31T20:50:09" class="time">20:50</a></td></tr>
+<tr id="t2014-12-31T20:51:46"><td class="join" colspan="2">*** ryanpetrello has joined #openstack-infra</td><td><a href="#t2014-12-31T20:51:46" class="time">20:51</a></td></tr>
+<tr id="t2014-12-31T20:52:44"><td class="join" colspan="2">*** mriedem has joined #openstack-infra</td><td><a href="#t2014-12-31T20:52:44" class="time">20:52</a></td></tr>
+<tr id="t2014-12-31T20:55:37"><td class="part" colspan="2">*** unicell has quit IRC</td><td><a href="#t2014-12-31T20:55:37" class="time">20:55</a></td></tr>
+<tr id="t2014-12-31T21:00:52"><td class="part" colspan="2">*** stevemar has quit IRC</td><td><a href="#t2014-12-31T21:00:52" class="time">21:00</a></td></tr>
+<tr id="t2014-12-31T21:01:44"><td class="join" colspan="2">*** _nadya_ has joined #openstack-infra</td><td><a href="#t2014-12-31T21:01:44" class="time">21:01</a></td></tr>
+<tr id="t2014-12-31T21:06:15"><td class="part" colspan="2">*** _nadya_ has quit IRC</td><td><a href="#t2014-12-31T21:06:15" class="time">21:06</a></td></tr>
+<tr id="t2014-12-31T21:10:20"><td class="join" colspan="2">*** andreaf has joined #openstack-infra</td><td><a href="#t2014-12-31T21:10:20" class="time">21:10</a></td></tr>
+<tr id="t2014-12-31T21:10:43"><td class="part" colspan="2">*** adalbas has quit IRC</td><td><a href="#t2014-12-31T21:10:43" class="time">21:10</a></td></tr>
+<tr id="t2014-12-31T21:11:40"><td class="part" colspan="2">*** andreaf has quit IRC</td><td><a href="#t2014-12-31T21:11:40" class="time">21:11</a></td></tr>
+<tr id="t2014-12-31T21:12:09"><td class="join" colspan="2">*** Masahiro has joined #openstack-infra</td><td><a href="#t2014-12-31T21:12:09" class="time">21:12</a></td></tr>
+<tr id="t2014-12-31T21:14:01"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2014-12-31T21:14:01" class="time">21:14</a></td></tr>
+<tr id="t2014-12-31T21:16:17"><td class="part" colspan="2">*** Masahiro has quit IRC</td><td><a href="#t2014-12-31T21:16:17" class="time">21:16</a></td></tr>
+<tr id="t2014-12-31T21:21:18"><td class="nickchange" colspan="2">*** zz_dimtruck is now known as dimtruck</td><td><a href="#t2014-12-31T21:21:18" class="time">21:21</a></td></tr>
+<tr id="t2014-12-31T21:29:46"><td class="join" colspan="2">*** Ryan_Lane has joined #openstack-infra</td><td><a href="#t2014-12-31T21:29:46" class="time">21:29</a></td></tr>
+<tr id="t2014-12-31T21:31:03"><td class="nickchange" colspan="2">*** dimtruck is now known as zz_dimtruck</td><td><a href="#t2014-12-31T21:31:03" class="time">21:31</a></td></tr>
+<tr id="t2014-12-31T21:31:10"><td class="part" colspan="2">*** mugsie_ has quit IRC</td><td><a href="#t2014-12-31T21:31:10" class="time">21:31</a></td></tr>
+<tr id="t2014-12-31T21:43:07"><td class="join" colspan="2">*** rkukura_ has joined #openstack-infra</td><td><a href="#t2014-12-31T21:43:07" class="time">21:43</a></td></tr>
+<tr id="t2014-12-31T21:45:37"><td class="part" colspan="2">*** rkukura has quit IRC</td><td><a href="#t2014-12-31T21:45:37" class="time">21:45</a></td></tr>
+<tr id="t2014-12-31T21:45:37"><td class="nickchange" colspan="2">*** rkukura_ is now known as rkukura</td><td><a href="#t2014-12-31T21:45:37" class="time">21:45</a></td></tr>
+<tr id="t2014-12-31T21:54:26"><td class="part" colspan="2">*** Sukhdev has quit IRC</td><td><a href="#t2014-12-31T21:54:26" class="time">21:54</a></td></tr>
+<tr id="t2014-12-31T21:57:31"><th class="nick" style="background: #5959a9">zaro</th><td class="text" style="color: #5959a9">clarkb: reason i want to revert is because that change messed up the Gerrit ACLs screen.</td><td class="time"><a href="#t2014-12-31T21:57:31" class="time">21:57</a></td></tr>
+<tr id="t2014-12-31T21:57:49"><th class="nick" style="background: #5959a9">zaro</th><td class="text" style="color: #5959a9">opps ignore that.</td><td class="time"><a href="#t2014-12-31T21:57:49" class="time">21:57</a></td></tr>
+<tr id="t2014-12-31T22:06:34"><td class="nickchange" colspan="2">*** sabari is now known as zz_sabari</td><td><a href="#t2014-12-31T22:06:34" class="time">22:06</a></td></tr>
+<tr id="t2014-12-31T22:09:18"><td class="join" colspan="2">*** armax has joined #openstack-infra</td><td><a href="#t2014-12-31T22:09:18" class="time">22:09</a></td></tr>
+<tr id="t2014-12-31T22:14:57"><td class="part" colspan="2">*** Ryan_Lane has quit IRC</td><td><a href="#t2014-12-31T22:14:57" class="time">22:14</a></td></tr>
+<tr id="t2014-12-31T22:15:18"><td class="nickchange" colspan="2">*** zz_sabari is now known as sabari</td><td><a href="#t2014-12-31T22:15:18" class="time">22:15</a></td></tr>
+<tr id="t2014-12-31T22:19:35"><td class="nickchange" colspan="2">*** sigmavirus24 is now known as sigmavirus24_awa</td><td><a href="#t2014-12-31T22:19:35" class="time">22:19</a></td></tr>
+<tr id="t2014-12-31T22:22:04"><td class="nickchange" colspan="2">*** zz_dimtruck is now known as dimtruck</td><td><a href="#t2014-12-31T22:22:04" class="time">22:22</a></td></tr>
+<tr id="t2014-12-31T22:26:10"><td class="part" colspan="2">*** andreykurilin has quit IRC</td><td><a href="#t2014-12-31T22:26:10" class="time">22:26</a></td></tr>
+<tr id="t2014-12-31T22:27:21"><td class="join" colspan="2">*** sabari- has joined #openstack-infra</td><td><a href="#t2014-12-31T22:27:21" class="time">22:27</a></td></tr>
+<tr id="t2014-12-31T22:27:38"><td class="join" colspan="2">*** vhoward- has joined #openstack-infra</td><td><a href="#t2014-12-31T22:27:38" class="time">22:27</a></td></tr>
+<tr id="t2014-12-31T22:27:40"><td class="join" colspan="2">*** HeOS__ has joined #openstack-infra</td><td><a href="#t2014-12-31T22:27:40" class="time">22:27</a></td></tr>
+<tr id="t2014-12-31T22:29:16"><td class="join" colspan="2">*** fabo_ has joined #openstack-infra</td><td><a href="#t2014-12-31T22:29:16" class="time">22:29</a></td></tr>
+<tr id="t2014-12-31T22:29:30"><td class="join" colspan="2">*** gpocente1 has joined #openstack-infra</td><td><a href="#t2014-12-31T22:29:30" class="time">22:29</a></td></tr>
+<tr id="t2014-12-31T22:29:34"><td class="join" colspan="2">*** gema_ has joined #openstack-infra</td><td><a href="#t2014-12-31T22:29:34" class="time">22:29</a></td></tr>
+<tr id="t2014-12-31T22:29:36"><td class="join" colspan="2">*** tobiash_ has joined #openstack-infra</td><td><a href="#t2014-12-31T22:29:36" class="time">22:29</a></td></tr>
+<tr id="t2014-12-31T22:31:10"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2014-12-31T22:31:10" class="time">22:31</a></td></tr>
+<tr id="t2014-12-31T22:31:21"><td class="join" colspan="2">*** ddieterl_ has joined #openstack-infra</td><td><a href="#t2014-12-31T22:31:21" class="time">22:31</a></td></tr>
+<tr id="t2014-12-31T22:31:42"><td class="nickchange" colspan="2">*** dimtruck is now known as zz_dimtruck</td><td><a href="#t2014-12-31T22:31:42" class="time">22:31</a></td></tr>
+<tr id="t2014-12-31T22:32:43"><td class="join" colspan="2">*** radez_g0` has joined #openstack-infra</td><td><a href="#t2014-12-31T22:32:43" class="time">22:32</a></td></tr>
+<tr id="t2014-12-31T22:33:19"><td class="join" colspan="2">*** cinerama` has joined #openstack-infra</td><td><a href="#t2014-12-31T22:33:19" class="time">22:33</a></td></tr>
+<tr id="t2014-12-31T22:33:21"><td class="join" colspan="2">*** dvorak_ has joined #openstack-infra</td><td><a href="#t2014-12-31T22:33:21" class="time">22:33</a></td></tr>
+<tr id="t2014-12-31T22:34:20"><td class="part" colspan="2">*** mriedem has quit IRC</td><td><a href="#t2014-12-31T22:34:20" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:20"><td class="part" colspan="2">*** ryanpetrello has quit IRC</td><td><a href="#t2014-12-31T22:34:20" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:21"><td class="part" colspan="2">*** ameade_ has quit IRC</td><td><a href="#t2014-12-31T22:34:21" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:21"><td class="part" colspan="2">*** ctracey has quit IRC</td><td><a href="#t2014-12-31T22:34:21" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:21"><td class="part" colspan="2">*** persia has quit IRC</td><td><a href="#t2014-12-31T22:34:21" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:22"><td class="part" colspan="2">*** radez_g0n3 has quit IRC</td><td><a href="#t2014-12-31T22:34:22" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:22"><td class="part" colspan="2">*** fandi has quit IRC</td><td><a href="#t2014-12-31T22:34:22" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:22"><td class="part" colspan="2">*** krtaylor has quit IRC</td><td><a href="#t2014-12-31T22:34:22" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:22"><td class="part" colspan="2">*** gema has quit IRC</td><td><a href="#t2014-12-31T22:34:22" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:23"><td class="part" colspan="2">*** NikitaKonovalov has quit IRC</td><td><a href="#t2014-12-31T22:34:23" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:23"><td class="part" colspan="2">*** cinerama has quit IRC</td><td><a href="#t2014-12-31T22:34:23" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:23"><td class="part" colspan="2">*** imcsk8 has quit IRC</td><td><a href="#t2014-12-31T22:34:23" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:23"><td class="part" colspan="2">*** tobiash has quit IRC</td><td><a href="#t2014-12-31T22:34:23" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:23"><td class="part" colspan="2">*** masayukig has quit IRC</td><td><a href="#t2014-12-31T22:34:23" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:23"><td class="part" colspan="2">*** gpocentek has quit IRC</td><td><a href="#t2014-12-31T22:34:23" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:24"><td class="part" colspan="2">*** anteaya has quit IRC</td><td><a href="#t2014-12-31T22:34:24" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:24"><td class="part" colspan="2">*** HeOS_ has quit IRC</td><td><a href="#t2014-12-31T22:34:24" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:24"><td class="part" colspan="2">*** fabo has quit IRC</td><td><a href="#t2014-12-31T22:34:24" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:24"><td class="part" colspan="2">*** dvorak has quit IRC</td><td><a href="#t2014-12-31T22:34:24" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:24"><td class="part" colspan="2">*** phschwartz has quit IRC</td><td><a href="#t2014-12-31T22:34:24" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:24"><td class="part" colspan="2">*** pabelanger has quit IRC</td><td><a href="#t2014-12-31T22:34:24" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:25"><td class="part" colspan="2">*** vhoward has quit IRC</td><td><a href="#t2014-12-31T22:34:25" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:25"><td class="part" colspan="2">*** tchaypo has quit IRC</td><td><a href="#t2014-12-31T22:34:25" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:25"><td class="part" colspan="2">*** zhiyan has quit IRC</td><td><a href="#t2014-12-31T22:34:25" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:25"><td class="part" colspan="2">*** gus has quit IRC</td><td><a href="#t2014-12-31T22:34:25" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:25"><td class="part" colspan="2">*** cloudnull has quit IRC</td><td><a href="#t2014-12-31T22:34:25" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:25"><td class="part" colspan="2">*** spw has quit IRC</td><td><a href="#t2014-12-31T22:34:25" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:26"><td class="part" colspan="2">*** vishy has quit IRC</td><td><a href="#t2014-12-31T22:34:26" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:26"><td class="part" colspan="2">*** sabari has quit IRC</td><td><a href="#t2014-12-31T22:34:26" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:26"><td class="part" colspan="2">*** zigo has quit IRC</td><td><a href="#t2014-12-31T22:34:26" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:26"><td class="part" colspan="2">*** jamielennox|away has quit IRC</td><td><a href="#t2014-12-31T22:34:26" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:26"><td class="part" colspan="2">*** briancline has quit IRC</td><td><a href="#t2014-12-31T22:34:26" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:26"><td class="part" colspan="2">*** hogepodge has quit IRC</td><td><a href="#t2014-12-31T22:34:26" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:26"><td class="part" colspan="2">*** freyes has quit IRC</td><td><a href="#t2014-12-31T22:34:26" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:26"><td class="part" colspan="2">*** otherwiseguy has quit IRC</td><td><a href="#t2014-12-31T22:34:26" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:26"><td class="part" colspan="2">*** mattoliverau has quit IRC</td><td><a href="#t2014-12-31T22:34:26" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:26"><td class="part" colspan="2">*** Guest7756 has quit IRC</td><td><a href="#t2014-12-31T22:34:26" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:27"><td class="part" colspan="2">*** Hunner has quit IRC</td><td><a href="#t2014-12-31T22:34:27" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:27"><td class="join" colspan="2">*** phschwartz_ has joined #openstack-infra</td><td><a href="#t2014-12-31T22:34:27" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:34:34"><td class="nickchange" colspan="2">*** dvorak_ is now known as dvorak</td><td><a href="#t2014-12-31T22:34:34" class="time">22:34</a></td></tr>
+<tr id="t2014-12-31T22:35:22"><td class="join" colspan="2">*** stevemar has joined #openstack-infra</td><td><a href="#t2014-12-31T22:35:22" class="time">22:35</a></td></tr>
+<tr id="t2014-12-31T22:36:33"><td class="join" colspan="2">*** NikitaKonovalov has joined #openstack-infra</td><td><a href="#t2014-12-31T22:36:33" class="time">22:36</a></td></tr>
+<tr id="t2014-12-31T22:39:35"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2014-12-31T22:39:35" class="time">22:39</a></td></tr>
+<tr id="t2014-12-31T22:40:07"><td class="join" colspan="2">*** fandi has joined #openstack-infra</td><td><a href="#t2014-12-31T22:40:07" class="time">22:40</a></td></tr>
+<tr id="t2014-12-31T22:41:27"><td class="join" colspan="2">*** anteaya has joined #openstack-infra</td><td><a href="#t2014-12-31T22:41:27" class="time">22:41</a></td></tr>
+<tr id="t2014-12-31T22:48:10"><td class="part" colspan="2">*** dims__ has quit IRC</td><td><a href="#t2014-12-31T22:48:10" class="time">22:48</a></td></tr>
+<tr id="t2014-12-31T22:48:43"><td class="join" colspan="2">*** persia has joined #openstack-infra</td><td><a href="#t2014-12-31T22:48:43" class="time">22:48</a></td></tr>
+<tr id="t2014-12-31T22:48:43"><td class="part" colspan="2">*** persia has quit IRC</td><td><a href="#t2014-12-31T22:48:43" class="time">22:48</a></td></tr>
+<tr id="t2014-12-31T22:48:43"><td class="join" colspan="2">*** persia has joined #openstack-infra</td><td><a href="#t2014-12-31T22:48:43" class="time">22:48</a></td></tr>
+<tr id="t2014-12-31T22:48:47"><td class="join" colspan="2">*** gus has joined #openstack-infra</td><td><a href="#t2014-12-31T22:48:47" class="time">22:48</a></td></tr>
+<tr id="t2014-12-31T22:48:49"><td class="join" colspan="2">*** pabelanger_ has joined #openstack-infra</td><td><a href="#t2014-12-31T22:48:49" class="time">22:48</a></td></tr>
+<tr id="t2014-12-31T22:48:49"><td class="join" colspan="2">*** otherwiseguy has joined #openstack-infra</td><td><a href="#t2014-12-31T22:48:49" class="time">22:48</a></td></tr>
+<tr id="t2014-12-31T22:48:51"><td class="join" colspan="2">*** masayukig has joined #openstack-infra</td><td><a href="#t2014-12-31T22:48:51" class="time">22:48</a></td></tr>
+<tr id="t2014-12-31T22:49:04"><td class="join" colspan="2">*** cloudnull has joined #openstack-infra</td><td><a href="#t2014-12-31T22:49:04" class="time">22:49</a></td></tr>
+<tr id="t2014-12-31T22:49:14"><td class="join" colspan="2">*** krtaylor has joined #openstack-infra</td><td><a href="#t2014-12-31T22:49:14" class="time">22:49</a></td></tr>
+<tr id="t2014-12-31T22:49:18"><td class="join" colspan="2">*** Hunner has joined #openstack-infra</td><td><a href="#t2014-12-31T22:49:18" class="time">22:49</a></td></tr>
+<tr id="t2014-12-31T22:49:19"><td class="join" colspan="2">*** bmwiedemann has joined #openstack-infra</td><td><a href="#t2014-12-31T22:49:19" class="time">22:49</a></td></tr>
+<tr id="t2014-12-31T22:49:30"><td class="part" colspan="2">*** bmwiedemann has quit IRC</td><td><a href="#t2014-12-31T22:49:30" class="time">22:49</a></td></tr>
+<tr id="t2014-12-31T22:49:30"><td class="join" colspan="2">*** bmwiedemann has joined #openstack-infra</td><td><a href="#t2014-12-31T22:49:30" class="time">22:49</a></td></tr>
+<tr id="t2014-12-31T22:49:31"><td class="part" colspan="2">*** Hunner has quit IRC</td><td><a href="#t2014-12-31T22:49:31" class="time">22:49</a></td></tr>
+<tr id="t2014-12-31T22:49:31"><td class="join" colspan="2">*** Hunner has joined #openstack-infra</td><td><a href="#t2014-12-31T22:49:31" class="time">22:49</a></td></tr>
+<tr id="t2014-12-31T22:49:45"><td class="join" colspan="2">*** zigo has joined #openstack-infra</td><td><a href="#t2014-12-31T22:49:45" class="time">22:49</a></td></tr>
+<tr id="t2014-12-31T22:49:45"><td class="join" colspan="2">*** vishy has joined #openstack-infra</td><td><a href="#t2014-12-31T22:49:45" class="time">22:49</a></td></tr>
+<tr id="t2014-12-31T22:49:46"><td class="join" colspan="2">*** sweston has joined #openstack-infra</td><td><a href="#t2014-12-31T22:49:46" class="time">22:49</a></td></tr>
+<tr id="t2014-12-31T22:49:52"><td class="join" colspan="2">*** tchaypo has joined #openstack-infra</td><td><a href="#t2014-12-31T22:49:52" class="time">22:49</a></td></tr>
+<tr id="t2014-12-31T22:49:57"><td class="join" colspan="2">*** zhiyan has joined #openstack-infra</td><td><a href="#t2014-12-31T22:49:57" class="time">22:49</a></td></tr>
+<tr id="t2014-12-31T22:50:15"><td class="join" colspan="2">*** ameade_ has joined #openstack-infra</td><td><a href="#t2014-12-31T22:50:15" class="time">22:50</a></td></tr>
+<tr id="t2014-12-31T22:50:22"><td class="join" colspan="2">*** ctracey has joined #openstack-infra</td><td><a href="#t2014-12-31T22:50:22" class="time">22:50</a></td></tr>
+<tr id="t2014-12-31T22:50:33"><td class="join" colspan="2">*** jamielennox|away has joined #openstack-infra</td><td><a href="#t2014-12-31T22:50:33" class="time">22:50</a></td></tr>
+<tr id="t2014-12-31T22:50:50"><td class="nickchange" colspan="2">*** jamielennox|away is now known as jamielennox</td><td><a href="#t2014-12-31T22:50:50" class="time">22:50</a></td></tr>
+<tr id="t2014-12-31T22:50:57"><td class="join" colspan="2">*** freyes has joined #openstack-infra</td><td><a href="#t2014-12-31T22:50:57" class="time">22:50</a></td></tr>
+<tr id="t2014-12-31T22:52:00"><td class="join" colspan="2">*** mattoliverau has joined #openstack-infra</td><td><a href="#t2014-12-31T22:52:00" class="time">22:52</a></td></tr>
+<tr id="t2014-12-31T22:52:46"><td class="part" colspan="2">*** armax has quit IRC</td><td><a href="#t2014-12-31T22:52:46" class="time">22:52</a></td></tr>
+<tr id="t2014-12-31T22:57:16"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2014-12-31T22:57:16" class="time">22:57</a></td></tr>
+<tr id="t2014-12-31T23:00:57"><td class="join" colspan="2">*** Masahiro has joined #openstack-infra</td><td><a href="#t2014-12-31T23:00:57" class="time">23:00</a></td></tr>
+<tr id="t2014-12-31T23:02:34"><td class="join" colspan="2">*** hdd has joined #openstack-infra</td><td><a href="#t2014-12-31T23:02:34" class="time">23:02</a></td></tr>
+<tr id="t2014-12-31T23:05:22"><td class="part" colspan="2">*** Masahiro has quit IRC</td><td><a href="#t2014-12-31T23:05:22" class="time">23:05</a></td></tr>
+<tr id="t2014-12-31T23:12:44"><td class="join" colspan="2">*** ryanpetrello has joined #openstack-infra</td><td><a href="#t2014-12-31T23:12:44" class="time">23:12</a></td></tr>
+<tr id="t2014-12-31T23:18:30"><td class="join" colspan="2">*** e0ne has joined #openstack-infra</td><td><a href="#t2014-12-31T23:18:30" class="time">23:18</a></td></tr>
+<tr id="t2014-12-31T23:22:59"><td class="nickchange" colspan="2">*** zz_dimtruck is now known as dimtruck</td><td><a href="#t2014-12-31T23:22:59" class="time">23:22</a></td></tr>
+<tr id="t2014-12-31T23:28:12"><th class="nick" style="background: #62bb62">mrmartin</th><td class="text" style="color: #62bb62">happy new year!</td><td class="time"><a href="#t2014-12-31T23:28:12" class="time">23:28</a></td></tr>
+<tr id="t2014-12-31T23:32:31"><td class="nickchange" colspan="2">*** dimtruck is now known as zz_dimtruck</td><td><a href="#t2014-12-31T23:32:31" class="time">23:32</a></td></tr>
+<tr id="t2014-12-31T23:34:24"><td class="join" colspan="2">*** baoli has joined #openstack-infra</td><td><a href="#t2014-12-31T23:34:24" class="time">23:34</a></td></tr>
+<tr id="t2014-12-31T23:36:45"><td class="part" colspan="2">*** mrmartin has quit IRC</td><td><a href="#t2014-12-31T23:36:45" class="time">23:36</a></td></tr>
+<tr id="t2014-12-31T23:38:37"><td class="part" colspan="2">*** e0ne has quit IRC</td><td><a href="#t2014-12-31T23:38:37" class="time">23:38</a></td></tr>
+<tr id="t2014-12-31T23:39:45"><td class="part" colspan="2">*** ryanpetrello has quit IRC</td><td><a href="#t2014-12-31T23:39:45" class="time">23:39</a></td></tr>
+<tr id="t2014-12-31T23:42:14"><td class="join" colspan="2">*** FallenPegasus has joined #openstack-infra</td><td><a href="#t2014-12-31T23:42:14" class="time">23:42</a></td></tr>
+<tr id="t2014-12-31T23:42:14"><td class="part" colspan="2">*** stevemar has quit IRC</td><td><a href="#t2014-12-31T23:42:14" class="time">23:42</a></td></tr>
+<tr id="t2014-12-31T23:43:42"><td class="part" colspan="2">*** patrickeast has quit IRC</td><td><a href="#t2014-12-31T23:43:42" class="time">23:43</a></td></tr>
+<tr id="t2014-12-31T23:48:48"><td class="join" colspan="2">*** dims__ has joined #openstack-infra</td><td><a href="#t2014-12-31T23:48:48" class="time">23:48</a></td></tr>
+<tr id="t2014-12-31T23:51:30"><td class="part" colspan="2">*** FallenPegasus has quit IRC</td><td><a href="#t2014-12-31T23:51:30" class="time">23:51</a></td></tr>
+<tr id="t2014-12-31T23:53:54"><td class="part" colspan="2">*** dims__ has quit IRC</td><td><a href="#t2014-12-31T23:53:54" class="time">23:53</a></td></tr>
+<tr id="t2014-12-31T23:58:58"><td class="part" colspan="2">*** hdd has quit IRC</td><td><a href="#t2014-12-31T23:58:58" class="time">23:58</a></td></tr>
+</table>
+<div class="navigation"> <a href="%23openstack-infra.2014-12-30.log.html">&#171; Tuesday, 2014-12-30</a> <a href="index.html">Index</a> <a href="%23openstack-infra.2015-01-01.log.html">Thursday, 2015-01-01 &#187;</a> </div>
+
+<div class="generatedby">
+<p>Generated by irclog2html.py 2.14.0 by <a href="mailto:marius@pov.lt">Marius Gedminas</a>
+ - find it at <a href="http://mg.pov.lt/irclog2html/">mg.pov.lt</a>!</p>
+</div>
+</body>
+</html>
