@@ -1,0 +1,994 @@
+2015-05-10T00:00:23  *** craigbr has quit IRC
+2015-05-10T00:02:02  <clarkb> foobio: did you have any trouble with `git review` and pushing those changes up earlier? It is either very slow or hanging for me
+2015-05-10T00:02:13  <openstackgerrit> Clark Boylan proposed openstack-infra/zuul: Simplify cloner required parameters  https://review.openstack.org/181694
+2015-05-10T00:02:18  *** sputnik13 has joined #openstack-infra
+2015-05-10T00:02:20  <clarkb> finally it goes through
+2015-05-10T00:02:39  *** salv-orlando has quit IRC
+2015-05-10T00:02:47  <clarkb> jeblair: I think ^ or something like it is a feature we should support for zuul-cloner.
+2015-05-10T00:03:15  <clarkb> mordred: nibalizer: in particular I think 181694 enables zuul-cloner a bit more for beaker use so that beaker can run on a dev's laptop or in the gate and be happy either way
+2015-05-10T00:03:34  <clarkb> ok back to weekend
+2015-05-10T00:04:47  *** btully has joined #openstack-infra
+2015-05-10T00:14:01  *** teran has joined #openstack-infra
+2015-05-10T00:14:17  *** Darkwan has joined #openstack-infra
+2015-05-10T00:15:55  *** ddieterly has joined #openstack-infra
+2015-05-10T00:18:29  *** teran has quit IRC
+2015-05-10T00:18:47  *** tiswanso has joined #openstack-infra
+2015-05-10T00:25:13  *** rm_work is now known as rm_work|away
+2015-05-10T00:25:19  *** tiswanso has quit IRC
+2015-05-10T00:56:14  *** achanda has quit IRC
+2015-05-10T01:01:05  *** tiswanso has joined #openstack-infra
+2015-05-10T01:05:37  *** tiswanso has quit IRC
+2015-05-10T01:06:53  *** tiswanso has joined #openstack-infra
+2015-05-10T01:08:56  *** ZZelle has quit IRC
+2015-05-10T01:14:48  *** teran has joined #openstack-infra
+2015-05-10T01:19:57  *** teran has quit IRC
+2015-05-10T01:26:54  *** sputnik13 has quit IRC
+2015-05-10T01:28:28  <mordred> oh nice. the gerrit output that git-review shows prints the urls for updated changes too
+2015-05-10T01:29:40  *** mwagner_lap has joined #openstack-infra
+2015-05-10T01:30:26  *** alexpilotti has quit IRC
+2015-05-10T01:36:25  *** changbl has quit IRC
+2015-05-10T01:56:53  *** achanda has joined #openstack-infra
+2015-05-10T01:59:22  *** achanda has quit IRC
+2015-05-10T01:59:36  *** achanda has joined #openstack-infra
+2015-05-10T02:00:27  *** otter768 has joined #openstack-infra
+2015-05-10T02:05:39  *** otter768 has quit IRC
+2015-05-10T02:08:03  *** btully has quit IRC
+2015-05-10T02:09:55  *** Kennan has joined #openstack-infra
+2015-05-10T02:11:11  *** Kennan2 has quit IRC
+2015-05-10T02:15:36  *** teran has joined #openstack-infra
+2015-05-10T02:18:37  *** ddieterly has quit IRC
+2015-05-10T02:20:42  *** teran has quit IRC
+2015-05-10T02:25:09  *** ivar-lazzaro has joined #openstack-infra
+2015-05-10T02:25:40  *** salv-orlando has joined #openstack-infra
+2015-05-10T02:28:09  *** ivar-laz_ has quit IRC
+2015-05-10T02:29:26  *** Darkwan has quit IRC
+2015-05-10T02:31:19  *** trey has quit IRC
+2015-05-10T02:31:44  *** salv-orlando has quit IRC
+2015-05-10T02:36:12  *** trey has joined #openstack-infra
+2015-05-10T02:41:24  *** koolhead17 has joined #openstack-infra
+2015-05-10T02:43:59  *** niska has quit IRC
+2015-05-10T02:44:51  *** trey has quit IRC
+2015-05-10T02:49:19  *** niska has joined #openstack-infra
+2015-05-10T02:49:42  *** chlong has quit IRC
+2015-05-10T02:50:43  *** trey has joined #openstack-infra
+2015-05-10T02:53:40  *** rmcall has joined #openstack-infra
+2015-05-10T02:58:28  *** rcarrill` has joined #openstack-infra
+2015-05-10T03:00:20  *** rcarrillocruz has quit IRC
+2015-05-10T03:01:31  *** rmcall has quit IRC
+2015-05-10T03:05:01  *** sdake_ has joined #openstack-infra
+2015-05-10T03:08:52  *** sdake has quit IRC
+2015-05-10T03:09:16  *** r-daneel has joined #openstack-infra
+2015-05-10T03:13:52  *** sdake_ is now known as sdake
+2015-05-10T03:15:07  *** Somay has joined #openstack-infra
+2015-05-10T03:16:18  *** teran has joined #openstack-infra
+2015-05-10T03:19:03  *** otter768 has joined #openstack-infra
+2015-05-10T03:19:34  *** ddieterly has joined #openstack-infra
+2015-05-10T03:19:46  *** sdake_ has joined #openstack-infra
+2015-05-10T03:21:11  *** armax has joined #openstack-infra
+2015-05-10T03:21:19  <HenryG> Why is this showing empty?  https://review.openstack.org/175546
+2015-05-10T03:23:03  *** teran has quit IRC
+2015-05-10T03:23:34  *** sdake has quit IRC
+2015-05-10T03:23:59  *** ddieterly has quit IRC
+2015-05-10T03:24:58  *** changbl has joined #openstack-infra
+2015-05-10T03:26:33  *** tiswanso has quit IRC
+2015-05-10T03:28:43  *** jpeeler has joined #openstack-infra
+2015-05-10T03:28:43  *** jpeeler has quit IRC
+2015-05-10T03:28:43  *** jpeeler has joined #openstack-infra
+2015-05-10T03:28:44  *** ivar-lazzaro has quit IRC
+2015-05-10T03:35:59  *** achanda has quit IRC
+2015-05-10T03:36:53  *** woodster_ has joined #openstack-infra
+2015-05-10T03:38:27  *** trey has quit IRC
+2015-05-10T03:41:18  *** r-daneel has quit IRC
+2015-05-10T03:43:07  *** sdake_ is now known as sdake
+2015-05-10T03:48:33  *** heyongli has quit IRC
+2015-05-10T03:49:14  *** heyongli has joined #openstack-infra
+2015-05-10T03:52:40  <clarkb> HenryG: appears that gerrit is returning a 404 for https://review.openstack.org/changes/175546/revisions/8e1e3acea77bc4f2d50677bf723b47f3841f318a/commit
+2015-05-10T03:53:32  <clarkb> HenryG: but there is nothing in the gerrit error_log for those requests
+2015-05-10T03:59:08  *** banix has joined #openstack-infra
+2015-05-10T03:59:22  <clarkb> I need to get back to weekend, the issue isn't readily apparent, requesting other resources like /review for that revision does work
+2015-05-10T03:59:35  <clarkb> we will have to look into this
+2015-05-10T04:15:08  *** smccully has quit IRC
+2015-05-10T04:15:46  *** smccully has joined #openstack-infra
+2015-05-10T04:16:18  *** patrickeast has joined #openstack-infra
+2015-05-10T04:18:48  *** teran has joined #openstack-infra
+2015-05-10T04:20:17  *** ddieterly has joined #openstack-infra
+2015-05-10T04:21:31  *** patrickeast_ has joined #openstack-infra
+2015-05-10T04:21:34  *** patrickeast has quit IRC
+2015-05-10T04:21:34  *** patrickeast_ is now known as patrickeast
+2015-05-10T04:23:38  *** teran has quit IRC
+2015-05-10T04:25:12  *** ddieterly has quit IRC
+2015-05-10T04:30:53  *** sputnik13 has joined #openstack-infra
+2015-05-10T04:30:56  *** sputnik13 has quit IRC
+2015-05-10T04:36:32  *** achanda has joined #openstack-infra
+2015-05-10T04:39:07  *** Somay has quit IRC
+2015-05-10T04:41:37  *** achanda has quit IRC
+2015-05-10T04:46:52  *** achanda has joined #openstack-infra
+2015-05-10T04:53:30  *** mmedvede_ has quit IRC
+2015-05-10T04:58:02  *** salv-orlando has joined #openstack-infra
+2015-05-10T04:59:42  *** yfried|afk has quit IRC
+2015-05-10T05:05:21  *** salv-orlando has quit IRC
+2015-05-10T05:05:32  *** craigbr has joined #openstack-infra
+2015-05-10T05:06:56  *** hdd has joined #openstack-infra
+2015-05-10T05:07:48  *** hdd has quit IRC
+2015-05-10T05:14:01  *** smccully has quit IRC
+2015-05-10T05:14:21  *** smccully has joined #openstack-infra
+2015-05-10T05:16:08  *** sdake_ has joined #openstack-infra
+2015-05-10T05:19:37  *** teran has joined #openstack-infra
+2015-05-10T05:19:50  *** sdake has quit IRC
+2015-05-10T05:20:40  *** sdake has joined #openstack-infra
+2015-05-10T05:21:03  *** ddieterly has joined #openstack-infra
+2015-05-10T05:23:59  *** sdake_ has quit IRC
+2015-05-10T05:24:14  *** teran has quit IRC
+2015-05-10T05:26:18  *** ddieterly has quit IRC
+2015-05-10T05:29:01  *** banix has quit IRC
+2015-05-10T05:36:18  *** jamespage_ has joined #openstack-infra
+2015-05-10T05:36:47  <openstackgerrit> Andreas Jaeger proposed openstack-infra/infra-manual: Add clarification on questions in reviews  https://review.openstack.org/177364
+2015-05-10T05:38:16  *** salv-orlando has joined #openstack-infra
+2015-05-10T05:40:44  *** woodster_ has quit IRC
+2015-05-10T05:46:07  *** salv-orlando has quit IRC
+2015-05-10T05:47:14  *** tteggel has quit IRC
+2015-05-10T05:48:43  *** tteggel has joined #openstack-infra
+2015-05-10T05:50:40  *** armax has quit IRC
+2015-05-10T05:53:35  *** yamamoto has joined #openstack-infra
+2015-05-10T05:58:41  *** koolhead17 has quit IRC
+2015-05-10T06:00:41  *** yamamoto has quit IRC
+2015-05-10T06:06:16  *** otter768 has quit IRC
+2015-05-10T06:06:44  *** btully has joined #openstack-infra
+2015-05-10T06:15:26  *** koolhead17 has joined #openstack-infra
+2015-05-10T06:15:26  *** koolhead17 has quit IRC
+2015-05-10T06:15:26  *** koolhead17 has joined #openstack-infra
+2015-05-10T06:20:13  *** yfried|afk has joined #openstack-infra
+2015-05-10T06:20:23  *** teran has joined #openstack-infra
+2015-05-10T06:20:37  *** sergsh has joined #openstack-infra
+2015-05-10T06:21:45  *** ddieterly has joined #openstack-infra
+2015-05-10T06:24:24  *** yamamoto has joined #openstack-infra
+2015-05-10T06:24:49  *** teran has quit IRC
+2015-05-10T06:26:36  *** ddieterly has quit IRC
+2015-05-10T06:26:46  *** yamamoto has quit IRC
+2015-05-10T06:29:44  *** anteaya has quit IRC
+2015-05-10T06:42:24  *** craigbr has quit IRC
+2015-05-10T06:43:52  *** shashankhegde has joined #openstack-infra
+2015-05-10T06:45:29  *** salv-orlando has joined #openstack-infra
+2015-05-10T06:51:29  *** koolhead17 has quit IRC
+2015-05-10T06:52:56  *** salv-orlando has quit IRC
+2015-05-10T06:54:48  *** salv-orlando has joined #openstack-infra
+2015-05-10T06:58:48  *** shashankhegde has quit IRC
+2015-05-10T06:59:09  *** salv-orlando has quit IRC
+2015-05-10T07:10:47  *** salv-orlando has joined #openstack-infra
+2015-05-10T07:11:34  *** salv-orlando has quit IRC
+2015-05-10T07:11:50  *** salv-orlando has joined #openstack-infra
+2015-05-10T07:18:33  *** yfried|afk is now known as yfried__
+2015-05-10T07:21:08  *** teran has joined #openstack-infra
+2015-05-10T07:22:36  *** ddieterly has joined #openstack-infra
+2015-05-10T07:26:06  *** teran has quit IRC
+2015-05-10T07:26:56  *** ddieterly has quit IRC
+2015-05-10T07:28:33  *** yfried__ is now known as yfried|afk
+2015-05-10T07:31:25  *** achanda has quit IRC
+2015-05-10T07:31:45  *** sergsh has quit IRC
+2015-05-10T07:36:31  *** achanda_ has joined #openstack-infra
+2015-05-10T07:44:45  *** slypushenko_ has quit IRC
+2015-05-10T07:47:18  *** achanda_ has quit IRC
+2015-05-10T07:48:16  *** viktors|afk has quit IRC
+2015-05-10T07:50:12  *** aarefiev has quit IRC
+2015-05-10T07:55:20  *** rm_work|away is now known as rm_work
+2015-05-10T07:59:49  *** aarefiev has joined #openstack-infra
+2015-05-10T08:00:51  *** viktors has joined #openstack-infra
+2015-05-10T08:02:33  *** slypushenko_ has joined #openstack-infra
+2015-05-10T08:07:11  *** otter768 has joined #openstack-infra
+2015-05-10T08:12:22  *** otter768 has quit IRC
+2015-05-10T08:16:07  *** yamamoto has joined #openstack-infra
+2015-05-10T08:17:02  <yolanda> wow, amazing gerrit upgrade! love it
+2015-05-10T08:21:55  *** teran has joined #openstack-infra
+2015-05-10T08:22:54  *** sergsh has joined #openstack-infra
+2015-05-10T08:23:21  *** ddieterly has joined #openstack-infra
+2015-05-10T08:26:53  *** teran has quit IRC
+2015-05-10T08:28:04  *** ddieterly has quit IRC
+2015-05-10T08:33:55  *** yfried|afk is now known as yfried__
+2015-05-10T08:38:12  *** slypushenko_ has quit IRC
+2015-05-10T08:41:16  *** aarefiev has quit IRC
+2015-05-10T08:41:30  *** viktors has quit IRC
+2015-05-10T08:43:24  *** btully has quit IRC
+2015-05-10T08:44:17  *** yfried__ is now known as yfried|afk
+2015-05-10T08:45:02  *** yfried|afk is now known as yfried__
+2015-05-10T08:46:56  *** HeOS has quit IRC
+2015-05-10T09:07:57  *** sergsh has quit IRC
+2015-05-10T09:16:37  *** yfried__ has quit IRC
+2015-05-10T09:22:40  *** sergsh has joined #openstack-infra
+2015-05-10T09:22:53  *** teran has joined #openstack-infra
+2015-05-10T09:22:56  *** slypushenko_ has joined #openstack-infra
+2015-05-10T09:24:04  *** ddieterly has joined #openstack-infra
+2015-05-10T09:28:39  *** ddieterly has quit IRC
+2015-05-10T09:29:13  *** teran has quit IRC
+2015-05-10T09:29:17  *** aarefiev has joined #openstack-infra
+2015-05-10T09:35:09  *** viktors has joined #openstack-infra
+2015-05-10T09:55:46  *** yamamoto_ has joined #openstack-infra
+2015-05-10T09:58:20  *** yamamoto has quit IRC
+2015-05-10T10:03:02  *** Longgeek has joined #openstack-infra
+2015-05-10T10:07:27  *** yamamoto_ has quit IRC
+2015-05-10T10:08:08  *** otter768 has joined #openstack-infra
+2015-05-10T10:12:34  *** otter768 has quit IRC
+2015-05-10T10:24:44  *** ddieterly has joined #openstack-infra
+2015-05-10T10:25:13  *** teran has joined #openstack-infra
+2015-05-10T10:26:26  *** koolhead17 has joined #openstack-infra
+2015-05-10T10:29:17  *** ddieterly has quit IRC
+2015-05-10T10:30:24  *** teran has quit IRC
+2015-05-10T10:57:35  *** koolhead17 has quit IRC
+2015-05-10T11:19:14  *** HeOS has joined #openstack-infra
+2015-05-10T11:25:34  *** ddieterly has joined #openstack-infra
+2015-05-10T11:26:31  *** teran has joined #openstack-infra
+2015-05-10T11:28:14  *** Shrews has quit IRC
+2015-05-10T11:30:20  *** ddieterly has quit IRC
+2015-05-10T11:30:57  *** teran has quit IRC
+2015-05-10T11:37:32  *** ddieterly has joined #openstack-infra
+2015-05-10T11:37:51  *** HeOS has quit IRC
+2015-05-10T11:38:37  *** banix has joined #openstack-infra
+2015-05-10T11:40:32  *** Shrews has joined #openstack-infra
+2015-05-10T11:44:34  *** yamamoto has joined #openstack-infra
+2015-05-10T11:54:05  *** banix has quit IRC
+2015-05-10T12:02:10  *** HeOS has joined #openstack-infra
+2015-05-10T12:06:54  *** rlandy has joined #openstack-infra
+2015-05-10T12:09:02  *** otter768 has joined #openstack-infra
+2015-05-10T12:13:01  *** HeOS has quit IRC
+2015-05-10T12:13:32  *** otter768 has quit IRC
+2015-05-10T12:21:06  *** anthonyper has quit IRC
+2015-05-10T12:22:01  *** anthonyper has joined #openstack-infra
+2015-05-10T12:23:13  *** yfried__ has joined #openstack-infra
+2015-05-10T12:23:31  *** dguerri is now known as _dguerri
+2015-05-10T12:27:14  *** teran has joined #openstack-infra
+2015-05-10T12:31:31  *** teran has quit IRC
+2015-05-10T12:34:21  <bknudson> https://review.openstack.org/#/c/178014/ -- this one doesn't show anything
+2015-05-10T12:34:33  <bknudson> shift+refresh fixed it
+2015-05-10T12:41:37  *** markvoelker has quit IRC
+2015-05-10T12:53:31  *** ajo has joined #openstack-infra
+2015-05-10T12:55:11  *** julim has joined #openstack-infra
+2015-05-10T12:58:11  *** julim has quit IRC
+2015-05-10T12:58:35  <bknudson> actually, this is happening often that I open a review and the page is empty
+2015-05-10T12:58:57  <foobio> clarkb: HenryG: fwiw, https://review.openstack.org/175546 does not show empty for me
+2015-05-10T12:59:23  <foobio> bknudson: just since yesterday?
+2015-05-10T12:59:36  <bknudson> foobio: y, I'd never seen that behavior before
+2015-05-10T12:59:49  <bknudson> reloading the page it shows up just fine.
+2015-05-10T13:02:08  <foobio> so far i've seen no issues with gertty pulling change contents either
+2015-05-10T13:02:55  *** yamamoto_ has joined #openstack-infra
+2015-05-10T13:03:58  <bknudson> I should use gertty
+2015-05-10T13:05:21  *** mmedvede_ has joined #openstack-infra
+2015-05-10T13:05:57  *** yamamoto has quit IRC
+2015-05-10T13:09:33  *** _dguerri is now known as dguerri
+2015-05-10T13:10:08  <bknudson> I turned on firebug and here's what's in the console: http://paste.openstack.org/show/218953/
+2015-05-10T13:10:30  <bknudson> doesn't tell me anything.
+2015-05-10T13:10:41  *** ddieterly has quit IRC
+2015-05-10T13:12:22  <bknudson> "SEVERE: Index: 0, Size: 0java.lang.RuntimeException(EXACT TYPE UNKNOWN): Index: 0, Size: " -- might indicate that there's an error on the server since it mentions java.
+2015-05-10T13:18:25  *** btully has joined #openstack-infra
+2015-05-10T13:18:44  <HenryG> foobio: still showing empty for me
+2015-05-10T13:19:37  *** slypushenko_ has quit IRC
+2015-05-10T13:19:45  *** slypushenko_ has joined #openstack-infra
+2015-05-10T13:19:51  *** aarefiev has quit IRC
+2015-05-10T13:20:08  *** aarefiev has joined #openstack-infra
+2015-05-10T13:20:23  <HenryG> foobio: hmmm, it show up if I sign out
+2015-05-10T13:21:08  <HenryG> and continues to work after signing in again.
+2015-05-10T13:21:25  <bknudson> is http://eavesdrop.openstack.org/irclogs/%23openstack-infra/ not updating anymore?
+2015-05-10T13:23:12  *** btully has quit IRC
+2015-05-10T13:27:17  <yolanda> foobio, i was looking at puppet git instances, centos is providing a very old git-daemon version, specially for centos 6.One of the things i'm doing is using repos from IUS community, to have latest git versions, are you open to have it upstream, in cgit manifest?
+2015-05-10T13:28:02  *** teran has joined #openstack-infra
+2015-05-10T13:29:06  *** dguerri is now known as _dguerri
+2015-05-10T13:31:05  *** gsagie has joined #openstack-infra
+2015-05-10T13:32:41  <gsagie> Hello all, i added a gate job to run devstack vm with our project, but it keeps failing with this message: "[ERROR] /opt/stack/new/devstack/functions-common:438 Cloning not allowed in this configuration"  (https://review.openstack.org//#/c/179741/) , this happens for all patches
+2015-05-10T13:32:50  *** teran has quit IRC
+2015-05-10T13:33:19  <gsagie> trying to understand if i did something wrong and where :) (or just a bug in the gate job?)
+2015-05-10T13:33:45  *** ddieterly has joined #openstack-infra
+2015-05-10T13:35:04  *** yfried__ is now known as yfried|afk
+2015-05-10T13:48:08  *** yfried|afk is now known as yfried__
+2015-05-10T13:52:39  *** ildikov has quit IRC
+2015-05-10T13:53:32  <AJaeger> bknudson: The HTML view is new and not updated ;(. mordred any idea why this is not run every hour?
+2015-05-10T13:53:53  <AJaeger> bknudson: use http://eavesdrop.openstack.org/irclogs/%23openstack-infra/%23openstack-infra.2015-05-09
+2015-05-10T13:54:04  <AJaeger> (without the .html on it)
+2015-05-10T13:54:28  <bknudson> http://eavesdrop.openstack.org/irclogs/%23openstack-infra/%23openstack-infra.2015-05-09 is 404
+2015-05-10T13:54:57  *** salv-orl_ has joined #openstack-infra
+2015-05-10T13:55:00  <bknudson> http://eavesdrop.openstack.org/irclogs/%23openstack-infra/%23openstack-infra.2015-05-09.log works
+2015-05-10T13:55:02  <AJaeger> bknudson: removed too many, try http://eavesdrop.openstack.org/irclogs/%23openstack-infra/%23openstack-infra.2015-05-09.log
+2015-05-10T13:55:04  <AJaeger> yeah ;)
+2015-05-10T13:55:24  <bknudson> http://eavesdrop.openstack.org/irclogs/%23openstack-infra/%23openstack-infra.2015-05-10.log is being updated
+2015-05-10T13:55:34  <foobio> bknudson: AJaeger: yeah, so we're still logging, but perhaps the cron job is not running/missing. i can look at it after i get some errands done
+2015-05-10T13:56:13  <foobio> yolanda: i think we want to upgrade our git servers to something with a more recent cgit package. maybe ubuntu trusty
+2015-05-10T13:56:44  *** mtanino_ has joined #openstack-infra
+2015-05-10T13:56:49  <AJaeger> foobio: Let's figure out how many people use eavesdrop ;)
+2015-05-10T13:57:30  *** mtanino_ is now known as mtanino
+2015-05-10T13:57:48  *** baoli has joined #openstack-infra
+2015-05-10T13:57:52  *** mtanino has joined #openstack-infra
+2015-05-10T13:58:23  <foobio> gsagie: devstack is configured in out environment to expect a local cache of git repositories. for some reason that job is trying to clone nova directly from the network
+2015-05-10T13:58:28  *** salv-orlando has quit IRC
+2015-05-10T13:58:41  <foobio> er, in our environment
+2015-05-10T13:59:44  <AJaeger> gsagie, foobio: cloning of git_clone https://github.com/kanaka/noVNC.git /opt/stack/new/noVNC master - not nova
+2015-05-10T14:00:03  <foobio> ahh, yep, it's novnc it's trying to clone
+2015-05-10T14:00:13  <foobio> i skimmed to quickly
+2015-05-10T14:01:26  <foobio> looks like ENABLED_SERVICES+=n-novnc might cause this
+2015-05-10T14:02:08  <foobio> i think that project may be the only one doing that, after a quick search through our configs
+2015-05-10T14:02:15  *** _dguerri is now known as dguerri
+2015-05-10T14:02:25  <foobio> anyway, gotta run, back soon
+2015-05-10T14:02:59  <AJaeger> foobio: enjoy your Sunday!
+2015-05-10T14:05:57  *** ildikov has joined #openstack-infra
+2015-05-10T14:06:18  <gsagie> Well i dont think its really needed so i can remove that
+2015-05-10T14:06:50  <gsagie> thanks
+2015-05-10T14:08:25  *** yamamoto_ has quit IRC
+2015-05-10T14:09:57  *** otter768 has joined #openstack-infra
+2015-05-10T14:10:12  *** rossella_s has quit IRC
+2015-05-10T14:10:34  *** rossella_s has joined #openstack-infra
+2015-05-10T14:11:42  *** koolhead17 has joined #openstack-infra
+2015-05-10T14:14:49  *** otter768 has quit IRC
+2015-05-10T14:16:47  *** baoli has quit IRC
+2015-05-10T14:17:24  *** dguerri is now known as _dguerri
+2015-05-10T14:19:46  *** zehicle has quit IRC
+2015-05-10T14:22:43  <openstackgerrit> Gal Sagie proposed openstack-infra/project-config: Remove n-novnc from enabled services  https://review.openstack.org/181736
+2015-05-10T14:22:57  <yolanda> foobio, why still all git instances are on centos, any reason?
+2015-05-10T14:25:12  *** jcooley is now known as Guest38967
+2015-05-10T14:25:46  <yolanda> foobio, i was able to bring git-daemon with 2.3.6 version, using centos and ius community repos: https://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ , but i've always wondered why was the reason to use centos there, and all the other instances on precise/trusty
+2015-05-10T14:27:47  *** _dguerri is now known as dguerri
+2015-05-10T14:28:07  *** ianychoi has quit IRC
+2015-05-10T14:28:57  *** teran has joined #openstack-infra
+2015-05-10T14:33:13  *** mtanino is now known as mtanino_awak
+2015-05-10T14:33:21  *** mtanino_awak is now known as mtanino_away
+2015-05-10T14:33:45  *** banix has joined #openstack-infra
+2015-05-10T14:33:46  *** koolhead17 has quit IRC
+2015-05-10T14:34:28  *** teran has quit IRC
+2015-05-10T14:35:15  *** dguerri is now known as _dguerri
+2015-05-10T14:39:34  *** koolhead17 has joined #openstack-infra
+2015-05-10T14:39:39  *** koolhead17 has quit IRC
+2015-05-10T14:45:47  *** woodster_ has joined #openstack-infra
+2015-05-10T14:52:00  <clarkb> yolanda for the cgit package. Does not exist in ubuntu until vivid
+2015-05-10T14:52:23  <clarkb> likely the simple thing to do is upgrade to centos7
+2015-05-10T14:54:00  *** banix has quit IRC
+2015-05-10T14:54:25  <foobio> right, so as to avoid installing a cgit package which isn't provided by the distro (i.e. to avoid installing from somewhere like dl.iuscommunity.org)
+2015-05-10T14:58:13  *** dimsum__ has quit IRC
+2015-05-10T14:59:27  <clarkb> foobio that change was definitely "empty" last night and that revisions commit url 404'd. Will likely have to dig through logs and see how it is doing on monday
+2015-05-10T15:07:01  <foobio> i see the irc log updating issue
+2015-05-10T15:07:34  <foobio> i think mordred ran the backlog as root rather than meetbot, but the cronjob runs as meetbot
+2015-05-10T15:07:42  <foobio> i'll correct the permissions on that directory tree
+2015-05-10T15:09:26  <foobio> okay, permissions updated. in another ~5 minutes it should update on its own
+2015-05-10T15:10:57  *** yfried has joined #openstack-infra
+2015-05-10T15:12:06  *** armax has joined #openstack-infra
+2015-05-10T15:13:09  *** yfried__ has quit IRC
+2015-05-10T15:16:06  *** sdake_ has joined #openstack-infra
+2015-05-10T15:19:21  *** sdake has quit IRC
+2015-05-10T15:21:18  *** baoli has joined #openstack-infra
+2015-05-10T15:21:39  *** hdd has joined #openstack-infra
+2015-05-10T15:25:30  *** tjones1 has joined #openstack-infra
+2015-05-10T15:30:33  *** teran has joined #openstack-infra
+2015-05-10T15:31:40  <mordred> aroo?
+2015-05-10T15:31:58  <mordred> foobio: oh - piddle. sorry
+2015-05-10T15:32:39  *** craigbr has joined #openstack-infra
+2015-05-10T15:35:08  *** teran has quit IRC
+2015-05-10T15:35:46  *** salv-orl_ has quit IRC
+2015-05-10T15:36:47  *** tjones1 has left #openstack-infra
+2015-05-10T15:41:50  *** ajo has quit IRC
+2015-05-10T15:43:34  <nibalizer> clarkb: what about using trusty but the cgit package from vivid?
+2015-05-10T15:43:42  <nibalizer> or is that gonna create too much instability
+2015-05-10T15:43:56  <nibalizer> to me, running a second distro for only one service is :/
+2015-05-10T15:44:54  <clarkb> well we didnt have that choice when we made the mirrors, vivid didnt exist yet
+2015-05-10T15:44:56  *** ajo has joined #openstack-infra
+2015-05-10T15:45:42  <clarkb> and given we have it working on centos I am inclined to stick with it. It works pretty well overall
+2015-05-10T15:46:09  *** dimsum__ has joined #openstack-infra
+2015-05-10T15:46:29  <clarkb> also note newer git breaks shallow cloning
+2015-05-10T15:49:15  *** craigbr has quit IRC
+2015-05-10T15:50:46  *** armax has quit IRC
+2015-05-10T15:53:33  <foobio> htmlified irc logs are looking better now
+2015-05-10T15:56:56  *** yamamoto has joined #openstack-infra
+2015-05-10T15:58:06  *** sergsh has quit IRC
+2015-05-10T15:58:50  <mordred> yay!
+2015-05-10T15:59:46  <mordred> greghaynes: re: simple-init ... we forgot to handle ssh host key regeneration I beleive
+2015-05-10T16:00:14  <mordred> greghaynes: not as big a deal for the nodepool nodes ... but should be fixed anyway - I'm working on a fix
+2015-05-10T16:00:44  *** dimsum__ has quit IRC
+2015-05-10T16:01:44  *** yamamoto has quit IRC
+2015-05-10T16:03:34  *** imcsk8 has quit IRC
+2015-05-10T16:04:36  *** sambetts has quit IRC
+2015-05-10T16:05:49  *** banix has joined #openstack-infra
+2015-05-10T16:06:03  *** sambetts has joined #openstack-infra
+2015-05-10T16:06:28  *** yfried_ has joined #openstack-infra
+2015-05-10T16:08:40  *** yfried_ is now known as yfried|afk
+2015-05-10T16:10:29  *** yfried has quit IRC
+2015-05-10T16:10:49  *** otter768 has joined #openstack-infra
+2015-05-10T16:13:22  *** ajo has quit IRC
+2015-05-10T16:13:58  *** yfried|afk is now known as yfried_
+2015-05-10T16:15:31  *** otter768 has quit IRC
+2015-05-10T16:18:35  *** ildikov has quit IRC
+2015-05-10T16:23:27  *** yfried_ has quit IRC
+2015-05-10T16:25:18  <mordred> hrm. the nodepool-base element has a script, "50-copy-nodepool-scripts" which depends on a NODEPOOL_SCRIPTDIR variable being set with no default. makes it a bit unselfcontained
+2015-05-10T16:31:22  *** teran has joined #openstack-infra
+2015-05-10T16:32:28  *** banix has quit IRC
+2015-05-10T16:33:59  *** ildikov has joined #openstack-infra
+2015-05-10T16:35:45  *** teran has quit IRC
+2015-05-10T16:42:04  <openstackgerrit> Monty Taylor proposed openstack-infra/project-config: Don't require NODEPOOL_SCRIPTDIR to be set  https://review.openstack.org/181742
+2015-05-10T16:44:24  *** hdd has quit IRC
+2015-05-10T16:45:37  *** mpopow has joined #openstack-infra
+2015-05-10T16:49:06  <clarkb> mordred that 50 precedence may mattet
+2015-05-10T16:49:18  <clarkb> we run nodepool scripts in dib iirc
+2015-05-10T16:49:31  <clarkb> but probably not in extra data I guess
+2015-05-10T16:51:05  *** johnthetubaguy has quit IRC
+2015-05-10T16:52:15  *** johnthetubaguy has joined #openstack-infra
+2015-05-10T16:52:51  <mordred> clarkb: yah. I'm doing a run of it right now to check
+2015-05-10T16:53:02  <mordred> clarkb: also - I just noticed a mildly-funny thing ...
+2015-05-10T16:53:33  <mordred> clarkb: which is that we cache all the source repositories, but our install_modules.sh script is unaware of this, so it clones from the internet
+2015-05-10T16:53:49  <mordred> clarkb: when it _Could_ be cloning most of our puppet modules from /opt/git
+2015-05-10T16:54:07  <mordred> it's not a huge deal, obviously
+2015-05-10T16:54:36  <nibalizer> mordred: right but thats a cache that can be hours out of date right?
+2015-05-10T16:54:43  <nibalizer> it could clone from /opt/git then git fetch i guess
+2015-05-10T16:54:49  <mordred> not in the contect of an image build
+2015-05-10T16:54:57  <nibalizer> or pull, rather
+2015-05-10T16:55:04  <mordred> when it builds the image, it clones the repos to be part of the cache, then it installs puppet
+2015-05-10T16:55:16  <mordred> so it literlaly just then did a clone of all of the repos from the internet
+2015-05-10T16:55:49  <clarkb> mordred see my zuul-cloner patch from yesterday :)
+2015-05-10T16:56:05  <mordred> clarkb: you're always one step ahead of me :)
+2015-05-10T16:56:10  <clarkb> we get that in then use zuul cloner, also fix the thing greghaynes hit
+2015-05-10T16:56:23  *** markvoelker has joined #openstack-infra
+2015-05-10T16:58:20  *** baoli has quit IRC
+2015-05-10T16:58:35  *** ddieterly has quit IRC
+2015-05-10T16:59:03  <mordred> clarkb: yah. although it means that it would start to make zuul cloner a thing we'd need to install as part of install_puppet
+2015-05-10T16:59:09  <clarkb> mordred basically aims to make zuul cloner useful in the context of a git cache but without zuul parameters
+2015-05-10T16:59:14  <mordred> ++
+2015-05-10T16:59:18  <mordred> I am in favor of such a thing
+2015-05-10T16:59:35  <clarkb> mordred yes, but we already install it on all nodes so should be fine, just moving where we do it
+2015-05-10T16:59:55  <mordred> clarkb: I mean for our things that arent' build nodes, which also consume install_modules.sh
+2015-05-10T17:00:04  <clarkb> ah right
+2015-05-10T17:00:14  <mordred> it's tractable - we just may need to unwind a few things :)
+2015-05-10T17:01:46  *** dimsum__ has joined #openstack-infra
+2015-05-10T17:02:06  <hogepodge> So where is the code in gerrit that does the download link rendering?
+2015-05-10T17:03:18  <mordred> hogepodge: somewhere in teh java ...
+2015-05-10T17:03:34  <mordred> hogepodge: zaro may know more specifically
+2015-05-10T17:03:56  <hogepodge> mordred: I've been searching the java, but was hoping crowdsourcing would help narrow my search
+2015-05-10T17:04:13  <mordred> hogepodge: I don't know off the top of my head - I'd have to search the java myself
+2015-05-10T17:06:31  *** dimsum__ has quit IRC
+2015-05-10T17:07:20  <mordred> clarkb: you know, we could make zuul-env slimmer if all it wants to do is use zuul-cloner - cloner only depends on extras and GitPython
+2015-05-10T17:07:54  <mordred> clarkb: of course, also not super important to do this instant - but if we make zuul-env part of install_puppet, we may want to consider that
+2015-05-10T17:08:21  <clarkb> ya I think splitting zuul-cloner out of the zuul deps tree would be good
+2015-05-10T17:08:34  <nibalizer> oh new gerrit has a size meter
+2015-05-10T17:08:35  <nibalizer> neat!
+2015-05-10T17:08:40  *** sergsh has joined #openstack-infra
+2015-05-10T17:09:05  <mordred> clarkb: I think we can do it without splitting the repos - we can either do an extras_require for zuul-cloner, or just do pip install --no-deps zuul ; pip install GitPython extras in the virtualenv
+2015-05-10T17:09:29  <mordred> clarkb: or we could split it out into a lib that big-zuul depends on
+2015-05-10T17:10:48  <mordred> clarkb: btw -I'm running local build testing  of nodepool _with_ all the repos, which I'd be skipping because it takes forever
+2015-05-10T17:10:59  <mordred> s/nodepool/nodepool images/
+2015-05-10T17:12:13  *** tjones1 has joined #openstack-infra
+2015-05-10T17:12:18  *** tjones1 has left #openstack-infra
+2015-05-10T17:12:19  <mordred> wow. can you not search for things with merge-conflict?
+2015-05-10T17:12:39  <openstackgerrit> Matthew Treinish proposed openstack-infra/project-config: Switch tempest python 3.4 unit test job to gating  https://review.openstack.org/181747
+2015-05-10T17:16:07  <hogepodge> How is the gerrit fork managed? I see lots of openstack forks.
+2015-05-10T17:16:51  <greghaynes> mordred: haha, I think we have a counter somewhere for every time someone tries to 'fix' ssh hostkey generation
+2015-05-10T17:16:59  <mordred> hogepodge: we're running http://git.openstack.org/cgit/openstack-infra/gerrit/log/?h=openstack/2.10.2
+2015-05-10T17:17:08  <mordred> greghaynes: :)
+2015-05-10T17:17:22  <mordred> greghaynes: well, if ubuntu would notice when they're not missing on boot, it would be nifty
+2015-05-10T17:17:32  <hogepodge> mordred: so are patches submitted against that?
+2015-05-10T17:17:40  <hogepodge> mordred: or master?
+2015-05-10T17:18:08  <clarkb> neither, they go upstream
+2015-05-10T17:18:17  <clarkb> we dont run a proper fork anymore
+2015-05-10T17:19:09  <mordred> we do backport a few things in from time to time
+2015-05-10T17:19:27  <mordred> also - we're going to have to figure out the '2.11 removes old change screen' thing
+2015-05-10T17:19:33  <mordred> hogepodge: what's the thing you're wanting to fix?
+2015-05-10T17:20:17  <hogepodge> mordred: I want to add a link to the "Download" part of the UI that offers 'git review -d CHANGE_ID' as an option.
+2015-05-10T17:20:17  <clarkb> ya we currate backported patches but thats it
+2015-05-10T17:20:38  <zaro> hogepodge, mordred : i believe that's done in the download plugin: https://gerrit.googlesource.com/plugins/download-commands/
+2015-05-10T17:20:49  <mordred> aha!
+2015-05-10T17:21:31  <clarkb> mordred I want zuul cloner to be easy to use without special install steps, but that may be a good intermediate step
+2015-05-10T17:21:37  <mordred> I think that would be an excellent addition to the download plugin
+2015-05-10T17:21:39  <mordred> clarkb: ++
+2015-05-10T17:21:52  <mordred> yeah - it may take us a little while to get it all split and whatnot
+2015-05-10T17:22:07  <mordred> hogepodge: https://gerrit.googlesource.com/plugins/download-commands/+/master/src/main/java/com/googlesource/gerrit/plugins/download/command/RepoCommand.java
+2015-05-10T17:22:22  <mordred> hogepodge: looking at the repo command entry, adding a git review entry seems pretty simple
+2015-05-10T17:22:36  *** sergsh has quit IRC
+2015-05-10T17:23:49  <clarkb> maybe it should be configurable?
+2015-05-10T17:24:01  <clarkb> anyways back to weekend
+2015-05-10T17:24:14  <mordred> it is - you can configure which schemes are used
+2015-05-10T17:24:22  <zaro> hogepodge, mordred : doc for it is in the resources folder.  probably would be good to make it optional. https://gerrit.googlesource.com/plugins/download-commands/+/master/src/main/resources/Documentation
+2015-05-10T17:25:25  <hogepodge> zaro: is git review our own special sauce? I thought go was providing their own with the same name. Would a patch for it be accepted upstream?
+2015-05-10T17:26:12  <clarkb> patch unlikely to get accepted if hard coded, thats why I suggest a configurable list
+2015-05-10T17:26:13  <zaro> hogepodge: yes, git review is an openstack-infra project
+2015-05-10T17:26:46  *** stevemar has joined #openstack-infra
+2015-05-10T17:26:58  <mordred> hogepodge: yeah - go decided to write their own thing
+2015-05-10T17:27:08  <mordred> hogepodge: even though ours was already there and usable
+2015-05-10T17:27:12  <mordred> hogepodge: beacuse *bonghits*
+2015-05-10T17:27:29  <mordred> but whatev
+2015-05-10T17:27:32  <zaro> i would probably create a seperate plugin for git review options download options.
+2015-05-10T17:27:47  <clarkb> zaro why? just add a gerrit.config list
+2015-05-10T17:27:59  <mordred> clarkb: the arguments provided to the command are different
+2015-05-10T17:28:08  <mordred> so just giving a list of commands isn't going to be good enough, no?
+2015-05-10T17:28:10  <clarkb> mordred no they are a subset
+2015-05-10T17:28:18  <mordred> aroo?
+2015-05-10T17:28:29  <zaro> because i think that might not get accepted
+2015-05-10T17:28:35  <zaro> upstream
+2015-05-10T17:28:36  <clarkb> fetch takes full ref, git review just change number
+2015-05-10T17:28:45  <mordred> right
+2015-05-10T17:28:48  <clarkb> full ref includes change number
+2015-05-10T17:29:31  *** otter768 has joined #openstack-infra
+2015-05-10T17:29:35  <clarkb> zaro even if its a configurable listing?
+2015-05-10T17:29:45  <mordred> so - are you saying "make enabling of the download scheme configurable"? because that I agree with
+2015-05-10T17:29:53  <clarkb> yes
+2015-05-10T17:30:18  <mordred> ok. I thought you were saying "make a thing so that you could define an arbitrary download command in config" :)
+2015-05-10T17:30:38  <clarkb> `git fetch $ref && git checkout FETCH_HEAD`
+2015-05-10T17:30:42  <clarkb> yes thats how you do iy
+2015-05-10T17:30:57  <zaro> clarkb: ohh you might be right.  i guess i would try upstreaming to download commands plugin first.
+2015-05-10T17:30:59  <clarkb> the `git review $change_number` in a list
+2015-05-10T17:31:19  *** freerunner has joined #openstack-infra
+2015-05-10T17:32:04  <zaro> i think it's just a tough sell because it's git review specific so i might consider that related but outside the scope of the download command
+2015-05-10T17:32:10  *** teran has joined #openstack-infra
+2015-05-10T17:32:12  <clarkb> no thats my point
+2015-05-10T17:32:18  <clarkb> dont make it specific to any command
+2015-05-10T17:32:29  <hogepodge> zaro: yeah, that would be my concern.
+2015-05-10T17:32:35  <mordred> clarkb: you'd have to completely rewrite the entire plugin
+2015-05-10T17:32:48  <mordred> when adding git-review as an optional scheme would take 5 minutes
+2015-05-10T17:32:53  <hogepodge> java patterns ftw
+2015-05-10T17:33:07  <clarkb> mordred gotcha
+2015-05-10T17:33:15  <clarkb> but upstream wont take it
+2015-05-10T17:33:24  <mordred> why not?
+2015-05-10T17:33:28  *** sputnik13 has joined #openstack-infra
+2015-05-10T17:33:37  <zaro> mordred: no, the git-review plugin can build on top of the download command
+2015-05-10T17:33:42  *** sdake has joined #openstack-infra
+2015-05-10T17:33:47  <zaro> just make it a dependency.
+2015-05-10T17:33:49  <mordred> git-review is more widely used than repo is - why not have a config option to expose it?
+2015-05-10T17:33:55  <clarkb> mordred because they have never wanted anything to do with our tools
+2015-05-10T17:34:09  <zaro> that's how the its plugins work.  there's an its-base and the its-bugzilla, its-jira, etc..
+2015-05-10T17:34:28  <mordred> well, whichever is fine by me honestly
+2015-05-10T17:34:57  <mordred> I find it a very sad thought that they would not accept a patch to the plugin to enable what is probably the #1 tool used to download gerrit changes
+2015-05-10T17:35:12  <mordred> but, you know, if that's how it is, then we can do what zaro says
+2015-05-10T17:35:23  <zaro> i might be completely wrong about this though.
+2015-05-10T17:35:31  <clarkb> adding a second plugin seems silly fwiw
+2015-05-10T17:36:06  <clarkb> but that may just be reality of gerrits design
+2015-05-10T17:36:14  *** freerunner has quit IRC
+2015-05-10T17:36:31  <mordred> it all seems silly. I'd try a patch to the plugin first and let them reject it - becuase it's like  12 line patch and rejecting it would be kinda crazy
+2015-05-10T17:36:33  *** stevemar has quit IRC
+2015-05-10T17:36:46  <mordred> especially if it's hidden behind a config option
+2015-05-10T17:37:01  *** sdake_ has quit IRC
+2015-05-10T17:37:06  *** teran has quit IRC
+2015-05-10T17:37:36  <zaro> mordred: ++ sounds like a good plan to me
+2015-05-10T17:37:53  <sdake> I fear the answer is no, but is it possible to delete a  tag in openstack git namespace?
+2015-05-10T17:38:03  <sdake> magnum 2015.1.0 is DOA as is and needs 3 backports
+2015-05-10T17:38:25  <mordred> sdake: physically possible, but a terrible idea. the tag is what it is
+2015-05-10T17:38:39  <mordred> sdake: solution is to make an additional tag
+2015-05-10T17:38:56  <sdake> what tag would you recommend
+2015-05-10T17:39:00  <sdake> 2015.1.0.0?
+2015-05-10T17:39:04  *** yfried_ has joined #openstack-infra
+2015-05-10T17:39:06  <mordred> sdake: so, if 2015.1.0 is bad, merge the backports into the stable branch and cut a 2015.1.1
+2015-05-10T17:39:20  <sdake> isn't 2015.1.1 on a standard release process?
+2015-05-10T17:39:51  <mordred> probably, in any case, you should probably chat with ttx about when he's in on Monday
+2015-05-10T17:39:59  <sdake> thanks will do
+2015-05-10T17:40:17  <mordred> cool! general idea is that once a tag is cut it's permanent
+2015-05-10T17:41:02  <greghaynes> mordred: did you cut a os-c-c release?
+2015-05-10T17:41:07  <mordred> greghaynes: I did
+2015-05-10T17:41:14  <greghaynes> \O/
+2015-05-10T17:41:21  <mordred> greghaynes: although I have some more patches up for review if you have a sec
+2015-05-10T17:41:32  <greghaynes> mordred: yes
+2015-05-10T17:41:35  <mordred> that clarify env/file/arg precedence
+2015-05-10T17:42:29  <greghaynes> mordred: should we bump the os-c-c req for shade then?
+2015-05-10T17:42:51  <mordred> greghaynes: I think I've got a patch up to do so, yeah
+2015-05-10T17:42:54  <greghaynes> ah, ok
+2015-05-10T17:43:06  <mordred> greghaynes: also - http://paste.openstack.org/show/219127 <-- this is what I was thinking in simple-init
+2015-05-10T17:43:15  <mordred> greghaynes: any issues you can think of with that?
+2015-05-10T17:43:16  <openstackgerrit> Matthew Treinish proposed openstack-infra/project-config: Switch tempest python 3.4 unit test job to gating  https://review.openstack.org/181747
+2015-05-10T17:44:00  <greghaynes> mordred: does that delete it? or do we want to also rm it before dpkg-reconfigure?
+2015-05-10T17:44:11  <mordred> the elements already properly delete it
+2015-05-10T17:44:26  <greghaynes> ah, ok
+2015-05-10T17:44:29  <mordred> greghaynes: this is just causing it to regen it if it's not there - which ubuntu apparently needs to be prodded to do
+2015-05-10T17:44:35  <greghaynes> oh wow
+2015-05-10T17:44:40  <sdake> mordred think you could +a a review Andreas already had a look at for project-config?
+2015-05-10T17:44:41  <greghaynes> is that not just an ubuntu bug?
+2015-05-10T17:44:54  <mordred> greghaynes: no- it's a feature I believe
+2015-05-10T17:44:57  <greghaynes> mordred: anyhow, LGTM
+2015-05-10T17:45:08  <clarkb> rhel does the correct thing
+2015-05-10T17:45:10  <mordred> greghaynes: cool - I'll submit as soon as I'm done with this local test run
+2015-05-10T17:45:13  <mordred> clarkb: yes it does
+2015-05-10T17:45:26  <mordred> sdake: link?
+2015-05-10T17:45:50  <sdake> https://review.openstack.org/#/c/181125/
+2015-05-10T17:46:40  <mordred> sdake: you have the openstack-cloudpulse channel registered and have granted permissions to the openstackci account?
+2015-05-10T17:46:41  *** freerunner has joined #openstack-infra
+2015-05-10T17:46:51  <sdake> yup and pypi as well
+2015-05-10T17:47:15  *** otter768 has quit IRC
+2015-05-10T17:47:17  <sdake> I followed the great documentation on setting up a new project this time
+2015-05-10T17:47:19  <sdake> rather then trying to guess what to do :)
+2015-05-10T17:47:26  <mordred> cool!
+2015-05-10T17:47:38  <sdake> nice work on the docs too folks yay docs :)
+2015-05-10T17:47:56  <mordred> patch looks great - +A
+2015-05-10T17:48:02  <sdake> thanks :)
+2015-05-10T17:48:09  <sdake> it was really andreas that beat it into submission
+2015-05-10T17:48:17  <sdake> he rocks for initial reviews
+2015-05-10T17:49:19  *** shashankhegde has joined #openstack-infra
+2015-05-10T17:49:41  <mordred> greghaynes: wth - Error: /Stage[main]/Ssh/Service[ssh]: Could not evaluate: Execution of '/sbin/status ssh' returned 1: status: Unable to connect to Upstart: Failed to connect to socket /com/ubuntu/upstart: Connection refused
+2015-05-10T17:50:33  *** _nadya_ has joined #openstack-infra
+2015-05-10T17:50:38  <greghaynes> mordred: huh.
+2015-05-10T17:50:47  <greghaynes> mordred: I wonder if were missing something important in ubuntu-minimal
+2015-05-10T17:51:03  <mordred> yeah - like, maybe the thing that disables init scripts or something?
+2015-05-10T17:51:25  <nibalizer> so is it possible to land this ? https://review.openstack.org/#/c/178760/ I feel like the answer is no
+2015-05-10T17:51:38  <nibalizer> it is coupled with https://review.openstack.org/#/c/178749/
+2015-05-10T17:51:46  <nibalizer> so if they both went in at the same time that'd be fine
+2015-05-10T17:51:55  <nibalizer> but either going ahead of the other breaks us right?
+2015-05-10T17:52:01  * mordred reads
+2015-05-10T17:52:06  *** markvoelker has quit IRC
+2015-05-10T17:52:38  *** markvoelker has joined #openstack-infra
+2015-05-10T17:52:38  <pleia2> you all work too much
+2015-05-10T17:52:45  *** sputnik13 has quit IRC
+2015-05-10T17:52:55  <nibalizer> http://logs.openstack.org/49/178749/4/check/gate-infra-puppet-apply-precise/e5ef016/console.html#_2015-05-07_22_13_19_389 is the problem I think
+2015-05-10T17:53:02  *** e0ne has joined #openstack-infra
+2015-05-10T17:53:05  <nibalizer> the other side is "we dont manage jenkins default file"
+2015-05-10T17:53:21  <nibalizer> pleia2: maybe sunday work makes up for the slacking off in the week?
+2015-05-10T17:53:36  <mordred> nibalizer: yeah. I think we're going to need a three-step change there
+2015-05-10T17:53:38  <pleia2> nibalizer: I dunno, I see lots of work in the weektime too ;)
+2015-05-10T17:53:48  <mordred> wrap one in "if not File[]" blah
+2015-05-10T17:53:57  <mordred> then add the other also with an if not file blah
+2015-05-10T17:54:05  <greghaynes> mordred: you do have upstart installed, right?
+2015-05-10T17:54:05  <mordred> then remove the original
+2015-05-10T17:54:06  <greghaynes> :p
+2015-05-10T17:54:14  <mordred> greghaynes: I can't imagine I wouldn't?
+2015-05-10T17:54:22  <openstackgerrit> Merged openstack-infra/project-config: Add CloudPulse  https://review.openstack.org/181125
+2015-05-10T17:54:49  <mordred> nibalizer: hrm. actually, well, you're right though
+2015-05-10T17:54:54  <pleia2> if you're using vivid, you wouldn't
+2015-05-10T17:54:55  <mordred> nibalizer: if we reverse the order
+2015-05-10T17:55:06  <mordred> we'll have a minute where we're not managing it, but it won't break things
+2015-05-10T17:55:10  <mordred> pleia2: should be trusty
+2015-05-10T17:55:20  <openstackgerrit> Monty Taylor proposed openstack-infra/project-config: Add elements for Infra servers  https://review.openstack.org/140840
+2015-05-10T17:55:21  <openstackgerrit> Monty Taylor proposed openstack-infra/project-config: Don't disable cloud-init if it is not installed  https://review.openstack.org/181750
+2015-05-10T17:55:25  <pleia2> mordred: good good, wasn't sure if you were doing local testing or so
+2015-05-10T17:55:38  <mordred> yah - well, am doing local testing - but of the dib images
+2015-05-10T17:55:39  *** baoli has joined #openstack-infra
+2015-05-10T17:55:46  <pleia2> ah :)
+2015-05-10T17:56:01  *** otter768 has joined #openstack-infra
+2015-05-10T17:56:01  <mordred> OH!
+2015-05-10T17:56:03  *** baoli_ has joined #openstack-infra
+2015-05-10T17:56:05  <mordred> pleia2: nope. you win the prize
+2015-05-10T17:56:05  *** baoli_ has quit IRC
+2015-05-10T17:56:11  <mordred> I did not set DIB_RELEASE
+2015-05-10T17:56:15  <pleia2> aha!
+2015-05-10T17:56:23  <mordred> so yeah, I was building on vivid by mistake I think
+2015-05-10T17:56:54  *** markvoelker has quit IRC
+2015-05-10T17:56:55  <mordred> hrm. nope. nevermind- trusty was in the logs
+2015-05-10T17:56:55  <greghaynes> mordred: by default its all trusty I think
+2015-05-10T17:57:49  <greghaynes> that is a really good point though, maybe lsb-release would be good to check
+2015-05-10T17:59:00  *** zul has quit IRC
+2015-05-10T17:59:00  *** e0ne has quit IRC
+2015-05-10T17:59:19  *** ddieterly has joined #openstack-infra
+2015-05-10T17:59:24  *** zul has joined #openstack-infra
+2015-05-10T17:59:55  *** sputnik13 has joined #openstack-infra
+2015-05-10T17:59:56  *** baoli has quit IRC
+2015-05-10T18:00:47  *** sputnik13 has quit IRC
+2015-05-10T18:01:00  <mordred> greghaynes: I can't find the thing in dib which disables running init scripts
+2015-05-10T18:03:07  *** e0ne has joined #openstack-infra
+2015-05-10T18:03:18  <mordred> greghaynes: I thought there was a thing that linked /usr/sbin/service to /bin/true or something during pre-install and then put it back in cleanup?
+2015-05-10T18:03:45  *** ddieterly has quit IRC
+2015-05-10T18:03:48  <greghaynes> mordred: dpkg/root.d/99-block-daemons I think
+2015-05-10T18:04:00  <mordred> yes!
+2015-05-10T18:04:27  <mordred> and we do depend on that
+2015-05-10T18:04:50  *** openstackgerrit has quit IRC
+2015-05-10T18:05:10  *** openstackgerrit has joined #openstack-infra
+2015-05-10T18:05:14  <mordred> so, something in puppet is running /sbin/status
+2015-05-10T18:05:21  <mordred> which that does not deal with
+2015-05-10T18:05:39  <greghaynes> mordred: and then it cleanups in finalise.d
+2015-05-10T18:05:53  <greghaynes> mordred: oh, that fail is happening at build time?
+2015-05-10T18:05:56  <greghaynes> not at run
+2015-05-10T18:06:14  *** stevemar has joined #openstack-infra
+2015-05-10T18:07:06  <greghaynes> mordred: yea, status is just an initctl symlink so we should do the same for it
+2015-05-10T18:07:42  <mordred> yah
+2015-05-10T18:08:14  <mordred> why isn't this breaking everything all the time?
+2015-05-10T18:08:14  <flashgordon> the new gerrit is realy neat
+2015-05-10T18:08:19  <mordred> flashgordon: woot!
+2015-05-10T18:08:21  <flashgordon> I like the size bar
+2015-05-10T18:08:23  *** flashgordon is now known as jogo
+2015-05-10T18:08:31  <greghaynes> One of the best parts of sunday work is that your tests never wait for resources
+2015-05-10T18:08:35  <mordred> yah
+2015-05-10T18:09:00  <jogo> also listing merge conflicts !
+2015-05-10T18:09:17  <greghaynes> yep, although im not sure what to do with that info
+2015-05-10T18:09:32  <greghaynes> since I still want to review merge conflicted things...
+2015-05-10T18:10:00  <jogo> greghaynes: you can rebase things for people
+2015-05-10T18:12:04  <clarkb> mordred we have stopped triggering services in puppet if chroot detected
+2015-05-10T18:12:12  <mordred> clarkb: not in puppet-ssh
+2015-05-10T18:12:28  <clarkb> does it ensure running?
+2015-05-10T18:12:31  <mordred> yu
+2015-05-10T18:12:32  <mordred> yup
+2015-05-10T18:14:03  *** HeOS has joined #openstack-infra
+2015-05-10T18:16:11  *** stevemar has quit IRC
+2015-05-10T18:16:17  <nibalizer> mordred: ya i'd like to see us come up with a pattern for how to do these refactors
+2015-05-10T18:16:48  <nibalizer> i dont know if 'have a minute where we are not managing a resource' is gonna work for everything but it should work for files and packages and services
+2015-05-10T18:17:00  <openstackgerrit> Monty Taylor proposed openstack-infra/puppet-ssh: Don't reload ssh service in a chroot  https://review.openstack.org/181751
+2015-05-10T18:17:32  *** yamahata has joined #openstack-infra
+2015-05-10T18:17:34  <mordred> clarkb: ^^
+2015-05-10T18:17:35  *** baoli has joined #openstack-infra
+2015-05-10T18:17:37  *** baoli has quit IRC
+2015-05-10T18:18:05  <greghaynes> is that in_chroot something we set? or is there some magic logic for that?
+2015-05-10T18:18:21  <clarkb> dib elements set it
+2015-05-10T18:18:38  <clarkb> its a facter fact
+2015-05-10T18:18:40  <mordred> greghaynes: nodepool/elements/puppet/bin/prepare-node:export FACTER_in_chroot=true
+2015-05-10T18:18:59  <greghaynes> neat
+2015-05-10T18:20:20  <mordred> greghaynes: I think we should also update the status link too though
+2015-05-10T18:20:40  <greghaynes> mordred: yep
+2015-05-10T18:21:20  <mordred> greghaynes: hrm. it's a symlink - it should just get covered
+2015-05-10T18:21:36  <greghaynes> mordred: haha, I was just typing that
+2015-05-10T18:21:42  <greghaynes> yea, so I have no idea whats up with that
+2015-05-10T18:22:07  <nibalizer> mordred: clarkb i responded on 177320
+2015-05-10T18:22:14  <mordred> greghaynes: whatcha wanna bet something in teh build is causing upstart to get upgraded and it's overwriting the thing?
+2015-05-10T18:22:23  <greghaynes> mordred: likely
+2015-05-10T18:22:45  *** sigmavirus24_awa is now known as sigmavirus24
+2015-05-10T18:24:09  *** e0ne has quit IRC
+2015-05-10T18:25:00  *** otter768 has quit IRC
+2015-05-10T18:26:11  *** baoli_ has joined #openstack-infra
+2015-05-10T18:26:25  <clarkb> I have no idea why that worked in a dib chroot before
+2015-05-10T18:27:02  <clarkb> oh I knoe
+2015-05-10T18:27:10  <greghaynes> mordred: we should dpkg-divert those files in dib during the build
+2015-05-10T18:27:12  <clarkb> because ssh was running in the host
+2015-05-10T18:28:09  *** e0ne has joined #openstack-infra
+2015-05-10T18:28:10  <mordred> greghaynes: yah
+2015-05-10T18:29:05  *** sdake_ has joined #openstack-infra
+2015-05-10T18:30:48  *** baoli_ has quit IRC
+2015-05-10T18:30:48  *** e0ne has quit IRC
+2015-05-10T18:32:34  *** sdake has quit IRC
+2015-05-10T18:32:58  *** teran has joined #openstack-infra
+2015-05-10T18:34:41  *** e0ne has joined #openstack-infra
+2015-05-10T18:35:08  *** banix has joined #openstack-infra
+2015-05-10T18:35:27  *** baoli has joined #openstack-infra
+2015-05-10T18:35:30  *** baoli has quit IRC
+2015-05-10T18:35:39  <mordred> clarkb, greghaynes: I have found ANOTHER glance api weirdness
+2015-05-10T18:35:55  <mordred> beacuse I now am working on uploading an image to a cloud that supports v2 but not tasks
+2015-05-10T18:37:03  *** e0ne has quit IRC
+2015-05-10T18:38:00  *** teran has quit IRC
+2015-05-10T18:38:15  *** sdake has joined #openstack-infra
+2015-05-10T18:38:42  <openstackgerrit> greghaynes proposed openstack-infra/nodepool: Use shade to get the client objects  https://review.openstack.org/168603
+2015-05-10T18:39:00  <greghaynes> mordred: oh joy
+2015-05-10T18:39:02  <mordred> and it LOOKS like the API wants the properties parameter in v2 to be a string- which means I think I need to json encode the properties dict before passing it as an argument
+2015-05-10T18:39:17  <mordred> at least, that's what I'm trying right now
+2015-05-10T18:39:31  <greghaynes> wooow
+2015-05-10T18:39:42  <mordred> or - wait- maybe it's a different thing ...
+2015-05-10T18:41:16  *** e0ne has joined #openstack-infra
+2015-05-10T18:41:21  *** sdake_ has quit IRC
+2015-05-10T18:41:40  <greghaynes> oh, something that seems new with gerrit - if a file doesnt change it keeps the check mark across patch sets
+2015-05-10T18:42:35  <mordred> oh interesting
+2015-05-10T18:42:39  <mordred> that's nice
+2015-05-10T18:42:47  <sigmavirus24> I agree. That's very nice
+2015-05-10T18:44:04  <greghaynes> ok, https://review.openstack.org/#/c/168603/14 actually passes now
+2015-05-10T18:44:17  <greghaynes> clarkb: ^
+2015-05-10T18:45:10  <mordred> woot
+2015-05-10T18:46:06  *** shashankhegde has quit IRC
+2015-05-10T18:47:36  *** sdake_ has joined #openstack-infra
+2015-05-10T18:49:53  <mordred> ok. its not quite as bad as I thought- but in addition to there being the put vs. tasks, there IS a difference between PUTv1 and PUTv2
+2015-05-10T18:49:55  *** freerunner has quit IRC
+2015-05-10T18:50:32  *** shashankhegde has joined #openstack-infra
+2015-05-10T18:51:54  *** sdake has quit IRC
+2015-05-10T18:52:56  *** mescanef has quit IRC
+2015-05-10T18:53:37  <sdake_> can someone with the appropriate permissions add me to :
+2015-05-10T18:53:48  <sdake_> https://review.openstack.org/#/admin/groups/699,members
+2015-05-10T18:53:57  *** banix has quit IRC
+2015-05-10T18:53:57  <sdake_> (cloudpulse-core)
+2015-05-10T18:53:59  <sdake_> and
+2015-05-10T18:54:20  <sdake_> https://review.openstack.org/#/admin/groups/700,members
+2015-05-10T18:55:50  *** shashankhegde has quit IRC
+2015-05-10T18:58:15  <openstackgerrit> Marton Kiss proposed openstack-infra/groups: Views module security upgrade  https://review.openstack.org/181753
+2015-05-10T18:58:40  *** achanda has joined #openstack-infra
+2015-05-10T19:00:05  *** ddieterly has joined #openstack-infra
+2015-05-10T19:01:41  *** e0ne has quit IRC
+2015-05-10T19:01:47  *** mescanef has joined #openstack-infra
+2015-05-10T19:02:23  *** sdake has joined #openstack-infra
+2015-05-10T19:04:16  *** ddieterly has quit IRC
+2015-05-10T19:04:46  <openstackgerrit> Merged openstack-infra/groups: Views module security upgrade  https://review.openstack.org/181753
+2015-05-10T19:05:21  *** e0ne has joined #openstack-infra
+2015-05-10T19:05:57  *** sdake_ has quit IRC
+2015-05-10T19:06:31  <foobio> sdake: done
+2015-05-10T19:06:39  <sdake> thanks foobio
+2015-05-10T19:06:42  <openstackgerrit> Monty Taylor proposed openstack-infra/shade: Support PUT in Image v2 API  https://review.openstack.org/181754
+2015-05-10T19:06:44  <sdake> appreciate it bro :)
+2015-05-10T19:06:50  <mordred> Shrews, greghaynes: ^^ read and cry
+2015-05-10T19:07:55  * mordred still needs to fix tests - but that's the code
+2015-05-10T19:07:55  *** e0ne has quit IRC
+2015-05-10T19:07:58  <foobio> pleia2: if it helps you feel better, most of my sunday is being spent baking sourdough bread and making chili (the latter of which would, probably rightly so, merely be considered bean and pepper stew by many chiliheads, but tasty nevertheless)
+2015-05-10T19:08:42  <pleia2> foobio: I went for a run and called my mom, so I'm calling today a success :)
+2015-05-10T19:09:04  <pleia2> also, mmm chili and sourdough
+2015-05-10T19:10:06  *** banix has joined #openstack-infra
+2015-05-10T19:10:42  *** achanda has quit IRC
+2015-05-10T19:12:01  <mordred> yes. chili
+2015-05-10T19:12:31  *** e0ne has joined #openstack-infra
+2015-05-10T19:14:15  *** e0ne has quit IRC
+2015-05-10T19:18:07  *** e0ne has joined #openstack-infra
+2015-05-10T19:20:53  <openstackgerrit> Monty Taylor proposed openstack-infra/shade: Support PUT in Image v2 API  https://review.openstack.org/181754
+2015-05-10T19:21:37  <openstackgerrit> Monty Taylor proposed openstack-infra/shade: Support PUT in Image v2 API  https://review.openstack.org/181754
+2015-05-10T19:21:46  <mordred> ok. now with tests that pass and test the new code
+2015-05-10T19:25:21  <openstackgerrit> Monty Taylor proposed openstack-infra/shade: Add inventory command to shade  https://review.openstack.org/175891
+2015-05-10T19:27:54  <openstackgerrit> Marton Kiss proposed openstack-infra/groups: Upgrade Drupal core to 7.37  https://review.openstack.org/181755
+2015-05-10T19:29:32  *** freerunner has joined #openstack-infra
+2015-05-10T19:30:32  *** mpaolino has joined #openstack-infra
+2015-05-10T19:30:37  *** mpaolino has quit IRC
+2015-05-10T19:31:59  *** rmcall has joined #openstack-infra
+2015-05-10T19:33:44  *** teran has joined #openstack-infra
+2015-05-10T19:35:49  *** e0ne has quit IRC
+2015-05-10T19:36:22  *** baoli has joined #openstack-infra
+2015-05-10T19:37:21  *** zul has quit IRC
+2015-05-10T19:38:27  *** teran has quit IRC
+2015-05-10T19:40:12  *** e0ne has joined #openstack-infra
+2015-05-10T19:40:27  *** e0ne has quit IRC
+2015-05-10T19:40:29  *** baoli has quit IRC
+2015-05-10T19:40:48  *** sigmavirus24 is now known as sigmavirus24_awa
+2015-05-10T19:42:30  *** rmcall has quit IRC
+2015-05-10T19:51:17  *** sdake_ has joined #openstack-infra
+2015-05-10T19:51:23  <hogepodge> Once https://review.openstack.org/#/c/181756/ lands, I'm going to look at adding a gate job to the defcore project.
+2015-05-10T19:54:19  *** sdake has quit IRC
+2015-05-10T19:55:00  *** sdake has joined #openstack-infra
+2015-05-10T19:58:34  *** sdake_ has quit IRC
+2015-05-10T19:58:56  *** achanda has joined #openstack-infra
+2015-05-10T20:00:51  *** ddieterly has joined #openstack-infra
+2015-05-10T20:02:15  <openstackgerrit> Merged openstack-infra/groups: Upgrade Drupal core to 7.37  https://review.openstack.org/181755
+2015-05-10T20:05:40  *** ddieterly has quit IRC
+2015-05-10T20:05:41  *** ddieterl_ has joined #openstack-infra
+2015-05-10T20:07:18  *** freerunner has quit IRC
+2015-05-10T20:07:48  *** freerunner has joined #openstack-infra
+2015-05-10T20:09:38  *** freerunner has quit IRC
+2015-05-10T20:10:43  *** stevemar has joined #openstack-infra
+2015-05-10T20:11:47  *** achanda has quit IRC
+2015-05-10T20:16:01  *** stevemar has quit IRC
+2015-05-10T20:20:57  *** ildikov has quit IRC
+2015-05-10T20:22:23  *** sdake_ has joined #openstack-infra
+2015-05-10T20:23:51  *** dkranz has quit IRC
+2015-05-10T20:24:51  *** rlandy has quit IRC
+2015-05-10T20:25:16  *** sdake__ has joined #openstack-infra
+2015-05-10T20:25:30  *** sdake has quit IRC
+2015-05-10T20:25:57  *** otter768 has joined #openstack-infra
+2015-05-10T20:28:37  *** sdake_ has quit IRC
+2015-05-10T20:31:01  *** otter768 has quit IRC
+2015-05-10T20:33:40  *** sdake has joined #openstack-infra
+2015-05-10T20:34:12  *** ildikov has joined #openstack-infra
+2015-05-10T20:36:54  *** sdake__ has quit IRC
+2015-05-10T20:37:07  *** freerunner has joined #openstack-infra
+2015-05-10T20:37:18  *** _nadya_ has quit IRC
+2015-05-10T20:38:58  *** teran has joined #openstack-infra
+2015-05-10T20:39:43  *** markvoelker has joined #openstack-infra
+2015-05-10T20:40:47  *** woodster_ has quit IRC
+2015-05-10T20:48:52  *** dimsum__ has joined #openstack-infra
+2015-05-10T20:50:21  *** dimsum__ has quit IRC
+2015-05-10T20:54:09  *** viglesias has quit IRC
+2015-05-10T20:55:28  *** viglesias has joined #openstack-infra
+2015-05-10T20:56:54  *** freerunner has quit IRC
+2015-05-10T21:00:26  *** dimsum__ has joined #openstack-infra
+2015-05-10T21:06:54  *** viglesias has quit IRC
+2015-05-10T21:07:03  *** baoli has joined #openstack-infra
+2015-05-10T21:07:48  *** viglesias has joined #openstack-infra
+2015-05-10T21:09:36  *** markvoelker has quit IRC
+2015-05-10T21:10:11  *** markvoelker has joined #openstack-infra
+2015-05-10T21:11:30  *** sdake_ has joined #openstack-infra
+2015-05-10T21:11:40  *** baoli has quit IRC
+2015-05-10T21:12:20  <lifeless> hmmm
+2015-05-10T21:12:29  <lifeless> do we install liberasurecode from source?
+2015-05-10T21:14:34  *** markvoelker has quit IRC
+2015-05-10T21:14:56  <clarkb> yes
+2015-05-10T21:14:57  *** sdake has quit IRC
+2015-05-10T21:15:26  <clarkb> iirc the python package grabs it from random place and builds it then links against it
+2015-05-10T21:18:54  <lifeless> PyECLib 1.0.7 doesn't
+2015-05-10T21:21:36  <lifeless> it just barfs on erasurecode.h being awol
+2015-05-10T21:22:49  *** sdake has joined #openstack-infra
+2015-05-10T21:25:27  *** ddieterl_ has quit IRC
+2015-05-10T21:26:37  *** sdake_ has quit IRC
+2015-05-10T21:27:28  <lifeless> ENFI
+2015-05-10T21:30:25  *** viglesias has quit IRC
+2015-05-10T21:31:00  *** viglesias has joined #openstack-infra
+2015-05-10T21:33:28  *** bhunter71 has joined #openstack-infra
+2015-05-10T21:34:12  *** sdake_ has joined #openstack-infra
+2015-05-10T21:34:40  <lifeless> ah, wtf
+2015-05-10T21:34:47  <lifeless> it has a vendored copy in its source tree
+2015-05-10T21:34:53  <lifeless> but its not picking it up
+2015-05-10T21:34:59  <openstackgerrit> Ian Wienand proposed openstack-infra/devstack-gate: [WIP] run centos7 with neutron  https://review.openstack.org/179689
+2015-05-10T21:35:03  <lifeless> seriously, who vendors a copy as a tarball
+2015-05-10T21:37:45  *** sdake has quit IRC
+2015-05-10T21:37:57  *** viglesias has quit IRC
+2015-05-10T21:38:49  *** viglesias has joined #openstack-infra
+2015-05-10T21:39:39  <ianw> do we know that clicking on change-id's in reviews takes some path that ends up in 404?
+2015-05-10T21:39:57  *** rmcall has joined #openstack-infra
+2015-05-10T21:40:01  <ianw> https://review.openstack.org//#/c/181395/1
+2015-05-10T21:40:08  <ianw>  -> https://review.openstack.org//#q,If051f43fb75d57c118db4e8e97895ff06fbb54e2,n,z
+2015-05-10T21:40:18  <ianw>  -> https:///#/q/If051f43fb75d57c118db4e8e97895ff06fbb54e2,n,z
+2015-05-10T21:40:40  <ianw> something happens inbetween to redirect... to /#
+2015-05-10T21:41:32  <foobio> i'm guessing something has happened with the link matching engine in 2.10... zaro ^?
+2015-05-10T21:42:25  <foobio> the extra / seems to be what's causing the problem
+2015-05-10T21:42:28  <nibalizer> it only does it on some of them
+2015-05-10T21:42:31  <nibalizer> https://review.openstack.org/#/c/178760/ works for instance
+2015-05-10T21:42:49  <ianw> yeah, and actually i reloaded and don't see it, i think ... weird
+2015-05-10T21:42:51  <nibalizer> foobio is right though
+2015-05-10T21:42:59  *** amitgandhinz has joined #openstack-infra
+2015-05-10T21:43:16  *** freerunner has joined #openstack-infra
+2015-05-10T21:43:45  <foobio> any idea if it's those with change-id starting I[:alpha:] vs I[:digit]?
+2015-05-10T21:43:46  <lifeless> clarkb: I give you https://twitter.com/rbtcollins/status/597517090992455680
+2015-05-10T21:44:05  <ianw> ahh, yeah, that first // in the review.openstack.org ... what link did i follow to get to that?
+2015-05-10T21:44:35  <foobio> the link substitution seems to add an additional / on some of those relative links
+2015-05-10T21:45:24  <ianw> i think that this started right after i logged in, i got redirected back to https://review.openstack.org//
+2015-05-10T21:46:09  <foobio> maybe it's something afoul with the openid config
+2015-05-10T21:46:28  <ianw> yep, that's it, when i logged out and back in, i end up at the // version
+2015-05-10T21:47:04  <ianw> that persists until you hit a link that makes gerrit barf
+2015-05-10T21:48:52  <stevebaker> Is there a fix in sight for the pypy jobs, or should we make them non-voting?
+2015-05-10T21:50:24  *** rmcall has quit IRC
+2015-05-10T21:50:50  *** rmcall has joined #openstack-infra
+2015-05-10T21:52:41  *** freerunner has quit IRC
+2015-05-10T21:52:49  <ianw> also a lot of 404's for https://review.openstack.org/accounts/self/avatar?s=26 in firebug
+2015-05-10T21:53:34  <clarkb> thats normal, we dont have avatars
+2015-05-10T21:54:00  <clarkb> (was an issue on 2.8 as well)
+2015-05-10T21:54:24  <clarkb> stevebaker I pushed a fix but it needs review
+2015-05-10T21:54:38  <clarkb> (update virtualenv to latest version)
+2015-05-10T21:54:41  *** achanda has joined #openstack-infra
+2015-05-10T21:54:51  <stevebaker> clarkb: ok
+2015-05-10T21:58:04  *** sdake_ has quit IRC
+2015-05-10T21:59:00  *** sdake_ has joined #openstack-infra
+2015-05-10T21:59:09  <lifeless> ahhhh
+2015-05-10T21:59:11  <lifeless> figured it out
+2015-05-10T21:59:18  <lifeless> the embedded copy installs the .so
+2015-05-10T21:59:20  <lifeless> not the .h
+2015-05-10T21:59:24  <lifeless> so if you pip install it
+2015-05-10T21:59:27  <lifeless> then pip uninstal it
+2015-05-10T21:59:35  <lifeless> then pip install it, it will fall over in a heap
+2015-05-10T22:02:03  <lifeless> erm, does install the .h
+2015-05-10T22:02:09  <lifeless> doesn't serch for it effectively
+2015-05-10T22:03:30  <foobio> clarkb: i'm cool with the virtualenv update patch, just didn't want to approve it right before gerrit upgrade madness, nor over the weekend when nobody's around to revert should it cause yet more and new exciting problems
+2015-05-10T22:03:51  <lifeless> weekend? What weekend.
+2015-05-10T22:03:53  <lifeless> Tis MONDAY
+2015-05-10T22:04:38  <foobio> lies
+2015-05-10T22:07:49  *** baoli has joined #openstack-infra
+2015-05-10T22:08:56  *** salv-orlando has joined #openstack-infra
+2015-05-10T22:12:33  *** baoli has quit IRC
+2015-05-10T22:15:16  *** amitgandhinz has quit IRC
+2015-05-10T22:18:20  *** banix has quit IRC
+2015-05-10T22:22:03  <openstackgerrit> Steven Dake proposed openstack-infra/project-config: Add python-cloudpulseclient project for CloudPulse  https://review.openstack.org/181761
+2015-05-10T22:22:57  *** ivar-lazzaro has joined #openstack-infra
+2015-05-10T22:26:50  *** otter768 has joined #openstack-infra
+2015-05-10T22:29:31  *** woodster_ has joined #openstack-infra
+2015-05-10T22:32:00  *** otter768 has quit IRC
+2015-05-10T22:32:22  *** sdake_ has quit IRC
+2015-05-10T22:36:07  *** sdake has joined #openstack-infra
+2015-05-10T22:37:02  *** mriedem1 has joined #openstack-infra
+2015-05-10T22:39:00  *** tnovacik has quit IRC
+2015-05-10T22:40:15  *** mriedem has quit IRC
+2015-05-10T22:42:24  *** markvoelker has joined #openstack-infra
+2015-05-10T22:45:35  *** achanda has quit IRC
+2015-05-10T22:46:51  *** mpopow has quit IRC
+2015-05-10T22:49:43  *** Shrews has quit IRC
+2015-05-10T22:49:47  *** ivar-laz_ has joined #openstack-infra
+2015-05-10T22:52:43  *** ivar-lazzaro has quit IRC
+2015-05-10T22:56:24  *** ddieterly has joined #openstack-infra
+2015-05-10T22:57:42  *** Alexandra_ has joined #openstack-infra
+2015-05-10T22:58:29  *** bhunter71 has quit IRC
+2015-05-10T23:00:51  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard: Single event email worker.  https://review.openstack.org/179542
+2015-05-10T23:00:52  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard: Added email preferences.  https://review.openstack.org/179507
+2015-05-10T23:00:53  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard: Added worker resource resolution helper.  https://review.openstack.org/179508
+2015-05-10T23:00:54  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard: Updated oslo.config to 1.11.0  https://review.openstack.org/179509
+2015-05-10T23:00:55  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard: Email Send Cron Worker  https://review.openstack.org/151416
+2015-05-10T23:00:56  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard: Redirect Browsers from API to Client  https://review.openstack.org/155551
+2015-05-10T23:00:57  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard: Factory subject is now a template file.  https://review.openstack.org/181763
+2015-05-10T23:00:58  *** ddieterly has quit IRC
+2015-05-10T23:01:51  <jhesketh> Morning
+2015-05-10T23:02:54  *** jamielennox|away is now known as jamielennox
+2015-05-10T23:05:23  *** hdd has joined #openstack-infra
+2015-05-10T23:05:24  *** camunoz has joined #openstack-infra
+2015-05-10T23:07:35  <lifeless> jhesketh: morning
+2015-05-10T23:10:23  *** viglesias has quit IRC
+2015-05-10T23:11:44  *** viglesias has joined #openstack-infra
+2015-05-10T23:11:59  *** yamamoto has joined #openstack-infra
+2015-05-10T23:15:13  *** yamamoto has quit IRC
+2015-05-10T23:15:19  *** yamamoto has joined #openstack-infra
+2015-05-10T23:24:24  *** sdake_ has joined #openstack-infra
+2015-05-10T23:26:31  *** hichihara has joined #openstack-infra
+2015-05-10T23:28:18  *** sdake has quit IRC
+2015-05-10T23:30:56  *** dimsum__ has quit IRC
+2015-05-10T23:36:40  *** sdake_ is now known as sdake
+2015-05-10T23:36:41  *** yamamoto has quit IRC
+2015-05-10T23:38:36  *** zul has joined #openstack-infra
+2015-05-10T23:38:54  *** baoli has joined #openstack-infra
+2015-05-10T23:40:16  *** Alexandra_ has quit IRC
+2015-05-10T23:40:43  *** chlong has joined #openstack-infra
+2015-05-10T23:40:45  *** ivar-lazzaro has joined #openstack-infra
+2015-05-10T23:41:25  *** ivar-lazzaro has quit IRC
+2015-05-10T23:42:01  *** ivar-lazzaro has joined #openstack-infra
+2015-05-10T23:43:52  *** baoli has quit IRC
+2015-05-10T23:44:22  *** ivar-laz_ has quit IRC
+2015-05-10T23:46:05  *** achanda has joined #openstack-infra
+2015-05-10T23:46:24  *** Alexandra_ has joined #openstack-infra
+2015-05-10T23:47:42  *** mpopow has joined #openstack-infra
+2015-05-10T23:50:30  *** banix has joined #openstack-infra
+2015-05-10T23:50:46  *** fedexo has joined #openstack-infra
+2015-05-10T23:51:57  *** achanda has quit IRC
+2015-05-10T23:53:23  *** mpopow has quit IRC
+2015-05-10T23:54:14  *** camunoz has quit IRC
+2015-05-10T23:56:08  *** ivar-laz_ has joined #openstack-infra
+2015-05-10T23:56:08  *** ivar-lazzaro has quit IRC
+2015-05-10T23:56:18  *** ivar-laz_ has quit IRC
+2015-05-10T23:56:54  *** ivar-lazzaro has joined #openstack-infra
+2015-05-10T23:57:18  *** ddieterly has joined #openstack-infra
+2015-05-10T23:57:32  *** ivar-lazzaro has quit IRC
+2015-05-10T23:57:56  *** mahito has joined #openstack-infra
+2015-05-10T23:58:05  *** mahito has quit IRC
+2015-05-10T23:58:16  *** sdake has quit IRC
+2015-05-10T23:58:18  *** ivar-lazzaro has joined #openstack-infra
+2015-05-10T23:58:39  *** mahito has joined #openstack-infra
+2015-05-10T23:58:41  *** sdake has joined #openstack-infra

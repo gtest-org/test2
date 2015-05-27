@@ -1,0 +1,1956 @@
+2013-09-30T00:03:56  *** guohliu has quit IRC
+2013-09-30T00:05:56  *** matsuhashi has joined #openstack-infra
+2013-09-30T00:15:00  <dhellmann> sdague, mordred : I'm going to just start incrementing X every release ;-)
+2013-09-30T00:33:53  <mordred> dhellmann: ++
+2013-09-30T00:34:48  *** crank has quit IRC
+2013-09-30T00:42:19  *** yaguang has joined #openstack-infra
+2013-09-30T01:01:22  *** alexpilotti has quit IRC
+2013-09-30T01:05:59  *** nosnos has joined #openstack-infra
+2013-09-30T01:07:58  *** xchu has joined #openstack-infra
+2013-09-30T01:13:58  *** darraghb has joined #openstack-infra
+2013-09-30T01:27:00  *** ericw has joined #openstack-infra
+2013-09-30T01:27:20  *** alexpilotti has joined #openstack-infra
+2013-09-30T01:31:58  *** yaguang has quit IRC
+2013-09-30T01:32:13  *** ericw has quit IRC
+2013-09-30T01:33:25  *** ekarlso has quit IRC
+2013-09-30T01:59:17  *** ericw has joined #openstack-infra
+2013-09-30T02:00:17  *** jpeeler has joined #openstack-infra
+2013-09-30T02:00:17  *** jpeeler has quit IRC
+2013-09-30T02:00:17  *** jpeeler has joined #openstack-infra
+2013-09-30T02:03:56  *** ericw has quit IRC
+2013-09-30T02:13:14  *** darraghb1 has joined #openstack-infra
+2013-09-30T02:15:39  *** darraghb has quit IRC
+2013-09-30T02:16:38  *** matsuhashi has quit IRC
+2013-09-30T02:20:13  *** mrda has joined #openstack-infra
+2013-09-30T02:21:39  *** matsuhashi has joined #openstack-infra
+2013-09-30T02:23:01  *** darraghb has joined #openstack-infra
+2013-09-30T02:25:26  *** darraghb1 has quit IRC
+2013-09-30T02:29:30  *** cyeoh_ is now known as cyeoh
+2013-09-30T02:29:55  *** ericw has joined #openstack-infra
+2013-09-30T02:29:56  *** matsuhashi has quit IRC
+2013-09-30T02:30:09  *** matsuhashi has joined #openstack-infra
+2013-09-30T02:34:11  *** ericw has quit IRC
+2013-09-30T02:53:34  *** xchu has quit IRC
+2013-09-30T02:54:37  <openstackgerrit> Monty Taylor proposed a change to openstack-dev/pbr: Use wheels for installation  https://review.openstack.org/48803
+2013-09-30T02:57:08  *** ericw has joined #openstack-infra
+2013-09-30T03:16:47  <openstackgerrit> Monty Taylor proposed a change to openstack-dev/pbr: Use wheels for installation  https://review.openstack.org/48803
+2013-09-30T03:24:54  *** guohliu has joined #openstack-infra
+2013-09-30T03:30:44  *** crank has joined #openstack-infra
+2013-09-30T03:34:18  *** changbl has quit IRC
+2013-09-30T03:35:39  *** crank has quit IRC
+2013-09-30T03:36:25  *** dcramer_ has joined #openstack-infra
+2013-09-30T03:41:26  <openstackgerrit> Matthew Treinish proposed a change to openstack-infra/reviewstats: Fix typo in mkoderer username  https://review.openstack.org/48882
+2013-09-30T03:44:14  *** darraghb has left #openstack-infra
+2013-09-30T03:47:00  *** changbl has joined #openstack-infra
+2013-09-30T03:53:06  <lifeless> mordred: ugh, the pbr tests decode the setup output? grumble.
+2013-09-30T03:53:19  <lifeless> (subprocess itself doesn't..)
+2013-09-30T03:54:05  <openstackgerrit> lifeless proposed a change to openstack-dev/pbr: Add a test for command registration.  https://review.openstack.org/48833
+2013-09-30T03:54:26  *** changbl has quit IRC
+2013-09-30T03:55:23  *** thingee_zzz is now known as thingee
+2013-09-30T03:57:43  <mordred> lifeless: aroo?
+2013-09-30T03:57:53  <lifeless> mordred: I checked for b" testr " in the output.
+2013-09-30T03:58:03  <lifeless> mordred: subprocess normally gets you bytes out
+2013-09-30T03:58:26  <lifeless> mordred: the failure on py33 was apparently a bytes-text mismatch, or so someone else suggested
+2013-09-30T03:58:32  <mordred> yup. sounds about right
+2013-09-30T03:58:40  *** dims has quit IRC
+2013-09-30T03:58:45  <lifeless> which means something is magically decoding the subprocess output
+2013-09-30T03:58:54  <lifeless> so just a surprise
+2013-09-30T03:58:58  <mordred> yes. the run_command function
+2013-09-30T03:59:16  <mordred> I believe we added that in one of the attempts to deal with 2.6-3.3
+2013-09-30T03:59:20  <mordred> I'm open to other suggestios
+2013-09-30T03:59:29  <mordred> the whole thing is a nightmare
+2013-09-30T03:59:40  <mordred> and I hate it
+2013-09-30T03:59:57  <lifeless> k
+2013-09-30T03:59:59  <lifeless> will poke later
+2013-09-30T04:00:04  <mordred> everytime I have to touch it, it makes me want to cry
+2013-09-30T04:00:30  <mordred> well, let the current stack of things merge first -there is a patch that mucks with the mechanics on run_shell_command that needs to go in to fix ... somebody
+2013-09-30T04:00:33  <mordred> I think osx
+2013-09-30T04:00:38  <mordred> or somethingt
+2013-09-30T04:00:42  <mordred> maybe windows
+2013-09-30T04:01:02  <mordred> then going back through and re-sensible-izing it sounds GREAT
+2013-09-30T04:01:13  <mordred> and would be SUPER SUPER welcome
+2013-09-30T04:07:19  *** changbl has joined #openstack-infra
+2013-09-30T04:14:53  *** thingee is now known as thingee_zzz
+2013-09-30T04:17:15  <mordred> dstufft: it looks like pip might normalize _ to - when processing requirements names?
+2013-09-30T04:17:38  <mordred> is that correct? or is something on my end doing something unexpected?
+2013-09-30T04:22:23  *** AlexF has joined #openstack-infra
+2013-09-30T04:26:16  *** dkliban has quit IRC
+2013-09-30T04:29:17  *** dkliban has joined #openstack-infra
+2013-09-30T04:31:00  *** crank has joined #openstack-infra
+2013-09-30T04:34:38  <mordred> ooh!
+2013-09-30T04:34:56  <mordred> dstufft, lifeless: I just tried devpi again and it was able to make it through installing all of openstack requirements this time
+2013-09-30T04:35:39  *** crank has quit IRC
+2013-09-30T04:38:24  <dstufft> mordred: all of python packging does that
+2013-09-30T04:38:26  *** vipul-away is now known as vipul
+2013-09-30T04:38:41  <dstufft> mordred: it's a bit more than that, i'm trying to simplify it a bit
+2013-09-30T04:39:54  <mordred> dstufft: ok. my testing of a local mirror which is static files at file:/// seems to be confuseled by it
+2013-09-30T04:40:04  * mordred just wants to cry
+2013-09-30T04:40:13  *** dkehn_ has joined #openstack-infra
+2013-09-30T04:40:42  *** salv-orlando_ has joined #openstack-infra
+2013-09-30T04:42:05  *** michchap_ has joined #openstack-infra
+2013-09-30T04:42:23  <dstufft> mordred: a directory full of file:// ?
+2013-09-30T04:42:46  <dstufft> mordred: what does your file structure look like
+2013-09-30T04:43:03  *** zigo_ has joined #openstack-infra
+2013-09-30T04:43:05  *** bnemec has joined #openstack-infra
+2013-09-30T04:43:28  *** rahmu_ has joined #openstack-infra
+2013-09-30T04:43:35  *** SergeyLukjanov has joined #openstack-infra
+2013-09-30T04:43:39  <mordred> sorry, that wasn't clear
+2013-09-30T04:43:56  <mordred> dstufft: are stuff makes stuff that looks like this:
+2013-09-30T04:43:57  <mordred> http://pypi.openstack.org/openstack/
+2013-09-30T04:43:59  <mordred> s/are/our/
+2013-09-30T04:44:05  *** ArxCruz_ has joined #openstack-infra
+2013-09-30T04:44:05  *** sdake__ has joined #openstack-infra
+2013-09-30T04:44:13  *** jpipes has joined #openstack-infra
+2013-09-30T04:44:21  <mordred> hrm
+2013-09-30T04:44:22  *** pabelanger_ has joined #openstack-infra
+2013-09-30T04:44:38  <mordred> so, on my test run thing, django_compressor is appropriately in django_compressor
+2013-09-30T04:44:41  <mordred> gah
+2013-09-30T04:44:50  <mordred> so, on my test run thing, django_compressor is inappropriately in django-compressor
+2013-09-30T04:44:54  *** belliott_ has joined #openstack-infra
+2013-09-30T04:44:55  <mordred> but on pypi.o.o it's correct
+2013-09-30T04:45:26  *** Reapster_ has joined #openstack-infra
+2013-09-30T04:45:26  <dstufft> mordred: so your local filesysem has BASEDIR/django_compressor/index.html ?
+2013-09-30T04:45:46  <mordred> no. I think that's the issue.
+2013-09-30T04:45:54  <dstufft> what does your local filesystem have
+2013-09-30T04:46:09  <mordred> the exact same as that web server, dirs full of tarballs
+2013-09-30T04:46:17  <mordred> except the webserver is doing autoindex
+2013-09-30T04:46:27  <mordred> and on the filesystem, it needs an exact match first time,
+2013-09-30T04:46:30  <dstufft> oh oops, I didn't click on that
+2013-09-30T04:46:32  <dstufft> er
+2013-09-30T04:46:33  <dstufft> a file
+2013-09-30T04:46:35  <dstufft> I mean
+2013-09-30T04:46:36  <mordred> because there is nothing to fall back to crawling
+2013-09-30T04:46:40  <dstufft> I just looked at the top level
+2013-09-30T04:46:49  <dstufft> pip has some logic to fake an index.html I think
+2013-09-30T04:46:55  <mordred> not on file:/// urls
+2013-09-30T04:47:01  <mordred> it actually explcitly does not use it on those
+2013-09-30T04:47:13  <mordred> for reasons unbeknownst to me
+2013-09-30T04:47:19  <dstufft> mordred: are you using --index-url or --file-links
+2013-09-30T04:47:25  <mordred> --index-url
+2013-09-30T04:47:26  <dstufft> er find-links
+2013-09-30T04:47:28  *** tvb has quit IRC
+2013-09-30T04:47:41  <dstufft> mordred: moment
+2013-09-30T04:48:09  <mordred> k. thanks (this is probably an error somewhere in our stuff, but knowing what the 'right' thing is will certainly be helpful)
+2013-09-30T04:48:18  <dstufft> mordred: I think you need to add an index.html
+2013-09-30T04:48:23  <dstufft> https://github.com/pypa/pip/blob/develop/pip/index.py#L638
+2013-09-30T04:48:27  <mordred> for the file:// ?
+2013-09-30T04:48:46  <dstufft> sec
+2013-09-30T04:48:51  <dstufft> making sure
+2013-09-30T04:49:06  <mordred> easier thing in this case would actually probably be just starting an apache and pointing it at a dir
+2013-09-30T04:49:36  *** ArxCruz has quit IRC
+2013-09-30T04:49:36  *** salv-orlando has quit IRC
+2013-09-30T04:49:36  *** jaypipes has quit IRC
+2013-09-30T04:49:36  *** michchap has quit IRC
+2013-09-30T04:49:36  *** pabelanger has quit IRC
+2013-09-30T04:49:36  *** bnemec_ has quit IRC
+2013-09-30T04:49:36  *** afazekas has quit IRC
+2013-09-30T04:49:36  *** dkehn has quit IRC
+2013-09-30T04:49:36  *** zigo has quit IRC
+2013-09-30T04:49:36  *** sdake_ has quit IRC
+2013-09-30T04:49:37  *** rahmu has quit IRC
+2013-09-30T04:49:37  *** belliott has quit IRC
+2013-09-30T04:49:37  *** Reapster has quit IRC
+2013-09-30T04:49:37  *** salv-orlando_ is now known as salv-orlando
+2013-09-30T04:49:37  *** belliott_ is now known as belliott
+2013-09-30T04:49:38  *** rahmu_ is now known as rahmu
+2013-09-30T04:50:43  <dstufft> mordred: can you do an install with -vvv
+2013-09-30T04:50:56  <mordred> it'll take a bit - but yeah
+2013-09-30T04:51:46  <mordred> oh!
+2013-09-30T04:51:53  <mordred> hrm
+2013-09-30T04:52:35  <dstufft> I think for --index-url it literally looks for an index.html file to be inside the directory
+2013-09-30T04:59:43  *** salv-orlando has quit IRC
+2013-09-30T05:10:54  <openstackgerrit> Monty Taylor proposed a change to openstack-dev/pbr: Use wheels for installation  https://review.openstack.org/48803
+2013-09-30T05:11:02  <mordred> dstufft: that'll add the -v -v
+2013-09-30T05:11:18  <mordred> dstufft: actually, it looks like we are doing the index.html for the local dirs
+2013-09-30T05:11:31  <mordred> dstufft: so I'm curious to see what the discovery sequence looks like
+2013-09-30T05:12:51  *** basha has joined #openstack-infra
+2013-09-30T05:16:28  *** jcoufal has joined #openstack-infra
+2013-09-30T05:29:39  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T05:31:17  *** crank has joined #openstack-infra
+2013-09-30T05:32:53  <openstackgerrit> Monty Taylor proposed a change to openstack-infra/pypi-mirror: Ensure that wheel is installed  https://review.openstack.org/48888
+2013-09-30T05:34:18  *** Ryan_Lane has quit IRC
+2013-09-30T05:36:38  *** moted has quit IRC
+2013-09-30T05:41:13  *** tvb has joined #openstack-infra
+2013-09-30T05:55:36  <notmyname> mordred: https://answers.launchpad.net/swift/+question/236471 <-- issues with the swift ppa being gone. seems that it was getting some amount of use
+2013-09-30T05:57:43  *** matsuhas_ has joined #openstack-infra
+2013-09-30T05:58:23  *** AlexF has quit IRC
+2013-09-30T05:58:35  *** matsuhashi has quit IRC
+2013-09-30T05:58:41  *** nosnos_ has joined #openstack-infra
+2013-09-30T05:59:18  *** nosnos has quit IRC
+2013-09-30T05:59:48  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T06:06:19  *** Ryan_Lane has quit IRC
+2013-09-30T06:07:28  *** AlexF has joined #openstack-infra
+2013-09-30T06:09:42  *** crank has quit IRC
+2013-09-30T06:11:21  <mordred> notmyname: oh excellent
+2013-09-30T06:11:23  <mordred> ttx: ^^
+2013-09-30T06:12:21  *** nicedice has quit IRC
+2013-09-30T06:12:27  <notmyname> mordred: ya. the hard thing is that if it were used people were getting bad (ie old, unsupported) code
+2013-09-30T06:12:41  <notmyname> mordred: perhaps we have an old doc somewhere that is still pointing to it
+2013-09-30T06:12:57  <notmyname> mordred: do you know if any stats are tracked about how much LP resources like that are used?
+2013-09-30T06:13:03  <mordred> notmyname: I'm guessing that's probably the case
+2013-09-30T06:13:10  *** AlexF has quit IRC
+2013-09-30T06:13:27  <mordred> and no, I don't believe there was any stat for that (I know ttx was trying to look in to whether it was in use or not and couldn't get a good answer)
+2013-09-30T06:13:35  <notmyname> mordred: yup. http://docs.openstack.org/developer/swift/howto_installmultinode.html <-- search for ppa
+2013-09-30T06:13:59  <notmyname> which is an old doc that needs updating anyway
+2013-09-30T06:14:03  *** SergeyLukjanov has quit IRC
+2013-09-30T06:14:18  <mordred> wow
+2013-09-30T06:14:19  <mordred> https://wiki.openstack.org/wiki/Project_Resources
+2013-09-30T06:14:32  <mordred> also is up to date enough to have zuul
+2013-09-30T06:14:37  <mordred> but still references the ppas
+2013-09-30T06:14:52  <notmyname> mordred: so maybe if we're lucky it's just a new user trying to do stuff for the first time. if we're not lucky, it's a prod setup trying to update
+2013-09-30T06:14:58  <mordred> yah
+2013-09-30T06:15:11  <mordred> well, if they are a prod user looking for ubuntu packages, we should be able to point them to cloud-archive
+2013-09-30T06:15:28  <mordred> I'm answering about the ppas being deprecated for a while and recently removed
+2013-09-30T06:15:37  <mordred> I'll mention cloudarchive - unless you want to respond instead?
+2013-09-30T06:16:07  <notmyname> nope. go for it
+2013-09-30T06:16:19  <notmyname>  /punt
+2013-09-30T06:16:49  *** afazekas has joined #openstack-infra
+2013-09-30T06:17:38  *** davidhadas_ has quit IRC
+2013-09-30T06:21:07  *** pblaho has joined #openstack-infra
+2013-09-30T06:21:47  *** ekarlso has joined #openstack-infra
+2013-09-30T06:23:49  *** basha has quit IRC
+2013-09-30T06:24:42  *** mrda has quit IRC
+2013-09-30T06:26:10  *** ekarlso has quit IRC
+2013-09-30T06:26:10  *** ekarlso has joined #openstack-infra
+2013-09-30T06:28:33  <notmyname> mordred: still up?
+2013-09-30T06:30:49  <notmyname> mordred: since I'll be traveling tomorrow, I'll send an email.
+2013-09-30T06:33:49  *** basha has joined #openstack-infra
+2013-09-30T06:34:19  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T06:38:17  *** Ryan_Lane has quit IRC
+2013-09-30T06:45:14  *** odyssey4me has joined #openstack-infra
+2013-09-30T06:54:34  *** michchap_ has quit IRC
+2013-09-30T06:54:55  *** michchap has joined #openstack-infra
+2013-09-30T06:56:57  *** yaguang has joined #openstack-infra
+2013-09-30T06:57:52  *** matsuhas_ has quit IRC
+2013-09-30T06:58:46  *** dkliban has quit IRC
+2013-09-30T07:00:41  <ttx> notmyname, mordred: wow. I was expecting something like this
+2013-09-30T07:02:27  *** nosnos has joined #openstack-infra
+2013-09-30T07:02:32  *** nosnos_ has quit IRC
+2013-09-30T07:02:39  <ttx> but there was no way of marking PPAs "deprecated" in a way those users would have noticed, anyway
+2013-09-30T07:04:30  <openstackgerrit> Dirk Mueller proposed a change to openstack/requirements: Raise/Relax WebTest requirement to match Keystone  https://review.openstack.org/48898
+2013-09-30T07:04:49  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T07:04:50  *** crank has joined #openstack-infra
+2013-09-30T07:05:39  *** matsuhashi has joined #openstack-infra
+2013-09-30T07:06:54  *** davidhadas has joined #openstack-infra
+2013-09-30T07:07:24  *** michchap has quit IRC
+2013-09-30T07:08:00  *** markmc has joined #openstack-infra
+2013-09-30T07:09:03  *** basha has quit IRC
+2013-09-30T07:09:11  *** Ryan_Lane has quit IRC
+2013-09-30T07:09:28  *** michchap has joined #openstack-infra
+2013-09-30T07:12:40  <mordred> ttx: I think we should do some searching in the wiki for PPA
+2013-09-30T07:13:06  *** flaper87|afk is now known as flaper87
+2013-09-30T07:13:41  *** slong has quit IRC
+2013-09-30T07:14:12  <mordred> ttx, notmyname: (http://docs.openstack.org/developer/swift/howto_installmultinode.html)
+2013-09-30T07:14:18  <mordred> is what messed those guys up
+2013-09-30T07:14:33  *** tkammer has joined #openstack-infra
+2013-09-30T07:15:45  <ttx> mordred: I'll do some wiki searching
+2013-09-30T07:33:37  *** davidhadas_ has joined #openstack-infra
+2013-09-30T07:33:46  *** davidhadas has quit IRC
+2013-09-30T07:35:28  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T07:37:03  <saschpe> zul: ping, you still owe me a package on the gate :-)
+2013-09-30T07:39:39  *** Ryan_Lane has quit IRC
+2013-09-30T07:40:24  *** matsuhashi has quit IRC
+2013-09-30T07:42:05  *** matsuhashi has joined #openstack-infra
+2013-09-30T07:42:30  *** matsuhashi has quit IRC
+2013-09-30T07:42:36  *** AJaeger has joined #openstack-infra
+2013-09-30T07:44:38  *** SergeyLukjanov has joined #openstack-infra
+2013-09-30T07:44:40  *** matsuhashi has joined #openstack-infra
+2013-09-30T07:45:05  *** matsuhashi has quit IRC
+2013-09-30T07:47:19  *** kpavel has joined #openstack-infra
+2013-09-30T07:48:30  *** matsuhashi has joined #openstack-infra
+2013-09-30T07:48:55  *** matsuhashi has quit IRC
+2013-09-30T07:50:10  *** davidhadas_ has quit IRC
+2013-09-30T07:51:45  *** boris-42 has joined #openstack-infra
+2013-09-30T07:59:26  *** yassine has joined #openstack-infra
+2013-09-30T08:05:37  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T08:05:41  *** derekh has joined #openstack-infra
+2013-09-30T08:05:57  *** hashar has joined #openstack-infra
+2013-09-30T08:09:13  *** hashar_ has joined #openstack-infra
+2013-09-30T08:10:30  *** hashar has quit IRC
+2013-09-30T08:10:30  *** hashar_ is now known as hashar
+2013-09-30T08:12:00  *** flaper87 is now known as flaper87|afk
+2013-09-30T08:13:07  *** matsuhashi has joined #openstack-infra
+2013-09-30T08:14:02  *** mkerrin has joined #openstack-infra
+2013-09-30T08:14:19  *** Ryan_Lane has quit IRC
+2013-09-30T08:14:25  *** dizquierdo has joined #openstack-infra
+2013-09-30T08:23:16  *** flaper87|afk is now known as flaper87
+2013-09-30T08:25:41  *** fbo_away is now known as fbo
+2013-09-30T08:28:39  *** dizquierdo has quit IRC
+2013-09-30T08:38:28  *** basha has joined #openstack-infra
+2013-09-30T08:39:59  *** boris-42 has quit IRC
+2013-09-30T08:40:51  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T08:44:48  *** Ryan_Lane has quit IRC
+2013-09-30T08:59:43  *** jcoufal has quit IRC
+2013-09-30T09:02:22  *** dizquierdo has joined #openstack-infra
+2013-09-30T09:13:52  *** johnthetubaguy has joined #openstack-infra
+2013-09-30T09:26:15  *** tkammer has quit IRC
+2013-09-30T09:41:17  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T09:41:20  <kong> anyone can see this problem, AttributeError: 'module' object has no attribute 'find_resourceid_by_name_or_id'. Jenkins in stable/grizzly is failed because of it. Please see https://review.openstack.org/#/c/48557/
+2013-09-30T09:41:23  *** Ryan_Lane has quit IRC
+2013-09-30T09:41:37  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T09:41:48  *** thomasbiege has joined #openstack-infra
+2013-09-30T09:42:28  *** yaguang has quit IRC
+2013-09-30T09:42:34  *** boris-42 has joined #openstack-infra
+2013-09-30T09:44:16  *** yaguang has joined #openstack-infra
+2013-09-30T09:46:19  *** Ryan_Lane has quit IRC
+2013-09-30T09:50:16  *** thomasbiege has quit IRC
+2013-09-30T09:50:42  *** guohliu has quit IRC
+2013-09-30T09:54:31  <ttx> notmyname, mordred: more fun at https://bugs.launchpad.net/ubuntu/+source/swift/+bug/1233042
+2013-09-30T09:54:33  <uvirtbot> Launchpad bug 1233042 in swift "swift-core repository failed to fetch" [Undecided,Invalid]
+2013-09-30T10:07:10  *** boris-42_ has joined #openstack-infra
+2013-09-30T10:07:11  *** boris-42 has quit IRC
+2013-09-30T10:11:45  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T10:11:51  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T10:16:18  *** Ryan_Lane has quit IRC
+2013-09-30T10:19:13  <openstackgerrit> Jaroslav Henner proposed a change to openstack-infra/jenkins-job-builder: Add dynamic string and choice params.  https://review.openstack.org/48506
+2013-09-30T10:30:21  *** pcm_ has joined #openstack-infra
+2013-09-30T10:32:26  *** pcm_ has quit IRC
+2013-09-30T10:33:03  *** pcm_ has joined #openstack-infra
+2013-09-30T10:34:39  *** michchap has quit IRC
+2013-09-30T10:34:45  *** yaguang has quit IRC
+2013-09-30T10:34:59  *** michchap has joined #openstack-infra
+2013-09-30T10:42:22  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T10:44:30  *** amotoki has joined #openstack-infra
+2013-09-30T10:46:48  *** Ryan_Lane has quit IRC
+2013-09-30T10:47:41  *** HenryG has joined #openstack-infra
+2013-09-30T10:59:30  *** alexpilotti has quit IRC
+2013-09-30T11:08:57  *** ArxCruz_ has quit IRC
+2013-09-30T11:12:37  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T11:16:48  *** Ryan_Lane has quit IRC
+2013-09-30T11:22:30  *** thomasbiege has joined #openstack-infra
+2013-09-30T11:22:44  *** thomasbiege has quit IRC
+2013-09-30T11:25:27  *** tvb has quit IRC
+2013-09-30T11:26:04  *** tvb has joined #openstack-infra
+2013-09-30T11:26:39  <soren> I seem to remember that you guys found a way to cache the virtualenvs used during tox runs. Is that still functional?
+2013-09-30T11:36:54  <sdague> soren: I thought it was just a feature of new tox, but mordred would know for sure once he's up
+2013-09-30T11:39:48  *** lcestari_ has joined #openstack-infra
+2013-09-30T11:41:08  *** kong has quit IRC
+2013-09-30T11:42:39  <soren> sdague: Just saw this from 2011: https://lists.launchpad.net/openstack/msg06405.html Mentions pre-caching virtualenvs
+2013-09-30T11:43:10  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T11:43:32  <sdague> soren: you have PIP_CACHE enabled?
+2013-09-30T11:43:50  <soren> sdague: I have a pip cache.
+2013-09-30T11:44:22  <soren> sdague: The problem with pip caches is that pip still has to interrogate pypi to learn what the newest version is.
+2013-09-30T11:44:30  <sdague> right, fair
+2013-09-30T11:44:58  <soren> Well, interrogate pypi and install the packages again, but it seems like talking to pypi is the lengthy bit.
+2013-09-30T11:46:07  *** rfolco has joined #openstack-infra
+2013-09-30T11:46:14  <soren> I'd just like to cache the virtualenvs and do e.g. daily expiration + expiration every time pip-requirements changes or something like that.
+2013-09-30T11:47:07  *** Ryan_Lane has quit IRC
+2013-09-30T11:48:09  *** dims has joined #openstack-infra
+2013-09-30T11:56:16  *** jcoufal has joined #openstack-infra
+2013-09-30T11:56:50  *** dkranz has joined #openstack-infra
+2013-09-30T11:56:59  *** cody-somerville has quit IRC
+2013-09-30T12:02:05  *** AlexF has joined #openstack-infra
+2013-09-30T12:08:22  *** boris-42_ has quit IRC
+2013-09-30T12:08:36  *** sandywalsh has joined #openstack-infra
+2013-09-30T12:11:08  *** ArxCruz has joined #openstack-infra
+2013-09-30T12:12:07  *** dims has quit IRC
+2013-09-30T12:12:31  *** dims has joined #openstack-infra
+2013-09-30T12:13:18  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T12:15:00  *** hemnafk has quit IRC
+2013-09-30T12:16:17  *** hemnafk has joined #openstack-infra
+2013-09-30T12:17:28  *** Ryan_Lane has quit IRC
+2013-09-30T12:24:27  *** pabelanger_ has quit IRC
+2013-09-30T12:24:47  *** adalbas has joined #openstack-infra
+2013-09-30T12:24:51  *** pabelanger has joined #openstack-infra
+2013-09-30T12:26:19  *** hashar has quit IRC
+2013-09-30T12:26:34  *** thomasm has joined #openstack-infra
+2013-09-30T12:26:39  *** Clabbe has joined #openstack-infra
+2013-09-30T12:27:17  *** sdake has quit IRC
+2013-09-30T12:27:28  <Clabbe> What happens in openstack-ci if a git change cant be automatically merged?
+2013-09-30T12:27:45  *** sdake has joined #openstack-infra
+2013-09-30T12:27:51  *** basha has quit IRC
+2013-09-30T12:31:23  *** adalbas has quit IRC
+2013-09-30T12:32:20  *** hashar has joined #openstack-infra
+2013-09-30T12:35:48  *** schwicht has joined #openstack-infra
+2013-09-30T12:37:39  *** weshay has joined #openstack-infra
+2013-09-30T12:39:00  *** hashar has quit IRC
+2013-09-30T12:39:54  *** hashar has joined #openstack-infra
+2013-09-30T12:43:29  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T12:43:49  *** adalbas has joined #openstack-infra
+2013-09-30T12:43:54  *** acabrera has joined #openstack-infra
+2013-09-30T12:47:51  *** Ryan_Lane has quit IRC
+2013-09-30T12:55:28  <foobio> Clabbe: it doesn't get merged, the corresponding gerrit review gets a comment stating as much, and someone needs to rebase/fix it before it gets reviewed and approved again
+2013-09-30T12:56:12  <foobio> (usually with another patchset to the same change in gerrit)
+2013-09-30T12:58:27  *** amotoki has quit IRC
+2013-09-30T12:58:30  <mordred> soren: so ...
+2013-09-30T12:58:50  <mordred> soren: tox should re-use its virtualenv in the same workspace
+2013-09-30T12:59:08  <mordred> but if you're talking about reusing a virtualenv between various jenkins workspaces or something
+2013-09-30T12:59:18  <mordred> no, virtualenv itself gets screwy
+2013-09-30T12:59:25  *** dprince has joined #openstack-infra
+2013-09-30T12:59:38  <mordred> we did a BUNCH of hacks to get that to work and eventually just ditched it and went for running our pypi mirror
+2013-09-30T12:59:59  <mordred> soren: if you don't want to set up the pypi mirroring stuff we did, I recommend running devpi
+2013-09-30T13:00:07  <mordred> which I just verified works last night
+2013-09-30T13:01:47  <Clabbe> foobio: thx
+2013-09-30T13:02:27  <openstackgerrit> A change was merged to openstack-infra/config: Add #stackforge-libra to gerritbot  https://review.openstack.org/48040
+2013-09-30T13:03:00  *** pblaho has quit IRC
+2013-09-30T13:03:42  *** dkranz has quit IRC
+2013-09-30T13:04:08  *** pblaho has joined #openstack-infra
+2013-09-30T13:07:38  *** julim has joined #openstack-infra
+2013-09-30T13:08:46  *** mriedem has joined #openstack-infra
+2013-09-30T13:09:08  *** julim has joined #openstack-infra
+2013-09-30T13:10:28  *** OlivierSanchez has joined #openstack-infra
+2013-09-30T13:13:00  *** nosnos has quit IRC
+2013-09-30T13:13:28  *** dcramer_ has quit IRC
+2013-09-30T13:14:04  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T13:15:34  *** rnirmal has joined #openstack-infra
+2013-09-30T13:16:50  *** dkranz has joined #openstack-infra
+2013-09-30T13:18:08  *** Ryan_Lane has quit IRC
+2013-09-30T13:20:20  *** matty_dubs|gone is now known as matty_dubs
+2013-09-30T13:20:37  *** OlivierSanchez has quit IRC
+2013-09-30T13:22:37  *** openstackgerrit has quit IRC
+2013-09-30T13:22:51  *** openstackgerrit has joined #openstack-infra
+2013-09-30T13:23:21  *** tizzo has joined #openstack-infra
+2013-09-30T13:25:55  <mordred> ttx: another fun thing to search for is pip-requires
+2013-09-30T13:27:45  <mordred> hub_cap: this is out of date: https://wiki.openstack.org/wiki/DatabaseAsAService
+2013-09-30T13:28:42  <notmyname> mordred: about to tag a release for python-swiftclient so that we can get beyond the most painful dependency issues
+2013-09-30T13:30:06  <openstackgerrit> afazekas proposed a change to openstack-infra/devstack-gate: Using the root user for tempest run  https://review.openstack.org/42101
+2013-09-30T13:30:46  <mordred> notmyname: woot!
+2013-09-30T13:31:07  <mordred> notmyname: I believe that that means that no more openstack projects will depend on it and I can remove it from the mirror
+2013-09-30T13:31:57  <notmyname> mordred: https://etherpad.openstack.org/LtMO26sWK5 writing my tag message
+2013-09-30T13:32:14  <afazekas> mordred,lifeless : https://review.openstack.org/42101
+2013-09-30T13:33:17  *** OlivierSanchez has joined #openstack-infra
+2013-09-30T13:33:47  <soren> mordred: devpi, eh? Thanks for the pointer.
+2013-09-30T13:34:48  <soren> mordred: I suppose I could just configure Jenkins not to wipe the workspace, but the sort of bugs caused by that can be soo hard to spot.
+2013-09-30T13:36:30  <mordred> soren: I recommend wiping the workspace and using somesort of pypi mirror
+2013-09-30T13:36:49  *** adalbas has quit IRC
+2013-09-30T13:40:38  *** OlivierSanchez has quit IRC
+2013-09-30T13:40:52  *** amotoki has joined #openstack-infra
+2013-09-30T13:41:54  <notmyname> mordred: final proposal on the etherpad
+2013-09-30T13:42:40  <mordred> notmyname: yes. that looks good to me
+2013-09-30T13:42:45  <notmyname> mordred: ok, thanks
+2013-09-30T13:43:09  *** OlivierSanchez has joined #openstack-infra
+2013-09-30T13:44:09  <notmyname> mordred: tag pushed to gerrit. sending email now
+2013-09-30T13:44:39  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T13:44:43  *** dcramer_ has joined #openstack-infra
+2013-09-30T13:44:59  <mordred> sweet. I'm going to watch the mirror jobs that are kicked off by this so I can see if anyone else is left touching d2to1
+2013-09-30T13:45:30  *** jergerber has joined #openstack-infra
+2013-09-30T13:45:32  <mriedem> does anyone know if the gate is supposed to be installing devstack from master against a stable/grizzly patch or not?
+2013-09-30T13:45:33  <mriedem> https://bugs.launchpad.net/openstack-ci/+bug/1231989
+2013-09-30T13:45:34  <mordred> as of yesterday, the count was python-swiftclient, oslo.sphinx, diskimage-buidler and triple-image-elements - but I believe all 4 have now made new releases
+2013-09-30T13:45:35  <uvirtbot> Launchpad bug 1231989 in openstack-ci "quantumclient being tested against devstack master rather than devstack stable/grizzly" [Undecided,Confirmed]
+2013-09-30T13:45:48  <mriedem> sdague: ping
+2013-09-30T13:45:56  <sdague> mriedem: pong?
+2013-09-30T13:46:06  <mriedem> sdague: looking at this: https://bugs.launchpad.net/openstack-ci/+bug/1231989
+2013-09-30T13:46:17  <mriedem> it's blocking a patch to fix quantumclient in stable/grizzly
+2013-09-30T13:46:23  <mordred> mriedem: client libs currently are tested against master
+2013-09-30T13:46:36  <mordred> mriedem: we don't take stable patches to client libs
+2013-09-30T13:46:45  <mriedem> mordred: and master has neutronclient but stable/grizzly has quantumclient
+2013-09-30T13:47:01  *** tizzo has quit IRC
+2013-09-30T13:47:13  <mordred> mriedem: can you explain more about the patch you're wanting to land?
+2013-09-30T13:47:14  <mriedem> mordred: this is a cliff/pyparsing issue with quantumclient
+2013-09-30T13:47:18  <mordred> gotcha
+2013-09-30T13:47:22  <mordred> yeah, we have to ninja that
+2013-09-30T13:47:23  <mriedem> mordred: yeah, let me start at the beginning...
+2013-09-30T13:47:26  <mordred> can you point me at the patch?
+2013-09-30T13:47:38  <mriedem> mordred: this is my nova stable/grizzly patch: https://review.openstack.org/#/c/48300/
+2013-09-30T13:47:40  *** AlexF has quit IRC
+2013-09-30T13:47:40  <mordred> (quantumclient is a very special snowflake)
+2013-09-30T13:47:58  <mriedem> that fails in the check b/c of quantumclient deps for cliff
+2013-09-30T13:48:07  <mordred> yes. with you so far
+2013-09-30T13:48:11  <mriedem> which is being addressed here: https://review.openstack.org/#/c/48299/
+2013-09-30T13:48:23  <mriedem> but that's failing because of this bug: https://bugs.launchpad.net/openstack-ci/+bug/1231989
+2013-09-30T13:48:25  <uvirtbot> Launchpad bug 1231989 in openstack-ci "quantumclient being tested against devstack master rather than devstack stable/grizzly" [Undecided,Confirmed]
+2013-09-30T13:48:46  *** Ryan_Lane has quit IRC
+2013-09-30T13:49:12  <mriedem> from the check logs on my nova patch: "error: Installed distribution pyparsing 1.5.7 conflicts with requirement pyparsing>=2.0.1"
+2013-09-30T13:49:33  <mriedem> most people here are probably still having nightmares from the cliff/pyparsing issue from last week?
+2013-09-30T13:50:36  <mriedem> so in this patch, thomasm is simply removing the pyparsing requirement from quantumclient so cliff can pull it in implicitly: https://review.openstack.org/#/c/48299/1/
+2013-09-30T13:51:22  <thomasm> mriedem, Yeah. I am about to revert the 3rd patch to the second, given the setup.py stuff, and my only wanting to change the thing causing trouble for a backport.
+2013-09-30T13:51:29  <mriedem> but then jenkins fails because it's running devstack on master which is looking for the neutron bash completion file but it should be using quantumclient
+2013-09-30T13:51:30  <mriedem> http://logs.openstack.org/99/48299/2/check/gate-tempest-devstack-vm-full/252a566/console.html.gz
+2013-09-30T13:51:46  <mordred> thomasm, mriedem ok. this is the deal
+2013-09-30T13:51:52  <mordred> a) please do remove d2to1
+2013-09-30T13:52:27  <mordred> b) also please update setup.py to match the current setup.py in the projects, namely: setup_requires=['pbr'], pbr=True)
+2013-09-30T13:52:42  <mordred> c) jenkins tests for the quantumclient patch will and are expected to fail
+2013-09-30T13:53:24  <mordred> If we're happy with this patch, and someone can verify that it does what we think it does (by hand)
+2013-09-30T13:53:33  <mordred> then I will force merge it and release a new quantumclient to pypi
+2013-09-30T13:53:41  *** adalbas has joined #openstack-infra
+2013-09-30T13:54:26  <notmyname> mordred: when you are on a plane, do you use the wifi to do code reviews or do you download everything up front?
+2013-09-30T13:54:36  <mordred> notmyname: wifi
+2013-09-30T13:54:39  <mriedem> thomasm: i'm assuming you'll revert your patch to set 2 and change setup.py as mordred points out?
+2013-09-30T13:54:45  * notmyname has a 5 hour flight today :-(
+2013-09-30T13:54:48  <mordred> notmyname: although I also tend to download all the code first
+2013-09-30T13:55:08  <mordred> notmyname: I just wrote a script yesterday that you can use to make sure that you have all of the code in all of the openstack repos up to date on your laptop!
+2013-09-30T13:55:10  <mordred> :)
+2013-09-30T13:55:12  <mriedem> thomasm: once you get those changes up i can cherry pick them locally and run an install to verify it's OK
+2013-09-30T13:55:22  *** flaper87 is now known as flaper87|afk
+2013-09-30T13:55:24  <mordred> notmyname: I recommend the wifi. it makes the flight much more productive time
+2013-09-30T13:55:31  <notmyname> mordred: called "download ALL THE THINGS!!!!"
+2013-09-30T13:55:32  <mordred> especially for a cross-country
+2013-09-30T13:55:45  <mordred> hehe
+2013-09-30T13:57:28  *** OlivierSanchez is now known as ojacques
+2013-09-30T13:58:13  <openstackgerrit> Monty Taylor proposed a change to openstack-dev/pbr: Use wheels for installation  https://review.openstack.org/48803
+2013-09-30T13:59:08  <openstackgerrit> Monty Taylor proposed a change to openstack-dev/pbr: Add the semver documentation  https://review.openstack.org/48855
+2013-09-30T13:59:26  <mordred> mriedem: awesome. let me know when it's ready and I'll get it in
+2013-09-30T13:59:54  *** julim has quit IRC
+2013-09-30T14:00:11  <mordred> dhellmann: thanks for the bullet catch. the semver doc is different than upstream - most notably it ports in PEP440 semantics for how to deal with pre-release versions
+2013-09-30T14:00:37  *** basha has joined #openstack-infra
+2013-09-30T14:01:28  <mriedem> mordred: thanks
+2013-09-30T14:01:42  *** julim has joined #openstack-infra
+2013-09-30T14:01:54  *** che-arne has joined #openstack-infra
+2013-09-30T14:02:16  *** dkranz has quit IRC
+2013-09-30T14:02:27  *** dguitarbite has joined #openstack-infra
+2013-09-30T14:03:14  <openstackgerrit> A change was merged to openstack-infra/reviewstats: Fix typo in mkoderer username  https://review.openstack.org/48882
+2013-09-30T14:04:14  *** pblaho has quit IRC
+2013-09-30T14:04:39  *** ojacques has quit IRC
+2013-09-30T14:05:02  *** dkliban has joined #openstack-infra
+2013-09-30T14:05:21  <thomasm> mriedem, Yes, I will
+2013-09-30T14:05:32  <thomasm> mriedem, Doing that now
+2013-09-30T14:05:40  <mriedem> thomasm: ok, thanks, i'll see the change when it comes up
+2013-09-30T14:05:51  *** pblaho has joined #openstack-infra
+2013-09-30T14:05:59  <thomasm> mriedem, thanks! =]
+2013-09-30T14:06:29  *** OlivierSanchez has joined #openstack-infra
+2013-09-30T14:06:39  <dhellmann> mordred: do the upstream folks not want to address pre-release versioning?
+2013-09-30T14:06:46  *** AlexF has joined #openstack-infra
+2013-09-30T14:06:50  * dhellmann wonders why we want a separate copy of that document
+2013-09-30T14:06:51  *** adalbas has quit IRC
+2013-09-30T14:09:02  <mordred> dhellmann: they address is differently
+2013-09-30T14:09:02  <mordred> dhellmann: in ways that are incompatible with both python and distro versioning
+2013-09-30T14:09:20  <mordred> dhellmann: the one in pbr is, I believe, going to be step one towards writing a pep
+2013-09-30T14:09:22  <dhellmann> mordred: oh, that's helpful
+2013-09-30T14:09:56  <mordred> dhellmann: I was more snarky about it, but lifeless and I hashed it out for a while over the weekend
+2013-09-30T14:10:02  <dhellmann> mordred: what will the new pep address?
+2013-09-30T14:10:40  <mordred> dhellmann: I think my main beef isn't so much the version itself, but the fact that their use of - as a seperator between main version and pre-release version is potentially confusing to a human looking at the version
+2013-09-30T14:10:53  <dhellmann> yeah
+2013-09-30T14:11:02  <mordred> dhellmann: the pep would basically be pep440 semantic versioning guidelines for python
+2013-09-30T14:11:19  <mordred> so, if a python project claims to use semantic versioning, this is how that's implemented
+2013-09-30T14:11:28  *** dguitarbite has quit IRC
+2013-09-30T14:11:36  <mordred> there isn't _that_ much that has to change from upstream, honestly
+2013-09-30T14:11:47  <mordred> the important bits (the actual releases) are spot on
+2013-09-30T14:12:13  <mordred> but the two main changes are actually being stricter about what you can and can't do in a pre-release section, and changing how that section is signfied
+2013-09-30T14:13:05  <mordred> from X.Y.X-any.thing.here.is.prelease1.garbage
+2013-09-30T14:13:32  <mordred> to X.Y.Z.(a|b|rc)[0-9]+
+2013-09-30T14:13:52  <dstufft> well PEP440 also doesn't say that 2.1 and 2.2 must be compatible
+2013-09-30T14:13:56  <dstufft> it sort of suggests it
+2013-09-30T14:13:59  <mordred> indeed
+2013-09-30T14:14:08  *** odyssey4me has quit IRC
+2013-09-30T14:14:26  <dstufft> but i'd think with a "PEP440 based semver" we'd remove the suggestion and just make PEP440 define the version spec, and redirect to PEPWhatever for the semantics
+2013-09-30T14:14:37  <mordred> that's why I like your suggestion of an additional pep to talk about what the versions should _mean_
+2013-09-30T14:14:37  <mordred> where PEP440 talks about how they should be physically constructed
+2013-09-30T14:14:52  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T14:15:31  <thomasm> mordred, mriedem quantumclient branch is already updated with neutron's setup.py and it was given a new set of requirements: https://github.com/openstack/python-neutronclient/blob/quantumclient/setup.py
+2013-09-30T14:15:33  <mordred> this will be my first pep - I'm gonna have to go read up more on the process
+2013-09-30T14:15:37  <dhellmann> is it worth pointing out the differences between what pbr and the proto-pep say to do and what the upstream version says, to ensure a casual reader doesn't miss the differences
+2013-09-30T14:15:47  <thomasm> mordred, mriedem: https://github.com/openstack/python-neutronclient/blob/quantumclient/requirements.txt
+2013-09-30T14:16:00  <mordred> dhellmann: yeah. that's a good idea
+2013-09-30T14:16:16  <dhellmann> mordred: that can be a second changeset, if you like
+2013-09-30T14:16:35  <thomasm> https://github.com/openstack/python-neutronclient/commit/cbb83121c09f95b00720f494ab5f424612ac207d
+2013-09-30T14:16:50  *** DennyZhang has joined #openstack-infra
+2013-09-30T14:16:57  <mordred> dhellmann: I'm hoping that maybe some people will iterate on the doc for a bit after it's in and before we do a pep
+2013-09-30T14:17:19  <dstufft> mordred: essentially it's write the PEP, submit it to the PEP eidtors (Nick is one of them), then post it on distutils-sig, set the BDFL-Delegate to Nick, discuss on mailing list, adjust with feedback until discussion is over or you're ready and then ask for pronouncement from the BDFL Delegate
+2013-09-30T14:17:31  <dstufft> that's it in a nutshell
+2013-09-30T14:17:40  <mordred> awesome.
+2013-09-30T14:17:41  <mriedem> thomasm: good point, i forgot that mark was working on that
+2013-09-30T14:18:04  <thomasm> Yep!
+2013-09-30T14:18:12  <thomasm> Let me recheck my stable fix. =]
+2013-09-30T14:18:28  <dstufft> mordred: and if you make any major changes post it again so peolpe can view the changes easily
+2013-09-30T14:18:34  <dstufft> before acceptance
+2013-09-30T14:18:35  *** changbl has quit IRC
+2013-09-30T14:18:55  <dstufft> mordred: packaging PEPs that don't touch CPython are easier than ones that do (assuming the idea is sane :) )
+2013-09-30T14:19:13  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/config: Move savanna under openstack org  https://review.openstack.org/48491
+2013-09-30T14:19:18  *** Ryan_Lane has quit IRC
+2013-09-30T14:19:42  *** dkranz has joined #openstack-infra
+2013-09-30T14:19:43  *** adalbas has joined #openstack-infra
+2013-09-30T14:19:44  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/config: Move savanna under openstack org  https://review.openstack.org/48491
+2013-09-30T14:19:56  *** esker has joined #openstack-infra
+2013-09-30T14:19:56  *** tvb has quit IRC
+2013-09-30T14:20:40  <esker> Hi All... How might one get a project listed here:  https://launchpad.net/openstack/
+2013-09-30T14:20:52  *** anteaya has joined #openstack-infra
+2013-09-30T14:20:57  <esker> Must it be fully recognized as "incubated" first?
+2013-09-30T14:22:15  *** OlivierSanchez is now known as ojacques
+2013-09-30T14:22:40  <mordred> esker: nope. there's all sorts of crazy stuff there. what sort of thing do you want listed?
+2013-09-30T14:23:08  <esker> mordred: thanks... this:  https://launchpad.net/manila
+2013-09-30T14:23:48  <esker> mordred: FWIW, headed down the incubation path... just haven't fully prepped it yet.
+2013-09-30T14:24:52  *** tkammer has joined #openstack-infra
+2013-09-30T14:25:34  *** markmcclain has joined #openstack-infra
+2013-09-30T14:26:44  <mordred> esker: so, what you want to do is go to: https://launchpad.net/manilla/+edit look for the "Part of" field and put openstack there
+2013-09-30T14:27:03  <esker> mordred... ah, okay... had missed that.  Thanks!
+2013-09-30T14:27:30  <mordred> esker: sure thing!
+2013-09-30T14:28:52  *** rcleere has joined #openstack-infra
+2013-09-30T14:30:23  *** markmcclain has quit IRC
+2013-09-30T14:34:28  *** markmcclain has joined #openstack-infra
+2013-09-30T14:37:13  <jog0> I am getting timeouts on logstash.o.o today
+2013-09-30T14:37:32  *** rcleere_ has joined #openstack-infra
+2013-09-30T14:37:34  <basha> can someone look at https://review.openstack.org/#/c/47161/
+2013-09-30T14:37:45  <basha> The failures doesnt seem to be coz of the change
+2013-09-30T14:37:47  *** rcleere has quit IRC
+2013-09-30T14:37:48  *** rcleere_ is now known as rcleere
+2013-09-30T14:37:51  <jog0> so elastic-recheck is down and timing out
+2013-09-30T14:37:57  <basha> and rechecks are'nt working
+2013-09-30T14:38:19  <jeblair> jog0: elasticsearch is 502ing for me
+2013-09-30T14:39:57  <jog0> jeblair: hmm I can go to http://logstash.openstack.org/ but its slow
+2013-09-30T14:40:04  <jog0> I don't see any 502s
+2013-09-30T14:40:06  *** AlexF has quit IRC
+2013-09-30T14:40:11  <jeblair> jog0: "
+2013-09-30T14:40:12  <jeblair> If it helps, I received a 502 Proxy Error from: api/search"
+2013-09-30T14:40:24  <jeblair> jog0: is what eventually happens after several minutes
+2013-09-30T14:40:28  <mordred> dstufft: you know things about both packaging and django ...
+2013-09-30T14:40:39  *** thomasem has joined #openstack-infra
+2013-09-30T14:40:40  <mordred> dstufft: all of our django-related thigns have this cargo-culted into their setup.py:
+2013-09-30T14:40:42  <mordred> for scheme in install.INSTALL_SCHEMES.values():
+2013-09-30T14:40:44  <mordred>     scheme['data'] = scheme['purelib']
+2013-09-30T14:41:13  <dstufft> mordred: yea, that's because distutils doesn't have package_data IIRC
+2013-09-30T14:41:23  <jog0> jeblair: hmm, anyway back to finishing up my slides for today
+2013-09-30T14:41:26  <dstufft> data files get installed somewhere different then where .py files do
+2013-09-30T14:41:33  <dstufft> package_daa files get installed alongside
+2013-09-30T14:41:34  <mordred> dstufft: but setuptools does, no?
+2013-09-30T14:41:39  <dstufft> Django won't depend on setuptools
+2013-09-30T14:42:01  <mordred> ah. but so if it's an external project that uses django and does depend on setuptools, this is not needed
+2013-09-30T14:42:14  <mordred> ?
+2013-09-30T14:42:25  <dstufft> shouldn't be, you just need to properly setup package_data
+2013-09-30T14:42:31  *** AlexF has joined #openstack-infra
+2013-09-30T14:42:34  <mordred> awesome. well, that we do
+2013-09-30T14:42:38  <mordred> sweet! thank you!
+2013-09-30T14:42:40  *** thomasm has quit IRC
+2013-09-30T14:42:55  *** blamar has joined #openstack-infra
+2013-09-30T14:44:10  *** DennyZhang has quit IRC
+2013-09-30T14:45:24  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T14:46:01  *** datsun180b has joined #openstack-infra
+2013-09-30T14:46:42  <jeblair> the elasticsearch cluster status is 'green'
+2013-09-30T14:48:14  *** dkranz has quit IRC
+2013-09-30T14:49:40  *** Ryan_Lane has quit IRC
+2013-09-30T14:50:34  <jog0> jeblair: hmm still seeing timeouts
+2013-09-30T14:51:06  <foobio> green timeouts. greaaaat
+2013-09-30T14:51:11  <jeblair> jog0: agreed
+2013-09-30T14:51:14  <jeblair> foobio: agreed.  :)
+2013-09-30T14:53:01  <jog0> it may be related to how fast new data gets processed
+2013-09-30T14:53:17  <jog0> because I am cheacking if new job is in elasticSearch when it timesout
+2013-09-30T14:54:27  <mordred> wow. I just submitted patches to every stackforge project that's still referencing d2to1
+2013-09-30T14:54:37  <mordred> blerg, is what I have to say
+2013-09-30T14:55:02  <foobio> elasticsearch and the logstash workers don't seem to be particularly heavily loaded
+2013-09-30T14:55:07  <clarkb> elasticsearch may have gone sideways did we check status?
+2013-09-30T14:55:22  <Alex_Gaynor> mordred: so the docs tests for oslo.version don't appear to be passing, known?
+2013-09-30T14:55:50  <mordred> Alex_Gaynor: yeah - I noticed on that patch - lemme fix
+2013-09-30T14:56:20  *** tizzo has joined #openstack-infra
+2013-09-30T14:57:12  *** basha has quit IRC
+2013-09-30T14:58:36  <clarkb> elasticsearch4 is not part of the cluster, I think something happened
+2013-09-30T14:58:40  <Alex_Gaynor> Yay. A patch was just approved which fixes a bug with 163 rechecks!
+2013-09-30T14:59:55  <mordred> Alex_Gaynor: WOOT
+2013-09-30T15:00:00  <jeblair> clarkb: good morning!
+2013-09-30T15:00:04  <clarkb> jeblair: morning
+2013-09-30T15:00:09  <jeblair> clarkb: i checked status, it said green...
+2013-09-30T15:00:17  *** che-arne has quit IRC
+2013-09-30T15:00:21  <jeblair> clarkb: how did you find es4 was gone?
+2013-09-30T15:00:27  <mordred> Alex_Gaynor: patch submitted for oslo.version which should fix the doc issue, and I rebased the sequence of mark-patches on top of it
+2013-09-30T15:00:32  <openstackgerrit> Victor Sergeyev proposed a change to openstack-dev/hacking: Add H234 check to avoid (x)range() function usage  https://review.openstack.org/46912
+2013-09-30T15:00:45  <clarkb> jeblair: yeah, it is grean because we have one replica so no data lost with one node gone. I saw green and 13 nodes in cluster, we should have 14
+2013-09-30T15:01:04  <clarkb> jeblair: then I fired up bigdesk against a local port forward to one of the cluster nodes
+2013-09-30T15:01:17  <clarkb> I am going to restart elasticsearch on elasticsearch4
+2013-09-30T15:01:27  *** thingee_zzz is now known as thingee
+2013-09-30T15:01:44  *** dkranz has joined #openstack-infra
+2013-09-30T15:01:44  <jeblair> clarkb: ok.  what's the math to get to 14?
+2013-09-30T15:02:06  <clarkb> jeblair: 8 worker nodes + 6 indexer nodes
+2013-09-30T15:02:22  <clarkb> jeblair: the logstash workers join the cluster themselves in order to index data
+2013-09-30T15:03:19  <jeblair> clarkb: gotcha
+2013-09-30T15:03:50  <clarkb> bigdesk also shows a few nodes are under some memory pressure related to cache so I am going to run `curl -XPOST 'http://localhost:9200/_cache/clear'` locally against my portforward to clear all cached data. This will temporarily slow stuff down but should be good for us longer term
+2013-09-30T15:07:24  *** ojacques is now known as OlivierSanchez
+2013-09-30T15:08:21  *** michchap has quit IRC
+2013-09-30T15:09:56  <clarkb> elasticsearch3 seems to want to use all the memory for some reason... seems to float between 13 and 15 of 15.9GB of heap available. May need to kick it more later
+2013-09-30T15:10:06  <clarkb> I am going to walk to the conference venue now
+2013-09-30T15:11:01  *** michchap has joined #openstack-infra
+2013-09-30T15:11:10  *** Ryan_Lane has joined #openstack-infra
+2013-09-30T15:11:31  <mordred> hub_cap: ping
+2013-09-30T15:11:34  <clarkb> ran cache clearing once more as I am hoping 4 can pick up some of the slack as stuff is rebalanced
+2013-09-30T15:11:35  <hub_cap> :o
+2013-09-30T15:11:48  <mordred> hub_cap: you use pexpect in trove in the guestagent code
+2013-09-30T15:11:53  <esker> mordred: another question... are OpenStack github repos afforded any "special" status in Launchpad?  Or do I simply "import a branch hosted somewhere else"
+2013-09-30T15:12:01  <mordred> but that package isn't in global requirements or our mirror
+2013-09-30T15:12:06  <hub_cap> what u dont like ugly expect code in production mordred?
+2013-09-30T15:12:07  <esker> mordred: referring to this specifically: https://github.com/stackforge/manila
+2013-09-30T15:12:08  <mordred> that leads me to believe it may not be being used?
+2013-09-30T15:12:11  <hub_cap> rearry? :(
+2013-09-30T15:12:15  <hub_cap> oh no it is
+2013-09-30T15:12:18  <mordred> or at least not being tested
+2013-09-30T15:12:26  <hub_cap> but its possibly we build it in to the image
+2013-09-30T15:12:31  <hub_cap> *possible
+2013-09-30T15:12:43  <mordred> ok. so, you're suggesting that we need to add pexec to the global requirements list
+2013-09-30T15:12:44  <hub_cap> we dont exactly pip install the reqs.txt in the guest
+2013-09-30T15:13:00  <hub_cap> well im not suggesting anything yet :)
+2013-09-30T15:13:06  * hub_cap is not a fan of our pexpect code
+2013-09-30T15:13:17  <mordred> hub_cap: lemme rephrase - does it belong in your requirements.txt list?
+2013-09-30T15:13:18  <hub_cap> but if its necessary to add to global- then we can
+2013-09-30T15:13:27  <hub_cap> mordred: likely yes
+2013-09-30T15:13:30  <hub_cap> for now
+2013-09-30T15:14:55  <sdague> clarkb: how far behind is ES now time wise from when runs complete?
+2013-09-30T15:15:00  *** SergeyLukjanov has quit IRC
+2013-09-30T15:15:06  <openstackgerrit> Monty Taylor proposed a change to openstack/requirements: Add pexpect which is used by trove  https://review.openstack.org/48985
+2013-09-30T15:16:10  <hub_cap> mordred: would u like me to submit a review sir?
+2013-09-30T15:17:04  <mordred> hub_cap: already done
+2013-09-30T15:17:22  <mordred> hub_cap: once that requirements change lands, this: https://review.openstack.org/48986 should be able to pass the gate, at which point I'd love it if you could merge it
+2013-09-30T15:17:40  <clarkb> sdague < 1 minute I think
+2013-09-30T15:17:44  <sdague> nice :)
+2013-09-30T15:17:48  <clarkb> your wsgi patch helped
+2013-09-30T15:18:08  <Alex_Gaynor> mordred: should I assume pexpect has an FFE?
+2013-09-30T15:18:10  <hub_cap> it will be done mordred
+2013-09-30T15:18:45  *** changbl has joined #openstack-infra
+2013-09-30T15:19:18  *** pblaho has quit IRC
+2013-09-30T15:20:10  <jeblair> for some reason, we're not watching elastic-recheck in here...
+2013-09-30T15:20:11  <jog0> clarkb jeblair: did any ES settings change this weekend?
+2013-09-30T15:20:15  <jeblair> https://review.openstack.org/48987
+2013-09-30T15:20:31  <jeblair> jog0: did you read clarkb's report on the cluster health?
+2013-09-30T15:20:40  *** kpavel has quit IRC
+2013-09-30T15:20:59  <jog0> jeblair: I just saw someone says its green here
+2013-09-30T15:21:10  <jeblair> jog0: more complicated.  read scrollback from clarkb
+2013-09-30T15:21:14  <jog0> so no
+2013-09-30T15:21:29  <jog0> I will just ask him in person in a few minutes
+2013-09-30T15:22:09  <jog0> jeblair: ahh just read makes sense
+2013-09-30T15:22:33  *** hashar has quit IRC
+2013-09-30T15:24:06  <sdague> jog0: so are we going to do the elastic-recheck summit session in QA or Infra?
+2013-09-30T15:24:37  * sdague is starting to rough out some things this week, so want to make sure to save it a space if I need to
+2013-09-30T15:24:39  *** thomasem has quit IRC
+2013-09-30T15:25:10  <jog0> sdague: your choice
+2013-09-30T15:25:18  <jog0> I haven't submitted one yet
+2013-09-30T15:25:21  <sdague> jeblair: you have an opinion?
+2013-09-30T15:25:23  *** che-arne has joined #openstack-infra
+2013-09-30T15:25:26  <jog0> feel free to submit one yourself
+2013-09-30T15:25:26  *** matsuhashi has quit IRC
+2013-09-30T15:25:42  <sdague> jog0: there's going to be so much stuff under my name.... I'd rather have other folks do it :)
+2013-09-30T15:25:55  *** thomasm has joined #openstack-infra
+2013-09-30T15:26:04  <jog0> I can do it after my presentation this morning
+2013-09-30T15:26:13  <jog0> just ping me around 11
+2013-09-30T15:26:22  *** SergeyLukjanov has joined #openstack-infra
+2013-09-30T15:27:25  <clarkb> jog0: you want to go in the theater not the pub
+2013-09-30T15:27:40  <sdague> jog0: yeh, not a big deal. We don't need the actual content for a couple weeks, just getting ahead of stuff to make sure less important things don't get landed
+2013-09-30T15:27:40  <clarkb> jog0: but the pub can give yo udirections if you find it first
+2013-09-30T15:27:42  *** mrodden1 has quit IRC
+2013-09-30T15:28:13  *** thomasm has quit IRC
+2013-09-30T15:28:45  <jog0> clarkb:  thanks on my way
+2013-09-30T15:30:35  *** thomasm has joined #openstack-infra
+2013-09-30T15:32:19  <clarkb> is the neutron test a lot more reliable after we got the q-vpn d-g revert in?
+2013-09-30T15:33:02  <mordred> Alex_Gaynor: it's probably worth talking about, I don't think we should assume that, no
+2013-09-30T15:33:17  <sdague> clarkb: so one of the half a dozen neutron fails seems to have quietted
+2013-09-30T15:33:36  <sdague> it wasn't just one fail, elastic-recheck has been helpful at slicing them apart
+2013-09-30T15:33:42  <clarkb> sdague: woot. I was just glancing at zuul status and it seems to have a lot of green neutron tests
+2013-09-30T15:33:53  <clarkb> double woot to elastic-recheck being helpful
+2013-09-30T15:34:19  <Alex_Gaynor> mordred: I'm pretty confused by pexpects versioning, the 2.4 release, which is the highest version, is from 2008, but there are two releases from 2012 with lower release numbers.
+2013-09-30T15:34:21  <mordred> Alex_Gaynor: it doesn't seem like a big risk to me- it's in ubuntu already, it's MIT license, it's only used by an incubated project
+2013-09-30T15:34:30  <mordred> Alex_Gaynor: oh excellent
+2013-09-30T15:34:37  <clarkb> mordred: is that for trove?
+2013-09-30T15:34:40  * mordred did not follow the external link
+2013-09-30T15:34:41  <mordred> clarkb: yes
+2013-09-30T15:34:50  <clarkb> so I suggested to them that they just write the tests properly...
+2013-09-30T15:35:00  <mordred> clarkb: pexpect is used in their guest agent
+2013-09-30T15:35:09  <Alex_Gaynor> ++clarkb :)
+2013-09-30T15:35:14  <mordred> not in the test suite
+2013-09-30T15:35:15  <clarkb> I thought it was for tests that check output of commands
+2013-09-30T15:35:24  <sdague> yeh, honestly what it's giving us today is already pretty great, what it looks like by the end of icehouse... I think will be awesome
+2013-09-30T15:35:44  <mordred> nope. it's for the guest agent which runs commands and does things based on what they do
+2013-09-30T15:35:56  <sdague> mordred: pexpect in a guest agent seems kind of terrible as well
+2013-09-30T15:36:21  * mordred doesn't specifically care- other than he wants d2to1 out of their requirements file, and is pretty sure the patch to remove it will bounce on the requirements gate
+2013-09-30T15:38:12  <mordred> hub_cap: this looks like a really terrible library
+2013-09-30T15:38:16  <clarkb> mordred: I think you would enjoy this. We are in an old school theater that has been converted into a theater, restaurant pub thing. Sitting on couches with working wifi and electrical outlets at my feet :)
+2013-09-30T15:38:26  <mordred> clarkb: nice!
+2013-09-30T15:38:41  <clarkb> mordred: expect is terrible. I don't think any implementation of it can be non terrible as a result
+2013-09-30T15:39:21  <hub_cap> mordred: pexpect?
+2013-09-30T15:39:48  <hub_cap> yes yes im well aware of pexpect being a TERRRRRRRRIBLE way to impl things in the guest
+2013-09-30T15:40:02  <hub_cap> ill file a bug to remove it, id love for it to dissapear
+2013-09-30T15:40:06  *** tvb has joined #openstack-infra
+2013-09-30T15:41:00  *** basha has joined #openstack-infra
+2013-09-30T15:41:55  <esker> Are OpenStack github repos afforded any "special" status in Launchpad?  Should one "import a branch hosted somewhere else?"  When having a look at Neutron on code.launchpad.net (for example) it indicates that doesn't know where code is hosted... yet lists tons of branches
+2013-09-30T15:43:16  <esker> I'm trying to determine how to wire launchpad up to: https://github.com/stackforge/manila
+2013-09-30T15:43:18  *** dkranz has quit IRC
+2013-09-30T15:43:46  *** thomasbiege1 has joined #openstack-infra
+2013-09-30T15:44:08  <mordred> esker: hi!
+2013-09-30T15:44:14  <mordred> esker: we don't do anyting with code on launchpad
+2013-09-30T15:44:20  <mordred> esker: so don't set up code imports
+2013-09-30T15:44:57  *** thomasbiege1 has quit IRC
+2013-09-30T15:46:06  <esker> mordred: so leave it hanging then... okay, thanks
+2013-09-30T15:46:51  <mordred> yup!
+2013-09-30T15:48:17  *** MikeSpreitzer has joined #openstack-infra
+2013-09-30T15:48:46  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Add elastic-recheck to infra gerritbot  https://review.openstack.org/48997
+2013-09-30T15:49:03  <MikeSpreitzer> How can I tell whether https://bugs.launchpad.net/cinder/+bug/1090595 made it into Grizzly?
+2013-09-30T15:49:04  <uvirtbot> Launchpad bug 1090595 in cinder "Deleting volumes set as PVs results in unresolvable error_deleting status" [Undecided,Fix released]
+2013-09-30T15:49:24  <MikeSpreitzer> (I mean the fix, of course)
+2013-09-30T15:50:57  <jeblair> MikeSpreitzer: bill rich left a comment indicating the fix was in this change: https://review.openstack.org/#/c/20523/
+2013-09-30T15:50:57  <clarkb> MikeSpreitzer: there is no code commit linked in the bug so it may be a little hard to check. easiest thing would be to clone cinder, checkout stable/grizzly and look in the history
+2013-09-30T15:51:24  <jgriffith> MikeSpreitzer: jeblair clarkb https://review.openstack.org/#/c/20523/
+2013-09-30T15:53:50  *** jswarren has joined #openstack-infra
+2013-09-30T15:54:04  <jog0> mtreinish: ping
+2013-09-30T15:54:55  *** dkranz has joined #openstack-infra
+2013-09-30T15:55:05  *** tjones has joined #openstack-infra
+2013-09-30T15:55:11  <MikeSpreitzer> jeblair: the comment I see from Bill Rich says "Change I40d12bd1 is submitted for review"
+2013-09-30T15:55:23  *** tjones has quit IRC
+2013-09-30T15:55:26  <jswarren> Hello.  I'm seeing an odd failure in tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops: http://logs.openstack.org/53/48953/1/check/check-tempest-devstack-vm-neutron/e50af37/console.html
+2013-09-30T15:55:38  <MikeSpreitzer> Is that the comment to which you are referring?  How did you map that to the URL you pasted a few minutes ago?
+2013-09-30T15:56:10  <jeblair> MikeSpreitzer: copy/pasted the change id into the search field in gerrit
+2013-09-30T15:56:47  <jeblair> MikeSpreitzer: (it also shows up in the git log, so one could search 'git log' for it as well)
+2013-09-30T15:56:48  <jswarren> It repeats the same 7 lines several times with "sudo: 3 incorrect password attempts" at the end.
+2013-09-30T15:57:08  <MikeSpreitzer> jeblair: thanks
+2013-09-30T15:57:25  <jeblair> jswarren: it's probably trying to run a command not supported by the neutron rootwrap
+2013-09-30T15:57:26  *** basha has quit IRC
+2013-09-30T15:57:44  <clarkb> jeblair: foobio: elastic-recheck was running on jog0's personaly machine but he is at this conference with me and can't get on the box to restart it after the elasticsearch derpage. Any chance one of you guys want to poke at getting it running on logstash.o.o?
+2013-09-30T15:58:11  <jswarren> jeblair: OK, thanks.  What should I do?
+2013-09-30T15:58:45  <foobio> clarkb: what's still missing, just the implementation change you had up on gerrit?
+2013-09-30T15:59:03  <clarkb> foobio: yup I think that is it (well and an init script)
+2013-09-30T15:59:10  <clarkb> foobio: because you added the gerrit user right?
+2013-09-30T15:59:21  <foobio> clarkb: i did, yes
+2013-09-30T15:59:26  <mriedem> thomasm: did your recheck fail too?
+2013-09-30T15:59:36  <jeblair> jswarren: oh, that's clearly not because of that change.  check the recheck bug page for a similar bug and leave a 'recheck bug ###' comment; see https://wiki.openstack.org/wiki/GerritJenkinsGit#Test_Failures for details
+2013-09-30T16:00:10  <clarkb> awesome. then yes I believe just the puppet change to install it
+2013-09-30T16:00:20  <jeblair> clarkb, foobio: i -1'd because i registered an irc bot user; i'll update the change to reflect that
+2013-09-30T16:00:22  <jswarren> jeblair: Yeah, I did that.  Could not find a bug that matched.
+2013-09-30T16:00:25  <mriedem> thomasm: mordred: looks like a different failure now on stable/grizzly patches: http://logs.openstack.org/00/48300/1/check/gate-nova-python26/f0cf22d/console.html
+2013-09-30T16:00:33  <mriedem> can't find test results
+2013-09-30T16:00:45  <jswarren> There's one that fails on the same test, but the logs look nothing alike.
+2013-09-30T16:00:46  <foobio> jeblair: yeah, i saw the comment and the entry for it in hiera. i can update it
+2013-09-30T16:01:22  <openstackgerrit> A change was merged to openstack-infra/config: Set mysql max_connections to 1024 on nodepool  https://review.openstack.org/48755
+2013-09-30T16:01:25  <jeblair> foobio: it's okay i'll update it
+2013-09-30T16:01:31  <foobio> clarkb: what's current invocation like? does it background and disassociate properly already, create a pidfile, et cetera?
+2013-09-30T16:02:01  <thomasm> mriedem, Let me check, it just finished
+2013-09-30T16:02:10  <clarkb> foobio: yes, I think so. It uses python-daemon like our other things iirc
+2013-09-30T16:02:50  *** dizquierdo has quit IRC
+2013-09-30T16:03:20  <mriedem> mtreinish: ping
+2013-09-30T16:03:45  <foobio> ideal. thanks clarkb
+2013-09-30T16:04:17  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Deploy elastic-recheck on logstash.openstack.org.  https://review.openstack.org/47497
+2013-09-30T16:04:22  *** acabrera is now known as alcabrera
+2013-09-30T16:05:18  <thomasm> mriedem, It failed, but I'm having trouble finding where in the logs.
+2013-09-30T16:05:29  <thomasm> specifically check-tempest-devstack-vm-neutron
+2013-09-30T16:05:30  <thomasm> failed
+2013-09-30T16:05:40  *** mrodden has joined #openstack-infra
+2013-09-30T16:05:42  <thomasm> All of the other gates are passed
+2013-09-30T16:05:46  <mriedem> thomasm: i opened a bug: https://bugs.launchpad.net/openstack-ci/+bug/1233256
+2013-09-30T16:05:49  <uvirtbot> Launchpad bug 1233256 in openstack-ci "stable/grizzly patches failing in jenkins - unable to find test results" [Undecided,New]
+2013-09-30T16:05:57  <thomasm> mriedem, Great, thanks!
+2013-09-30T16:06:33  <mriedem> thomasm: here is my nova patch that has failures, it's the same in all 3 that failed: https://review.openstack.org/#/c/48300/
+2013-09-30T16:06:57  <mriedem> looks like the code is trying to find nosetests results but the test is using testr
+2013-09-30T16:07:12  <thomasm> mriedem, my failure for neutron looks the same.
+2013-09-30T16:07:17  <jeblair> sdague, jog0: i'm happy to have elastic-recheck summit sessions under the infra umbrella; it clearly has some crossover, so i'd understand if some topics fit better in qa.
+2013-09-30T16:07:40  <jeblair> ttx, sdague: https://review.openstack.org/#/c/42101/  your input on that would be appreciated
+2013-09-30T16:07:56  *** guohliu has joined #openstack-infra
+2013-09-30T16:08:08  *** hemnafk is now known as hemna
+2013-09-30T16:08:14  *** thomasbiege1 has joined #openstack-infra
+2013-09-30T16:08:49  *** thomasbiege1 has quit IRC
+2013-09-30T16:10:16  <mriedem> thomasm: i think my bug is invalid, there are a lot of quantum test failures in my py27 results
+2013-09-30T16:10:45  <thomasm> mriedem, I think it may be two separate issues, yeah.
+2013-09-30T16:10:50  *** yassine has quit IRC
+2013-09-30T16:11:01  *** ruhe has joined #openstack-infra
+2013-09-30T16:11:33  <thomasm> mriedem, I'm trying to spot where the failure is occurring for the neutron gate
+2013-09-30T16:11:51  *** markmc has quit IRC
+2013-09-30T16:12:06  *** dguitarbite has joined #openstack-infra
+2013-09-30T16:12:20  <mordred> jeblair: we're getting some interesting topic suggestions for the infra track :)
+2013-09-30T16:12:21  <thomasm> Because it failed before it couldn't find the results, unless it's just logging the fact that it couldn't, but tried before failing at 'Execute shell'.
+2013-09-30T16:12:46  <jeblair> mordred: where do i look?
+2013-09-30T16:13:58  <openstackgerrit> A change was merged to openstack/requirements: add an explanation to the sqla requirement  https://review.openstack.org/48789
+2013-09-30T16:14:19  *** flaper87|afk is now known as flaper87
+2013-09-30T16:14:49  <mordred> jeblair: http://summit.openstack.org/
+2013-09-30T16:14:57  <mordred> jeblair: also, http://summit.openstack.org/cfp/topic/9
+2013-09-30T16:15:06  *** rnirmal has quit IRC
+2013-09-30T16:15:36  *** ruhe has quit IRC
+2013-09-30T16:15:41  <jeblair> mordred: a couple look like "openstack plumbing"
+2013-09-30T16:15:44  <jeblair> mordred: i can't see that
+2013-09-30T16:16:01  <jeblair> mordred: (topic 9)
+2013-09-30T16:16:47  <mordred> jeblair: oh - I believe I'm still the topiclead
+2013-09-30T16:16:56  <mordred> ttx: you may want to make jeblair that
+2013-09-30T16:17:14  <jeblair> mordred: is that just a list of infra cfps?  (== search for 'infra' on index page?)
+2013-09-30T16:17:37  <mordred> jeblair: yup
+2013-09-30T16:17:47  <mordred> jeblair: and also the screen where you can review and accept them
+2013-09-30T16:17:48  <ttx> mordred: yes, I received a few requests around that. Even if in theory they are not formally PTLs yet I should probably already switch
+2013-09-30T16:18:11  <jeblair> ttx: when do we/they formally become ptls?
+2013-09-30T16:18:17  <mordred> ttx: btw - similar to the tc thing - perhaps for next summit we should just use gerrit for summit session voting :)
+2013-09-30T16:18:29  <ttx> jeblair: when elections end... that should be Thursday
+2013-09-30T16:19:11  <ttx> jeblair: but that's a minor detail...you just want all PTLs to start at the same date, not some before others just because there was not enough candidates
+2013-09-30T16:19:12  * mordred goes to approve a bunch of things real quick before jeblair gets the keys
+2013-09-30T16:19:22  <jeblair> ttx: ok.  no rush, i can wait till then.  :)
+2013-09-30T16:19:49  <jeblair> mordred: i agree; i'm excited about all of them except the 2 that were misfiled!
+2013-09-30T16:19:51  <notmyname> anteaya: ttx: I never saw a voting email. but maybe they only went to the elections with more than one candidate?
+2013-09-30T16:20:07  <ttx> notmyname: yes
+2013-09-30T16:20:15  <notmyname> ttx: ah, carry on then :-)
+2013-09-30T16:20:17  <mordred> jeblair: yes. also, I feel like in new orleans I kept saying "we should have a summit session about that" - and then I got drunk and don't remember any of them
+2013-09-30T16:20:26  <jeblair> foobio: aprv https://review.openstack.org/47497 ?
+2013-09-30T16:20:30  * mordred voted in all the elections
+2013-09-30T16:20:52  <jeblair> mordred: it turns out you actually just said "i think we should have a summit session about $DRINKNAME" a lot.
+2013-09-30T16:21:07  <mordred> jeblair: ah. no wonder they all sounded like great ideas
+2013-09-30T16:21:41  <jeblair> mordred: i mean, yeah, "we should have a summit session about sazerac" sounds plausible and awesome.
+2013-09-30T16:21:49  <ttx> I remember that one
+2013-09-30T16:22:20  <mordred> jeblair: we SHOULD
+2013-09-30T16:23:12  *** reed has joined #openstack-infra
+2013-09-30T16:25:41  <mriedem> thomasm: markmcclain: bug report for the neutron client proxy issue in stable/grizzly checks: https://bugs.launchpad.net/neutron/+bug/1233264
+2013-09-30T16:25:42  <uvirtbot> Launchpad bug 1233264 in neutron "stable branch patches failing in check queue due to missing 'find_resourceid_by_name_or_id'" [Undecided,New]
+2013-09-30T16:26:09  <jog0> mordred: the open bar at openstack on ales has already opened
+2013-09-30T16:27:27  *** julim has quit IRC
+2013-09-30T16:28:45  *** jcoufal has quit IRC
+2013-09-30T16:30:42  *** guohliu has quit IRC
+2013-09-30T16:33:44  <foobio> jeblair: i was still writing the initscript for a follow-on patchset to 47497
+2013-09-30T16:34:13  <foobio> jog0: i see the pidfile is hardcoded to /tmp/recheckwatchbot.pid, is that where it's going to stay?
+2013-09-30T16:34:32  <jeblair> foobio: ok, np.
+2013-09-30T16:34:45  *** moted has joined #openstack-infra
+2013-09-30T16:34:46  <jeblair> foobio: i can patch e-r to make the pid configurable and default to /var/run/elastic-recheck.pid
+2013-09-30T16:34:52  <jeblair> jog0: ^
+2013-09-30T16:35:46  *** matty_dubs is now known as matty_dubs|lunch
+2013-09-30T16:36:50  <jeblair> foobio: i can patch e-r to make the pid configurable and default to /var/run/elastic-recheck/elastic-recheck.pid  <-- correction
+2013-09-30T16:37:17  * anteaya crawls back up for air after submitting expense reports
+2013-09-30T16:37:19  <anteaya> gah
+2013-09-30T16:38:02  *** fbo is now known as fbo_away
+2013-09-30T16:38:31  *** afazekas has quit IRC
+2013-09-30T16:39:19  <foobio> jeblair: that seems ideal to me. i doubt jog0 will mind since he's running by hand (and is about to stop doing so anyway)
+2013-09-30T16:39:31  <foobio> i'll submit this initscript on that assumption
+2013-09-30T16:40:26  <jeblair> foobio: do you think it should be 'elastic-recheck' or 'recheckwatchbot'?
+2013-09-30T16:40:30  *** mikal has quit IRC
+2013-09-30T16:40:32  *** matty_dubs|lunch is now known as matty_dubs
+2013-09-30T16:41:11  <jog0> foobio: mtreinish wrote that part AFAIK he took it from one of the many apps in the config repo
+2013-09-30T16:41:36  <foobio> jeblair: it looks like elastic-recheck everywhere
+2013-09-30T16:41:42  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Deploy elastic-recheck on logstash.openstack.org.  https://review.openstack.org/47497
+2013-09-30T16:41:59  <foobio> as far as config file name passed on the cli, executable name, et cetera
+2013-09-30T16:42:08  <jog0> foobio: I do not mind
+2013-09-30T16:42:21  <jog0> foobio: and I am really bad at naming things too
+2013-09-30T16:43:03  <mriedem> thomasm: markmcclain: fyi https://review.openstack.org/#/c/49006/
+2013-09-30T16:44:51  <openstackgerrit> Monty Taylor proposed a change to openstack-dev/pbr: Use wheels for installation  https://review.openstack.org/48803
+2013-09-30T16:48:09  * mordred is getting closer that working ^^
+2013-09-30T16:48:16  *** SergeyLukjanov has quit IRC
+2013-09-30T16:49:00  *** mikal has joined #openstack-infra
+2013-09-30T16:54:16  *** tjones has joined #openstack-infra
+2013-09-30T16:56:06  <mtreinish> foobio: yeah I wrote that part and naming wasn't really finalized then
+2013-09-30T16:56:13  <mtreinish> it doesn't really matter to me what we call it
+2013-09-30T16:56:52  <foobio> mtreinish: no sweat. /var/run/elastic-recheck/elastic-recheck.pid seems a fine default to me
+2013-09-30T16:57:46  <mordred> jeblair: I don't thing image pre-caching is working in d-g anymore
+2013-09-30T16:57:54  <mordred> jeblair: https://jenkins02.openstack.org/job/check-pbr-devstack-vm-rawinstall/12/console
+2013-09-30T16:58:15  <mordred> jeblair: search for IMAGE_FNAME=cirros-0.3.1-x86_64-uec.tar.gz
+2013-09-30T16:58:17  <jeblair> mordred: that sucks
+2013-09-30T16:58:41  <mordred> jeblair: this is not a direct problem that I'm seeing, I just happened to notice an image being download during a devstack run on a d-g node
+2013-09-30T16:59:17  <mordred> sdague: &&
+2013-09-30T16:59:19  <mordred> gah
+2013-09-30T16:59:21  <mordred> sdague: ^^
+2013-09-30T17:00:14  *** derekh has quit IRC
+2013-09-30T17:01:59  <sdague> mordred: hmmm... interesting
+2013-09-30T17:03:28  <mordred> (I mean, we have other fish to fry this week, but still
+2013-09-30T17:04:17  <sdague> so there was some restructure on the hypervisor code in devstack, I wonder if a path changed that tripped up the caching
+2013-09-30T17:04:29  *** sodabrew has joined #openstack-infra
+2013-09-30T17:06:57  * anteaya puts lunch aside
+2013-09-30T17:07:03  <anteaya> welcome sodabrew
+2013-09-30T17:07:39  <anteaya> we figured out why all of our nodes have been unresponsive: http://15.185.153.222:3000/
+2013-09-30T17:08:05  <anteaya> the url to send reports to the dashboard had been reverted, but we fixed that
+2013-09-30T17:08:51  <anteaya> and now we only have 10 unresponsive nodes, but I just cleared the queue and restarted the worker about 15 minutes ago, so that number is dropping
+2013-09-30T17:08:51  <foobio> yeah, something (possibly a stray puppet agent run i may have inadvertently fired on the master) unset it last week
+2013-09-30T17:09:01  <anteaya> I do have a question about pending tasks
+2013-09-30T17:09:33  <anteaya> so far we have 34 and I am not seeing the number drop, perhaps it is too earlier to tell though since the worker restart
+2013-09-30T17:10:02  <anteaya> just glad you are here sodabrew, thanks for joining us
+2013-09-30T17:10:54  *** nati_ueno has joined #openstack-infra
+2013-09-30T17:10:57  <pleia2> not supposed to declare backscroll bankruptcy for a *weekend* away, busy weekend
+2013-09-30T17:11:34  <anteaya> morning pleia2
+2013-09-30T17:11:39  <anteaya> mordred was chatty
+2013-09-30T17:11:47  <anteaya> we need to get him on an airplane
+2013-09-30T17:11:53  <clarkb> hahahaha
+2013-09-30T17:11:57  <openstackgerrit> A change was merged to openstack-infra/jenkins-job-builder: doc: fix up strict errors  https://review.openstack.org/47861
+2013-09-30T17:11:58  <pleia2> hehe
+2013-09-30T17:12:14  *** reed has quit IRC
+2013-09-30T17:12:45  <sodabrew> Hi @anteaya I'm not actually around at the moment. Will be later on today though, around 1 or 2pm Pacific time.
+2013-09-30T17:12:53  <anteaya> k
+2013-09-30T17:12:57  <anteaya> thx
+2013-09-30T17:13:31  *** ekarlso has quit IRC
+2013-09-30T17:13:44  <anteaya> sodabrew: I kind of ambushed you, sorry
+2013-09-30T17:13:54  <anteaya> just really hoping to make some progress on this
+2013-09-30T17:13:59  <anteaya> when you are available
+2013-09-30T17:14:33  <sodabrew> thanks! catch you later on
+2013-09-30T17:14:40  <anteaya> k
+2013-09-30T17:16:02  <zaro> mordred: i'm not sure how these disagreements get resolved -> https://gerrit-review.googlesource.com/#/c/48254
+2013-09-30T17:16:10  *** sodabrew has quit IRC
+2013-09-30T17:16:41  *** reed has joined #openstack-infra
+2013-09-30T17:16:44  *** julim has joined #openstack-infra
+2013-09-30T17:17:10  *** gyee has joined #openstack-infra
+2013-09-30T17:17:44  <zaro> mordred: do you want to provide an opinion there?
+2013-09-30T17:18:19  *** dkliban has quit IRC
+2013-09-30T17:18:32  <mordred> zaro: yes - but I will have to read more things first
+2013-09-30T17:19:18  *** tkammer has quit IRC
+2013-09-30T17:19:54  <mordred> pleia2: come on - you'll enjoy reading an hour-long conversations between lifeless and I on semantic versioning
+2013-09-30T17:20:10  <mordred> pleia2: it's like Game of Thrones, except with less talk about winter
+2013-09-30T17:20:30  *** dkliban has joined #openstack-infra
+2013-09-30T17:21:42  *** dcramer_ has quit IRC
+2013-09-30T17:21:54  <thomasm> mriedem, Ahh, thanks!
+2013-09-30T17:22:00  *** morganfainberg has quit IRC
+2013-09-30T17:22:06  *** ekarlso has joined #openstack-infra
+2013-09-30T17:22:08  *** morganfainberg has joined #openstack-infra
+2013-09-30T17:22:16  <pleia2> mordred: slightlyless blood too
+2013-09-30T17:24:52  *** rockyg has joined #openstack-infra
+2013-09-30T17:24:55  *** sarob has joined #openstack-infra
+2013-09-30T17:25:15  *** thomasbiege1 has joined #openstack-infra
+2013-09-30T17:26:35  *** SergeyLukjanov has joined #openstack-infra
+2013-09-30T17:27:29  <openstackgerrit> Monty Taylor proposed a change to openstack-dev/pbr: Use wheels for installation  https://review.openstack.org/48803
+2013-09-30T17:28:21  *** thomasbiege1 has quit IRC
+2013-09-30T17:29:16  <jeblair> jog0, foobio, mtreinish: https://review.openstack.org/49018
+2013-09-30T17:29:32  <mriedem> markmcclain: how do you get patches through jenkins if the change is on the quantumclient branch?
+2013-09-30T17:29:33  <mriedem> http://logs.openstack.org/06/49006/1/check/check-tempest-devstack-vm-full/bf391fd/console.html
+2013-09-30T17:29:35  *** MikeSpreitzer has left #openstack-infra
+2013-09-30T17:30:06  <zaro> ls
+2013-09-30T17:30:22  <mriedem> ah, nm, force merge from mordred
+2013-09-30T17:30:36  *** johnthetubaguy has quit IRC
+2013-09-30T17:30:59  <zaro> clarkb: pleasant drive to bend?
+2013-09-30T17:31:39  *** thomasbiege1 has joined #openstack-infra
+2013-09-30T17:31:43  <clarkb> zaro: No, it was crazy. But I made it in one piece. So many cars up on the berms by the freeway or in ditches upside down and facing the wrong direction
+2013-09-30T17:31:56  <clarkb> I think we counted 6 between seattle and portland
+2013-09-30T17:32:49  <pleia2> yeesh
+2013-09-30T17:32:54  *** jerryz has joined #openstack-infra
+2013-09-30T17:33:00  *** morganfainberg has quit IRC
+2013-09-30T17:33:00  <anteaya> clarkb: wow, glad you are safe
+2013-09-30T17:33:09  *** mdrnstm has joined #openstack-infra
+2013-09-30T17:33:19  <anteaya> was their ice, or just rain?
+2013-09-30T17:33:25  <anteaya> *there
+2013-09-30T17:33:26  <clarkb> anteaya: a lot of rain and wind
+2013-09-30T17:33:29  <anteaya> ah
+2013-09-30T17:33:41  <zaro> anteaya, pleia2 : you were in seattle on the good week.  this weekend has been horrible
+2013-09-30T17:33:50  <anteaya> :(
+2013-09-30T17:33:54  <clarkb> the weather in bend is nice though. crisp and dry
+2013-09-30T17:34:01  <anteaya> dry is nice
+2013-09-30T17:34:06  *** mdrnstm is now known as morganfainberg
+2013-09-30T17:34:12  <anteaya> crisp is okay if you are dry and have a hat
+2013-09-30T17:35:24  *** thomasbiege1 has quit IRC
+2013-09-30T17:36:46  <mtreinish> jeblair: it looks good to me, I'm running the tests to ensure everything works (I doubt it broke anything though)
+2013-09-30T17:37:06  <jeblair> mtreinish: can we have jenkins run them?
+2013-09-30T17:38:00  <mtreinish> jeblair: right now they require a working config file. (because they touch gerrit, es, and other things)
+2013-09-30T17:38:32  <mtreinish> so we could add them to jenkins but I think it would be better to make them run independently first
+2013-09-30T17:38:48  <jeblair> mtreinish: yep, definitely.  zuul has a fake gerrit implementation if you feel like going that route...
+2013-09-30T17:39:12  <mtreinish> jeblair: really cool that would be useful for testing the gerrit stuff
+2013-09-30T17:39:14  <jeblair> mtreinish: clarkb and foobio are working on getting a _real_ gerrit spun up in git-review tests, but that's not quite working yet.
+2013-09-30T17:39:25  <jeblair> mtreinish: (i'd go with the fake one for now)
+2013-09-30T17:39:26  *** ekarlso has quit IRC
+2013-09-30T17:39:26  *** ekarlso has joined #openstack-infra
+2013-09-30T17:39:50  *** tjones has left #openstack-infra
+2013-09-30T17:40:17  <mtreinish> jeblair: yeah the gerrit tests for elastic-recheck just leave a comment on review-dev https://review-dev.openstack.org/#/c/434/
+2013-09-30T17:40:18  <sdague> jeblair: so... question on devstackgate vs. devstack-tempest vs. sudo
+2013-09-30T17:40:41  <jeblair> sdague: ya (did you see afazekas patch?)
+2013-09-30T17:40:47  <sdague> I guess not yet
+2013-09-30T17:40:57  <foobio> jeblair: mtreinish: well, it does work but it's a little racy/flaky or slow (depending on how we do it) tearing down and spinning up a new gerrit for each test
+2013-09-30T17:40:57  <jeblair> sdague: https://review.openstack.org/#/c/42101/
+2013-09-30T17:41:33  <mtreinish> foobio: I'm fine with faking it, the test is just making sure we call gerritlib correctly for leaving a comment
+2013-09-30T17:41:49  <jeblair> foobio: yeah, i think e-r's use of gerrit is very similar (actually a subset) of what zuul does, so it's probably a good match.
+2013-09-30T17:41:53  <mtreinish> it was easier to just point it to a real gerrit and look for the comment :)
+2013-09-30T17:41:57  <foobio> mtreinish: yeah, that's probably fairly safe to just stub out with a fake then
+2013-09-30T17:42:01  <sdague> jeblair: ok, so that's one approach
+2013-09-30T17:42:20  <sdague> I was also thinking we could just drop in a new sudoers file for the debug commands we want
+2013-09-30T17:42:21  <mordred> jeblair, sdague: that doesn't seem like the _best_ approach on first glance
+2013-09-30T17:42:31  <sdague> yeh, I'd rather not run as root
+2013-09-30T17:42:38  <sdague> as it masks too many other things
+2013-09-30T17:42:40  <jeblair> sdague: i haven't formed an opinion yet
+2013-09-30T17:42:42  <mordred> ++
+2013-09-30T17:42:51  <mordred> I _do_ want additional interesting information
+2013-09-30T17:42:57  <jeblair> sdague: btw, what's the problem? :)
+2013-09-30T17:43:02  <sdague> the issue is we need to run ip and iptables as root
+2013-09-30T17:43:13  <sdague> to dump out their contents
+2013-09-30T17:43:23  <jeblair> sdague: does tempest assume it's running on-host?
+2013-09-30T17:43:33  <sdague> no
+2013-09-30T17:43:38  <mordred> yeah - it would certainly be good if tempest did not assume that :)
+2013-09-30T17:43:45  <sdague> however, it's behind a flag you need to set if you wan it
+2013-09-30T17:43:48  <jeblair> sdague: i thought 'point tempest at an external (multi|single-node install) was a primary use case
+2013-09-30T17:43:54  <jeblair> ok
+2013-09-30T17:44:04  <sdague> jeblair: it is, this is sitting behind some debug flags
+2013-09-30T17:44:38  <jeblair> sdague: where are the debug flags set?
+2013-09-30T17:44:58  *** hogepodge has joined #openstack-infra
+2013-09-30T17:45:55  <sdague> jeblair: one sec...
+2013-09-30T17:47:10  <sdague> so, it's in the wrong place, but it's currently in tempest.conf.sample
+2013-09-30T17:47:37  <jeblair> sdague: also is this to get ip/iptables content before and after individual tests? (as opposed to, say, a sort of final state dump that could just be done by d-g at the end of the run?
+2013-09-30T17:47:40  <sdague> lets say, this really shouldn't have gone in like this
+2013-09-30T17:47:51  <sdague> jeblair: yeh, this is point in time dump
+2013-09-30T17:47:55  <jeblair> k
+2013-09-30T17:48:15  <sdague> what we really need to find out is when neutron didn't bring up a network in time, what was going on
+2013-09-30T17:48:39  <sdague> how much was pulled together
+2013-09-30T17:48:58  *** flaper87 is now known as flaper87|afk
+2013-09-30T17:50:44  <sdague> long term, what we probably want is a neutron API to put that to the logs
+2013-09-30T17:50:55  <jeblair> sdague: do you know why tempest is being run as 'stack' atm?
+2013-09-30T17:51:27  <sdague> jeblair: because it's the non root user
+2013-09-30T17:51:53  <sdague> honestly, besides that, I don't know that stack is important relative to any normal user
+2013-09-30T17:52:02  *** sdake__ is now known as sdake_
+2013-09-30T17:52:32  <jeblair> sdague: so, dropping in a sudoers.d file sounds like the best approach atm; adding to a different account would be even better, only dropping it in when needed is even better than that, and not needing it at all is even better than that...
+2013-09-30T17:52:57  <sdague> yeh, we can't not need it at all unless we move the functionality back to neutron
+2013-09-30T17:53:31  <jeblair> right; so the best compromise i can think of atm is to create a tempest user and make a sudoers.d file for it that allows that
+2013-09-30T17:53:32  <sdague> so, how about I propose a d-g change to switch users
+2013-09-30T17:53:43  <sdague> ok, I'll work on that
+2013-09-30T17:53:43  <jeblair> that minimizes the potential impact to testing
+2013-09-30T17:53:45  <sdague> yep
+2013-09-30T17:53:50  <sdague> agreed
+2013-09-30T17:53:53  <jeblair> cool, thx
+2013-09-30T17:54:26  <hogepodge> I'm about to send a new review to add the puppet-vswitch module to stackforge. I don't expect I did everything right the first time through, so comments and suggestions are certainly welcome.
+2013-09-30T17:55:35  *** melwitt has joined #openstack-infra
+2013-09-30T17:55:57  *** rnirmal has joined #openstack-infra
+2013-09-30T17:57:37  <openstackgerrit> Chris Hoge proposed a change to openstack-infra/config: Added puppet-vswitch project to Stackforge  https://review.openstack.org/49020
+2013-09-30T17:58:56  *** lcestari_ has quit IRC
+2013-09-30T17:59:27  <SergeyLukjanov> hi all, are there any thoughts on https://review.openstack.org/#/c/37620? sorry for spamming - it's on review 2.5 months ;)
+2013-09-30T18:00:36  *** dcramer_ has joined #openstack-infra
+2013-09-30T18:01:11  *** lcestari_ has joined #openstack-infra
+2013-09-30T18:01:42  <openstackgerrit> Sean Dague proposed a change to openstack-infra/devstack-gate: run tempest tests under tempest user  https://review.openstack.org/49021
+2013-09-30T18:01:52  <sdague> jeblair: ok, see what you think
+2013-09-30T18:02:54  *** mrmartin has joined #openstack-infra
+2013-09-30T18:07:12  <SergeyLukjanov> does anyone know will be design summit talks displayed at http://openstacksummitnovember2013.sched.org?
+2013-09-30T18:09:02  *** dcramer_ has quit IRC
+2013-09-30T18:09:08  <openstackgerrit> A change was merged to openstack-infra/jeepyb: Improve git2lp and is_direct_release behaviour  https://review.openstack.org/37620
+2013-09-30T18:09:10  <foobio> SergeyLukjanov: ^ thanks again for your help (and patience!) on that one
+2013-09-30T18:09:31  <SergeyLukjanov> foobio, thank you for dozens of reviews :)
+2013-09-30T18:09:53  <SergeyLukjanov> foobio, the next step, I think is to update projects.yaml in os-infra/config
+2013-09-30T18:10:36  <foobio> SergeyLukjanov: yes, and then we can rip the mapping out of jeepyb once the projects.yaml update merges
+2013-09-30T18:11:11  <SergeyLukjanov> foobio, yeah, I'll try to do it tomorrow
+2013-09-30T18:11:27  <foobio> SergeyLukjanov: thanks again!
+2013-09-30T18:12:29  <SergeyLukjanov> btw, https://review.openstack.org/#/c/37621 could be merged too I think
+2013-09-30T18:13:07  <sdague> SergeyLukjanov: design summit schedules are typically not set until the week before the event
+2013-09-30T18:13:24  <sdague> at the PTLs are busy getting the release out before that point
+2013-09-30T18:13:37  *** basha has joined #openstack-infra
+2013-09-30T18:14:06  <SergeyLukjanov> sdague, just looking at how to plan own schedule for summit
+2013-09-30T18:14:48  <openstackgerrit> Felipe Reyes proposed a change to openstack-infra/jenkins-job-builder: Added support for Git shallow clone parameter  https://review.openstack.org/48661
+2013-09-30T18:15:18  *** dguitarbite has quit IRC
+2013-09-30T18:15:40  *** dguitarbite has joined #openstack-infra
+2013-09-30T18:16:19  *** freyes has joined #openstack-infra
+2013-09-30T18:18:05  <openstackgerrit> A change was merged to openstack-infra/jeepyb: Map all savanna repos to savanna at launchpad  https://review.openstack.org/37621
+2013-09-30T18:20:39  *** fbo_away is now known as fbo
+2013-09-30T18:21:22  *** MarkAtwood has joined #openstack-infra
+2013-09-30T18:21:30  *** dcramer_ has joined #openstack-infra
+2013-09-30T18:23:50  *** guitarzan has quit IRC
+2013-09-30T18:23:57  *** guitarzan has joined #openstack-infra
+2013-09-30T18:25:14  *** _david_ has joined #openstack-infra
+2013-09-30T18:29:25  *** cody-somerville has joined #openstack-infra
+2013-09-30T18:30:54  *** afazekas has joined #openstack-infra
+2013-09-30T18:34:09  *** _david_ has quit IRC
+2013-09-30T18:34:23  <openstackgerrit> Joe Gordon proposed a change to openstack-infra/config: Add elastic-recheck to openstack-infra channel  https://review.openstack.org/49028
+2013-09-30T18:34:25  <jog0> jeblair: ^
+2013-09-30T18:34:46  <jeblair> openstackgerrit: heh, i think i proposed that already
+2013-09-30T18:34:49  <jeblair> ga
+2013-09-30T18:34:51  <jeblair> jog0: ^
+2013-09-30T18:36:46  <jog0> jeblair: done
+2013-09-30T18:38:27  *** basha has quit IRC
+2013-09-30T18:39:14  <lifeless> mordred: pleia2: semver is coming
+2013-09-30T18:40:12  *** sarob has quit IRC
+2013-09-30T18:40:35  <mriedem> mordred: ping?
+2013-09-30T18:40:42  *** sarob has joined #openstack-infra
+2013-09-30T18:41:15  <openstackgerrit> A change was merged to openstack-infra/config: Add elastic-recheck to infra gerritbot  https://review.openstack.org/48997
+2013-09-30T18:41:21  <foobio> jog0: ^
+2013-09-30T18:41:25  <foobio> jeblair: jog0: since 49018 merged (pidfile relocation for e-r), are we okay to merge https://review.openstack.org/47497 (initscript look fine?)
+2013-09-30T18:42:10  <dkranz> foobio: Any idea why https://review.openstack.org/#/c/41345/ is not merging? Has all reviews and no dependencies and +1 from jenkins.
+2013-09-30T18:42:44  <clarkb> dkranz: recheck vs reverify
+2013-09-30T18:43:00  <dkranz> clarkb: Ah! Thanks.
+2013-09-30T18:43:01  <clarkb> reverify is for the gate, recheck for check tests
+2013-09-30T18:43:27  <dkranz> clarkb: Yeah, I didn't do the recheck and didn't notice.
+2013-09-30T18:45:02  *** sarob has quit IRC
+2013-09-30T18:47:00  *** openstackgerrit has quit IRC
+2013-09-30T18:47:20  *** openstackgerrit has joined #openstack-infra
+2013-09-30T18:47:38  <jog0> foobio: one issue
+2013-09-30T18:47:54  <dkranz> clarkb: Is there a way to deal with a patch that has a dependency that was abandoned, other than resubmitting fresh?
+2013-09-30T18:48:06  <openstackgerrit> Diane Fleming proposed a change to openstack-infra/config: Updated api.yaml for the netconn-api v1.0 and v2.0 refs - pom location changed  https://review.openstack.org/49030
+2013-09-30T18:48:11  <clarkb> dkranz: you can unabandon the dependency and merge it
+2013-09-30T18:48:19  <clarkb> dkranz: submitting without the dep is probably simplest
+2013-09-30T18:48:20  <foobio> jog0: ahh, thanks!
+2013-09-30T18:48:29  <dkranz> clarkb: Thanks.
+2013-09-30T18:52:16  <jog0> foobio: but I want that patch merged ASAP
+2013-09-30T18:52:35  <foobio> jog0: so the initscript is going to need to run something like 'python /opt/elastic-recheck/elastic_recheck/bot.py /etc/elastic-recheck/elastic-recheck.conf' instead?
+2013-09-30T18:52:51  *** sarob has joined #openstack-infra
+2013-09-30T18:53:13  <jog0> yes
+2013-09-30T18:53:22  <foobio> okay, coming right up
+2013-09-30T18:53:34  <jog0> foobio: \o/
+2013-09-30T18:54:15  *** gyee has quit IRC
+2013-09-30T18:56:55  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Deploy elastic-recheck on logstash.openstack.org.  https://review.openstack.org/47497
+2013-09-30T18:57:23  <foobio> jog0: hopefully ^ that does what we expect (though s-s-d may get confused, not sure)
+2013-09-30T18:57:40  <foobio> in the interim i can launch it by hand now that i know what you were running
+2013-09-30T18:57:47  *** vipul has quit IRC
+2013-09-30T18:57:58  *** mrodden1 has joined #openstack-infra
+2013-09-30T18:58:10  *** vipul has joined #openstack-infra
+2013-09-30T18:58:45  *** mrodden has quit IRC
+2013-09-30T18:59:20  <jog0> foobio: I don't see any bugs so LGTM
+2013-09-30T18:59:34  <jog0> foobio: thats a good idea
+2013-09-30T19:00:35  <foobio> jog0: is installing executables just a matter of adding a proper [entry_points] section to setup.cfg in the elastic-recheck project?
+2013-09-30T19:01:29  <jog0> foobio: I *think* so
+2013-09-30T19:01:39  <mordred> yes
+2013-09-30T19:01:40  <jog0> also renamining things away from 'bot' I think
+2013-09-30T19:01:53  <jog0> patches welcome
+2013-09-30T19:01:53  <mordred> entrypoints ftw
+2013-09-30T19:01:56  <mordred> should all just work
+2013-09-30T19:02:49  <jog0> mordred: unlike  http://goo.gl/8VS5NA
+2013-09-30T19:04:28  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/elastic-recheck: Install an executable for the elastic-recheck bot  https://review.openstack.org/49033
+2013-09-30T19:04:39  <foobio> jog0: mordred: that ^ ?
+2013-09-30T19:04:47  *** dkehn_ is now known as dkehn
+2013-09-30T19:05:34  *** pmoosh has joined #openstack-infra
+2013-09-30T19:05:57  <mordred> yup
+2013-09-30T19:05:59  <mordred> lgtm
+2013-09-30T19:08:00  *** sarob has quit IRC
+2013-09-30T19:08:35  *** sarob has joined #openstack-infra
+2013-09-30T19:12:38  *** sarob has quit IRC
+2013-09-30T19:12:48  *** AlexF has quit IRC
+2013-09-30T19:15:42  *** adalbas has quit IRC
+2013-09-30T19:16:45  *** pmoosh has quit IRC
+2013-09-30T19:17:05  *** pmoosh has joined #openstack-infra
+2013-09-30T19:17:51  *** qba73_ has joined #openstack-infra
+2013-09-30T19:20:30  *** beagles has quit IRC
+2013-09-30T19:22:13  *** alexpilotti has joined #openstack-infra
+2013-09-30T19:22:21  <openstackgerrit> A change was merged to openstack-infra/config: Deploy elastic-recheck on logstash.openstack.org.  https://review.openstack.org/47497
+2013-09-30T19:24:08  <openstackgerrit> A change was merged to openstack-infra/config: Update projects when requirements change  https://review.openstack.org/40068
+2013-09-30T19:27:02  *** reed has quit IRC
+2013-09-30T19:27:56  *** boris-42 has joined #openstack-infra
+2013-09-30T19:28:30  *** ryanpetrello has joined #openstack-infra
+2013-09-30T19:29:21  *** ArxCruz has quit IRC
+2013-09-30T19:29:58  *** alcabrera has left #openstack-infra
+2013-09-30T19:31:01  *** MarkAtwood has quit IRC
+2013-09-30T19:31:58  <mordred> ooh. exciting!
+2013-09-30T19:37:05  <zaro> foobio: i'm working on bug 1083101
+2013-09-30T19:37:07  <openstackgerrit> Elizabeth Krumbach Joseph proposed a change to openstack-infra/config: Add basic syntax highlighting to cgit  https://review.openstack.org/49041
+2013-09-30T19:37:07  <uvirtbot> Launchpad bug 1083101 in openstack-ci "Set up private gerrit for security reviews" [High,In progress] https://launchpad.net/bugs/1083101
+2013-09-30T19:37:50  <zaro> foobio: need your help to figure out what groups to create and which permissions to assign them -> https://review.openstack.org/#/c/47937/5/modules/openstack_project/files/gerrit/acls/All-Projects-review_security.config
+2013-09-30T19:38:24  *** adalbas has joined #openstack-infra
+2013-09-30T19:39:21  *** nicedice has joined #openstack-infra
+2013-09-30T19:39:38  <openstackgerrit> Elizabeth Krumbach Joseph proposed a change to openstack-infra/config: Add basic syntax highlighting to cgit  https://review.openstack.org/49041
+2013-09-30T19:40:15  *** sandywalsh has quit IRC
+2013-09-30T19:40:54  *** thingee is now known as thingee_zzz
+2013-09-30T19:41:21  <openstackgerrit> Khai Do proposed a change to openstack-infra/config: Setup a private gerrit instance for security reviews  https://review.openstack.org/47937
+2013-09-30T19:41:35  <foobio> zaro: i think the workflow we'd discussed previously was that we'd want to sync existing group memberships continuously from the public gerrit, but that projects would be acl'd so that changes to them were only visible to their respective core group members instead of everyone. probably need to hash the workflow details out with ttx again now that it's closer to reality
+2013-09-30T19:43:04  *** hashar has joined #openstack-infra
+2013-09-30T19:43:17  *** qba73_ has quit IRC
+2013-09-30T19:45:31  <foobio> zaro: unfortunately group sync probably also means we have to sync user accounts as well (since the group membership tables are joined on user id number)
+2013-09-30T19:46:24  *** beagles has joined #openstack-infra
+2013-09-30T19:46:26  <zaro> foobio: that patch sets up replication to the new gerrit so that should include the groups.  not sure about users though.
+2013-09-30T19:47:04  <zaro> foobio: do you know if user info is save to the underlying git?
+2013-09-30T19:47:30  <foobio> zaro: what do you mean by user info?
+2013-09-30T19:47:44  <foobio> you mean individual account preferences?
+2013-09-30T19:47:56  <foobio> those are in tables in mysql, at least in 2.4.x
+2013-09-30T19:48:08  <zaro> foobio: yes, user and their account profile.
+2013-09-30T19:48:15  <foobio> they're in the db
+2013-09-30T19:48:25  <foobio> just like the groups are
+2013-09-30T19:48:43  <zaro> foobio: aren't groups in refs/meta/config?
+2013-09-30T19:49:20  <zaro> foobio: ohh, those are only the permission settings.
+2013-09-30T19:49:33  <openstackgerrit> A change was merged to openstack-infra/elastic-recheck: Install an executable for the elastic-recheck bot  https://review.openstack.org/49033
+2013-09-30T19:50:01  <zaro> foobio: i think maybe replication only replicates the git stuff?
+2013-09-30T19:52:18  <mordred> yes. it does
+2013-09-30T19:52:19  <zaro> foobio: yep, gerrit replication only replicates the git stuff.
+2013-09-30T19:52:26  <mordred> you'd need to set up mysql replication to replicate mysql
+2013-09-30T19:52:31  <openstackgerrit> Endre Karlson proposed a change to openstack-infra/config: Add RTFD hook to trigger auto-build of docs  https://review.openstack.org/48437
+2013-09-30T19:52:33  <mordred> and that might get weird is
+2013-09-30T19:52:35  <mordred> ish
+2013-09-30T19:52:50  <jeblair> foobio:https://review.openstack.org/49033 merged (elastic-recheck executable)
+2013-09-30T19:52:56  <zaro> mordred: why replicate?  can't we just point to same mysql?
+2013-09-30T19:53:25  *** sandywalsh has joined #openstack-infra
+2013-09-30T19:53:56  <mordred> zaro: because then a setting made in the security gerrit might modify the global gerrit
+2013-09-30T19:53:57  *** AlexF has joined #openstack-infra
+2013-09-30T19:54:20  <mordred> zaro: but - if we make a mysql user for the security gerrit that does not have write privs, it might be ok
+2013-09-30T19:54:22  <zaro> mordred: ohh of course.
+2013-09-30T19:55:23  <zaro> mordred: probably not, if we want comments, votes, etc.. right?
+2013-09-30T19:55:28  *** beagles has quit IRC
+2013-09-30T19:55:45  *** beagles has joined #openstack-infra
+2013-09-30T19:56:40  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Correct elastic-recheck puppet dependencies  https://review.openstack.org/49042
+2013-09-30T19:56:42  <foobio> jeblair: ^ yes, i know
+2013-09-30T19:56:45  *** pblaho has joined #openstack-infra
+2013-09-30T19:56:48  *** alexpilotti has quit IRC
+2013-09-30T19:57:59  <foobio> jeblair: i'm trying to hand-patch-and-apply it to logstash.o.o through a puppet development environment currently to ferret out anything else which was also missing
+2013-09-30T19:59:08  <foobio> mordred: zaro: yes, i think the original workflows discussed would probably need to be able to overwrite some tables in the security gerrit with their current content from the public gerrit
+2013-09-30T19:59:40  <foobio> mordred: zaro: and possibly also perform some etl on them in flight
+2013-09-30T20:00:22  <foobio> (because not sure what breakage we're likely to uncover which could require filtering/overriding some rows, fields, whatever)
+2013-09-30T20:00:42  *** tvb has quit IRC
+2013-09-30T20:02:23  *** mrmartin has quit IRC
+2013-09-30T20:02:56  <zaro> foobio: mordred : does our puppet setup the gerrit mysql?
+2013-09-30T20:03:21  <foobio> jeblair: oh, you said 49033 not 47497. i'll adjust 49042 to suit
+2013-09-30T20:04:41  *** sodabrew has joined #openstack-infra
+2013-09-30T20:07:55  *** changbl has quit IRC
+2013-09-30T20:08:21  <zaro> foobio: ok. i see where mysql for gerrit gets setup.  i'll take look further to see how it can get replicated.
+2013-09-30T20:08:34  *** thedodd has joined #openstack-infra
+2013-09-30T20:09:07  *** davidhadas has joined #openstack-infra
+2013-09-30T20:10:57  <mordred> jeblair: what is our policy on channel op rights for devs in team channels?
+2013-09-30T20:11:41  *** thedodd has quit IRC
+2013-09-30T20:11:57  *** thedodd has joined #openstack-infra
+2013-09-30T20:12:14  *** dguitarbite has quit IRC
+2013-09-30T20:12:41  <jeblair> mordred: we need a bot/script to manage channel perms; i don't want to be in the business of handing out perms manually
+2013-09-30T20:13:04  *** AlexF has quit IRC
+2013-09-30T20:13:39  <jeblair> mordred: i expect with that in place, we'd have a policy something like core devs or ptls could get ops on their related channel
+2013-09-30T20:16:37  *** sarob has joined #openstack-infra
+2013-09-30T20:21:45  *** jcoufal has joined #openstack-infra
+2013-09-30T20:21:47  <lifeless> that policy would be fine for -deployment, FWIW.
+2013-09-30T20:23:02  *** adalbas has quit IRC
+2013-09-30T20:23:23  <anteaya> sodabrew: are you available to chat?
+2013-09-30T20:24:03  <jcoufal> Hi everybody, can I ask for a help regarding UX discussion tool?
+2013-09-30T20:24:44  <anteaya> jcoufal: ask away, we will do our best
+2013-09-30T20:24:48  *** sarob has quit IRC
+2013-09-30T20:24:50  <ekarlso> jcoufal: UX discusion tool how?
+2013-09-30T20:24:58  <jcoufal> right, so
+2013-09-30T20:25:11  <jcoufal> currently UX community is discussing their issues on Google+
+2013-09-30T20:25:21  <anteaya> yes, not optimal
+2013-09-30T20:25:22  <jcoufal> and we needed to move somewhere else, because it is very unefficient
+2013-09-30T20:25:33  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Correct elastic-recheck Puppet dependencies  https://review.openstack.org/49042
+2013-09-30T20:25:35  <jcoufal> yeah, there was voting between Askbot and Discourse
+2013-09-30T20:25:41  <jcoufal> and Askbot won the voting
+2013-09-30T20:25:59  <jcoufal> based on previous talks infra team would love to run our own deployment of askbot
+2013-09-30T20:26:14  <anteaya> we have had discussion previously about a UX tool
+2013-09-30T20:26:24  <jcoufal> but previously there were some troubles with postgresql
+2013-09-30T20:26:41  <jcoufal> so askbot is still heavily dependent on postgresql
+2013-09-30T20:27:00  <jcoufal> currently one of our developers is trying to setup some puppet scripts to propose new server to infra
+2013-09-30T20:27:07  <jcoufal> but it might take some time
+2013-09-30T20:27:12  <anteaya> jeblair: what is our latest direction with a UX tool?
+2013-09-30T20:27:28  <jcoufal> and it's getting very long
+2013-09-30T20:27:38  *** dprince has quit IRC
+2013-09-30T20:27:42  <jcoufal> so my question is if you could help us getting the deployment run
+2013-09-30T20:27:48  <anteaya> jim would have the latest info from the infra end of things methinks
+2013-09-30T20:27:51  <foobio> jcoufal: yes, for the moment askbot runs ask.openstack.org for us because of a variety of reasons, one of which was that we don't currently have a lot of developers familiar with managing postgresql (but plenty with heavy mysql background)
+2013-09-30T20:28:48  <jeblair> jcoufal: hi!  yes, clarkb worked for quite a while on askbot puppet modules before we decided it was getting very complicated and we weren't making progress on our other tasks...
+2013-09-30T20:29:16  <jcoufal> jeblair: yeah, but it was few months ago, wasn't it?
+2013-09-30T20:29:20  <jeblair> jcoufal: if someone did finish some puppet modules we would be happy to run them (for ux discussion and even for ask.o.o)
+2013-09-30T20:29:21  <jeblair> jcoufal: yes
+2013-09-30T20:29:36  <jcoufal> we are trying to get them working
+2013-09-30T20:29:40  <jcoufal> it just takes time
+2013-09-30T20:30:01  <jeblair> jcoufal: also, i would eventually like to propose storyboard as an alternative, but it's not ready (it's not even ready for bugs yet, so it's definitely not ready for ux discussions)
+2013-09-30T20:30:22  <jeblair> jcoufal: but we can talk about that later; will you be at the summit?
+2013-09-30T20:30:25  <anteaya> would this be worthy of a design session at the summit?
+2013-09-30T20:30:33  <jcoufal> so the question is, if you would tolerate temporary deployment of UX askbot on openshift (until our deployment is ready) and then we can just migrate DB to our deployment
+2013-09-30T20:30:36  *** ArxCruz has joined #openstack-infra
+2013-09-30T20:30:59  <jcoufal> jeblair: anteaya: I'll be there, we just want to move forward sooner
+2013-09-30T20:31:03  <jcoufal> that's why I am talking about temporary openshift solution
+2013-09-30T20:31:17  *** tvb has joined #openstack-infra
+2013-09-30T20:32:27  <jeblair> jcoufal: can you talk a bit about how openshift would help?
+2013-09-30T20:33:38  <jcoufal> jeblair: well there is no problem in getting the setup running in normal way or openshift - it's fast. The guy who is helping doesn't have much experience with puppet, so it gets longer for him to 'puppetize' the whole thing
+2013-09-30T20:33:47  <jcoufal> deployment on openshift would be faster
+2013-09-30T20:33:48  <openstackgerrit> A change was merged to openstack-infra/config: Correct elastic-recheck Puppet dependencies  https://review.openstack.org/49042
+2013-09-30T20:33:51  <foobio> jog0: clarkb: i'll reenable puppet on logstash.o.o in a bit once ^ that propagates, but at this point e-r is started and running there for about the past 15 minutes
+2013-09-30T20:34:02  <clarkb> foobio: \o/
+2013-09-30T20:34:21  <clarkb> foobio: thank you for helping out with that. Too many distractions on my end to give it an honest effort
+2013-09-30T20:34:24  <jcoufal> and UX can discuss there until we have the real deployment ready based on puppet scripts
+2013-09-30T20:34:25  <clarkb> foobio: I owe you a beer
+2013-09-30T20:34:27  <jcoufal> which might take weeks
+2013-09-30T20:35:18  <mordred> jeblair: I think that's an excellent policy. I agree though about the bot thing
+2013-09-30T20:35:37  <jog0> foobio:  e-r is runnig?
+2013-09-30T20:35:44  <jog0> I don't see anything in #openstack-qa
+2013-09-30T20:36:26  <foobio> clarkb: you can subtract it from one of the many beers i owe you
+2013-09-30T20:36:30  <foobio> jog0: foobio@logstash:~$ ps auxww|grep recheck
+2013-09-30T20:36:32  <foobio> recheck  18219  0.0  0.8 160240 17936 ?        S    20:18   0:00 /usr/bin/python /usr/local/bin/elastic-recheck /etc/elastic-recheck/elastic-recheck.conf
+2013-09-30T20:36:48  <foobio> not sure why it's not connecting. i'll see if i can tell
+2013-09-30T20:36:55  <jeblair> pretty sure it's there
+2013-09-30T20:37:15  *** thingee_zzz is now known as thingee
+2013-09-30T20:37:19  <mordred> jeblair, jcoufal: honestly, at this point, I think I'm fine with just about any solution to the UX discussion problem, because it seems like all of the 'good' and 'appropriate' solutions are a few months out from being usable
+2013-09-30T20:37:24  <hub_cap> hey what projects use pecan/wsme ? /me looks at their source for a Trove move
+2013-09-30T20:37:42  <jeblair> jcoufal: we don't currently manage anything in openshift; how would you see that working?
+2013-09-30T20:37:43  *** sarob has joined #openstack-infra
+2013-09-30T20:37:57  <anteaya> hub_cap: I think ironic and ceilometer
+2013-09-30T20:38:02  <anteaya> don't know if there are others
+2013-09-30T20:38:04  *** davidhadas has quit IRC
+2013-09-30T20:38:06  <mordred> if a UX guy spinning an ask up in openshift buys us enough time to talk about the overall problem at the summit and then get a thign in that things can migrate to and we're happy with
+2013-09-30T20:38:10  <hub_cap> thx anteaya
+2013-09-30T20:38:16  <mordred> then, it's not idea, but it's not as bad as google+ perhaps
+2013-09-30T20:38:22  <anteaya> np
+2013-09-30T20:39:10  <mordred> as long as we're clear that it's a stop gap measure and not meant to be the long-term solution to the problem (I don't want someone getting attached to their openshift thing on the side) - of course, as always, my opinions are often wrong
+2013-09-30T20:39:18  <jeblair> mordred, jcoufal: so the proposal is for a privately managed askbot on openshift until puppet-managed askbot is ready?
+2013-09-30T20:39:19  *** davidhadas has joined #openstack-infra
+2013-09-30T20:39:39  *** tvb has quit IRC
+2013-09-30T20:39:52  <mordred> jeblair: I think that's what I'm hearing.
+2013-09-30T20:40:06  <foobio> jog0: currently we're creating a /var/log/elastic-recheck directory, but the bot doesn't seem to have an open fd in it
+2013-09-30T20:40:33  <jcoufal> jeblair, mordred: Yes, mostly yes. We would create an account, deploy askbot there, set everything up and take care about it until we have real deployment.
+2013-09-30T20:40:41  <mordred> jeblair: I'd amend that to be "until puppet-managed askbot or storyboard, whichever comes first"
+2013-09-30T20:40:47  <jeblair> mordred: ++
+2013-09-30T20:40:49  <mordred> jcoufal: ++
+2013-09-30T20:41:23  <jeblair> jcoufal, mordred: that seems reasonable to me.  and i'm glad you're working on this btw -- regardless, it sounds like we'll end up with askbot run in the public infra which is something we really want
+2013-09-30T20:41:29  <jcoufal> jeblair, mordred: the only thing what I would like to ask is, if ux.openstack.org could be pointed to that deployment?
+2013-09-30T20:41:41  <mordred> jcoufal: and then, at the summit, we also would like to talk to you about our plans with storyboard so that we can make sure the long-term vision has you ultimately happy
+2013-09-30T20:41:41  <jeblair> jcoufal: and then if storyboard can do a better job later on, even better.
+2013-09-30T20:43:14  <clarkb> foobio: it may be opening the fd then closing it when daemonization happens
+2013-09-30T20:43:20  <clarkb> foobio: geard has/had this problem
+2013-09-30T20:44:05  <mtreinish> mordred: quick question, what's the recommended way for stubbing things out in unit tests? I remember a discussion about this from a while ago, but I can't remember the answer.
+2013-09-30T20:44:14  <jeblair> foobio: did anyone configure the bot to log?
+2013-09-30T20:44:25  <jeblair> foobio: it would be a separate config file, pointed to by the main config file
+2013-09-30T20:44:34  <jcoufal> jeblair, mordred: will be happy to discuss that
+2013-09-30T20:44:52  <anteaya> mtreinish: I think mock is the preferred framework since it works with py3
+2013-09-30T20:45:07  <mtreinish> anteaya: ok thanks
+2013-09-30T20:45:10  *** fbo is now known as fbo_away
+2013-09-30T20:45:23  <jcoufal> jeblair, mordred: what do you think about pointing the domain (ux.openstack.org) to the askbot deployment, would it be possible?
+2013-09-30T20:45:50  <foobio> clarkb: after a while of select looping, strace says http://paste.openstack.org/show/47727/
+2013-09-30T20:45:53  <jeblair> jcoufal: we don't generally point openstack.org dns entries at hosts not managed by the project; i don't feel very comfortable doing that.
+2013-09-30T20:45:55  <foobio> jeblair: ahh, checking
+2013-09-30T20:46:34  <jeblair> foobio: there is no "log_config" in the config file
+2013-09-30T20:47:08  <jeblair> jcoufal: can you live without that until the puppet-managed askbot is ready?
+2013-09-30T20:47:23  <jog0> foobio: I actually have never run the full bot in daemon mode
+2013-09-30T20:47:41  <jog0> but the logs are pretty verbose
+2013-09-30T20:47:50  <jeblair> jog0: i noticed.  i fixed a number of things.
+2013-09-30T20:47:53  <jeblair> it does work now
+2013-09-30T20:47:57  *** sarob has quit IRC
+2013-09-30T20:48:04  <jog0> jeblair:  thanks
+2013-09-30T20:48:27  *** sarob has joined #openstack-infra
+2013-09-30T20:48:34  <jcoufal> jeblair: I see the reason. My concern is about moving people temporarily somewhere, make them used to that and then move them to another place
+2013-09-30T20:49:38  <jcoufal> jeblair: that's I wanted to make the transition smooth (even the deployment would be temporal, because user won't see any change when changing to our deployment)
+2013-09-30T20:52:37  *** sarob has quit IRC
+2013-09-30T20:52:39  <jeblair> foobio, jog0: i'll propose a log config in a minute
+2013-09-30T20:52:49  <foobio> jeblair: yeah, i have it restarted with logging enabled now
+2013-09-30T20:52:52  <foobio> patch coming
+2013-09-30T20:53:00  <jeblair> foobio: oh, ok.
+2013-09-30T20:53:12  <foobio> but it does seem to be connecting
+2013-09-30T20:53:18  <mtreinish> foobio: where do the logs go?
+2013-09-30T20:53:23  <foobio> and identifying successfully with the right nick
+2013-09-30T20:53:32  <jeblair> foobio: yes, i was talking to it in -qa earlier.
+2013-09-30T20:53:48  <foobio> mtreinish: they will go into /var/log/elastic-recheck/ once the patch goes in
+2013-09-30T20:54:11  <foobio> jeblair: thought so. i saw some tests from you in the debug log when i was reviewing it
+2013-09-30T20:57:09  *** mordred has quit IRC
+2013-09-30T20:57:09  *** mordred has joined #openstack-infra
+2013-09-30T20:58:16  *** dizquierdo has joined #openstack-infra
+2013-09-30T20:58:56  <mtreinish> jeblair: I'm going to submit a summit topic for elastic-recheck, should I put it in qa or infra?
+2013-09-30T20:59:09  <jog0> sdague: ^
+2013-09-30T20:59:10  <mtreinish> apparently, there was a discussion about it earlier that I missed
+2013-09-30T20:59:11  <clarkb> mtreinish: I think we decided earlier today that either would work
+2013-09-30T20:59:19  <jeblair> mtreinish: +1 infra
+2013-09-30T20:59:44  <jog0> infra works for me too
+2013-09-30T20:59:48  <mordred> jcoufal: so, I hear that - the problem is that if we give you the dns pointer, and then something breaks, people will come ask us to fix it (this happens a lot) and we have to say "sorry, we don't actually run that"
+2013-09-30T20:59:48  <jeblair> mtreinish: unless you think due to subject matter it should be in qa (it's a crossover project, that could easily be the case)
+2013-09-30T20:59:49  <mtreinish> jeblair: ok that works for me I'll put it in infra
+2013-09-30T21:00:07  <mtreinish> jeblair: no, I think most of the discussion about it are more infra related
+2013-09-30T21:00:12  <jeblair> mtreinish: cool
+2013-09-30T21:00:13  <jog0> jeblair: as long as sdague shows up ...
+2013-09-30T21:00:14  <mordred> jcoufal: I betcha swapping a url won't be too bad for folks once we have it up for real, and if it is, I'll buy everyone a beer
+2013-09-30T21:00:46  <jcoufal> mordred: I was just wondering that it might be possible to point openstack.org dns entries outside the project, because ask.openstack.org does the same thing
+2013-09-30T21:00:56  <jcoufal> the difference would be, that it would be temporary
+2013-09-30T21:01:02  <jcoufal> but I understand your concerns
+2013-09-30T21:01:04  *** emagana has joined #openstack-infra
+2013-09-30T21:01:27  <jeblair> we're trying to avoid repeating that :(
+2013-09-30T21:02:11  <jcoufal> jeblair: I know :(
+2013-09-30T21:02:11  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Turn on logging for elastic-recheck  https://review.openstack.org/49057
+2013-09-30T21:02:31  <matty_dubs> I was going to be helping jcoufal set up AskBot. So it looks like the best path is to just set up a server via puppet?
+2013-09-30T21:02:31  *** dkliban has quit IRC
+2013-09-30T21:02:35  <mtreinish> foobio: ^^^ whitespace!
+2013-09-30T21:02:36  <jcoufal> mordred, jeblair: can matty_dubs reach you and ask few questions around puppetizing?
+2013-09-30T21:02:44  <foobio> mtreinish: grrr
+2013-09-30T21:03:17  <mordred> matty_dubs: yup! we're here all the time!
+2013-09-30T21:03:28  <foobio> mtreinish: clearly i forgot my 'git diff --check master' mantra
+2013-09-30T21:03:43  <jeblair> matty_dubs: have you seen these docs? http://ci.openstack.org/sysadmin.html
+2013-09-30T21:04:31  <jeblair> matty_dubs: also, you may find https://review.openstack.org/#/c/18518/ helpful
+2013-09-30T21:04:52  *** rfolco has quit IRC
+2013-09-30T21:05:05  <matty_dubs> jeblair: Ooh, I had seen the first, but not the latter
+2013-09-30T21:06:09  <matty_dubs> Do you know off-hand why it was abandoned? Was it just a lack of time/resources, or as there a blocker?
+2013-09-30T21:06:53  *** tvb has joined #openstack-infra
+2013-09-30T21:07:18  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Turn on logging for elastic-recheck  https://review.openstack.org/49057
+2013-09-30T21:07:20  <foobio> mtreinish: ^ this house is clean
+2013-09-30T21:07:50  <jeblair> matty_dubs: we tried to use mysql, which sent us very far down a dead-end, basically, and clark had to move onto other things (it was expedient to just outsource to the askbot folks at that point)
+2013-09-30T21:08:01  <anteaya> sodabrew: available?
+2013-09-30T21:08:13  <sodabrew> hey, yep available now
+2013-09-30T21:08:14  <mtreinish> foobio: what about https://review.openstack.org/#/c/49057/2/modules/elastic_recheck/files/elastic-recheck.init that tab change wasn't there before :)
+2013-09-30T21:08:30  <clarkb> matty_dubs: jeblair: right, the mysql support wasn't there. Also neither was the i8ln support
+2013-09-30T21:08:33  <sodabrew> so, you're at the issue of the dashboard job worker appears not to be processing?
+2013-09-30T21:08:39  <anteaya> yes
+2013-09-30T21:08:41  <matty_dubs> jeblair: And the outsourced solution doesn't support multi-tenancy, right?
+2013-09-30T21:08:42  <foobio> mtreinish: it's documented in the commit message though ;)
+2013-09-30T21:08:44  <clarkb> so two of the things we wanted to get working were non starters
+2013-09-30T21:08:47  <anteaya> 593 pending tasks right now
+2013-09-30T21:08:54  <anteaya> I have 6 workers working
+2013-09-30T21:08:56  <matty_dubs> IOW, is the right path for me to try this vs. us looking at hosting this with them, too?
+2013-09-30T21:09:01  <sodabrew> and you're starting the job workers by rake task?
+2013-09-30T21:09:07  <anteaya> yes
+2013-09-30T21:09:14  <mtreinish> foobio: fair enough, you prempted my nit-picking
+2013-09-30T21:09:15  <jeblair> matty_dubs: it's not working out that well; we'd like to insource it.
+2013-09-30T21:09:17  <anteaya> sudo -u puppet-dashboard bundle exec rake jobs:work
+2013-09-30T21:09:38  <sodabrew> aha! I have it. add RAILS_ENV=production
+2013-09-30T21:09:44  <anteaya> they all have their own screen window
+2013-09-30T21:09:44  <jeblair> matty_dubs: so yes, if you get this working, we'll run it here for ux and probably try to move ask.o.o to it as well.
+2013-09-30T21:09:49  *** amotoki_ has joined #openstack-infra
+2013-09-30T21:09:53  <anteaya> sodabrew: I specified that in root.rb
+2013-09-30T21:09:57  <sodabrew> oh
+2013-09-30T21:09:59  *** thingee is now known as thingee_zzz
+2013-09-30T21:09:59  <sodabrew> bother
+2013-09-30T21:10:07  <anteaya> the entire deployment is in proctuction
+2013-09-30T21:10:11  <matty_dubs> jeblair: Ah, okay. FWIW, when I tried to set AskBot up locally, the MySQL stuff just flat out didn't work. I could install it fine, but AskBot refused to actually use it.
+2013-09-30T21:10:21  <anteaya> yeah, I didn't want to have to add that to every command
+2013-09-30T21:10:23  <matty_dubs> Is MySQL a requirement, or could we use Postgres?
+2013-09-30T21:10:29  <sodabrew> are the job workers claiming to do anything?
+2013-09-30T21:10:34  <anteaya> oh yes
+2013-09-30T21:10:37  <anteaya> busy buys
+2013-09-30T21:10:46  <anteaya> http://paste.openstack.org/show/47713/
+2013-09-30T21:11:02  <clarkb> matty_dubs: :( that is disappointing because that was the state in january
+2013-09-30T21:11:10  <jeblair> mordred, clarkb: want to weigh in on matty_dubs question?
+2013-09-30T21:11:26  <mordred> meh
+2013-09-30T21:11:32  <jeblair> my feeling is that if it needs postgres, then we should run postgres; but we also want to use trove, which is mysql-only, right?
+2013-09-30T21:11:33  <clarkb> I personally don't have strong opinions about mysql vs postgres because I am not a mysql expert and have to think hard for either
+2013-09-30T21:11:38  <mordred> yes
+2013-09-30T21:11:47  <mordred> we want to move all of our databases to be run by cloud databases / trove
+2013-09-30T21:11:49  <mordred> which are mysql only
+2013-09-30T21:11:53  <clarkb> but we are surrounded by mysql expertise and cloud dbs are mysql
+2013-09-30T21:11:58  <mordred> also, none of us know anything about admin-ing postgres
+2013-09-30T21:12:00  <mordred> at all
+2013-09-30T21:12:07  <clarkb> mordred: well I know enough to run it on our slaves
+2013-09-30T21:12:10  <foobio> the postgres need had to do with its search indexing mostly, right? or was that something else?
+2013-09-30T21:12:10  <clarkb> mordred: which isn't much
+2013-09-30T21:12:28  <clarkb> foobio: index for serach was a big part of it
+2013-09-30T21:12:37  <clarkb> sounds like it may not work at all now on mysql though
+2013-09-30T21:12:46  <mordred> foobio: yes. it was for search, and because ask is using $library and $library has very snarky bearded and lame comments about mysql not being a real db
+2013-09-30T21:12:47  <foobio> yay bitrot
+2013-09-30T21:12:49  <jeblair> it used to involve a lot of vacuuming.
+2013-09-30T21:12:51  <matty_dubs> Yeah, they say that. My problem was just that whatever they used to abstract the database calls just flat-out didn't work with MySQL.
+2013-09-30T21:12:54  <anteaya> sodabrew: do you want me to give you access to the server, you can poke around?
+2013-09-30T21:12:55  *** mrodden has joined #openstack-infra
+2013-09-30T21:12:56  <matty_dubs> It was supposed to, but didn't.
+2013-09-30T21:13:02  <sodabrew> well that's weird. you're sure that you have only dashboard 2.0 running both the web interface and the job workers?
+2013-09-30T21:13:03  * mordred wants to cry
+2013-09-30T21:13:07  <anteaya> sodabrew: can you pm me your public key?
+2013-09-30T21:13:10  <clarkb> mordred: its ok
+2013-09-30T21:13:14  <sodabrew> sure, @anteaya will do
+2013-09-30T21:13:21  <anteaya> sodabrew: I used your fork
+2013-09-30T21:13:30  <anteaya> that is all the puppet I have on that server
+2013-09-30T21:14:03  *** mrodden1 has quit IRC
+2013-09-30T21:14:08  <matty_dubs> So I can poke around some more and see if it has an easy fix.
+2013-09-30T21:14:32  <dstufft> mordred: I make snarky comments about mysql not being a real db ;P
+2013-09-30T21:14:47  *** amotoki has quit IRC
+2013-09-30T21:14:59  <foobio> jog0: so is it doing the things it needs to then? since it seems to be making it into irc... what else is missing?
+2013-09-30T21:15:02  <matty_dubs> Hehe, I tend to favor Postgres anyway, but I don't have any real DBA experience either way
+2013-09-30T21:15:08  <mordred> dstufft: I know - but you at least do it with guts in a channel with former MySQL Inc folks
+2013-09-30T21:15:15  *** thomasm has quit IRC
+2013-09-30T21:15:18  <mordred> that I can at least respect
+2013-09-30T21:15:32  <clarkb> foobio: it should be yelling at us on every failure
+2013-09-30T21:15:34  <dstufft> mordred: :D
+2013-09-30T21:15:40  *** amotoki_ is now known as amotoki
+2013-09-30T21:15:44  <clarkb> foobio: either with a bug that it detected or info that it couldn't correlate a bu
+2013-09-30T21:15:46  *** MarkAtwood has joined #openstack-infra
+2013-09-30T21:15:51  <jeblair> clarkb, mordred: so can we say to matty_dubs "mysql would be preferred due to local expertise and our ability to better integrate it into our future directions in deployment; but failing that, we are okay with the puppet module running postgres on the host (with the caveat that none of us know anything about that)?"
+2013-09-30T21:15:52  <foobio> clarkb: and it detects these by scraping something?
+2013-09-30T21:15:58  <dstufft> mordred: I never was afraid to be snarky to peoples faces, (well "faces"), not sure if that's a good or a bad thing aobut me :)
+2013-09-30T21:16:00  <clarkb> foobio: elasticserach
+2013-09-30T21:16:07  <openstackgerrit> Monty Taylor proposed a change to openstack/requirements: Align our setup.py with ourselves  https://review.openstack.org/49059
+2013-09-30T21:16:11  <foobio> ahh, right
+2013-09-30T21:16:12  <clarkb> jeblair: ++
+2013-09-30T21:16:13  <dstufft> mordred: FWIW I know a few postgresql people
+2013-09-30T21:16:19  <dstufft> if you end up needing help
+2013-09-30T21:16:19  <foobio> clarkb: firewall rules?
+2013-09-30T21:16:31  <clarkb> foobio: maybe, it is running on the host where the elasticsearch proxy is located
+2013-09-30T21:16:35  <foobio> clarkb: oh, nevermind it hits a public endpoint
+2013-09-30T21:16:38  *** reed has joined #openstack-infra
+2013-09-30T21:16:39  <jog0> foobio: what room is it in?
+2013-09-30T21:16:39  <clarkb> foobio: but you should eb able to hit it locally
+2013-09-30T21:16:50  <foobio> jog0: -qa
+2013-09-30T21:16:51  <jeblair> foobio: accept ssh host keys?
+2013-09-30T21:17:01  <jeblair> foobio: gimme a minute to finish up my patch to your logging patch
+2013-09-30T21:17:04  <jeblair> and let's put it into place
+2013-09-30T21:17:05  <jog0> foobio: a bug just came through
+2013-09-30T21:17:09  <jog0> so should trigger
+2013-09-30T21:17:14  <openstackgerrit> Monty Taylor proposed a change to openstack/requirements: Remove pin from WebTest  https://review.openstack.org/49060
+2013-09-30T21:17:23  <foobio> jeblair: good point--i don't see any known_hosts management in the earlier puppetry
+2013-09-30T21:17:37  <mordred> I thnk the most salient point is that we'd like to stop running databases on hosts
+2013-09-30T21:18:00  <mordred> and use cloud databases
+2013-09-30T21:18:06  <anteaya> if I want to add a keypair to a running server, do I have to reboot the server?
+2013-09-30T21:18:08  <mordred> hub_cap: is RAX growing a postgres aaS any time soon?
+2013-09-30T21:18:20  <mordred> vipul: what about HP?
+2013-09-30T21:18:20  <hub_cap> nope
+2013-09-30T21:18:22  <clarkb> dstufft: I just ask selenamarie any time the slave postgres servers derp and I am stumped
+2013-09-30T21:18:33  <foobio> jeblair: clarkb: though would ssh host key issues prevent it from barking in irc? does it use that for more than just leaving comments in gerrit?
+2013-09-30T21:18:33  <clarkb> dstufft: but she may not like it if I do that every time a production service derps
+2013-09-30T21:18:34  <anteaya> I'll try rebooting
+2013-09-30T21:18:37  <hub_cap> but mordred i talked to josh berkus and he says he will be building it
+2013-09-30T21:18:44  <mordred> hub_cap: in trove?
+2013-09-30T21:18:45  <hub_cap> had lunch w/ him last wk
+2013-09-30T21:18:47  <hub_cap> yes
+2013-09-30T21:18:49  <mordred> awesome
+2013-09-30T21:18:53  <mordred> josh knows his stuff
+2013-09-30T21:18:53  <jeblair> foobio: it wouldn't know what to barck about
+2013-09-30T21:18:56  <openstackgerrit> Chris Hoge proposed a change to openstack-infra/config: Added puppet-vswitch project to Stackforge  https://review.openstack.org/49020
+2013-09-30T21:19:00  <mordred> so - in any case.
+2013-09-30T21:19:00  <foobio> k
+2013-09-30T21:19:01  <hub_cap> we talked about the pain points and how to start
+2013-09-30T21:19:02  <mordred> MERG
+2013-09-30T21:19:24  <foobio> jeblair: so it does query something out of gerrit then, not just scrape elasticsearch for info?
+2013-09-30T21:19:26  <mordred> I do not like the idea of growing a special snowflake
+2013-09-30T21:19:27  <clarkb> foobio: yeah it uses the gerrit event stream too so needs ssh
+2013-09-30T21:19:36  <mordred> how about this:
+2013-09-30T21:19:38  <foobio> k, addressing that manually for now
+2013-09-30T21:19:42  <clarkb> foobio: one comments from jenkins it checks elasticsearch
+2013-09-30T21:19:48  <mordred> go ahead and set it up in puppet to do postgres - BUT
+2013-09-30T21:19:52  <clarkb> we can actually change it to feed off of the zmq stream now that we host it
+2013-09-30T21:19:59  <anteaya> nope, looks like I have to rebuild the server to add a keypair
+2013-09-30T21:20:03  <mordred> do it such that there would be a postgres host and an ask host
+2013-09-30T21:20:08  <anteaya> sorry sodabrew this might take a few minutes
+2013-09-30T21:20:13  <sodabrew> no problem
+2013-09-30T21:20:23  <mordred> that way we could potentially have just one single postgres machine (or set of machines)
+2013-09-30T21:20:44  *** pblaho has quit IRC
+2013-09-30T21:20:47  <jeblair> matty_dubs: see mordred's suggestion ^
+2013-09-30T21:20:50  <vipul> mordred: Postgres isn't a hgih priority yet for HP either
+2013-09-30T21:20:56  <mordred> and the _service_ on the ask host we can kind of manage puppet-wise the same as if it was a cloud database
+2013-09-30T21:21:13  <mordred> which is to say the hostname and username and database name and password will all be input params
+2013-09-30T21:21:20  <mordred> that way, once a cloud grows a postgres aaS
+2013-09-30T21:21:28  <mordred> we can migrate the data and delete our postgres host
+2013-09-30T21:21:49  <mordred> and once the postgres host is up and running, we can migrate ask.o.o into the folks potentially as well
+2013-09-30T21:21:54  <mordred> yeah?
+2013-09-30T21:22:00  * mordred shudders
+2013-09-30T21:22:03  <dstufft> mordred: herou has a cloud pg
+2013-09-30T21:22:08  <dstufft> if that's your thing
+2013-09-30T21:22:10  <mordred> dstufft: it's not
+2013-09-30T21:22:16  <mordred> dstufft: we only use openstack tech to run openstack
+2013-09-30T21:22:21  <dstufft> mordred: ok!
+2013-09-30T21:22:30  <mordred> dstufft: dogfood tastes good!
+2013-09-30T21:22:36  <clarkb> we only* use ... * except in cases were we don't
+2013-09-30T21:22:41  <mordred> clarkb: SSSHHHHH
+2013-09-30T21:22:50  <mordred> clarkb: you're taking away my rigteousness
+2013-09-30T21:22:56  <mordred> clarkb: you're taking away my righteousness
+2013-09-30T21:23:16  <clarkb> mordred: sorry, but I think it is worth mentioning that some stuff isn't possible unfortunately
+2013-09-30T21:23:17  <anteaya> rats I still don't have your key attached to the vm
+2013-09-30T21:23:28  <mordred> Alex_Gaynor, clarkb, dhellmann, foobio: could I get some thoughts on: https://review.openstack.org/49060 ?
+2013-09-30T21:23:31  <foobio> clarkb: i see yet a new wrinkle here... since ~recheck is /var/run/elastic-recheck, the known hosts file will get blown away along with the rest of the homedir on every reboot
+2013-09-30T21:23:36  <mordred> clarkb: yes. indeed
+2013-09-30T21:23:39  <mordred> clarkb: but we try real hard
+2013-09-30T21:23:48  <clarkb> foobio: gah
+2013-09-30T21:23:55  <clarkb> foobio: we can put it in /etc/elastic-recheck instead
+2013-09-30T21:23:57  *** davidhadas_ has joined #openstack-infra
+2013-09-30T21:24:31  *** slong has joined #openstack-infra
+2013-09-30T21:24:46  <jeblair> why is ~recheck there?
+2013-09-30T21:24:48  <dstufft> mordred:  I love me some dogfood, I also love me some pragmatism
+2013-09-30T21:24:50  <dstufft> :D
+2013-09-30T21:25:04  <jeblair> foobio, clarkb: how about we put it in /home/recheck?
+2013-09-30T21:25:09  <clarkb> jeblair: that works too
+2013-09-30T21:25:16  <clarkb> jeblair: I picked an existing dir that was needed for other things
+2013-09-30T21:25:17  <foobio> jeblair: i am great with that suggestion
+2013-09-30T21:25:21  <clarkb> and chose poorly
+2013-09-30T21:25:24  <Alex_Gaynor> mordred: I think there's a seperate review somewhere which pins it to >=2.0 or something, have you coordinated with whoever wrote that?
+2013-09-30T21:25:35  <mordred> Alex_Gaynor: oh, is there? lemme to look
+2013-09-30T21:25:36  *** slong has quit IRC
+2013-09-30T21:25:37  <mordred> Alex_Gaynor: thanks
+2013-09-30T21:25:42  *** slong has joined #openstack-infra
+2013-09-30T21:25:53  <mordred> Alex_Gaynor: you are very right
+2013-09-30T21:26:16  *** weshay has quit IRC
+2013-09-30T21:26:16  *** davidhadas has quit IRC
+2013-09-30T21:26:22  <mordred> Alex_Gaynor: https://review.openstack.org/#/c/48898/ clarkb, foobio <--
+2013-09-30T21:26:31  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Turn on logging for elastic-recheck  https://review.openstack.org/49057
+2013-09-30T21:26:49  <anteaya> sodabrew rebuilding, will take me about 15 minutes
+2013-09-30T21:26:51  <jeblair> foobio: ^ updated the log config file based on what i was using locally
+2013-09-30T21:28:28  <openstackgerrit> A change was merged to openstack-infra/jenkins-job-builder: log info on job deletion  https://review.openstack.org/48804
+2013-09-30T21:28:50  *** mrodden has quit IRC
+2013-09-30T21:29:14  *** sodabrew has quit IRC
+2013-09-30T21:29:30  <foobio> jeblair: how does recheckwatchbot differ from elastic-recheck in that? what are the logger keys exactly?
+2013-09-30T21:30:32  *** mrodden has joined #openstack-infra
+2013-09-30T21:30:33  <mordred> jeblair, foobio: we're about to test whether or not the new propose-requirements-changes patch works in the wild...
+2013-09-30T21:30:42  <foobio> mordred: great
+2013-09-30T21:32:00  <openstackgerrit> Sergey Lukjanov proposed a change to openstack/requirements: os/requirements should be in sync with itself  https://review.openstack.org/49064
+2013-09-30T21:32:06  <clarkb> mordred: propose-requirements-changes patch? is this with pypi-mirror?
+2013-09-30T21:34:10  <mordred> clarkb: no, this is the translations like "propose requirements sync patches to all projects when requirements changes" job
+2013-09-30T21:34:24  <clarkb> oh that one
+2013-09-30T21:34:26  <clarkb> cool
+2013-09-30T21:34:52  <jgriffith> mordred: jeblair Any of you know what might have caused this to start happening again: Unknown distribution option: 'install_requires'
+2013-09-30T21:35:19  <jeblair> foobio: recheckwatchbot is the current key in use.  i like your idea that it should change though, so i left that in.
+2013-09-30T21:35:46  <jgriffith> mordred: jeblair unit tests can't run on Cinder except in the gate, assuming our mirror is saving us from something bad here?
+2013-09-30T21:37:51  <foobio> jeblair: ahh, got it. the key is defined in python where logging is being called
+2013-09-30T21:38:16  *** davidhadas_ has quit IRC
+2013-09-30T21:39:09  *** dkranz has quit IRC
+2013-09-30T21:39:30  *** davidhadas has joined #openstack-infra
+2013-09-30T21:40:10  <clarkb> jgriffith: can you paste the output of a `tox --version && tox` for cinder?
+2013-09-30T21:40:12  *** mriedem has quit IRC
+2013-09-30T21:41:05  *** jcoufal has quit IRC
+2013-09-30T21:41:15  <openstackgerrit> Russell Bryant proposed a change to openstack-infra/reviewstats: Use separate script for reviews for bugs  https://review.openstack.org/49066
+2013-09-30T21:41:15  <openstackgerrit> Russell Bryant proposed a change to openstack-infra/reviewstats: Add milestone option to reviews_for_bugs  https://review.openstack.org/49067
+2013-09-30T21:41:47  *** dizquierdo has left #openstack-infra
+2013-09-30T21:42:59  *** dkliban has joined #openstack-infra
+2013-09-30T21:46:21  <sdague> Alex_Gaynor: do you really +A something before we had jenkins results? :)
+2013-09-30T21:46:25  <sdague> https://review.openstack.org/#/c/49064/1
+2013-09-30T21:47:05  <russellb> for something that trivial i might do it too, heh
+2013-09-30T21:47:36  <openstackgerrit> Jeremy Stanley proposed a change to openstack-infra/config: Move elastic-recheck shell account out of /var/run  https://review.openstack.org/49068
+2013-09-30T21:47:40  <sdague> I would submit that changing requirements never ends up being trivial :)
+2013-09-30T21:48:17  <sdague> man, that's a query I need to build, how many "trivial" changes +Aed and exploded in the gate
+2013-09-30T21:48:42  *** jcoufal has joined #openstack-infra
+2013-09-30T21:49:28  *** julim has quit IRC
+2013-09-30T21:51:05  *** tvb has quit IRC
+2013-09-30T21:52:35  *** tvb has joined #openstack-infra
+2013-09-30T21:53:18  <foobio> clarkb: jog0: okay, so aside from recheck@logstash.o.o accepting the ssh host key on review.openstack.org:29418 (which has been done for a while), what else could we check?
+2013-09-30T21:55:46  <clarkb> foobio: I'm not sure, jog0 will probably have ideas
+2013-09-30T21:56:12  <anteaya> I may have figured it out - I created a dashboard user 'dashboard'@'localhost' in the mysql db when I was the ubuntu user - and then followed some instructions to create a puppet-dashboard user and switch the repo to /opt/puppet-dashboard - I wonder if that would affect the ability of dashboard@localhost to connect to the db?
+2013-09-30T21:56:42  *** pcm_ has quit IRC
+2013-09-30T21:56:49  <jeblair> foobio: i'll take a look
+2013-09-30T21:57:05  <pleia2> anteaya: by default mysql doesn't care what system user you are (postgres can)
+2013-09-30T21:57:35  <anteaya> pleia2: hmmm, okay so that isn't it then
+2013-09-30T21:57:43  <jeblair> foobio: did you manually apply logging and restart?
+2013-09-30T21:58:14  <foobio> jeblair: yes, i actually applied it through my puppet development environment, but also restarted the elastic-recheck service after that as well
+2013-09-30T21:58:35  <jeblair> foobio: hrm, i don't see any paramiko logs
+2013-09-30T21:58:56  <jeblair> foobio: i'm going to try some interactive debugging on host
+2013-09-30T21:58:58  <foobio> i still have puppet agent stopped on that server because i've been testing patches that way while proposing them for review, just to make sure there are no other omissions
+2013-09-30T21:59:03  *** sarob has joined #openstack-infra
+2013-09-30T21:59:18  *** hashar has quit IRC
+2013-09-30T21:59:41  <foobio> jeblair: the current state should reflect your last patchset on the logging change as well as https://review.openstack.org/49068 on top of that
+2013-09-30T22:00:14  <jeblair> this is much easier to test if i can log in as the account
+2013-09-30T22:00:18  <foobio> gah, it's actually not running
+2013-09-30T22:00:19  <jeblair> i'm going to chsh to bash
+2013-09-30T22:00:23  <jeblair> foobio:  i stopped it
+2013-09-30T22:00:31  <foobio> oh, phew
+2013-09-30T22:00:33  <jog0> foobio: first time i ran elastic-recheck I had to make sure review.o.o was added as a host
+2013-09-30T22:00:35  <jeblair> that's what i was trying to say when i said i was going to try interactive debugging
+2013-09-30T22:00:51  <foobio> i was pretty sure i had made sure it survived my last restart, but freaked out for a sec ;) carry on!
+2013-09-30T22:01:36  * foobio needs to start grilling dinner. i have a very annoyed girlfriend who was promised i'd start cooking about 1.5 hours ago
+2013-09-30T22:01:41  *** sarob has quit IRC
+2013-09-30T22:01:43  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Make elastic-recheck's shell bash  https://review.openstack.org/49070
+2013-09-30T22:01:44  <sdague> jeblair: can we land this - https://review.openstack.org/#/c/48784/ ?
+2013-09-30T22:01:47  <foobio> i'll keep one eye on the computer
+2013-09-30T22:02:13  *** sarob has joined #openstack-infra
+2013-09-30T22:03:01  *** hashar has joined #openstack-infra
+2013-09-30T22:03:29  *** matty_dubs is now known as matty_dubs|gone
+2013-09-30T22:04:39  *** lcestari_ has quit IRC
+2013-09-30T22:04:46  *** thomasm has joined #openstack-infra
+2013-09-30T22:05:04  <openstackgerrit> A change was merged to openstack-infra/reviewstats: Use separate script for reviews for bugs  https://review.openstack.org/49066
+2013-09-30T22:05:04  <openstackgerrit> A change was merged to openstack-infra/reviewstats: Add milestone option to reviews_for_bugs  https://review.openstack.org/49067
+2013-09-30T22:05:05  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Replace queries.json with queries.yaml for elastic-recheck  https://review.openstack.org/49071
+2013-09-30T22:06:05  <openstackgerrit> Sean Dague proposed a change to openstack-infra/elastic-recheck: added bug #1224001 to skynet  https://review.openstack.org/49072
+2013-09-30T22:06:07  <uvirtbot> Launchpad bug 1224001 in neutron "test_network_basic_ops fails waiting for network to become available" [Critical,New] https://launchpad.net/bugs/1224001
+2013-09-30T22:07:30  *** sdake has quit IRC
+2013-09-30T22:07:55  *** tvb has quit IRC
+2013-09-30T22:08:04  *** sdake has joined #openstack-infra
+2013-09-30T22:08:04  *** sdake has quit IRC
+2013-09-30T22:08:04  *** sdake has joined #openstack-infra
+2013-09-30T22:08:38  <mtreinish> ^^^ That's a nice effect
+2013-09-30T22:08:40  <uvirtbot> mtreinish: Error: "^^" is not a valid command.
+2013-09-30T22:08:43  *** thomasm has quit IRC
+2013-09-30T22:09:01  <openstackgerrit> A change was merged to openstack-infra/config: Turn on logging for elastic-recheck  https://review.openstack.org/49057
+2013-09-30T22:09:06  <jog0> the bots are taking over
+2013-09-30T22:10:32  *** s1rp has quit IRC
+2013-09-30T22:10:45  *** s1rp has joined #openstack-infra
+2013-09-30T22:10:57  *** MoXxXoM has quit IRC
+2013-09-30T22:11:09  *** datsun180b has quit IRC
+2013-09-30T22:11:15  *** MoXxXoM has joined #openstack-infra
+2013-09-30T22:11:30  *** datsun180b has joined #openstack-infra
+2013-09-30T22:12:17  <foobio> jeblair: oho! how did i not notice that the json symlink into the git repo there was broken. was that all it needed?
+2013-09-30T22:13:17  <anteaya> the sodabrew dashboard is up again with 3 workers working
+2013-09-30T22:13:17  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Increase verbosity in elastic-recheck debug log  https://review.openstack.org/49076
+2013-09-30T22:13:24  <clarkb> did I get the symlink wrong/
+2013-09-30T22:13:27  <jeblair> foobio: yes, that should be it
+2013-09-30T22:13:32  <jeblair> clarkb: no, i changed it from json to yaml this morning
+2013-09-30T22:13:38  <clarkb> OOOHHHH
+2013-09-30T22:13:41  <jeblair> clarkb: but forgot about the config change
+2013-09-30T22:13:51  <anteaya> and I lost him, too slow
+2013-09-30T22:13:53  <anteaya> dang
+2013-09-30T22:14:04  *** esker has quit IRC
+2013-09-30T22:14:29  <jeblair> jog0, clarkb, foobio, sdague, mtreinish: to the best of my knowlegde, elasticrecheck should be operational now
+2013-09-30T22:14:43  <clarkb> awesome
+2013-09-30T22:14:52  <jeblair> it just spoke
+2013-09-30T22:15:01  <anteaya> total of 6 workers working now
+2013-09-30T22:15:04  <russellb> is this broken, or do I have to log in now to see anything?  http://activity.openstack.org/data/
+2013-09-30T22:15:19  <jog0> and its not running on my desktop anymore
+2013-09-30T22:15:22  <foobio> clarkb: jeblair: the other missing bit is we still need to decide on a good way to manage known_hosts entries for puppeted things. we
+2013-09-30T22:15:24  <foobio> er
+2013-09-30T22:15:35  <foobio> we're still manually accepting those everywhere
+2013-09-30T22:15:38  <clarkb> foobio: ya
+2013-09-30T22:15:55  <clarkb> reed: can you look at russellb's question?
+2013-09-30T22:16:15  <jeblair> foobio: maybe we can brainstorm something involving sshfp records
+2013-09-30T22:16:26  *** jerryz has quit IRC
+2013-09-30T22:16:59  <jeblair> sdague: neutron-pg aprvd
+2013-09-30T22:18:26  *** rockyg has quit IRC
+2013-09-30T22:18:43  <foobio> jeblair: sshfp would be lovely, but needs dnssec
+2013-09-30T22:19:14  <jog0> does the bot auto pull from git every time there is a change?
+2013-09-30T22:19:19  <clarkb> fyi designate intends on supporting dnssec and zone file uploads
+2013-09-30T22:19:22  *** rockyg has joined #openstack-infra
+2013-09-30T22:19:24  *** tvb has joined #openstack-infra
+2013-09-30T22:19:25  <clarkb> so we could possibly win all the things
+2013-09-30T22:19:34  <foobio> clarkb: that's stellar
+2013-09-30T22:19:41  * foobio is eager to use it
+2013-09-30T22:20:04  *** sodabrew has joined #openstack-infra
+2013-09-30T22:20:22  <jeblair> jog0: when we land all the outstanding changes, then it should be updated within 10-25 minutes after a change
+2013-09-30T22:20:36  <jog0> jeblair: nice
+2013-09-30T22:20:36  <jeblair> jog0: (the salt work that's going on is intended to reduce that)
+2013-09-30T22:20:54  *** tizzo has quit IRC
+2013-09-30T22:21:00  <jog0> btw for a query file change you don't need to restart the service
+2013-09-30T22:21:11  <jog0> so when we pull out the query file ...
+2013-09-30T22:21:59  *** tizzo has joined #openstack-infra
+2013-09-30T22:22:14  <jgriffith> clarkb: sorry... stepped out
+2013-09-30T22:22:16  <jgriffith> clarkb: http://paste.openstack.org/show/47729/
+2013-09-30T22:22:22  <jeblair> jog0: actually, it should be 0-10 minutes, now that i think about it
+2013-09-30T22:22:49  <jeblair> jog0: the way clarkb set it up it's just a symlink into the git checkout, and the git checkout is updated if needed every puppet run, which is on a 10 minute interval
+2013-09-30T22:23:16  <jog0> jeblair: nice not bad
+2013-09-30T22:23:27  *** rnirmal has quit IRC
+2013-09-30T22:24:33  <clarkb> jgriffith: hmm you have new tox which comes with new setuptools... not sure what is going on there
+2013-09-30T22:24:34  *** SergeyLukjanov has quit IRC
+2013-09-30T22:25:11  <clarkb> mordred: ^
+2013-09-30T22:26:11  *** vipul is now known as vipul-away
+2013-09-30T22:26:49  *** DennyZhang has joined #openstack-infra
+2013-09-30T22:29:02  *** thedodd has quit IRC
+2013-09-30T22:29:06  <openstackgerrit> A change was merged to openstack-infra/config: start voting on neutron-pg job  https://review.openstack.org/48784
+2013-09-30T22:30:44  <openstackgerrit> A change was merged to openstack-infra/config: Move elastic-recheck shell account out of /var/run  https://review.openstack.org/49068
+2013-09-30T22:31:08  <openstackgerrit> A change was merged to openstack-infra/config: Make elastic-recheck's shell bash  https://review.openstack.org/49070
+2013-09-30T22:33:32  *** jerryz has joined #openstack-infra
+2013-09-30T22:34:02  <openstackgerrit> James E. Blair proposed a change to openstack-infra/elastic-recheck: Remove stray backslash  https://review.openstack.org/49078
+2013-09-30T22:34:14  <openstackgerrit> A change was merged to openstack-infra/elastic-recheck: added bug #1224001 to skynet  https://review.openstack.org/49072
+2013-09-30T22:34:15  <uvirtbot> Launchpad bug 1224001 in neutron "test_network_basic_ops fails waiting for network to become available" [Critical,New] https://launchpad.net/bugs/1224001
+2013-09-30T22:34:22  <reed> russellb, ah! thanks for spotting that
+2013-09-30T22:34:28  <russellb> np
+2013-09-30T22:34:38  <reed> russellb, it is being upgraded
+2013-09-30T22:34:42  <russellb> ah, k
+2013-09-30T22:34:55  <reed> russellb, anything in particular you're looking for?
+2013-09-30T22:34:58  <russellb> nah, it's fine
+2013-09-30T22:35:06  <anteaya> so sodabrew is in the puppet-dashboard server
+2013-09-30T22:35:17  <anteaya> and we have 45 nodes reporting
+2013-09-30T22:35:23  <anteaya> and 71 pending tasks
+2013-09-30T22:35:28  <anteaya> with 6 workers running
+2013-09-30T22:35:32  <sodabrew> @anteaya So I see the pending tasks, but the reports are in fact being processed in a timely manner. I'm wondering if may have made some error in the update of the delayed_job gem.
+2013-09-30T22:35:48  <anteaya> sodabrew: that is an interesting thought
+2013-09-30T22:35:56  <anteaya> any idea how I could track that down?
+2013-09-30T22:35:56  *** vipul-away is now known as vipul
+2013-09-30T22:36:16  <reed> russellb, we fixed a bunch of issues with it, improved reports...
+2013-09-30T22:36:21  <sodabrew> I'm digging in a bit, looking at what query generates that number
+2013-09-30T22:36:29  <anteaya> since pending tasks are going to just keep accumulating until we run jobs:clear
+2013-09-30T22:36:36  <anteaya> great thanks
+2013-09-30T22:36:57  <anteaya> I'll keep off the server while you are working, too many cooks and all that
+2013-09-30T22:37:38  <reed> russellb, it should be open now
+2013-09-30T22:37:57  <openstackgerrit> A change was merged to openstack-infra/config: Replace queries.json with queries.yaml for elastic-recheck  https://review.openstack.org/49071
+2013-09-30T22:38:05  <openstackgerrit> A change was merged to openstack-infra/config: Increase verbosity in elastic-recheck debug log  https://review.openstack.org/49076
+2013-09-30T22:38:28  *** davidhadas has quit IRC
+2013-09-30T22:39:39  *** davidhadas has joined #openstack-infra
+2013-09-30T22:40:12  <jgriffith> clarkb: mordred thanks!  That gave me enough of to work with
+2013-09-30T22:40:20  <russellb> reed: cool, in now.  noticed that some project links on this page are an IP address instead of activity.openstack.org - http://activity.openstack.org/data/display/OPNSTK2/Projects
+2013-09-30T22:40:24  <jgriffith> clarkb: mordred uninstalled setuptools and tox, reinstalled and good to go
+2013-09-30T22:40:37  <clarkb> jgriffith: good to know
+2013-09-30T22:40:40  <reed> russellb, yep, one of the reasons why it was closed :)
+2013-09-30T22:40:48  <sodabrew> @anteaya The 70 jobs are ones that failed. Looks like there's no rake provided by delayed_job to inspect failures
+2013-09-30T22:40:51  <russellb> reed: ha, ok, will be gentle then :)
+2013-09-30T22:40:53  <reed> it's being fixed now
+2013-09-30T22:40:54  *** tizzo has quit IRC
+2013-09-30T22:40:59  <russellb> sounds good, thanks!
+2013-09-30T22:41:12  <anteaya> sodabrew: suggestions on going forward?
+2013-09-30T22:41:30  <anteaya> we might have to run jobs:clear on a cron of some kind maybe?
+2013-09-30T22:41:47  <sodabrew> they are always reporting this probelm: Validation failed: Host already has a report for time and kind
+2013-09-30T22:42:02  <anteaya> how difficult would it be to offer a rake task for delayed_job to inspect failures?
+2013-09-30T22:42:08  <clarkb> anteaya: sodabrew: I think I know what that is. Our slaves share a single cert
+2013-09-30T22:42:13  <anteaya> yeah, i see that a lot
+2013-09-30T22:42:18  <clarkb> that confuses the dashboard
+2013-09-30T22:42:23  <anteaya> oh
+2013-09-30T22:42:32  <sodabrew> do they all have the same cert hostname?
+2013-09-30T22:42:46  <clarkb> sodabrew: different hostnames same certname
+2013-09-30T22:42:51  *** OlivierSanchez has quit IRC
+2013-09-30T22:42:52  *** hemna has quit IRC
+2013-09-30T22:42:56  *** ojacques has joined #openstack-infra
+2013-09-30T22:43:11  <sodabrew> oh, yeah that'll do it i think. generally the certname should match the hostname, right?
+2013-09-30T22:43:19  <sodabrew> i think a lot of puppet docs use those two almost interchangeable
+2013-09-30T22:43:21  <sodabrew> y
+2013-09-30T22:43:30  *** hemna has joined #openstack-infra
+2013-09-30T22:43:34  *** amotoki has quit IRC
+2013-09-30T22:43:51  <clarkb> sodabrew: right, but there is no guaruntee they will be identical or that they will be unique...
+2013-09-30T22:44:02  <anteaya> clarkb: so live with the queue of pending tasks and clear them from time to time or unique certnames?
+2013-09-30T22:44:21  <clarkb> we are trying to move to unique certnames but that is slow going
+2013-09-30T22:44:38  *** tvb has quit IRC
+2013-09-30T22:44:50  <anteaya> so for now, it appears that the sodabrew dashboard is working as well as it is going to
+2013-09-30T22:44:59  <anteaya> so run jobs:clear occasionally
+2013-09-30T22:45:18  <anteaya> and then when unique certnames kick in, remove the jobs:clear job
+2013-09-30T22:45:20  <anteaya> yeah?
+2013-09-30T22:46:11  <anteaya> any dissenting arguments?
+2013-09-30T22:46:47  <anteaya> sodabrew: how many workers should I be running, any thoughts?
+2013-09-30T22:46:53  <anteaya> right now I have 6 running
+2013-09-30T22:47:10  <sodabrew> @anteaya Meanwhile, I'll make myself a TODO task to have some kind of failed jobs inspector rake task
+2013-09-30T22:47:11  <anteaya> do I run into issues if I have too many running?
+2013-09-30T22:47:30  <anteaya> sodabrew: thanks, let me know if I can help or be a guinea pig for that
+2013-09-30T22:48:48  <anteaya> I'm going to try starting the server with --port=80 on it
+2013-09-30T22:48:56  <anteaya> clarkb would like port 80
+2013-09-30T22:49:26  *** mrodden has quit IRC
+2013-09-30T22:49:41  <lifeless> mordred: btw you're not lurking in openstack-cinder
+2013-09-30T22:50:12  <lifeless> mordred: we just saw an interesting thing there - tox can fail if the package can't be built outside the venvs, which means we really shouldn't be building it outside the venvs, rather we shoud make a venv for building it.
+2013-09-30T22:50:34  <anteaya> sodabrew: it says port is in use or requires root privileges, I was sudo when I ran the command - any thoughts?
+2013-09-30T22:51:43  *** sodabrew has quit IRC
+2013-09-30T22:51:48  <anteaya> http://15.185.153.222/
+2013-09-30T22:51:54  <anteaya> clarkb ^
+2013-09-30T22:52:01  *** sodabrew has joined #openstack-infra
+2013-09-30T22:52:04  <anteaya> but I had to sudo su to get that to work
+2013-09-30T22:52:14  <anteaya> not sure if that is to your liking or not
+2013-09-30T22:53:12  *** jcoufal has quit IRC
+2013-09-30T22:53:26  <openstackgerrit> Joe Gordon proposed a change to openstack-infra/elastic-recheck: Make test_queries save stdout in tox testr  https://review.openstack.org/49080
+2013-09-30T22:54:55  <mordred> lifeless: yes. that's why I've been putting in the skip-sdist patches to people's tox.ini files
+2013-09-30T22:55:08  <lifeless> mordred: ah, so cinder may be missing that?
+2013-09-30T22:55:11  <lifeless> jgriffith: ^
+2013-09-30T22:55:14  <mordred> lifeless: yup
+2013-09-30T22:55:48  <jgriffith> lifeless: mordred :)
+2013-09-30T22:55:58  *** tvb has joined #openstack-infra
+2013-09-30T22:56:02  <jgriffith> lifeless: mordred I'll add
+2013-09-30T22:56:09  <jgriffith> unless you're already on it
+2013-09-30T22:56:11  <dstufft> mordred: what does skipsdist do
+2013-09-30T22:56:34  <mordred> jgriffith: I'm on it
+2013-09-30T22:56:40  <jgriffith> mordred: k
+2013-09-30T22:56:45  <jgriffith> mordred: thank you
+2013-09-30T22:56:49  <jgriffith> lifeless: thanks to you as well
+2013-09-30T22:56:51  <mordred> dstufft: it causes tox to run pip install -e . _inside_ of the venv after it's already installed the deps
+2013-09-30T22:56:57  <dstufft> oh
+2013-09-30T22:57:01  <dstufft> so it's an alias for usedevelop
+2013-09-30T22:57:07  <mordred> it's in two pieces
+2013-09-30T22:57:10  *** reed has quit IRC
+2013-09-30T22:57:12  <mordred> skipsdist is one part
+2013-09-30T22:57:16  <mordred> it skipts the sdist part
+2013-09-30T22:57:16  *** reed_ has joined #openstack-infra
+2013-09-30T22:57:20  <mordred> usedevelop is the other part
+2013-09-30T22:57:24  <mordred> (they made me split it)
+2013-09-30T22:57:26  <mordred> but yes
+2013-09-30T22:57:51  <anteaya> thanks so much for your help sodabrew
+2013-09-30T22:57:58  <sodabrew> yw!
+2013-09-30T22:58:04  <anteaya> we always have many pupptety type questions
+2013-09-30T22:58:04  <dstufft> I think that's a bad idea, there are differences between a package installed with -e and installed normally; Why don't your packages build?
+2013-09-30T22:58:16  <anteaya> you are always welcome to hang out and lurk
+2013-09-30T22:58:18  *** cody-somerville has quit IRC
+2013-09-30T22:58:32  <mordred> jgriffith: https://review.openstack.org/49083
+2013-09-30T22:58:35  <anteaya> and if you ever want to know anything about openstack, please be sure to ask
+2013-09-30T22:58:43  <jgriffith> thank you sir
+2013-09-30T22:58:44  <sodabrew> Context question: is this the channel for those working on openstack.org itself?
+2013-09-30T22:58:49  <mordred> dstufft: setup_requires
+2013-09-30T22:58:50  <anteaya> yes
+2013-09-30T22:58:53  <sodabrew> neat
+2013-09-30T22:59:01  <anteaya> we are the infrastructure team
+2013-09-30T22:59:08  <mordred> dstufft: means that you have to run setup.py first to be able to get the deps you need to run setup.py
+2013-09-30T22:59:13  <anteaya> we keep gerrit, and zuul and jenkins running
+2013-09-30T22:59:21  <anteaya> and all the other little pieces
+2013-09-30T22:59:26  <anteaya> including puppet and salt
+2013-09-30T22:59:46  <mordred> dstufft: they should all build/install sanely outside of that env too
+2013-09-30T22:59:52  <mordred> dstufft: and we have tests to double-check that
+2013-09-30T23:00:03  <mordred> but dev laptops are notoriously ... unpredictable
+2013-09-30T23:00:06  <anteaya> general customer service, any questions on testing and helping folks to find the right place for something
+2013-09-30T23:00:11  <sodabrew> ok, gotta get back to the day job. au revoir
+2013-09-30T23:00:17  *** sodabrew has left #openstack-infra
+2013-09-30T23:00:31  <dstufft> mordred: sounds like tox should do a setup.py egg_info before doing a setup.py sdist
+2013-09-30T23:00:50  <mordred> even that would require setup.py to run and then download its setup_requires
+2013-09-30T23:00:52  <mordred> via easy_install
+2013-09-30T23:01:03  <mordred> which will helpfully drop an egg into the source dir
+2013-09-30T23:01:23  <mordred> which in some other contexts will lead to the egg being seen and subsequently not installed into the venv when requested :)
+2013-09-30T23:01:37  <mordred> dstufft: there are many many things that _should_ be different here
+2013-09-30T23:01:57  <dstufft> mordred: I know that feel
+2013-09-30T23:02:29  <mordred> dstufft: yah. it's when people are like "omg, that's terrible, why would you ever?" and you're like "trust me, I know. It is terrible. It's just less terrible than the other choice right now"
+2013-09-30T23:02:46  <mordred> and then you hit your face with a large animal
+2013-09-30T23:03:38  <dstufft> someday this small corner will be better
+2013-09-30T23:03:51  <dstufft> mordred: oh yea, pip pep isn't getting a backport
+2013-09-30T23:03:56  <dstufft> not yet anyways
+2013-09-30T23:04:22  *** DennyZhang has quit IRC
+2013-09-30T23:04:55  *** hogepodge has quit IRC
+2013-09-30T23:04:59  *** hogepodge_ has joined #openstack-infra
+2013-09-30T23:05:15  <mordred> sigh
+2013-09-30T23:05:17  * mordred cries
+2013-09-30T23:05:59  <dstufft> mordred: does openstack support windows in any capacity?
+2013-09-30T23:06:06  <dstufft> like clients or anything
+2013-09-30T23:08:30  *** tvb has quit IRC
+2013-09-30T23:08:38  <openstackgerrit> A change was merged to openstack-infra/elastic-recheck: Remove stray backslash  https://review.openstack.org/49078
+2013-09-30T23:08:44  *** rcleere has quit IRC
+2013-09-30T23:08:48  <mordred> dstufft: sure
+2013-09-30T23:09:01  <mordred> dstufft: I believe both rackspace and hp clouds have windows guests
+2013-09-30T23:09:15  <lifeless> and the python clients should run on windows just fine
+2013-09-30T23:09:15  <mordred> and microsoft have been spending a bunch of effort to make sure openstack supports hyper-v
+2013-09-30T23:09:17  <lifeless> and there is murana
+2013-09-30T23:09:28  <mordred> which thing is murano again?
+2013-09-30T23:09:28  <dstufft> mordred: no I mean where you'd install some component of openstack on windows
+2013-09-30T23:09:39  <lifeless> 'install windows clusters for you'
+2013-09-30T23:09:53  <mordred> dstufft: I don't think even msft have put too much effort into that
+2013-09-30T23:09:53  <dstufft> mordred: basically I'm going to make the windows installation story for pip (and setuptools) better, so idk if that'll affect you guys or not
+2013-09-30T23:10:02  <lifeless> it will
+2013-09-30T23:10:03  <mordred> it's pretty linux-centric in design
+2013-09-30T23:10:04  <lifeless> for the clients
+2013-09-30T23:10:26  <mordred> for the clients, sure. although we don't actually have windows in our target support matrix at all
+2013-09-30T23:10:41  <mordred> but I'm _certain_ it will make people happy for the story to be better
+2013-09-30T23:10:45  <lifeless> they are the first against the wall
+2013-09-30T23:10:51  *** dkliban has quit IRC
+2013-09-30T23:10:57  <mordred> I don't grok your new zealand language
+2013-09-30T23:11:07  <lifeless> to support windows
+2013-09-30T23:11:08  <lifeless> clients first
+2013-09-30T23:11:53  <lifeless> I realise it could be misinterpreted :)
+2013-09-30T23:12:13  *** cody-somerville has joined #openstack-infra
+2013-09-30T23:12:16  <mordred> ah. they == clients
+2013-09-30T23:12:27  <mordred> yes. same with python3 - clients first
+2013-09-30T23:12:46  <mordred> I am not expecting large amounts of clamoring for windows gating for the clients in the near term
+2013-09-30T23:12:57  *** sarob has quit IRC
+2013-09-30T23:13:00  <mordred> which makes me glad, because I have no idea how we'd do that - it's sort of against current policy
+2013-09-30T23:13:18  *** datsun180b has quit IRC
+2013-09-30T23:13:25  *** sarob has joined #openstack-infra
+2013-09-30T23:14:09  <mordred> and I'd rather not have to shoot that down- it would be much nicer if just nobody ever wanted it :)
+2013-09-30T23:14:10  <dstufft> lifeless: mordred cool, , well I'm putting the wheels in motion to make a unified (pip + setuptools) msi installer, and I now have a signing key with which to sign it; So there's that at least :/
+2013-09-30T23:14:50  <dstufft> might do the same thing for OSX, though curl is not hard there
+2013-09-30T23:16:58  <mordred> dstufft: well, honestly, woot
+2013-09-30T23:17:15  <mordred> because the windows pushback in the easy_install area is just frustrating
+2013-09-30T23:17:15  <dstufft> mordred: we haven't given up on 2.7 btw
+2013-09-30T23:17:24  <dstufft> We're defering it
+2013-09-30T23:17:39  <mordred> fair
+2013-09-30T23:17:40  <dstufft> so we can get 3.4 in becuase the timeline is shorter on that
+2013-09-30T23:17:44  *** tvb has joined #openstack-infra
+2013-09-30T23:17:47  <mordred> I think that's a good choice
+2013-09-30T23:17:50  *** sarob has quit IRC
+2013-09-30T23:17:55  *** mrda has joined #openstack-infra
+2013-09-30T23:22:11  * anteaya wanders away ... dinner
+2013-09-30T23:27:34  <foobio> dstufft: i can't wait for bootstrapped pip in python. hopefully in about a decade when most stable server distros are using python >= 3.4 by default, we'll all be better off for it ;)
+2013-09-30T23:27:50  *** mrda has quit IRC
+2013-09-30T23:28:10  <dstufft> foobio: yea :[
+2013-09-30T23:28:21  <foobio> so, of course, even more excited about an eventual 2.7 backport. but baby steps i guess
+2013-09-30T23:28:48  *** tvb has quit IRC
+2013-09-30T23:28:48  <dstufft> yea it's a mixed emotions PEP for me
+2013-09-30T23:28:57  <dstufft> I got emotionally invested in it, and it got half way accepted
+2013-09-30T23:30:17  *** tizzo has joined #openstack-infra
+2013-09-30T23:35:03  *** tvb has joined #openstack-infra
+2013-09-30T23:35:35  *** melwitt has quit IRC
+2013-09-30T23:35:37  *** melwitt1 has joined #openstack-infra
+2013-09-30T23:37:13  <foobio> well, still seems like progress, even then
+2013-09-30T23:37:17  *** hemna is now known as hemnafk
+2013-09-30T23:37:52  *** UtahDave has joined #openstack-infra
+2013-09-30T23:38:28  *** davidhadas has quit IRC
+2013-09-30T23:39:26  *** tvb has quit IRC
+2013-09-30T23:39:46  *** davidhadas has joined #openstack-infra
+2013-09-30T23:40:03  *** mrda has joined #openstack-infra
+2013-09-30T23:40:34  *** hashar has quit IRC
+2013-09-30T23:41:37  *** sarob has joined #openstack-infra
+2013-09-30T23:44:05  *** dims has quit IRC
+2013-09-30T23:51:00  *** thingee_zzz is now known as thingee
+2013-09-30T23:58:42  *** matsuhashi has joined #openstack-infra
+2013-09-30T23:59:19  *** dims has joined #openstack-infra
+2013-09-30T23:59:33  *** nicedice has quit IRC

@@ -1,0 +1,1338 @@
+2015-05-09T00:00:05  <foobio> clarkb: hrm, it's still unhappy apparently
+2015-05-09T00:01:10  <clarkb> :/
+2015-05-09T00:01:47  *** otter768 has quit IRC
+2015-05-09T00:02:08  *** zehicle has quit IRC
+2015-05-09T00:04:31  *** wenlock1 has quit IRC
+2015-05-09T00:04:38  *** baoli has joined #openstack-infra
+2015-05-09T00:05:03  *** wenlock has quit IRC
+2015-05-09T00:05:24  *** ashleighfarnham has quit IRC
+2015-05-09T00:05:26  *** zehicle has joined #openstack-infra
+2015-05-09T00:05:32  <foobio> Error: Duplicate declaration: Tidy[/home/gerrit2/review_site/lib] is already declared...
+2015-05-09T00:07:40  <openstackgerrit> Jeremy Stanley proposed openstack-infra/puppet-gerrit: Ensure only one set of bouncy castle libs are installed for Gerrit.  https://review.openstack.org/181586
+2015-05-09T00:07:45  <foobio> that oughta solve it
+2015-05-09T00:09:10  *** mpopow has quit IRC
+2015-05-09T00:10:16  <clarkb> foobio seems reasonable
+2015-05-09T00:12:29  <foobio> looks like all jobs are probably passing for it now
+2015-05-09T00:12:59  <foobio> would be nice to at least have all this working and tested on review-dev before tomorrow
+2015-05-09T00:15:16  *** mtanino has quit IRC
+2015-05-09T00:18:59  *** wznoinsk has quit IRC
+2015-05-09T00:21:02  *** banix has quit IRC
+2015-05-09T00:22:47  *** rwsu has joined #openstack-infra
+2015-05-09T00:28:16  *** smccully has quit IRC
+2015-05-09T00:28:26  <pleia2> clarkb: I have $things this evening, so left 179840 with latest status from tests, I'll resume on Monday
+2015-05-09T00:28:40  *** ddieterly has joined #openstack-infra
+2015-05-09T00:28:48  *** smccully has joined #openstack-infra
+2015-05-09T00:31:51  *** dimsum__ has joined #openstack-infra
+2015-05-09T00:32:18  <openstackgerrit> Merged openstack-infra/puppet-gerrit: Ensure only one set of bouncy castle libs are installed for Gerrit.  https://review.openstack.org/181586
+2015-05-09T00:33:13  *** rwsu has quit IRC
+2015-05-09T00:33:14  *** shashankhegde has quit IRC
+2015-05-09T00:33:30  *** ddieterly has quit IRC
+2015-05-09T00:34:21  *** gyee has quit IRC
+2015-05-09T00:37:04  *** julim has quit IRC
+2015-05-09T00:42:15  *** dimsum__ has quit IRC
+2015-05-09T00:42:53  *** dimsum__ has joined #openstack-infra
+2015-05-09T00:45:00  *** ddieterly has joined #openstack-infra
+2015-05-09T00:45:03  *** smarcet has joined #openstack-infra
+2015-05-09T00:47:25  *** dimsum__ has quit IRC
+2015-05-09T00:55:16  *** shashankhegde has joined #openstack-infra
+2015-05-09T00:55:44  *** Krinkle|detached is now known as Krinkle
+2015-05-09T00:57:00  *** mestery has joined #openstack-infra
+2015-05-09T00:57:53  <openstackgerrit> Chris Hoge proposed openstack-infra/project-config: Add gerritbot/accessbot to #openstack-defcore channel  https://review.openstack.org/181590
+2015-05-09T00:58:05  <foobio> bingbong2.10.2-23-g039a170 https://review-dev.openstack.org/
+2015-05-09T00:58:20  *** ivar-laz_ has joined #openstack-infra
+2015-05-09T00:58:26  <foobio> looks like we're good to poke at it a bit, anyone who's around
+2015-05-09T00:58:43  <foobio> latest cleanup patch seems to do the trick
+2015-05-09T00:58:51  <foobio> hopefully with this we're ready for tomorrow
+2015-05-09T01:01:04  *** ivar-lazzaro has quit IRC
+2015-05-09T01:02:00  <sigmavirus24> Sounds ominous foobio
+2015-05-09T01:03:02  *** ivar-laz_ has quit IRC
+2015-05-09T01:04:25  *** shashankhegde has quit IRC
+2015-05-09T01:07:08  <anteaya> I can sign into review-dev and leave a comment
+2015-05-09T01:08:30  *** Swami has quit IRC
+2015-05-09T01:19:51  *** ZZelle has quit IRC
+2015-05-09T01:22:55  *** samueldmq has joined #openstack-infra
+2015-05-09T01:23:41  *** dimsum__ has joined #openstack-infra
+2015-05-09T01:27:22  *** dimsum__ has quit IRC
+2015-05-09T01:28:57  *** BharatK has quit IRC
+2015-05-09T01:38:13  *** miqui has quit IRC
+2015-05-09T01:39:48  *** dimsum__ has joined #openstack-infra
+2015-05-09T01:41:13  *** baoli has quit IRC
+2015-05-09T01:41:48  *** banix has joined #openstack-infra
+2015-05-09T01:42:07  *** tjones1 has left #openstack-infra
+2015-05-09T01:51:22  *** unicell has quit IRC
+2015-05-09T01:52:40  *** Somay has joined #openstack-infra
+2015-05-09T01:58:16  *** otter768 has joined #openstack-infra
+2015-05-09T02:02:32  *** sarob has quit IRC
+2015-05-09T02:03:21  *** otter768 has quit IRC
+2015-05-09T02:07:11  *** chlong has quit IRC
+2015-05-09T02:12:41  *** tiswanso has joined #openstack-infra
+2015-05-09T02:14:54  *** achanda has quit IRC
+2015-05-09T02:15:30  *** baoli has joined #openstack-infra
+2015-05-09T02:19:49  *** yamahata has quit IRC
+2015-05-09T02:20:51  *** baoli has quit IRC
+2015-05-09T02:27:30  *** banix has quit IRC
+2015-05-09T02:27:37  *** stevemar has joined #openstack-infra
+2015-05-09T02:28:56  *** btully has quit IRC
+2015-05-09T02:40:18  *** ajmiller has joined #openstack-infra
+2015-05-09T02:41:41  *** ajmiller_ has joined #openstack-infra
+2015-05-09T02:45:25  *** ajmiller has quit IRC
+2015-05-09T02:46:45  *** sarob has joined #openstack-infra
+2015-05-09T02:49:49  *** samueldmq has quit IRC
+2015-05-09T02:51:06  *** koolhead17 has joined #openstack-infra
+2015-05-09T02:59:21  *** unicell has joined #openstack-infra
+2015-05-09T03:01:44  <zaro> foobio, clarkb : back, but looks like you gents took care of it.  thanks!!
+2015-05-09T03:03:32  *** mmedvede_ has quit IRC
+2015-05-09T03:12:32  *** bhunter71 has quit IRC
+2015-05-09T03:14:35  *** tiswanso has quit IRC
+2015-05-09T03:15:28  *** achanda has joined #openstack-infra
+2015-05-09T03:20:49  *** achanda has quit IRC
+2015-05-09T03:21:42  *** baoli has joined #openstack-infra
+2015-05-09T03:37:09  *** achanda has joined #openstack-infra
+2015-05-09T03:49:27  *** ddieterly has quit IRC
+2015-05-09T03:54:15  *** Somay has quit IRC
+2015-05-09T03:59:09  *** otter768 has joined #openstack-infra
+2015-05-09T04:03:54  *** baoli has quit IRC
+2015-05-09T04:04:00  *** otter768 has quit IRC
+2015-05-09T04:40:01  *** Somay has joined #openstack-infra
+2015-05-09T04:45:43  *** Krinkle is now known as Krinkle|detached
+2015-05-09T05:00:16  *** Somay has quit IRC
+2015-05-09T05:02:17  *** sdake has joined #openstack-infra
+2015-05-09T05:06:30  *** sdake_ has joined #openstack-infra
+2015-05-09T05:09:47  *** sdake has quit IRC
+2015-05-09T05:11:49  *** stevemar has quit IRC
+2015-05-09T05:13:40  *** jlvillal has quit IRC
+2015-05-09T05:13:49  *** jlvillal has joined #openstack-infra
+2015-05-09T05:15:18  *** tiswanso has joined #openstack-infra
+2015-05-09T05:20:10  *** tiswanso has quit IRC
+2015-05-09T05:20:25  *** ddieterly has joined #openstack-infra
+2015-05-09T05:21:10  *** hdd has joined #openstack-infra
+2015-05-09T05:22:05  *** chlong has joined #openstack-infra
+2015-05-09T05:22:09  *** sputnik13 has quit IRC
+2015-05-09T05:25:05  *** ddieterly has quit IRC
+2015-05-09T05:25:26  *** mmedvede has quit IRC
+2015-05-09T05:27:08  *** ujuc has joined #openstack-infra
+2015-05-09T05:31:45  *** ujuc has quit IRC
+2015-05-09T05:32:38  <openstackgerrit> Merged openstack-infra/system-config: Add the ability for template to manage exim  https://review.openstack.org/180782
+2015-05-09T05:34:30  <openstackgerrit> Merged openstack-infra/nodepool: Add tox 'docs' env to build Sphinx documentation  https://review.openstack.org/175941
+2015-05-09T05:35:02  <openstackgerrit> Merged openstack-infra/nodepool: Improve configuration documentation  https://review.openstack.org/175959
+2015-05-09T05:35:36  <openstackgerrit> Merged openstack-infra/puppet-zuul: Manage logging configuration files (feature flag)  https://review.openstack.org/180614
+2015-05-09T05:38:36  <openstackgerrit> Merged openstack-infra/puppet-openstackci: Add developer guidelines  https://review.openstack.org/178559
+2015-05-09T05:40:29  <openstackgerrit> Merged openstack-infra/project-config: Add python34 job for proliantutils  https://review.openstack.org/181104
+2015-05-09T05:41:25  *** ildikov has quit IRC
+2015-05-09T05:41:52  *** ildikov has joined #openstack-infra
+2015-05-09T05:42:56  <openstackgerrit> Sean Roberts proposed openstack-infra/project-config: update layout.yaml  https://review.openstack.org/181613
+2015-05-09T05:44:33  <sarob> looking to add publish and release to akanda projects
+2015-05-09T05:44:43  <sarob> anyone available to review?
+2015-05-09T05:47:53  *** mmedvede has joined #openstack-infra
+2015-05-09T06:00:00  *** otter768 has joined #openstack-infra
+2015-05-09T06:04:54  *** otter768 has quit IRC
+2015-05-09T06:17:55  *** tnovacik has joined #openstack-infra
+2015-05-09T06:21:17  *** ddieterly has joined #openstack-infra
+2015-05-09T06:25:46  *** ddieterly has quit IRC
+2015-05-09T06:25:54  *** shashankhegde has joined #openstack-infra
+2015-05-09T06:48:02  <openstackgerrit> Merged openstack-infra/project-config: Add #openstack-defcore to the list of irc channels  https://review.openstack.org/181576
+2015-05-09T06:48:05  *** btully has joined #openstack-infra
+2015-05-09T06:49:47  *** shashankhegde has quit IRC
+2015-05-09T06:50:45  *** Longgeek has joined #openstack-infra
+2015-05-09T06:52:37  *** hdd has quit IRC
+2015-05-09T06:53:29  *** sabeen1 has quit IRC
+2015-05-09T07:00:07  <openstackgerrit> Andreas Jaeger proposed openstack-infra/project-config: Add gerritbot/accessbot to #openstack-defcore channel  https://review.openstack.org/181590
+2015-05-09T07:07:36  *** abregman has joined #openstack-infra
+2015-05-09T07:18:23  <waynr> hmm i can't seem to create a story on storyboard.openstack.org
+2015-05-09T07:20:14  <waynr> okay, figured out a different click path to make it
+2015-05-09T07:20:44  *** woodster_ has quit IRC
+2015-05-09T07:22:04  *** ddieterly has joined #openstack-infra
+2015-05-09T07:26:29  *** ddieterly has quit IRC
+2015-05-09T07:41:54  <openstackgerrit> Merged openstack-infra/project-config: Add gerritbot/accessbot to #openstack-defcore channel  https://review.openstack.org/181590
+2015-05-09T07:51:11  *** e0ne has joined #openstack-infra
+2015-05-09T07:51:23  *** openstackgerrit has quit IRC
+2015-05-09T07:51:42  *** openstackgerrit has joined #openstack-infra
+2015-05-09T07:51:49  *** e0ne is now known as e0ne_
+2015-05-09T07:52:16  *** e0ne_ is now known as e0ne
+2015-05-09T07:54:17  *** e0ne has quit IRC
+2015-05-09T07:57:44  *** e0ne has joined #openstack-infra
+2015-05-09T07:58:05  *** koolhead17 has quit IRC
+2015-05-09T08:00:55  *** otter768 has joined #openstack-infra
+2015-05-09T08:02:35  *** e0ne has quit IRC
+2015-05-09T08:05:29  *** otter768 has quit IRC
+2015-05-09T08:06:22  *** e0ne has joined #openstack-infra
+2015-05-09T08:13:04  *** sputnik13 has joined #openstack-infra
+2015-05-09T08:15:08  *** e0ne has quit IRC
+2015-05-09T08:18:26  *** Somay has joined #openstack-infra
+2015-05-09T08:18:58  *** e0ne has joined #openstack-infra
+2015-05-09T08:21:10  *** e0ne has quit IRC
+2015-05-09T08:22:56  *** ddieterly has joined #openstack-infra
+2015-05-09T08:25:04  *** e0ne has joined #openstack-infra
+2015-05-09T08:26:46  *** e0ne has quit IRC
+2015-05-09T08:28:00  *** ddieterly has quit IRC
+2015-05-09T08:28:45  *** abregman has quit IRC
+2015-05-09T08:31:08  *** e0ne has joined #openstack-infra
+2015-05-09T08:33:47  *** e0ne has quit IRC
+2015-05-09T08:37:21  *** e0ne has joined #openstack-infra
+2015-05-09T08:39:32  *** jamielennox|away is now known as jamielennox
+2015-05-09T08:39:32  *** e0ne has quit IRC
+2015-05-09T08:40:28  *** achanda has quit IRC
+2015-05-09T08:43:53  *** e0ne has joined #openstack-infra
+2015-05-09T08:44:31  <yolanda> jeblair, i've been looking at the agenda for the summit. I see mine moved to friday, it's fine. But i'm leaving on friday early afternoon, can we have that on friday morning?
+2015-05-09T08:46:37  *** e0ne has quit IRC
+2015-05-09T08:49:56  *** e0ne has joined #openstack-infra
+2015-05-09T08:50:12  *** luqas has joined #openstack-infra
+2015-05-09T08:51:17  *** luqas has quit IRC
+2015-05-09T08:51:34  *** luqas has joined #openstack-infra
+2015-05-09T08:54:45  *** e0ne has quit IRC
+2015-05-09T08:55:03  *** achanda has joined #openstack-infra
+2015-05-09T08:57:46  *** luqas has quit IRC
+2015-05-09T08:58:00  *** e0ne has joined #openstack-infra
+2015-05-09T08:58:11  *** e0ne has quit IRC
+2015-05-09T09:05:44  *** subscope_ has joined #openstack-infra
+2015-05-09T09:07:51  *** koolhead17 has joined #openstack-infra
+2015-05-09T09:09:22  *** jswarren has quit IRC
+2015-05-09T09:23:38  *** ddieterly has joined #openstack-infra
+2015-05-09T09:24:31  *** Somay has quit IRC
+2015-05-09T09:28:09  *** ddieterly has quit IRC
+2015-05-09T09:39:34  *** achanda has quit IRC
+2015-05-09T09:47:12  *** e0ne has joined #openstack-infra
+2015-05-09T09:49:37  *** btully has quit IRC
+2015-05-09T09:49:37  *** e0ne has quit IRC
+2015-05-09T09:53:44  *** e0ne has joined #openstack-infra
+2015-05-09T09:55:54  *** e0ne has quit IRC
+2015-05-09T09:59:23  *** e0ne has joined #openstack-infra
+2015-05-09T10:01:51  *** otter768 has joined #openstack-infra
+2015-05-09T10:01:51  *** e0ne has quit IRC
+2015-05-09T10:02:33  *** teran has joined #openstack-infra
+2015-05-09T10:03:16  *** Kennan2 has joined #openstack-infra
+2015-05-09T10:03:37  *** sarob has quit IRC
+2015-05-09T10:04:28  *** Kennan has quit IRC
+2015-05-09T10:04:51  *** sarob has joined #openstack-infra
+2015-05-09T10:05:30  *** e0ne has joined #openstack-infra
+2015-05-09T10:05:57  *** prad has quit IRC
+2015-05-09T10:06:43  *** otter768 has quit IRC
+2015-05-09T10:08:02  *** teran has quit IRC
+2015-05-09T10:10:41  *** e0ne has quit IRC
+2015-05-09T10:15:01  *** e0ne has joined #openstack-infra
+2015-05-09T10:17:56  *** e0ne has quit IRC
+2015-05-09T10:21:24  *** hdd has joined #openstack-infra
+2015-05-09T10:21:33  *** prad has joined #openstack-infra
+2015-05-09T10:24:29  *** ddieterly has joined #openstack-infra
+2015-05-09T10:29:02  *** ddieterly has quit IRC
+2015-05-09T10:39:52  *** e0ne has joined #openstack-infra
+2015-05-09T10:41:42  *** e0ne has quit IRC
+2015-05-09T10:45:26  *** ddieterly has joined #openstack-infra
+2015-05-09T10:53:52  *** teran has joined #openstack-infra
+2015-05-09T10:55:14  *** sigmavirus24 is now known as sigmavirus24_awa
+2015-05-09T11:01:44  *** teran has quit IRC
+2015-05-09T11:36:41  *** jamielennox is now known as jamielennox|away
+2015-05-09T11:40:27  *** sarob has quit IRC
+2015-05-09T11:41:40  *** alexpilotti has quit IRC
+2015-05-09T11:45:04  *** sarob has joined #openstack-infra
+2015-05-09T11:46:05  *** hdd has quit IRC
+2015-05-09T11:46:41  *** tiswanso has joined #openstack-infra
+2015-05-09T11:57:44  *** sarob has quit IRC
+2015-05-09T11:58:09  *** tiswanso has quit IRC
+2015-05-09T12:02:38  *** teran has joined #openstack-infra
+2015-05-09T12:02:44  *** otter768 has joined #openstack-infra
+2015-05-09T12:07:19  *** teran has quit IRC
+2015-05-09T12:07:19  *** otter768 has quit IRC
+2015-05-09T12:12:40  *** banix has joined #openstack-infra
+2015-05-09T12:15:45  *** baoli has joined #openstack-infra
+2015-05-09T12:15:50  <mordred> jhesketh: aroudn?
+2015-05-09T12:25:26  *** subscope_ has quit IRC
+2015-05-09T12:26:45  *** baoli has quit IRC
+2015-05-09T12:43:00  *** banix has quit IRC
+2015-05-09T12:46:01  *** subscope_ has joined #openstack-infra
+2015-05-09T12:49:36  *** mrmartin has joined #openstack-infra
+2015-05-09T12:50:35  *** mrmartin has quit IRC
+2015-05-09T12:52:35  *** woodster_ has joined #openstack-infra
+2015-05-09T12:54:44  *** tiswanso has joined #openstack-infra
+2015-05-09T12:54:58  *** prad has quit IRC
+2015-05-09T12:57:41  *** subscope_ has quit IRC
+2015-05-09T12:59:47  *** mmedvede_ has joined #openstack-infra
+2015-05-09T13:03:21  *** teran has joined #openstack-infra
+2015-05-09T13:03:42  *** baoli has joined #openstack-infra
+2015-05-09T13:05:12  *** teran_ has joined #openstack-infra
+2015-05-09T13:05:59  *** baoli has quit IRC
+2015-05-09T13:08:13  *** teran has quit IRC
+2015-05-09T13:10:26  *** teran_ has quit IRC
+2015-05-09T13:10:59  *** tiswanso has quit IRC
+2015-05-09T13:12:22  * koolhead17 pokes mordred
+2015-05-09T13:12:38  <mordred> how ya doing koolhead17
+2015-05-09T13:13:00  <koolhead17> mordred: all good, hoping to see you soon.
+2015-05-09T13:13:25  <mordred> you know it
+2015-05-09T13:18:04  <koolhead17> mordred: dm.
+2015-05-09T13:21:10  *** abregman has joined #openstack-infra
+2015-05-09T13:22:29  *** ddieterly has quit IRC
+2015-05-09T13:23:07  <openstackgerrit> Merged openstack-infra/git-review: Use plumbing rev-parse to get the branch name  https://review.openstack.org/179937
+2015-05-09T13:26:45  *** bknudson has joined #openstack-infra
+2015-05-09T13:29:38  <koolhead17> ttx: ping
+2015-05-09T13:31:25  <kashyap> koolhead17: Please don't do blank pings. Leave him some context.
+2015-05-09T13:33:38  <koolhead17> kashyap: I think a pong means ttx is active & around. Am i missing something here?
+2015-05-09T13:33:56  <kashyap> koolhead17: Yes, you're missing something: https://blogs.gnome.org/markmc/2014/02/20/naked-pings/
+2015-05-09T13:35:30  <openstackgerrit> Andreas Jaeger proposed openstack-infra/infra-manual: Extend Gerrit ACL section  https://review.openstack.org/181646
+2015-05-09T13:35:44  <kashyap> In short: If you'd have provided context/data with your ping, his response would have been your answer.
+2015-05-09T13:36:42  <koolhead17> kashyap: thanks for sharing, will never do naked ping anymore & will pay for beer to ttx next week when i meet him. I hope we are good now. :)
+2015-05-09T13:37:59  <kashyap> Np.
+2015-05-09T13:38:30  <koolhead17> soren: are you around?
+2015-05-09T13:39:01  <kashyap> Oh the irony!
+2015-05-09T13:39:01  <openstackgerrit> Cedric Brandily proposed openstack-infra/git-review: Use git push-url instead of a second remote  https://review.openstack.org/109869
+2015-05-09T13:42:51  <koolhead17> kashyap: i have few things to discuss and i want to know if they are around. I just don`t want to broadcast here, like a spamming channel. All i want is if they are around so that i can dm and talk.
+2015-05-09T13:43:50  <koolhead17> not sure if am doing anything wrong according to the blog you posted.
+2015-05-09T13:44:18  <foobio> koolhead17: if you intend to talk to someone via private /msg then you might as well initiate the conversation via private /msg
+2015-05-09T13:44:47  <koolhead17> foobio: but for that i have to confirm if the same person is around.
+2015-05-09T13:44:54  <foobio> instead of, as you say, "broadcast here, like a spamming channel"
+2015-05-09T13:45:14  <foobio> koolhead17: /query somenick
+2015-05-09T13:45:24  <foobio> and then start typing
+2015-05-09T13:48:04  <koolhead17> foobio: my intension was just to check if they are around then initiate a DM. Seems like am doing it wrong
+2015-05-09T13:48:29  *** HeOS has quit IRC
+2015-05-09T13:48:30  *** baoli has joined #openstack-infra
+2015-05-09T13:48:46  <koolhead17> thanks foobio & kashyap
+2015-05-09T13:49:26  * koolhead17 goes back reading IRC guidelines & commands
+2015-05-09T13:50:57  *** ajmiller_ has quit IRC
+2015-05-09T13:51:45  <foobio> koolhead17: if you intend to talk to someone publicly in channel instead, either ask them what you want to ask them and let them answer once they're paying attention or, if it's really critical for you to know whether they're actively engaged in irc, /whois their nick and see what the reported idle time is for them
+2015-05-09T13:53:01  <foobio> and whether it reports them in an away status (which will often include information on why/where/how long they're away)
+2015-05-09T13:53:09  <koolhead17> foobio: noted. Thx
+2015-05-09T13:53:35  <foobio> you're welcome!
+2015-05-09T13:54:25  *** baoli has quit IRC
+2015-05-09T13:55:36  *** alexpilotti has joined #openstack-infra
+2015-05-09T13:56:54  *** ddieterly has joined #openstack-infra
+2015-05-09T13:57:47  *** ujuc has joined #openstack-infra
+2015-05-09T14:03:44  *** otter768 has joined #openstack-infra
+2015-05-09T14:05:56  *** teran has joined #openstack-infra
+2015-05-09T14:07:55  *** dalgaaf has quit IRC
+2015-05-09T14:08:32  *** otter768 has quit IRC
+2015-05-09T14:10:31  *** teran has quit IRC
+2015-05-09T14:13:42  *** koolhead17 has quit IRC
+2015-05-09T14:14:17  *** koolhead17 has joined #openstack-infra
+2015-05-09T14:15:40  <openstackgerrit> Cedric Brandily proposed openstack-infra/git-review: Use git push-url instead of a second remote  https://review.openstack.org/109869
+2015-05-09T14:18:53  *** koolhead17 has quit IRC
+2015-05-09T14:20:33  <openstackgerrit> Monty Taylor proposed openstack-infra/shade: Add inventory command to shade  https://review.openstack.org/175891
+2015-05-09T14:21:52  <jeblair> foobio: morning
+2015-05-09T14:22:40  <openstackgerrit> Monty Taylor proposed openstack-infra/shade: Make ironic use the API version system  https://review.openstack.org/181651
+2015-05-09T14:22:41  <openstackgerrit> Monty Taylor proposed openstack-infra/shade: Consume os_client_config defaults as base defaults  https://review.openstack.org/181652
+2015-05-09T14:22:41  <openstackgerrit> Monty Taylor proposed openstack-infra/shade: Rely on defaults being present  https://review.openstack.org/181653
+2015-05-09T14:22:42  <openstackgerrit> Monty Taylor proposed openstack-infra/shade: Remove fallback from get_service_vales  https://review.openstack.org/181654
+2015-05-09T14:24:32  <openstackgerrit> Andreas Jaeger proposed openstack-infra/project-config: Cleanup openstack documentation Gerrit ACLs  https://review.openstack.org/181655
+2015-05-09T14:24:53  *** banix has joined #openstack-infra
+2015-05-09T14:25:14  <openstackgerrit> Andreas Jaeger proposed openstack-infra/project-config: Cleanup openstack documentation Gerrit ACLs  https://review.openstack.org/181655
+2015-05-09T14:25:30  <jeblair> mordred: and to you too :)
+2015-05-09T14:25:41  <mordred> jeblair: morning!
+2015-05-09T14:26:54  <foobio> morning to all for whom it is indeed still morning
+2015-05-09T14:27:19  *** AJaeger has joined #openstack-infra
+2015-05-09T14:27:23  <foobio> and happiest gerritday greetings to all
+2015-05-09T14:27:41  <AJaeger> happy gerritday greetings from me as well...
+2015-05-09T14:27:49  <mordred> jeblair, foobio: so, I submitted a somewhat silly patch yesterda - 181377 - for making irc logs html. it'll need a manual find command to be run once by hand to get the backlog, and it seems the weekend is as good a time as any to run one of those ... either of you have love/hate opinions?
+2015-05-09T14:28:15  <foobio> i am not opposed to htmlified logs
+2015-05-09T14:28:21  <AJaeger> I went on the fringe a bit - gerrit ACLs: documentation in https://review.openstack.org/#/c/181646/1 and cleanup to see whether I really understand them: https://review.openstack.org/#/c/181655/
+2015-05-09T14:28:47  <mordred> ooh
+2015-05-09T14:28:49  <mordred> docs
+2015-05-09T14:29:14  <AJaeger> mordred: just the basics ;)
+2015-05-09T14:30:19  <AJaeger> Btw. do we want to do against Louis Taylor's eye-damage? See his patch https://review.openstack.org/181000 that adds lots of empty lines to zuul/layout.yaml...
+2015-05-09T14:30:39  <AJaeger> (s/to do against/do anything against)
+2015-05-09T14:30:46  <jeblair> mordred: good with me
+2015-05-09T14:31:11  <mordred> jeblair, foobio: awesome. I'll start the command and let it chug along
+2015-05-09T14:32:20  <kragniz> AJaeger: I'm fine if that isn't merged, I just found myself going cross-eyed adding new items in there
+2015-05-09T14:32:43  <jeblair> kragniz: are you louis taylor?
+2015-05-09T14:32:50  <foobio> mordred: looks like that's not making use of the htmlifier we have in our supybot? i take it that wasn't particularly extensible to this end?
+2015-05-09T14:32:51  <kragniz> jeblair: yeah
+2015-05-09T14:32:56  <jeblair> kragniz: nice to meet you :)
+2015-05-09T14:33:29  <kragniz> jeblair: you too!
+2015-05-09T14:34:00  <kragniz> jeblair: (we also met afk a few weeks ago)
+2015-05-09T14:34:20  <jeblair> kragniz: i have made the connection now!  thanks!
+2015-05-09T14:35:21  <jeblair> kragniz, AJaeger: i don't have a strong opinion, but i think it does look better :)
+2015-05-09T14:35:52  <openstackgerrit> Andreas Jaeger proposed openstack-infra/project-config: Merge openstack-doc tool ACLs  https://review.openstack.org/181656
+2015-05-09T14:36:41  <AJaeger> kragniz: Thanks for the patch.
+2015-05-09T14:36:42  <mordred> foobio: yah - the irclog2html thing knows how to process directories of logs like we have, which is nice for this. I could see consolidating the two in the future, but it didn't seem worth tons of effort for converging up front
+2015-05-09T14:37:00  <kragniz> jeblair: face -> irc nick -> real name can be hard sometimes
+2015-05-09T14:37:04  <kragniz> jeblair: cool! :)
+2015-05-09T14:37:20  <mordred> this is why one should have one's IRC nick tattood on one's face
+2015-05-09T14:37:28  <AJaeger> So, anybody with an objection to the whitespace? Otherwise let's get this in, I'll add my +2 now...
+2015-05-09T14:37:44  <kragniz> mordred: a wise choice
+2015-05-09T14:38:03  <jeblair> mordred: kragniz works on glance and would love to receive rants^Winput on api usage!  ;)
+2015-05-09T14:38:21  <kragniz> jeblair: lol
+2015-05-09T14:38:37  <AJaeger> jeblair: do you really want to open that pandora's box today? ;)
+2015-05-09T14:38:42  <foobio> mordred: cool. lgtm then
+2015-05-09T14:39:43  <mordred> foobio: example of a directory of them done: http://eavesdrop.openstack.org/irclogs/%23openstack-swift/
+2015-05-09T14:40:05  <kragniz> jeblair: oops, good spot on that random # character
+2015-05-09T14:40:18  <kragniz> jeblair: want me to remove it?
+2015-05-09T14:40:34  <mordred> kragniz: oh. yeah. I can definitely rant on API usage :)
+2015-05-09T14:40:46  <jeblair> kragniz: maybe clean it up in a followup if AJaeger wants to go ahead and get it in...?
+2015-05-09T14:41:09  <openstackgerrit> Thanh Ha proposed openstack-infra/nodepool: Clarify meaning of Jenkins master configuration settings in target  https://review.openstack.org/167878
+2015-05-09T14:41:22  <kragniz> jeblair: okay
+2015-05-09T14:41:37  <foobio> mordred: nice--i like that the url to the raw log is the same just with the .html suffix omitted too
+2015-05-09T14:41:40  <openstackgerrit> Kiall Mac Innes proposed openstack-infra/jeepyb: Jeepyb based HEAD management  https://review.openstack.org/181658
+2015-05-09T14:41:43  <mordred> foobio: ++
+2015-05-09T14:42:21  <mordred> foobio: I like the next/prev links too - makes reading through things that cross date boundaries friendlier
+2015-05-09T14:42:22  <AJaeger> kragniz: if you have time now, clean it up and we review again...
+2015-05-09T14:42:32  <AJaeger> if not, we can do it later.
+2015-05-09T14:42:42  <foobio> mordred: agreed
+2015-05-09T14:42:50  <AJaeger> your patch is large, I'd like to get it in quickly to avoid many rebases due to merge conflicts
+2015-05-09T14:43:12  <kragniz> AJaeger: I'm ircing from my phone at the moment, so I'd rather not make patches from here
+2015-05-09T14:43:13  <AJaeger> mordred: that looks nice!
+2015-05-09T14:43:19  *** ChanServ changes topic to "Gerrit 2.10 Upgrade starting at 1600 UTC: https://etherpad.openstack.org/p/gerrit-2.10-upgrade"
+2015-05-09T14:43:32  *** banix has quit IRC
+2015-05-09T14:43:57  <AJaeger> kragniz: let me do it quickly...
+2015-05-09T14:44:04  <nibalizer> AJaeger: i like the whitespace
+2015-05-09T14:44:07  <nibalizer> also good morning everyone
+2015-05-09T14:44:30  <kragniz> AJaeger: cool
+2015-05-09T14:44:37  <openstackgerrit> Thanh Ha proposed openstack-infra/nodepool: Clarify project-id meaning for Rackspace deployment  https://review.openstack.org/167881
+2015-05-09T14:45:07  <AJaeger> kragniz: and there's a wrong merge conflict resolution ;(
+2015-05-09T14:45:20  *** banix has joined #openstack-infra
+2015-05-09T14:45:35  <jeblair> foobio, zaro: dumb question: why are we running a mysql command manually -- why isn't it handled by gerrit's db migrations?
+2015-05-09T14:45:53  <kragniz> AJaeger: it just gets worse :(
+2015-05-09T14:46:19  <openstackgerrit> Andreas Jaeger proposed openstack-infra/project-config: Add extra padding to some entries in layout.yaml  https://review.openstack.org/181000
+2015-05-09T14:46:31  *** baoli has joined #openstack-infra
+2015-05-09T14:46:52  <AJaeger> kragniz: now it's really only empty lines added ^
+2015-05-09T14:47:14  <AJaeger> jeblair: do you want to double check and +A? ^
+2015-05-09T14:48:13  <foobio> jeblair: i honestly have no idea... i assumed this was a missing migration/upstream bug but that's actually a really great question
+2015-05-09T14:48:26  <foobio> seeing now whether i can find an explanation
+2015-05-09T14:48:42  <kragniz> AJaeger: awesome
+2015-05-09T14:49:07  <jeblair> foobio: https://groups.google.com/forum/#!msg/repo-discuss/0qP1xZoOoDY/DWWcXkhOwu8J
+2015-05-09T14:49:13  <jeblair> that was from 2.4-2.9
+2015-05-09T14:49:19  <foobio> yep, just found the same
+2015-05-09T14:49:33  <foobio> now i vaguely recall the discussion we had around this
+2015-05-09T14:49:53  <jeblair> foobio: also, i wonder if we need '--recheck-mergable' on our 'reindex' command
+2015-05-09T14:50:31  <foobio> basically it's a missing migration that gerrit devs felt was not worth inserting because they no longer care about anyone who installed 2.4 or earlier initially
+2015-05-09T14:51:13  <jeblair> they are nice people
+2015-05-09T14:51:29  <jeblair> we are indeed missing that index
+2015-05-09T14:51:43  <jeblair> we are not missing the _other_ index in that thread.  which is also nice.
+2015-05-09T14:52:32  <jeblair> however, our index on the other doesn't match tha thread
+2015-05-09T14:52:38  <jeblair> mordred: can you help take a look at this
+2015-05-09T14:52:48  <openstackgerrit> Kiall Mac Innes proposed openstack-infra/jeepyb: Jeepyb based HEAD management  https://review.openstack.org/181658
+2015-05-09T14:53:06  <mordred> jeblair: yes I can - reading
+2015-05-09T14:53:31  <jeblair> mordred: i pasted some stuff into etherpad https://etherpad.openstack.org/p/gerrit-2.10-upgrade
+2015-05-09T14:54:03  *** sputnik13 has quit IRC
+2015-05-09T14:54:07  <openstackgerrit> Kiall Mac Innes proposed openstack-infra/jeepyb: Jeepyb based HEAD management  https://review.openstack.org/181658
+2015-05-09T14:54:17  <foobio> apparently that index is created by default on 2.5 and later when initializing the db, but they missed adding a migration to create it in 2.5 for upgrades. in 2.9 they start expecting it to be present and error out if it is not
+2015-05-09T14:54:21  <mordred> jeblair: I believe we shoudl be able to run that command right now without taking gerrit down
+2015-05-09T14:54:29  <openstackgerrit> Merged openstack-infra/puppet-meetbot: Produce html logs for our IRC logs  https://review.openstack.org/181377
+2015-05-09T14:54:30  <mordred> it's just an index creation
+2015-05-09T14:54:34  <jeblair> mordred: yeah, but i'm wondering what the index should actually be
+2015-05-09T14:54:49  <mordred> ah - I see your paste
+2015-05-09T14:54:54  <jeblair> the command they suggest in the thread does not match the index we actually have in prod
+2015-05-09T14:55:25  <jeblair> mordred: key == index, right?
+2015-05-09T14:55:31  <mordred> hrm. I bet that's because they've modifed the index in a later migration
+2015-05-09T14:55:33  <mordred> jeblair: yes
+2015-05-09T14:55:43  * mordred goes to read gerrit source code
+2015-05-09T14:55:44  <jeblair> yeah, so just the columns then
+2015-05-09T14:56:42  <mordred> wow. those are terrible indexes from 2.4
+2015-05-09T14:56:48  <jeblair> oh, haha
+2015-05-09T14:56:53  <mordred> please tell me that in 2.10 they have dropped one of them
+2015-05-09T14:56:55  <jeblair> schema 89 drops those indexes
+2015-05-09T14:56:57  <mordred> yah
+2015-05-09T14:57:01  <jeblair> we are on schema 86
+2015-05-09T14:57:01  <mordred> they're stupid indexes
+2015-05-09T14:57:15  <mordred> so - we need to create an index named that so that schema 89 can drop it
+2015-05-09T14:57:21  <jeblair> yep
+2015-05-09T14:57:23  <mordred> neat
+2015-05-09T14:57:26  * jeblair is satisfied
+2015-05-09T14:57:32  <mordred> so - in that case, it does not matter what goes in it
+2015-05-09T14:57:42  <foobio> looks like https://gerrit.googlesource.com/gerrit/+/242f0adc3407473d40d568acc5363669b6fc4a56%5E2..242f0adc3407473d40d568acc5363669b6fc4a56/ switches from patch_set_approvals_closedByUser to patch_set_approvals_closedByU
+2015-05-09T14:57:48  <mordred> 'm glad they are dropping them - they are the worst indexes I've ever seen
+2015-05-09T14:58:09  <mordred> they will literally never be used
+2015-05-09T14:58:42  <foobio> gerrit has a lot of terrible database choices. i think they've realized many of them but are just trying to put less in the database rather than heavily reorganize it
+2015-05-09T14:58:43  <mordred> they MIGHT get used occasionally if the order of the keys in the index was reversed
+2015-05-09T14:58:44  <jeblair> are we thinking of doing a db dump before the migration?
+2015-05-09T14:58:56  <mordred> jeblair: probably not a bad idea
+2015-05-09T14:59:11  <foobio> i would recommend doing one after we stop gerrit before we proceed with any upgrading
+2015-05-09T14:59:22  <jeblair> so let's stop gerrit; dump; add index; proceed...
+2015-05-09T14:59:30  <foobio> just so we have last known state before upgrade, in case
+2015-05-09T14:59:40  *** baoli has quit IRC
+2015-05-09T14:59:52  <clarkb> morning
+2015-05-09T14:59:56  <mordred> morning clarkb
+2015-05-09T15:00:13  <jeblair> mordred: even though i agree we could add that now, we'll get a little bit of extra safety if we do it during downtime
+2015-05-09T15:00:44  *** woodster_ has quit IRC
+2015-05-09T15:01:13  <mordred> jeblair: kk
+2015-05-09T15:01:40  <openstackgerrit> Andreas Jaeger proposed openstack-infra/project-config: Cleanup openstack/* ACLs: remove "refs/heads/stable"  https://review.openstack.org/181660
+2015-05-09T15:03:10  <clarkb> heh why wouldn't if make dropping that index optional if it wasn't added as migration step... I shouldn't think about it too hard
+2015-05-09T15:04:48  *** sdake has joined #openstack-infra
+2015-05-09T15:05:11  *** woodster_ has joined #openstack-infra
+2015-05-09T15:05:26  <mordred> jeblair, foobio: ok. IRC logs all processed. subsequent runs of the operation are taking aroudn 10 seconds- so I think the 15-minute cron is safe
+2015-05-09T15:05:51  <jeblair> oh, okay, it looks like --recheck-mergable was folded into init default behavior, so we should be okay on that front
+2015-05-09T15:06:01  <mordred> woot
+2015-05-09T15:06:04  <jeblair> (it was only needed for 2.9, but since we're going to 2.10, we should be okay)
+2015-05-09T15:06:44  *** teran has joined #openstack-infra
+2015-05-09T15:06:47  <jeblair> shall we stop puppet and merge the upgrade changes?
+2015-05-09T15:07:15  *** sputnik13 has joined #openstack-infra
+2015-05-09T15:07:39  <clarkb> makes sense, 2.8 didn't have the mergeable state and 2.9 added it
+2015-05-09T15:07:41  <jeblair> foobio: did the patch you and zaro were working on yesterday get merged?
+2015-05-09T15:07:57  <foobio> jeblair: yep, review-dev gets puppeted sanely now
+2015-05-09T15:08:08  <foobio> and gerrit starts successfully on it
+2015-05-09T15:08:16  *** sdake_ has quit IRC
+2015-05-09T15:08:19  <zaro> morning
+2015-05-09T15:08:31  <clarkb> good morning
+2015-05-09T15:09:20  <zaro> jeblair: so your question about the mysql command.. that command is a workaround for something that the gerrit migration doesn't do.
+2015-05-09T15:09:37  * zaro looks up the discussion for it
+2015-05-09T15:10:07  <clarkb> zaro: I think mordred and jeblair and foobio were able to track it down and decide it ws mostly a noop for us but we have to do it to make migrations happy
+2015-05-09T15:10:27  <mordred> yup. that is correct
+2015-05-09T15:10:45  <jeblair> i updated the etherpad with an explanation even :)
+2015-05-09T15:11:42  <openstackgerrit> Merged openstack-infra/project-config: Add extra padding to some entries in layout.yaml  https://review.openstack.org/181000
+2015-05-09T15:11:44  *** teran has quit IRC
+2015-05-09T15:12:04  <zaro> well here's the discussion if you want to read more: https://groups.google.com/d/msg/repo-discuss/0qP1xZoOoDY/a9LKSYkii5MJ
+2015-05-09T15:12:33  <jeblair> zaro: yeah, i read that.  it didn't actually explain much.  :)
+2015-05-09T15:13:05  <jeblair> for instance, why you would need two separate indexes on the same field
+2015-05-09T15:13:11  <jeblair> that sent us to the source code which explained it
+2015-05-09T15:15:11  <jeblair> status notice Gerrit will be offline from 1600-2000 UTC while it is upgraded to version 2.10
+2015-05-09T15:15:14  <jeblair> look good ^?
+2015-05-09T15:15:21  <zaro> cool, i should have read more backscroll :)
+2015-05-09T15:15:52  <zaro> lgtm
+2015-05-09T15:16:05  <jeblair> #status notice Gerrit will be offline from 1600-2000 UTC while it is upgraded to version 2.10
+2015-05-09T15:16:05  <openstackstatus> jeblair: sending notice
+2015-05-09T15:16:40  <openstackgerrit> Cedric Brandily proposed openstack-infra/git-review: Use git push-url instead of a second remote  https://review.openstack.org/109869
+2015-05-09T15:16:52  *** ZZelle has joined #openstack-infra
+2015-05-09T15:17:05  -openstackstatus- NOTICE: Gerrit will be offline from 1600-2000 UTC while it is upgraded to version 2.10
+2015-05-09T15:17:08  <mordred> ZZelle: hey - thanks for working on that
+2015-05-09T15:17:23  *** banix has quit IRC
+2015-05-09T15:18:10  <ZZelle> mordred, hi
+2015-05-09T15:18:18  <openstackstatus> jeblair: finished sending notice
+2015-05-09T15:18:36  <ZZelle> mordred, it's really difficult to correct gitreview tests as they become more and more complex
+2015-05-09T15:19:20  <mordred> ZZelle: yah. this is a very true statement
+2015-05-09T15:20:15  *** sputnik13 has quit IRC
+2015-05-09T15:20:40  *** banix has joined #openstack-infra
+2015-05-09T15:21:36  <ZZelle> mordred, i am wondering we should not start to rework git-review to test functionally integration with system/gerrit at low level instead of testing git review command
+2015-05-09T15:24:20  *** ihrachyshka has joined #openstack-infra
+2015-05-09T15:27:30  <openstackgerrit> Merged openstack-infra/publications: Update logos on System slide  https://review.openstack.org/158134
+2015-05-09T15:28:58  <foobio> ZZelle: i've felt (since before we had tests for git-review) that we should just mock the cli interactions since it's purely a cli wrapper... or at least that was the case though now we'd probably need a separate solution to mock the http api interactions too
+2015-05-09T15:31:08  *** banix has quit IRC
+2015-05-09T15:33:21  *** sputnik13 has joined #openstack-infra
+2015-05-09T15:36:21  <openstackgerrit> Merged openstack-infra/gerritbot: Update to modern pbr  https://review.openstack.org/160069
+2015-05-09T15:36:28  <openstackgerrit> Merged openstack-infra/gerritbot: Replace six.iteritems with iter()  https://review.openstack.org/160070
+2015-05-09T15:36:34  <openstackgerrit> Merged openstack-infra/puppet-cgit: Add puppet-cgit load balancer class  https://review.openstack.org/179053
+2015-05-09T15:37:34  <ZZelle> foobio, it seems difficult to do currently because git_review.cmd is a script, it would be easier if business logic was clearly separated from low level drivers interacting with git/gerrit/system/ssh/http ...
+2015-05-09T15:38:25  <jeblair> foobio, clarkb, mordred, zaro: should we go ahead and stop puppet and merge the upgrade changes?
+2015-05-09T15:39:14  <clarkb> jeblair: sure
+2015-05-09T15:39:22  <clarkb> I think I have reviewed the changes but will double check now
+2015-05-09T15:40:01  <foobio> jeblair: sounds like a good way to shorten the outage
+2015-05-09T15:40:03  <mordred> jeblair: ++
+2015-05-09T15:40:14  <clarkb> yup both have my +2
+2015-05-09T15:41:46  <jeblair> okay i ran 'puppet agent --disable' and puppet is not currently running
+2015-05-09T15:41:56  <jeblair> so i think we're safe to aprv now
+2015-05-09T15:43:22  <jeblair> both changes approved
+2015-05-09T15:45:59  <mordred> k. I'm claiming the mysqldump step
+2015-05-09T15:46:03  *** ddieterly has quit IRC
+2015-05-09T15:46:21  <mordred> which I suppose means I should claim the create index step too
+2015-05-09T15:47:21  <clarkb> might be good to tee he puppet agent --test output to a file so those not running puppet can tail it
+2015-05-09T15:48:21  <zaro> ++
+2015-05-09T15:49:45  *** tjones1 has joined #openstack-infra
+2015-05-09T15:49:49  *** tjones1 has left #openstack-infra
+2015-05-09T15:51:09  <foobio> it looks like there's not a lot of steps to claim. i'm happy to do any nobody else wants, otherwise i'm mostly here to help test and if necessary debug/fix whatever we've overlooked
+2015-05-09T15:51:58  <zaro> much cleaner than the 2.8 upgrade, right?
+2015-05-09T15:52:14  <openstackgerrit> Merged openstack-infra/system-config: Upgrade Gerrit from 2.8 to ver 2.10 on review.o.o  https://review.openstack.org/155463
+2015-05-09T15:52:31  *** baoli has joined #openstack-infra
+2015-05-09T15:54:01  <jeblair> clarkb: something like puppet agent --test | tee /tmp/upgrade.log  ?
+2015-05-09T15:54:09  <clarkb> ya
+2015-05-09T15:55:01  <jeblair> one down; one to go
+2015-05-09T15:55:41  <openstackgerrit> Merged openstack-infra/project-config: Make gerritbot report changes from Gerrit 2.10.2 branch  https://review.openstack.org/155450
+2015-05-09T15:56:03  *** baoli has quit IRC
+2015-05-09T15:56:17  <jeblair> status alert Gerrit is offline from 16:00-20:00 UTC to upgrade to version 2.10.
+2015-05-09T15:56:24  <jeblair> that look good? ^
+2015-05-09T15:56:32  <foobio> lgtm
+2015-05-09T15:56:46  <clarkb> +1
+2015-05-09T15:56:47  *** baoli has joined #openstack-infra
+2015-05-09T15:57:18  *** banix has joined #openstack-infra
+2015-05-09T15:59:04  <jeblair> #status alert Gerrit is offline from 16:00-20:00 UTC to upgrade to version 2.10.
+2015-05-09T15:59:04  <openstackstatus> jeblair: sending alert
+2015-05-09T15:59:11  <jeblair> it takes a couple minutes to send :)
+2015-05-09T15:59:51  <openstackgerrit> Merged openstack-infra/system-config: update Gerrit javamelody plugin on review.o.o  https://review.openstack.org/173052
+2015-05-09T16:00:04  <jeblair> okay, that's all the changes in
+2015-05-09T16:00:07  <jeblair> good timing on that :)
+2015-05-09T16:00:29  <clarkb> zuul knows
+2015-05-09T16:00:53  <jeblair> we should implement the "Merge-By: <timestamp>" header
+2015-05-09T16:00:56  *** Darkwan has joined #openstack-infra
+2015-05-09T16:01:03  -openstackstatus- NOTICE: Gerrit is offline from 16:00-20:00 UTC to upgrade to version 2.10.
+2015-05-09T16:01:05  *** ChanServ changes topic to "Gerrit is offline from 16:00-20:00 UTC to upgrade to version 2.10."
+2015-05-09T16:01:16  *** sdake_ has joined #openstack-infra
+2015-05-09T16:01:42  <foobio> ready, set, breakstuff
+2015-05-09T16:01:59  <jeblair> stopping gerrit
+2015-05-09T16:02:08  <jeblair> i saved the zuul queue if we want to be nice later :)
+2015-05-09T16:02:53  <jeblair> gerrit is stopped
+2015-05-09T16:02:59  <mordred> ok. dumping db
+2015-05-09T16:03:04  *** baoli has quit IRC
+2015-05-09T16:03:25  <openstackstatus> jeblair: finished sending alert
+2015-05-09T16:04:10  <mordred> creating index
+2015-05-09T16:04:27  <mordred> done
+2015-05-09T16:04:31  <mordred> db done - ready for next step
+2015-05-09T16:04:31  *** otter768 has joined #openstack-infra
+2015-05-09T16:04:56  <clarkb> oh your puppet agent command will need the lockfile arg
+2015-05-09T16:05:03  *** sdake has quit IRC
+2015-05-09T16:05:04  <mordred> jeblair: ^^
+2015-05-09T16:05:13  <clarkb> --agent_disabled_lockfile=/tmp/alt-lock-file
+2015-05-09T16:05:30  <jeblair> clarkb: ep look good?
+2015-05-09T16:05:36  <clarkb> yup
+2015-05-09T16:05:51  <jeblair> okay, ready for me to run that now?
+2015-05-09T16:06:03  <clarkb> I am
+2015-05-09T16:06:13  <mordred> yup. have we verified that the latest revs are on puppetmaster?
+2015-05-09T16:06:17  <clarkb> mordred: no
+2015-05-09T16:06:21  <mordred> doing so
+2015-05-09T16:06:27  <jeblair> waiting
+2015-05-09T16:06:32  <clarkb> (also good catch)
+2015-05-09T16:06:44  <mordred> they were not. they are now. proceed
+2015-05-09T16:06:53  <foobio> i've made a note of the couple of changes which are likely to report while gerrit is still offline so i can bump them once it's back up
+2015-05-09T16:07:01  <jeblair> foobio: i saved the zuul queues
+2015-05-09T16:07:10  <foobio> oh, i missed that. cool
+2015-05-09T16:07:47  *** teran has joined #openstack-infra
+2015-05-09T16:08:58  *** otter768 has quit IRC
+2015-05-09T16:10:23  <jeblair> running now
+2015-05-09T16:10:42  <foobio> tailing
+2015-05-09T16:11:52  <foobio> libs look like they're supposed to
+2015-05-09T16:12:16  <clarkb> its still doing the initial init
+2015-05-09T16:12:21  *** baoli has joined #openstack-infra
+2015-05-09T16:12:52  *** teran has quit IRC
+2015-05-09T16:13:43  <jeblair> it's reindexing; this usually takes, what, 20 minutes?
+2015-05-09T16:13:49  <clarkb> 10-15 I think
+2015-05-09T16:13:51  *** tonytan4ever has quit IRC
+2015-05-09T16:14:02  <foobio> yeah, somewhere in there
+2015-05-09T16:14:06  *** tonytan4ever has joined #openstack-infra
+2015-05-09T16:14:24  *** tonytan4ever has quit IRC
+2015-05-09T16:14:28  <foobio> hrm... we have a mysql-connector symlink and download version side-by-side. doesn't seem to be that way on review-dev
+2015-05-09T16:14:41  *** baoli has quit IRC
+2015-05-09T16:14:48  <foobio> review-dev just has the symlinked one
+2015-05-09T16:15:06  <foobio> zaro: any idea whether that ^ will pose a problem?
+2015-05-09T16:15:19  <zaro> foobio: no it should be ok
+2015-05-09T16:16:04  <foobio> i guess it's just bcpg that gets touchy if we have more that one lying around
+2015-05-09T16:16:05  <jeblair> oops, i think the tee missed stderr
+2015-05-09T16:16:06  <jeblair> Error: /Stage[main]/Gerrit/Exec[gerrit-start]: Failed to call refresh: /etc/init.d/gerrit start returned 1 instead of one of [0]
+2015-05-09T16:16:06  <jeblair> Error: /Stage[main]/Gerrit/Exec[gerrit-start]: /etc/init.d/gerrit start returned 1 instead of one of [0]
+2015-05-09T16:16:06  <clarkb> it says starting gerrit failed, is that because indexing took too long?
+2015-05-09T16:16:25  <foobio> clarkb: i suspect so. the timeout on the exec is likely way too short
+2015-05-09T16:16:37  <nibalizer> default timeout is 300 seconds
+2015-05-09T16:17:07  <jeblair> we think the reindex aborted?
+2015-05-09T16:17:08  <jeblair> ugh
+2015-05-09T16:17:21  <foobio> i see the reindex still running
+2015-05-09T16:17:25  <jeblair> oh good
+2015-05-09T16:17:36  <foobio> going on 8 minutes now
+2015-05-09T16:17:45  <jeblair> so we'll just wait for it to finish, then run puppet again to make sure it's stable, then start
+2015-05-09T16:17:45  <foobio> at least the process is still in the process table anyway
+2015-05-09T16:17:48  <clarkb> ya I think from puppet/init's perspective it failed
+2015-05-09T16:17:58  <clarkb> but we just have to wait then start the service directly
+2015-05-09T16:18:29  <clarkb> everything else seems to have gone well, its just the start which can't happen when indexing
+2015-05-09T16:19:09  <zaro> foobio: does the mysql file that's in the lib folder match tidy setting?
+2015-05-09T16:19:39  <foobio> zaro: mysql-connector-java-5.1.21.jar
+2015-05-09T16:20:33  <foobio> and we have a tidy for 2.10 with a matches mysql-connector-java-*.jar
+2015-05-09T16:20:54  *** armax has quit IRC
+2015-05-09T16:21:34  <foobio> so not sure why it ended up left behind
+2015-05-09T16:21:48  <foobio> maybe it'll get cleared on the next puppet update
+2015-05-09T16:24:30  *** AJaeger has quit IRC
+2015-05-09T16:24:55  *** ildikov has quit IRC
+2015-05-09T16:24:57  <clarkb> looks like index just finished
+2015-05-09T16:24:57  <foobio> finished?
+2015-05-09T16:25:07  <foobio> i agree
+2015-05-09T16:25:15  <jeblair> i'll run puppet again?
+2015-05-09T16:25:17  <jeblair> same command?
+2015-05-09T16:25:22  <foobio> yep
+2015-05-09T16:25:33  <jeblair> running
+2015-05-09T16:25:48  <jeblair> done
+2015-05-09T16:26:02  <foobio> as suspected, the mysql-connector spare got tidied up this time around
+2015-05-09T16:26:10  <jeblair> um, do we need to do something about restTokenPrivateKey ?
+2015-05-09T16:26:18  <clarkb> ok, now I think we have to start gerrit directly because it isn't started if we don't update the war
+2015-05-09T16:26:47  <foobio> jeblair: why are you wondering if we need to do something with restTokenPrivateKey?
+2015-05-09T16:26:53  <clarkb> zaro: ^ is restTokenPrivateKey still a thing
+2015-05-09T16:26:58  <clarkb> foobio: it was removed by puppet
+2015-05-09T16:27:04  <foobio> ahh, i see that in the log now
+2015-05-09T16:27:20  <zaro> clarkb: not on review-dev so i don't know.
+2015-05-09T16:27:22  <jeblair> yeah, the other changes look fine to me
+2015-05-09T16:27:25  <foobio> i bet gerrit creates it at each start
+2015-05-09T16:27:27  <clarkb> I think either gerrit wrote that to its config on init (really? writing back to config files?) or its old and we don't need it
+2015-05-09T16:27:36  <clarkb> foobio: ya
+2015-05-09T16:27:38  <foobio> gerrit does rewrite its config
+2015-05-09T16:27:46  <mordred> well, we all have it in our logs
+2015-05-09T16:27:47  <foobio> note all the empty strings getting updated
+2015-05-09T16:27:57  <foobio> i agree it's insane
+2015-05-09T16:28:04  <foobio> and not at all the most insane thing about gerrit
+2015-05-09T16:28:04  <mordred> so if gertty is not happy, we can likely add it
+2015-05-09T16:29:02  <foobio> yeah, i'm in favor of just starting it and seeing what we've broken
+2015-05-09T16:29:11  <jeblair> hrm, i'd like to understand what that is first
+2015-05-09T16:29:23  <zaro> i tested gerty with 2.10 and gertty was happy with it.
+2015-05-09T16:29:28  <jeblair> i'm trying to find docs about it
+2015-05-09T16:29:31  <clarkb> ya googling isn't returning much data about it
+2015-05-09T16:30:18  <foobio> agreed. i see example configs in the gerrit docs including it, but no explanation
+2015-05-09T16:30:37  <zaro> where was the restTokenPrivateKey setting?
+2015-05-09T16:30:47  <mordred> secure.conf
+2015-05-09T16:30:47  <zaro> gerrit config?
+2015-05-09T16:30:55  <mordred> gerrit-pgm/src/main/java/com/google/gerrit/pgm/init/InitAuth.java:      auth.setSecure("restTokenPrivateKey", SignedToken.generateRandomKey());
+2015-05-09T16:31:27  <clarkb> mordred: just found that too, so if it is null then we generate a new one
+2015-05-09T16:31:27  <mordred> so - it's in the same place as registerEmailPrivateKey
+2015-05-09T16:31:32  *** dboik has quit IRC
+2015-05-09T16:31:36  <mordred> ayh - so I think we need it in our secure.config
+2015-05-09T16:31:41  <mordred> with an entry in hiera
+2015-05-09T16:32:02  *** dboik has joined #openstack-infra
+2015-05-09T16:32:17  <clarkb> mordred: ya we likely want it there
+2015-05-09T16:32:26  <foobio> heh, i see people asking what it is in gerrit irc logs... nobody answers
+2015-05-09T16:32:55  <clarkb> it appears to be used to sign REST token
+2015-05-09T16:32:56  <mordred> so - keep puppet disabled - add it to the file by hand, start gerrit, push patches to add it to the file and land those patches before we restart puppet, yeah?
+2015-05-09T16:33:02  *** banix has quit IRC
+2015-05-09T16:33:06  <clarkb> and if it is null you get a null restToken
+2015-05-09T16:33:12  <jeblair> i actually can't find it used in gerrit, but maybe the AuthConfig class is passed to a library
+2015-05-09T16:33:13  <clarkb> mordred: sounds good
+2015-05-09T16:33:48  <jeblair> i will add it to the file
+2015-05-09T16:34:04  <mordred> I'll add it to hiera
+2015-05-09T16:34:12  <jeblair> someone else want to write the patch?
+2015-05-09T16:34:18  <foobio> writing now
+2015-05-09T16:34:39  <foobio> patches, likely (since we need to plumb it through the puppet module)
+2015-05-09T16:35:34  <clarkb> jeblair: are you starting gerrit after adding it to the file?
+2015-05-09T16:35:53  <jeblair> okay, that's staged on review.o.o; i'll wait to start gerrit until we have a quorum again so we can all poke at it
+2015-05-09T16:35:58  *** sputnik13 has quit IRC
+2015-05-09T16:36:15  <mordred> done. it's in gerrit_rest_token_private_key
+2015-05-09T16:36:47  <mordred> jeblair: I'm ready for you to start gerrit
+2015-05-09T16:36:48  *** ddieterly has joined #openstack-infra
+2015-05-09T16:37:04  <jeblair> okay, i'll start gerrit now
+2015-05-09T16:37:36  <jeblair> it's up
+2015-05-09T16:37:49  <mordred> I agree that it is up
+2015-05-09T16:38:00  <mordred> uhm
+2015-05-09T16:38:09  <mordred> ALL of my patches are listed as being in merge conflict
+2015-05-09T16:38:23  <clarkb> mordred: mostly the case here too
+2015-05-09T16:38:23  <mordred> and it appears that is the case for all of the patches
+2015-05-09T16:38:24  <zaro> mordred: should that be added to review-dev too?
+2015-05-09T16:38:29  <jeblair> neat, that's the thing that --recheck-mergeable was supposed to fix
+2015-05-09T16:38:34  <mordred> ah
+2015-05-09T16:38:39  <mordred> sweet
+2015-05-09T16:38:39  <jeblair> which is the flag they removed between 2.9 and 2.10
+2015-05-09T16:38:41  *** ildikov has joined #openstack-infra
+2015-05-09T16:38:43  <clarkb> jeblair: mordred so maybe we bring it back down then rerun the indexing?
+2015-05-09T16:38:49  <clarkb> oh they removed it? gah
+2015-05-09T16:38:54  <clarkb> I thought it was just no longer necessary
+2015-05-09T16:38:57  <jeblair> is it possible that we are required to upgrade to 2.9 first?
+2015-05-09T16:39:20  <jeblair> review-dev _did_ upgrade to 2.9 first, didn't it?
+2015-05-09T16:39:41  <mordred> maybe there is a db flag for it that 2.9 would  have filled out and that they would not have bothered ssetting in a migration?
+2015-05-09T16:39:43  <clarkb> the changelog says 2.8 or 2.9 first then 2.10
+2015-05-09T16:39:44  <zaro> no. i tested direct migration from 2.8 to 2.10
+2015-05-09T16:39:45  <clarkb> but it may be wrong
+2015-05-09T16:39:47  <zaro> 0
+2015-05-09T16:40:07  <jeblair> okay, so try reindexing again sounds like the best next step
+2015-05-09T16:40:18  <clarkb> https://gerrit-documentation.storage.googleapis.com/ReleaseNotes/ReleaseNotes-2.10.html is the changelog
+2015-05-09T16:40:26  <jeblair> stopping gerrit
+2015-05-09T16:40:40  <mordred> jeblair: changes has a mergeable field
+2015-05-09T16:41:17  <jeblair> mordred: is there any variability in the field?
+2015-05-09T16:41:27  <jeblair> maybe it was being updated in the background after start?
+2015-05-09T16:41:43  <mordred> yes
+2015-05-09T16:41:57  <mordred> it is N for one of my changes that was marked as non-mergable
+2015-05-09T16:42:05  <mordred> let me see if I can get a count
+2015-05-09T16:42:11  <jeblair> [2015-05-09 16:39:06,817] WARN  com.google.gerrit.server.patch.PatchListLoader : 5000 ms timeout reached for Diff loader in project openstack-infra/project-config on commit 78f3ccde78e1acb7e2392b3fc5f1acfd75fe
+2015-05-09T16:42:11  <jeblair> 5e93 on path jenkins/jobs/devstack-gate.yaml comparing 82ccb5fb8fa474c9a449fe8063508d9477a332ef..8a46c8017a8d7f020b8d78560500e9735dd10adf
+2015-05-09T16:42:23  <foobio> i have the rest token patches ready to go once it's back up and running
+2015-05-09T16:42:24  <jeblair> there were a few of those ^ in the logs -- maybe that was gerrit computing mergability while running
+2015-05-09T16:42:44  <jeblair> (and not in the reindex step as we had supposed?)
+2015-05-09T16:42:53  <clarkb> I can't find anything in the changelog saying it does things either way
+2015-05-09T16:43:24  <mordred> there does not seem to be an obvious cut off - so yes, I think it's recalcing
+2015-05-09T16:43:35  <jeblair> okay, so, er, restart it again? :)
+2015-05-09T16:43:39  <mordred> 181629 is Y, 181664 is N
+2015-05-09T16:43:55  <foobio> seems reasonable that it might be a background task
+2015-05-09T16:44:01  <clarkb> jeblair: mordred ya we can restart then check the db periodically
+2015-05-09T16:44:05  <mordred> kk
+2015-05-09T16:44:13  <jeblair> started
+2015-05-09T16:44:17  <jeblair> mordred: let us know if the numebrs change
+2015-05-09T16:44:35  <mordred> I shall
+2015-05-09T16:44:41  <foobio> probably easiest thing to do is query for a count on ='N' and then repeat a minute later and see if it's dropped
+2015-05-09T16:44:45  <mordred> mysql> select max(change_id) from changes group by mergeable \G
+2015-05-09T16:44:47  <mordred> btw
+2015-05-09T16:44:48  <foobio> yeah, that
+2015-05-09T16:45:03  <mordred> mysql> select max(change_id), count(change_id) from changes group by mergeable \G
+2015-05-09T16:45:16  <foobio> should i hold off pushing up changes for the token key until we're sure we're not taking it offline again?
+2015-05-09T16:45:24  <jeblair> foobio: yeah
+2015-05-09T16:45:38  <jeblair> [2015-05-09 16:45:32,841] WARN  com.google.gerrit.server.patch.PatchListLoader : 5000 ms timeout reached for Diff loader in project openstack-infra/release-tools on commit c51c2ed294ca7cbb8ce518daadae3488afa21ce8 on path stable_freeze.py comparing 4022d639a6b3d964495c2a4601b1aee1676660c6..c85afc933aca73dd419781305244a616589601e3
+2015-05-09T16:45:44  <jeblair> okay, whatever was doing that is doing it again
+2015-05-09T16:45:44  <mordred> I am not seeing the nubmers change
+2015-05-09T16:45:55  <mordred> oh! yes I am
+2015-05-09T16:46:04  <jeblair> [2015-05-09 16:45:57,895] ERROR org.eclipse.jgit.internal.storage.file.ObjectDirectory : ERROR: Exception caught while accessing pack file /home/gerrit2/review_site/git/openstack-infra/shade.git/objects/pack/pack-4e3b4959ed4c7365a16a07dc39c578f6b05b5b8d.pack, the pack file might be corrupt
+2015-05-09T16:46:13  <mordred> nope. no I'm not
+2015-05-09T16:46:13  <clarkb> cool, fwiw I tried opening a change of mine to see if that would force it to check mergeability and it doesnt seem to do so
+2015-05-09T16:46:31  <mordred> ok. now I can verify different numbers
+2015-05-09T16:46:33  <clarkb> jeblair: er that doesn't look happy
+2015-05-09T16:46:42  <mordred> sorry for the false start before
+2015-05-09T16:46:42  <jeblair> oh look at show-queue
+2015-05-09T16:46:48  <jeblair> a30f58fc waiting .... 16:45:56.163      mergeability-check-change-181102-project
+2015-05-09T16:46:48  <jeblair> c31e0c3e waiting .... 16:45:56.163      mergeability-check-change-181268-project
+2015-05-09T16:46:59  <mordred> why do I get the feeling this is NOT going to scale for us
+2015-05-09T16:47:07  <foobio> indeed
+2015-05-09T16:47:23  <jeblair> it's off to a slow start though; it's also right in the middle of 5000 git pushes
+2015-05-09T16:47:26  <jeblair> [2015-05-09 16:46:44,837] ERROR org.eclipse.jgit.internal.storage.file.ObjectDirectory : ERROR: Exception caught while accessing pack file /home/gerrit2/review_site/git/openstack-infra/tripleo-ci.git/objects/pack/pack-0592bdb67756ca77439e46314897c256277ef793.pack, the pack file might be corrupt
+2015-05-09T16:47:29  <openstackgerrit> Cedric Brandily proposed openstack-infra/git-review: Use git push-url instead of a second remote  https://review.openstack.org/109869
+2015-05-09T16:47:56  <mordred> it does find 142k changes mergable
+2015-05-09T16:47:58  <jeblair> and now we have diverged from our pre-upgrade state :)
+2015-05-09T16:48:03  <mordred> and only 37k not
+2015-05-09T16:48:05  <jeblair> that's a lot
+2015-05-09T16:48:11  <foobio> ZZelle: you may want to hold off pushing patches up to review.o.o. we're still testing the waters with the gerrit upgrade and may need to revert the database
+2015-05-09T16:48:30  <jeblair> [2015-05-09 16:48:24,399] ERROR org.eclipse.jgit.internal.storage.file.ObjectDirectory : ERROR: Exception caught while accessing pack file /home/gerrit2/review_site/git/stackforge/anchor.git/objects/pack/pack-217d5293ef3ca9dc902d2b23eaf76f4bab57f8e1.pack, the pack file might be corrupt
+2015-05-09T16:48:39  *** armax has joined #openstack-infra
+2015-05-09T16:48:40  <foobio> though worth noting, 109869 has "can merge: yes"
+2015-05-09T16:48:45  <ZZelle> foobio, oups, i forgot it was gerrit update day, thx
+2015-05-09T16:49:07  <mordred> yah
+2015-05-09T16:49:29  <mordred> I've been stuck on the same mergeability count for a while
+2015-05-09T16:49:41  <foobio> i have a feeling the merge checking is fragile, and if gerrit encounters any failure it assumes a corrupt git repo
+2015-05-09T16:49:50  <jeblair> hrm; diff loader errors are still showing up
+2015-05-09T16:50:01  <mordred> because, you know, jgit sucks at merging things it turns out
+2015-05-09T16:50:05  <clarkb> foobio: you think that eplains the errors above?
+2015-05-09T16:50:28  <jeblair> there are no more mergeabality check tasks running
+2015-05-09T16:50:31  <foobio> clarkb: i'm still digesting the backtrace
+2015-05-09T16:50:33  <jeblair> in the queue
+2015-05-09T16:50:45  <mordred> ok. well, I still show 37k changes unmergable
+2015-05-09T16:51:00  <clarkb> and all of my changes still show up as unmergeable
+2015-05-09T16:51:17  <mordred> ok - so ...
+2015-05-09T16:51:21  <mordred> look at these two;
+2015-05-09T16:51:29  <clarkb> but there are open unmerged changes are are mergeable
+2015-05-09T16:51:30  <mordred> https://review.openstack.org/#/c/181651/ - that shows can-merge no
+2015-05-09T16:51:55  <mordred> and https://review.openstack.org/#/c/140840/ which shows can-merge no but ALSO "Patch is in Merge-Conflict" error
+2015-05-09T16:52:13  <jeblair> mordred: "Patch in merge conflict" is from zuul
+2015-05-09T16:52:18  <mordred> ah. silly me
+2015-05-09T16:52:20  <clarkb> ya so that one likely can't merge
+2015-05-09T16:52:25  <foobio> https://bugs.eclipse.org/bugs/show_bug.cgi?id=462868
+2015-05-09T16:52:25  <openstack> bugs.eclipse.org bug 462868 in JGit "IOException while accessing pack file" [Major,Resolved: fixed] - Assigned to jgit.core-inbox
+2015-05-09T16:52:25  <mordred> yah. I trust zuul
+2015-05-09T16:52:26  <clarkb> but the first one probably can
+2015-05-09T16:52:37  *** bknudson has left #openstack-infra
+2015-05-09T16:52:40  <sdake_> say quick q, all the channels ge tthe gerrit notification but #kolla, is there something missing in the project-config?  (or is now not hte right time to ask? :)
+2015-05-09T16:52:46  *** bknudson has joined #openstack-infra
+2015-05-09T16:52:58  <mordred> sdake_: not the right time
+2015-05-09T16:53:01  <sdake_> thanks
+2015-05-09T16:53:03  <sdake_> i'll ask later
+2015-05-09T16:53:43  <foobio> http://comments.gmane.org/gmane.comp.version-control.repo/14199
+2015-05-09T16:53:45  <jeblair> foobio: i'm seeing more errors like "java.io.EOFException: Short compressed stream at 596,639
+2015-05-09T16:54:51  <foobio> yeah, a lot of these seem to be jgit dealing poorly with nfs, which is not our scenario
+2015-05-09T16:55:30  <clarkb> foobio: that and out of band git gc
+2015-05-09T16:55:37  <clarkb> whcih we do but shouldn't be a problem right now
+2015-05-09T16:55:48  <jeblair> clarkb: yes, but not over nfs where locking is weird
+2015-05-09T16:56:22  <foobio> https://groups.google.com/forum/#!searchin/repo-discuss/jgit/repo-discuss/Qdmbl-YZ4NU/VmLKVk4CnkEJ
+2015-05-09T16:56:47  <foobio> mentions replacing pack files with new ones of the same name, cgit behavior which confuses jgit
+2015-05-09T16:57:41  <jeblair> hrm, i think --recheck-mergeable might exist in our reindex
+2015-05-09T16:57:58  <jeblair> did they just remove the documentation for it?
+2015-05-09T16:58:09  <mordred> the docs on the 10.3 branch still list it
+2015-05-09T16:58:13  <jeblair> i propose we stop and run reindex --recheck-mergeable
+2015-05-09T16:58:24  <clarkb> foobio: and solved by upgrading git version?
+2015-05-09T16:58:53  *** armax has quit IRC
+2015-05-09T16:59:12  <jeblair> mordred: wow, okay.  looks like they are in our version too.  sorry about that.
+2015-05-09T16:59:32  <jeblair> anyone agree/object to stop + reindex --recheck-mergabel?
+2015-05-09T16:59:55  <mordred> I guess? I kinda want to find a way to turn off the stupid checker - but I'm guessing I will not find that
+2015-05-09T17:00:35  <clarkb> jeblair: seems like a reasonable next step to get merges checked
+2015-05-09T17:00:45  <jeblair> whats the reindex command?
+2015-05-09T17:01:00  <jeblair> (see etherpad)
+2015-05-09T17:01:25  <foobio> seems like the next logical step, yes
+2015-05-09T17:01:56  <clarkb> `/usr/bin/java -jar /home/gerrit2/review_site/bin/gerrit.war reindex -d /home/gerrit2/review_site` is what I have according to ps from before
+2015-05-09T17:02:43  <jeblair> running that now
+2015-05-09T17:03:33  <jeblair> mordred: let us know if numbers change?
+2015-05-09T17:03:34  *** AJaeger has joined #openstack-infra
+2015-05-09T17:03:38  *** AJaeger has joined #openstack-infra
+2015-05-09T17:03:51  <mordred> yes. they are changing
+2015-05-09T17:04:12  <mordred> they are going down at a rate of about 10 per second
+2015-05-09T17:04:21  <mordred> and there are 37k outstanding
+2015-05-09T17:04:28  <jeblair> have we thought about the "--threads" option to reindex?
+2015-05-09T17:04:39  *** ihrachyshka has quit IRC
+2015-05-09T17:04:45  <mordred> we have not
+2015-05-09T17:04:46  <foobio> at that rate, it might finish in an hour
+2015-05-09T17:05:22  <jeblair>   private int threads = Runtime.getRuntime().availableProcessors();
+2015-05-09T17:05:29  <jeblair> i guess it has a reasonable default
+2015-05-09T17:05:45  <clarkb> it if is cpu bound we probably won't get much better performance changing that
+2015-05-09T17:06:02  <jeblair> we're only at LA 3 with 8 vcpus
+2015-05-09T17:06:12  <jeblair> we might double it to 16 and get performance
+2015-05-09T17:06:40  *** ddieterl_ has joined #openstack-infra
+2015-05-09T17:06:42  <mordred> 36655
+2015-05-09T17:07:42  *** tiswanso has joined #openstack-infra
+2015-05-09T17:07:42  <jeblair> neat, so we're going to burn a scotty hour on this :)
+2015-05-09T17:07:52  <clarkb> zaro: I remember the last patch on 2.10.3 was related to jgit, any chance its related to the things foobio has pointed out?
+2015-05-09T17:08:05  *** ivar-lazzaro has joined #openstack-infra
+2015-05-09T17:08:36  *** teran has joined #openstack-infra
+2015-05-09T17:08:38  <foobio> it was to fix https://bugs.eclipse.org/bugs/show_bug.cgi?id=465509
+2015-05-09T17:08:38  <openstack> bugs.eclipse.org bug 465509 in JGit "Massive performance problem in Gerrit caused by ObjectWalk.markUninteresting marking the root tree as uninteresting" [Normal,Resolved: fixed] - Assigned to jgit.core-inbox
+2015-05-09T17:08:56  <clarkb> ah ok so not the same
+2015-05-09T17:09:53  *** ivar-laz_ has joined #openstack-infra
+2015-05-09T17:10:05  *** ddieterly has quit IRC
+2015-05-09T17:11:16  *** ivar-lazzaro has quit IRC
+2015-05-09T17:13:16  *** teran has quit IRC
+2015-05-09T17:13:44  *** stevemar has joined #openstack-infra
+2015-05-09T17:14:51  *** otter768 has joined #openstack-infra
+2015-05-09T17:15:01  <mordred> 35622
+2015-05-09T17:15:26  * dimsum__ peeks 
+2015-05-09T17:15:55  <mordred> we should put up a "service not available" page with a worstcat on it
+2015-05-09T17:16:50  *** AJaeger_ has joined #openstack-infra
+2015-05-09T17:17:08  <jeblair> the recheck command is producing no progress output, btw.
+2015-05-09T17:17:13  *** AJaeger_ is now known as Guest16702
+2015-05-09T17:17:31  <jeblair> (i mean, it hasn't since starting, as in, it does not supply progress information)
+2015-05-09T17:17:47  <clarkb> jeblair: a counter would be nice
+2015-05-09T17:20:30  *** sdake has joined #openstack-infra
+2015-05-09T17:20:48  <clarkb> jeblair: load has fallen to ~1
+2015-05-09T17:21:05  <mordred> 35405
+2015-05-09T17:21:53  <mordred> we COULD just set the flag to Y in sql
+2015-05-09T17:22:03  <clarkb> ha
+2015-05-09T17:22:17  <clarkb> mordred: then let things converge on sanity over time
+2015-05-09T17:22:26  <mordred> yah
+2015-05-09T17:22:52  *** AJaeger has quit IRC
+2015-05-09T17:23:13  *** Guest16702 has quit IRC
+2015-05-09T17:23:34  *** sdake_ has quit IRC
+2015-05-09T17:23:56  *** AJaeger has joined #openstack-infra
+2015-05-09T17:23:56  *** AJaeger has joined #openstack-infra
+2015-05-09T17:23:56  *** tiswanso has quit IRC
+2015-05-09T17:26:40  <jeblair> that suggests we would be comfortable interrupting the reindex
+2015-05-09T17:28:09  *** stevemar has quit IRC
+2015-05-09T17:31:21  <jeblair> i'm running the reindex in a root-owned screen, btw
+2015-05-09T17:31:40  <jeblair> oh!
+2015-05-09T17:31:54  <jeblair> Reindexing changes: projects: 80% (506/630), 87% (157151/180289) (\)
+2015-05-09T17:31:58  <jeblair> that just started!
+2015-05-09T17:32:15  <jeblair> and increasing quickly
+2015-05-09T17:32:39  <zaro> i'm guessing --recheck-mergeable needs to be done for every upgrade going forward?  meaning update puppet manifest?
+2015-05-09T17:32:48  <jeblair> zaro: no i think only this one
+2015-05-09T17:33:03  <zaro> because we going from 2.8->2.10?
+2015-05-09T17:33:08  *** isviridov_away is now known as isviridov
+2015-05-09T17:33:18  <jeblair> yes -- because the mergable field is being added
+2015-05-09T17:33:23  *** sputnik13 has joined #openstack-infra
+2015-05-09T17:33:45  <jeblair> i expect it to be done in <1min
+2015-05-09T17:33:59  <jeblair> it's done
+2015-05-09T17:34:04  <zaro> yah!
+2015-05-09T17:34:13  <jeblair> starting gerrit
+2015-05-09T17:34:44  <jeblair> okay, it's up and there are way fewer changes in conflict now
+2015-05-09T17:35:06  <foobio> much better
+2015-05-09T17:35:55  <foobio> oh, i accidentally terminated the screen session, though i have the last contents from it in my terminal buffer if anyone needs them
+2015-05-09T17:36:00  <jeblair> foobio: np
+2015-05-09T17:36:31  *** isviridov is now known as isviridov_away
+2015-05-09T17:36:33  <foobio> nothing out of the ordinary. errors about the known ancient projects which we've never properly cleaned up in the db
+2015-05-09T17:36:57  <clarkb> my changes are looking good
+2015-05-09T17:37:13  <foobio> as are mine
+2015-05-09T17:37:23  <jeblair> shade changes in general seem to work (shade was one of the projects that emitted an error in the log
+2015-05-09T17:37:28  <foobio> i'm going to push up the token key changes if there are no objections
+2015-05-09T17:37:33  <jeblair> foobio: ++
+2015-05-09T17:37:37  <clarkb> foobio: no, I think trying some changes out is the next step
+2015-05-09T17:37:48  <clarkb> foobio: so go for it
+2015-05-09T17:37:51  <openstackgerrit> Jeremy Stanley proposed openstack-infra/puppet-gerrit: Support restTokenPrivateKey as $token_private_key  https://review.openstack.org/181667
+2015-05-09T17:37:54  <foobio> there's one
+2015-05-09T17:38:03  <clarkb> diff works happily
+2015-05-09T17:38:13  <clarkb> zuul is running jobs for it
+2015-05-09T17:38:15  <jeblair> gertty seems to be working so far
+2015-05-09T17:38:27  <jeblair> i'll review that with gertty; someone else should review it with gerrit webui
+2015-05-09T17:38:30  <openstackgerrit> Jeremy Stanley proposed openstack-infra/system-config: Support restTokenPrivateKey on review.o.o  https://review.openstack.org/181669
+2015-05-09T17:38:33  <foobio> there's the other, with a depends-on for the first
+2015-05-09T17:38:35  <clarkb> I will review with web ui
+2015-05-09T17:38:38  <mordred> yah. I agree - it looks good
+2015-05-09T17:39:30  <clarkb> ok used old change screen to review the first one, left an inline comment
+2015-05-09T17:39:40  <clarkb> seems to work, will use new chnage screen on the second change
+2015-05-09T17:40:11  <clarkb> Conflicts with (N/A) 500 Internal Server Error
+2015-05-09T17:40:16  <clarkb> thats on the new change screen
+2015-05-09T17:40:31  <foobio> fixing the whitespace problem on that first change now with a second patchset
+2015-05-09T17:40:44  <jeblair> clarkb: can you paste the new screen link?
+2015-05-09T17:40:44  *** woodster_ has quit IRC
+2015-05-09T17:40:46  <clarkb> I wonder if it does that until it is able to check mergeability?
+2015-05-09T17:40:58  <clarkb> jeblair: https://review.openstack.org/#/c2/181669/
+2015-05-09T17:41:07  <openstackgerrit> Jeremy Stanley proposed openstack-infra/puppet-gerrit: Support restTokenPrivateKey as $token_private_key  https://review.openstack.org/181667
+2015-05-09T17:41:14  <foobio> there's pushing a second patchset
+2015-05-09T17:42:48  <foobio> as predicted, updating 181667 while 181669 was being tested caused testing to abort with the "depends on a change that failed to merge" message
+2015-05-09T17:42:50  <jeblair> clarkb, foobio: there's an exception logged about that
+2015-05-09T17:42:55  <clarkb> jeblair: also zuul -1'd because it says it depends on a change that can't merge
+2015-05-09T17:43:01  <clarkb> foobio: yup that
+2015-05-09T17:43:14  <jeblair> Caused by: org.eclipse.jgit.errors.ObjectWritingException: Unable to create new object: /home/gerrit2/review_site/git/openstack-infra/system-config.git/objects/96/5337f2632f3a1ac55d77eb8afe86ba8a403176
+2015-05-09T17:43:46  <foobio> er, interesting
+2015-05-09T17:44:00  <jeblair> 	at org.eclipse.jgit.internal.storage.file.ObjectDirectoryInserter.insertOneObject(ObjectDirectoryInserter.java:126)
+2015-05-09T17:44:26  <jeblair> there are root owned directories
+2015-05-09T17:44:38  <foobio> ick, yes
+2015-05-09T17:44:44  <clarkb> jeblair: side effect of running the merge checks as root possibly?
+2015-05-09T17:44:49  <jeblair> clarkb: ah, maybe so
+2015-05-09T17:44:51  <jeblair> so, er, i'll stop gerrit and we'll do some chowning
+2015-05-09T17:44:57  <foobio> good eye
+2015-05-09T17:44:57  <clarkb> jeblair: sounds good
+2015-05-09T17:45:09  <foobio> yes, lest we get any more missing commits
+2015-05-09T17:45:54  <jeblair> just: chown -R gerrit2.gerrit2 /home/gerrit2/review_site/git ?
+2015-05-09T17:46:24  <jeblair> perms look fine, just ownership is wrong
+2015-05-09T17:46:34  <foobio> agreed, that should do it
+2015-05-09T17:46:41  <foobio> and ought to be reasonably fast
+2015-05-09T17:47:15  <clarkb> ya
+2015-05-09T17:48:14  *** koolhead17 has joined #openstack-infra
+2015-05-09T17:48:16  <jeblair> i'm going to do the same for the index dir, just in case
+2015-05-09T17:48:35  <clarkb> oh good idea
+2015-05-09T17:48:38  *** koolhead17 has quit IRC
+2015-05-09T17:48:38  *** koolhead17 has joined #openstack-infra
+2015-05-09T17:48:59  <jeblair> also tmp
+2015-05-09T17:49:04  <jeblair> everything else looks good to me
+2015-05-09T17:49:15  <clarkb> I believe the index should be read onl but don't trust gerrit enough to count on it
+2015-05-09T17:49:15  <jeblair> ready to restart; anyone else want to check anything else first?
+2015-05-09T17:49:43  <jeblair> clarkb: oh i thought that was the lucene thing?  doesn't it write to that with new changes, etc?
+2015-05-09T17:50:02  <foobio> oh, right, that also explains why we normally run teh reindex step as gerrit2 in the project renaming steps
+2015-05-09T17:50:08  <foobio> i think we ran into this once before
+2015-05-09T17:50:17  <clarkb> jeblair: oh right, its just updating things out of band that can't happen at run time
+2015-05-09T17:50:34  <clarkb> jeblair: its read only to management commands like reindex and so on, but gerrit itself writes to it
+2015-05-09T17:50:52  <jeblair> clarkb, foobio: ready to restart?
+2015-05-09T17:50:55  <clarkb> jeblair: I think index/git/tmp covers it
+2015-05-09T17:50:55  <foobio> ready
+2015-05-09T17:51:00  <foobio> all lgtm now
+2015-05-09T17:51:04  <jeblair> starting
+2015-05-09T17:51:27  *** ildikov has quit IRC
+2015-05-09T17:51:29  <jeblair> https://review.openstack.org/#/c2/181669/ looks correct now
+2015-05-09T17:51:38  <clarkb> the conflicts with na 500 error went away
+2015-05-09T17:52:55  <clarkb> I am approving the first change now
+2015-05-09T17:54:09  <clarkb> rechecking the second one again, I think zuul must've tried to report back while gerrit was down
+2015-05-09T17:54:14  <foobio> i just did
+2015-05-09T17:54:43  <foobio> both of them tried to report form the check pipeline while gerrit was back offline for the chown, yeah
+2015-05-09T17:54:53  <foobio> er, from the check pipeline
+2015-05-09T17:54:59  <clarkb> change screen 2 is not pleasant but seems to work
+2015-05-09T17:55:10  <jeblair> oh, we seem to have the polling turned on for cs2
+2015-05-09T17:55:29  <jeblair> i just got a little "update from ..." window at the bottom
+2015-05-09T17:55:46  <clarkb> jeblair: ya gerrit does that, it is very similar to how gmail does it
+2015-05-09T17:55:48  <jeblair> i had to click an 'update' link to actually update the page
+2015-05-09T17:55:58  <clarkb> I really dislike that commenting covers over all of the important details of the change
+2015-05-09T17:56:48  <jeblair> i sort of imagined it would just update the page, but oh well.
+2015-05-09T17:57:05  <clarkb> jeblair: I am not sure why you have to manually ask for it to show the updates
+2015-05-09T17:57:26  <clarkb> we seem to be waitnig on precise nodes /me checks nodepool
+2015-05-09T17:57:38  <jeblair> clarkb: maybe it's naive and just refreshes everything and would therefore destroy comments in progress or something.
+2015-05-09T17:57:57  <clarkb> we have a bunch building
+2015-05-09T17:58:28  <jeblair> low min-ready there i guess
+2015-05-09T17:58:52  *** shashankhegde has joined #openstack-infra
+2015-05-09T18:00:06  <zaro> anybody notice the diff preferences in cs2?
+2015-05-09T18:01:01  <zaro> pretty nice, but not intuitive to get to.
+2015-05-09T18:01:52  <clarkb> zaro: fwiw they are in the old change screen too (and have been long before new change screen existed)
+2015-05-09T18:02:18  <clarkb> zaro: do you see the monitoring tab across the top?
+2015-05-09T18:02:27  <clarkb> its gone if I sign out
+2015-05-09T18:02:49  *** sabeen1 has joined #openstack-infra
+2015-05-09T18:02:54  <clarkb> just wondering if everyone sees the tab or not (also hitting it when not logged in still forbids access so not worried about that)
+2015-05-09T18:03:04  <zaro> no, it's not there for me
+2015-05-09T18:03:07  <clarkb> cool
+2015-05-09T18:04:00  <jeblair> i reloaded the zuul queue -- people are using the system anyway :)
+2015-05-09T18:04:25  <clarkb> the hideci.js stuff seems to work just fine
+2015-05-09T18:04:38  <clarkb> what other things should I be checking?
+2015-05-09T18:05:17  <clarkb> just approved the second change, once that is in we can update puppet on master then renable on review.o.o
+2015-05-09T18:05:27  <foobio> yep, both are in the gate pipeline now
+2015-05-09T18:05:46  *** achanda has joined #openstack-infra
+2015-05-09T18:05:56  <zaro> clarkb: LP integration?
+2015-05-09T18:06:31  <foobio> zaro: https://review.openstack.org/180974 is about to test that for us
+2015-05-09T18:06:56  *** ildikov has joined #openstack-infra
+2015-05-09T18:07:06  <zaro> cool
+2015-05-09T18:07:20  <foobio> should hopefully merge any second
+2015-05-09T18:07:42  <zaro> anybody following the gerrit log?
+2015-05-09T18:08:11  <jeblair> zaro: i was but just stopped; want me to look for something?
+2015-05-09T18:08:21  <jeblair> i switch to the apache log and i'm seeing a bunch of these:
+2015-05-09T18:08:23  <jeblair> 2001:4800:7819:102:be76:4eff:fe05:c9f5 - - [09/May/2015:18:07:41 +0000] "GET /changes/?q=status:merged+owner:&n=250&N=0034f7bb0002c490 HTTP/1.1" 200 150112 "-" "-"
+2015-05-09T18:08:29  <foobio> currently tailing it
+2015-05-09T18:08:50  <zaro> not really, just wondering in case we see any errors
+2015-05-09T18:09:19  <foobio> that's a machine in rackspace with no reverse dns entry
+2015-05-09T18:09:23  *** teran has joined #openstack-infra
+2015-05-09T18:10:00  <jeblair> i kinda want to iptables it
+2015-05-09T18:10:15  <clarkb> its paging through all of the merged changes?
+2015-05-09T18:10:33  <jeblair> the query isn't changing
+2015-05-09T18:10:44  <clarkb> oh its not even shifting the window
+2015-05-09T18:11:00  <foobio> wacky
+2015-05-09T18:11:12  <clarkb> I think thats what N=0034... is there for right?
+2015-05-09T18:11:13  <foobio> yeah that's something misbehaving, and i don't think it's something of ours
+2015-05-09T18:11:18  <clarkb> you move that pointer to page
+2015-05-09T18:11:20  <jeblair> is that even a valid query?
+2015-05-09T18:11:28  <clarkb> jeblair: yes its valid, I ran it and got back the json
+2015-05-09T18:11:32  <foobio> it seems to return json results
+2015-05-09T18:11:35  <foobio> yeah, that
+2015-05-09T18:11:43  <jeblair> weird
+2015-05-09T18:11:52  <jeblair> the "owner:" bit seems strange to me
+2015-05-09T18:11:55  <clarkb> I think it is saying give me all merged changes with any owner 250 at a time
+2015-05-09T18:12:12  <openstackgerrit> Merged openstack-infra/puppet-gerrit: Support restTokenPrivateKey as $token_private_key  https://review.openstack.org/181667
+2015-05-09T18:12:13  <clarkb> manually searching owner: is an error
+2015-05-09T18:12:31  <jeblair> yay things merge ^
+2015-05-09T18:14:28  *** teran has quit IRC
+2015-05-09T18:14:28  <clarkb> the rally change to test LP integration is ~40 minutes out
+2015-05-09T18:14:31  <zaro> shouldn't the jenkins result appear before merge succesfully message?
+2015-05-09T18:14:56  <openstackgerrit> Merged openstack-infra/system-config: Support restTokenPrivateKey on review.o.o  https://review.openstack.org/181669
+2015-05-09T18:15:20  <jeblair> zaro: they often appear in the other order
+2015-05-09T18:15:32  <jeblair>  ip6tables -I openstack-INPUT 3 -m tcp -s 2001:4800:7819:102:be76:4eff:fe05:c9f5 -j DROP
+2015-05-09T18:15:36  <jeblair> how does that look ^ ?
+2015-05-09T18:15:42  <clarkb> zaro: I think zuul does a gerrit review --verified 2 --submit "message here" then its up to gerrit to get the order
+2015-05-09T18:16:02  <clarkb> jeblair: 3, is above the established allowing rule right?
+2015-05-09T18:16:28  <clarkb> yup it is, lgtm
+2015-05-09T18:16:35  <jeblair> clarkb: yeah, that is rule number 3 currently, and if i understand -I correctly, that means this will be the new #3 and push that down to 4
+2015-05-09T18:17:05  *** Somay has joined #openstack-infra
+2015-05-09T18:17:07  <jeblair> clarkb: or i could put it after the established; i don't think we actually have long runinng connections from it
+2015-05-09T18:17:16  <foobio> yeah, that looks right
+2015-05-09T18:17:34  <clarkb> jeblair: before is where I would put it
+2015-05-09T18:17:55  <clarkb> worked well when I Had to block the canonical ddoser thing
+2015-05-09T18:18:24  <foobio> 181669 is on the puppetmaster now, so should be safe to try puppet again on gerrit and possibly reenable
+2015-05-09T18:19:11  <clarkb> foobio: woot
+2015-05-09T18:19:20  <foobio> i'm checking the noop now
+2015-05-09T18:19:23  <clarkb> we can do a puppet agent --noop --test to confirm the diff
+2015-05-09T18:19:27  <foobio> yeah
+2015-05-09T18:19:56  <foobio> hrm... doesn't seem to indicate any changes to apply?
+2015-05-09T18:20:21  <clarkb> foobio: thats what we want right? file was updated directly
+2015-05-09T18:20:30  <jeblair> forgot the "-p tcp", but added that and the rule is in now
+2015-05-09T18:20:46  <jeblair> and they switched to v4
+2015-05-09T18:21:01  <openstackgerrit> Cedric Brandily proposed openstack-infra/git-review: Use git push-url instead of a second remote  https://review.openstack.org/109869
+2015-05-09T18:21:04  <foobio> clarkb: yeah, pretty sure. it's just gerrit always throws me because it modifies the config after start to insert explicit "" on empty values
+2015-05-09T18:21:35  <jeblair> v4 blocked too
+2015-05-09T18:21:58  <foobio> did someone else want to rerun puppet for real, or shall i and just do it and | tee /tmp/upgrade.log ?
+2015-05-09T18:22:11  <jeblair> foobio: not i
+2015-05-09T18:22:31  <foobio> running
+2015-05-09T18:22:38  <clarkb> go for it
+2015-05-09T18:22:39  <jeblair> (i feel like 5 times per second is too many times per second to check for merged changes)
+2015-05-09T18:22:58  *** koolhead17 has quit IRC
+2015-05-09T18:23:03  <foobio> yep, puppet updated with no changes, as expected
+2015-05-09T18:23:06  <clarkb> looks like it ran successfully
+2015-05-09T18:23:08  <jeblair> woot
+2015-05-09T18:23:15  <foobio> all clear to reenable puppet agent now?
+2015-05-09T18:23:22  <jeblair> foobio: ++
+2015-05-09T18:23:23  <clarkb> foobio: yup
+2015-05-09T18:23:27  <foobio> done and done
+2015-05-09T18:23:48  <jeblair> also, btw, gerrit load has gone down a bit.
+2015-05-09T18:24:00  <foobio> heh, i can imagine
+2015-05-09T18:24:38  <jeblair> "Update from Jenkins, Gerrit Code Review Show Ignore" is what pops up on CS2
+2015-05-09T18:24:44  <jeblair> "Show" and "Ignore" are links
+2015-05-09T18:25:12  <clarkb> I was just able to abandon a change of mine that is no longer necessary. So that works
+2015-05-09T18:25:23  <clarkb> jeblair: if you click show it just loads it on the same page though
+2015-05-09T18:25:28  <jeblair> yep
+2015-05-09T18:25:56  <clarkb> I can try pushing a draft change though I expect that to be blocked still
+2015-05-09T18:26:03  <foobio> no reverse dns on that v4 addy either
+2015-05-09T18:26:47  <clarkb> draft push was denied
+2015-05-09T18:26:54  <jeblair> excellen
+2015-05-09T18:26:55  <jeblair> t
+2015-05-09T18:27:02  <jeblair> are we ready to #status ok?
+2015-05-09T18:27:10  <foobio> i think so
+2015-05-09T18:27:19  <foobio> i'm not seeing anything else out of the ordinary now
+2015-05-09T18:27:37  <foobio> done with 1.5 scotty hours in the bank
+2015-05-09T18:27:49  <jeblair> status ok Gerrit upgrade completed; please report problems in #openstack-infra
+2015-05-09T18:27:50  <jeblair> ?
+2015-05-09T18:28:03  <zaro> lgtm
+2015-05-09T18:28:17  * foobio makes a thumbs-up gesture
+2015-05-09T18:28:23  <jeblair> #status ok Gerrit upgrade completed; please report problems in #openstack-infra
+2015-05-09T18:28:24  <openstackstatus> jeblair: sending ok
+2015-05-09T18:28:29  <clarkb> ya I am not able to find anything else that looks wrong
+2015-05-09T18:28:33  <openstackgerrit> Clint Adams proposed openstack-infra/system-config: Add #kolla to the list of statusbot channels  https://review.openstack.org/181673
+2015-05-09T18:28:41  <clarkb> last thing was the 500 internal server errors that were corrected by the chowning
+2015-05-09T18:28:47  *** otter768 has quit IRC
+2015-05-09T18:28:49  <Clint> sdake: i think https://review.openstack.org/181673 is what you want
+2015-05-09T18:28:51  <sdake> thanks clint
+2015-05-09T18:28:57  <sdake> appreciate it
+2015-05-09T18:29:44  <sdake> I thought one of our community submitted a change like that
+2015-05-09T18:29:53  <sdake> maybe it was rejected or lost - not clear
+2015-05-09T18:30:22  *** ChanServ changes topic to "Gerrit 2.10 Upgrade starting at 1600 UTC: https://etherpad.openstack.org/p/gerrit-2.10-upgrade"
+2015-05-09T18:30:24  -openstackstatus- NOTICE: Gerrit upgrade completed; please report problems in #openstack-infra
+2015-05-09T18:30:29  *** ujuc has quit IRC
+2015-05-09T18:30:33  <foobio> jeblair: clarkb: i'm going to wager that ip address is a stats scraper (for stackalytics? activity.o.o? reviewstats? something else?) because it's also polling the "CLA Accepted - ICLA" group member list twice every 10 minutes
+2015-05-09T18:31:27  <foobio> hopefully whoever it is will get up with us in short order and we can help them fine-tune their queries
+2015-05-09T18:31:41  <zaro> thanks guys, have a great rest of the day.
+2015-05-09T18:31:55  <superdan> looks good to me from here
+2015-05-09T18:31:59  <jeblair> sdake: oh while you are around (and we're not super busy now) -- i don't think we have time in the official summit schedule for the docker registry topic; but i think in general we're happy to run additional infrastructure like that; we can talk about it informally at the summit or handle it in an ML thread
+2015-05-09T18:32:03  <openstackgerrit> Andreas Jaeger proposed openstack-infra/project-config: Cleanup gerrit ACLs: remove unneccary "refs/heads/stable"  https://review.openstack.org/181660
+2015-05-09T18:32:06  <superdan> although I guess they changed the theme again
+2015-05-09T18:32:15  <clarkb> foobio: lol hit it with your browser
+2015-05-09T18:32:16  <jeblair> zaro: thank you!
+2015-05-09T18:32:17  *** superdan is now known as dansmith
+2015-05-09T18:32:25  <sdake> jeblair sounds good
+2015-05-09T18:32:31  <openstackgerrit> Cedric Brandily proposed openstack-infra/git-review: Use git push-url instead of a second remote  https://review.openstack.org/109869
+2015-05-09T18:32:35  <sdake> jeblair I don't know it warrants an entire hour of discussion anyway
+2015-05-09T18:32:40  <sdake> know/think ;)
+2015-05-09T18:32:43  <clarkb> foobio: look familiar :) I can ping todd
+2015-05-09T18:32:44  <openstackstatus> jeblair: finished sending ok
+2015-05-09T18:32:53  <foobio> clarkb: please do
+2015-05-09T18:32:55  <jeblair> sdake: sounds good then :)
+2015-05-09T18:33:19  <sdake> when we get our integrated gate rolling
+2015-05-09T18:33:25  <sdake> I'll come back to the ml with the request
+2015-05-09T18:33:31  <sdake> hopefully this will happen by l1
+2015-05-09T18:33:32  <foobio> clarkb: i'm betting that's the "cla management" feature tipit was saying they added to the foundation member system
+2015-05-09T18:33:38  <sdake> code is starting to hit the repo
+2015-05-09T18:33:49  <sdake> integrated gate/functional gate
+2015-05-09T18:34:00  <sdake> too many terms - brain implodes :)
+2015-05-09T18:35:31  <foobio> zuul estimates 18 minutes until gerrit (hopefully) auto-closes bug 1452710
+2015-05-09T18:35:31  <openstack> bug 1452710 in Rally "Unit tests for Mistral benchmark are not running in py27 gate" [Undecided,In progress] https://launchpad.net/bugs/1452710 - Assigned to Anastasia Kuznetsova (akuznetsova)
+2015-05-09T18:35:40  *** ChanServ changes topic to "Discussion of OpenStack Developer and Community Infrastructure | docs http://docs.openstack.org/infra/manual/ http://ci.openstack.org/ | bugs https://storyboard.openstack.org/ | source https://git.openstack.org/cgit/openstack-infra/"
+2015-05-09T18:36:44  *** achanda has quit IRC
+2015-05-09T18:37:38  *** julim has joined #openstack-infra
+2015-05-09T18:38:28  <jeblair> i'm going to afk for 15 mins or so
+2015-05-09T18:39:55  <clarkb> I have pinged foundation people about the iptables rule and have asked them to hop over here so we can figure out what the appropriate query and poll frequency would be
+2015-05-09T18:41:15  <kragniz> new gerrit looks shiny!
+2015-05-09T18:41:22  <kragniz> the registered date on my profile seems to have reset to today, though
+2015-05-09T18:41:28  <kragniz> not sure if that is intended
+2015-05-09T18:41:35  *** yfried|afk has joined #openstack-infra
+2015-05-09T18:42:28  <clarkb> oh hey me too, I bet that is a broken db migration :/
+2015-05-09T18:42:54  <ZZelle> Is it intended that gerrit default screen is old screen? The "default" default screen is new screen when version >=2.0.9
+2015-05-09T18:45:41  <ZZelle> mordred, https://review.openstack.org/109869 is corrected: i corrected some incorrect autorebase and tests
+2015-05-09T18:48:11  *** mpopow has joined #openstack-infra
+2015-05-09T18:48:39  *** AJaeger has quit IRC
+2015-05-09T18:48:58  *** AJaeger has joined #openstack-infra
+2015-05-09T18:48:58  *** AJaeger has joined #openstack-infra
+2015-05-09T18:52:05  *** banix has joined #openstack-infra
+2015-05-09T18:52:11  *** openstackgerrit has quit IRC
+2015-05-09T18:52:32  *** openstackgerrit has joined #openstack-infra
+2015-05-09T18:53:09  *** mpopow has quit IRC
+2015-05-09T18:53:51  *** Sukhdev has joined #openstack-infra
+2015-05-09T18:56:19  *** julim has quit IRC
+2015-05-09T18:57:53  *** Somay has quit IRC
+2015-05-09T19:00:23  <jeblair> ZZelle: yes, openstack's system default is intentionally the old screen
+2015-05-09T19:01:06  <jeblair> kragniz, clarkb: we might be able to update the database to fix that based on data in our mysqldump
+2015-05-09T19:01:34  <ZZelle> jeblair, it's perhaps better, the new screen is not really user friendly at first
+2015-05-09T19:01:44  <clarkb> jeblair: basically load the old db in under a new name then update rows where old row doesn't match
+2015-05-09T19:01:53  <clarkb> ZZelle: s/at first//
+2015-05-09T19:02:19  <jeblair> ZZelle: yeah, that's our thinking.  2.10 is a lot better than 2.8 was though.  i'm at least ready to entertain discussion of it now, unlike 2.8.  :)
+2015-05-09T19:03:02  <jeblair> https://bugs.launchpad.net/rally/+bug/1452710
+2015-05-09T19:03:02  <openstack> Launchpad bug 1452710 in Rally "Unit tests for Mistral benchmark are not running in py27 gate" [Undecided,Fix committed] - Assigned to Anastasia Kuznetsova (akuznetsova)
+2015-05-09T19:03:03  <ZZelle> jeblair, i see a "My Menu" in preferences is it inherited from the 2.10? or OpenStack custo?
+2015-05-09T19:03:28  <jeblair> clarkb, foobio: looks like that bug was updated; shall i send a completion email announcement now?
+2015-05-09T19:03:39  <clarkb> ZZelle: I think that is from upstraem, its definitely not our
+2015-05-09T19:03:44  <clarkb> jeblair: ++
+2015-05-09T19:04:13  <clarkb> ZZelle: but this looks neat time to test it
+2015-05-09T19:04:39  <jeblair> oh that'll be nice.  now people can add their own queries there and stop abandoning other peoples changes
+2015-05-09T19:04:46  <clarkb> greghaynes: ^
+2015-05-09T19:05:02  <clarkb> greghaynes: https://review.openstack.org/#/settings/preferences may be the start of something useful for making a dashboard
+2015-05-09T19:05:02  <ZZelle> clarkb, let see what we can do we with it... perhaps it simplifies access to dashboards
+2015-05-09T19:05:25  <greghaynes> clarkb: waaaa
+2015-05-09T19:05:30  <greghaynes> clarkb: shiney
+2015-05-09T19:05:34  <clarkb> ZZelle: it looks like it lets you make your own dashboard via a ui then you don't have to remember crazy urls
+2015-05-09T19:05:44  *** tiswanso has joined #openstack-infra
+2015-05-09T19:05:57  <clarkb> ya it puts the link up under the My ta
+2015-05-09T19:05:59  <greghaynes> looks like you still cant order oldest first though :(
+2015-05-09T19:06:13  *** woodster_ has joined #openstack-infra
+2015-05-09T19:06:13  <clarkb> no, this is just for queries
+2015-05-09T19:06:20  <clarkb> table returns are still broken
+2015-05-09T19:06:57  <greghaynes> btw - Congrats on the successful upgrade infraers!
+2015-05-09T19:08:20  <jeblair> greghaynes: thanks; i think we'll all still be hoping it's successful for the next few days ;)
+2015-05-09T19:08:36  <foobio> jeblair: yeah, sorryl, had stepped away for a sec
+2015-05-09T19:08:52  <foobio> seems successful to me (not sure if we care about the updated account creation times)
+2015-05-09T19:10:08  <foobio> contact info update timestamps seem unchanged, but i think all existing accounts are now showing "registered on 2015-05-09 16:10"
+2015-05-09T19:10:09  *** teran has joined #openstack-infra
+2015-05-09T19:10:48  <foobio> i suppose we could try to mine the originals out of the mysqldump and correct those on the fly
+2015-05-09T19:10:59  <foobio> if they're especially important
+2015-05-09T19:11:24  <clarkb> The only thing that I can think of as being important for that is figuring out whcih of multiple accounts for a single user is the older/newer
+2015-05-09T19:11:34  <clarkb> but that is infrequent enough of a problem that we can probably get by
+2015-05-09T19:13:41  <jeblair> i think it would be worth correcting them if it's not too much trouble; should be a fairly simple process.  i don't think we need to do it right now though.
+2015-05-09T19:14:53  *** teran has quit IRC
+2015-05-09T19:15:03  <jeblair> msg sent
+2015-05-09T19:17:06  <clarkb> jeblair: added a note about the chowning that was required for the git repos to the etherpad
+2015-05-09T19:20:00  <foobio> should also be possible to correct them with gerrit online
+2015-05-09T19:20:22  <foobio> i believe it just uses that for display purposes, and queries it out of the db when needed
+2015-05-09T19:21:20  *** _nadya_ has joined #openstack-infra
+2015-05-09T19:22:28  *** tiswanso has quit IRC
+2015-05-09T19:41:15  *** shashankhegde has quit IRC
+2015-05-09T19:44:06  <dstufft> lifeless: foobio clarkb whoever else I forget, just talked to arigato, he's OK with a PR that has cffi compile to a temporary directory if the regular directory isn't writable + printing a warning to stderr saying that's it's doing that and import is gonna be slow
+2015-05-09T19:44:20  <lifeless> thanks
+2015-05-09T19:45:21  <dstufft> I also confirmed that he's thinking about ABI compat and how to handle that in cffi 1.0+ so that cffi-runtime upgrades don't make everything blow up
+2015-05-09T19:45:44  <lifeless> thats excellent
+2015-05-09T19:45:53  <dstufft> (or at the very least, if an upgrade happens that it really can't handle, printing out better error messages)
+2015-05-09T19:46:11  <lifeless> we need to add conflicts: to pep-440
+2015-05-09T19:46:19  <lifeless> erm / 426
+2015-05-09T19:46:48  <lifeless> some way of saying 'I'm breaking all your shit'
+2015-05-09T19:47:33  <dstufft> I know someone suggested it before, but I don't remember where that discussion went, I'm not opposed to it though
+2015-05-09T19:51:25  <lifeless> not on my radar yet
+2015-05-09T19:51:34  <lifeless> 3 deep, the dream is getting unstable
+2015-05-09T19:51:59  <dstufft> I know that feeling
+2015-05-09T19:53:11  *** ddieterl_ has quit IRC
+2015-05-09T19:54:32  *** rm_work is now known as rm_work|away
+2015-05-09T20:01:43  *** trey has quit IRC
+2015-05-09T20:04:23  <foobio> lifeless: i get the feeling you only just found out that virtualenv always uses its bundled version of pip when creating a new virtualenv, regardless of what version of pip you have in the calling environment's path
+2015-05-09T20:05:05  <lifeless> foobio: I thought it grabbed the active one yeah
+2015-05-09T20:05:13  <foobio> (this being, i gather, the main reason dstufft has started releasing them together with matched version numbers)
+2015-05-09T20:05:29  <mordred> oh - I didn't notice the matched version numbers
+2015-05-09T20:05:42  <dstufft> so
+2015-05-09T20:05:43  <foobio> they're now offset by 12, but otherwise in sync
+2015-05-09T20:05:50  <foobio> er, by 6
+2015-05-09T20:05:56  <dstufft> for awhile virtualenv downloaded
+2015-05-09T20:06:04  <dstufft> but it did it without any security
+2015-05-09T20:06:09  <dstufft> or attempt at security
+2015-05-09T20:06:12  <dstufft> so we removed it
+2015-05-09T20:06:44  <dstufft> I can't decide if I like the consistency of always using the bundled one more or if I like always getting the latest pip/setuptools more
+2015-05-09T20:06:53  <dstufft> I'm kinda leaning towards the second one though
+2015-05-09T20:06:59  <foobio> i think the principle of least surprise violation there is in the case of "i already have a particular version of pip installed, why aren't you using that one?"
+2015-05-09T20:07:05  *** trey has joined #openstack-infra
+2015-05-09T20:07:28  <dstufft> we can't use the version of pip you have in the system because it's not a package we can install from
+2015-05-09T20:07:39  <lifeless> dstufft: weeeel.
+2015-05-09T20:07:42  <lifeless> dstufft: we have the file list :)
+2015-05-09T20:07:51  <dstufft> the best we could do is inspect the version and essentially do ``pip install pip==<wahtever>``
+2015-05-09T20:07:58  <dstufft> ok so there are other even hackier things
+2015-05-09T20:08:02  <dstufft> but I'd rather not :D
+2015-05-09T20:08:28  *** Darkwan has quit IRC
+2015-05-09T20:09:03  <foobio> yeah, i'm not saying it needs solving, just pointing out that a lot of people using virtualenv are caught unawares by this
+2015-05-09T20:09:50  <dstufft> now that we install pip with pip it wouldn't be hard to have pip hit the network
+2015-05-09T20:09:58  <dstufft> and do it safely
+2015-05-09T20:10:52  *** teran has joined #openstack-infra
+2015-05-09T20:13:13  *** ddieterly has joined #openstack-infra
+2015-05-09T20:16:04  *** teran has quit IRC
+2015-05-09T20:18:11  <lifeless> dstufft: do you release virtualenv every time pip releases?
+2015-05-09T20:18:21  <dstufft> lifeless: yea
+2015-05-09T20:18:45  *** shashankhegde has joined #openstack-infra
+2015-05-09T20:18:52  <lifeless> k
+2015-05-09T20:18:57  <lifeless> what about setuptools
+2015-05-09T20:19:02  <lifeless> is it bundled in virtualenv?
+2015-05-09T20:19:04  *** _nadya_ has quit IRC
+2015-05-09T20:19:51  <dstufft> it's bundled in virtualenv yes, we don't release virtualenv everytime setuptools releases though
+2015-05-09T20:20:12  <dstufft> a goal of mine is release automation behind pip and virtualenv so that a new pip or setuptools will just automatically trigger a virtualenv release
+2015-05-09T20:20:46  <dstufft> but I haven't gotten around to that yet (partially because I don't like any of the options for automation like jenkins vs buildbot vs whatever)
+2015-05-09T20:23:21  *** banix has quit IRC
+2015-05-09T20:29:42  *** otter768 has joined #openstack-infra
+2015-05-09T20:31:02  *** e0ne has joined #openstack-infra
+2015-05-09T20:31:23  *** e0ne is now known as e0ne_
+2015-05-09T20:31:32  *** mpopow has joined #openstack-infra
+2015-05-09T20:31:48  *** e0ne_ is now known as e0ne
+2015-05-09T20:33:49  *** e0ne has quit IRC
+2015-05-09T20:35:07  *** otter768 has quit IRC
+2015-05-09T20:37:11  *** e0ne has joined #openstack-infra
+2015-05-09T20:39:40  *** e0ne has quit IRC
+2015-05-09T20:40:22  *** patrickeast has joined #openstack-infra
+2015-05-09T20:43:53  *** e0ne has joined #openstack-infra
+2015-05-09T20:44:45  *** ihrachyshka has joined #openstack-infra
+2015-05-09T20:45:03  *** harlowja_at_home has joined #openstack-infra
+2015-05-09T20:48:43  *** e0ne has quit IRC
+2015-05-09T20:52:20  *** ddieterl_ has joined #openstack-infra
+2015-05-09T20:52:54  *** e0ne has joined #openstack-infra
+2015-05-09T20:53:45  *** Sukhdev has quit IRC
+2015-05-09T20:54:51  *** shashankhegde has quit IRC
+2015-05-09T20:54:51  *** e0ne has quit IRC
+2015-05-09T20:55:40  *** ddieterly has quit IRC
+2015-05-09T20:56:50  *** mriedem has joined #openstack-infra
+2015-05-09T20:58:23  *** sabeen1 has quit IRC
+2015-05-09T20:59:02  *** e0ne has joined #openstack-infra
+2015-05-09T20:59:39  *** tnovacik has quit IRC
+2015-05-09T21:03:42  *** e0ne has quit IRC
+2015-05-09T21:07:04  *** e0ne has joined #openstack-infra
+2015-05-09T21:09:07  *** e0ne has quit IRC
+2015-05-09T21:11:41  *** teran has joined #openstack-infra
+2015-05-09T21:13:43  *** e0ne has joined #openstack-infra
+2015-05-09T21:15:06  *** harlowja_at_home has quit IRC
+2015-05-09T21:16:08  *** teran has quit IRC
+2015-05-09T21:16:09  *** e0ne has quit IRC
+2015-05-09T21:16:50  *** otter768 has joined #openstack-infra
+2015-05-09T21:20:26  *** e0ne has joined #openstack-infra
+2015-05-09T21:20:57  *** ibiris is now known as ibiris_away
+2015-05-09T21:21:08  *** leakypipes has quit IRC
+2015-05-09T21:22:42  *** e0ne has quit IRC
+2015-05-09T21:23:30  *** banix has joined #openstack-infra
+2015-05-09T21:25:00  *** e0ne has joined #openstack-infra
+2015-05-09T21:26:43  *** e0ne has quit IRC
+2015-05-09T21:27:24  *** shashankhegde has joined #openstack-infra
+2015-05-09T21:28:03  *** mpopow has quit IRC
+2015-05-09T21:28:04  *** shashankhegde has quit IRC
+2015-05-09T21:28:10  *** otter768 has quit IRC
+2015-05-09T21:31:04  *** e0ne has joined #openstack-infra
+2015-05-09T21:31:52  *** ajo has quit IRC
+2015-05-09T21:33:03  *** e0ne has quit IRC
+2015-05-09T21:42:07  <openstackgerrit> Joshua Harlow proposed openstack-infra/project-config: Remove custom taskflow sqlalchemy environments  https://review.openstack.org/181687
+2015-05-09T21:48:14  <mordred> lifeless, foobio: I have now read the thread between you where lifeless learns about pip bundling
+2015-05-09T21:48:19  <mordred> so I'm caught up
+2015-05-09T21:54:34  *** ihrachyshka has quit IRC
+2015-05-09T21:55:52  <clarkb> keep in mind we havent allowed latest virtualenv because it brings in new pip/setuptools that breaks everything
+2015-05-09T21:56:20  <clarkb> happy to switch to latest if we want to deal with that again
+2015-05-09T21:59:12  <mordred> yah. I mean, we probably should at some point, but not today
+2015-05-09T21:59:40  <clarkb> I do have a change up to use the current release but not 'latest' in puppet
+2015-05-09T21:59:48  <clarkb> probably get that in monday
+2015-05-09T22:04:18  *** dmellado has quit IRC
+2015-05-09T22:04:41  *** dmellado has joined #openstack-infra
+2015-05-09T22:05:16  <lifeless> clarkb: new pip breaks everything?
+2015-05-09T22:05:23  <lifeless> clarkb: inside the virtualenv ?
+2015-05-09T22:08:06  *** e0ne has joined #openstack-infra
+2015-05-09T22:09:13  *** soren has quit IRC
+2015-05-09T22:09:46  *** tnovacik has joined #openstack-infra
+2015-05-09T22:10:01  *** patrickeast has quit IRC
+2015-05-09T22:10:27  <clarkb> that has often been the case yes
+2015-05-09T22:10:45  <clarkb> well that and/or setuptools
+2015-05-09T22:11:11  *** banix has quit IRC
+2015-05-09T22:12:26  *** teran has joined #openstack-infra
+2015-05-09T22:13:01  *** e0ne has quit IRC
+2015-05-09T22:13:48  *** tjones1 has joined #openstack-infra
+2015-05-09T22:16:57  *** teran has quit IRC
+2015-05-09T22:27:02  *** sdake has quit IRC
+2015-05-09T22:31:04  *** tjones1 has quit IRC
+2015-05-09T22:31:06  *** sdake has joined #openstack-infra
+2015-05-09T22:33:22  <bknudson> I like the size column... handy
+2015-05-09T22:33:30  *** nzeer has joined #openstack-infra
+2015-05-09T22:33:43  <bknudson> can't sort by it but then I can't sort by any of the columns
+2015-05-09T22:40:28  *** nzeer has quit IRC
+2015-05-09T22:42:09  *** nzeer has joined #openstack-infra
+2015-05-09T22:54:39  *** achanda has joined #openstack-infra
+2015-05-09T22:58:33  *** salv-orlando has quit IRC
+2015-05-09T23:03:05  *** ddieterl_ has quit IRC
+2015-05-09T23:06:13  *** Longgeek has quit IRC
+2015-05-09T23:09:56  *** dboik has quit IRC
+2015-05-09T23:13:11  *** teran has joined #openstack-infra
+2015-05-09T23:13:48  *** abregman has quit IRC
+2015-05-09T23:15:00  *** HeOS has joined #openstack-infra
+2015-05-09T23:15:00  *** rm_work|away is now known as rm_work
+2015-05-09T23:17:44  *** teran has quit IRC
+2015-05-09T23:23:55  *** ddieterly has joined #openstack-infra
+2015-05-09T23:28:18  *** otter768 has joined #openstack-infra
+2015-05-09T23:32:42  *** sputnik13 has quit IRC
+2015-05-09T23:50:44  *** woodster_ has quit IRC
+2015-05-09T23:58:55  *** craigbr has joined #openstack-infra
+2015-05-09T23:59:23  *** salv-orlando has joined #openstack-infra
+2015-05-09T23:59:31  *** otter768 has quit IRC
+2015-05-09T23:59:53  *** ddieterly has quit IRC
