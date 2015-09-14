@@ -1,0 +1,2266 @@
+2015-03-02T00:00:05  *** baoli has quit IRC
+2015-03-02T00:00:49  *** baoli has joined #openstack-infra
+2015-03-02T00:05:29  *** sarob has joined #openstack-infra
+2015-03-02T00:05:47  *** purp has quit IRC
+2015-03-02T00:06:17  *** purp has joined #openstack-infra
+2015-03-02T00:06:36  *** ParsectiX has quit IRC
+2015-03-02T00:07:02  *** ParsectiX has joined #openstack-infra
+2015-03-02T00:11:59  *** xnox has quit IRC
+2015-03-02T00:17:13  *** spzala has joined #openstack-infra
+2015-03-02T00:25:44  <sarob> any cores online?
+2015-03-02T00:25:56  <sarob> i need to get this ML going https://review.openstack.org/#/c/159995/
+2015-03-02T00:26:42  *** stevemar has joined #openstack-infra
+2015-03-02T00:27:32  <pleia2> sarob: there's one +2
+2015-03-02T00:27:57  <pleia2> maybe someone else will wander by too :)
+2015-03-02T00:28:37  <sarob> pleia2: thx!
+2015-03-02T00:30:44  <sarob> mordred or foobio: you around?
+2015-03-02T00:34:05  *** dimsum__ has joined #openstack-infra
+2015-03-02T00:35:53  *** dims_ has joined #openstack-infra
+2015-03-02T00:36:50  *** dims_ is now known as dims
+2015-03-02T00:39:22  *** dimsum__ has quit IRC
+2015-03-02T00:46:09  *** achanda has joined #openstack-infra
+2015-03-02T00:46:52  *** dannywilson has joined #openstack-infra
+2015-03-02T00:51:05  *** dannywilson has quit IRC
+2015-03-02T00:51:15  *** achanda has quit IRC
+2015-03-02T00:54:39  <zxiiro> Anyone available to review this patch, I need it moving along if possible? https://review.openstack.org/#/c/155865/
+2015-03-02T00:57:06  *** sputnik13 has quit IRC
+2015-03-02T00:58:13  *** camunoz is now known as camunoz_mtg
+2015-03-02T00:58:13  *** dimtruck is now known as zz_dimtruck
+2015-03-02T01:01:58  *** vilobhmm1 has joined #openstack-infra
+2015-03-02T01:02:20  *** xnox has joined #openstack-infra
+2015-03-02T01:05:01  *** vilobhmm has quit IRC
+2015-03-02T01:08:27  *** sputnik13 has joined #openstack-infra
+2015-03-02T01:10:28  *** camunoz_mtg is now known as camunoz
+2015-03-02T01:14:13  *** amitgandhinz has joined #openstack-infra
+2015-03-02T01:18:38  *** sputnik13 has quit IRC
+2015-03-02T01:18:48  *** mriedem has quit IRC
+2015-03-02T01:22:24  *** vilobhmm1 has quit IRC
+2015-03-02T01:23:02  *** sputnik13 has joined #openstack-infra
+2015-03-02T01:25:23  *** sputnik13 has quit IRC
+2015-03-02T01:32:26  *** sputnik13 has joined #openstack-infra
+2015-03-02T01:32:43  *** sputnik13 has quit IRC
+2015-03-02T01:34:50  *** wuhg has joined #openstack-infra
+2015-03-02T01:37:21  *** jerryz_ has joined #openstack-infra
+2015-03-02T01:37:26  *** cody-somerville has joined #openstack-infra
+2015-03-02T01:38:31  *** nelsnelson has quit IRC
+2015-03-02T01:40:52  *** jyuso1 has quit IRC
+2015-03-02T01:42:47  *** ghostpl_ has joined #openstack-infra
+2015-03-02T01:46:14  *** tiswanso has joined #openstack-infra
+2015-03-02T01:47:19  *** ghostpl_ has quit IRC
+2015-03-02T01:48:59  *** tiswanso has quit IRC
+2015-03-02T01:50:04  *** tiswanso has joined #openstack-infra
+2015-03-02T01:59:58  *** yamamoto_ has joined #openstack-infra
+2015-03-02T02:08:23  *** amitgandhinz has quit IRC
+2015-03-02T02:10:55  *** jyuso1 has joined #openstack-infra
+2015-03-02T02:14:31  *** ashleighfarnham has joined #openstack-infra
+2015-03-02T02:18:02  *** Ryan_Lane has joined #openstack-infra
+2015-03-02T02:19:13  *** ashleighfarnham has quit IRC
+2015-03-02T02:20:41  *** sarob has quit IRC
+2015-03-02T02:21:27  *** purp has quit IRC
+2015-03-02T02:21:58  *** purp has joined #openstack-infra
+2015-03-02T02:22:03  *** rmcall has joined #openstack-infra
+2015-03-02T02:27:12  *** koolhead17 has joined #openstack-infra
+2015-03-02T02:27:14  *** trey_ has joined #openstack-infra
+2015-03-02T02:27:38  *** trey has quit IRC
+2015-03-02T02:27:38  *** trey_ is now known as trey
+2015-03-02T02:35:16  *** mwagner_lap has joined #openstack-infra
+2015-03-02T02:38:05  *** patri962 has joined #openstack-infra
+2015-03-02T02:38:05  *** patri674 has joined #openstack-infra
+2015-03-02T02:38:06  *** patri824 has joined #openstack-infra
+2015-03-02T02:38:11  *** patri659 has joined #openstack-infra
+2015-03-02T02:38:20  *** patrickeast___ has quit IRC
+2015-03-02T02:38:40  *** patrickeast has quit IRC
+2015-03-02T02:38:52  *** patrickeast__ has quit IRC
+2015-03-02T02:39:25  *** patrickeast_ has quit IRC
+2015-03-02T02:39:35  *** patri28 has quit IRC
+2015-03-02T02:39:47  *** nelsnelson has joined #openstack-infra
+2015-03-02T02:41:35  *** patrickeast has joined #openstack-infra
+2015-03-02T02:45:45  *** rmcall has quit IRC
+2015-03-02T02:59:24  *** asettle is now known as asettle-FEET
+2015-03-02T02:59:47  *** Ryan_Lane has quit IRC
+2015-03-02T03:05:21  *** jyuso has joined #openstack-infra
+2015-03-02T03:07:45  *** jyuso1 has quit IRC
+2015-03-02T03:08:58  <jerryz_> quantumfly: ping
+2015-03-02T03:13:36  *** amitgandhinz has joined #openstack-infra
+2015-03-02T03:14:30  <quantumfly> hi
+2015-03-02T03:23:00  *** spzala has quit IRC
+2015-03-02T03:24:18  *** amitgandhinz has quit IRC
+2015-03-02T03:31:34  *** ghostpl_ has joined #openstack-infra
+2015-03-02T03:35:17  *** dims has quit IRC
+2015-03-02T03:36:08  *** ghostpl_ has quit IRC
+2015-03-02T03:44:37  *** amotoki has joined #openstack-infra
+2015-03-02T03:49:34  *** achanda has joined #openstack-infra
+2015-03-02T03:54:30  *** achanda has quit IRC
+2015-03-02T03:55:20  *** jpeeler has joined #openstack-infra
+2015-03-02T03:59:06  *** camunoz is now known as camunoz_mtg
+2015-03-02T04:02:02  *** hdd has joined #openstack-infra
+2015-03-02T04:02:03  *** tsg has quit IRC
+2015-03-02T04:02:09  *** david-lyle_afk has quit IRC
+2015-03-02T04:02:24  *** tiswanso has quit IRC
+2015-03-02T04:12:23  *** tsg has joined #openstack-infra
+2015-03-02T04:15:24  *** hdd has quit IRC
+2015-03-02T04:19:11  <openstackgerrit> Merged openstack-infra/system-config: patch to create foundation-testing-standards mailing list  https://review.openstack.org/159995
+2015-03-02T04:26:12  *** Sukhdev has joined #openstack-infra
+2015-03-02T04:27:17  *** patrickeast_ has joined #openstack-infra
+2015-03-02T04:27:17  *** patrickeast has quit IRC
+2015-03-02T04:27:18  *** patrickeast_ is now known as patrickeast
+2015-03-02T04:28:42  *** patri659 has quit IRC
+2015-03-02T04:29:05  *** patri962 has quit IRC
+2015-03-02T04:29:05  *** patri824 has quit IRC
+2015-03-02T04:29:06  *** patri674 has quit IRC
+2015-03-02T04:30:14  *** koolhead_ has joined #openstack-infra
+2015-03-02T04:30:39  *** patrickeast_ has joined #openstack-infra
+2015-03-02T04:30:44  *** patrickeast__ has joined #openstack-infra
+2015-03-02T04:30:46  *** patri484 has joined #openstack-infra
+2015-03-02T04:30:58  *** patri533 has joined #openstack-infra
+2015-03-02T04:32:51  *** koolhead17 has quit IRC
+2015-03-02T04:34:22  *** BharatK has joined #openstack-infra
+2015-03-02T04:35:49  *** dims has joined #openstack-infra
+2015-03-02T04:40:10  *** asettle-FEET is now known as asettle
+2015-03-02T04:40:55  *** dims has quit IRC
+2015-03-02T04:41:27  *** carl_baldwin has joined #openstack-infra
+2015-03-02T04:43:39  *** coolsvap_ is now known as coolsvap
+2015-03-02T04:44:40  *** fifieldt has joined #openstack-infra
+2015-03-02T04:44:53  *** ParsectiX has quit IRC
+2015-03-02T04:45:00  *** ParsectiX has joined #openstack-infra
+2015-03-02T04:45:56  *** hdd has joined #openstack-infra
+2015-03-02T04:46:10  *** bhunter71 has quit IRC
+2015-03-02T04:48:39  *** koolhead17 has joined #openstack-infra
+2015-03-02T04:49:29  *** achanda has joined #openstack-infra
+2015-03-02T04:50:14  *** koolhead_ has quit IRC
+2015-03-02T04:52:21  *** hdd has quit IRC
+2015-03-02T04:52:33  <openstackgerrit> Merged openstack-dev/pbr: "packages" might list multiple directories  https://review.openstack.org/159918
+2015-03-02T04:58:06  *** camunoz_mtg is now known as camunoz
+2015-03-02T05:00:47  *** Ryan_Lane has joined #openstack-infra
+2015-03-02T05:05:02  *** baoli has quit IRC
+2015-03-02T05:06:10  *** ddieterl_ has quit IRC
+2015-03-02T05:09:22  *** sarob has joined #openstack-infra
+2015-03-02T05:14:37  *** nelsnelson has quit IRC
+2015-03-02T05:14:40  *** sarob has quit IRC
+2015-03-02T05:18:05  *** carl_baldwin has quit IRC
+2015-03-02T05:19:23  *** yfried|afk has joined #openstack-infra
+2015-03-02T05:20:18  *** ghostpl_ has joined #openstack-infra
+2015-03-02T05:21:27  *** ildikov has quit IRC
+2015-03-02T05:23:01  *** patri338 has joined #openstack-infra
+2015-03-02T05:23:01  *** patri781 has joined #openstack-infra
+2015-03-02T05:23:03  *** patri996 has joined #openstack-infra
+2015-03-02T05:23:04  *** patri952 has joined #openstack-infra
+2015-03-02T05:23:57  *** patrickeast has quit IRC
+2015-03-02T05:24:07  *** patrickeast_ has quit IRC
+2015-03-02T05:24:49  *** ghostpl_ has quit IRC
+2015-03-02T05:24:52  *** patri484 has quit IRC
+2015-03-02T05:24:57  *** patri533 has quit IRC
+2015-03-02T05:25:05  *** patrickeast__ has quit IRC
+2015-03-02T05:27:00  *** patrickeast has joined #openstack-infra
+2015-03-02T05:39:02  *** BharatK has quit IRC
+2015-03-02T05:44:38  *** koolhead17 has quit IRC
+2015-03-02T05:46:23  *** yfried|afk has quit IRC
+2015-03-02T05:46:41  *** yfried|afk has joined #openstack-infra
+2015-03-02T05:51:31  *** armax has joined #openstack-infra
+2015-03-02T05:52:44  *** tsg has quit IRC
+2015-03-02T05:55:39  *** yfried|afk has quit IRC
+2015-03-02T05:56:23  *** otter768 has quit IRC
+2015-03-02T05:57:53  *** trinaths has joined #openstack-infra
+2015-03-02T05:58:51  *** sputnik13 has joined #openstack-infra
+2015-03-02T05:59:33  *** hdd has joined #openstack-infra
+2015-03-02T06:01:53  *** BharatK has joined #openstack-infra
+2015-03-02T06:01:59  *** sputnik13 has quit IRC
+2015-03-02T06:02:41  *** sputnik13 has joined #openstack-infra
+2015-03-02T06:03:30  *** achanda has quit IRC
+2015-03-02T06:04:01  *** sarob has joined #openstack-infra
+2015-03-02T06:05:48  *** sputnik1_ has joined #openstack-infra
+2015-03-02T06:07:17  *** sputnik13 has quit IRC
+2015-03-02T06:07:38  *** hdd has quit IRC
+2015-03-02T06:12:06  *** deepakcs has joined #openstack-infra
+2015-03-02T06:15:23  *** jyuso1 has joined #openstack-infra
+2015-03-02T06:15:23  *** jyuso has quit IRC
+2015-03-02T06:21:07  *** ghostpl_ has joined #openstack-infra
+2015-03-02T06:24:07  <GheRivero> morning all
+2015-03-02T06:25:44  *** ghostpl_ has quit IRC
+2015-03-02T06:26:06  *** Sukhdev has quit IRC
+2015-03-02T06:27:53  *** achanda has joined #openstack-infra
+2015-03-02T06:36:15  *** tnovacik has joined #openstack-infra
+2015-03-02T06:36:45  *** ddieterly has joined #openstack-infra
+2015-03-02T06:41:13  *** Ryan_Lane has quit IRC
+2015-03-02T06:41:23  *** ddieterly has quit IRC
+2015-03-02T06:52:23  *** yfried|afk has joined #openstack-infra
+2015-03-02T06:52:32  *** armax has quit IRC
+2015-03-02T06:53:28  *** tnovacik has quit IRC
+2015-03-02T06:55:23  *** hogepodge has quit IRC
+2015-03-02T06:56:41  *** yfried|afk has quit IRC
+2015-03-02T06:56:47  *** yfried has joined #openstack-infra
+2015-03-02T06:56:47  *** yfried is now known as yfried|afk
+2015-03-02T07:05:38  <tchaypo> morning ghe
+2015-03-02T07:05:43  <tchaypo> almost feels like being back in europe
+2015-03-02T07:10:58  *** jerryz_ has quit IRC
+2015-03-02T07:12:56  <GheRivero> tchaypo: are you at home finally? :)
+2015-03-02T07:12:58  *** ParsectiX has quit IRC
+2015-03-02T07:13:06  *** ParsectiX has joined #openstack-infra
+2015-03-02T07:13:24  *** achanda has quit IRC
+2015-03-02T07:13:43  *** ParsectiX has quit IRC
+2015-03-02T07:13:47  *** jerryz_ has joined #openstack-infra
+2015-03-02T07:14:29  *** ParsectiX has joined #openstack-infra
+2015-03-02T07:15:45  *** achanda has joined #openstack-infra
+2015-03-02T07:16:31  <tchaypo> yes :)
+2015-03-02T07:16:59  <tchaypo> Well, not quite - don’t actually *have* a home yet. At partner’s parent’s place while we battle the rental market here
+2015-03-02T07:17:27  *** scheuran has joined #openstack-infra
+2015-03-02T07:20:00  *** mrmartin has joined #openstack-infra
+2015-03-02T07:21:51  *** katyafervent is now known as katyafervent_awa
+2015-03-02T07:23:01  *** katyafervent_awa is now known as katyafervent
+2015-03-02T07:23:20  *** sarob has quit IRC
+2015-03-02T07:23:49  *** achanda has quit IRC
+2015-03-02T07:23:57  *** HeOS has joined #openstack-infra
+2015-03-02T07:26:46  *** armax has joined #openstack-infra
+2015-03-02T07:27:25  *** mrunge has joined #openstack-infra
+2015-03-02T07:29:37  *** achanda has joined #openstack-infra
+2015-03-02T07:29:58  *** jcoufal has joined #openstack-infra
+2015-03-02T07:34:59  *** yfried|afk is now known as yfried
+2015-03-02T07:37:59  *** ddieterly has joined #openstack-infra
+2015-03-02T07:41:37  *** ashleighfarnham has joined #openstack-infra
+2015-03-02T07:42:37  *** ddieterly has quit IRC
+2015-03-02T07:47:09  *** koolhead17 has joined #openstack-infra
+2015-03-02T07:47:10  *** ashleighfarnham has quit IRC
+2015-03-02T07:49:36  *** hogepodge has joined #openstack-infra
+2015-03-02T07:50:22  *** woodster_ has quit IRC
+2015-03-02T07:50:54  <openstackgerrit> Jerry Zhao proposed openstack-infra/project-config: add python26 jobs back for compass-core  https://review.openstack.org/160251
+2015-03-02T07:52:33  *** Sukhdev has joined #openstack-infra
+2015-03-02T07:52:37  *** achanda has quit IRC
+2015-03-02T07:55:32  *** jgallard has joined #openstack-infra
+2015-03-02T07:56:34  *** ildikov has joined #openstack-infra
+2015-03-02T07:57:17  *** otter768 has joined #openstack-infra
+2015-03-02T07:57:21  *** achanda has joined #openstack-infra
+2015-03-02T07:58:10  *** HeOS has quit IRC
+2015-03-02T07:58:23  *** Ryan_Lane has joined #openstack-infra
+2015-03-02T07:58:34  *** ihrachyshka has joined #openstack-infra
+2015-03-02T08:00:18  *** HeOS has joined #openstack-infra
+2015-03-02T08:02:03  *** otter768 has quit IRC
+2015-03-02T08:02:22  *** chlong has quit IRC
+2015-03-02T08:03:02  *** Ryan_Lane has quit IRC
+2015-03-02T08:06:14  *** markus_z has joined #openstack-infra
+2015-03-02T08:06:35  *** mpaolino has joined #openstack-infra
+2015-03-02T08:07:49  *** mpaolino has quit IRC
+2015-03-02T08:08:15  *** mpaolino has joined #openstack-infra
+2015-03-02T08:09:03  *** mpaolino has quit IRC
+2015-03-02T08:09:15  *** unicell has joined #openstack-infra
+2015-03-02T08:09:33  *** mpaolino has joined #openstack-infra
+2015-03-02T08:09:50  *** unicell1 has quit IRC
+2015-03-02T08:09:51  *** ghostpl_ has joined #openstack-infra
+2015-03-02T08:10:12  *** arxcruz has joined #openstack-infra
+2015-03-02T08:11:55  *** mpavone has joined #openstack-infra
+2015-03-02T08:11:55  *** mpaolino has quit IRC
+2015-03-02T08:12:17  *** mpaolino has joined #openstack-infra
+2015-03-02T08:14:18  *** ghostpl_ has quit IRC
+2015-03-02T08:14:40  *** mpaolino has quit IRC
+2015-03-02T08:15:14  *** mpaolino has joined #openstack-infra
+2015-03-02T08:16:07  *** teran has quit IRC
+2015-03-02T08:16:33  *** achanda has quit IRC
+2015-03-02T08:18:25  *** afazekas has joined #openstack-infra
+2015-03-02T08:20:58  *** Guest78669 is now known as d0ugal
+2015-03-02T08:21:10  *** d0ugal has joined #openstack-infra
+2015-03-02T08:23:28  *** Sukhdev has quit IRC
+2015-03-02T08:24:47  *** sergsh has joined #openstack-infra
+2015-03-02T08:26:07  *** dtantsur|afk is now known as dtantsur
+2015-03-02T08:26:13  *** Ala has joined #openstack-infra
+2015-03-02T08:26:52  *** sergsh has quit IRC
+2015-03-02T08:27:25  *** sergsh has joined #openstack-infra
+2015-03-02T08:27:37  *** matrohon has joined #openstack-infra
+2015-03-02T08:28:38  *** _nadya_ has joined #openstack-infra
+2015-03-02T08:28:54  *** dizquierdo has joined #openstack-infra
+2015-03-02T08:36:22  *** stevemar has quit IRC
+2015-03-02T08:37:14  *** macjack has joined #openstack-infra
+2015-03-02T08:38:16  *** mpaolino has quit IRC
+2015-03-02T08:38:43  *** mpaolino has joined #openstack-infra
+2015-03-02T08:38:56  *** ddieterly has joined #openstack-infra
+2015-03-02T08:40:08  *** _shaps__ has joined #openstack-infra
+2015-03-02T08:40:32  *** mpaolino has quit IRC
+2015-03-02T08:40:38  *** _shaps__ has quit IRC
+2015-03-02T08:41:17  *** mpaolino has joined #openstack-infra
+2015-03-02T08:42:56  <openstackgerrit> Gauvain Pocentek proposed openstack-infra/project-config: Add cloudkitty projetcs to gerritbot configuration  https://review.openstack.org/160256
+2015-03-02T08:43:28  *** ddieterly has quit IRC
+2015-03-02T08:43:49  *** mpaolino has quit IRC
+2015-03-02T08:44:17  *** mpaolino has joined #openstack-infra
+2015-03-02T08:44:33  *** salv-orlando has joined #openstack-infra
+2015-03-02T08:45:23  <openstackgerrit> Merged openstack-infra/project-config: Use Neutron in Horizon integration tests job  https://review.openstack.org/159397
+2015-03-02T08:50:25  *** viktors|afk has quit IRC
+2015-03-02T08:55:06  <macjack> Good day everyone, I need help to go next step. https://review.openstack.org/#/c/158923/ Thanks for help.
+2015-03-02T08:55:59  *** yfried is now known as yfried|afk
+2015-03-02T08:57:26  *** yfried|afk is now known as yfried
+2015-03-02T09:00:26  *** MaxV has joined #openstack-infra
+2015-03-02T09:00:54  *** tnovacik has joined #openstack-infra
+2015-03-02T09:01:18  *** Hal has joined #openstack-infra
+2015-03-02T09:01:42  *** Hal is now known as Guest35678
+2015-03-02T09:05:23  *** sputnik1_ has quit IRC
+2015-03-02T09:05:50  *** tkelsey has joined #openstack-infra
+2015-03-02T09:07:45  *** Guest35678 has quit IRC
+2015-03-02T09:07:46  *** ihrachyshka has quit IRC
+2015-03-02T09:08:52  *** mpaolino has quit IRC
+2015-03-02T09:09:23  *** mpaolino has joined #openstack-infra
+2015-03-02T09:12:03  *** jistr has joined #openstack-infra
+2015-03-02T09:13:42  *** mpaolino has quit IRC
+2015-03-02T09:13:47  *** salv-orlando has quit IRC
+2015-03-02T09:14:00  *** salv-orlando has joined #openstack-infra
+2015-03-02T09:14:20  *** mpaolino has joined #openstack-infra
+2015-03-02T09:17:35  *** ghostpl_ has joined #openstack-infra
+2015-03-02T09:19:29  *** doude has quit IRC
+2015-03-02T09:19:36  *** doude_ has joined #openstack-infra
+2015-03-02T09:29:06  *** skolekonov has joined #openstack-infra
+2015-03-02T09:29:44  *** koolhead17 has quit IRC
+2015-03-02T09:31:07  <openstackgerrit> Aleksey Ripinen proposed openstack-infra/storyboard: Removed PostgreSQL from tests  https://review.openstack.org/160272
+2015-03-02T09:33:07  *** Ala has quit IRC
+2015-03-02T09:33:26  *** jcoufal_ has joined #openstack-infra
+2015-03-02T09:36:32  *** jcoufal has quit IRC
+2015-03-02T09:36:35  *** Ala has joined #openstack-infra
+2015-03-02T09:36:52  *** mpaolino has quit IRC
+2015-03-02T09:37:22  *** mpaolino has joined #openstack-infra
+2015-03-02T09:37:33  *** sergsh has quit IRC
+2015-03-02T09:38:06  *** _nadya_ has quit IRC
+2015-03-02T09:39:29  *** ddieterly has joined #openstack-infra
+2015-03-02T09:39:49  *** mpaolino has quit IRC
+2015-03-02T09:40:22  *** mpaolino has joined #openstack-infra
+2015-03-02T09:41:54  *** mpaolino has quit IRC
+2015-03-02T09:42:23  *** mpaolino has joined #openstack-infra
+2015-03-02T09:43:19  *** mpaolino has quit IRC
+2015-03-02T09:43:43  *** mpaolino has joined #openstack-infra
+2015-03-02T09:44:02  *** ddieterly has quit IRC
+2015-03-02T09:47:06  *** _nadya_ has joined #openstack-infra
+2015-03-02T09:49:28  *** e0ne has joined #openstack-infra
+2015-03-02T09:49:51  *** sergsh has joined #openstack-infra
+2015-03-02T09:51:00  *** mpaolino has quit IRC
+2015-03-02T09:51:24  *** mpaolino has joined #openstack-infra
+2015-03-02T09:53:18  *** ZZelle has joined #openstack-infra
+2015-03-02T09:53:42  <openstackgerrit> Merged openstack-infra/storyboard: Exclude pyMySQL v0.6.4  https://review.openstack.org/159564
+2015-03-02T09:55:11  <openstackgerrit> Merged openstack-infra/storyboard: Reduce the number of timezones under test.  https://review.openstack.org/159576
+2015-03-02T09:55:11  *** mpaolino has quit IRC
+2015-03-02T09:55:44  *** mpaolino has joined #openstack-infra
+2015-03-02T09:56:01  *** MaxV has quit IRC
+2015-03-02T09:56:07  <openstackgerrit> Merged openstack-infra/storyboard: Remove is_active from task model  https://review.openstack.org/159135
+2015-03-02T09:56:25  *** MaxV has joined #openstack-infra
+2015-03-02T09:58:11  *** otter768 has joined #openstack-infra
+2015-03-02T09:59:32  <openstackgerrit> Merged openstack-infra/storyboard: Replaced python-crontab with apscheduler  https://review.openstack.org/158955
+2015-03-02T09:59:58  *** ssam2 has joined #openstack-infra
+2015-03-02T10:01:36  <openstackgerrit> Merged openstack-infra/storyboard: User abort call instead of returning response  https://review.openstack.org/152515
+2015-03-02T10:02:50  *** otter768 has quit IRC
+2015-03-02T10:04:52  *** jgallard has quit IRC
+2015-03-02T10:06:52  *** mpaolino has quit IRC
+2015-03-02T10:07:26  *** mpaolino has joined #openstack-infra
+2015-03-02T10:08:15  <openstackgerrit> Aleksey Ripinen proposed openstack-infra/storyboard: Added MySQL-python to requirements  https://review.openstack.org/160280
+2015-03-02T10:09:03  *** AJaeger has joined #openstack-infra
+2015-03-02T10:09:11  *** jedimike has joined #openstack-infra
+2015-03-02T10:09:11  <AJaeger>  /msg chanserv access #cloudkitty list
+2015-03-02T10:09:24  <AJaeger> argh ;(
+2015-03-02T10:09:38  <mrmartin> AJaeger hi
+2015-03-02T10:09:47  <mrmartin> can you give me a review on this: https://review.openstack.org/#/c/159426/
+2015-03-02T10:09:50  <AJaeger> hi mrmartin
+2015-03-02T10:10:19  <mrmartin> The groups portal cron jobs are broken for a while, and this patch resolves that issue
+2015-03-02T10:10:32  <AJaeger> mrmartin, I'm not a core there and don't know enough to review it.
+2015-03-02T10:10:38  <mrmartin> if you give me a +1 it is enough
+2015-03-02T10:10:45  <mrmartin> it is easier to manage a +2 at the end
+2015-03-02T10:10:54  <AJaeger> Let me check whether it looks sane...
+2015-03-02T10:11:07  *** salv-orlando has quit IRC
+2015-03-02T10:11:08  <mrmartin> it is a very simple patch
+2015-03-02T10:11:23  <mrmartin> just a puppet variable changed
+2015-03-02T10:11:39  <AJaeger> looks sane, +1
+2015-03-02T10:11:52  <mrmartin> thanks
+2015-03-02T10:12:10  <mrmartin> don't we have an infra core in EU timezone?
+2015-03-02T10:12:16  <openstackgerrit> Thierry Carrez proposed openstack-infra/storyboard: Added milestones  https://review.openstack.org/152500
+2015-03-02T10:12:53  <AJaeger> mrmartin, SergeyLukjanov is in the European timezone (not EU)
+2015-03-02T10:13:11  <mrmartin> yeah, but he used to be in the States too :)
+2015-03-02T10:13:12  *** mpaolino has quit IRC
+2015-03-02T10:13:30  <AJaeger> ;)
+2015-03-02T10:13:46  *** mpaolino has joined #openstack-infra
+2015-03-02T10:13:51  <mrmartin> we need to establish an EU infra team
+2015-03-02T10:14:19  <mrmartin> need to find somebody who don't want too sleep in the next 1yr
+2015-03-02T10:15:31  <openstackgerrit> Aleksey Ripinen proposed openstack-infra/storyboard: Split auth in api and change user_tokens  https://review.openstack.org/153591
+2015-03-02T10:16:29  *** mpaolino has quit IRC
+2015-03-02T10:16:35  <openstackgerrit> Gauvain Pocentek proposed openstack-infra/project-config: Add cloudkitty projetcs to gerritbot configuration  https://review.openstack.org/160256
+2015-03-02T10:16:56  *** mpaolino has joined #openstack-infra
+2015-03-02T10:20:58  <deepakcs> AJaeger, mrmartin can someone help respond to http://lists.openstack.org/pipermail/openstack-dev/2015-February/057948.html ( i tried on -qa, but nobody responded)
+2015-03-02T10:22:30  <mrmartin> deepakcs, sorry I don't have experience with that, if you cannot find anyone in actual timezone, need to wait until the US fellas wake up
+2015-03-02T10:23:14  <deepakcs> mrmartin, np, yeah will try to find someone in US tz
+2015-03-02T10:23:20  *** dizquierdo has quit IRC
+2015-03-02T10:27:08  <openstackgerrit> Merged openstack-infra/storyboard: Added milestones  https://review.openstack.org/152500
+2015-03-02T10:28:37  *** marcusvrn has joined #openstack-infra
+2015-03-02T10:29:14  *** dtantsur is now known as dtantsur|bbl
+2015-03-02T10:32:49  *** marcusvrn1 has quit IRC
+2015-03-02T10:34:58  <GheRivero> I'm in European TZ but not core... yet
+2015-03-02T10:35:21  *** mpaolino has quit IRC
+2015-03-02T10:35:58  *** mpaolino has joined #openstack-infra
+2015-03-02T10:37:37  *** mpaolino has quit IRC
+2015-03-02T10:37:58  *** mpaolino has joined #openstack-infra
+2015-03-02T10:37:59  *** jyuso1 has quit IRC
+2015-03-02T10:38:07  *** jyuso1 has joined #openstack-infra
+2015-03-02T10:40:15  *** ddieterly has joined #openstack-infra
+2015-03-02T10:41:07  <openstackgerrit> Merged openstack-infra/storyboard-webclient: Singularized Timeline Event Preferences  https://review.openstack.org/155945
+2015-03-02T10:41:50  *** yfried is now known as yfried|afk
+2015-03-02T10:43:37  <gpocentek> AJaeger: any clue on the IRC test failure for https://review.openstack.org/#/c/160256/ ? it doesn't fail locally
+2015-03-02T10:43:57  <AJaeger> deepakcs, sorry, can't help with that one.
+2015-03-02T10:44:00  <AJaeger> gpocentek, let me check...
+2015-03-02T10:44:16  <deepakcs> AJaeger, np, got someone on -qa to help
+2015-03-02T10:44:51  *** pelix has joined #openstack-infra
+2015-03-02T10:45:00  *** ddieterly has quit IRC
+2015-03-02T10:46:11  *** rlandy has joined #openstack-infra
+2015-03-02T10:46:55  *** ihrachyshka has joined #openstack-infra
+2015-03-02T10:46:55  *** _nadya_ has quit IRC
+2015-03-02T10:48:30  <openstackgerrit> Merged openstack-infra/storyboard-webclient: Tweak for Superuser UI in projects.  https://review.openstack.org/159947
+2015-03-02T10:50:04  *** AJaeger has quit IRC
+2015-03-02T10:53:32  <openstackgerrit> Radomir Dopieralski proposed openstack/requirements: Add ironic-discoverd  https://review.openstack.org/158210
+2015-03-02T10:54:45  *** EmilienM is now known as EmilienM|afk
+2015-03-02T10:55:46  <openstackgerrit> Aleksey Ripinen proposed openstack-infra/infra-specs: Foreign keys support in StoryBoard  https://review.openstack.org/159406
+2015-03-02T10:56:11  <openstackgerrit> Aleksey Ripinen proposed openstack-infra/storyboard: Removed PostgreSQL from tests  https://review.openstack.org/160272
+2015-03-02T10:56:39  <openstackgerrit> Radomir Dopieralski proposed openstack/requirements: Upgrade oslo.config to version 1.7  https://review.openstack.org/160297
+2015-03-02T10:57:31  <ZZelle> Hi everyone
+2015-03-02T10:58:45  <ZZelle> Does somone understand why jenkins say that the change https://review.openstack.org/143412 depends on a change that failed to merge?
+2015-03-02T11:01:06  *** Hal has joined #openstack-infra
+2015-03-02T11:01:29  *** Hal is now known as Guest35994
+2015-03-02T11:01:37  *** armax has quit IRC
+2015-03-02T11:02:00  *** yfried|afk is now known as yfried
+2015-03-02T11:02:23  *** AJaeger has joined #openstack-infra
+2015-03-02T11:02:23  *** AJaeger has quit IRC
+2015-03-02T11:02:23  *** AJaeger has joined #openstack-infra
+2015-03-02T11:02:35  *** dizquierdo has joined #openstack-infra
+2015-03-02T11:04:44  <AJaeger> gpocentek, my extra recheck and the successfull test just crossed each other - so, 160256 looks fine again.
+2015-03-02T11:05:06  <gpocentek> AJaeger: thanks!
+2015-03-02T11:05:51  *** Ala has quit IRC
+2015-03-02T11:09:08  *** mpaolino has quit IRC
+2015-03-02T11:09:32  *** mpaolino has joined #openstack-infra
+2015-03-02T11:09:40  *** armax has joined #openstack-infra
+2015-03-02T11:10:09  *** dizquierdo has quit IRC
+2015-03-02T11:11:32  *** mpaolino has quit IRC
+2015-03-02T11:12:01  *** yfried is now known as yfried|afk
+2015-03-02T11:12:02  *** mpaolino has joined #openstack-infra
+2015-03-02T11:14:05  <openstackgerrit> Julien Danjou proposed openstack-dev/hacking: Add a check for staticmethod  https://review.openstack.org/151952
+2015-03-02T11:14:07  <openstackgerrit> Julien Danjou proposed openstack-dev/hacking: tests: allow to run the same test for different code  https://review.openstack.org/152108
+2015-03-02T11:14:30  *** ryanpetrello has quit IRC
+2015-03-02T11:17:15  *** mpaolino has quit IRC
+2015-03-02T11:17:30  *** achanda has joined #openstack-infra
+2015-03-02T11:17:50  *** mpaolino has joined #openstack-infra
+2015-03-02T11:19:37  *** ryanpetrello has joined #openstack-infra
+2015-03-02T11:21:56  *** achanda has quit IRC
+2015-03-02T11:22:13  *** dizquierdo has joined #openstack-infra
+2015-03-02T11:22:22  *** jerryz_ has quit IRC
+2015-03-02T11:22:26  *** yamamoto_ has quit IRC
+2015-03-02T11:24:45  *** yfried|afk is now known as yfried
+2015-03-02T11:26:29  *** doude_ has quit IRC
+2015-03-02T11:26:40  *** SergK has joined #openstack-infra
+2015-03-02T11:26:40  <openstackgerrit> Aleksey Ripinen proposed openstack-infra/storyboard: Added MySQL-python to requirements  https://review.openstack.org/160280
+2015-03-02T11:28:56  *** claudiub has joined #openstack-infra
+2015-03-02T11:29:16  <openstackgerrit> Aleksey Ripinen proposed openstack-infra/storyboard: Split auth in api and change user_tokens  https://review.openstack.org/153591
+2015-03-02T11:31:17  *** pc_m has joined #openstack-infra
+2015-03-02T11:32:24  *** tnovacik has quit IRC
+2015-03-02T11:32:34  *** ldnunes has joined #openstack-infra
+2015-03-02T11:34:15  *** mpaolino has quit IRC
+2015-03-02T11:34:21  *** ildikov has quit IRC
+2015-03-02T11:34:52  *** mpaolino has joined #openstack-infra
+2015-03-02T11:36:21  *** mpaolino has quit IRC
+2015-03-02T11:36:52  *** mpaolino has joined #openstack-infra
+2015-03-02T11:38:11  *** jerryz_ has joined #openstack-infra
+2015-03-02T11:39:43  *** mpaolino has quit IRC
+2015-03-02T11:40:09  <bookwar> hi, everyone, there is a commit to create new repos https://review.openstack.org/#/c/147169/ which has been merged, but we have empty core-reviewers group: https://review.openstack.org/#/admin/groups/579,members
+2015-03-02T11:40:23  *** mpaolino has joined #openstack-infra
+2015-03-02T11:40:27  <bookwar> can someone add Nikolay Markov to core reviewers?
+2015-03-02T11:41:01  *** ddieterly has joined #openstack-infra
+2015-03-02T11:43:48  <AJaeger> bookwar, one of the infra cores needs to do this - let's ask quantumfly or pleia2 once they're awake (US time) for this. Could you give me the email address of NIkolay, please?
+2015-03-02T11:44:53  <bookwar> AJaeger: he is the author of the original commit, Nikolay Markov <nmarkov AT mirantis.com>
+2015-03-02T11:45:37  <AJaeger> bookwar, thanks. I hope pleia2 and quantumfly scroll back once they're back ^ - if not, please ping again later today
+2015-03-02T11:45:44  *** ddieterly has quit IRC
+2015-03-02T11:45:59  <bookwar> AJaeger: thanks, will do
+2015-03-02T11:47:45  *** ildikov has joined #openstack-infra
+2015-03-02T11:49:26  *** Shrews has quit IRC
+2015-03-02T11:49:39  *** acfleury has joined #openstack-infra
+2015-03-02T11:50:46  *** Shrews has joined #openstack-infra
+2015-03-02T11:51:14  *** mpaolino has quit IRC
+2015-03-02T11:51:54  *** mpaolino has joined #openstack-infra
+2015-03-02T11:52:15  *** denis_makogon has joined #openstack-infra
+2015-03-02T11:53:00  *** mpaolino has quit IRC
+2015-03-02T11:53:20  *** yamamoto has joined #openstack-infra
+2015-03-02T11:53:22  *** mpaolino has joined #openstack-infra
+2015-03-02T11:55:16  *** mpaolino has quit IRC
+2015-03-02T11:55:54  *** mpaolino has joined #openstack-infra
+2015-03-02T11:57:35  *** tnovacik has joined #openstack-infra
+2015-03-02T11:58:02  *** mpaolino has quit IRC
+2015-03-02T11:58:25  *** mpaolino has joined #openstack-infra
+2015-03-02T11:59:07  *** otter768 has joined #openstack-infra
+2015-03-02T12:01:23  *** mpaolino has quit IRC
+2015-03-02T12:01:55  *** mpaolino has joined #openstack-infra
+2015-03-02T12:03:14  *** e0ne is now known as e0ne_
+2015-03-02T12:04:01  *** otter768 has quit IRC
+2015-03-02T12:04:13  *** yamamoto has quit IRC
+2015-03-02T12:04:15  *** spredzy is now known as spredzy|afk
+2015-03-02T12:05:24  *** mase_x200 has joined #openstack-infra
+2015-03-02T12:06:18  *** coolsvap is now known as coolsvap_
+2015-03-02T12:06:59  *** koolhead17 has joined #openstack-infra
+2015-03-02T12:09:02  *** dims has joined #openstack-infra
+2015-03-02T12:09:02  *** mpaolino has quit IRC
+2015-03-02T12:09:26  *** mpaolino has joined #openstack-infra
+2015-03-02T12:11:24  *** mpaolino has quit IRC
+2015-03-02T12:11:56  *** mpaolino has joined #openstack-infra
+2015-03-02T12:13:15  *** e0ne_ has quit IRC
+2015-03-02T12:15:00  *** coolsvap_ is now known as coolsvap
+2015-03-02T12:16:11  *** BobBall_AWOL is now known as BobBall
+2015-03-02T12:18:19  *** derekh has joined #openstack-infra
+2015-03-02T12:22:58  *** trinaths has quit IRC
+2015-03-02T12:24:41  *** BharatK has quit IRC
+2015-03-02T12:27:42  *** e0ne has joined #openstack-infra
+2015-03-02T12:28:39  <mordred> bookwar AJaeger: done
+2015-03-02T12:29:28  *** yamamoto has joined #openstack-infra
+2015-03-02T12:29:30  *** aysyd has joined #openstack-infra
+2015-03-02T12:30:10  <bookwar> mordred: thanks
+2015-03-02T12:40:04  *** Guest35994 has quit IRC
+2015-03-02T12:40:29  *** Hal has joined #openstack-infra
+2015-03-02T12:40:30  <openstackgerrit> Aleksey Ripinen proposed openstack-infra/storyboard: Added fulltext index for access tokens  https://review.openstack.org/160326
+2015-03-02T12:40:53  *** Hal is now known as Guest55528
+2015-03-02T12:41:46  *** ddieterly has joined #openstack-infra
+2015-03-02T12:42:44  *** Guest55528 has quit IRC
+2015-03-02T12:43:40  *** dkranz has joined #openstack-infra
+2015-03-02T12:44:40  <SergK> mordred, could you please help me with the same issue ^, adding me (skulanov@mirantis.com) to core group https://review.openstack.org/#/admin/groups/628,members   (my patchset https://review.openstack.org/#/c/156245/)
+2015-03-02T12:46:25  *** ddieterly has quit IRC
+2015-03-02T12:49:49  *** Ala has joined #openstack-infra
+2015-03-02T12:50:40  *** yamamoto has quit IRC
+2015-03-02T12:53:37  *** _nadya_ has joined #openstack-infra
+2015-03-02T12:53:53  *** tnovacik has quit IRC
+2015-03-02T12:56:41  *** baoli has joined #openstack-infra
+2015-03-02T12:57:12  *** chmod__ has joined #openstack-infra
+2015-03-02T12:57:13  *** deepakcs has quit IRC
+2015-03-02T12:57:53  <chmod__> Hi guys, someone have worked on the implementation of the openstack APIC plugin ?
+2015-03-02T12:59:14  *** woodster_ has joined #openstack-infra
+2015-03-02T12:59:19  *** hdd has joined #openstack-infra
+2015-03-02T13:02:30  *** baoli has quit IRC
+2015-03-02T13:03:05  *** baoli has joined #openstack-infra
+2015-03-02T13:03:35  *** hdd has quit IRC
+2015-03-02T13:04:11  *** dkranz has quit IRC
+2015-03-02T13:05:25  *** claudiub has quit IRC
+2015-03-02T13:06:04  *** jgallard has joined #openstack-infra
+2015-03-02T13:07:23  <openstackgerrit> Monty Taylor proposed openstack-infra/system-config: Add two more useful ansible playbooks  https://review.openstack.org/105057
+2015-03-02T13:08:20  *** markvoelker has joined #openstack-infra
+2015-03-02T13:08:42  *** claudiub has joined #openstack-infra
+2015-03-02T13:09:51  *** ashleighfarnham has joined #openstack-infra
+2015-03-02T13:09:58  *** weshay has joined #openstack-infra
+2015-03-02T13:10:13  *** esker has quit IRC
+2015-03-02T13:11:00  <openstackgerrit> Aleksey Ripinen proposed openstack-infra/python-storyboardclient: Added milestones controller  https://review.openstack.org/160334
+2015-03-02T13:14:05  *** ashleighfarnham has quit IRC
+2015-03-02T13:14:11  *** dkranz has joined #openstack-infra
+2015-03-02T13:14:39  <openstackgerrit> yolanda.robla proposed openstack-infra/nodepool: Enforce nodepool user when running cmd commands  https://review.openstack.org/160336
+2015-03-02T13:15:50  *** chmod__ has quit IRC
+2015-03-02T13:16:33  *** mpaolino has quit IRC
+2015-03-02T13:16:52  *** hdd has joined #openstack-infra
+2015-03-02T13:17:03  *** mpaolino has joined #openstack-infra
+2015-03-02T13:17:23  *** rfolco has joined #openstack-infra
+2015-03-02T13:18:52  *** yfried has quit IRC
+2015-03-02T13:20:42  *** e0ne is now known as e0ne_
+2015-03-02T13:20:56  *** gondoi has quit IRC
+2015-03-02T13:20:58  <openstackgerrit> Monty Taylor proposed openstack-infra/nodepool: Record nodeinfo as ansible facts and inventory  https://review.openstack.org/107597
+2015-03-02T13:21:21  <openstackgerrit> Kevin Benton proposed openstack-infra/project-config: Add Big Switch Networking library to StackForge  https://review.openstack.org/160339
+2015-03-02T13:22:20  *** nithyag__ has joined #openstack-infra
+2015-03-02T13:22:56  <mordred> SergK: done
+2015-03-02T13:24:00  *** nithyag_ has quit IRC
+2015-03-02T13:24:29  *** yamamoto has joined #openstack-infra
+2015-03-02T13:24:34  *** e0ne_ is now known as e0ne
+2015-03-02T13:25:25  <SergK> mordred, thank a lot
+2015-03-02T13:25:43  *** bswartz has quit IRC
+2015-03-02T13:26:34  *** _nadya_ has quit IRC
+2015-03-02T13:27:01  *** tmcpeak has joined #openstack-infra
+2015-03-02T13:30:10  *** gordc has joined #openstack-infra
+2015-03-02T13:31:36  *** hdd has quit IRC
+2015-03-02T13:31:56  *** hdd has joined #openstack-infra
+2015-03-02T13:32:23  *** gondoi has joined #openstack-infra
+2015-03-02T13:34:27  <openstackgerrit> Monty Taylor proposed openstack-infra/nodepool: Record nodeinfo as ansible facts and inventory  https://review.openstack.org/107597
+2015-03-02T13:36:04  *** hdd has quit IRC
+2015-03-02T13:36:33  *** dhritishikhar has joined #openstack-infra
+2015-03-02T13:38:35  <openstackgerrit> Monty Taylor proposed openstack-infra/puppet-mailman: Add non-alias-modifying mailman provider  https://review.openstack.org/160342
+2015-03-02T13:38:39  *** Ala has quit IRC
+2015-03-02T13:39:31  <openstackgerrit> Monty Taylor proposed openstack-infra/puppet-mailman: Add non-alias-modifying mailman provider  https://review.openstack.org/160343
+2015-03-02T13:40:27  *** Ala has joined #openstack-infra
+2015-03-02T13:40:46  <openstackgerrit> Kevin Benton proposed openstack-infra/project-config: Add Big Switch Networking library to StackForge  https://review.openstack.org/160339
+2015-03-02T13:41:40  <openstackgerrit> Monty Taylor proposed openstack-infra/system-config: Use non-alias-modifying mailman provider  https://review.openstack.org/89367
+2015-03-02T13:41:42  *** Hal has joined #openstack-infra
+2015-03-02T13:41:58  <openstackgerrit> yolanda.robla proposed openstack-infra/nodepool: Enforce nodepool user when running cmd commands  https://review.openstack.org/160336
+2015-03-02T13:42:05  *** Hal is now known as Guest26642
+2015-03-02T13:42:32  *** ddieterly has joined #openstack-infra
+2015-03-02T13:43:44  *** salv-orlando has joined #openstack-infra
+2015-03-02T13:45:07  *** _nadya_ has joined #openstack-infra
+2015-03-02T13:45:19  <openstackgerrit> Kevin Benton proposed openstack-infra/project-config: Add Big Switch Networking library to StackForge  https://review.openstack.org/160339
+2015-03-02T13:46:06  *** bknudson has quit IRC
+2015-03-02T13:46:23  *** mpaolino has quit IRC
+2015-03-02T13:46:31  *** marcusvrn1 has joined #openstack-infra
+2015-03-02T13:47:05  *** ddieterly has quit IRC
+2015-03-02T13:47:06  *** mpaolino has joined #openstack-infra
+2015-03-02T13:48:25  *** yolanda has quit IRC
+2015-03-02T13:48:42  *** marcusvrn has quit IRC
+2015-03-02T13:48:42  *** jcoufal_ has quit IRC
+2015-03-02T13:48:43  *** mpaolino has quit IRC
+2015-03-02T13:48:59  *** yolanda has joined #openstack-infra
+2015-03-02T13:49:07  *** mpaolino has joined #openstack-infra
+2015-03-02T13:49:18  *** yolanda has quit IRC
+2015-03-02T13:49:44  *** julim has joined #openstack-infra
+2015-03-02T13:49:49  *** jcoufal has joined #openstack-infra
+2015-03-02T13:50:21  *** marcusvrn has joined #openstack-infra
+2015-03-02T13:50:34  *** claudiub has quit IRC
+2015-03-02T13:50:34  *** yolanda has joined #openstack-infra
+2015-03-02T13:53:22  *** thelexx is now known as lxsli
+2015-03-02T13:53:22  *** marcusvrn1 has quit IRC
+2015-03-02T13:53:28  *** mase_x200 has quit IRC
+2015-03-02T13:55:24  *** amotoki has quit IRC
+2015-03-02T13:55:27  *** gondoi has quit IRC
+2015-03-02T13:59:25  *** gondoi has joined #openstack-infra
+2015-03-02T13:59:44  *** dtantsur|bbl is now known as dtantsur
+2015-03-02T13:59:55  *** yamamoto has quit IRC
+2015-03-02T14:00:01  *** otter768 has joined #openstack-infra
+2015-03-02T14:00:17  *** bswartz has joined #openstack-infra
+2015-03-02T14:01:31  *** bcourt has joined #openstack-infra
+2015-03-02T14:01:40  *** doug-fish has joined #openstack-infra
+2015-03-02T14:02:13  *** ParsectiX has quit IRC
+2015-03-02T14:02:19  *** ParsectiX has joined #openstack-infra
+2015-03-02T14:02:58  <openstackgerrit> Monty Taylor proposed openstack-infra/git-review: Use git push-url instead of a second remote  https://review.openstack.org/109869
+2015-03-02T14:04:10  *** bhunter71 has joined #openstack-infra
+2015-03-02T14:04:41  *** otter768 has quit IRC
+2015-03-02T14:06:21  <openstackgerrit> Monty Taylor proposed openstack-infra/nodepool: Record nodeinfo as ansible facts and inventory  https://review.openstack.org/107597
+2015-03-02T14:06:21  *** cdent has joined #openstack-infra
+2015-03-02T14:06:34  *** afazekas has quit IRC
+2015-03-02T14:08:01  *** jgallard has quit IRC
+2015-03-02T14:09:59  *** dustins has joined #openstack-infra
+2015-03-02T14:10:09  *** bknudson has joined #openstack-infra
+2015-03-02T14:10:31  *** yfried has joined #openstack-infra
+2015-03-02T14:10:33  *** mriedem has joined #openstack-infra
+2015-03-02T14:11:32  *** mriedem has quit IRC
+2015-03-02T14:11:51  *** mriedem has joined #openstack-infra
+2015-03-02T14:12:39  <mordred> wee. that was fun
+2015-03-02T14:13:11  * mordred went through his outstanding patches and abandoned things that were total crap and responded to reviews on things that still made some sense
+2015-03-02T14:17:21  *** yamamoto has joined #openstack-infra
+2015-03-02T14:19:08  *** mpaolino has quit IRC
+2015-03-02T14:19:32  *** mpaolino has joined #openstack-infra
+2015-03-02T14:20:33  *** mjturek1 has joined #openstack-infra
+2015-03-02T14:20:39  <AJaeger> mordred, thanks for the spring cleanup ;)
+2015-03-02T14:20:55  *** nelsnelson has joined #openstack-infra
+2015-03-02T14:22:29  <mordred> AJaeger: gotta start somewhere :)
+2015-03-02T14:22:48  *** ParsectiX has quit IRC
+2015-03-02T14:23:28  *** afazekas has joined #openstack-infra
+2015-03-02T14:25:22  *** dims has quit IRC
+2015-03-02T14:26:06  *** dims has joined #openstack-infra
+2015-03-02T14:26:06  *** dhritishikhar has quit IRC
+2015-03-02T14:27:58  *** radez_g0n3 is now known as radez
+2015-03-02T14:28:08  *** mpaolino has quit IRC
+2015-03-02T14:28:31  *** mpaolino has joined #openstack-infra
+2015-03-02T14:28:57  *** tmcpeak1 has joined #openstack-infra
+2015-03-02T14:29:05  *** tmcpeak has quit IRC
+2015-03-02T14:29:07  *** tiswanso has joined #openstack-infra
+2015-03-02T14:30:40  *** mpaolino has quit IRC
+2015-03-02T14:31:10  *** mpaolino has joined #openstack-infra
+2015-03-02T14:31:14  <mriedem> is everything a story in storyboard? including bugs?
+2015-03-02T14:32:02  <mordred> mriedem: yes
+2015-03-02T14:32:27  *** mattfarina has joined #openstack-infra
+2015-03-02T14:35:02  *** mpaolino has quit IRC
+2015-03-02T14:35:40  *** mpaolino has joined #openstack-infra
+2015-03-02T14:36:32  *** tmcpeak1 has quit IRC
+2015-03-02T14:37:36  *** armax has quit IRC
+2015-03-02T14:38:06  *** mpaolino has quit IRC
+2015-03-02T14:38:32  *** mpaolino has joined #openstack-infra
+2015-03-02T14:38:51  *** ddieterly has joined #openstack-infra
+2015-03-02T14:40:47  *** mpaolino has quit IRC
+2015-03-02T14:41:11  *** mpaolino has joined #openstack-infra
+2015-03-02T14:41:24  *** afazekas has quit IRC
+2015-03-02T14:43:06  *** mpaolino has quit IRC
+2015-03-02T14:43:31  *** mpaolino has joined #openstack-infra
+2015-03-02T14:43:36  *** denis_makogon has quit IRC
+2015-03-02T14:44:18  <openstackgerrit> Kun Huang proposed openstack-infra/lodgeit: update 404 link of lodgeit.py  https://review.openstack.org/160363
+2015-03-02T14:46:39  *** mpaolino has quit IRC
+2015-03-02T14:47:11  *** mpaolino has joined #openstack-infra
+2015-03-02T14:48:39  *** mpaolino has quit IRC
+2015-03-02T14:48:55  <openstackgerrit> Andrea Frittoli  proposed openstack-infra/devstack-gate: Get default branch from feature.yaml  https://review.openstack.org/160366
+2015-03-02T14:49:08  *** eharney has joined #openstack-infra
+2015-03-02T14:49:11  *** mpaolino has joined #openstack-infra
+2015-03-02T14:49:14  *** amitgandhinz has joined #openstack-infra
+2015-03-02T14:51:15  <openstackgerrit> Monty Taylor proposed openstack-infra/project-config: Add config-drive element  https://review.openstack.org/154132
+2015-03-02T14:52:18  *** mpaolino has quit IRC
+2015-03-02T14:52:42  *** mpaolino has joined #openstack-infra
+2015-03-02T14:52:46  <mordred> Ng: ^^ there is the static version with keypair support added
+2015-03-02T14:52:55  <Ng> mordred: ta
+2015-03-02T14:54:14  *** mpaolino has quit IRC
+2015-03-02T14:54:52  *** tonytan4ever has joined #openstack-infra
+2015-03-02T14:55:14  *** mpaolino has joined #openstack-infra
+2015-03-02T14:55:14  *** mpaolino has quit IRC
+2015-03-02T14:57:41  <openstackgerrit> Ricardo Carrillo Cruz proposed openstack-infra/shade: Add initial compute functional tests to Shade  https://review.openstack.org/158463
+2015-03-02T14:59:30  *** yamamoto has quit IRC
+2015-03-02T15:00:19  *** pblaho_ has joined #openstack-infra
+2015-03-02T15:00:41  <openstackgerrit> Ricardo Carrillo Cruz proposed openstack-infra/shade: Add initial compute functional tests to Shade  https://review.openstack.org/158463
+2015-03-02T15:00:52  *** nelsnelson has quit IRC
+2015-03-02T15:01:30  *** nelsnelson has joined #openstack-infra
+2015-03-02T15:02:41  <openstackgerrit> Ricardo Carrillo Cruz proposed openstack-infra/project-config: Add functional job for Shade and enable it on check and gate pipelines  https://review.openstack.org/160190
+2015-03-02T15:03:42  *** tsg_ has joined #openstack-infra
+2015-03-02T15:03:43  *** pblaho has quit IRC
+2015-03-02T15:05:18  *** tgohad has joined #openstack-infra
+2015-03-02T15:05:18  *** rm_work has quit IRC
+2015-03-02T15:06:41  *** spredzy|afk is now known as spredzy
+2015-03-02T15:07:02  *** yamamoto has joined #openstack-infra
+2015-03-02T15:07:10  *** rm_work|away has joined #openstack-infra
+2015-03-02T15:07:34  *** rm_work|away is now known as rm_work
+2015-03-02T15:07:35  *** rm_work has quit IRC
+2015-03-02T15:07:35  *** rm_work has joined #openstack-infra
+2015-03-02T15:08:23  *** tsg_ has quit IRC
+2015-03-02T15:10:59  *** mbacchi has joined #openstack-infra
+2015-03-02T15:11:22  *** yfried has quit IRC
+2015-03-02T15:11:52  *** sigmavirus24_awa is now known as sigmavirus24
+2015-03-02T15:12:18  *** rm_work has quit IRC
+2015-03-02T15:14:28  *** dangers_away is now known as dangers
+2015-03-02T15:14:56  *** mtanino has joined #openstack-infra
+2015-03-02T15:15:10  *** rm_work|away has joined #openstack-infra
+2015-03-02T15:15:33  *** rm_work|away is now known as rm_work
+2015-03-02T15:15:34  *** rm_work has joined #openstack-infra
+2015-03-02T15:16:24  *** claudiub has joined #openstack-infra
+2015-03-02T15:17:04  *** mfink_ has joined #openstack-infra
+2015-03-02T15:19:39  *** afazekas has joined #openstack-infra
+2015-03-02T15:20:21  *** dmsimard_away is now known as dmsimard
+2015-03-02T15:22:02  *** asselin_ has joined #openstack-infra
+2015-03-02T15:25:51  <mordred> quantumfly: fyi - I updated my original "just read crap out of config-drive" patch to support keypairs. it was literally 5 lines of code. it's entirely possible that it's actually more work to deal with installing, configuring and debugging cloud-init than it is to just have the simple script - so I wanted to have it for comparison
+2015-03-02T15:26:15  <mordred> quantumfly: because, of course, "just use cloud-init" isn't actualy "just" in any way - that would be way too sane
+2015-03-02T15:26:45  *** pblaho__ has joined #openstack-infra
+2015-03-02T15:27:23  <openstackgerrit> Matt Riedemann proposed openstack-infra/release-tools: Add .venv to .gitignore  https://review.openstack.org/160377
+2015-03-02T15:27:24  <openstackgerrit> Matt Riedemann proposed openstack-infra/release-tools: Make git clone work for python-*client projects  https://review.openstack.org/160378
+2015-03-02T15:28:13  *** e0ne is now known as e0ne_
+2015-03-02T15:28:24  *** e0ne_ is now known as e0ne
+2015-03-02T15:29:45  *** ildikov has quit IRC
+2015-03-02T15:30:38  *** pblaho_ has quit IRC
+2015-03-02T15:31:08  *** annegentle has joined #openstack-infra
+2015-03-02T15:32:00  *** yamamoto has quit IRC
+2015-03-02T15:32:24  *** stevemar has joined #openstack-infra
+2015-03-02T15:32:28  <hogepodge> foobio do you have a link on how to integrate with openstackid?
+2015-03-02T15:32:38  <hogepodge> or quantumfly, or anyone else
+2015-03-02T15:32:57  *** beekneemech is now known as bnemec
+2015-03-02T15:32:58  <hogepodge> anteaya: ? ^^
+2015-03-02T15:33:06  *** achanda has joined #openstack-infra
+2015-03-02T15:33:23  <anteaya> hi sorry I know zip about openstackid
+2015-03-02T15:33:28  <anteaya> and foobio is on holiday
+2015-03-02T15:33:35  <hogepodge> :-/
+2015-03-02T15:33:37  <anteaya> mordred: ^^
+2015-03-02T15:33:41  *** radez is now known as radez_g0n3
+2015-03-02T15:34:02  <hogepodge> thanks anteaya
+2015-03-02T15:34:05  <jbooboo> hogepodge: mrmartin can probably help you
+2015-03-02T15:35:22  *** yamahata has joined #openstack-infra
+2015-03-02T15:35:58  *** zz_jgrimm is now known as jgrimm
+2015-03-02T15:36:52  <jbooboo> hogepodge: but you should only need to specify the url as an openid provider
+2015-03-02T15:37:00  <jbooboo> hogepodge: here's how groups.o.o does it: http://git.openstack.org/cgit/openstack-infra/system-config/tree/modules/openstack_project/manifests/groups.pp#n73
+2015-03-02T15:37:42  *** wenlock has joined #openstack-infra
+2015-03-02T15:37:54  *** jlvillal|afk has quit IRC
+2015-03-02T15:38:05  *** zz_dimtruck is now known as dimtruck
+2015-03-02T15:38:11  <timrc> jbooboo, quantumfly, foobio, mordred and whomever else... just a random question about nodepool and is probably a product of my naivety... why do we go through the trouble of complete tear-down / build-up of nodes in nodepool? In other words, why don't we use "rebuild" to avoid costly delete operations to reset VMs?  All else be equal (in terms of required resources and what not) then simply re-imaging an existing VM seems to be a much quicker solutio
+2015-03-02T15:38:11  <timrc> n than deleting everything and then recreating it with a different image.
+2015-03-02T15:38:34  <mordred> timrc: we have a todo list item to use rebuild
+2015-03-02T15:38:47  * timrc beams.  Yay.
+2015-03-02T15:38:55  <mordred> timrc: but it'll take some work in the scheduler, since the delete and create threads are separeate right now
+2015-03-02T15:38:59  <mkj_wk> ZZelle: any comments on the latest version of my patch?
+2015-03-02T15:39:02  <mordred> so it's not a quick-fix - but we do want it
+2015-03-02T15:39:21  <ZZelle> mkj_wk, did'nt get the time to look at it
+2015-03-02T15:39:36  *** jlvillal|afk has joined #openstack-infra
+2015-03-02T15:39:39  <mkj_wk> ZZelle: ok, just wanted to make sure it wasn't lost in the shuffle of piles of email for unrelated reasons :)
+2015-03-02T15:39:48  *** jlvillal|afk is now known as jlvillal
+2015-03-02T15:40:34  <timrc> mordred, That's enough for me.  There is some interest in the Gozer team in making nodepool more performant, so perhaps something we might be interested in looking at.
+2015-03-02T15:42:38  <mordred> ++
+2015-03-02T15:43:43  *** skolekonov has quit IRC
+2015-03-02T15:44:17  *** achanda has quit IRC
+2015-03-02T15:45:02  <ZZelle> mkj_wk, done
+2015-03-02T15:45:06  <jbooboo> timrc: it's going to be a big enough change it should have a spec beforehand; it might want to wait until the big nodepool work i have proposed on the list.  also, we should test that using rebuild is actually faster and benchmark it.
+2015-03-02T15:45:48  <pashkin> Hi all! Can somebody explain, why Jenkins jobs configs stored in separate repository and not in propjects repositories themselves?
+2015-03-02T15:45:49  <timrc> jbooboo, I think I have quite a bit of work to do learning about nodepool before I tackle anything, so yeah...
+2015-03-02T15:46:29  <mordred> jbooboo: ++ to testing
+2015-03-02T15:46:43  <mordred> jbooboo, timrc: I _have_ verified that you can do a rebuild with a different base image
+2015-03-02T15:46:57  <jbooboo> mordred: oh!  that could make things much simpler!
+2015-03-02T15:46:59  <mordred> yah
+2015-03-02T15:46:59  <jbooboo> timrc: ^
+2015-03-02T15:47:01  <timrc> mordred, As have I.  I'm super lazy.
+2015-03-02T15:47:24  <mordred> jbooboo: yeah - I think with that, it's really about exposing needs to the reaper
+2015-03-02T15:47:29  <timrc> I hate creating VM's so if my resources don't need to change I always go with a rebuild.
+2015-03-02T15:48:06  <timrc> jbooboo, It should be faster inherently since there's no need to reprovision anything or create / assign floatings ips.
+2015-03-02T15:48:46  *** armax has joined #openstack-infra
+2015-03-02T15:48:47  <mordred> timrc: yah - but 'should' and 'are' are often at odds in openstack :)
+2015-03-02T15:48:51  *** garyh has joined #openstack-infra
+2015-03-02T15:49:05  <timrc> mordred, Indeed.  I'm completely supportive of testing and benchmarking to prove that the statement is true.
+2015-03-02T15:49:31  <timrc> mordred, I think that's a general conundrum in life in general :)
+2015-03-02T15:49:36  <mordred> timrc: yah. oy
+2015-03-02T15:50:19  <jbooboo> timrc: maybe a short program that used shade would be in order.  it could do the steps nodepool currently does, then it could do things again with rebuild.  we can run that on both clouds.
+2015-03-02T15:50:56  <mrmartin> hogepodge hi, what you like to integrate with openstackid?
+2015-03-02T15:51:22  <hogepodge> mrmartin: We'd like to use it as the identity provider for refstack
+2015-03-02T15:51:36  <mordred> jbooboo, timrc: ++
+2015-03-02T15:51:56  <mrmartin> allright, you have to options, a, integrate an openid auth or, an oauth2
+2015-03-02T15:52:02  <quantumfly> pashkin the way jenkins is configured it helps to have code review of those jobs and to locate them in a known place so jjb can find them. We need some control of where and what projects can do considering the resources that are handed out. in particular we have nodes for publishing to maven nexus and pypi
+2015-03-02T15:52:45  <mordred> timrc: step one- add rebuild support to shade
+2015-03-02T15:52:54  <mordred> timrc: should be easy - should be a single function
+2015-03-02T15:53:05  <hogepodge> mrmartin: is there one that infra prefers or recommends?
+2015-03-02T15:53:07  <mrmartin> hogepodge, first I suggest to do the integration localy, and if you're ready, we can do some tests on live
+2015-03-02T15:53:30  <timrc> mordred, Looking at shade now.
+2015-03-02T15:53:41  <mrmartin> hogepodge: it depends on you, I'm using oauth2 for groups portal because I can query the profile pictures
+2015-03-02T15:53:42  <openstackgerrit> Matthew Treinish proposed openstack-infra/subunit2sql: Add microsecond columns to the test_runs table  https://review.openstack.org/160057
+2015-03-02T15:53:47  <mrmartin> but this is the only reason
+2015-03-02T15:54:40  <mordred> timrc: yolanda has been hacking in it already - so she's a good person to poke and whatnot
+2015-03-02T15:54:51  *** dustins_ has joined #openstack-infra
+2015-03-02T15:55:00  <hogepodge> mrmartin: ok, thanks. pictures are nice. :-D
+2015-03-02T15:55:06  *** salv-orlando has quit IRC
+2015-03-02T15:55:06  *** tiswanso has quit IRC
+2015-03-02T15:55:45  *** salv-orlando has joined #openstack-infra
+2015-03-02T15:56:01  <mrmartin> hogepodge, I'm have vagrant scripts somewhere I'm using for testing, because it is easier to read logs from there, if something goes wrong during development
+2015-03-02T15:56:07  <mrmartin> I can share it if you like
+2015-03-02T15:56:14  <pashkin> <quantumfly> You talking about control, but actually, if somebody put some resource-heavy or malicious code in a project - you will not be able to review it
+2015-03-02T15:56:21  <hogepodge> mrmartin: that would be great. thanks.
+2015-03-02T15:56:29  *** ildikov has joined #openstack-infra
+2015-03-02T15:56:37  <timrc> mordred, That's super convenient that we're on the same team at HP and I have access to her phone number.  Thanks!
+2015-03-02T15:56:51  *** harlowja_at_home has joined #openstack-infra
+2015-03-02T15:57:12  *** kmartin has joined #openstack-infra
+2015-03-02T15:57:16  <zxiiro> pelix: any chance you'll be able to get to https://review.openstack.org/#/c/155865/ today?
+2015-03-02T15:57:21  <quantumfly> pashkin thats mostly fine for the single use throwaway nodes.
+2015-03-02T15:57:29  *** dustins has quit IRC
+2015-03-02T15:57:59  <quantumfly> the larger concern are the publishing nodes which do not run arbitrary code
+2015-03-02T15:58:07  <mrmartin> hogepodge this one: https://github.com/fremontlabs/vagrant-openstackid
+2015-03-02T16:00:13  <pashkin> quantumfly Isnt it more sane to keep jobs in a project repos?
+2015-03-02T16:00:14  *** salv-orlando has quit IRC
+2015-03-02T16:00:28  <quantumfly> pashkin given the current set of tools no
+2015-03-02T16:00:39  <quantumfly> for the reason above
+2015-03-02T16:00:55  *** otter768 has joined #openstack-infra
+2015-03-02T16:01:14  <quantumfly> pashkin is there something in particular you are trying to achieve?
+2015-03-02T16:01:21  <openstackgerrit> James E. Blair proposed stackforge/gertty: Fix syncing messages attached to draft revisions  https://review.openstack.org/160388
+2015-03-02T16:01:42  <pashkin> quantumfly Understanding mostly
+2015-03-02T16:01:55  <jbooboo> storyboard meeting in #openstack-meeting-3
+2015-03-02T16:02:26  <quantumfly> pashkin we need control of what jobs have access to privileged info. that requires central control of the jobs given our current tooling
+2015-03-02T16:02:59  <pashkin> quantumfly So you saying, that aside with throwaway nodes, there are also long-living nodes - and if they will be broken - it will be bad? But they can be broken anyway by some new evil patchset
+2015-03-02T16:03:14  <quantumfly> pashkin jbooboo started a thread on evolving zuul that describes how we can put some control in the jobs but it requires new tooling
+2015-03-02T16:04:10  <quantumfly> pashkin not broken but exploited. if I have control of jobs in my project I could run ajob on that node and publish to pypi
+2015-03-02T16:04:38  *** mbacchi has quit IRC
+2015-03-02T16:05:13  *** coolsvap is now known as coolsvap_
+2015-03-02T16:05:34  *** mbacchi has joined #openstack-infra
+2015-03-02T16:05:49  *** otter768 has quit IRC
+2015-03-02T16:05:57  <pashkin> quantumfly You mean - untrusted user can publish to PyPi which is undesired?
+2015-03-02T16:06:11  <quantumfly> correct
+2015-03-02T16:06:37  <pashkin> quantumfly  "jbooboo started a thread #openstack-meeting-3 ?
+2015-03-02T16:06:47  *** sputnik13 has joined #openstack-infra
+2015-03-02T16:06:53  <openstackgerrit> Matt Riedemann proposed openstack-infra/release-tools: Add bashate testing  https://review.openstack.org/160389
+2015-03-02T16:06:56  *** kgiusti has joined #openstack-infra
+2015-03-02T16:06:57  <quantumfly> no on the openstack-dev mailing list
+2015-03-02T16:07:00  *** _nadya_ has quit IRC
+2015-03-02T16:07:27  *** sputnik13 has quit IRC
+2015-03-02T16:10:07  <pleia2> doing some final rsyncs on the new backup server, but it should be ready soon
+2015-03-02T16:10:10  *** annegentle has quit IRC
+2015-03-02T16:10:43  <jbooboo> quantumfly: pashkin openstack-infra list
+2015-03-02T16:11:20  <quantumfly> jbooboo thanks
+2015-03-02T16:11:26  <quantumfly> I will get a link
+2015-03-02T16:11:27  <openstackgerrit> Michael Johnson proposed openstack-infra/git-review: Choose correct branch for rebase when submitting  https://review.openstack.org/158877
+2015-03-02T16:12:05  <quantumfly> pashkin: http://lists.openstack.org/pipermail/openstack-infra/2015-February/002471.html
+2015-03-02T16:15:09  *** dannywilson has joined #openstack-infra
+2015-03-02T16:17:31  *** deepakcs has joined #openstack-infra
+2015-03-02T16:18:15  <andreaf> jbooboo: my first step towards dropping GIT_BRANCH and have a test-matrix based solution: https://review.openstack.org/#/c/160366/
+2015-03-02T16:18:31  <jbooboo> andreaf: thanks
+2015-03-02T16:19:39  <andreaf> jbooboo: next I would include an additional section in the YAML to express in there the update paths to be tested, and then extract that via python script into GRENADE_BRANCH env variables
+2015-03-02T16:19:49  *** carl_baldwin has joined #openstack-infra
+2015-03-02T16:20:06  *** tiswanso has joined #openstack-infra
+2015-03-02T16:20:14  *** armax has quit IRC
+2015-03-02T16:21:28  <pashkin> quantumfly Thanks, I see it now
+2015-03-02T16:22:15  <openstackgerrit> Andrea Frittoli  proposed openstack-infra/devstack-gate: Get default branch from feature.yaml  https://review.openstack.org/160366
+2015-03-02T16:22:20  *** HeOS has quit IRC
+2015-03-02T16:24:15  *** carl_baldwin_ has joined #openstack-infra
+2015-03-02T16:25:08  *** patrickeast has quit IRC
+2015-03-02T16:25:34  *** patri952 has quit IRC
+2015-03-02T16:25:34  *** patri781 has quit IRC
+2015-03-02T16:25:34  *** patri338 has quit IRC
+2015-03-02T16:25:34  *** patri996 has quit IRC
+2015-03-02T16:26:00  <deepakcs> quantumfly, Reg. gluster CI, we are running stable on ubuntu, see http://logs.openstack.org/11/159711/1/experimental/gate-tempest-dsvm-full-glusterfs/
+2015-03-02T16:26:13  *** carl_baldwin has quit IRC
+2015-03-02T16:26:16  *** carl_baldwin_ is now known as carl_baldwin
+2015-03-02T16:26:36  <deepakcs> quantumfly, So i would request that we add the ubuntu job on openstack/cinder in experimental pipeline
+2015-03-02T16:26:45  *** julim has quit IRC
+2015-03-02T16:26:53  <quantumfly> deepakcs have you proposed that change?
+2015-03-02T16:27:07  <deepakcs> quantumfly, no, since you had removed it, wanted to check with you before doing it
+2015-03-02T16:27:15  *** reed has joined #openstack-infra
+2015-03-02T16:27:33  <quantumfly> best to just push those things to gerrit and we can discuss in review. I am fine with it as long as the job isnt restarting continuously and sounds like it is not
+2015-03-02T16:27:55  <deepakcs> quantumfly, we have 2 test case failures which are expected, we will fix that soon, in the meantime we wanted to get enuf runtime against cinder before the deadline
+2015-03-02T16:28:05  <deepakcs> quantumfly, yes, its running w/o the oom, restart, issue
+2015-03-02T16:28:36  *** matrohon has quit IRC
+2015-03-02T16:28:37  <quantumfly> great, I would propose the layout change then
+2015-03-02T16:28:55  <deepakcs> quantumfly, thanks, will wait for your patch then
+2015-03-02T16:29:08  <quantumfly> I am catching up on mail looks like there is desire to get a centos7 node on rax to debug further?
+2015-03-02T16:29:36  <deepakcs> quantumfly, yes, there was some interest from centos-devel folks, so if you can help 1 VM each from rax and hpcloud, they would like to get some data
+2015-03-02T16:30:05  *** ashleighfarnham has joined #openstack-infra
+2015-03-02T16:30:35  <deepakcs> quantumfly, BTW, fyi - we added the ubuntu experimental job on our stackforge plugin repo too, once we fix the 2 TC failures, will add it to check pipeline of our repo
+2015-03-02T16:32:05  *** carl_baldwin has quit IRC
+2015-03-02T16:32:24  *** boris-42 has quit IRC
+2015-03-02T16:32:35  *** marcusvrn has quit IRC
+2015-03-02T16:33:19  *** marcusvrn has joined #openstack-infra
+2015-03-02T16:33:53  *** mrodden has quit IRC
+2015-03-02T16:34:24  *** ashleighfarnham has quit IRC
+2015-03-02T16:35:30  *** mrodden has joined #openstack-infra
+2015-03-02T16:37:16  *** ashleighfarnham has joined #openstack-infra
+2015-03-02T16:37:33  *** annegentle has joined #openstack-infra
+2015-03-02T16:37:44  *** marcusvrn has quit IRC
+2015-03-02T16:38:35  *** carl_baldwin has joined #openstack-infra
+2015-03-02T16:38:42  *** marcusvrn has joined #openstack-infra
+2015-03-02T16:39:26  *** derekh has quit IRC
+2015-03-02T16:39:27  *** wuhg has quit IRC
+2015-03-02T16:39:27  *** ddieterl_ has joined #openstack-infra
+2015-03-02T16:40:07  *** ddieterly has quit IRC
+2015-03-02T16:41:36  *** melwitt has joined #openstack-infra
+2015-03-02T16:42:27  *** gyee has joined #openstack-infra
+2015-03-02T16:43:57  *** mbacchi has quit IRC
+2015-03-02T16:44:13  *** deepakcs has quit IRC
+2015-03-02T16:45:23  <openstackgerrit> Kun Huang proposed openstack-infra/lodgeit: update 404 link of lodgeit.py  https://review.openstack.org/160363
+2015-03-02T16:46:19  *** saper has quit IRC
+2015-03-02T16:46:40  *** _nadya_ has joined #openstack-infra
+2015-03-02T16:49:04  <pleia2> quantumfly, jbooboo: new backups server is ready at 23.253.166.59 (cinder volume mounted, bup users created with homedirs on the cinder volume, backups synced from old server), should poke around and make sure everything looks good, then see about switching over to it
+2015-03-02T16:49:56  *** dizquierdo has quit IRC
+2015-03-02T16:50:12  <quantumfly> pleia2: maybe try do a restore off of new server given the current rsynced data?
+2015-03-02T16:50:28  <jbooboo> pleia2: cool.  we will need to have each server accept the new ssh host key when we switch
+2015-03-02T16:50:30  <quantumfly> docs on that should be on the same ci.openstack.org page
+2015-03-02T16:51:09  <quantumfly> but sounds good +1 to switching over asap
+2015-03-02T16:53:05  *** yfried has joined #openstack-infra
+2015-03-02T16:53:19  <quantumfly> pleia2: quick glance at fstab, mount, and passwd look good
+2015-03-02T16:53:43  <quantumfly> also ssh keys seem to be in place. Anything else you think should be looked at?
+2015-03-02T16:54:04  <quantumfly> I have a centos7 node held in rax and hpcloud for the glusterfs OOM debugging
+2015-03-02T16:54:12  <pleia2> should be it, jbooboo is right about this server having a new ssh key so the connecting servers will need to accept it
+2015-03-02T16:54:55  *** markus_z has quit IRC
+2015-03-02T16:55:03  <quantumfly> deepakcs is no longer here... I guess I can ask for ssh keys on the ml thread
+2015-03-02T16:55:10  <jbooboo> pleia2: i think try a restore, and if it seems halfway reasonable, let's go ahead and do the switch, and see if it looks like things backed up
+2015-03-02T16:55:32  *** unicell has quit IRC
+2015-03-02T16:55:38  <pleia2> ok
+2015-03-02T16:55:45  <quantumfly> +1
+2015-03-02T16:55:45  *** dustins_ has quit IRC
+2015-03-02T16:55:51  *** e0ne is now known as e0ne_
+2015-03-02T16:56:06  *** e0ne_ is now known as e0ne
+2015-03-02T16:56:40  *** trey has quit IRC
+2015-03-02T16:57:39  *** trey has joined #openstack-infra
+2015-03-02T16:57:49  *** radez_g0n3 is now known as radez
+2015-03-02T16:58:18  <openstackgerrit> Matt Riedemann proposed openstack-infra/project-config: Add bashate job for release-tools  https://review.openstack.org/160419
+2015-03-02T16:58:40  *** asselin__ has joined #openstack-infra
+2015-03-02T16:59:46  <quantumfly> good news everyone, I will be presenting to the PSU CS capstone groups either april 20 or april 27. Then they get to rank and choose projects so hopefully we get selected
+2015-03-02T17:00:46  <mrmartin> re
+2015-03-02T17:00:48  *** jaypipes has joined #openstack-infra
+2015-03-02T17:00:54  *** harlowja_at_home has quit IRC
+2015-03-02T17:01:00  <mrmartin> if somebody have a little time, can I get an approval on this: https://review.openstack.org/#/c/159426/ ?
+2015-03-02T17:01:01  <jbooboo> quantumfly: yay!  what do you need help with?
+2015-03-02T17:01:09  <anteaya> quantumfly: yay!
+2015-03-02T17:01:11  <mrmartin> it is blocking the groups portal scheduled jobs.
+2015-03-02T17:01:44  <quantumfly> jbooboo: right now not much. I need to get a first draft of the pitch together then will ask for review/edits on that
+2015-03-02T17:01:52  <Ng> mordred: so, if these services are enabled on a centos7 system, they'll mount a configdrive and kick off some script or other, but I'm not really sure what the benefit is over what's already in your changeset
+2015-03-02T17:01:56  <Ng> mordred: http://paste.openstack.org/show/185245/
+2015-03-02T17:01:59  <anteaya> quantumfly: what are the capstone groups?
+2015-03-02T17:02:14  <anteaya> sorry if I should know context, I don't
+2015-03-02T17:02:28  <Ng> mordred: (but it would likely be worth having the mount options either way, because securitah :)
+2015-03-02T17:03:00  *** asselin_ has quit IRC
+2015-03-02T17:03:07  <mordred> Ng: well, whats in my changeset doesn't work
+2015-03-02T17:03:13  <mordred> Ng: so if these actually run the script
+2015-03-02T17:03:14  <zaro> morning
+2015-03-02T17:03:17  <mordred> Ng: then they are 100% better
+2015-03-02T17:03:33  *** _shaps_ has quit IRC
+2015-03-02T17:03:35  <quantumfly> anteaya: PSU has two tracks for undergraduate studies, there is one track where you write a thesis and mosty that is for students that intend on going to graduate school. Other students do a capstone which is typically a 6 month projects in a small group of 4-5 people. In this case the computer science department has external entities pitch projects to the teams which they then select from and work
+2015-03-02T17:03:36  <quantumfly> on for the next 6 months
+2015-03-02T17:04:00  <quantumfly> anteaya: my capstone at PSU is how I know mordred :)
+2015-03-02T17:04:00  <mordred> Ng: (also, feel free to modify my changeset and submit new patchsets - no ego/ownership issues round these parts)
+2015-03-02T17:04:09  <mordred> quantumfly, anteaya: yup
+2015-03-02T17:04:10  *** dizquierdo has joined #openstack-infra
+2015-03-02T17:04:32  <mordred> quantumfly: happy to help in any way I can
+2015-03-02T17:04:44  <quantumfly> so my idea is to propose vinz webui as a capstone project and see if we can get people working on that
+2015-03-02T17:04:46  <Ng> mordred: :)
+2015-03-02T17:04:49  <anteaya> quantumfly mordred awesome!
+2015-03-02T17:04:55  *** bdpayne has joined #openstack-infra
+2015-03-02T17:05:00  <anteaya> oh yes
+2015-03-02T17:05:04  *** Sukhdev has joined #openstack-infra
+2015-03-02T17:05:05  <anteaya> what a good idea
+2015-03-02T17:05:37  *** mugsie has quit IRC
+2015-03-02T17:05:40  *** yfried has quit IRC
+2015-03-02T17:06:10  *** hdd has joined #openstack-infra
+2015-03-02T17:06:11  *** mugsie has joined #openstack-infra
+2015-03-02T17:06:34  *** mugsie is now known as Guest46000
+2015-03-02T17:07:14  *** annegentle has quit IRC
+2015-03-02T17:08:50  *** prad has joined #openstack-infra
+2015-03-02T17:09:18  *** sergsh has quit IRC
+2015-03-02T17:09:26  *** scheuran has quit IRC
+2015-03-02T17:09:34  *** rwsu has joined #openstack-infra
+2015-03-02T17:10:01  *** Ala has quit IRC
+2015-03-02T17:10:24  *** julim has joined #openstack-infra
+2015-03-02T17:10:51  <quantumfly> http://logs.openstack.org/59/160059/1/check/gate-infra-puppet-apply-trusty/7b980a5/console.html#_2015-02-28_00_59_48_460 is interesting
+2015-03-02T17:11:11  <quantumfly> I am going to recheck and see if that is consistent on hpcloud images
+2015-03-02T17:11:31  *** rkukura has quit IRC
+2015-03-02T17:13:24  *** markvan__ has joined #openstack-infra
+2015-03-02T17:13:44  *** markvan_ has quit IRC
+2015-03-02T17:14:04  *** cnesa has joined #openstack-infra
+2015-03-02T17:14:42  <quantumfly> ok next step try and replicate rcarrillocruz's devstack sigttin with devstack
+2015-03-02T17:14:42  *** e0ne has quit IRC
+2015-03-02T17:16:07  *** yamahata has quit IRC
+2015-03-02T17:16:49  *** salv-orlando has joined #openstack-infra
+2015-03-02T17:17:11  <pleia2> neat, bup is not installed on the new backups server
+2015-03-02T17:17:25  *** pblaho__ is now known as pblaho
+2015-03-02T17:17:40  <jbooboo> whopsie
+2015-03-02T17:18:02  <jerryz_> quantumfly: do you have to talk about nodepool ipv6 support?
+2015-03-02T17:18:12  <quantumfly> jerryz_ sure
+2015-03-02T17:19:28  <jerryz_> quantumfly: i see right now, nodepool db is storing both public ipv4 or v6 and private v4
+2015-03-02T17:19:33  *** Guest46000 has quit IRC
+2015-03-02T17:19:33  *** Guest46000 has joined #openstack-infra
+2015-03-02T17:19:43  *** Guest46000 is now known as mugsie_
+2015-03-02T17:20:17  *** ddieterl_ has quit IRC
+2015-03-02T17:20:19  <quantumfly> I think just v4 public and private until your change gets in, but yes
+2015-03-02T17:20:24  *** kirshil has quit IRC
+2015-03-02T17:20:26  <anteaya> can I get third party ci account number 5170 disabled please? http://paste.openstack.org/show/185255/
+2015-03-02T17:20:36  <jerryz_> quantumfly: what did you mean by "recording an ipv4 address and an ipv6 address"
+2015-03-02T17:20:45  <anteaya> pleia2: you up to learning how?
+2015-03-02T17:21:15  <jerryz_> quantumfly: do you mean both ipv4 and ipv6 public ips?
+2015-03-02T17:21:15  *** tonytan4ever has quit IRC
+2015-03-02T17:21:21  <quantumfly> jerryz_ yes
+2015-03-02T17:21:35  *** jistr has quit IRC
+2015-03-02T17:22:25  *** ddieterly has joined #openstack-infra
+2015-03-02T17:22:29  <jerryz_> quantumfly: in one column or two?
+2015-03-02T17:22:49  <quantumfly> two, we will need to update the db schema for this
+2015-03-02T17:23:14  <quantumfly> mordred has a change to add alembic support so we can likely base it on that
+2015-03-02T17:23:32  <anteaya> quantumfly: can I bug you for the disable since it appears pleia2 is busy?
+2015-03-02T17:23:49  <jerryz_> quantumfly: cool
+2015-03-02T17:24:06  <pleia2> anteaya: sorry, being pulled in many directions this morning
+2015-03-02T17:24:12  <anteaya> pleia2: I understand
+2015-03-02T17:24:16  <anteaya> pleia2: don't mean to add
+2015-03-02T17:24:16  <quantumfly> anteaya yup give me a minute. Were you not able to track them down?
+2015-03-02T17:24:20  <anteaya> quantumfly: thanks
+2015-03-02T17:24:26  *** jcoufal has quit IRC
+2015-03-02T17:24:34  <anteaya> no we asked for claudeb in neutron, no response
+2015-03-02T17:25:04  <anteaya> we will re-enable if he does respond, currently there is a patch in neutron to remove hyper-v driver
+2015-03-02T17:25:19  <anteaya> so mestery and I aren't sure what the status of the account is
+2015-03-02T17:25:46  <anteaya> https://review.openstack.org/#/c/153394/
+2015-03-02T17:25:51  *** tgohad is now known as tsg_
+2015-03-02T17:25:58  *** vigneshvar has joined #openstack-infra
+2015-03-02T17:26:10  <anteaya> not sure but claudeb might be the hyper-v ci operator? I don't know
+2015-03-02T17:26:27  <anteaya> in any case it is failing to build
+2015-03-02T17:26:34  <anteaya> or failing tests
+2015-03-02T17:26:35  <quantumfly> well they do ci on nova too
+2015-03-02T17:26:50  <anteaya> https://review.openstack.org/#/q/reviewer:hyper-v_ci%2540microsoft.com+status:open,n,z
+2015-03-02T17:26:54  *** patrickeast has joined #openstack-infra
+2015-03-02T17:26:57  <anteaya> I went through this list
+2015-03-02T17:26:59  *** carl_baldwin has quit IRC
+2015-03-02T17:27:01  *** adam_g_out is now known as adam_g
+2015-03-02T17:27:06  <anteaya> the top 5 patches all report failure
+2015-03-02T17:27:32  *** sputnik13 has joined #openstack-infra
+2015-03-02T17:28:15  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard: Email base plugin.  https://review.openstack.org/151948
+2015-03-02T17:28:16  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard: Email SMTP Client  https://review.openstack.org/149792
+2015-03-02T17:28:17  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard: Email Send Cron Worker  https://review.openstack.org/151416
+2015-03-02T17:28:18  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard: Email Working Directory Utility Method  https://review.openstack.org/151947
+2015-03-02T17:28:19  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard: Email Outbox  https://review.openstack.org/151413
+2015-03-02T17:28:20  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard: Redirect Browsers from API to Client  https://review.openstack.org/155551
+2015-03-02T17:29:03  <openstackgerrit> Matthew Treinish proposed openstack-infra/subunit2sql: Add microsecond columns to the test_runs table  https://review.openstack.org/160057
+2015-03-02T17:29:43  *** ayoung is now known as ayoung-lunx
+2015-03-02T17:31:46  <anteaya> as I said in neutron I would like to take an action and move on so that I don't forget
+2015-03-02T17:31:58  <anteaya> as what happened with plumgrid
+2015-03-02T17:32:21  <anteaya> I left it with someone else with the request that a post be made to the mailing list and the post never happened
+2015-03-02T17:32:35  <anteaya> just the removal from non-voting
+2015-03-02T17:32:38  *** asselin__ has quit IRC
+2015-03-02T17:34:12  <anteaya> quantumfly: belay that claudeb showed up in neutron
+2015-03-02T17:34:33  <pleia2> quantumfly: could use some help figuring out what I missed when setting this up that caused it to lack the bup stuff (but puppet installed all our system users fine?)
+2015-03-02T17:34:52  <quantumfly> pleia2: sure let me see
+2015-03-02T17:34:58  <SpamapS> mordred: I agree that I hope nova's test fakes continue to function. What I'm worried about is that we start depending on how they behave in ways that change, like expecting certain names go in and from that id's come out.
+2015-03-02T17:35:03  <quantumfly> anteaya: ok please ping if you still need that deactivation
+2015-03-02T17:35:09  <anteaya> quantumfly: thanks will do
+2015-03-02T17:35:19  <anteaya> hopefully claudeb can shed some light
+2015-03-02T17:35:51  <quantumfly> pleia2: check out openstack_project::backup_server
+2015-03-02T17:35:59  <quantumfly> pleia2: it is quite... empty :)
+2015-03-02T17:36:13  <pleia2> quantumfly: heh, yeah
+2015-03-02T17:36:22  <openstackgerrit> James E. Blair proposed stackforge/gertty: Fix crashing on files with no changes  https://review.openstack.org/160432
+2015-03-02T17:36:25  <quantumfly> pleia2: so I don't think anything you did was wrong, puppet did exactl as it was told
+2015-03-02T17:36:32  <pleia2> which was nothing \o/
+2015-03-02T17:36:37  <pleia2> well, set up the template system
+2015-03-02T17:36:45  <quantumfly> ya which is iptables and admins
+2015-03-02T17:36:57  <pleia2> so how'd we install these other backups servers?
+2015-03-02T17:37:09  <quantumfly> pleia2: jbooboo set them up probably installed it by hand
+2015-03-02T17:37:31  <quantumfly> pleia2: we can likely just add the bup package you need to that manifest and be good right? iirc bup shouldn't need anthing other than ssh and users
+2015-03-02T17:37:40  <jbooboo> NikitaKonovalov, yolanda: what's the current state of session timeout in storyboard?  i'm working on closing some bugs, and my session times out quickly...
+2015-03-02T17:37:43  *** vigneshvar has quit IRC
+2015-03-02T17:37:45  <pleia2> quantumfly: makes sense to me
+2015-03-02T17:37:53  <pleia2> I'll write a patch now
+2015-03-02T17:37:55  *** afazekas is now known as _afezekas|pub
+2015-03-02T17:38:12  <SpamapS> mordred: I actually think what might be best is if they simply ACK that it should be used in such a way or recoil in horror.
+2015-03-02T17:38:25  <jbooboo> quantumfly, pleia2: oh, sorry :(
+2015-03-02T17:38:35  <yolanda> jbooboo, it keeps me logged until i close browser
+2015-03-02T17:38:44  <SpamapS> mordred: if the latter, then we can suggest they be made a real public API and supported properly. :)
+2015-03-02T17:38:48  <yolanda> maybe some cookies issue?
+2015-03-02T17:38:55  <mordred> jogo, sdague: ^^ could we get a thought on the SpamapS question above?
+2015-03-02T17:39:00  <jbooboo> yolanda: can you elaborate?
+2015-03-02T17:39:20  <mordred> jogo, sdague: the question si saroudn re-use of novaclient client fakes in teh shade tests
+2015-03-02T17:39:20  *** alexpilotti has joined #openstack-infra
+2015-03-02T17:39:33  <yolanda> jbooboo, i'm not sure on the internals of it, but i don't see a timeout for me inside storyboard webclient
+2015-03-02T17:39:35  <sdague> can someone crisply state the question?'
+2015-03-02T17:39:50  <yolanda> i just need to logout, or close browser and clean cookies to logout
+2015-03-02T17:40:00  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard-webclient: User typeahead permits unassign.  https://review.openstack.org/159948
+2015-03-02T17:40:22  <anteaya> sdague: what is the answer to life the universe and everything?
+2015-03-02T17:40:40  <mordred> sdague: is it a disaster to make the shade unittests use the Client fakes in python-novaclient
+2015-03-02T17:41:12  *** tsg_ has quit IRC
+2015-03-02T17:41:19  <jogo> mordred: probably, we don't really treat it as a stable API at the moment
+2015-03-02T17:41:37  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard-webclient: User typeahead permits unassign.  https://review.openstack.org/159948
+2015-03-02T17:41:52  <SpamapS> jogo: https://review.openstack.org/#/c/160155/
+2015-03-02T17:41:55  <SpamapS> sdague: ^^
+2015-03-02T17:42:10  <openstackgerrit> Merged openstack-infra/storyboard: Removed PostgreSQL from tests  https://review.openstack.org/160272
+2015-03-02T17:42:36  <greghaynes> haha, allow me to just import your tests....
+2015-03-02T17:42:51  <SpamapS> greghaynes: your tests are not _tests so I will import them as I see fit. ;-)
+2015-03-02T17:43:14  <openstackgerrit> Elizabeth K. Joseph proposed openstack-infra/system-config: Add bup package to backup_server.pp  https://review.openstack.org/160433
+2015-03-02T17:44:12  <sdague> SpamapS / mordred: so it's probably a medium dangerous thing to do, but the reality is people don't tend to change that stuff willy nilly
+2015-03-02T17:44:13  *** patrickeast_ has joined #openstack-infra
+2015-03-02T17:44:14  *** patrickeast__ has joined #openstack-infra
+2015-03-02T17:44:14  *** patri136 has joined #openstack-infra
+2015-03-02T17:44:15  *** patri505 has joined #openstack-infra
+2015-03-02T17:44:28  <openstackgerrit> Dmitry Tantsur proposed openstack/requirements: Add ironic-discoverd to projects.txt  https://review.openstack.org/156270
+2015-03-02T17:44:48  <SpamapS> sdague: I kind of want it to be a 1st class thing. It's super useful for users.
+2015-03-02T17:44:48  <sdague> so you might just need to tweak things on releases, but I wouldn't imagine much
+2015-03-02T17:44:52  *** yamahata has joined #openstack-infra
+2015-03-02T17:45:20  <SpamapS> sdague: I'm happy to do the work to document it and explain what is supported and what isn't.
+2015-03-02T17:45:54  <mordred> SpamapS, sdague: honestly, if the _interface_ of the fake changes, it ultimately probably means that the interface of the Client object itself changed
+2015-03-02T17:45:58  *** ChuckC has quit IRC
+2015-03-02T17:46:04  <mordred> and that breakage is probably something we want very much to know about :)
+2015-03-02T17:46:22  <SpamapS> mordred: agree
+2015-03-02T17:46:22  *** vigneshvar has joined #openstack-infra
+2015-03-02T17:46:55  <SpamapS> It's perfectly good as a sanity check the way I've done it there.
+2015-03-02T17:47:02  <sdague> yeh, true, the calling interface should be reasonably stable, I'd just imagine the payload might get changed over time to support testing other things the current fake payloads don't cover
+2015-03-02T17:47:44  <SpamapS> but right now, for instance, we can't test anything except 'BUILD' status in shade, because the fake has no way to signal "I want an active server".
+2015-03-02T17:48:17  <SpamapS> Which means I can't add tests for wait=True, because that does create and then immediately waits for it to turn into ACTIVE
+2015-03-02T17:49:18  *** Ryan_Lane has joined #openstack-infra
+2015-03-02T17:49:49  <jbooboo> SpamapS, mordred: aware of https://github.com/rackerlabs/mimic ?
+2015-03-02T17:50:07  <quantumfly> rcarrillocruz: I have a node in hpcloud that wasn't booted off of our images to try and reproduce the sigttin thing
+2015-03-02T17:50:11  <quantumfly> rcarrillocruz: will let you know how that goes
+2015-03-02T17:50:29  *** mpavone has quit IRC
+2015-03-02T17:50:52  *** ihrachyshka has quit IRC
+2015-03-02T17:51:03  <mordred> jbooboo: yes
+2015-03-02T17:51:59  *** tonytan4ever has joined #openstack-infra
+2015-03-02T17:52:06  <SpamapS> funny they call it a mock
+2015-03-02T17:52:10  <SpamapS> but it is clearly a fake. ;)
+2015-03-02T17:52:18  <SpamapS> which makes me :|
+2015-03-02T17:53:04  <SpamapS> jbooboo: looks realy cool actually
+2015-03-02T17:53:11  <sdague> so... if you want something complicated enough to have state progression, I don't think you'll get it out of the novaclient tree easily
+2015-03-02T17:53:14  <anteaya> what is the difference between a mock and a fake?
+2015-03-02T17:53:19  <SpamapS> I sort of think nova should have a way to just start nova-api --fake with exactly that behavior.
+2015-03-02T17:53:33  <sdague> SpamapS: well... I have a fixture in the nova tree for it
+2015-03-02T17:53:46  *** MaxV has quit IRC
+2015-03-02T17:53:56  *** carl_baldwin has joined #openstack-infra
+2015-03-02T17:54:08  <SpamapS> sdague: can haz hint how to find? kthx
+2015-03-02T17:54:11  *** yfried has joined #openstack-infra
+2015-03-02T17:54:18  <sdague> https://github.com/openstack/nova/blob/master/nova/tests/fixtures.py#L287-L345
+2015-03-02T17:54:19  *** dhritishikhar has joined #openstack-infra
+2015-03-02T17:54:22  <zxiiro> pelix: thanks :)
+2015-03-02T17:54:31  <zxiiro> now to find someone else to +2 it...
+2015-03-02T17:55:21  <zxiiro> any JJB committers have time to review and merge https://review.openstack.org/#/c/155865/   ?   (I'd be very greatful!)
+2015-03-02T17:55:31  *** _nadya_ has quit IRC
+2015-03-02T17:56:03  <sdague> though, you need to do a few more things to get a full nova, but we also have ways to start the services in the test process with an in memory sqlite and in memory oslo.message queue
+2015-03-02T17:56:54  *** tonytan4ever has quit IRC
+2015-03-02T17:57:01  <openstackgerrit> Davanum Srinivas (dims) proposed openstack/requirements: Bump oslo.log for critical nova regression  https://review.openstack.org/160435
+2015-03-02T17:57:02  <sdague> that infrastructure is all in the nova test tree, it's just not super easy to export right now
+2015-03-02T17:58:07  <SpamapS> sdague: I think it should stay in the nova tree
+2015-03-02T17:58:20  <pc_m> Can I get a second core reviewer on the new VPNaaS functional job being created? https://review.openstack.org/#/c/158389/
+2015-03-02T17:58:25  <sdague> SpamapS: sure, by export I mean easy to consume out of tree
+2015-03-02T17:58:52  <SpamapS> sdague: but if it could actually be wrapped up in a bundle as 'nova-api --fake' so test authors can just point their functional test suite at a real nova that doesn't require any infrastructure, that would be huge for end users.
+2015-03-02T17:59:10  <SpamapS> I know that's a tall order.
+2015-03-02T17:59:12  *** Guest26642 has quit IRC
+2015-03-02T17:59:15  <sdague> SpamapS: yeh, I've actually been thinking about that actually
+2015-03-02T17:59:15  <SpamapS> But it's something to consider. :)
+2015-03-02T17:59:26  <SpamapS> sdague: double actually, so you know it's true. :)
+2015-03-02T17:59:35  <sdague> :)
+2015-03-02T18:00:14  <sdague> see that's the problem when I start writing one sentence, and lose context on a though until the end, having forgotten I used that word already
+2015-03-02T18:00:27  <SpamapS> I think your subconscious served you perfectly there. :)
+2015-03-02T18:00:29  *** BobBall is now known as BobBall_AWOL
+2015-03-02T18:00:42  *** unicell has joined #openstack-infra
+2015-03-02T18:00:56  <SpamapS> sdague: I'd guess nodepool would love to have tests that hit a fake nova too.
+2015-03-02T18:01:28  <sdague> anyway, in trying to come up with constructive functional test patterns in the nova tree, it has occurred to me how close it gets us to a test stack that could actually be bundled into a command to bring it up.
+2015-03-02T18:01:45  <sdague> either with a libvirt, or with a fakevirt
+2015-03-02T18:01:45  * sigmavirus24 is hoping someone can take a look at https://review.openstack.org/#/c/160006/ today
+2015-03-02T18:01:50  *** otter768 has joined #openstack-infra
+2015-03-02T18:01:58  <SpamapS> sdague: You have my full support in making something like that a reality and it would have direct benefit to work I'm interested in. :)
+2015-03-02T18:02:15  * SpamapS returns to email-slog for a bit
+2015-03-02T18:02:16  *** mbacchi has joined #openstack-infra
+2015-03-02T18:02:29  <sdague> yeh, it won't be right away, but I'll try to keep that on the list
+2015-03-02T18:03:45  *** ivar-lazzaro has joined #openstack-infra
+2015-03-02T18:04:55  <SpamapS> I'm reminded that back when I was doing work with RealtyTrac and MLS, they both have fake services that always behave a certain way, which was realy nice for writing automated tests _and_ for development.
+2015-03-02T18:05:12  *** jerryz_ has quit IRC
+2015-03-02T18:05:13  *** boris-42 has joined #openstack-infra
+2015-03-02T18:05:57  <SpamapS> and even once uncovered an issue with our version of libssl IIRC, where they dropped support for an old cipher and we accidentally didn't have any new ciphers. :-P
+2015-03-02T18:06:32  *** otter768 has quit IRC
+2015-03-02T18:07:46  *** annegentle has joined #openstack-infra
+2015-03-02T18:08:18  *** tiswanso has quit IRC
+2015-03-02T18:09:17  *** ssam2 has quit IRC
+2015-03-02T18:09:24  *** mbacchi has quit IRC
+2015-03-02T18:09:40  *** dustins has joined #openstack-infra
+2015-03-02T18:10:08  *** vilobhmm has joined #openstack-infra
+2015-03-02T18:10:14  *** _afezekas|pub has quit IRC
+2015-03-02T18:13:28  <asselin> jbooboo, fyi, I'm seeing this zuul issue again. Not sure why it's not hitting -infra. Fills up the log files: http://paste.openstack.org/show/185263/
+2015-03-02T18:13:49  <mordred> SpamapS: actually, nodepool is being ported to shade - so "shade having functional tests" will be the mechanism whereby nodepool can test its nova interactions
+2015-03-02T18:14:28  <mordred> SpamapS: although don't forget that much of the difficulty actually comes around interacting with the other services - glance and neutron and keystone - and figuring out when to use nova and when to use glance/neutron
+2015-03-02T18:14:45  <mordred> SpamapS: you'll also love the things I've been learning about keystone v3
+2015-03-02T18:15:18  <jbooboo> mordred, SpamapS: i expect we'll have devstack-based testing for shade soon (and then later, nodepool).
+2015-03-02T18:15:27  *** jedimike has quit IRC
+2015-03-02T18:15:29  <mordred> yah
+2015-03-02T18:15:47  <mordred> I'd like to see more effort focused on that than too much working standing up fake novas
+2015-03-02T18:15:49  <stevemar> mordred, care to share what you've learned? :)
+2015-03-02T18:16:10  <mordred> stevemar: domains and projects and roles and users are all infinitely combinable
+2015-03-02T18:16:34  <mordred> stevemar: and in v3, you _must_ pass domain information, as the project list is not automatically filtered by user's current logged in domain
+2015-03-02T18:16:48  <mordred> but in v2, there are no domains, so you can't make domain an interface level required parameter
+2015-03-02T18:16:54  <stevemar> mordred, bah, the second point should be fixed.
+2015-03-02T18:17:15  <mordred> which means that to get sane defaults, I intend to pull the user's current domain from the token
+2015-03-02T18:17:28  <mordred> and if the domain is not provided for any domain parameters, provide the one from the current token
+2015-03-02T18:18:04  <mordred> this is mainly to facilitate passing project and user by name and not by id
+2015-03-02T18:19:25  <stevemar> mordred, this should be interesting once federated users get into the mix
+2015-03-02T18:19:33  <mordred> stevemar: I'm sure it's going to be magical
+2015-03-02T18:19:37  <stevemar> the have a 'federated' domain,
+2015-03-02T18:19:50  *** dizquierdo_ has joined #openstack-infra
+2015-03-02T18:19:51  <anteaya> asselin: any idea if it is related to a change or a timestamp?
+2015-03-02T18:20:14  *** dizquierdo has quit IRC
+2015-03-02T18:20:26  <asselin> anteaya, I think it's related to a depends-on change
+2015-03-02T18:20:34  <asselin> anteaya, still investigating....
+2015-03-02T18:20:57  *** tiswanso has joined #openstack-infra
+2015-03-02T18:21:07  <anteaya> asselin: okay keep us posted
+2015-03-02T18:21:48  *** harlowja_away is now known as harlowja_
+2015-03-02T18:22:54  *** mugsie_ is now known as mugsie
+2015-03-02T18:23:30  <mordred> jogo: the patch to fix the console-scripts merged in pbr
+2015-03-02T18:23:38  <mordred> jogo: in the feature/0.10 branch
+2015-03-02T18:23:53  <jogo> mordred: woot!
+2015-03-02T18:24:00  <jogo> thanks, when is the release expected?
+2015-03-02T18:24:32  *** hdd has quit IRC
+2015-03-02T18:25:01  <mordred> pleia2, jbooboo, quantumfly: so - we've got another patch in 0.10 of pbr that we need to release to make jogo happy - any thoughts?
+2015-03-02T18:25:42  <mordred> dhellmann: ^^
+2015-03-02T18:25:47  <quantumfly> mordred: wfm. Though next thing that breaks without working semver I propose we revert all of semver and put that on a feature branch
+2015-03-02T18:25:47  <SpamapS> jbooboo: I agree, and I think that's quite important as a true integration test. I also don't really want to spin that up for every patch to shade or nodepool. :-P
+2015-03-02T18:25:58  <quantumfly> mordred: also any chance you will update 159159 soon?
+2015-03-02T18:26:45  <mordred> quantumfly: oh - piddle - I actually walked my outstanding patches-needing-work this morning but didn't see that because of the gerrit "show +2 over -1" logic
+2015-03-02T18:26:48  <SpamapS> jbooboo: but maybe I'm just resisting for no good reason. I like self contained unit tests for tighter development iteration.
+2015-03-02T18:26:59  <jbooboo> SpamapS: locally, sure.  I'm not suggesting it as a substitute for the convenienc of full local testing.
+2015-03-02T18:27:13  *** AJaeger_ has joined #openstack-infra
+2015-03-02T18:27:24  <jbooboo> SpamapS: however, we do have a system that will do that for you automatically, so we can have that testing now at very little cost.  :)
+2015-03-02T18:27:37  <SpamapS> And faked functional tests also blow my mind when they work right because they test actual things against some partially relevant things. :)
+2015-03-02T18:27:43  <SpamapS> fast
+2015-03-02T18:27:47  <quantumfly> mordred: are you saing I should -2 more liberally :P
+2015-03-02T18:27:49  <jbooboo> SpamapS: i would really like both.
+2015-03-02T18:27:52  <SpamapS> jbooboo: Yeah, it's low cost, high latency.
+2015-03-02T18:27:52  <mordred> quantumfly: :)
+2015-03-02T18:28:04  *** yfried has quit IRC
+2015-03-02T18:28:15  *** dtantsur is now known as dtantsur|afk
+2015-03-02T18:28:18  <SpamapS> Even if we have nodepools under capacity and images ready to go and [.. magic ..] .. It's still a few minutes.
+2015-03-02T18:28:32  <jbooboo> SpamapS: yep.  so the end state for me is local functional testing to help iterate quickly, and full devstack testing to make sure we don't land changes that break
+2015-03-02T18:28:54  <jbooboo> SpamapS: we just happen to be in a position to be able to do the second now, and the first will take more work
+2015-03-02T18:29:01  <SpamapS> jbooboo: we share end state. I think that means we combine into a Voltron.
+2015-03-02T18:29:18  *** ZZelle_ has joined #openstack-infra
+2015-03-02T18:29:23  <mordred> jbooboo, SpamapS: also, at some point, it would be neat if we knew how to configure a devstack to behave like HP and how to configure a devstack to behave like RAX
+2015-03-02T18:29:36  * SpamapS hopes jbooboo gets that and isn't googling Voltron right now ;)
+2015-03-02T18:29:57  <anteaya> quantumfly: to follow up hyper-v ci disabled their system and updated their system status wikipage
+2015-03-02T18:30:23  <SpamapS> mordred: the result of that is exciting. The work estimate seems daunting.
+2015-03-02T18:30:46  <mordred> jbooboo, dhellmann, quantumfly, jbooboo: ok. I'm going to cut 0.10.8 - just as an FYI in case something in our testing missed something and the world decides to break
+2015-03-02T18:30:56  <mordred> I _think_ we're pretty well covered at this point though
+2015-03-02T18:31:02  *** achanda has joined #openstack-infra
+2015-03-02T18:31:16  <pc_m> quantumfly: Can you review https://review.openstack.org/158389? I need a second core reviewer.
+2015-03-02T18:31:21  * anteaya goes for a walk
+2015-03-02T18:32:57  <mordred> jogo: ^^ released - mind keeping an eye out for bonghits?
+2015-03-02T18:33:45  <SpamapS> mordred: 0.10.8 of what?
+2015-03-02T18:33:57  <SpamapS> Is there a place all the tags -> tars gets logged?
+2015-03-02T18:34:05  <SpamapS> seems like a worthy thing for gerritbot to handle.
+2015-03-02T18:34:25  <jogo> mordred: thanks, will do!
+2015-03-02T18:34:48  <quantumfly> SpamapS: pypi
+2015-03-02T18:34:56  <mordred> SpamapS: pbr
+2015-03-02T18:37:03  <openstackgerrit> Merged openstack-infra/project-config: Fix glob pattern for os-ansible-logs publisher  https://review.openstack.org/160006
+2015-03-02T18:39:47  *** dhritishikhar has quit IRC
+2015-03-02T18:42:17  <jbooboo> asselin: that's strange; i think i see one instance of it in our last month of zuul logs
+2015-03-02T18:43:00  <quantumfly> rcarrillocruz: I have reproduced on an hpcloud node
+2015-03-02T18:43:49  <jbooboo>   File "/usr/local/lib/python2.7/dist-packages/zuul/trigger/zuultrigger.py", line 74, in _createProjectChangeMergedEvent
+2015-03-02T18:43:50  <jbooboo>     event.project_name = change.project.name
+2015-03-02T18:44:03  <jbooboo> asselin: ^ actually, that's different; so we haven't seen your exact error :(
+2015-03-02T18:45:36  <asselin> jbooboo, it's still logging in my zuul debug.log file.
+2015-03-02T18:45:49  <SpamapS> quantumfly: but thats _the world_ of pypi.
+2015-03-02T18:46:05  <SpamapS> quantumfly: I'm kind of thinking if I care about reviews of project x, I care about releases of it too, is all.
+2015-03-02T18:46:17  *** achanda has quit IRC
+2015-03-02T18:46:42  *** achanda has joined #openstack-infra
+2015-03-02T18:47:55  *** mpaolino_ has joined #openstack-infra
+2015-03-02T18:48:39  <asselin> jbooboo, this started occuring when the cross-project depends on change merged. Perhaps something didn't completely update on my system?
+2015-03-02T18:49:09  <patrickeast> asselin: i see that error in my log as well as on my zuul status page it displays an error
+2015-03-02T18:49:32  *** marun has joined #openstack-infra
+2015-03-02T18:50:04  <asselin> patrickeast, thanks for confirming
+2015-03-02T18:50:19  *** pelix has quit IRC
+2015-03-02T18:52:03  *** unicell has quit IRC
+2015-03-02T18:52:26  *** adalba has joined #openstack-infra
+2015-03-02T18:52:37  *** mpaolino_ has quit IRC
+2015-03-02T18:52:46  *** acfleury has quit IRC
+2015-03-02T18:52:58  <pleia2> if we can get this in, I can rerun puppet on the new backups server https://review.openstack.org/#/c/160433/
+2015-03-02T18:53:38  <quantumfly> rcarrillocruz: it is the apt-get install that is hanging on the sigttin
+2015-03-02T18:54:06  *** Rockyg has joined #openstack-infra
+2015-03-02T18:54:10  <quantumfly> pleia2: +2
+2015-03-02T18:55:18  *** crc32 has joined #openstack-infra
+2015-03-02T18:55:32  <asselin> pleia2, hi, our gerrit ip  firewall rule was applied. Let me konw when you're ready to test
+2015-03-02T18:56:34  *** zul has quit IRC
+2015-03-02T18:56:54  *** zul has joined #openstack-infra
+2015-03-02T18:57:14  <quantumfly> rcarrillocruz: it appears that root is running sudo
+2015-03-02T18:58:16  <greghaynes> quantumfly: You mentioned rest api patches for zuul at one point, any idea if those were posted somewhere?
+2015-03-02T18:58:28  <greghaynes> for the zuul webhook deal I need something very similar
+2015-03-02T18:58:50  <mordred> greghaynes: nobody has posted patches to my knowledge
+2015-03-02T18:59:00  <greghaynes> ok
+2015-03-02T18:59:07  <greghaynes> code reading time, then
+2015-03-02T18:59:36  <jbooboo> greghaynes: i think there is a rest api patch for nodepool
+2015-03-02T18:59:38  <openstackgerrit> Merged openstack-infra/system-config: OpenStack Taiwan User Group mailing list  https://review.openstack.org/158923
+2015-03-02T18:59:57  <greghaynes> ah, nodepool
+2015-03-02T19:00:31  <greghaynes> oh, but theres already zuul.webapp :)
+2015-03-02T19:00:40  <pleia2> asselin: yeah, sorry, working to get to it today
+2015-03-02T19:00:55  <asselin> pleia2, ok thanks. let me know if you need any help
+2015-03-02T19:01:13  *** ghostpl_ has quit IRC
+2015-03-02T19:01:22  *** devlaps has joined #openstack-infra
+2015-03-02T19:01:45  <quantumfly> zuul has a webserver just not a real restapi
+2015-03-02T19:01:58  <jbooboo> greghaynes: check in with jhesketh, i know he has/had an interest in expanding that
+2015-03-02T19:02:52  <greghaynes> jhesketh: ^ hello there
+2015-03-02T19:02:58  <jbooboo> greghaynes: but yeah, if you just need a hook endpoint, could probably stick it in webapp or something
+2015-03-02T19:03:36  <jbooboo> greghaynes: (and will likely be some hours before jhesketh is awake)
+2015-03-02T19:03:48  *** crc32 has quit IRC
+2015-03-02T19:04:24  <quantumfly> rcarrillocruz: so its definitely something hanging up http://paste.openstack.org/show/185362/ which does work when I run it in the foreground with the stack user
+2015-03-02T19:04:41  <quantumfly> jbooboo: any ideas on why ^ would get SIGTTIN despire have the noninteractive and assume yes flags set?
+2015-03-02T19:04:58  *** Sukhdev has quit IRC
+2015-03-02T19:07:04  *** zz_johnthetubagu is now known as johnthetubaguy
+2015-03-02T19:08:12  *** arxcruz has quit IRC
+2015-03-02T19:10:29  *** annegentle has quit IRC
+2015-03-02T19:11:37  *** ChuckC has joined #openstack-infra
+2015-03-02T19:12:26  *** crc32 has joined #openstack-infra
+2015-03-02T19:13:13  *** unicell has joined #openstack-infra
+2015-03-02T19:13:22  *** hdd has joined #openstack-infra
+2015-03-02T19:13:33  <quantumfly> rcarrillocruz: so I think jenkins must be doing something that affects apt-get/dpkg differently than running it in an interactive shell
+2015-03-02T19:13:41  <mordred> quantumfly: wow
+2015-03-02T19:13:44  <quantumfly> and its possible that devstack-gate tickles that
+2015-03-02T19:13:56  <quantumfly> since we don't seem to see this problem when people just run devstack
+2015-03-02T19:14:05  <quantumfly> mordred: if you have an insight into that it would be appreciated
+2015-03-02T19:14:28  <mordred> quantumfly: only thing I can imagine is that it has something to do with how the java process is forking
+2015-03-02T19:14:49  <mordred> quantumfly: I seem to remember in the fog of my brain that it's one of the reasons we stick a bash -c in front of some things
+2015-03-02T19:14:51  <quantumfly> mordred: possible, like maybe it is handing off a different stdin or something
+2015-03-02T19:14:54  <mordred> yah
+2015-03-02T19:15:45  <quantumfly> oh also that doesn't seem to be a problem with our images
+2015-03-02T19:16:06  <quantumfly> so maybe jenkins isn't at fault but something we do during image build? maybe the dist upgrade? its all veryweird
+2015-03-02T19:16:25  <mordred> quantumfly: I am looking forward to uncomplexity this some more
+2015-03-02T19:17:08  <quantumfly> so after manually istalling that package set then restarting d-g it does the same thing against a subsequent apt-get install command
+2015-03-02T19:17:13  <quantumfly> so I don't think a specific package is at fault
+2015-03-02T19:17:55  <openstackgerrit> Merged openstack-infra/jenkins-job-builder: Remove unnecessary warning message.  https://review.openstack.org/158543
+2015-03-02T19:20:06  *** tonytan4ever has joined #openstack-infra
+2015-03-02T19:20:31  <reed> jbooboo, in the auto-abandon discussion, I think fifieldt gave a very good suggestion. I'd pick that one up
+2015-03-02T19:20:50  *** cdent has quit IRC
+2015-03-02T19:21:47  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard: Story events may now be filtered by event_type.  https://review.openstack.org/160462
+2015-03-02T19:27:01  *** annegentle has joined #openstack-infra
+2015-03-02T19:27:52  <quantumfly> AHA! I think it may be timeout that is at fault
+2015-03-02T19:28:07  * quantumfly tests some stuff
+2015-03-02T19:29:00  <reed> looks like we didn't make it to GSoC 2015
+2015-03-02T19:29:05  <openstackgerrit> Ricardo Carrillo Cruz proposed openstack-infra/shade: Add initial compute functional tests to Shade  https://review.openstack.org/158463
+2015-03-02T19:29:38  <quantumfly> rcarrillocruz: ^ btw I think our use of timeout is at fault, unsure why it doesn't break when jenkins uses it but going to test timeout with the --foreground optin
+2015-03-02T19:29:50  *** devlaps has quit IRC
+2015-03-02T19:29:59  <pleia2> reed: aw, sorry to hear
+2015-03-02T19:30:18  <reed> we're in good company, with mozilla, linux foundation, tor
+2015-03-02T19:30:47  <rcarrillocruz> quantumfly: awesome, thx for confirming re:sigttin
+2015-03-02T19:31:14  *** yfried has joined #openstack-infra
+2015-03-02T19:31:41  <rcarrillocruz> SpamapS: thx, the cleanup should indeed go in setUp to avoid duplication
+2015-03-02T19:32:21  *** dimtruck is now known as zz_dimtruck
+2015-03-02T19:32:32  *** e0ne has joined #openstack-infra
+2015-03-02T19:32:32  *** e0ne is now known as e0ne_
+2015-03-02T19:32:32  *** e0ne_ is now known as e0ne
+2015-03-02T19:33:48  *** tkelsey has quit IRC
+2015-03-02T19:34:14  <quantumfly> rcarrillocruz: also unsure why it works when we use our own images
+2015-03-02T19:34:55  <rcarrillocruz> our own images = dib images?
+2015-03-02T19:35:30  <quantumfly> or snapshot images, basically anything built by jenkins
+2015-03-02T19:35:33  <quantumfly> er nodepool
+2015-03-02T19:35:54  <rcarrillocruz> ah ok
+2015-03-02T19:36:28  <nibalizer> reed: so no gsoc for openstack this year?
+2015-03-02T19:36:28  <quantumfly> if this works I will propose a change to use the --foreground flag to double check that jenkins is happy with it too
+2015-03-02T19:36:39  <reed> nibalizer, doesn't seem likely
+2015-03-02T19:37:39  <jogo> mordred jbooboo: question about the zuul evolution plan
+2015-03-02T19:38:32  <jogo> mordred jbooboo: would that help make things like https://review.openstack.org/#/c/160194/ better
+2015-03-02T19:38:48  <jbooboo> reed, fifieldt: yeah, i think it is a good idea -- however, i'd want to try to keep it to a minimum (ie, only leave that message once per user or something...); i would not think it would be helpful for, say, mordred's changes to have 50 copies of that message on each :)
+2015-03-02T19:38:51  <jogo> aka more obvious that its an issue, make it not an issue etc.
+2015-03-02T19:39:06  <jbooboo> reed, fifieldt: but i agree the general idea is good, and we can hash details like that out later
+2015-03-02T19:40:07  <reed> jbooboo, yeah, it's just a matter of optimizing the query or to write the text more about each individual review
+2015-03-02T19:40:21  *** ghostpl_ has joined #openstack-infra
+2015-03-02T19:40:28  *** ghostpl_ has quit IRC
+2015-03-02T19:40:35  *** ghostpl_ has joined #openstack-infra
+2015-03-02T19:41:09  <jbooboo> jogo: i think job inheritance and/or project-specific job configuration might help with things like that
+2015-03-02T19:41:40  <quantumfly> the project specific job configuration is what I was thinking would help
+2015-03-02T19:42:41  <quantumfly> so rather than apply job data to neutron and nova instead you would sa from neutron and nova's perspective that these jobs should do X and Y
+2015-03-02T19:42:55  <openstackgerrit> Merged openstack-infra/system-config: Updates to running-your-own CI docs: Initial setup section  https://review.openstack.org/155864
+2015-03-02T19:42:58  <jogo> quantumfly: nice
+2015-03-02T19:43:46  <jogo> jbooboo quantumfly: thanks, wanted to bring this up as an example where things are confusing in the current model. sounds like the proposal will help!
+2015-03-02T19:43:55  <quantumfly> pleia2: I think you can self approve the bug package change
+2015-03-02T19:44:05  <pleia2> quantumfly: k
+2015-03-02T19:44:15  <quantumfly> jogo: fwiw I am not sure it should be confusing, the current behavior is simple and deterministic
+2015-03-02T19:44:24  *** koolhead17 has quit IRC
+2015-03-02T19:44:31  <quantumfly> jogo: and its always had this behavior since we first added the functionality
+2015-03-02T19:44:40  <quantumfly> jogo: maybe we need better documentation?
+2015-03-02T19:45:10  <pleia2> re: https://review.openstack.org/#/c/148949/ does our mailman stuff actually apply changes like to the admin after a list has been created? (I know people adjust descriptions post creation)
+2015-03-02T19:46:00  <jogo> quantumfly: the current behavior is non obvious and its easy to miss the subtle interactions
+2015-03-02T19:46:12  <jogo> as seen by the fact that no one caught this in my patch
+2015-03-02T19:46:14  <quantumfly> jogo: how is it non obvious?
+2015-03-02T19:46:15  <jogo> the first time
+2015-03-02T19:46:39  <quantumfly> jogo: I think the larger issue is we are using regexes here and people often don't parse regexes well
+2015-03-02T19:47:05  <jogo> quantumfly: yes, that and regex and a massive config file means it is easy to literally miss a conflict
+2015-03-02T19:47:27  <quantumfly> pleia2: I don't think it will apply the update, but is useful should we ever need to redeploy the list server?
+2015-03-02T19:48:03  <pleia2> quantumfly: fair enough, I'll +A and make a comment accordingly
+2015-03-02T19:48:56  <pleia2> ah, looking at the live list it looks like they did go in to mailman and update their address already
+2015-03-02T19:49:08  <AJaeger_> jogo: is https://review.openstack.org/#/c/160194/ urgent to get in? How broken is the situation?
+2015-03-02T19:49:13  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard-webclient: Read user preferences from backend  https://review.openstack.org/137798
+2015-03-02T19:49:34  <jogo> AJaeger_: not very AFAIK, it only impacts neutron
+2015-03-02T19:49:38  <jogo> and means extra jobs run
+2015-03-02T19:49:41  <jogo> not fewer
+2015-03-02T19:49:52  <quantumfly> jogo: is the last match wins behavior not what you would expect? I guess that is my real question
+2015-03-02T19:50:09  <jbooboo> jogo: let's make sure marun is involved in reviews on skip-if changes
+2015-03-02T19:50:16  <quantumfly> last match wins is what I prefer to see as its unambiguous vs merging things and which side has priority and so on
+2015-03-02T19:50:31  <jogo> quantumfly: no, its not. because of the 'project' part of skip-if
+2015-03-02T19:50:35  <jogo> jbooboo: yes please, good point
+2015-03-02T19:50:40  <quantumfly> jogo: not sure I follow
+2015-03-02T19:50:48  <quantumfly> jogo: you want something other than last match wins?
+2015-03-02T19:50:50  <jogo> jbooboo AJaeger_: plus this impacts code marun wrote
+2015-03-02T19:51:12  <quantumfly> what would you suggest as a better alternative to last match wins?
+2015-03-02T19:51:15  <marun> jogo: hmmm, so the nova regex was too broad
+2015-03-02T19:51:36  <quantumfly> jogo: I don't think we want to merge things becuse then you get ambiguity in a less easy to understand way
+2015-03-02T19:51:41  <marun> jogo: I think it would be preferable to exclude the neutron jobs from nova rather than merging them
+2015-03-02T19:51:42  *** zz_dimtruck is now known as dimtruck
+2015-03-02T19:51:49  <quantumfly> marun: why is that?
+2015-03-02T19:52:02  <jogo> marun: I don't think we can even do that
+2015-03-02T19:52:09  <marun> jogo: Really?
+2015-03-02T19:52:09  <quantumfly> doing so makes the regex more complicated and I think the regexes are where we acutally have the problem
+2015-03-02T19:52:12  <quantumfly> jogo: you can
+2015-03-02T19:52:16  <marun> jogo: (!?neutron)
+2015-03-02T19:52:20  <jogo> marun: job names are the same
+2015-03-02T19:52:24  <jogo> nova runs those tests too
+2015-03-02T19:52:25  <marun> jogo: they are not the same
+2015-03-02T19:52:35  <marun> jogo: hmmm
+2015-03-02T19:52:47  <quantumfly> either way the current set for neutron and nova has to stay
+2015-03-02T19:52:53  <jogo> check-tempest-dsvm-neutron-full  gate-tempest-dsvm-neutron-large-ops
+2015-03-02T19:52:53  <quantumfly> you can have a second set for non neutron jobs though
+2015-03-02T19:53:35  <jogo> quantumfly: I assumed the 'project: ^openstack/neutron$' line prevented conflicts like this
+2015-03-02T19:53:36  <marun> jogo: ah, I see
+2015-03-02T19:53:49  <quantumfly> jogo: its not a conflict
+2015-03-02T19:53:50  <marun> jogo: the skip-if application is done without regard to the target projects
+2015-03-02T19:54:00  <quantumfly> jogo: its specifically the lack of any conflicts via last match wins
+2015-03-02T19:54:10  <jogo> marun: well I know that know
+2015-03-02T19:54:12  <marun> jogo: so that the matcher for one project can't co-exist with another for the same job
+2015-03-02T19:54:22  <quantumfly> if however you switch to merging things that would require conflict resolution
+2015-03-02T19:55:07  <marun> quantumfly: might it be preferable to allow merging skip-if clauses across metajobs?
+2015-03-02T19:55:17  <quantumfly> marun: imo no, because we have never merged any of that job data
+2015-03-02T19:55:23  <marun> quantumfly: it should be possible to detect conflicts as errors and prevent them from merging
+2015-03-02T19:55:26  *** matrohon has joined #openstack-infra
+2015-03-02T19:55:26  <openstackgerrit> Merged openstack-infra/project-config: Updated the Chef repo description  https://review.openstack.org/159664
+2015-03-02T19:55:36  <AJaeger_> marun: could you document this, please? I'd like some more reference for the skip-if
+2015-03-02T19:55:37  <openstackgerrit> Merged openstack-infra/system-config: Add bup package to backup_server.pp  https://review.openstack.org/160433
+2015-03-02T19:55:46  <quantumfly> marun: it would introduce new behavior that isn't consistent with the other job flags
+2015-03-02T19:55:52  <jogo> marun: so your review on https://review.openstack.org/#/c/160194 would be great (even if its a -1)
+2015-03-02T19:56:00  <marun> quantumfly: metajobs are hacky today
+2015-03-02T19:56:06  <quantumfly> marun: they really aren't
+2015-03-02T19:56:08  <quantumfly> last match wins
+2015-03-02T19:56:10  <quantumfly> its simple
+2015-03-02T19:56:15  <marun> quantumfly: and that's not hackey?
+2015-03-02T19:56:17  <quantumfly> no
+2015-03-02T19:56:19  *** carl_baldwin has quit IRC
+2015-03-02T19:56:22  <marun> quantumfly: it seems pretty easy to screw up
+2015-03-02T19:56:26  *** crc32 has quit IRC
+2015-03-02T19:56:35  <marun> quantumfly: maybe not to you, but to fresh eyes?
+2015-03-02T19:56:46  <quantumfly> its deterministic, avoids merge conflicts problems
+2015-03-02T19:56:55  <quantumfly> the problem is more with regexes than with last match wins imo
+2015-03-02T19:57:07  <quantumfly> because its harder for people to read regexes
+2015-03-02T19:57:21  <jogo> quantumfly: I agree with marun, its hard to reason that out on  really big config file without reading the full config file
+2015-03-02T19:57:22  <marun> quantumfly: really?
+2015-03-02T19:57:53  <quantumfly> marun: yes, what is confusing about last match wins?
+2015-03-02T19:58:00  <marun> quantumfly: what is confusing about regexes?
+2015-03-02T19:58:04  <jogo> https://xkcd.com/1171/
+2015-03-02T19:58:07  *** vilobhmm2 has joined #openstack-infra
+2015-03-02T19:58:12  <marun> that seems to me to be the least complex piece in play
+2015-03-02T19:58:25  <quantumfly> marun: regexes model large state machines that are hard for people to keep track of
+2015-03-02T19:58:33  * jogo goes to lunch
+2015-03-02T19:58:37  <marun> quantumfly: ...as opposed to the config itself?
+2015-03-02T19:58:41  <marun> quantumfly: I mean, honestly?
+2015-03-02T19:59:02  <openstackgerrit> Merged openstack-infra/system-config: Update mailman contact for openstack-fr mailing list  https://review.openstack.org/148949
+2015-03-02T19:59:05  <quantumfly> marun: the config itself isn't a massive state machine with many transitions. Most of it is neatly self contained under its branch of the tree
+2015-03-02T19:59:06  *** e0ne is now known as e0ne_
+2015-03-02T19:59:09  *** xyang1 has joined #openstack-infra
+2015-03-02T19:59:11  <marun> quantumfly: if you say so
+2015-03-02T19:59:17  *** saper has joined #openstack-infra
+2015-03-02T19:59:22  <quantumfly> marun: last match wins is part of that, if I read through the list I know exactly what behavior I will get at the end
+2015-03-02T19:59:34  <marun> quantumfly: yeah, I got that *you* understand the configuration.
+2015-03-02T19:59:44  *** bswartz has quit IRC
+2015-03-02T19:59:48  <marun> quantumfly: I'm not sure why you're not willing to admin that it's complicated for folks that don't live and breath it.'
+2015-03-02T19:59:54  <marun> admin -> admit
+2015-03-02T20:00:06  <quantumfly> I do admit that portions of it are complicated but not the last match wins behavior
+2015-03-02T20:00:08  <marun> quantumfly: and that's today...  this is going to keep evolving.
+2015-03-02T20:00:09  <quantumfly> because thats simple
+2015-03-02T20:00:23  <marun> quantumfly: simple to implement, I get.
+2015-03-02T20:00:33  <mordred> quantumfly: I think I'd say that, if we have people coming and saying that as new users it's complicated for them, it's worthwhile to hear that - I mean, I'm sure that keystone domains make sense to the keystone team
+2015-03-02T20:00:33  <quantumfly> IMO the complicatedness is part of using regexes as the keys for elements in the tree
+2015-03-02T20:00:37  <marun> quantumfly: simple to reason about? Not sure I can agree.
+2015-03-02T20:00:51  *** vilobhmm has quit IRC
+2015-03-02T20:00:54  *** e0ne has joined #openstack-infra
+2015-03-02T20:00:54  <quantumfly> mordred: I agree which is why I was trying to see what jogo found confusing to boil it down to a thing we can fix
+2015-03-02T20:00:56  <stevemar> mordred, you'd think so - right? about that...
+2015-03-02T20:01:01  <mordred> stevemar: :)
+2015-03-02T20:01:04  <AJaeger_> quantumfly: the problem for me is that it's not always obvious that a regex matches multiple things *by accident*
+2015-03-02T20:01:10  <quantumfly> AJaeger_: yes exactly
+2015-03-02T20:01:15  <marun> quantumfly: I'm suggesting that we add checks for conflicting skip-if matchers.
+2015-03-02T20:01:29  <quantumfly> marun: you were suggesting we merge skip ifs
+2015-03-02T20:01:33  <marun> quantumfly: they could run on merges
+2015-03-02T20:01:34  <quantumfly> marun: which is a break in behavior
+2015-03-02T20:01:36  *** saper has quit IRC
+2015-03-02T20:01:36  *** saper has joined #openstack-infra
+2015-03-02T20:01:47  <greghaynes> clearly we should make on giant CFG out of all the regexes in our config
+2015-03-02T20:02:04  <marun> quantumfly: so we have 2 choices...
+2015-03-02T20:02:27  <marun> quantumfly: I'm hearing that manually merging is the preferred path?
+2015-03-02T20:02:46  *** otter768 has joined #openstack-infra
+2015-03-02T20:02:55  <quantumfly> marun: imo yes because it avoids surpises and maintains consistent behavior with the rest of the config
+2015-03-02T20:03:36  <marun> quantumfly: That's fine. And does that path imply that we don't want errors or warnings when multiple skip-if clauses are found to match?
+2015-03-02T20:03:49  <quantumfly> no
+2015-03-02T20:03:57  <marun> quantumfly: ok.
+2015-03-02T20:04:20  <marun> quantumfly: So I'm happy with jogo
+2015-03-02T20:04:22  *** patrickeast__ has quit IRC
+2015-03-02T20:04:23  *** patri505 has quit IRC
+2015-03-02T20:04:33  *** patri136 has quit IRC
+2015-03-02T20:04:33  *** patrickeast_ has quit IRC
+2015-03-02T20:04:55  *** patrickeast has quit IRC
+2015-03-02T20:04:56  <marun> 's patch as written, and I'll add a story to track better validation to protect against unexpected skip-if overwrite
+2015-03-02T20:05:05  <marun> quantumfly: sound good?
+2015-03-02T20:05:25  *** sandywalsh_ has joined #openstack-infra
+2015-03-02T20:05:29  <pleia2> heading out for lunch, hopefully will finish up that backups server when I get back
+2015-03-02T20:06:07  <harlowja_> could i get https://review.openstack.org/#/c/157580/ looked over, approved
+2015-03-02T20:06:17  <harlowja_> just a final addition needed for debtcollector stuffs
+2015-03-02T20:06:42  <quantumfly> marun: sure, I would say that we should general warn/error on any overwrites though if that is the approach. To be consistent
+2015-03-02T20:06:56  <marun> quantumfly: understood.
+2015-03-02T20:07:08  *** otter768 has quit IRC
+2015-03-02T20:07:10  <marun> quantumfly: I don't think there is any such capability today, but it would make sense to add it.
+2015-03-02T20:07:14  <quantumfly> (which I think is my biggest concern here, we shouldn't treat skip-if as special if it is part of the job list config)
+2015-03-02T20:07:16  <SpamapS> jbooboo: I may have to hack up a vim-mode for gertty. I've cherry picked so many changes hitting x... :-P
+2015-03-02T20:07:25  *** patrickeast has joined #openstack-infra
+2015-03-02T20:07:30  *** fifieldt has quit IRC
+2015-03-02T20:07:44  <quantumfly> SpamapS: its unfortunate that urwid doesn't do it out of the box
+2015-03-02T20:07:54  *** achanda has quit IRC
+2015-03-02T20:07:55  *** sandywalsh has quit IRC
+2015-03-02T20:08:18  *** patrickeast_ has joined #openstack-infra
+2015-03-02T20:08:19  *** patrickeast__ has joined #openstack-infra
+2015-03-02T20:08:20  *** patri875 has joined #openstack-infra
+2015-03-02T20:08:22  *** patri928 has joined #openstack-infra
+2015-03-02T20:08:38  *** achanda has joined #openstack-infra
+2015-03-02T20:08:48  *** HeOS has joined #openstack-infra
+2015-03-02T20:08:58  <openstackgerrit> Clark Boylan proposed openstack-infra/devstack-gate: apt-get needs access to tty so give it access  https://review.openstack.org/160480
+2015-03-02T20:09:12  <quantumfly> rcarrillocruz: ^ I think that will fix your d-g runs
+2015-03-02T20:09:18  <quantumfly> rcarrillocruz: let us see if jenkins is happy with it
+2015-03-02T20:10:04  *** EmilienM|afk is now known as EmilienM
+2015-03-02T20:11:06  <mordred> new rant - directed at nova
+2015-03-02T20:11:08  <mordred> "No valid host was found. Exceeded max scheduling attempts 3"
+2015-03-02T20:11:13  *** Rockyg has quit IRC
+2015-03-02T20:11:14  <mordred> completely useless error message
+2015-03-02T20:11:15  <SpamapS> quantumfly: I don't know enough about urwid to know if what I'm suggesting would be crazy hard. :-P
+2015-03-02T20:11:20  <quantumfly> SpamapS: I don
+2015-03-02T20:11:22  <quantumfly> er
+2015-03-02T20:11:24  <mordred> _what_ exactly, did I do that caused fail?
+2015-03-02T20:11:38  <quantumfly> SpamapS: I don't think its crazy hard its just annoying that movement and multi modal behavior isn't something alrady done for you
+2015-03-02T20:11:51  <dstufft> mordred: you expected a computer to do somehting for you when you asked
+2015-03-02T20:11:51  *** cnesa has quit IRC
+2015-03-02T20:11:52  <quantumfly> mordred: by chance are you using qcow2 images on hpcloud?
+2015-03-02T20:11:56  <dstufft> that's what you did
+2015-03-02T20:12:13  <mordred> quantumfly: yes
+2015-03-02T20:12:17  <mordred> quantumfly: am I not supposed to?
+2015-03-02T20:12:29  *** bswartz has joined #openstack-infra
+2015-03-02T20:12:34  <quantumfly> mordred: you can but hpcloud doesn't support latest qcow2 version that qemu-img gives you
+2015-03-02T20:12:42  <mordred> sigh stab stab
+2015-03-02T20:12:45  <mordred> quantumfly: thank you
+2015-03-02T20:12:49  <quantumfly> mordred: you have to restrict the verison of qcow2 to 0.10 iirc, see the nodepool yaml file
+2015-03-02T20:12:50  <greghaynes> hahahaha, I forgot about that one
+2015-03-02T20:13:05  <mordred> greghaynes: is there a dib param I pass? /me looks at nodepool file
+2015-03-02T20:13:10  <greghaynes> no
+2015-03-02T20:13:13  <quantumfly> there is
+2015-03-02T20:13:19  <greghaynes> no to dib I dont think
+2015-03-02T20:13:20  <quantumfly> QEMU_IMG_OPTIONS or similar
+2015-03-02T20:13:30  <quantumfly> nodepool sets it, just grab what nodepool does
+2015-03-02T20:13:31  <greghaynes> yea, thats a qemu-img env var
+2015-03-02T20:13:48  <SpamapS> quantumfly: Honestly, I think it's crazy that I _want_ modal behavior. IMO we're all broken for loving vim. ;)
+2015-03-02T20:14:06  *** _afezekas|pub has joined #openstack-infra
+2015-03-02T20:14:13  <greghaynes> oh wait, we tunnel that through
+2015-03-02T20:14:22  <greghaynes> quantumfly: konws whats up
+2015-03-02T20:15:10  <greghaynes> Related, it might be sane for dib to set qemu to make qcow2's that are backwards compat by default
+2015-03-02T20:15:19  <AJaeger_> jbooboo, quantumfly : marun has +1'ed 160194, will either of you review and approve?
+2015-03-02T20:15:28  <mordred> quantumfly: thank you
+2015-03-02T20:15:43  *** Sukhdev has joined #openstack-infra
+2015-03-02T20:16:11  *** dizquierdo_ has quit IRC
+2015-03-02T20:16:17  <mordred> quantumfly: but - you know - not to completely deflect - but it would be great if the nova error wasn't "scheduler error" but instead was "gah qcow2 incompatible version"
+2015-03-02T20:16:27  <quantumfly> mordred: definitely
+2015-03-02T20:16:40  <mordred> I should, in fat, NEVER hear anything about the scheduler
+2015-03-02T20:16:45  <greghaynes> Reminds me of the old Heat error we would get of "Error in cloud"
+2015-03-02T20:16:51  <quantumfly> printer on fire
+2015-03-02T20:17:04  <SpamapS> ENOCLOUD
+2015-03-02T20:17:19  *** tsg has joined #openstack-infra
+2015-03-02T20:17:29  <mordred> PC LOAD LETTER
+2015-03-02T20:18:09  <SpamapS> somebody should setup a translation for a new language: en_MEME
+2015-03-02T20:18:33  <mordred> SpamapS: I can't see anything that would go wrong with that
+2015-03-02T20:18:40  <SpamapS> ever right?
+2015-03-02T20:18:46  *** ddieterly has quit IRC
+2015-03-02T20:18:53  <mordred> SpamapS: also - any meme reference should be acceptable as a translated string - regardless of relevance
+2015-03-02T20:19:17  <SpamapS> "Authentication Failed" --> "Somebody set us up the bomb"
+2015-03-02T20:19:18  *** ddieterly has joined #openstack-infra
+2015-03-02T20:19:37  <mordred> yup
+2015-03-02T20:19:42  *** bswartz has quit IRC
+2015-03-02T20:21:05  * ianw on the phone to the bank again, thanks to hpcloud getting my card cut off with it's 8c transaction
+2015-03-02T20:23:39  *** ddieterly has quit IRC
+2015-03-02T20:23:45  *** ddieterl_ has joined #openstack-infra
+2015-03-02T20:24:06  <SpamapS> ianw: hahaha
+2015-03-02T20:24:12  <SpamapS> ianw: it's cost effective
+2015-03-02T20:24:13  <mordred> ianw: wow, really?
+2015-03-02T20:24:23  <mordred> purp: ^^ fyi
+2015-03-02T20:24:30  *** matrohon has quit IRC
+2015-03-02T20:24:45  <SpamapS> < $0.10 transactions _are_ the hallmark of CC theft.
+2015-03-02T20:25:12  *** fifieldt has joined #openstack-infra
+2015-03-02T20:25:54  <ianw> yep, it's all automated on the banks end, they can't seem to mark hpcloud as "safe"
+2015-03-02T20:26:01  <mtreinish> foobio, quantumfly: so the next subunit2sql release will likely have a db migration it. I set things up to auto run the upgrade tool on new releases but I was wondering if maybe we should make a backup before I push it
+2015-03-02T20:26:24  *** baoli has quit IRC
+2015-03-02T20:26:27  <mtreinish> is there a good way to do that? I looked at the mysql_backup module but that was just a cron job and I'm not sure that's what we want here
+2015-03-02T20:27:17  <mtreinish> SpamapS: they've just seen office space one too many times :)
+2015-03-02T20:29:03  <openstackgerrit> Merged openstack-infra/project-config: Revert "Remove lib-forward-testing from openstackclient"  https://review.openstack.org/159590
+2015-03-02T20:29:22  *** _afezekas|pub has quit IRC
+2015-03-02T20:30:04  <ianw> ok hp has their 8c and Meg Whitman's salary is covered for another nanosecond
+2015-03-02T20:30:15  <mordred> ianw: thank goodness
+2015-03-02T20:30:53  <jroll> ianw: hey, did I get back to you about fedora/rackspace things?
+2015-03-02T20:30:54  <mrmartin> mtreinish: why not? just exec the same job that cron is using before your upgrade tool
+2015-03-02T20:31:26  <jroll> ianw: they confirmed the bug and said they would fix it in the next fedora image they build (which may be done by now, dunno)
+2015-03-02T20:31:56  <mtreinish> mrmartin: I meant the cron job isn't what we wanted. But, yeah that's a good idea just run the raw mysqldump command
+2015-03-02T20:32:41  <mtreinish> mrmartin: the only issue is the storage location, the upgrade command runs on logstash.o.o and I don't think we want a many gb sql dump on that node
+2015-03-02T20:33:46  *** vigneshvar has quit IRC
+2015-03-02T20:34:35  *** juice has quit IRC
+2015-03-02T20:34:44  <mrmartin> mtreinish: maybe you could make the backup using a pipe, and it not generates a local gb sql dump
+2015-03-02T20:35:31  <mrmartin> just an idea
+2015-03-02T20:35:57  <mtreinish> mrmartin: yeah I can pipe it into somthing, but to where I guess is the real question?
+2015-03-02T20:36:14  <mtreinish> I ran a mysqldump locally at home over the weekend and it was ~20gb
+2015-03-02T20:36:21  <quantumfly> mtreinish: you could have it be in /opt somewhere on the server which is where we mount the ephemeral drive
+2015-03-02T20:36:23  <mrmartin> this bup we are using for backup does deduplication in some form
+2015-03-02T20:36:31  <quantumfly> mtreinish: then just keep a single backup file
+2015-03-02T20:37:03  <quantumfly> except on logstash.o.o we haven't mounted tha drive
+2015-03-02T20:37:21  <mrmartin> anyway, if we have enough storage don't spend the time to find out how to keep disk usage low
+2015-03-02T20:37:30  <quantumfly> hrm there is no xvde maybe the falvor is wrong
+2015-03-02T20:37:36  <mtreinish> quantumfly: ok cool, that's easy enough. I just wasn't sure where to put things.
+2015-03-02T20:37:40  *** david-lyle has joined #openstack-infra
+2015-03-02T20:39:18  <openstackgerrit> Clark Boylan proposed openstack-infra/zuul: Fix race in CRD duplicates test  https://review.openstack.org/160491
+2015-03-02T20:39:25  <quantumfly> jbooboo: ^ another zuul test race fix
+2015-03-02T20:40:19  <mtreinish> mrmartin, quantumfly: ok I'll push a patch up to store to run a mysqldump in /opt and we can go from there
+2015-03-02T20:41:37  <quantumfly> mtreinish: note that mysqldump will lock of the db when it runs too iirc
+2015-03-02T20:41:52  <quantumfly> mtreinish: which should be fine, all of the jobs trying to write to it will just queue up while that happens
+2015-03-02T20:42:53  <mtreinish> quantumfly: sure I think that's fine, although I can also do it with the single transaction flag (or whatever it is) and that should not lock everything
+2015-03-02T20:43:28  *** tonytan4ever has quit IRC
+2015-03-02T20:45:00  *** mfink_ has quit IRC
+2015-03-02T20:45:36  *** AJaeger_ has quit IRC
+2015-03-02T20:46:12  *** mrunge has quit IRC
+2015-03-02T20:46:48  *** baoli has joined #openstack-infra
+2015-03-02T20:47:45  *** baoli has quit IRC
+2015-03-02T20:48:25  *** baoli has joined #openstack-infra
+2015-03-02T20:49:15  <rcarrillocruz> quantumfly: wootz, thx
+2015-03-02T20:50:03  <quantumfly> I have restarted jenkins02 it died from running out of memory, copied the error file to my homedir from /tmp
+2015-03-02T20:50:12  <quantumfly> 04 is also being slow but is up so looking into that now
+2015-03-02T20:50:13  *** rlandy has quit IRC
+2015-03-02T20:51:06  *** eharney has quit IRC
+2015-03-02T20:51:42  <quantumfly> looks pretty consistent like spanw all the threads for compute remoting then it dies
+2015-03-02T20:51:49  <macjack> https://review.openstack.org/#/c/158923/ Thanks for help! Appreciated it!
+2015-03-02T20:52:06  <quantumfly> intesting that http://cacti.openstack.org/cacti/graph.php?action=view&local_graph_id=826&rra_id=all shows it didn't run out of system meory
+2015-03-02T20:52:12  <quantumfly> I think it is running out of memory for all the threads
+2015-03-02T20:52:55  *** achanda has quit IRC
+2015-03-02T20:53:50  *** kmartin has quit IRC
+2015-03-02T20:54:29  <ianw> jroll: ok, thanks, let me check
+2015-03-02T20:56:31  *** yamamoto has joined #openstack-infra
+2015-03-02T20:56:32  <ianw> jbooboo / foobio / someone : speaking of f21 images, if we can get f21 dib going that would be good (https://review.openstack.org/#/c/140911/)
+2015-03-02T20:57:55  <HenryG> jogo: marun has spoken: https://review.openstack.org/160194
+2015-03-02T20:59:15  <quantumfly> zaro: have you seen this jenkins thread explosion anywhere else?
+2015-03-02T20:59:38  <quantumfly> I am trying to get on 04 which is chugging to see if its halfway there and maybe we can inspect it live
+2015-03-02T21:00:06  <quantumfly> preparing 04 for shutdown now so that nodes are no longer distributed to it
+2015-03-02T21:05:47  *** annegentle has quit IRC
+2015-03-02T21:07:22  <jogo> marun quantumfly: thanks
+2015-03-02T21:07:57  *** penguinRaider has joined #openstack-infra
+2015-03-02T21:08:11  *** med_ has quit IRC
+2015-03-02T21:08:50  *** andreaf_ has joined #openstack-infra
+2015-03-02T21:08:59  *** andreaf_ has quit IRC
+2015-03-02T21:09:37  *** kmartin has joined #openstack-infra
+2015-03-02T21:09:45  <quantumfly> melody confirms jenkins04 is currently running with 10k threads
+2015-03-02T21:10:11  <quantumfly> going to grab lunch now will see if I can get any more info out of melody while I wait for jobs to finish on that host so I can restart it
+2015-03-02T21:10:35  <quantumfly> zaro: ^ I think this confirms we are heavily leaking the remote compute threads
+2015-03-02T21:14:39  <mikal> Hello, can anyone here teach me how to use LP?
+2015-03-02T21:14:55  *** rm_work is now known as rm_work|away
+2015-03-02T21:15:17  <mikal> Specifically, what controls who creates milestones (and therefore can do releases) for python-novaclient?
+2015-03-02T21:15:23  <mikal> I'd like to open that up to more people than just me
+2015-03-02T21:17:33  <jbooboo> mikal: i think drivers does that?
+2015-03-02T21:17:42  <mikal> jbooboo: that's not working for us
+2015-03-02T21:17:58  <mikal> Members of drivers say that the milestone page has nothing actionable for them
+2015-03-02T21:18:14  <jbooboo> hrm
+2015-03-02T21:18:49  <jbooboo> mikal: maybe it's owner then... i can make drivers the owner
+2015-03-02T21:18:53  <jbooboo> mikal: shall i?
+2015-03-02T21:18:54  <dansmith> mikal: what does the button look like?
+2015-03-02T21:18:57  <openstackgerrit> Matthew Treinish proposed openstack-infra/puppet-subunit2sql: Add backup before running db migrations  https://review.openstack.org/160514
+2015-03-02T21:19:15  <jbooboo> mikal, dansmith: this page, right? https://launchpad.net/python-novaclient/+addseries
+2015-03-02T21:19:17  <mtreinish> quantumfly, mrmartin: ^^^
+2015-03-02T21:19:23  <dansmith> no
+2015-03-02T21:19:23  <mikal> jbooboo: so I'm not 100% sure I understand the side effects of that, but sure
+2015-03-02T21:19:26  <mikal> Let's try it
+2015-03-02T21:19:30  <dansmith> jbooboo: that's to add 3.x.x right?
+2015-03-02T21:19:35  <jbooboo> mikal, dansmith: "(+) Register a series" under "Series and milestones", right?
+2015-03-02T21:19:46  <mikal> We;re trying to create milestones on https://launchpad.net/python-novaclient/2.x.x
+2015-03-02T21:19:54  <mriedem> dansmith: yeah we don't want a new series yet
+2015-03-02T21:19:59  <dansmith> right
+2015-03-02T21:20:14  <mkj_wk> ZZelle_: I have interactive with two unit test cases implemented -- shall I submit it separately or would you rather see a stack of patches with a dependency?
+2015-03-02T21:20:27  <jbooboo> mikal: erm, i don't think you have any permissions on python-novaclient that the rest of nova-drivers doesn't have
+2015-03-02T21:20:55  <mikal> Also, I also want specific non-drivers people to be able to do this, but let's start with drivers
+2015-03-02T21:20:58  <jbooboo> mikal: so let's start with: what page can you see that the drivers can't?
+2015-03-02T21:21:11  <mikal> jbooboo: https://launchpad.net/python-novaclient/2.x.x is where I create milestones
+2015-03-02T21:21:23  <dansmith> mikal: can you describe the thing you can click on?
+2015-03-02T21:21:26  <mikal> jbooboo: I am told that other members of drivers don't see a "create milestone" link there
+2015-03-02T21:21:26  <dansmith> I see no "add milestone" link or anything
+2015-03-02T21:21:30  <ZZelle_> mkj_wk, if there is no merge conflicts between them, prefer independent changes
+2015-03-02T21:21:46  <mikal> I have a "create milestone" under the list of milestones in the middle of the page
+2015-03-02T21:21:49  <dansmith> mikal: jbooboo: I have no "create milestone" on my page
+2015-03-02T21:21:51  *** radez is now known as radez_g0n3
+2015-03-02T21:22:02  <ZZelle_> mkj_wk, it reduces coupling and the merge of one depends not on the other one merge
+2015-03-02T21:22:06  <jbooboo> dansmith: "Create milestone"?  it's under "Milestones and releases"
+2015-03-02T21:22:16  <mkj_wk> it's just pulled out with no change, and unit test added, but there's a real dependency -- test suite for track patch will fail without the interactive patch
+2015-03-02T21:22:46  <dansmith> jbooboo: nope, don't have that
+2015-03-02T21:23:05  *** dmitryme has quit IRC
+2015-03-02T21:23:06  <jbooboo> dansmith: https://launchpad.net/~danms  that's your user, right?
+2015-03-02T21:23:13  <dansmith> jbooboo: mikal: I just tried logging out and in to see if it was an issue, but it didn't help
+2015-03-02T21:23:14  <dansmith> jbooboo: yep
+2015-03-02T21:23:15  <mkj_wk> but it's really simple so if you look at it and accept it, then the review won't be stacked
+2015-03-02T21:23:35  <ZZelle_> mkj_wk, i am not a core :)
+2015-03-02T21:23:35  *** alazarev has quit IRC
+2015-03-02T21:23:37  *** rm_work|away is now known as rm_work
+2015-03-02T21:23:51  <mkj_wk> ZZelle_: oh, just saw that you had plenty of commits
+2015-03-02T21:23:53  *** chlong has joined #openstack-infra
+2015-03-02T21:23:57  *** ruhe has quit IRC
+2015-03-02T21:24:04  <dansmith> mikal: jbooboo: http://imgur.com/Yjs9GI5
+2015-03-02T21:24:07  *** NikitaKonovalov has quit IRC
+2015-03-02T21:24:07  *** DinaBelova has quit IRC
+2015-03-02T21:24:10  <mkj_wk> ZZelle_: who is core for git-review? :)
+2015-03-02T21:24:19  *** SergeyLukjanov has quit IRC
+2015-03-02T21:24:38  <mikal> dansmith: is that a picture of a dead clown?
+2015-03-02T21:24:42  <ZZelle_> mkj_wk, jbooboo, quantumfly, foobio, jhesketh at least
+2015-03-02T21:24:52  *** baoli has quit IRC
+2015-03-02T21:24:57  <mikal> dansmith: yeah, the next line below "5 of 5 releases" for me is a "create milestone" link
+2015-03-02T21:24:58  <dansmith> mikal: wat?
+2015-03-02T21:25:23  <mikal> dansmith: sorry, imgur scares me
+2015-03-02T21:26:10  <jbooboo> dansmith, mikal: wow, i can't find the permission difference between the two of you in this context.  you are both members of nova-drivers and not members of openstack-admins...
+2015-03-02T21:26:55  <mikal> jbooboo: and I an owner of the project or something?
+2015-03-02T21:26:58  <mikal> How do I check that?
+2015-03-02T21:27:12  *** david-lyle has quit IRC
+2015-03-02T21:27:40  <jbooboo> mikal: afaik, only the driver and maintainer matter (and they are nova-drivers and openstack-admins respectively, according to https://launchpad.net/python-novaclient )
+2015-03-02T21:27:50  *** ayoung-lunx has quit IRC
+2015-03-02T21:28:32  *** david-lyle has joined #openstack-infra
+2015-03-02T21:29:03  *** annegentle has joined #openstack-infra
+2015-03-02T21:29:08  <jbooboo> mikal, dansmith: i have made nova-drivers the maintainer of python-novaclient; try it out now
+2015-03-02T21:29:23  <mikal> Ok, sounds like its time for a confused email to ttx on this
+2015-03-02T21:29:28  <dansmith> jbooboo: yep, that works now
+2015-03-02T21:29:29  *** carl_baldwin has joined #openstack-infra
+2015-03-02T21:29:34  <mikal> Huh
+2015-03-02T21:29:34  <jbooboo> mikal: still have the button?
+2015-03-02T21:29:35  <dansmith> I have create milestone and release
+2015-03-02T21:29:53  <mikal> I still have the thing
+2015-03-02T21:30:10  <dansmith> so, can I create the .22 milestone to test?
+2015-03-02T21:30:12  <dansmith> mriedem: ?
+2015-03-02T21:30:21  <mriedem> 2.22.0
+2015-03-02T21:30:25  <jhesketh> Morning
+2015-03-02T21:30:34  <dansmith> mikal: cool?
+2015-03-02T21:30:40  <mikal> Ok, I have to go to a 1:1 with my boss, so reply latency will increase for a bit
+2015-03-02T21:30:45  <mikal> dansmith: i am cool with you making .22
+2015-03-02T21:30:47  <jbooboo> mikal: okay.  i think the solution is fine (several other projects have this set).  i'm weirded out by the permissions difference we saw, but i'm also okay with "<shrug> launchpad...storyboard..." as an answer to that for now.
+2015-03-02T21:31:26  <dansmith> mriedem: and what for the release date.. today?
+2015-03-02T21:31:31  <mriedem> yeah
+2015-03-02T21:31:45  *** dizquierdo has joined #openstack-infra
+2015-03-02T21:32:19  <dansmith> mriedem: done, look right?
+2015-03-02T21:32:39  <mriedem> dansmith: yes, beautiful
+2015-03-02T21:32:40  <dansmith> I even put the time of your mail for release time/date
+2015-03-02T21:32:44  <dansmith> cool
+2015-03-02T21:32:50  <dansmith> jbooboo: thanks!
+2015-03-02T21:32:50  <mriedem> i like that
+2015-03-02T21:34:31  <quantumfly> hudson.plugins.sshslaves.SSHLauncher.afterDisconnect(SSHLauncher.java:1063) is where all the jenkins trheads are blocking
+2015-03-02T21:34:46  <quantumfly> I don't think jenkins is properly cleaning up after nodes that have disconnected and been deleted
+2015-03-02T21:35:49  *** david-lyle has quit IRC
+2015-03-02T21:36:09  *** eharney has joined #openstack-infra
+2015-03-02T21:36:44  <zaro> jamespage: ping
+2015-03-02T21:36:56  <jamespage> zaro, hello
+2015-03-02T21:37:18  *** bswartz has joined #openstack-infra
+2015-03-02T21:37:40  <zaro> jamespage: would it be possible for you to update LP python-jenkins page and remove bzr references?
+2015-03-02T21:37:56  <zaro> jamespage: people think the project is dead when they look at the history.
+2015-03-02T21:38:18  <pleia2> quantumfly: I think we need some more docs around how we run puppet on the backups servers, I think you must have run it on the old one to get my user added, but it doesn't have a cert on the puppetmaster (there is a revoked one that I created for the new one, but I revoked it so it doesn't auto-update)
+2015-03-02T21:38:26  <jamespage> zaro, I thought I had
+2015-03-02T21:38:28  * jamespage looks
+2015-03-02T21:38:38  <pleia2> our docs just say "run it manually"
+2015-03-02T21:38:44  <quantumfly> https://github.com/jenkinsci/ssh-slaves-plugin/blob/ssh-slaves-1.5/src/main/java/hudson/plugins/sshslaves/SSHLauncher.java#L1063 <- thats the line that is blocking
+2015-03-02T21:39:01  <quantumfly> pleia2: I did not run it on the old one to make your user, I adduser'd you
+2015-03-02T21:39:07  <pleia2> quantumfly: ah :)
+2015-03-02T21:39:13  <zaro> quantumfly: its only offlined, not disconnected correct?
+2015-03-02T21:39:27  <quantumfly> zaro: I do not know yet, there are ~10k threads in that state
+2015-03-02T21:39:35  *** dizquierdo has quit IRC
+2015-03-02T21:39:39  <quantumfly> zaro: and they don't say what node they are associated to
+2015-03-02T21:39:44  *** johnthetubaguy is now known as zz_johnthetubagu
+2015-03-02T21:40:02  <jamespage> zaro, hmm - not sure I can get rid of all that history
+2015-03-02T21:40:03  <quantumfly> zaro: though I am pretty sure not all 10k belong to offlined nodes
+2015-03-02T21:40:28  <quantumfly> pleia2: I am not sure how we want to handle that, I think ansible may need a blacklist of nodes
+2015-03-02T21:40:32  <quantumfly> mordred: ^
+2015-03-02T21:40:44  *** med_ has joined #openstack-infra
+2015-03-02T21:40:47  <jamespage> zaro, I could setup an auto-import of https://github.com/stackforge/python-jenkins into lp:python-jenkins but that might be more confusing
+2015-03-02T21:41:01  *** med_ has quit IRC
+2015-03-02T21:41:02  *** med_ has joined #openstack-infra
+2015-03-02T21:41:08  <zaro> jamespage: yeah, that probably wouldn't be any better.
+2015-03-02T21:41:46  <zaro> jamespage: also just heads up, reference to http://git.openstack.org/cgit/stackforge/python-jenkins would be better
+2015-03-02T21:41:49  *** kgiusti has quit IRC
+2015-03-02T21:42:41  <pleia2> quantumfly: ok, we need to build a second node anyway (on hp), so let's try the new puppet change when I make that change and figure out how to handle "only run puppet manually" separately. Going to use my apt-get install for the moment here
+2015-03-02T21:43:03  *** ghostpl_ has quit IRC
+2015-03-02T21:43:36  <quantumfly> pleia2: sounds good. I think likely what we want is to have a cert on the puppetmaster that ansible ignores
+2015-03-02T21:43:44  <quantumfly> then use puppet agent --test to run puppet when we want to
+2015-03-02T21:43:48  * pleia2 nods
+2015-03-02T21:44:16  *** ChuckC has quit IRC
+2015-03-02T21:44:31  <jbooboo> quantumfly, pleia2: yeah, and also probably no root key for ansible on it...
+2015-03-02T21:44:38  <jbooboo> that could be harder to put into today's puppet
+2015-03-02T21:45:02  <jbooboo> (things have changed radically since the last time this was run; "run puppet manually" was sufficient documentation at the time :)
+2015-03-02T21:45:17  <pleia2> :)
+2015-03-02T21:46:08  <jbooboo> this idea might be untenable, but i'd like to limp along until after mordred's attempt to remove the puppetmaster is complete before we make any decisions; i think things are still too much in flux to invest too much in this right now.
+2015-03-02T21:46:14  *** e0ne is now known as e0ne_
+2015-03-02T21:46:37  *** achanda has joined #openstack-infra
+2015-03-02T21:46:46  <pleia2> wfm
+2015-03-02T21:48:45  *** e0ne_ is now known as e0ne
+2015-03-02T21:48:46  <openstackgerrit> Chris Jones proposed openstack-infra/project-config: Add config-drive element  https://review.openstack.org/154132
+2015-03-02T21:48:56  <quantumfly> zaro: https://github.com/jenkinsci/ssh-slaves-plugin/commit/b5f26ae3c685496ba942a7c18fc9659167293e43#diff-80fc627a638d10d5056a52e20a13d8cbR1208 I think that may fix it
+2015-03-02T21:49:03  <quantumfly> zaro: there is a bit more state checking before getting the node
+2015-03-02T21:49:11  <quantumfly> zaro: what do you think?
+2015-03-02T21:49:42  <zaro> looking
+2015-03-02T21:50:00  <Ng> mordred: ^^ only tested with local VMs so far, but it seems to work. How have you been building the images to test in RAX?
+2015-03-02T21:51:00  *** chlong has quit IRC
+2015-03-02T21:51:09  <quantumfly> zaro: we should be able to update the bundled plugins right? we don't have to use the bundled versions. I will likely update that plugin to 1.9
+2015-03-02T21:51:37  *** julim has quit IRC
+2015-03-02T21:52:24  *** sarob has joined #openstack-infra
+2015-03-02T21:52:32  *** achanda has quit IRC
+2015-03-02T21:53:09  <openstackgerrit> Michael Johnson proposed openstack-infra/git-review: Choose correct branch for rebase when submitting  https://review.openstack.org/158877
+2015-03-02T21:53:09  <openstackgerrit> Michael Johnson proposed openstack-infra/git-review: Add ability to run non-interactive commands  https://review.openstack.org/160524
+2015-03-02T21:54:14  <mkj_wk> quantumfly, jhesketh, jbooboo: followed ZZelle's review and broke up my patch. I think it addresses all his concerns now. Will any of you have a chance to look those patches over?
+2015-03-02T21:54:31  * mkj_wk noticed the other day that foobio is on vacation ☺
+2015-03-02T21:55:00  <bookwar> i need to test my gerrit configuration, especially the trigger on merge event, can i create branches and merge things in sandbox repository? or is it for testing commits only?
+2015-03-02T21:55:16  <zaro> quantumfly: yes, i believe so.
+2015-03-02T21:55:23  *** bswartz has quit IRC
+2015-03-02T21:56:07  <anteaya> bookwar: we have a sandbox for testing ci systems
+2015-03-02T21:56:21  <zaro> quantumfly: that looks like it may help.
+2015-03-02T21:56:23  <mordred> Ng: there are scripts in that repo
+2015-03-02T21:56:29  *** sarob has quit IRC
+2015-03-02T21:56:39  <anteaya> http://git.openstack.org/cgit/openstack-dev/ci-sandbox/
+2015-03-02T21:56:54  *** _afezekas|pub has joined #openstack-infra
+2015-03-02T21:57:00  <anteaya> bookwar: now that is for testing ci systems
+2015-03-02T21:57:09  <mordred> Ng: in the tools dir - that show what needs to happen for rackspace image conversion and extra parameters and stuff
+2015-03-02T21:57:21  <anteaya> but if you area just testing stuff as a gerrit user, you can use the regular sandbox
+2015-03-02T21:57:42  <anteaya> bookwar: try to do what you need to do and let us know if you hit an obstacle
+2015-03-02T21:57:46  <sigmavirus24> Anyone here familiar with Ant glob patterns (used in the publishers part of macros)?
+2015-03-02T21:57:53  *** sarob has joined #openstack-infra
+2015-03-02T21:57:56  <anteaya> I don't know if you can create branches or not in it
+2015-03-02T21:58:16  <zaro> quantumfly: i'm just wondering if offline is a ssh  disconnect
+2015-03-02T21:58:27  <bookwar> anteaya: ok, i'll check, thanks
+2015-03-02T21:58:44  <anteaya> bookwar: np
+2015-03-02T21:58:46  <quantumfly> zaro: I don't think so, I think thats what happens when either the node goes away under jenkins or you properly delete a node
+2015-03-02T21:59:09  *** penguinRaider has quit IRC
+2015-03-02T21:59:32  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard-webclient: Added class and view variable for state transitions.  https://review.openstack.org/160526
+2015-03-02T22:00:26  *** markvan_ has joined #openstack-infra
+2015-03-02T22:00:47  <Ng> mordred: ta
+2015-03-02T22:00:53  *** yamamoto has quit IRC
+2015-03-02T22:00:56  <zaro> quantumfly: so that was my question initially.  are we setting the node to offline or disconnect after using it?
+2015-03-02T22:00:57  <openstackgerrit> Clark Boylan proposed openstack-infra/zuul: Set __gearman_mananger on builds at launch time  https://review.openstack.org/160050
+2015-03-02T22:01:05  <quantumfly> zaro: disconnect
+2015-03-02T22:01:13  <quantumfly> zaro: we set it to offline before we use it
+2015-03-02T22:01:18  *** markvan__ has quit IRC
+2015-03-02T22:01:31  <quantumfly> then when we are done with it nodepool deletes the node which should disconnect it
+2015-03-02T22:01:43  <openstackgerrit> Michael Krotscheck proposed openstack-infra/storyboard-webclient: Added class and view variable for state transitions.  https://review.openstack.org/160526
+2015-03-02T22:01:48  *** cebruns has quit IRC
+2015-03-02T22:02:29  <zaro> quantumfly: cool, then that is a likely fix.
+2015-03-02T22:02:34  *** mrmartin has quit IRC
+2015-03-02T22:03:11  <quantumfly> ok I will have to install it on jenkins-dev and give it a quick test
+2015-03-02T22:03:43  *** otter768 has joined #openstack-infra
+2015-03-02T22:04:17  *** dannywilson has quit IRC
+2015-03-02T22:04:56  *** dustins has quit IRC
+2015-03-02T22:05:58  *** david-lyle has joined #openstack-infra
+2015-03-02T22:06:18  *** wenlock has quit IRC
+2015-03-02T22:07:14  <pleia2> quantumfly: fyi jenkins-dev is what I'm using for the bup test, in case it's a little networky-slow (only ~3G backups, hopefully done soon)
+2015-03-02T22:07:40  <quantumfly> pleia2: no problem and thanks
+2015-03-02T22:08:19  *** otter768 has quit IRC
+2015-03-02T22:10:23  *** _afezekas|pub has quit IRC
+2015-03-02T22:10:32  *** baoli has joined #openstack-infra
+2015-03-02T22:11:43  <anteaya> jogo and mtreinish can you ack this patch please? makes the nova api v2.1 test voting in nova and tempest: https://review.openstack.org/#/c/159024/2
+2015-03-02T22:15:05  <jogo> anteaya: neat, looking forward to that landing
+2015-03-02T22:15:37  *** Sukhdev has quit IRC
+2015-03-02T22:15:41  *** tiswanso has quit IRC
+2015-03-02T22:16:43  *** penguinRaider has joined #openstack-infra
+2015-03-02T22:18:31  *** andreykurilin_ has joined #openstack-infra
+2015-03-02T22:18:32  <anteaya> jogo: great thanks, waiting to hear from mtreinish
+2015-03-02T22:20:01  *** radez_g0n3 is now known as radez
+2015-03-02T22:20:52  <anteaya> jogo: if you are still here can you also acknowledge this patch: https://review.openstack.org/#/c/156698/
+2015-03-02T22:21:12  <anteaya> it adds an experimental job to nova which is for infra testing more than anything
+2015-03-02T22:21:28  <anteaya> we are trying to compress our node images to one kind, currently we have two
+2015-03-02T22:21:56  <anteaya> just nice to see on the review that someone in nova is aware what this test is about
+2015-03-02T22:23:23  *** e0ne has quit IRC
+2015-03-02T22:24:01  <anteaya> marun: would you be willing to make 159672 dependent on https://review.openstack.org/#/c/159900/ ?
+2015-03-02T22:25:52  <anteaya> jhesketh: were you waiting on something to approve https://review.openstack.org/#/c/156252/ ?
+2015-03-02T22:26:43  <anteaya> like the patch it depends on?
+2015-03-02T22:27:13  *** pc_m has quit IRC
+2015-03-02T22:27:31  *** e0ne has joined #openstack-infra
+2015-03-02T22:27:44  <quantumfly> ok jenkins-dev is running ssh-slaves plugin version 1.9 which includes that commit I linked to above
+2015-03-02T22:28:08  <quantumfly> I don't think jenkins-dev sees the volume we need to know if it fixes the problem but I will do my best to vet this newer version then I can update one of the normal jenkins masters
+2015-03-02T22:29:38  <jhesketh> anteaya: no reason, I think I just wasn't going to be around if it merged and failed for some reason
+2015-03-02T22:30:15  <anteaya> ah okay, well the parent looks okay to me, you able to merge both and watch them?
+2015-03-02T22:30:18  *** tsg_ has joined #openstack-infra
+2015-03-02T22:31:31  <openstackgerrit> Merged openstack-infra/project-config: Limit manual jobs  https://review.openstack.org/158406
+2015-03-02T22:31:34  <quantumfly> jhesketh: did you see the concurrent uploads change went in late last week? I haven't seen any problems iwth it so far and d-g log uploads were taking ~2minutes
+2015-03-02T22:32:35  <jhesketh> quantumfly: oh cool :-) that's good
+2015-03-02T22:32:40  *** tsg has quit IRC
+2015-03-02T22:33:00  <anteaya> jhesketh: you don't want to do that?
+2015-03-02T22:33:03  <openstackgerrit> Darragh Bailey proposed openstack-infra/jenkins-job-builder: Test command should not attempt connection to Jenkins  https://review.openstack.org/158826
+2015-03-02T22:33:43  *** andreykurilin_ has quit IRC
+2015-03-02T22:33:46  *** stevemar has quit IRC
+2015-03-02T22:34:04  *** andreykurilin_ has joined #openstack-infra
+2015-03-02T22:34:10  *** e0ne has quit IRC
+2015-03-02T22:34:49  <mtreinish> anteaya: looking now
+2015-03-02T22:34:59  <jhesketh> anteaya: do what sorry?
+2015-03-02T22:36:13  <anteaya> jhesketh: approve the two uuid logging patches, one to nodepool and one to project-config
+2015-03-02T22:36:18  <anteaya> mtreinish: thanks
+2015-03-02T22:36:35  *** alazarev has joined #openstack-infra
+2015-03-02T22:36:51  *** dmitryme has joined #openstack-infra
+2015-03-02T22:37:20  *** NikitaKonovalov has joined #openstack-infra
+2015-03-02T22:37:21  *** ruhe has joined #openstack-infra
+2015-03-02T22:37:21  <mtreinish> anteaya: so I'm fine with it, but I have questions because I'm not really sure the strategy around gating v2.1 has been thought out
+2015-03-02T22:37:26  <openstackgerrit> Merged openstack-infra/system-config: Update docs for puppet 3  https://review.openstack.org/156272
+2015-03-02T22:37:50  *** DinaBelova has joined #openstack-infra
+2015-03-02T22:37:50  *** SergeyLukjanov has joined #openstack-infra
+2015-03-02T22:38:00  <anteaya> mtreinish: good, do ask your questions
+2015-03-02T22:38:07  <mtreinish> anteaya: I did :)
+2015-03-02T22:38:13  <jhesketh> anteaya: I can do that :-)
+2015-03-02T22:38:13  <anteaya> mtreinish: ah cool
+2015-03-02T22:38:17  <anteaya> mtreinish: thank you
+2015-03-02T22:38:23  <quantumfly> ok ssh-slaves 1.9 appears to be working on jenkins-dev
+2015-03-02T22:38:30  <anteaya> jhesketh: awesome, trying to dig out some of the moldier patches
+2015-03-02T22:38:33  *** e0ne has joined #openstack-infra
+2015-03-02T22:38:39  <quantumfly> I have 04 in shutdown mode, any opposition to me updating this plugin there and putting it back into service?
+2015-03-02T22:39:02  *** mtanino has quit IRC
+2015-03-02T22:39:24  *** marun has quit IRC
+2015-03-02T22:39:24  *** che-arne|2 has quit IRC
+2015-03-02T22:39:51  *** patrickeast has quit IRC
+2015-03-02T22:40:34  <anteaya> this plugin? sorry I have no context
+2015-03-02T22:40:35  *** esker has joined #openstack-infra
+2015-03-02T22:40:40  *** ldnunes has quit IRC
+2015-03-02T22:40:52  <quantumfly> the ssh-slaves plugin, was talking to zaro about it earlier
+2015-03-02T22:40:56  <anteaya> ah
+2015-03-02T22:41:07  *** alexpilotti has quit IRC
+2015-03-02T22:41:08  <quantumfly> the current version we run seems to get stuck on a thing that was updated in the latest version
+2015-03-02T22:41:18  <quantumfly> my reading of the comments are that this is a likely fixfor our issue
+2015-03-02T22:41:22  <sigmavirus24> Before I go reverse-engineering things, does anyone know, off the top of their head, what directory the publisher macros run from?
+2015-03-02T22:41:27  <jhesketh> anteaya: so I pressed +A and then unpressed it because we'll need to make sure the uuid part for nodepool merges and is applied (nodepool will probably need restarting) first
+2015-03-02T22:41:34  <anteaya> I'm for updating on one jenkins and seeing what happens
+2015-03-02T22:41:59  <anteaya> do you have a notes file somewhere on teh server to let others know you did so, if they miss it in backscroll?
+2015-03-02T22:41:59  <pleia2> quantumfly: root@jenkins-dev:~/backup-restore-02Mar2015 <-- untarred, looks like a linux filesystem, yay
+2015-03-02T22:42:01  <quantumfly> sigmavirus24: from the workspace which is usually /home/jenkins/workspace/$nameofjob
+2015-03-02T22:42:04  <quantumfly> pleia2: woot
+2015-03-02T22:42:11  <sigmavirus24> quantumfly: awesome thanks!
+2015-03-02T22:42:16  <nibalizer> pleia2: woot
+2015-03-02T22:42:35  *** achanda has joined #openstack-infra
+2015-03-02T22:42:35  <anteaya> or will history tell them what you did?
+2015-03-02T22:43:07  <quantumfly> anteaya: this channel is logged :)
+2015-03-02T22:43:23  <jogo> sdague: when we build devstack nodepool images, why not run devstack.sh;./unstack.sh and use that?
+2015-03-02T22:43:23  <anteaya> so backscroll, okay
+2015-03-02T22:43:50  <quantumfly> jogo: probably so that stack.sh is self testing
+2015-03-02T22:43:50  <openstackgerrit> Merged openstack-infra/nodepool: Write the node UUID to /etc/nodepool/uuid  https://review.openstack.org/159339
+2015-03-02T22:43:54  <anteaya> just wondering what you do on servers to communicate when a server is ina different state than what puppet tells it to do
+2015-03-02T22:44:01  <quantumfly> jogo: which is why we cache as many things we can then let it exercise the logic
+2015-03-02T22:44:23  *** patrickeast__ has quit IRC
+2015-03-02T22:44:24  *** patri875 has quit IRC
+2015-03-02T22:44:27  *** patri928 has quit IRC
+2015-03-02T22:44:46  *** patrickeast_ has quit IRC
+2015-03-02T22:44:58  *** mattfarina has quit IRC
+2015-03-02T22:45:34  <jogo> quantumfly: well we can have a devstack only test that doesn't use an image that already ran stack unstack
+2015-03-02T22:45:59  <quantumfly> jogo: we could, though we are explicitly trying to reduce the number of images not increase them
+2015-03-02T22:46:24  *** weshay has quit IRC
+2015-03-02T22:46:25  <quantumfly> also wouldn't that do weird things for requiing that devstack be upgradeable?
+2015-03-02T22:46:47  <quantumfly> which it isn't currently today (not saying its impossible but I think it would require use to be able to update from one env to another sanely)
+2015-03-02T22:47:16  <jogo> quantumfly: hmm well from unstack
+2015-03-02T22:47:16  *** annegentle has quit IRC
+2015-03-02T22:47:22  *** mtanino has joined #openstack-infra
+2015-03-02T22:47:31  <jogo> quantumfly: I'm interested to hearing what sdague thinks
+2015-03-02T22:47:53  *** radez is now known as radez_g0n3
+2015-03-02T22:48:09  <openstackgerrit> Anita Kuno proposed openstack-infra/project-config: Add non-voting tempest dsvm job for Midonet  https://review.openstack.org/159867
+2015-03-02T22:49:36  *** e0ne has quit IRC
+2015-03-02T22:49:48  <quantumfly> I am going to go ahead and test ssh-slaves 1.9 on jenkins04 now. I didn't hear any opposition and this issue is causing us to lose jenkins fairly frequently
+2015-03-02T22:50:12  <openstackgerrit> Merged openstack-infra/project-config: Limit target projects for the neutron func job  https://review.openstack.org/155958
+2015-03-02T22:50:27  <openstackgerrit> Merged openstack-infra/project-config: Refactor Gerrit plugin build jobs  https://review.openstack.org/157603
+2015-03-02T22:50:30  <quantumfly> anteaya: I will write the corresponding puppet change if it all works well
+2015-03-02T22:51:09  *** ddieterl_ has quit IRC
+2015-03-02T22:51:33  <ianw> quantumfly: tty thing (160480) ... isn't that papering over that debconf is probably asking you something?
+2015-03-02T22:51:36  *** ddieterly has joined #openstack-infra
+2015-03-02T22:52:20  <quantumfly> ianw: yes, probably. But it does seem to work even without being able to get that input
+2015-03-02T22:52:21  <mtreinish> jogo: I think there is a test in the devstack repo which does the stack unstack bit
+2015-03-02T22:52:31  <anteaya> quantumfly: great, I hope it does
+2015-03-02T22:52:41  *** wuhg has joined #openstack-infra
+2015-03-02T22:52:47  <quantumfly> ianw: also devstack is pretty good at the whole non interactive, assume yes, conf old settings. so not sure why it is happening
+2015-03-02T22:53:11  *** tiswanso has joined #openstack-infra
+2015-03-02T22:53:16  <mtreinish> jogo: the thing is I don't think an unstack isn't really going to reliably put the system in a good state for restacking and running tests
+2015-03-02T22:53:49  *** e0ne has joined #openstack-infra
+2015-03-02T22:54:13  <jogo> mtreinish: but if it did, that would be a better way of building ready to go images right?
+2015-03-02T22:54:17  <jogo> more things installed etc
+2015-03-02T22:54:24  <quantumfly> ianw: I am happy to wip that change if you want me/someone to dig into it more first
+2015-03-02T22:54:49  <ianw> quantumfly: where's the logs / failing job?  sorry probably in scrollback somehwere ...
+2015-03-02T22:54:59  *** tiswanso has quit IRC
+2015-03-02T22:55:00  *** ddieterly has quit IRC
+2015-03-02T22:55:22  <quantumfly> ianw: jenkins is actually fine with it, this came up because rcarrillocruz tried using the devstack-gate readme to locally run d-g + tempest and ran into that
+2015-03-02T22:55:33  *** ddieterly has joined #openstack-infra
+2015-03-02T22:55:36  <quantumfly> ianw: I was able to reproduce the behavior today on hpcloud with their current trusty image
+2015-03-02T22:55:48  <quantumfly> (I did not use the nodepool built image)
+2015-03-02T22:55:48  <notmyname> gerrit usernames pull from launchpad? (I'm looking for the gerrit user names for a few people)
+2015-03-02T22:56:00  *** tiswanso_ has joined #openstack-infra
+2015-03-02T22:56:27  <quantumfly> notmyname: they may, but can be overridden in some cases. email is likely a good key to use instaed unless you really need the username
+2015-03-02T22:56:30  <mtreinish> jogo: it might, but what exactly are you trying to optimize? It's not like a devstack build takes very long with all the caching we already do
+2015-03-02T22:56:33  <jogo> mordred: is this the new pbr version pbr==0.10.8
+2015-03-02T22:56:36  <notmyname> quantumfly: ok, thanks
+2015-03-02T22:56:42  <jogo> if so, root wrap is fast with it
+2015-03-02T22:56:51  <jogo> mtreinish: I counted 20 minutes today
+2015-03-02T22:56:56  <SpamapS> jbooboo: Hi, do you have an infra deck that is presentty friendly?
+2015-03-02T22:57:08  <SpamapS> or does anybody for that matter?
+2015-03-02T22:57:11  <mtreinish> jogo: that's over 2x what it normally takes
+2015-03-02T22:57:16  <jogo> mtreinish: http://logs.openstack.org/94/160494/1/check/check-tempest-dsvm-full/85e0294//logs/devstacklog.txt.gz
+2015-03-02T22:57:20  <jogo> yup
+2015-03-02T22:58:05  <mtreinish> jogo: so my guess it's related to building the wheelhouse, we should be caching the wheels during nodepool
+2015-03-02T22:58:06  *** unicell has quit IRC
+2015-03-02T22:58:10  <jogo> yeah me too
+2015-03-02T22:58:11  <pleia2> any considerations when approving gerritbot changes? (like, how eavesdrop restarts so can't be done when a meeting is in progress/coming up)
+2015-03-02T22:58:14  *** unicell1 has joined #openstack-infra
+2015-03-02T22:58:20  <mtreinish> we're not yet but that's a good thing to work on (hint, hint)
+2015-03-02T22:58:21  <quantumfly> mtreinish: ya we could build the wheelhouse at image time
+2015-03-02T22:58:25  *** resker has joined #openstack-infra
+2015-03-02T22:58:41  <quantumfly> pleia2: nope gerritbot will restart itself but doesn't have much state so should be ifne
+2015-03-02T22:58:47  <pleia2> great, thanks
+2015-03-02T22:59:30  <jogo> yeah numpy takes a few minutes to build
+2015-03-02T22:59:35  <jogo> http://logs.openstack.org/94/160494/1/check/check-tempest-dsvm-full/85e0294//logs/devstacklog.txt.gz#_2015-03-02_21_59_00_996
+2015-03-02T22:59:40  *** annegentle has joined #openstack-infra
+2015-03-02T22:59:40  <mordred> jogo: yay! I did good job?
+2015-03-02T22:59:51  <jogo> mtreinish: if we stack.sh & unstack.sh we wouldn't have to build it every time
+2015-03-02T22:59:51  <quantumfly> ok restarting jenkins04 now with new plugin version
+2015-03-02T22:59:52  *** esker has quit IRC
+2015-03-02T23:00:04  * jogo hands mordred a cookie for doing a good job
+2015-03-02T23:00:11  <mtreinish> jogo: oh, that's your fault because nova is dumb and requires numpy as a transient dep
+2015-03-02T23:00:11  *** tiswanso_ has quit IRC
+2015-03-02T23:00:27  <mtreinish> jogo: or we could just add building the wheelhouse to the nodepool scripts
+2015-03-02T23:00:33  <mtreinish> which is really what the fix is
+2015-03-02T23:00:48  <jogo> mtreinish: that works for me too
+2015-03-02T23:00:51  *** andreykurilin_ has quit IRC
+2015-03-02T23:01:43  <anteaya> notmyname: you are here, do you know what the status if for this patch? https://review.openstack.org/#/c/159943/
+2015-03-02T23:01:53  <anteaya> notmyname: is it still required or have you any idea?
+2015-03-02T23:02:09  <jogo> mtreinish: /opt/stack/new/.wheelhouse is the dir we would have to populate which works
+2015-03-02T23:02:11  <notmyname> anteaya: I have no idea
+2015-03-02T23:02:14  <ianw> SpamapS : i'm giving a talk locally on infra and have a deck ... it might have something useful
+2015-03-02T23:02:36  <mtreinish> jogo: it actually wouldn't be that hard. You probably just need to add a loop over the branche which checks for tools/build_wheel.sh and calls it into the cache_devstack stuff in project-config
+2015-03-02T23:02:38  <notmyname> anteaya: I've seen some stuff be talked about wrt swift in icehouse (maybe something with keystone not being installed?) but I don't know any details of that
+2015-03-02T23:03:09  <jogo> mtreinish: 'pip wheel -r' isn't enough
+2015-03-02T23:03:17  <jogo> because that fails if any one of those fails
+2015-03-02T23:03:29  *** amitgandhinz has quit IRC
+2015-03-02T23:03:34  <SpamapS> ianw: I kind of want to develop a deck in presentty, and then track in in a git repo for the project to use :)
+2015-03-02T23:04:11  <anteaya> notmyname: okay thanks, once we get into the third gen of reverting I need some details
+2015-03-02T23:04:22  *** nelsnelson has quit IRC
+2015-03-02T23:04:24  <mordred> ianw, SpamapS: infr has a repo of presentations we all hack on and share already that you may be intersted in ...
+2015-03-02T23:04:30  <mordred> ianw, SpamapS: infra has a repo of presentations we all hack on and share already that you may be intersted in ...
+2015-03-02T23:04:31  <jogo> mtreinish: I still think stack.sh ./unstack.sh is a more robust long term answer
+2015-03-02T23:04:32  <notmyname> anteaya: looks like you know as much (and probably more) than me about it
+2015-03-02T23:04:40  *** dkliban is now known as dkliban_afk
+2015-03-02T23:04:47  <anteaya> notmyname: okey dokey, thanks
+2015-03-02T23:04:50  <SpamapS> mordred: perfect. :)
+2015-03-02T23:05:00  <quantumfly> the one gotcha on this is pinned plugins
+2015-03-02T23:05:03  <quantumfly> arg jenkins why
+2015-03-02T23:05:05  <notmyname> anteaya: as always, let me know if/when I can help
+2015-03-02T23:05:07  <mtreinish> jogo: tools/build_wheels.sh doesn't use -r it loops over file
+2015-03-02T23:05:21  <quantumfly> oh well should be fine to have the ssh-slaves plugin pinned as longs as it works
+2015-03-02T23:05:28  <anteaya> notmyname: will do
+2015-03-02T23:05:43  * ianw learns that presentty is *not* just a typo of "presenter" :)
+2015-03-02T23:06:26  <jogo> mtreinish: oh perfect
+2015-03-02T23:08:32  *** bknudson has quit IRC
+2015-03-02T23:08:55  *** dannywilson has joined #openstack-infra
+2015-03-02T23:09:01  <quantumfly> hrm we don't currently manage the jenkins bundled plugins with puppet
+2015-03-02T23:09:03  <openstackgerrit> Stefano Maffulli 'reed' proposed openstack-infra/jeepyb: Put the link to developer infra manual  https://review.openstack.org/160547
+2015-03-02T23:09:09  <quantumfly> I suppose if this works out I should figure out how to do that
+2015-03-02T23:09:17  *** dannywilson has quit IRC
+2015-03-02T23:09:45  *** dannywilson has joined #openstack-infra
+2015-03-02T23:09:57  <openstackgerrit> Merged openstack-infra/project-config: Add cloudkitty projetcs to gerritbot configuration  https://review.openstack.org/160256
+2015-03-02T23:11:43  *** cebruns has joined #openstack-infra
+2015-03-02T23:13:15  <SpamapS> mordred: hm the overview one is so nice as-is.. I can't inflict presentty on that. ;)
+2015-03-02T23:14:18  *** sarob has quit IRC
+2015-03-02T23:15:54  <openstackgerrit> Matthew Treinish proposed openstack-infra/project-config: Build wheel house during nodepool devstack caching  https://review.openstack.org/160548
+2015-03-02T23:16:03  <jogo> mtreinish: damn, I was writing that too
+2015-03-02T23:16:07  <mtreinish> jogo: ^^^ untested, but I think you can roll with it
+2015-03-02T23:16:17  <mtreinish> jogo: heh, I win then :)
+2015-03-02T23:16:45  <mtreinish> dtroyer: ^^^ you might be interested in that too
+2015-03-02T23:17:07  <jogo> mtreinish: I'll move over to doing the testing instead
+2015-03-02T23:17:21  <mtreinish> jogo: what testing?
+2015-03-02T23:17:49  <jogo> mtreinish: if tools/build_wheels thing works without a localrc etc
+2015-03-02T23:18:03  <reed> pleia2, thanks for the comment, abandoned the patch
+2015-03-02T23:18:31  <mtreinish> jogo: it should: http://git.openstack.org/cgit/openstack-dev/devstack/tree/tools/build_wheels.sh
+2015-03-02T23:18:43  *** dimtruck is now known as zz_dimtruck
+2015-03-02T23:18:56  <pleia2> reed: sure thing, foobio's patch is kind of old but I recalled in the back of my mind that he had them hanging out there for most (all?) projects
+2015-03-02T23:19:45  <mtreinish> jogo: there isn't much in there but it only depends on in repo files
+2015-03-02T23:19:57  <openstackgerrit> Clark Boylan proposed openstack-infra/puppet-jenkins: Allow for plugin pinning  https://review.openstack.org/160549
+2015-03-02T23:20:11  <jogo> http://paste.ubuntu.com/10507887/
+2015-03-02T23:20:27  *** annegentle has quit IRC
+2015-03-02T23:20:28  *** salv-orlando has quit IRC
+2015-03-02T23:21:12  <jogo> hmm commented that line out and its doing apt-get installs first
+2015-03-02T23:21:15  <jogo> neat
+2015-03-02T23:21:32  <quantumfly> zaro: while writing 160549 I realize that I don't think the wget for installing plugins is correct
+2015-03-02T23:21:42  <quantumfly> zaro: any chance you can look at the url it uses and tell me if it looks wrong to you as well?
+2015-03-02T23:21:51  *** salv-orlando has joined #openstack-infra
+2015-03-02T23:22:02  <mtreinish> jogo: hmm yeah those requirements are probably for other things in those files, but they shouldn't be needed for the actual script
+2015-03-02T23:22:15  <mtreinish> jogo: I would just push a devstack patch to add sane defaults for both
+2015-03-02T23:22:16  <jogo> well python2.7-dev
+2015-03-02T23:22:24  <mtreinish> dtroyer: ^^^ is that sane advice? :)
+2015-03-02T23:22:41  <openstackgerrit> Darragh Bailey proposed openstack-infra/jenkins-job-builder: Support lazy resolving of include yaml tags  https://review.openstack.org/63580
+2015-03-02T23:22:52  *** annegentle has joined #openstack-infra
+2015-03-02T23:22:52  <jogo> http://paste.ubuntu.com/10507907/
+2015-03-02T23:23:25  <mtreinish> jogo: well I can run it as sudo in the patch
+2015-03-02T23:23:34  <jogo> mtreinish: trying that now
+2015-03-02T23:24:11  <dtroyer> mtreinish: I think the primary thing build_wheels.sh needs from stackrc/local.conf is the WHEELHOUSE setting, if you can work with the pip default ($HOME/.wheelhouse IIRC) you probably could remove the source stackrc line
+2015-03-02T23:24:21  *** marun has joined #openstack-infra
+2015-03-02T23:24:24  *** rm_work is now known as rm_work|away
+2015-03-02T23:24:42  <jogo> dtroyer: that would be great using default pip
+2015-03-02T23:25:01  <jogo> dtroyer: also thoughts on just using stack.sh ; unstack.sh  ?
+2015-03-02T23:25:09  <mtreinish> dtroyer: oh, I assumed the script set WHEELHOUSE to the right dir by default, I guess I should add that to the patch
+2015-03-02T23:25:35  <dtroyer> it used to, got pushback so used stackrc to set it…
+2015-03-02T23:26:00  *** jgrimm is now known as zz_jgrimm
+2015-03-02T23:26:02  *** yamamoto has joined #openstack-infra
+2015-03-02T23:26:04  <pleia2> jbooboo: exim is your thing, so I figured I'd ask first, mind if I logrotate some of the paniclogs to quiet down system emails? (last entries were from mid 2014 so far on systems I'm looking at, and logrotate keeps them around if we need them for some reason)
+2015-03-02T23:26:28  <mtreinish> dtroyer: well if we call it standalone it sources stackrc so it would be set right?
+2015-03-02T23:26:30  <jbooboo> pleia2: please do!
+2015-03-02T23:26:35  <quantumfly> jogo: oh one more thing on stack + unstack during image builds, that may not work with dib as you need to have real services and things running
+2015-03-02T23:27:08  <jogo> quantumfly: ohhh dib isn't a full VM its a chroot or something right?
+2015-03-02T23:27:12  <dtroyer> mtreinish: yes
+2015-03-02T23:27:21  <mtreinish> dtroyer: I'm just trying to figure out what else is needed for https://review.openstack.org/160548
+2015-03-02T23:27:21  <quantumfly> jogo: correct
+2015-03-02T23:27:29  <jogo> quantumfly: ohh never mind
+2015-03-02T23:28:32  <jogo> mtreinish: based on how long this is taking, I think just sudo
+2015-03-02T23:28:49  <mtreinish> heh, that seems to be the cureall for the nodepool scripts :)
+2015-03-02T23:29:10  <dtroyer> mtreinish: that looks sane
+2015-03-02T23:29:23  <pleia2> there, two fewer emails per day
+2015-03-02T23:30:20  <mtreinish> quantumfly: what do you think? should I add sudo preemptively to the wheelhouse patch, or try it without first?
+2015-03-02T23:30:42  *** marun has quit IRC
+2015-03-02T23:30:42  <mtreinish> dtroyer: ok cool, thanks
+2015-03-02T23:31:08  <quantumfly> mtreinish you shouldnt need sudo to make a wheelhouse. I must be missing something
+2015-03-02T23:31:23  *** dannywilson has quit IRC
+2015-03-02T23:31:27  *** prad has quit IRC
+2015-03-02T23:31:47  *** gordc has quit IRC
+2015-03-02T23:32:02  <mtreinish> quantumfly: it might be needed for the outdir of where devstack expects the wheelhouse.
+2015-03-02T23:32:03  <jogo> quantumfly: OSError: [Errno 13] Permission denied: '/opt/stack'
+2015-03-02T23:32:31  *** MaxV has joined #openstack-infra
+2015-03-02T23:32:33  <quantumfly> hrm are wheelhouses portable? I wonder if we should do like we do for the cached images
+2015-03-02T23:32:45  *** MaxV has quit IRC
+2015-03-02T23:32:51  <jogo> quantumfly: not fully portable
+2015-03-02T23:33:00  *** annegentle has quit IRC
+2015-03-02T23:33:04  <mtreinish> jogo: well that could just be because your system didn't have the proper permissions on /opt, the nodepool script might create things correctly first
+2015-03-02T23:33:06  <jogo> but may work for our two vendors
+2015-03-02T23:33:10  *** dannywilson has joined #openstack-infra
+2015-03-02T23:33:19  *** MaxV has joined #openstack-infra
+2015-03-02T23:33:24  <jogo> mtreinish: possibly. this is a blank image though
+2015-03-02T23:33:26  <quantumfly> sudo is probably fine
+2015-03-02T23:33:29  <jogo> blank vm
+2015-03-02T23:33:42  <mtreinish> jogo: in this case it would be, the gcc args are normally pretty portable in the pip installs
+2015-03-02T23:33:43  *** chlong has joined #openstack-infra
+2015-03-02T23:33:44  <quantumfly> also note that anything in /opt is copied anyways so not an optimization to avoid the copying
+2015-03-02T23:33:52  <jbooboo> tchaypo: are you still looking into 157492?  or should i look into doing my suggestion?
+2015-03-02T23:33:53  *** dannywil_ has joined #openstack-infra
+2015-03-02T23:34:06  <quantumfly> mtreinish: jogo not that kind of portable, portable as in can we move them
+2015-03-02T23:34:06  <jogo> I ran 'sudo tools/build_wheels.sh 2>&1 |  pastebinit'
+2015-03-02T23:34:09  *** yamamoto has quit IRC
+2015-03-02T23:34:14  <jogo> so can't even see whats going on :/
+2015-03-02T23:34:15  <quantumfly> mtreinish: jogo virtualenvs blow up if you move them for example
+2015-03-02T23:34:18  <mtreinish> quantumfly: oh, yeah that it is
+2015-03-02T23:34:22  <mtreinish> I think
+2015-03-02T23:34:28  <jogo> quantumfly: ohh yeah wheels are self contained
+2015-03-02T23:34:32  <quantumfly> mtreinish: jogo since each image is distrp release specific the wheels will be built for it just fine
+2015-03-02T23:34:36  <jogo> quantumfly: I think
+2015-03-02T23:35:14  <mtreinish> quantumfly: I mean I can create the wheels and move them wherever too I jsut figured it was easier to call the devstack script
+2015-03-02T23:35:16  <tchaypo> jbooboo: one sec
+2015-03-02T23:35:20  <quantumfly> but sudoing should be fine, probably simplifies what is going on
+2015-03-02T23:35:40  <quantumfly> mtreinish: sure I just wanted to point out that /opt is copied anyways so don't expect this to be faster
+2015-03-02T23:35:49  <quantumfly> but if there is already a script that does it that is probably worht it
+2015-03-02T23:35:57  *** rfolco has quit IRC
+2015-03-02T23:37:11  <tchaypo> jbooboo: I think your suggestion is the right way to proceed, I just haven't had time to dig into it yet.
+2015-03-02T23:37:24  <jogo> http://paste.ubuntu.com/10508007/
+2015-03-02T23:37:25  *** dannywilson has quit IRC
+2015-03-02T23:37:44  <tchaypo> Was travelling too much last week. Should be able to look at it this week
+2015-03-02T23:37:48  *** melwitt has quit IRC
+2015-03-02T23:37:51  <mtreinish> quantumfly: sure, the optimization we're looking for here is to stop compiling wheels during the jobs. Compared to the 10+ min hit we take for that everything will be better
+2015-03-02T23:38:30  <quantumfly> mtreinish: jogo maybe we should back up a second, in theory all of those wheelhouse items are being built regardless
+2015-03-02T23:38:31  <jogo> quantumfly: would /opt/stack/.wheelhouse
+2015-03-02T23:38:33  <greghaynes> Out of curiousity - how is the wheelhouse that gets built there served to the jobs?
+2015-03-02T23:38:35  <quantumfly> so its not a 10 minute hit
+2015-03-02T23:38:36  *** openstackgerrit has quit IRC
+2015-03-02T23:38:36  *** rm_work|away is now known as rm_work
+2015-03-02T23:38:45  <jogo>  get copied to the right location
+2015-03-02T23:38:50  <quantumfly> greghaynes: PIP env vars set in stackrc
+2015-03-02T23:39:03  *** openstackgerrit has joined #openstack-infra
+2015-03-02T23:39:10  *** baoli has quit IRC
+2015-03-02T23:39:22  <quantumfly> mtreinish: jogo I am worried that either A) we are not using the wheelhouse properly if it has increased job runtime or B) something else is actually slowing devstack down
+2015-03-02T23:39:28  <jogo> of /opt/stack/new/.wheelhouse
+2015-03-02T23:39:39  <quantumfly> jogo: no
+2015-03-02T23:39:53  <quantumfly> jogo: it would get copied to /opt/stack/.wheelhouse on the newly mounted filesystem under /opt
+2015-03-02T23:39:55  <jogo> quantumfly: yes wheelhouse *shouldn't slow things down
+2015-03-02T23:40:04  <jogo> so something else may be wrong
+2015-03-02T23:40:18  <mtreinish> quantumfly: it's probably how devstack is checking and using the wheels
+2015-03-02T23:40:19  <jogo> but this is a good win even if this isn't the regression itself
+2015-03-02T23:40:25  <quantumfly> jogo: or its possible that we don't use the wheelhouse so we don't save any time
+2015-03-02T23:40:29  <mtreinish> quantumfly: because it's calling tools/build_wheels.sh on every run
+2015-03-02T23:40:33  <quantumfly> jogo: so we just shifted the time sink
+2015-03-02T23:40:42  <jogo> quantumfly: I think we are using wheelhouse based on the logs
+2015-03-02T23:40:50  <quantumfly> jogo: kk
+2015-03-02T23:42:17  <jogo> quantumfly: actually not sure
+2015-03-02T23:42:40  <greghaynes> I am surprised you dont hit the same issues we didn in tripleo when we tried using a wheelhouse in this way
+2015-03-02T23:42:48  <quantumfly> greghaynes: what issue was that?
+2015-03-02T23:43:50  <greghaynes> There were several. The first one was an issue with fallback behavior when a wheel was not found in a directory index (which was a result of another bug where case insensitivity didnt work for local dir indexes)
+2015-03-02T23:43:52  <greghaynes> tchaypo: ^
+2015-03-02T23:43:58  <greghaynes> I think you were dealing with these
+2015-03-02T23:44:09  *** ddieterly has quit IRC
+2015-03-02T23:44:36  <greghaynes> Then there was issues with transitive deps for a package that uses easy_insall
+2015-03-02T23:44:42  <quantumfly> I think pip fixed taht first issue
+2015-03-02T23:44:49  <dstufft> yea
+2015-03-02T23:45:07  <quantumfly> for the second thats not really a problem, we are trying to reduce compile times not avoid easy installs
+2015-03-02T23:45:31  <jbooboo> tchaypo: okay, i'm trying to get any outstanding bugfixes in and stabilize gertty for a release this week
+2015-03-02T23:45:40  <greghaynes> yes, but the problem is that it would search the wheelhouse and then bail and not fall back when it couldnt install anything
+2015-03-02T23:45:45  <tchaypo> I worked around  the file-not-found upstream
+2015-03-02T23:45:50  <tchaypo> By faking a 404
+2015-03-02T23:46:05  *** mriedem is now known as mriedem_away
+2015-03-02T23:46:22  <tchaypo> Which fixed at least one case insensitivity issue
+2015-03-02T23:46:37  <quantumfly> greghaynes: you mean easy_install wouldn't use pypi as it normally would?
+2015-03-02T23:46:47  <jogo> we do a lot of compiling http://logs.openstack.org/94/160494/1/check/check-tempest-dsvm-full/85e0294//logs/devstacklog.txt.gz#_2015-03-02_21_59_00_996
+2015-03-02T23:46:48  <quantumfly> greghaynes: aiui easy_intall shouldn't even try wheels it would just go straight to pypi
+2015-03-02T23:47:06  <tchaypo> jbooboo: I'll see if I can prioritise that for today then
+2015-03-02T23:47:09  <jogo> mtreinish: so build_wheels.sh is pretty touchy
+2015-03-02T23:47:23  *** ayoung-lunx has joined #openstack-infra
+2015-03-02T23:47:24  <jogo> mtreinish: it takes a separate list from venv-requirements
+2015-03-02T23:47:26  <jogo> dtroyer: ^
+2015-03-02T23:47:31  <openstackgerrit> Merged openstack-infra/project-config: Add non-voting tempest dsvm job for Midonet  https://review.openstack.org/159867
+2015-03-02T23:47:48  <jogo> IMHO we should try building a wheel for all requirments
+2015-03-02T23:48:05  <quantumfly> jogo: if we are going to do that we should put wheels on the mirrors
+2015-03-02T23:48:05  <greghaynes> pypi-mirror? ;)
+2015-03-02T23:48:16  *** annegentle has joined #openstack-infra
+2015-03-02T23:48:24  <dtroyer> the intent was to just build wheels for the stuff with C dependencies
+2015-03-02T23:48:36  <jogo> quantumfly: well yes and no. yes if that is possible that would be great ( dstufft ^ )
+2015-03-02T23:48:53  <jogo> quantumfly: and no, we should still cache pip packages locally if possible anyway
+2015-03-02T23:49:00  <greghaynes> quantumfly: acually, we used index-url, looks like stackrc uses find-links?
+2015-03-02T23:49:05  <dstufft> it's not currently possibly with bandersnatch, though there's a devpi thing
+2015-03-02T23:49:07  <greghaynes> no idea what the difference is there
+2015-03-02T23:49:19  <dstufft> --index-url overwrites the default index of PyPI
+2015-03-02T23:49:30  <dstufft> --extra-index-url adds an additional index
+2015-03-02T23:49:46  <dstufft> --find-links is similar to --extra-index-url, except it doesn't expect a directory structure
+2015-03-02T23:49:50  <dstufft> (this is confusing i know)
+2015-03-02T23:49:56  <quantumfly> dstufft: jogo its 100% possible with pypi-mirror
+2015-03-02T23:50:05  <greghaynes> ah, so I bet this is the reason then :)
+2015-03-02T23:50:18  <quantumfly> jogo: I disagree on putting it in the images if we can avoid it, our images are already something like 4GB uncompressed
+2015-03-02T23:50:21  <jogo> dtroyer: but you got the list wrong search for gcc on http://logs.openstack.org/94/160494/1/check/check-tempest-dsvm-full/85e0294//logs/devstacklog.txt.gz#_2015-03-02_21_59_00_996
+2015-03-02T23:51:09  <jogo> quantumfly: how much bigger would the image be ?
+2015-03-02T23:51:13  <dtroyer> what is wrong?  I don't try to get them all, just the known problem children
+2015-03-02T23:51:15  *** erlon has quit IRC
+2015-03-02T23:51:21  <jogo> also we could use devpi-server and do stuff in the background or something
+2015-03-02T23:51:37  <jogo> dtroyer: problem is devstack is taking 20 minutes to launch now
+2015-03-02T23:51:51  <jogo> dtroyer: and not 100% clear what the issue is
+2015-03-02T23:51:52  *** salv-orlando has quit IRC
+2015-03-02T23:51:55  <mordred> jogo: dont add devpi-server
+2015-03-02T23:52:03  <quantumfly> jogo: the entire mirror is 130GB, I would have to go rebuild a wheel only mirror with pypi-mirror to see what our subset of the world is
+2015-03-02T23:52:07  <quantumfly> probably at least a gig
+2015-03-02T23:52:18  <jogo> dtroyer: 21:56:53 -> 22:14:43
+2015-03-02T23:52:25  * jogo gets coffee
+2015-03-02T23:52:26  <quantumfly> though we can avoid building wheels for all the platforms if we do it per image so maybe not that bad
+2015-03-02T23:52:31  <dtroyer> jogo: you specifically said I had the list wrong…what about the list is wrong?
+2015-03-02T23:52:42  *** Sukhdev has joined #openstack-infra
+2015-03-02T23:52:59  *** dmsimard is now known as dmsimard_away
+2015-03-02T23:54:14  <quantumfly> so far jenkins04 does not seem to be leaking any threads, will likely leave it this way for a bit so that we can see it over time
+2015-03-02T23:54:56  <Sukhdev> quantumfly: May I ask a question?
+2015-03-02T23:55:13  <quantumfly> Sukhdev: sre
+2015-03-02T23:55:19  <quantumfly> Sukhdev: er sUre
+2015-03-02T23:55:51  *** ddieterly has joined #openstack-infra
+2015-03-02T23:56:04  *** ddieterly has quit IRC
+2015-03-02T23:56:04  *** tsg_ has quit IRC
+2015-03-02T23:56:24  <Sukhdev> I set up the networking_arista project for our ML2 driver decomposition - I got all the infra pieces in place except for the lauchpad
+2015-03-02T23:56:42  <Sukhdev> wondering what step am I missing to get it taken care of?
+2015-03-02T23:56:43  *** tiswanso has joined #openstack-infra
+2015-03-02T23:57:02  <quantumfly> Sukhdev: launchpad is all you, none of the project management in launchpad is automated
+2015-03-02T23:57:48  <anteaya> Sukhdev: http://docs.openstack.org/infra/manual/creators.html#set-up-launchpad
+2015-03-02T23:58:02  <quantumfly> anteaya: ty
+2015-03-02T23:58:08  <Sukhdev> quantumfly: Thanks
+2015-03-02T23:58:12  *** EmilienM is now known as EmilienM|afk
+2015-03-02T23:58:21  <Sukhdev> anteaya: Thannks
+2015-03-02T23:58:27  <Sukhdev> Thanks
+2015-03-02T23:59:00  <pleia2> quantumfly: so, is switching to this new backups server just a DNS change?
+2015-03-02T23:59:37  *** aysyd has quit IRC
+2015-03-02T23:59:38  <quantumfly> pleia2: that and accepting the new ssh host key
