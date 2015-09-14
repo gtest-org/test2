@@ -1,0 +1,1565 @@
+2014-11-15T00:00:17  *** _nadya_ has quit IRC
+2014-11-15T00:01:24  *** ddieterly has quit IRC
+2014-11-15T00:01:45  *** ddieterly has joined #openstack-infra
+2014-11-15T00:01:56  <openstackgerrit> Joe Gordon proposed openstack-infra/devstack-gate: Setup ssh_known_host files for aiopcpu  https://review.openstack.org/134670
+2014-11-15T00:01:57  <openstackgerrit> Joe Gordon proposed openstack-infra/devstack-gate: DO NOT MERGE: testing aiopcpu with tempest full  https://review.openstack.org/134639
+2014-11-15T00:02:16  *** ddieterly has quit IRC
+2014-11-15T00:03:05  *** hdd has quit IRC
+2014-11-15T00:06:29  *** teran_ has quit IRC
+2014-11-15T00:07:49  *** amitgandhinz has joined #openstack-infra
+2014-11-15T00:08:20  <openstackgerrit> Merged openstack-infra/jenkins-job-builder: Add support for multiple port allocations  https://review.openstack.org/131335
+2014-11-15T00:08:44  *** MaxV has joined #openstack-infra
+2014-11-15T00:12:03  *** amitgandhinz has quit IRC
+2014-11-15T00:13:41  *** MaxV has quit IRC
+2014-11-15T00:16:30  *** yamamoto has joined #openstack-infra
+2014-11-15T00:16:52  *** wenlock has quit IRC
+2014-11-15T00:17:07  *** ryanpetrello has joined #openstack-infra
+2014-11-15T00:18:23  *** HeOS has quit IRC
+2014-11-15T00:20:03  *** bswartz has joined #openstack-infra
+2014-11-15T00:20:48  *** melwitt has quit IRC
+2014-11-15T00:20:53  *** yamamoto has quit IRC
+2014-11-15T00:23:36  *** p5ntangle has joined #openstack-infra
+2014-11-15T00:27:22  *** marun has quit IRC
+2014-11-15T00:28:23  *** p5ntangle has quit IRC
+2014-11-15T00:35:48  *** harlowja is now known as harlowja_away
+2014-11-15T00:37:46  *** ZZelle has quit IRC
+2014-11-15T00:38:04  *** david-lyle is now known as david-lyle_afk
+2014-11-15T00:38:04  *** bhuvan has quit IRC
+2014-11-15T00:44:37  <flashgordon> did anyone else get a notice about rackspace rebooting all the things?
+2014-11-15T00:45:17  <flashgordon> ahh https://status.rackspace.com/
+2014-11-15T00:47:51  *** gokrokve has quit IRC
+2014-11-15T00:49:52  *** harlowja_away is now known as harlowja
+2014-11-15T00:50:33  <openstackgerrit> Jay Faulkner proposed openstack-infra/project-config: Make agent_ssh check job voting for Ironic & IPA  https://review.openstack.org/134436
+2014-11-15T00:53:36  <openstackgerrit> Jay Faulkner proposed openstack-infra/project-config: Make agent_ssh check job voting for Ironic & IPA  https://review.openstack.org/134436
+2014-11-15T00:54:02  *** amcrn has quit IRC
+2014-11-15T00:55:56  <JayF> I'd love to know if I'm doing it right there ^ even though I have it workflow -1 right now
+2014-11-15T00:59:10  *** dangers is now known as dangers_away
+2014-11-15T01:00:44  *** yamamoto has joined #openstack-infra
+2014-11-15T01:02:41  *** teran has joined #openstack-infra
+2014-11-15T01:03:16  *** dimsum__ has joined #openstack-infra
+2014-11-15T01:06:19  *** dims__ has joined #openstack-infra
+2014-11-15T01:06:23  *** salv-orlando has quit IRC
+2014-11-15T01:07:10  *** dims_ has quit IRC
+2014-11-15T01:08:59  *** dimsum__ has quit IRC
+2014-11-15T01:09:03  <foobio> flashgordon: yep
+2014-11-15T01:09:08  * foobio sighs
+2014-11-15T01:09:29  *** teran has quit IRC
+2014-11-15T01:11:58  *** armax has quit IRC
+2014-11-15T01:13:56  <foobio> JayF: i don't know why the gate-project-config-layout job is passing for that change... it looks like the check-tempest-dsvm-ironic-agent_ssh and check-tempest-dsvm-ironic-agent_ssh-src jobs have no template defining them
+2014-11-15T01:14:41  <foobio> JayF: oh, nevermind. they're in devstack-gate.yaml
+2014-11-15T01:15:10  *** HeOS has joined #openstack-infra
+2014-11-15T01:15:27  <foobio> JayF: yeah, that looks fine to me. +2
+2014-11-15T01:16:09  *** dannywilson has quit IRC
+2014-11-15T01:16:32  *** patrickeast has quit IRC
+2014-11-15T01:16:50  <foobio> JayF: oh, except you'll want them in gate pipelines too. i'll mark inline
+2014-11-15T01:17:17  *** aysyd has quit IRC
+2014-11-15T01:19:22  *** HeOS has quit IRC
+2014-11-15T01:19:53  *** yamamoto has quit IRC
+2014-11-15T01:20:15  *** adalbas has quit IRC
+2014-11-15T01:25:25  *** markmcclain1 has quit IRC
+2014-11-15T01:26:28  *** iain-king has joined #openstack-infra
+2014-11-15T01:32:56  *** adalbas has joined #openstack-infra
+2014-11-15T01:36:05  *** koolhead_ has quit IRC
+2014-11-15T01:36:38  *** koolhead17 has joined #openstack-infra
+2014-11-15T01:37:59  *** MaxV has joined #openstack-infra
+2014-11-15T01:39:27  *** rwsu has quit IRC
+2014-11-15T01:41:07  *** koolhead17 has quit IRC
+2014-11-15T01:41:11  *** dims__ has quit IRC
+2014-11-15T01:41:13  *** yamamoto has joined #openstack-infra
+2014-11-15T01:41:46  *** dimsum__ has joined #openstack-infra
+2014-11-15T01:46:41  *** ryanpetrello has quit IRC
+2014-11-15T01:51:25  *** henditan has joined #openstack-infra
+2014-11-15T01:53:07  *** yamamoto has quit IRC
+2014-11-15T01:55:17  *** adalbas has quit IRC
+2014-11-15T01:55:41  *** bdpayne has quit IRC
+2014-11-15T01:56:04  *** yjiang5 is now known as yjiang5_away
+2014-11-15T01:57:58  *** shashankhegde has quit IRC
+2014-11-15T01:59:38  *** MaxV has quit IRC
+2014-11-15T02:02:32  <flashgordon> foobio: if I post a new revision of a patch and run check experimental
+2014-11-15T02:03:04  <flashgordon>  while a old version is running
+2014-11-15T02:03:08  <flashgordon> it doesn
+2014-11-15T02:03:31  <flashgordon> doesn't appear to cancel the old job and run against the new revision instead the new request appears to go no where
+2014-11-15T02:07:45  *** ryanpetrello has joined #openstack-infra
+2014-11-15T02:16:10  <openstackgerrit> Joe Gordon proposed openstack-infra/devstack-gate: Setup ssh_known_host files for aiopcpu  https://review.openstack.org/134670
+2014-11-15T02:16:11  <openstackgerrit> Joe Gordon proposed openstack-infra/devstack-gate: DO NOT MERGE: testing aiopcpu with tempest full  https://review.openstack.org/134639
+2014-11-15T02:16:53  *** yamamoto has joined #openstack-infra
+2014-11-15T02:22:52  *** p5ntangle has joined #openstack-infra
+2014-11-15T02:23:26  *** bhunter71 has quit IRC
+2014-11-15T02:23:54  *** kgiusti has quit IRC
+2014-11-15T02:26:22  *** nelsnelson has quit IRC
+2014-11-15T02:27:23  *** p5ntangle has quit IRC
+2014-11-15T02:32:00  *** mfink has joined #openstack-infra
+2014-11-15T02:35:10  *** teran has joined #openstack-infra
+2014-11-15T02:37:42  *** teran has quit IRC
+2014-11-15T02:40:09  *** markmcclain has joined #openstack-infra
+2014-11-15T02:40:31  *** yamamoto has quit IRC
+2014-11-15T02:41:14  *** marun has joined #openstack-infra
+2014-11-15T02:41:33  *** yamahata has joined #openstack-infra
+2014-11-15T02:44:54  *** yamamoto has joined #openstack-infra
+2014-11-15T02:46:38  *** yamamoto has quit IRC
+2014-11-15T02:48:33  <flashgordon> hmm may have been a new gerrit UI thing
+2014-11-15T02:54:47  *** Ryan_Lane has quit IRC
+2014-11-15T02:57:40  *** nelsnelson has joined #openstack-infra
+2014-11-15T02:58:13  *** Longgeek has joined #openstack-infra
+2014-11-15T02:58:35  *** shashankhegde has joined #openstack-infra
+2014-11-15T03:03:28  *** Longgeek has quit IRC
+2014-11-15T03:04:01  *** HeOS has joined #openstack-infra
+2014-11-15T03:05:11  *** talluri has joined #openstack-infra
+2014-11-15T03:08:20  *** HeOS has quit IRC
+2014-11-15T03:08:33  *** achanda has quit IRC
+2014-11-15T03:09:22  *** yamamoto has joined #openstack-infra
+2014-11-15T03:14:34  *** yamamoto has quit IRC
+2014-11-15T03:14:39  *** marun has quit IRC
+2014-11-15T03:17:46  *** boris-42 has quit IRC
+2014-11-15T03:22:59  *** talluri has quit IRC
+2014-11-15T03:32:59  *** gokrokve has joined #openstack-infra
+2014-11-15T03:37:10  *** gokrokve has quit IRC
+2014-11-15T03:37:38  *** gokrokve has joined #openstack-infra
+2014-11-15T03:39:21  *** gokrokve has quit IRC
+2014-11-15T03:40:17  *** nelsnelson has quit IRC
+2014-11-15T03:41:02  *** mmaglana has joined #openstack-infra
+2014-11-15T03:41:06  *** teran has joined #openstack-infra
+2014-11-15T03:42:08  *** ryanpetrello has quit IRC
+2014-11-15T03:44:09  *** nelsnelson has joined #openstack-infra
+2014-11-15T03:45:31  *** teran has quit IRC
+2014-11-15T03:47:43  *** Longgeek has joined #openstack-infra
+2014-11-15T03:48:30  *** ryanpetrello has joined #openstack-infra
+2014-11-15T03:51:07  *** Longgeek has quit IRC
+2014-11-15T03:51:46  *** Longgeek has joined #openstack-infra
+2014-11-15T03:54:08  *** rushiagr_away is now known as rushiagr
+2014-11-15T03:54:45  *** koolhead17 has joined #openstack-infra
+2014-11-15T03:55:08  *** shashankhegde has quit IRC
+2014-11-15T04:02:22  *** bdpayne has joined #openstack-infra
+2014-11-15T04:02:47  *** mwagner_lap has joined #openstack-infra
+2014-11-15T04:05:40  *** harlowja is now known as harlowja_away
+2014-11-15T04:07:15  *** chandankumar has joined #openstack-infra
+2014-11-15T04:09:05  *** achanda has joined #openstack-infra
+2014-11-15T04:09:27  *** yamamoto has joined #openstack-infra
+2014-11-15T04:09:28  *** yamamoto has quit IRC
+2014-11-15T04:11:10  *** bdpayne has quit IRC
+2014-11-15T04:11:31  *** yamamoto has joined #openstack-infra
+2014-11-15T04:12:34  *** pc_m has quit IRC
+2014-11-15T04:13:28  <openstackgerrit> Joe Gordon proposed openstack-infra/devstack-gate: Setup ssh_known_host files for aiopcpu  https://review.openstack.org/134670
+2014-11-15T04:13:29  <openstackgerrit> Joe Gordon proposed openstack-infra/devstack-gate: DO NOT MERGE: testing aiopcpu with tempest full  https://review.openstack.org/134639
+2014-11-15T04:13:56  *** yamamoto has quit IRC
+2014-11-15T04:13:57  *** achanda has quit IRC
+2014-11-15T04:27:29  *** pcrews has quit IRC
+2014-11-15T04:28:37  *** chandankumar has quit IRC
+2014-11-15T04:28:39  *** mmaglana has quit IRC
+2014-11-15T04:34:11  *** ryanpetrello has quit IRC
+2014-11-15T04:36:07  *** cpowell has joined #openstack-infra
+2014-11-15T04:40:28  *** cpowell has quit IRC
+2014-11-15T04:46:05  *** enikanorov_ has quit IRC
+2014-11-15T04:47:18  *** nelsnelson has quit IRC
+2014-11-15T04:50:34  *** dmsimard_away is now known as dmsimard
+2014-11-15T04:51:04  *** dmsimard is now known as dmsimard_away
+2014-11-15T04:53:17  *** ivar-laz_ has joined #openstack-infra
+2014-11-15T04:56:40  *** ivar-lazzaro has quit IRC
+2014-11-15T04:56:58  *** nelsnelson has joined #openstack-infra
+2014-11-15T04:57:28  *** ivar-laz_ has quit IRC
+2014-11-15T04:59:53  *** talluri has joined #openstack-infra
+2014-11-15T05:05:14  *** Longgeek has quit IRC
+2014-11-15T05:05:44  *** Longgeek has joined #openstack-infra
+2014-11-15T05:07:11  *** mmaglana has joined #openstack-infra
+2014-11-15T05:07:38  *** talluri has quit IRC
+2014-11-15T05:08:37  *** nelsnelson has quit IRC
+2014-11-15T05:09:53  *** yamamoto has joined #openstack-infra
+2014-11-15T05:11:34  *** shashankhegde has joined #openstack-infra
+2014-11-15T05:14:05  *** iain-king has quit IRC
+2014-11-15T05:14:24  *** yamamoto has quit IRC
+2014-11-15T05:16:30  *** yamamoto has joined #openstack-infra
+2014-11-15T05:17:04  *** talluri has joined #openstack-infra
+2014-11-15T05:18:47  <openstackgerrit> Joe Gordon proposed openstack-infra/devstack-gate: Setup ssh_known_host files for aiopcpu  https://review.openstack.org/134670
+2014-11-15T05:18:48  <openstackgerrit> Joe Gordon proposed openstack-infra/devstack-gate: DO NOT MERGE: testing aiopcpu with tempest full  https://review.openstack.org/134639
+2014-11-15T05:19:40  *** mmaglana has quit IRC
+2014-11-15T05:21:06  *** yamamoto has quit IRC
+2014-11-15T05:22:32  *** otherwiseguy has joined #openstack-infra
+2014-11-15T05:24:43  *** nelsnelson has joined #openstack-infra
+2014-11-15T05:24:46  *** mmaglana has joined #openstack-infra
+2014-11-15T05:27:15  *** otherwiseguy has quit IRC
+2014-11-15T05:27:51  *** otherwiseguy has joined #openstack-infra
+2014-11-15T05:29:01  *** talluri has quit IRC
+2014-11-15T05:30:46  *** iain-king has joined #openstack-infra
+2014-11-15T05:34:08  *** links has joined #openstack-infra
+2014-11-15T05:35:16  *** stevemar has joined #openstack-infra
+2014-11-15T05:36:17  *** Longgeek has quit IRC
+2014-11-15T05:36:30  *** Longgeek has joined #openstack-infra
+2014-11-15T05:37:41  *** groknix has quit IRC
+2014-11-15T05:40:38  *** markmcclain has quit IRC
+2014-11-15T05:43:44  *** chandankumar has joined #openstack-infra
+2014-11-15T05:44:17  *** otherwiseguy has quit IRC
+2014-11-15T05:45:57  *** Longgeek has quit IRC
+2014-11-15T05:51:35  *** mtreinish has joined #openstack-infra
+2014-11-15T05:53:17  *** Longgeek has joined #openstack-infra
+2014-11-15T05:58:52  *** Viswanath has joined #openstack-infra
+2014-11-15T06:01:51  *** Viswanath has quit IRC
+2014-11-15T06:09:23  *** shashankhegde has quit IRC
+2014-11-15T06:11:43  *** achanda has joined #openstack-infra
+2014-11-15T06:16:07  *** achanda has quit IRC
+2014-11-15T06:16:31  *** yamamoto has joined #openstack-infra
+2014-11-15T06:17:30  *** achanda has joined #openstack-infra
+2014-11-15T06:21:51  *** yamamoto has quit IRC
+2014-11-15T06:28:45  *** hdd has joined #openstack-infra
+2014-11-15T06:30:18  *** bdpayne has joined #openstack-infra
+2014-11-15T06:30:45  *** p5ntangle has joined #openstack-infra
+2014-11-15T06:39:42  *** talluri has joined #openstack-infra
+2014-11-15T06:41:41  *** hdd has quit IRC
+2014-11-15T06:43:06  *** Longgeek has quit IRC
+2014-11-15T06:44:18  *** talluri has quit IRC
+2014-11-15T06:47:58  *** p5ntangle has quit IRC
+2014-11-15T06:48:35  *** p5ntangle has joined #openstack-infra
+2014-11-15T06:52:19  *** AlexF has joined #openstack-infra
+2014-11-15T06:52:41  *** p5ntangle has quit IRC
+2014-11-15T06:55:46  *** dstufft has quit IRC
+2014-11-15T06:56:05  *** dstufft has joined #openstack-infra
+2014-11-15T06:59:00  *** e0ne has joined #openstack-infra
+2014-11-15T07:01:57  *** e0ne has quit IRC
+2014-11-15T07:03:30  *** boris-42 has joined #openstack-infra
+2014-11-15T07:05:11  *** e0ne has joined #openstack-infra
+2014-11-15T07:10:10  *** e0ne has quit IRC
+2014-11-15T07:13:03  *** e0ne has joined #openstack-infra
+2014-11-15T07:16:30  *** yamamoto has joined #openstack-infra
+2014-11-15T07:16:30  *** e0ne has quit IRC
+2014-11-15T07:20:53  *** e0ne has joined #openstack-infra
+2014-11-15T07:21:03  *** yamamoto has quit IRC
+2014-11-15T07:22:57  *** talluri has joined #openstack-infra
+2014-11-15T07:22:57  *** e0ne has quit IRC
+2014-11-15T07:25:38  *** talluri has quit IRC
+2014-11-15T07:27:01  *** e0ne has joined #openstack-infra
+2014-11-15T07:29:38  *** talluri has joined #openstack-infra
+2014-11-15T07:29:39  *** e0ne has quit IRC
+2014-11-15T07:31:09  *** mrmartin has joined #openstack-infra
+2014-11-15T07:32:51  *** AlexF has quit IRC
+2014-11-15T07:33:34  *** e0ne has joined #openstack-infra
+2014-11-15T07:34:05  *** e0ne has quit IRC
+2014-11-15T07:43:12  *** mrmartin has quit IRC
+2014-11-15T07:43:39  *** Longgeek has joined #openstack-infra
+2014-11-15T07:48:53  *** Longgeek has quit IRC
+2014-11-15T07:48:53  *** talluri has quit IRC
+2014-11-15T07:49:35  *** talluri has joined #openstack-infra
+2014-11-15T07:52:20  *** mmaglana has quit IRC
+2014-11-15T07:52:37  *** iain-king has quit IRC
+2014-11-15T07:54:30  *** talluri has quit IRC
+2014-11-15T08:01:06  *** tchorizo is now known as tchaypo
+2014-11-15T08:03:29  *** bdpayne has quit IRC
+2014-11-15T08:04:23  *** AlexF has joined #openstack-infra
+2014-11-15T08:07:09  *** achanda has quit IRC
+2014-11-15T08:09:12  *** otter768 has quit IRC
+2014-11-15T08:11:52  *** AlexF has quit IRC
+2014-11-15T08:12:47  *** _nadya_ has joined #openstack-infra
+2014-11-15T08:15:42  *** _nadya_ has quit IRC
+2014-11-15T08:16:29  *** yamamoto has joined #openstack-infra
+2014-11-15T08:19:38  *** mmaglana has joined #openstack-infra
+2014-11-15T08:21:08  *** yamamoto has quit IRC
+2014-11-15T08:25:06  *** mmaglana has quit IRC
+2014-11-15T08:26:53  *** mmaglana has joined #openstack-infra
+2014-11-15T08:32:35  *** teran has joined #openstack-infra
+2014-11-15T08:39:59  *** teran has quit IRC
+2014-11-15T08:40:31  *** teran has joined #openstack-infra
+2014-11-15T08:44:18  *** Longgeek has joined #openstack-infra
+2014-11-15T08:45:17  *** chandankumar has quit IRC
+2014-11-15T08:46:33  *** AlexF has joined #openstack-infra
+2014-11-15T08:47:32  *** teran has quit IRC
+2014-11-15T08:47:33  *** mmaglana has quit IRC
+2014-11-15T08:47:49  *** mmaglana has joined #openstack-infra
+2014-11-15T08:47:59  *** teran has joined #openstack-infra
+2014-11-15T08:49:27  *** AlexF has quit IRC
+2014-11-15T08:50:27  *** Longgeek_ has joined #openstack-infra
+2014-11-15T08:53:51  *** Longgeek has quit IRC
+2014-11-15T08:54:13  *** yamahata has quit IRC
+2014-11-15T08:54:21  *** teran_ has joined #openstack-infra
+2014-11-15T08:54:31  *** teran_ has quit IRC
+2014-11-15T08:54:59  *** teran_ has joined #openstack-infra
+2014-11-15T08:57:29  *** teran has quit IRC
+2014-11-15T09:04:42  *** teran_ has quit IRC
+2014-11-15T09:09:03  *** Longgeek_ has quit IRC
+2014-11-15T09:10:23  *** mmaglana_ has joined #openstack-infra
+2014-11-15T09:10:23  *** mmaglana has quit IRC
+2014-11-15T09:11:15  *** Longgeek has joined #openstack-infra
+2014-11-15T09:12:30  *** Longgeek_ has joined #openstack-infra
+2014-11-15T09:15:00  *** koolhead17 has quit IRC
+2014-11-15T09:15:37  *** koolhead17 has joined #openstack-infra
+2014-11-15T09:15:43  *** koolhead17 has joined #openstack-infra
+2014-11-15T09:16:07  *** Longgeek has quit IRC
+2014-11-15T09:16:29  *** yamamoto has joined #openstack-infra
+2014-11-15T09:16:56  *** Longgeek has joined #openstack-infra
+2014-11-15T09:18:12  *** yamamoto has quit IRC
+2014-11-15T09:18:19  *** yamamoto_ has joined #openstack-infra
+2014-11-15T09:19:52  *** Longgeek_ has quit IRC
+2014-11-15T09:19:52  *** koolhead17 has quit IRC
+2014-11-15T09:21:55  *** dkehn has quit IRC
+2014-11-15T09:23:18  *** yamamoto_ has quit IRC
+2014-11-15T09:23:42  *** dkehn has joined #openstack-infra
+2014-11-15T09:24:13  *** tnovacik has joined #openstack-infra
+2014-11-15T09:28:12  *** masayukig has quit IRC
+2014-11-15T09:33:48  *** masayukig has joined #openstack-infra
+2014-11-15T09:34:50  *** yamamoto has joined #openstack-infra
+2014-11-15T09:46:47  *** yamamoto has quit IRC
+2014-11-15T09:48:22  *** mtreinish has quit IRC
+2014-11-15T09:48:31  *** tnovacik has quit IRC
+2014-11-15T09:49:00  *** mtreinish has joined #openstack-infra
+2014-11-15T09:50:36  *** MaxV has joined #openstack-infra
+2014-11-15T09:54:58  *** p5ntangle has joined #openstack-infra
+2014-11-15T09:55:14  *** p5ntangle has quit IRC
+2014-11-15T09:55:49  *** p5ntangle has joined #openstack-infra
+2014-11-15T09:58:28  *** salv-orlando has joined #openstack-infra
+2014-11-15T09:58:30  *** HeOS has joined #openstack-infra
+2014-11-15T09:58:42  *** p5ntangle has quit IRC
+2014-11-15T10:08:24  *** henditan has quit IRC
+2014-11-15T10:09:43  *** AlexF has joined #openstack-infra
+2014-11-15T10:16:25  *** mrmartin has joined #openstack-infra
+2014-11-15T10:17:23  *** yamamoto has joined #openstack-infra
+2014-11-15T10:22:09  *** yamamoto_ has joined #openstack-infra
+2014-11-15T10:22:31  *** yamamoto has quit IRC
+2014-11-15T10:26:22  *** mtreinish has quit IRC
+2014-11-15T10:26:56  *** mrmartin has quit IRC
+2014-11-15T10:27:38  *** mtreinish has joined #openstack-infra
+2014-11-15T10:32:27  *** mtreinish has quit IRC
+2014-11-15T10:33:06  *** mtreinish has joined #openstack-infra
+2014-11-15T10:40:17  *** mtreinish has quit IRC
+2014-11-15T10:41:07  *** mtreinish has joined #openstack-infra
+2014-11-15T10:41:36  *** MaxV has quit IRC
+2014-11-15T10:51:22  <openstackgerrit> Jakub Libosvar proposed openstack-infra/project-config: Promote check-grenade-dsvm-neutron to voting job  https://review.openstack.org/134532
+2014-11-15T10:54:20  *** stevemar has quit IRC
+2014-11-15T10:58:06  *** AlexF has quit IRC
+2014-11-15T11:01:53  *** p5ntangle has joined #openstack-infra
+2014-11-15T11:01:59  *** p5ntangle has quit IRC
+2014-11-15T11:03:23  *** MaxV has joined #openstack-infra
+2014-11-15T11:06:58  *** yamamoto_ has quit IRC
+2014-11-15T11:14:53  *** yamamoto has joined #openstack-infra
+2014-11-15T11:16:16  *** _nadya_ has joined #openstack-infra
+2014-11-15T11:20:53  *** _nadya_ has quit IRC
+2014-11-15T11:23:12  *** Longgeek has quit IRC
+2014-11-15T11:23:58  *** yamamoto has quit IRC
+2014-11-15T11:24:15  *** dimsum__ has quit IRC
+2014-11-15T11:24:32  *** dimsum__ has joined #openstack-infra
+2014-11-15T11:27:39  *** koolhead17 has joined #openstack-infra
+2014-11-15T11:33:57  *** Longgeek has joined #openstack-infra
+2014-11-15T11:35:17  *** Longgeek has quit IRC
+2014-11-15T11:43:24  *** yamamoto has joined #openstack-infra
+2014-11-15T11:43:27  *** harlowja_at_home has joined #openstack-infra
+2014-11-15T11:43:32  *** HeOS has quit IRC
+2014-11-15T11:43:56  <harlowja_at_home> anyone started to see gate failures with 'subunit.run discover: error: no such option: --list'; if not I opened https://bugs.launchpad.net/openstack-ci/+bug/1392986 since it seems to be causing all/most gate jobs to not pass
+2014-11-15T11:43:57  <uvirtbot> Launchpad bug 1392986 in openstack-ci "Subunit gate failures" [Undecided,New]
+2014-11-15T11:47:54  *** yamamoto has quit IRC
+2014-11-15T11:55:00  *** dimsum__ has quit IRC
+2014-11-15T11:59:17  *** ddieterly has joined #openstack-infra
+2014-11-15T11:59:18  *** bhunter71 has joined #openstack-infra
+2014-11-15T11:59:47  *** salv-orlando has quit IRC
+2014-11-15T12:03:56  *** Longgeek has joined #openstack-infra
+2014-11-15T12:10:09  *** p5ntangle has joined #openstack-infra
+2014-11-15T12:13:14  *** mrmartin has joined #openstack-infra
+2014-11-15T12:19:56  *** Longgeek has quit IRC
+2014-11-15T12:21:07  *** Longgeek has joined #openstack-infra
+2014-11-15T12:26:04  *** Longgeek has quit IRC
+2014-11-15T12:27:48  *** harlowja_at_home has quit IRC
+2014-11-15T12:29:32  *** p5ntangle has quit IRC
+2014-11-15T12:31:48  *** mmaglana_ has quit IRC
+2014-11-15T12:45:53  *** bhunter71 has quit IRC
+2014-11-15T12:47:10  *** yamamoto has joined #openstack-infra
+2014-11-15T12:51:59  *** yamamoto has quit IRC
+2014-11-15T12:57:41  *** mrmartin has quit IRC
+2014-11-15T13:01:44  *** adalbas has joined #openstack-infra
+2014-11-15T13:14:59  *** p5ntangle has joined #openstack-infra
+2014-11-15T13:15:00  *** pensu has joined #openstack-infra
+2014-11-15T13:15:10  <pensu> Hi all, for my patch submission I am getting this error: subunit.run discover: error: no such option: --list. Any idea what this means?
+2014-11-15T13:17:44  *** yamamoto has joined #openstack-infra
+2014-11-15T13:18:52  *** p5ntangle has quit IRC
+2014-11-15T13:19:28  *** p5ntangle has joined #openstack-infra
+2014-11-15T13:22:41  *** yamamoto has quit IRC
+2014-11-15T13:23:37  *** p5ntangle has quit IRC
+2014-11-15T13:26:29  <nibalizer> in gertty, after i've started an inline comment, how do i get out of it? ESC takes me out off diff mode and to the base of the review
+2014-11-15T13:31:14  <nibalizer> oh i guess i can click
+2014-11-15T13:32:37  *** mmaglana has joined #openstack-infra
+2014-11-15T13:32:56  *** yodayosi has joined #openstack-infra
+2014-11-15T13:33:16  *** _nadya_ has joined #openstack-infra
+2014-11-15T13:35:05  *** yamahata has joined #openstack-infra
+2014-11-15T13:37:06  *** mmaglana has quit IRC
+2014-11-15T13:38:09  *** bhunter71 has joined #openstack-infra
+2014-11-15T13:39:52  *** links has quit IRC
+2014-11-15T13:43:16  *** e0ne has joined #openstack-infra
+2014-11-15T13:43:46  *** ashp has left #openstack-infra
+2014-11-15T13:47:07  *** ddieterly has quit IRC
+2014-11-15T13:58:16  <openstackgerrit> Sean Dague proposed openstack/requirements: block testtools 1.2.0  https://review.openstack.org/134705
+2014-11-15T13:59:22  *** yodayosi has quit IRC
+2014-11-15T14:05:35  <openstackgerrit> Sean Dague proposed openstack-infra/elastic-recheck: add query for testtools bug  https://review.openstack.org/134706
+2014-11-15T14:06:23  *** mrmartin has joined #openstack-infra
+2014-11-15T14:08:05  <openstackgerrit> Merged openstack-infra/elastic-recheck: add query for testtools bug  https://review.openstack.org/134706
+2014-11-15T14:08:35  *** erikmwilson_ has joined #openstack-infra
+2014-11-15T14:16:30  *** yamamoto has joined #openstack-infra
+2014-11-15T14:16:44  *** ddieterly has joined #openstack-infra
+2014-11-15T14:21:02  *** yamamoto has quit IRC
+2014-11-15T14:29:47  *** mrmartin has quit IRC
+2014-11-15T14:35:49  *** ayoung has quit IRC
+2014-11-15T14:39:39  *** _nadya_ has quit IRC
+2014-11-15T14:44:17  *** rushiagr is now known as rushiagr_away
+2014-11-15T14:50:32  *** salv-orlando has joined #openstack-infra
+2014-11-15T14:53:19  *** markmcclain has joined #openstack-infra
+2014-11-15T15:01:50  <foobio> nibalizer: arrow keys if your terminal has them
+2014-11-15T15:03:01  <foobio> pensu: harlowja_away just mentioned the same error about 1.5 hours before you did. what job are you seeing it on?
+2014-11-15T15:03:35  <foobio> pensu: looks like he opened bug 1392986 for it
+2014-11-15T15:03:36  <uvirtbot> Launchpad bug 1392986 in openstack-ci "Subunit gate failures" [Undecided,New] https://launchpad.net/bugs/1392986
+2014-11-15T15:06:51  <foobio> lifeless: no idea whether you're still around on this pleasant saturday night, but that bug looks right up your alley
+2014-11-15T15:08:23  *** hemna__ has quit IRC
+2014-11-15T15:15:01  <foobio> 2014-11-15 09:55:02,346 INFO: Downloading: https://pypi.python.org/packages/2.6/t/testtools/testtools-1.2.0-py2-none-any.whl
+2014-11-15T15:15:15  <foobio> that was ~10 minutes before the first hit in logstash
+2014-11-15T15:16:30  *** yamamoto has joined #openstack-infra
+2014-11-15T15:19:26  *** ryanpetrello has joined #openstack-infra
+2014-11-15T15:21:02  *** links has joined #openstack-infra
+2014-11-15T15:21:07  *** yamamoto has quit IRC
+2014-11-15T15:21:34  *** mmaglana has joined #openstack-infra
+2014-11-15T15:21:39  <foobio> lifeless: i think maybe the workaround for http://bugs.python.org/issue22860 in dfe62af to add --list and --load-list in for unittest2's discover isn't working as advertised?
+2014-11-15T15:21:59  *** dimsum__ has joined #openstack-infra
+2014-11-15T15:23:07  <mmedvede> if that helps, on hour CI all the tests that used to be skipped, are now failing, starting around 9:00 UTC +- 30 minutes
+2014-11-15T15:23:30  <foobio> mmedvede: yep, that sounds consistent
+2014-11-15T15:24:21  <foobio> in the meantime, we might want to rush in a pin to testtools!=1.2.0
+2014-11-15T15:24:29  * foobio whips that up
+2014-11-15T15:26:25  *** mmaglana has quit IRC
+2014-11-15T15:26:29  *** mtreinish has quit IRC
+2014-11-15T15:27:31  <openstackgerrit> Christian Fetzer proposed openstack-infra/jenkins-job-builder: Add support for the Jenkins Clang Scan-Build publisher plugin.  https://review.openstack.org/117958
+2014-11-15T15:29:02  <openstackgerrit> Jeremy Stanley proposed openstack/requirements: Skip testtools 1.2.0  https://review.openstack.org/134712
+2014-11-15T15:29:38  *** mtreinish has joined #openstack-infra
+2014-11-15T15:29:55  *** shashankhegde has joined #openstack-infra
+2014-11-15T15:34:49  <openstackgerrit> Davanum Srinivas (dims) proposed openstack-infra/devstack-gate: EXPERIMENT: Break Nova V2 XML Support  https://review.openstack.org/134714
+2014-11-15T15:37:15  <foobio> sdague: yay! parallel effort
+2014-11-15T15:37:49  <foobio> that's what i get for looking at irc instead of e-mail when i wake up, i guess
+2014-11-15T15:41:45  *** cpowell has joined #openstack-infra
+2014-11-15T15:42:16  *** baoli has quit IRC
+2014-11-15T15:43:31  <sdague> foobio: heh, well that's why I sent an email, I figured that was the best way to make sure it was seen
+2014-11-15T15:44:14  <sdague> also, I think that every one of these library breaks we should send to the list from here on out as policy, as most people don't realize how often we're running into this
+2014-11-15T15:45:23  <foobio> sdague: yep. should i mark 1393006 as the duplicate since my upstream bug report refers to the earlier infra bug harlowja_away opened?
+2014-11-15T15:45:44  <sdague> foobio: sure, though that's the one the ER sig is on
+2014-11-15T15:46:07  *** pcrews has joined #openstack-infra
+2014-11-15T15:46:08  <foobio> ah, and looks like we've got two sets of reqs pin patches proposed for master and stable branches too
+2014-11-15T15:46:14  *** cpowell has quit IRC
+2014-11-15T15:46:28  <sdague> foobio: which is the other set?
+2014-11-15T15:46:39  *** mtreinish has quit IRC
+2014-11-15T15:46:45  <foobio> sdague: the ones linked from bug 1392986
+2014-11-15T15:46:47  <uvirtbot> Launchpad bug 1392986 in openstack-ci "Subunit gate failures" [Critical,In progress] https://launchpad.net/bugs/1392986
+2014-11-15T15:46:54  <sdague> I did search for equiv patches before I pushed mine
+2014-11-15T15:47:03  <foobio> sdague: yeah, i think yours are older
+2014-11-15T15:47:14  <sdague> yeh
+2014-11-15T15:47:31  <sdague> I also pre-approved them so that anyone could recheck them to get them landed
+2014-11-15T15:47:45  <sdague> not knowing if any reviewers were going to be around this weekend
+2014-11-15T15:47:48  <foobio> since i didn't see any activity at all in the bug report, i (wrongly) assumed nobody else was working on it yet. didn't notice you opened a second bug report after that
+2014-11-15T15:48:19  <sdague> yeh, sorry, I looked for an ER signature, and not seeing one, I opened a bug and went from there
+2014-11-15T15:48:36  <foobio> makes sense. too many entry points
+2014-11-15T15:48:48  <sdague> because finding lp dup bugs is so terrible for me, I just stopped trying
+2014-11-15T15:48:56  <foobio> heh
+2014-11-15T15:48:59  <foobio> i hear that
+2014-11-15T15:49:14  <sdague> I figured if there was an ER sig, that meant someone was on it
+2014-11-15T15:49:30  <foobio> i usually just sort all infra bugs by bug number and look at the newest reports in sudden break situations like this
+2014-11-15T15:49:40  <foobio> as they'll generally be the ones on top
+2014-11-15T15:50:23  *** liusheng has quit IRC
+2014-11-15T15:50:32  <sdague> anyway, actually actually about to drop off now. There was just a quiet moment for nap time as we start gearing up the whole machine for a family outing this afternoon.
+2014-11-15T15:50:42  <foobio> since we've got e-r referencing the newer bug, i'll mark the older one as a dupe and abandon my extra patches
+2014-11-15T15:50:43  *** salv-orlando has quit IRC
+2014-11-15T15:50:56  *** liusheng has joined #openstack-infra
+2014-11-15T15:52:24  <sdague> cool
+2014-11-15T15:53:00  *** ryanpetrello has quit IRC
+2014-11-15T15:55:54  *** rushiagr_away is now known as rushiagr
+2014-11-15T15:58:27  <openstackgerrit> Khai Do proposed openstack-infra/system-config: add a turbo hipster worker for testing  https://review.openstack.org/107331
+2014-11-15T15:58:47  *** p5ntangle has joined #openstack-infra
+2014-11-15T16:02:14  *** teran_ has joined #openstack-infra
+2014-11-15T16:05:36  *** links has quit IRC
+2014-11-15T16:07:04  *** pcrews has quit IRC
+2014-11-15T16:13:46  *** ddieterly has quit IRC
+2014-11-15T16:16:30  *** yamamoto has joined #openstack-infra
+2014-11-15T16:16:34  *** p5ntangle has quit IRC
+2014-11-15T16:17:11  *** p5ntangle has joined #openstack-infra
+2014-11-15T16:21:04  *** yamamoto has quit IRC
+2014-11-15T16:21:22  *** p5ntangle has quit IRC
+2014-11-15T16:23:03  *** ddieterly has joined #openstack-infra
+2014-11-15T16:23:35  *** paul-- has quit IRC
+2014-11-15T16:28:51  *** teran_ has quit IRC
+2014-11-15T16:31:24  *** teran has joined #openstack-infra
+2014-11-15T16:33:35  *** paul-- has joined #openstack-infra
+2014-11-15T16:33:35  *** HeOS has joined #openstack-infra
+2014-11-15T16:34:56  *** banix has joined #openstack-infra
+2014-11-15T16:36:23  *** mrmartin has joined #openstack-infra
+2014-11-15T16:36:43  *** bdpayne has joined #openstack-infra
+2014-11-15T16:39:30  *** bhunter71 has quit IRC
+2014-11-15T16:46:23  <openstackgerrit> Spencer Krum proposed openstack-infra/system-config: Logstash: Modifying rewrite rules to allow kibana 3  https://review.openstack.org/93167
+2014-11-15T16:52:22  *** mmaglana has joined #openstack-infra
+2014-11-15T16:54:57  *** shashankhegde has quit IRC
+2014-11-15T16:55:22  *** bdpayne has quit IRC
+2014-11-15T16:56:14  *** MaxV has quit IRC
+2014-11-15T16:57:43  *** mmaglana has quit IRC
+2014-11-15T16:59:09  *** banix has quit IRC
+2014-11-15T16:59:15  *** MaxV has joined #openstack-infra
+2014-11-15T17:00:56  *** shashankhegde has joined #openstack-infra
+2014-11-15T17:02:03  *** vrutkovs has joined #openstack-infra
+2014-11-15T17:10:46  *** _nadya_ has joined #openstack-infra
+2014-11-15T17:12:04  *** p5ntangle has joined #openstack-infra
+2014-11-15T17:12:10  *** p5ntangle has quit IRC
+2014-11-15T17:12:51  *** p5ntangle has joined #openstack-infra
+2014-11-15T17:16:29  *** yamamoto has joined #openstack-infra
+2014-11-15T17:18:11  *** yamamoto has quit IRC
+2014-11-15T17:18:14  *** talluri has joined #openstack-infra
+2014-11-15T17:18:17  *** yamamoto has joined #openstack-infra
+2014-11-15T17:18:32  *** banix has joined #openstack-infra
+2014-11-15T17:20:40  *** banix has quit IRC
+2014-11-15T17:21:33  *** talluri has quit IRC
+2014-11-15T17:22:13  *** banix has joined #openstack-infra
+2014-11-15T17:22:49  *** dimsum__ has quit IRC
+2014-11-15T17:22:57  *** yamamoto has quit IRC
+2014-11-15T17:25:09  <banix> are there any known issues at the “check” pipeline currently with a lot of tests failing for my patch which were passing earlier?
+2014-11-15T17:26:58  *** Hefeweizen has quit IRC
+2014-11-15T17:31:14  *** dimsum__ has joined #openstack-infra
+2014-11-15T17:32:59  *** vrutkovs has left #openstack-infra
+2014-11-15T17:42:22  <superbee> yes testtools made a release thst has broken stuff apparently
+2014-11-15T17:43:43  *** yodayosi has joined #openstack-infra
+2014-11-15T17:44:07  <banix> superbee: ok; so should hold off rechecks for now?
+2014-11-15T17:45:10  <superbee> I guess? I took the week off so dont know much beyond what was sent to the mail list
+2014-11-15T17:45:56  <banix> superbee: ok thanks
+2014-11-15T17:46:11  *** zz_dimtruck is now known as dimtruck
+2014-11-15T17:49:52  *** _david_ has joined #openstack-infra
+2014-11-15T17:50:23  *** yodayosi has quit IRC
+2014-11-15T17:53:41  *** _david__ has joined #openstack-infra
+2014-11-15T17:54:04  *** talluri has joined #openstack-infra
+2014-11-15T17:54:45  *** shashankhegde has quit IRC
+2014-11-15T17:55:49  *** mtreinish has joined #openstack-infra
+2014-11-15T17:57:30  *** _david_ has quit IRC
+2014-11-15T17:58:05  *** p5ntangle has quit IRC
+2014-11-15T17:58:43  *** p5ntangle has joined #openstack-infra
+2014-11-15T18:00:37  *** yodayosi has joined #openstack-infra
+2014-11-15T18:02:47  *** p5ntangle has quit IRC
+2014-11-15T18:03:35  *** mrmartin has quit IRC
+2014-11-15T18:03:48  *** yamahata has quit IRC
+2014-11-15T18:06:46  *** Bart has joined #openstack-infra
+2014-11-15T18:08:26  *** banix has quit IRC
+2014-11-15T18:09:16  *** rushiagr is now known as rushiagr_away
+2014-11-15T18:10:04  <openstackgerrit> Spencer Krum proposed openstack-infra/system-config: Source modules.env from apply-test.sh  https://review.openstack.org/134723
+2014-11-15T18:10:38  *** p5ntangle has joined #openstack-infra
+2014-11-15T18:10:44  <pensu> foobio: hi, it was failing without running any test, I am trying to send a patch to ironic, I see you are already working on it. :)
+2014-11-15T18:12:06  * nibalizer would appreciate reviews on https://review.openstack.org/#/c/134371/
+2014-11-15T18:16:29  *** yamamoto has joined #openstack-infra
+2014-11-15T18:17:00  *** talluri has quit IRC
+2014-11-15T18:17:17  *** mtreinish has quit IRC
+2014-11-15T18:18:43  *** ildikov has joined #openstack-infra
+2014-11-15T18:19:00  *** talluri has joined #openstack-infra
+2014-11-15T18:20:11  *** otter768 has joined #openstack-infra
+2014-11-15T18:20:40  *** yamamoto has quit IRC
+2014-11-15T18:22:44  *** gokrokve has joined #openstack-infra
+2014-11-15T18:23:57  <openstackgerrit> Cedric Brandily proposed openstack-infra/git-review: Test git-review CI (not to merge)  https://review.openstack.org/130949
+2014-11-15T18:24:07  *** yodayosi has quit IRC
+2014-11-15T18:25:45  *** markmcclain has quit IRC
+2014-11-15T18:29:10  *** gokrokve_ has joined #openstack-infra
+2014-11-15T18:29:10  *** gokrokve has quit IRC
+2014-11-15T18:32:19  *** e0ne has quit IRC
+2014-11-15T18:33:36  *** dimsum__ has quit IRC
+2014-11-15T18:34:08  *** dimsum__ has joined #openstack-infra
+2014-11-15T18:39:45  *** p5ntangle has quit IRC
+2014-11-15T18:39:58  <lifeless> foobio: yup, will look in a minute
+2014-11-15T18:42:53  *** banix has joined #openstack-infra
+2014-11-15T18:43:04  *** Daviey has joined #openstack-infra
+2014-11-15T18:45:32  <foobio> lifeless: awesome. i've filed https://github.com/testing-cabal/testtools/issues/121 for you
+2014-11-15T18:45:33  *** sileht has quit IRC
+2014-11-15T18:46:00  *** rainya has quit IRC
+2014-11-15T18:46:00  *** jvrbanac has quit IRC
+2014-11-15T18:47:22  <lifeless> foobio: I can't reproduce it so far
+2014-11-15T18:47:37  *** med_` has joined #openstack-infra
+2014-11-15T18:47:56  *** adam_g has quit IRC
+2014-11-15T18:48:24  *** rainya has joined #openstack-infra
+2014-11-15T18:48:38  *** simonmcc_ has joined #openstack-infra
+2014-11-15T18:48:38  *** adam_g has joined #openstack-infra
+2014-11-15T18:48:41  *** adam_g has quit IRC
+2014-11-15T18:48:42  *** adam_g has joined #openstack-infra
+2014-11-15T18:48:42  *** jvrbanac has joined #openstack-infra
+2014-11-15T18:49:02  *** sileht has joined #openstack-infra
+2014-11-15T18:49:28  *** serverascode__ has quit IRC
+2014-11-15T18:49:30  <foobio> lifeless: if it helps, a sample pip freeze looks like http://logs.openstack.org/69/134369/1/gate/gate-tempest-dsvm-postgres-full/6b2ef17/logs/pip-freeze.txt.gz
+2014-11-15T18:50:21  *** krotscheck has quit IRC
+2014-11-15T18:50:23  <foobio> lifeless: though i suppose it's possible the tempest virtualenv looks slightly different (it uses system site packages)
+2014-11-15T18:50:36  <lifeless> unpin unittest2
+2014-11-15T18:50:39  *** dims_ has joined #openstack-infra
+2014-11-15T18:50:49  *** ctracey has quit IRC
+2014-11-15T18:51:14  *** BobBall_ has joined #openstack-infra
+2014-11-15T18:51:16  <foobio> oho. i didn't even see we had that set older
+2014-11-15T18:51:16  <foobio> d'oh!
+2014-11-15T18:51:30  <foobio> i'll push up a test tempest change to see if that works
+2014-11-15T18:51:30  *** nelsnelson has quit IRC
+2014-11-15T18:52:01  *** serverascode__ has joined #openstack-infra
+2014-11-15T18:52:03  <lifeless> upstream deps are too loose
+2014-11-15T18:52:07  *** fabo_ has joined #openstack-infra
+2014-11-15T18:52:07  <lifeless> will fix
+2014-11-15T18:52:14  <Daviey> Anyone else helping look at the testtools 1.2.0 right now?
+2014-11-15T18:52:19  *** ctracey has joined #openstack-infra
+2014-11-15T18:52:22  <foobio> yeah, probably needs to bump its minimum
+2014-11-15T18:52:23  *** _david__ has left #openstack-infra
+2014-11-15T18:52:25  *** jgriffit1 has joined #openstack-infra
+2014-11-15T18:52:42  *** larsks|alt has joined #openstack-infra
+2014-11-15T18:52:46  *** dimtruck is now known as zz_dimtruck
+2014-11-15T18:52:56  *** nelsnelson has joined #openstack-infra
+2014-11-15T18:53:03  <Daviey> https://review.openstack.org/#/c/134710/ is confusing me, check-requirements-int' is oddly failing.
+2014-11-15T18:53:14  *** dtroyer has quit IRC
+2014-11-15T18:53:19  *** leifmadsen has joined #openstack-infra
+2014-11-15T18:53:45  *** JoshNang_ has joined #openstack-infra
+2014-11-15T18:54:12  *** yodayosi has joined #openstack-infra
+2014-11-15T18:54:19  <Daviey> Actually, turns out i can't read.
+2014-11-15T18:54:21  *** zz_dimtruck is now known as dimtruck
+2014-11-15T18:54:33  *** MmikeM has joined #openstack-infra
+2014-11-15T18:54:37  *** med_ has quit IRC
+2014-11-15T18:54:37  *** openstackgerrit has quit IRC
+2014-11-15T18:54:37  *** zz_jgrimm has quit IRC
+2014-11-15T18:54:37  *** Shrews has quit IRC
+2014-11-15T18:54:38  *** waynr has quit IRC
+2014-11-15T18:54:38  *** JoshNang has quit IRC
+2014-11-15T18:54:39  *** fandi has quit IRC
+2014-11-15T18:54:39  *** k4n0 has quit IRC
+2014-11-15T18:54:39  *** simonmcc has quit IRC
+2014-11-15T18:54:40  *** Mmike has quit IRC
+2014-11-15T18:54:40  *** larsks has quit IRC
+2014-11-15T18:54:40  *** BobBall has quit IRC
+2014-11-15T18:54:41  *** blitzrage has quit IRC
+2014-11-15T18:54:41  *** dimsum__ has quit IRC
+2014-11-15T18:54:41  *** fabo has quit IRC
+2014-11-15T18:54:41  *** jamespage has quit IRC
+2014-11-15T18:54:41  *** jgriffith has quit IRC
+2014-11-15T18:54:41  *** mfink_ has quit IRC
+2014-11-15T18:54:42  *** JoshNang_ is now known as JoshNang
+2014-11-15T18:54:46  *** waynr1 has joined #openstack-infra
+2014-11-15T18:54:53  <lifeless> Daviey: thats what foobio and I just discussed
+2014-11-15T18:54:54  *** _nadya_ has quit IRC
+2014-11-15T18:54:56  *** krotscheck has joined #openstack-infra
+2014-11-15T18:55:11  *** k4n0_ has joined #openstack-infra
+2014-11-15T18:55:13  *** zz_jgrimm has joined #openstack-infra
+2014-11-15T18:55:15  *** AlexF has joined #openstack-infra
+2014-11-15T18:55:28  *** simonmcc_ is now known as simonmcc
+2014-11-15T18:55:45  *** mfink_ has joined #openstack-infra
+2014-11-15T18:55:56  *** Shrews has joined #openstack-infra
+2014-11-15T18:56:13  *** openstackgerrit has joined #openstack-infra
+2014-11-15T18:56:17  *** pensu has quit IRC
+2014-11-15T18:56:28  *** fandi has joined #openstack-infra
+2014-11-15T18:57:21  *** bhunter71 has joined #openstack-infra
+2014-11-15T18:57:33  *** ddieterly has quit IRC
+2014-11-15T18:57:40  *** serverascode___ has joined #openstack-infra
+2014-11-15T18:58:35  *** dtroyer has joined #openstack-infra
+2014-11-15T18:58:55  *** ameade_ has joined #openstack-infra
+2014-11-15T18:59:35  *** StevenK_ has joined #openstack-infra
+2014-11-15T18:59:55  *** Adri2000_ has joined #openstack-infra
+2014-11-15T18:59:55  *** bmwiedemann1 has joined #openstack-infra
+2014-11-15T19:00:07  *** Nakato_ has joined #openstack-infra
+2014-11-15T19:00:12  <foobio> Daviey: 'oslo.middleware' is not in global-requirements.txt
+2014-11-15T19:00:13  <foobio> Daviey: that?
+2014-11-15T19:00:15  *** bauzas has quit IRC
+2014-11-15T19:00:17  *** j^2 has quit IRC
+2014-11-15T19:00:17  *** serverascode__ has quit IRC
+2014-11-15T19:00:17  *** rainya has quit IRC
+2014-11-15T19:00:18  *** ameade has quit IRC
+2014-11-15T19:00:18  *** rossella_s has quit IRC
+2014-11-15T19:00:19  *** greghaynes has quit IRC
+2014-11-15T19:00:20  *** JayF has quit IRC
+2014-11-15T19:00:21  *** StevenK has quit IRC
+2014-11-15T19:00:21  *** mgagne has quit IRC
+2014-11-15T19:00:21  *** ttx has quit IRC
+2014-11-15T19:00:21  *** bearhands has quit IRC
+2014-11-15T19:00:23  *** foobio has quit IRC
+2014-11-15T19:00:23  *** Nakato has quit IRC
+2014-11-15T19:00:24  *** Adri2000 has quit IRC
+2014-11-15T19:00:24  *** mattoliverau has quit IRC
+2014-11-15T19:00:24  *** bogdando has quit IRC
+2014-11-15T19:00:29  *** msuriar has quit IRC
+2014-11-15T19:00:32  *** bauzas has joined #openstack-infra
+2014-11-15T19:00:32  *** ameade_ is now known as ameade
+2014-11-15T19:00:53  *** JayF has joined #openstack-infra
+2014-11-15T19:00:55  *** j^2 has joined #openstack-infra
+2014-11-15T19:01:20  *** msuriar has joined #openstack-infra
+2014-11-15T19:01:21  *** mattoliverau has joined #openstack-infra
+2014-11-15T19:01:24  *** rainya has joined #openstack-infra
+2014-11-15T19:01:58  *** ttx has joined #openstack-infra
+2014-11-15T19:01:58  *** ttx has quit IRC
+2014-11-15T19:01:58  *** ttx has joined #openstack-infra
+2014-11-15T19:02:02  *** apmelton_ has joined #openstack-infra
+2014-11-15T19:02:45  *** rossella_s has joined #openstack-infra
+2014-11-15T19:02:49  *** roaet- has joined #openstack-infra
+2014-11-15T19:02:54  *** comstud has joined #openstack-infra
+2014-11-15T19:03:18  *** ddieterly has joined #openstack-infra
+2014-11-15T19:05:04  *** apmelton has quit IRC
+2014-11-15T19:05:09  *** roaet_ has quit IRC
+2014-11-15T19:07:06  *** yodayosi has quit IRC
+2014-11-15T19:07:39  *** mgagne has joined #openstack-infra
+2014-11-15T19:07:39  *** mgagne is now known as Guest32278
+2014-11-15T19:08:18  *** HeOS has quit IRC
+2014-11-15T19:09:22  *** yodayosi has joined #openstack-infra
+2014-11-15T19:10:21  *** greghaynes has joined #openstack-infra
+2014-11-15T19:11:00  *** bogdando has joined #openstack-infra
+2014-11-15T19:11:20  *** foobio has joined #openstack-infra
+2014-11-15T19:12:03  *** gokrokve has joined #openstack-infra
+2014-11-15T19:12:19  <foobio> Daviey: it does appear that oslo.middleware is not in stable/juno of global-requirements.txt
+2014-11-15T19:12:22  <foobio> Daviey: looks like glance-store is trying to declare it
+2014-11-15T19:12:26  <foobio> Daviey: i think this means that glance-store is not safe for stable/juno
+2014-11-15T19:12:30  <foobio> Daviey: oh, nevermind, it's oslo.messaging which is pulling it in
+2014-11-15T19:12:33  <foobio> dhellmann: ^
+2014-11-15T19:12:36  <foobio> so basically oslo.middleware is in stable/juno projects.txt and declares a requirement for oslo.middleware which is not in stable/juno global-requirements.txt
+2014-11-15T19:12:40  <foobio> Daviey: dhellmann: not sure whether that means we need to add oslo.middleware to juno global reqs (is that a violation of our stable branch policies?) or give oslo.messaging a stable/juno branch which doesn't need oslo.middleware
+2014-11-15T19:12:40  *** waynr1 is now known as waynr
+2014-11-15T19:12:46  <foobio> lifeless: interestingly, we weren't pinning unittest2 at all in global-reqs so something else was forcing it to an older release
+2014-11-15T19:12:49  <foobio> lifeless: aha! we're installing ubuntu's python-unittest2 package
+2014-11-15T19:12:54  <foobio> so i think this may need to be fixed in devstack
+2014-11-15T19:13:48  <Daviey> foobio: here
+2014-11-15T19:14:01  <Daviey> foobio: you went through the identical thought process as me
+2014-11-15T19:14:18  <foobio> Daviey: yep, freenode was getting in the way
+2014-11-15T19:15:02  <Daviey> foobio: I really don't think we can add unittest2 as a requirement, but i added a cherrypick incase.
+2014-11-15T19:15:16  *** gokrokve_ has quit IRC
+2014-11-15T19:15:23  <Daviey> foobio: I think we need a stable/juno oslo.messaging
+2014-11-15T19:15:35  <Daviey> dhellmann: around?
+2014-11-15T19:16:11  <foobio> Daviey: you mean can't add oslo.middleware as a stable req presumably (working multiple bugs at one time here)
+2014-11-15T19:16:31  *** yamamoto has joined #openstack-infra
+2014-11-15T19:16:38  *** gokrokve has quit IRC
+2014-11-15T19:17:00  *** mwagner_lap has quit IRC
+2014-11-15T19:17:21  <Daviey> foobio: Yeah, introducing a new requirement feels pretty wrong on stable/*
+2014-11-15T19:17:40  <foobio> Daviey: totally agree
+2014-11-15T19:17:50  <Daviey> foobio: I suspect we either need to try and get https://github.com/openstack/oslo.messaging/commit/10eb1202b37f896e1b7844d400e0defd926a7ab1 backed out from Master, or cut a stable/juno release of that
+2014-11-15T19:18:14  <Daviey> It was only merged 2 days ago...
+2014-11-15T19:19:02  <foobio> Daviey: yep, whichever dhellmann prefers (i suspect he'll want to to with the latter)
+2014-11-15T19:19:06  <Daviey> Hmm.. What about introducing a pin for oslo.messaging in juno?
+2014-11-15T19:19:28  <foobio> Daviey: oh, good point... that is what we agreed to in the oslo versioning summit session after all
+2014-11-15T19:19:37  <foobio> we just haven't gotten around to doing it yet
+2014-11-15T19:19:45  <Daviey> :)
+2014-11-15T19:19:52  <Daviey> I'll do that now.
+2014-11-15T19:19:53  <foobio> that way oslo.messaging doesn't need a stable/juno branch until there's something to backport
+2014-11-15T19:19:55  *** sressot has quit IRC
+2014-11-15T19:21:29  *** yamamoto has quit IRC
+2014-11-15T19:21:32  *** ildikov has quit IRC
+2014-11-15T19:21:47  *** maurosr has quit IRC
+2014-11-15T19:21:47  *** BadCub has quit IRC
+2014-11-15T19:22:08  *** jamespd has quit IRC
+2014-11-15T19:23:03  *** katyafervent has quit IRC
+2014-11-15T19:23:03  *** morganfainberg has quit IRC
+2014-11-15T19:23:03  *** vponomaryov has quit IRC
+2014-11-15T19:23:03  *** jkt has quit IRC
+2014-11-15T19:23:03  *** spiffxp has quit IRC
+2014-11-15T19:23:23  *** BadCub has joined #openstack-infra
+2014-11-15T19:24:03  *** jamespd has joined #openstack-infra
+2014-11-15T19:24:10  *** yodayosi has quit IRC
+2014-11-15T19:24:10  *** alaski has quit IRC
+2014-11-15T19:24:16  *** morganfainberg has joined #openstack-infra
+2014-11-15T19:24:21  *** kirshil has quit IRC
+2014-11-15T19:24:38  *** jkt has joined #openstack-infra
+2014-11-15T19:24:59  *** kirshil has joined #openstack-infra
+2014-11-15T19:27:59  *** alaski has joined #openstack-infra
+2014-11-15T19:28:00  *** katyafervent has joined #openstack-infra
+2014-11-15T19:28:16  *** maurosr has joined #openstack-infra
+2014-11-15T19:28:31  *** spiffxp has joined #openstack-infra
+2014-11-15T19:30:03  *** shashankhegde has joined #openstack-infra
+2014-11-15T19:31:54  *** mwagner_lap has joined #openstack-infra
+2014-11-15T19:33:23  <Daviey> foobio / lifeless : Care to be reviewing https://review.openstack.org/#/c/134727/ ?
+2014-11-15T19:34:39  *** ekarlso- has joined #openstack-infra
+2014-11-15T19:34:46  <foobio> Daviey: did we really introduce a new requirement in oslo.messaging 1.4.1? that should totally have been 1.5.0 instead
+2014-11-15T19:36:08  *** vponomaryov has joined #openstack-infra
+2014-11-15T19:36:09  <foobio> Daviey: in light of that, i think we need a !=1.4.1 followed by a 1.4.2 tag on top of the 1.4.0 commit (or a revert, tag, and unrevert), then retag tip of master as 1.5.0
+2014-11-15T19:36:17  <Daviey> foobio: Oh, i pinned to the latest version on pypi
+2014-11-15T19:36:26  *** ekarlso has quit IRC
+2014-11-15T19:36:52  <Daviey> foobio: https://pypi.python.org/pypi/oslo.messaging
+2014-11-15T19:37:44  *** AlexF has quit IRC
+2014-11-15T19:38:12  *** mrmartin has joined #openstack-infra
+2014-11-15T19:38:47  *** yodayosi has joined #openstack-infra
+2014-11-15T19:39:31  *** p5ntangle has joined #openstack-infra
+2014-11-15T19:39:31  <foobio> Daviey: it's possible that job is installing oslo.messaging from source rather than pypi
+2014-11-15T19:39:51  <foobio> i've been pulled away for a bit and can't dig deeper
+2014-11-15T19:39:54  <Daviey> foobio: I assumed if it was unbound openstack project it did just that?
+2014-11-15T19:40:24  <foobio> Daviey: no, depends on how the job is written
+2014-11-15T19:40:40  <lifeless> Daviey: what about adding oslo.middleware for juno ?
+2014-11-15T19:40:55  <Daviey> lifeless: Introduce a new package to distros / deployers?
+2014-11-15T19:41:03  *** _nadya_ has joined #openstack-infra
+2014-11-15T19:41:22  <lifeless> Daviey: sure, we permit that in the clients
+2014-11-15T19:41:27  <lifeless> Daviey: and the servers depend on clients
+2014-11-15T19:41:49  <foobio> lifeless: Daviey: sdague: also pushed up https://review.openstack.org/134728 and two corresponding stable backports to see if we can solve the testtools/unittest2 dilemma
+2014-11-15T19:41:51  <Daviey> lifeless: This is server code, no?
+2014-11-15T19:41:57  <lifeless> Daviey: its library code
+2014-11-15T19:42:31  <Daviey> lifeless: I mean, this isn't just touching clients.. which don't have stable releases.  This is touching core stable/* , which unless things have changed we do not permit new deps
+2014-11-15T19:42:32  <lifeless> anyhow remembering paris
+2014-11-15T19:42:41  *** banix has quit IRC
+2014-11-15T19:42:48  <lifeless> we were going to pin everything
+2014-11-15T19:42:52  <Daviey> lifeless: we'll always have Paris... UTF_heart
+2014-11-15T19:42:54  <lifeless> except things superbee objected to
+2014-11-15T19:42:58  *** jamespd_ has joined #openstack-infra
+2014-11-15T19:43:36  <foobio> lifeless: yep, though i'm starting to think the job in question is doing requirements integration testing for branch tip of everything, including libs, so pinning them won't help without rewriting that job
+2014-11-15T19:44:01  <lifeless> foobio: sure
+2014-11-15T19:44:30  <Daviey> foobio: Is it always using Master tip or only if not a bound requirement?
+2014-11-15T19:44:37  *** gokrokve has joined #openstack-infra
+2014-11-15T19:45:10  *** yodayosi has quit IRC
+2014-11-15T19:45:36  *** p5ntangle has quit IRC
+2014-11-15T19:45:46  <foobio> Daviey: i think it's using mater tip of any listed project which doesn't have the corresponding stable branch
+2014-11-15T19:46:08  <foobio> otherwise stable branch tip for the stable branch in question
+2014-11-15T19:46:09  *** p5ntangle has joined #openstack-infra
+2014-11-15T19:46:42  *** banix has joined #openstack-infra
+2014-11-15T19:47:05  <Daviey> bugger.
+2014-11-15T19:47:19  <foobio> but in the new world of pip-install-everything-except-your-project-being-tested we may need to reevaluate what we want that job to actually do
+2014-11-15T19:47:36  *** jamespd has quit IRC
+2014-11-15T19:47:36  *** superbee has quit IRC
+2014-11-15T19:47:43  *** p5ntangle has quit IRC
+2014-11-15T19:47:53  <foobio> reset to the most recent tag if no matching branch but there are tags, and reset to master tip if no stable branch and no tags?
+2014-11-15T19:48:02  <foobio> install everything from pypi?
+2014-11-15T19:48:13  *** bo_sh has joined #openstack-infra
+2014-11-15T19:48:19  <foobio> (except some projects also aren't on pypi)
+2014-11-15T19:48:41  *** bo_sh has left #openstack-infra
+2014-11-15T19:49:01  <foobio> probably worth revisiting the goal of the job itself, for that matter
+2014-11-15T19:49:24  <Daviey> Well, if it is a upper bound version - it should use pypi IMO.. If it isn't, then using Master (unless it is a project that contains stable/* and it is for a stable project, then use that branch latest)
+2014-11-15T19:49:32  *** shashankhegde has quit IRC
+2014-11-15T19:49:59  *** shashankhegde has joined #openstack-infra
+2014-11-15T19:50:50  *** sressot has joined #openstack-infra
+2014-11-15T19:50:53  *** dimtruck is now known as zz_dimtruck
+2014-11-15T19:51:00  <mordred> oh wow. maybe I should not have looked at IRC
+2014-11-15T19:51:08  <mordred> I'm pretty sure I don't actually want to read through all of that
+2014-11-15T19:51:46  <Daviey> mordred: Have fun.
+2014-11-15T19:51:48  <foobio> mordred: situation weekend, all f'ed up
+2014-11-15T19:52:09  <mordred> foobio: AWESOME
+2014-11-15T19:52:29  <mordred> btw - we should REALLY stop installing ANYTHING python from apt/yum in devstack
+2014-11-15T19:52:47  <foobio> mordred: yep
+2014-11-15T19:52:48  *** superbee has joined #openstack-infra
+2014-11-15T19:52:58  <mordred> I know that doesn't solve the oslo.middleware thing - responding to the python-unittest2 thing
+2014-11-15T19:53:02  <Daviey> If oslo.* is being treated as release independant  - like client tools.. I am surprised that there isn't a test for oslo stuff that blocked this landing in Master, which caused this.
+2014-11-15T19:53:03  <mordred> anybody made a patch for that yet?
+2014-11-15T19:53:14  <lifeless> mordred: foobio has
+2014-11-15T19:53:28  *** yodayosi has joined #openstack-infra
+2014-11-15T19:53:34  <mordred> Daviey: actually, I think we ran out of time talking about the release independent vs. release dependent problem in that session, no?
+2014-11-15T19:53:49  <foobio> mordred: lifeless: well, i made a patch for not installing python-unittest2 via apt/rpm, but not the bigger "python things should all come from pypi" patch
+2014-11-15T19:53:49  <mordred> I mean, there is a serious logic problem taht we have no declared soltuion for right now
+2014-11-15T19:53:52  <Daviey> mordred: indeed
+2014-11-15T20:07:39  *** openstack has joined #openstack-infra
+2014-11-15T20:08:02  *** NikitaKonovalov is now known as 16WAADH56
+2014-11-15T20:08:18  *** zul has joined #openstack-infra
+2014-11-15T20:08:18  *** rushiagrz has joined #openstack-infra
+2014-11-15T20:08:18  *** NikitaKonovalov has joined #openstack-infra
+2014-11-15T20:08:18  *** freyes has joined #openstack-infra
+2014-11-15T20:08:18  *** DinaBelova has joined #openstack-infra
+2014-11-15T20:08:18  *** notmyname has joined #openstack-infra
+2014-11-15T20:08:18  *** jmeridth_ has joined #openstack-infra
+2014-11-15T20:08:18  *** EmilienM has joined #openstack-infra
+2014-11-15T20:08:18  *** stevebak` has joined #openstack-infra
+2014-11-15T20:08:18  *** a2hill has joined #openstack-infra
+2014-11-15T20:08:18  *** dutsmoc has joined #openstack-infra
+2014-11-15T20:08:18  *** ttx has joined #openstack-infra
+2014-11-15T20:08:18  *** talluri has joined #openstack-infra
+2014-11-15T20:08:18  *** slagle has joined #openstack-infra
+2014-11-15T20:08:18  *** primemin2sterp has joined #openstack-infra
+2014-11-15T20:08:18  *** Adri2000 has joined #openstack-infra
+2014-11-15T20:08:18  *** colettecello has joined #openstack-infra
+2014-11-15T20:08:18  *** gilliard_ has joined #openstack-infra
+2014-11-15T20:08:18  *** matt_____ has joined #openstack-infra
+2014-11-15T20:08:18  *** Sukhdev has joined #openstack-infra
+2014-11-15T20:08:18  *** ivar-lazzaro has joined #openstack-infra
+2014-11-15T20:08:18  *** wendar_ has joined #openstack-infra
+2014-11-15T20:08:18  *** persia__ has joined #openstack-infra
+2014-11-15T20:08:18  *** yodayosi has joined #openstack-infra
+2014-11-15T20:08:18  *** superbee has joined #openstack-infra
+2014-11-15T20:08:18  *** sressot has joined #openstack-infra
+2014-11-15T20:08:18  *** shashankhegde has joined #openstack-infra
+2014-11-15T20:08:18  *** gokrokve has joined #openstack-infra
+2014-11-15T20:08:18  *** jamespd_ has joined #openstack-infra
+2014-11-15T20:08:18  *** _nadya_ has joined #openstack-infra
+2014-11-15T20:08:18  *** mrmartin has joined #openstack-infra
+2014-11-15T20:08:18  *** vponomaryov has joined #openstack-infra
+2014-11-15T20:08:18  *** ekarlso- has joined #openstack-infra
+2014-11-15T20:08:18  *** mwagner_lap has joined #openstack-infra
+2014-11-15T20:08:18  *** spiffxp has joined #openstack-infra
+2014-11-15T20:08:18  *** maurosr has joined #openstack-infra
+2014-11-15T20:08:18  *** katyafervent has joined #openstack-infra
+2014-11-15T20:08:18  *** alaski has joined #openstack-infra
+2014-11-15T20:08:18  *** kirshil has joined #openstack-infra
+2014-11-15T20:08:18  *** jkt has joined #openstack-infra
+2014-11-15T20:08:18  *** morganfainberg has joined #openstack-infra
+2014-11-15T20:08:18  *** BadCub has joined #openstack-infra
+2014-11-15T20:08:18  *** foobio has joined #openstack-infra
+2014-11-15T20:08:18  *** bogdando has joined #openstack-infra
+2014-11-15T20:08:18  *** greghaynes has joined #openstack-infra
+2014-11-15T20:08:18  *** Guest32278 has joined #openstack-infra
+2014-11-15T20:08:18  *** ddieterly has joined #openstack-infra
+2014-11-15T20:08:18  *** rossella_s has joined #openstack-infra
+2014-11-15T20:08:18  *** apmelton_ has joined #openstack-infra
+2014-11-15T20:08:18  *** rainya has joined #openstack-infra
+2014-11-15T20:08:18  *** msuriar has joined #openstack-infra
+2014-11-15T20:08:18  *** j^2 has joined #openstack-infra
+2014-11-15T20:08:18  *** JayF has joined #openstack-infra
+2014-11-15T20:08:18  *** Nakato_ has joined #openstack-infra
+2014-11-15T20:08:18  *** bmwiedemann1 has joined #openstack-infra
+2014-11-15T20:08:18  *** StevenK_ has joined #openstack-infra
+2014-11-15T20:08:18  *** dtroyer has joined #openstack-infra
+2014-11-15T20:08:18  *** serverascode___ has joined #openstack-infra
+2014-11-15T20:08:18  *** bhunter71 has joined #openstack-infra
+2014-11-15T20:08:18  *** fandi has joined #openstack-infra
+2014-11-15T20:08:18  *** openstackgerrit has joined #openstack-infra
+2014-11-15T20:08:18  *** Shrews has joined #openstack-infra
+2014-11-15T20:08:18  *** mfink_ has joined #openstack-infra
+2014-11-15T20:08:18  *** zz_jgrimm has joined #openstack-infra
+2014-11-15T20:08:18  *** k4n0_ has joined #openstack-infra
+2014-11-15T20:08:18  *** krotscheck has joined #openstack-infra
+2014-11-15T20:08:18  *** waynr has joined #openstack-infra
+2014-11-15T20:08:18  *** MmikeM has joined #openstack-infra
+2014-11-15T20:08:18  *** JoshNang has joined #openstack-infra
+2014-11-15T20:08:18  *** leifmadsen has joined #openstack-infra
+2014-11-15T20:08:18  *** larsks|alt has joined #openstack-infra
+2014-11-15T20:08:18  *** jgriffit1 has joined #openstack-infra
+2014-11-15T20:08:18  *** ctracey has joined #openstack-infra
+2014-11-15T20:08:18  *** fabo_ has joined #openstack-infra
+2014-11-15T20:08:18  *** BobBall_ has joined #openstack-infra
+2014-11-15T20:08:18  *** dims_ has joined #openstack-infra
+2014-11-15T20:08:18  *** jvrbanac has joined #openstack-infra
+2014-11-15T20:08:18  *** adam_g has joined #openstack-infra
+2014-11-15T20:08:18  *** simonmcc has joined #openstack-infra
+2014-11-15T20:08:18  *** med_` has joined #openstack-infra
+2014-11-15T20:08:18  *** Daviey has joined #openstack-infra
+2014-11-15T20:08:18  *** otter768 has joined #openstack-infra
+2014-11-15T20:08:18  *** Bart has joined #openstack-infra
+2014-11-15T20:08:18  *** MaxV has joined #openstack-infra
+2014-11-15T20:08:18  *** paul-- has joined #openstack-infra
+2014-11-15T20:08:18  *** teran has joined #openstack-infra
+2014-11-15T20:08:18  *** liusheng has joined #openstack-infra
+2014-11-15T20:08:18  *** erikmwilson_ has joined #openstack-infra
+2014-11-15T20:08:18  *** adalbas has joined #openstack-infra
+2014-11-15T20:08:18  *** koolhead17 has joined #openstack-infra
+2014-11-15T20:08:18  *** masayukig has joined #openstack-infra
+2014-11-15T20:08:18  *** dkehn has joined #openstack-infra
+2014-11-15T20:08:18  *** boris-42 has joined #openstack-infra
+2014-11-15T20:08:18  *** dstufft has joined #openstack-infra
+2014-11-15T20:08:18  *** mfink has joined #openstack-infra
+2014-11-15T20:08:18  *** bswartz has joined #openstack-infra
+2014-11-15T20:08:18  *** mdbooth has joined #openstack-infra
+2014-11-15T20:08:18  *** fifieldt has joined #openstack-infra
+2014-11-15T20:08:18  *** alexpilotti has joined #openstack-infra
+2014-11-15T20:08:18  *** marcusvrn has joined #openstack-infra
+2014-11-15T20:08:18  *** annegentle has joined #openstack-infra
+2014-11-15T20:08:18  *** imcsk8 has joined #openstack-infra
+2014-11-15T20:08:18  *** pleia2 has joined #openstack-infra
+2014-11-15T20:08:18  *** harlowja_away has joined #openstack-infra
+2014-11-15T20:08:18  *** achuprin_ has joined #openstack-infra
+2014-11-15T20:08:18  *** funzo has joined #openstack-infra
+2014-11-15T20:08:18  *** cnesa has joined #openstack-infra
+2014-11-15T20:08:18  *** dkranz has joined #openstack-infra
+2014-11-15T20:08:18  *** aalekov has joined #openstack-infra
+2014-11-15T20:08:18  *** dkehnm has joined #openstack-infra
+2014-11-15T20:08:18  *** krtaylor has joined #openstack-infra
+2014-11-15T20:08:18  *** anteaya has joined #openstack-infra
+2014-11-15T20:08:18  *** vladan has joined #openstack-infra
+2014-11-15T20:08:18  *** d0ugal has joined #openstack-infra
+2014-11-15T20:08:18  *** coolsvap has joined #openstack-infra
+2014-11-15T20:08:18  *** HeOS_ has joined #openstack-infra
+2014-11-15T20:08:18  *** alazarev has joined #openstack-infra
+2014-11-15T20:08:18  *** SergeyLukjanov has joined #openstack-infra
+2014-11-15T20:08:18  *** dvorak has joined #openstack-infra
+2014-11-15T20:08:18  *** ruhe has joined #openstack-infra
+2014-11-15T20:08:18  *** rakhmerov has joined #openstack-infra
+2014-11-15T20:08:18  *** jd__ has joined #openstack-infra
+2014-11-15T20:08:18  *** david-lyle_afk has joined #openstack-infra
+2014-11-15T20:08:18  *** ChuckC has joined #openstack-infra
+2014-11-15T20:08:18  *** viglesias has joined #openstack-infra
+2014-11-15T20:08:18  *** gus has joined #openstack-infra
+2014-11-15T20:08:18  *** nolafleur has joined #openstack-infra
+2014-11-15T20:08:18  *** vhoward has joined #openstack-infra
+2014-11-15T20:08:18  *** bookwar has joined #openstack-infra
+2014-11-15T20:08:18  *** rcarrill` has joined #openstack-infra
+2014-11-15T20:08:18  *** kashyap has joined #openstack-infra
+2014-11-15T20:08:18  *** miqui has joined #openstack-infra
+2014-11-15T20:08:18  *** sergsh has joined #openstack-infra
+2014-11-15T20:08:18  *** mjturek has joined #openstack-infra
+2014-11-15T20:08:18  *** mwhudson has joined #openstack-infra
+2014-11-15T20:08:18  *** wolsen has joined #openstack-infra
+2014-11-15T20:08:18  *** michchap_ has joined #openstack-infra
+2014-11-15T20:08:18  *** tteggel has joined #openstack-infra
+2014-11-15T20:08:18  *** gpocentek has joined #openstack-infra
+2014-11-15T20:08:18  *** enikanorov__ has joined #openstack-infra
+2014-11-15T20:08:18  *** Svedrin has joined #openstack-infra
+2014-11-15T20:08:18  *** redrobot has joined #openstack-infra
+2014-11-15T20:08:18  *** tsufiev has joined #openstack-infra
+2014-11-15T20:08:18  *** vipul has joined #openstack-infra
+2014-11-15T20:08:18  *** darvon has joined #openstack-infra
+2014-11-15T20:08:18  *** mordred has joined #openstack-infra
+2014-11-15T20:08:18  *** hamzy has joined #openstack-infra
+2014-11-15T20:08:18  *** tristanC_ has joined #openstack-infra
+2014-11-15T20:08:18  *** tchaypo has joined #openstack-infra
+2014-11-15T20:08:18  *** Ng has joined #openstack-infra
+2014-11-15T20:08:18  *** Guest32088 has joined #openstack-infra
+2014-11-15T20:08:18  *** oda-g_ has joined #openstack-infra
+2014-11-15T20:08:18  *** beekneemech has joined #openstack-infra
+2014-11-15T20:08:18  *** Vek has joined #openstack-infra
+2014-11-15T20:08:18  *** markvan has joined #openstack-infra
+2014-11-15T20:08:18  *** cody-somerville has joined #openstack-infra
+2014-11-15T20:08:18  *** skraynev has joined #openstack-infra
+2014-11-15T20:08:18  *** rkukura has joined #openstack-infra
+2014-11-15T20:08:18  *** julim has joined #openstack-infra
+2014-11-15T20:08:18  *** s0nea has joined #openstack-infra
+2014-11-15T20:08:18  *** chmouel has joined #openstack-infra
+2014-11-15T20:08:18  *** flaper87 has joined #openstack-infra
+2014-11-15T20:08:18  *** JaDonG has joined #openstack-infra
+2014-11-15T20:08:18  *** changbl has joined #openstack-infra
+2014-11-15T20:08:18  *** arosen1 has joined #openstack-infra
+2014-11-15T20:08:18  *** jule has joined #openstack-infra
+2014-11-15T20:08:18  *** hogepodge has joined #openstack-infra
+2014-11-15T20:08:18  *** Kiall has joined #openstack-infra
+2014-11-15T20:08:18  *** mmedvede has joined #openstack-infra
+2014-11-15T20:08:18  *** pabelanger has joined #openstack-infra
+2014-11-15T20:08:18  *** loquacity has joined #openstack-infra
+2014-11-15T20:08:18  *** grue_pm has joined #openstack-infra
+2014-11-15T20:08:18  *** dmitryme has joined #openstack-infra
+2014-11-15T20:08:18  *** LinuxJedi has joined #openstack-infra
+2014-11-15T20:08:18  *** timfreund has joined #openstack-infra
+2014-11-15T20:08:18  *** radez_g0n3 has joined #openstack-infra
+2014-11-15T20:08:18  *** dougwig has joined #openstack-infra
+2014-11-15T20:08:18  *** dteselkin has joined #openstack-infra
+2014-11-15T20:08:18  *** dstanek has joined #openstack-infra
+2014-11-15T20:08:18  *** dtantsur|afk has joined #openstack-infra
+2014-11-15T20:08:18  *** tnurlygayanov has joined #openstack-infra
+2014-11-15T20:08:18  *** smoser has joined #openstack-infra
+2014-11-15T20:08:18  *** HenryG has joined #openstack-infra
+2014-11-15T20:08:18  *** nijaba has joined #openstack-infra
+2014-11-15T20:08:18  *** russellb has joined #openstack-infra
+2014-11-15T20:08:18  *** mrodden has joined #openstack-infra
+2014-11-15T20:08:18  *** pfallenop has joined #openstack-infra
+2014-11-15T20:08:18  *** zhiyan has joined #openstack-infra
+2014-11-15T20:08:18  *** sbadia has joined #openstack-infra
+2014-11-15T20:08:18  *** dosaboy has joined #openstack-infra
+2014-11-15T20:08:18  *** kevinbenton has joined #openstack-infra
+2014-11-15T20:08:18  *** mestery has joined #openstack-infra
+2014-11-15T20:08:18  *** lifeless has joined #openstack-infra
+2014-11-15T20:08:18  *** briancline has joined #openstack-infra
+2014-11-15T20:08:18  *** primemin1sterp has joined #openstack-infra
+2014-11-15T20:08:18  *** jpeeler has joined #openstack-infra
+2014-11-15T20:08:18  *** zxiiro has joined #openstack-infra
+2014-11-15T20:08:18  *** saper has joined #openstack-infra
+2014-11-15T20:08:18  *** spiffxp- has joined #openstack-infra
+2014-11-15T20:08:18  *** tlbr has joined #openstack-infra
+2014-11-15T20:08:18  *** toabctl has joined #openstack-infra
+2014-11-15T20:08:18  *** Mithrandir has joined #openstack-infra
+2014-11-15T20:08:18  *** antonym has joined #openstack-infra
+2014-11-15T20:08:18  *** bodepd has joined #openstack-infra
+2014-11-15T20:08:18  *** gema has joined #openstack-infra
+2014-11-15T20:08:18  *** jbooboo has joined #openstack-infra
+2014-11-15T20:08:18  *** jklare has joined #openstack-infra
+2014-11-15T20:08:18  *** gnuoy has joined #openstack-infra
+2014-11-15T20:08:18  *** kragniz has joined #openstack-infra
+2014-11-15T20:08:18  *** SlickNik has joined #openstack-infra
+2014-11-15T20:08:18  *** tcammann has joined #openstack-infra
+2014-11-15T20:08:18  *** davidlenwell has joined #openstack-infra
+2014-11-15T20:08:18  *** Hunner has joined #openstack-infra
+2014-11-15T20:08:18  *** zz_gondoi has joined #openstack-infra
+2014-11-15T20:08:18  *** jroll has joined #openstack-infra
+2014-11-15T20:08:18  *** d34dh0r53 has joined #openstack-infra
+2014-11-15T20:08:18  *** jraim has joined #openstack-infra
+2014-11-15T20:08:18  *** nikhil_k|afk has joined #openstack-infra
+2014-11-15T20:08:18  *** rodrigods has joined #openstack-infra
+2014-11-15T20:08:18  *** jhesketh has joined #openstack-infra
+2014-11-15T20:08:18  *** dangers_away has joined #openstack-infra
+2014-11-15T20:08:18  *** sc68cal has joined #openstack-infra
+2014-11-15T20:08:18  *** joa has joined #openstack-infra
+2014-11-15T20:08:18  *** zigo has joined #openstack-infra
+2014-11-15T20:08:18  *** juice has joined #openstack-infra
+2014-11-15T20:08:18  *** dmsimard_away has joined #openstack-infra
+2014-11-15T20:08:18  *** sdague has joined #openstack-infra
+2014-11-15T20:08:18  *** schang has joined #openstack-infra
+2014-11-15T20:08:18  *** jcooley has joined #openstack-infra
+2014-11-15T20:08:18  *** asadoughi has joined #openstack-infra
+2014-11-15T20:08:18  *** jesusaurus has joined #openstack-infra
+2014-11-15T20:08:18  *** abramley has joined #openstack-infra
+2014-11-15T20:08:18  *** ctlaugh_ has joined #openstack-infra
+2014-11-15T20:08:18  *** mugsie has joined #openstack-infra
+2014-11-15T20:08:18  *** dhellmann has joined #openstack-infra
+2014-11-15T20:08:18  *** SpamapS has joined #openstack-infra
+2014-11-15T20:08:18  *** superdan has joined #openstack-infra
+2014-11-15T20:08:18  *** jamielennox has joined #openstack-infra
+2014-11-15T20:08:18  *** mika has joined #openstack-infra
+2014-11-15T20:08:18  *** mfisch has joined #openstack-infra
+2014-11-15T20:08:18  *** TheJulia has joined #openstack-infra
+2014-11-15T20:08:18  *** shardy has joined #openstack-infra
+2014-11-15T20:08:18  *** morgabra has joined #openstack-infra
+2014-11-15T20:08:18  *** zaro has joined #openstack-infra
+2014-11-15T20:08:18  *** NobodyCam has joined #openstack-infra
+2014-11-15T20:08:18  *** psedlak has joined #openstack-infra
+2014-11-15T20:08:18  *** dkliban_pto has joined #openstack-infra
+2014-11-15T20:08:18  *** bradm has joined #openstack-infra
+2014-11-15T20:08:18  *** charz has joined #openstack-infra
+2014-11-15T20:08:18  *** crinkle has joined #openstack-infra
+2014-11-15T20:08:18  *** mikal has joined #openstack-infra
+2014-11-15T20:08:18  *** cinerama has joined #openstack-infra
+2014-11-15T20:08:18  *** flashgordon has joined #openstack-infra
+2014-11-15T20:08:18  *** yamahata_ has joined #openstack-infra
+2014-11-15T20:08:18  *** devananda has joined #openstack-infra
+2014-11-15T20:08:18  *** grantbow has joined #openstack-infra
+2014-11-15T20:08:18  *** gaelL has joined #openstack-infra
+2014-11-15T20:08:18  *** timrc has joined #openstack-infra
+2014-11-15T20:08:18  *** beecee has joined #openstack-infra
+2014-11-15T20:08:18  *** phschwartz has joined #openstack-infra
+2014-11-15T20:08:18  *** mkoderer has joined #openstack-infra
+2014-11-15T20:08:18  *** Vivek has joined #openstack-infra
+2014-11-15T20:08:18  *** niedbalski has joined #openstack-infra
+2014-11-15T20:08:18  *** esmute has joined #openstack-infra
+2014-11-15T20:08:18  *** odyi has joined #openstack-infra
+2014-11-15T20:08:18  *** Guest20522 has joined #openstack-infra
+2014-11-15T20:08:18  *** nibalizer has joined #openstack-infra
+2014-11-15T20:08:18  *** blkperl has joined #openstack-infra
+2014-11-15T20:08:18  *** uvirtbot has joined #openstack-infra
+2014-11-15T20:08:18  *** isviridov_away has joined #openstack-infra
+2014-11-15T20:08:18  *** soren has joined #openstack-infra
+2014-11-15T20:08:18  *** niska has joined #openstack-infra
+2014-11-15T20:08:18  *** therve has joined #openstack-infra
+2014-11-15T20:08:18  *** zz_naotok has joined #openstack-infra
+2014-11-15T20:08:18  *** ChanServ has joined #openstack-infra
+2014-11-15T20:08:18  *** sendak.freenode.net sets mode: +o ChanServ
+2014-11-15T20:08:28  *** ttx has quit IRC
+2014-11-15T20:08:28  *** ttx has joined #openstack-infra
+2014-11-15T20:08:28  *** alexpilotti has quit IRC
+2014-11-15T20:08:28  <Daviey> wow, freenode is in a mess today
+2014-11-15T20:08:28  <foobio> yep, typical saturday bot armada wars
+2014-11-15T20:08:53  *** jcooley_ has joined #openstack-infra
+2014-11-15T20:08:55  *** jcooley has quit IRC
+2014-11-15T20:08:58  <foobio> the zombie hordes are vying for cnc channel takeovers as usual
+2014-11-15T20:09:01  *** jcooley_ is now known as jcooley
+2014-11-15T20:09:10  *** flaper87 has quit IRC
+2014-11-15T20:09:20  *** talluri has quit IRC
+2014-11-15T20:09:26  <foobio> and the rest of us are simply caught in the crossfire
+2014-11-15T20:09:32  *** DinaBelova has quit IRC
+2014-11-15T20:09:33  *** rakhmerov has quit IRC
+2014-11-15T20:09:33  *** hogepodge has quit IRC
+2014-11-15T20:09:39  *** rodrigods has quit IRC
+2014-11-15T20:09:41  *** 16WAADH56 has quit IRC
+2014-11-15T20:09:56  *** ctlaugh_ has quit IRC
+2014-11-15T20:09:59  *** asadoughi has quit IRC
+2014-11-15T20:10:02  *** dangers_` has joined #openstack-infra
+2014-11-15T20:10:05  *** omnibus7 has joined #openstack-infra
+2014-11-15T20:10:19  *** tlbr has quit IRC
+2014-11-15T20:10:19  *** dangers_away has quit IRC
+2014-11-15T20:10:19  *** sc68cal has quit IRC
+2014-11-15T20:10:42  *** toabctl has quit IRC
+2014-11-15T20:10:42  *** jbooboo has quit IRC
+2014-11-15T20:11:06  *** briancline has quit IRC
+2014-11-15T20:11:06  *** davidlenwell has quit IRC
+2014-11-15T20:11:06  *** schang has quit IRC
+2014-11-15T20:11:16  *** jbooboo has joined #openstack-infra
+2014-11-15T20:11:29  *** gilliard_ has quit IRC
+2014-11-15T20:11:29  *** marcusvrn has quit IRC
+2014-11-15T20:11:31  *** Guest32088 has quit IRC
+2014-11-15T20:11:34  *** toabctl has joined #openstack-infra
+2014-11-15T20:11:40  <mordred> yup. installing half from distro packages and half from pip is basically considered a good idea by zero people
+2014-11-15T20:11:42  *** gilliard has joined #openstack-infra
+2014-11-15T20:11:56  *** larsks|alt has quit IRC
+2014-11-15T20:11:56  *** imcsk8 has quit IRC
+2014-11-15T20:12:00  *** flaper87 has joined #openstack-infra
+2014-11-15T20:12:02  <foobio> lifeless: also, rant++. i completely agree with everything you said there
+2014-11-15T20:12:10  *** krtaylor has quit IRC
+2014-11-15T20:12:14  *** abramley has quit IRC
+2014-11-15T20:12:21  *** rakhmerov has joined #openstack-infra
+2014-11-15T20:12:28  *** imcsk8 has joined #openstack-infra
+2014-11-15T20:12:29  *** yodayosi has quit IRC
+2014-11-15T20:12:37  *** nijaba has quit IRC
+2014-11-15T20:12:48  <foobio> i should totally have tried reproducing that outside devstack
+2014-11-15T20:13:04  *** ctlaugh has joined #openstack-infra
+2014-11-15T20:13:14  <foobio> or more specifically, outside devstack+tempest
+2014-11-15T20:13:18  <lifeless> I've jut cut 1.2.1 which may fix by provoking an upgrade even with site packages
+2014-11-15T20:13:37  <foobio> lifeless: awesome--thanks again!
+2014-11-15T20:14:08  *** colettecello has quit IRC
+2014-11-15T20:14:19  <Daviey> lifeless: I agree with your rant.. But i don't think anyone was attacking you.  It is totally a natural reaction to go 'oh damn, a dep is breaking us - lets pin, until we find a better fix'
+2014-11-15T20:14:31  *** nijaba has joined #openstack-infra
+2014-11-15T20:14:34  *** jesusaurus has quit IRC
+2014-11-15T20:14:38  *** DinaBelova has joined #openstack-infra
+2014-11-15T20:14:43  *** rodrigods has joined #openstack-infra
+2014-11-15T20:14:51  <lifeless> Daviey: the last paragraph specifically talked about the action of releasing when I did and then disappearing off
+2014-11-15T20:14:54  *** JoshNang has quit IRC
+2014-11-15T20:14:56  *** tlbr has joined #openstack-infra
+2014-11-15T20:15:01  <lifeless> Daviey: without that last paragraph my rant would have been half-sized.
+2014-11-15T20:15:18  <lifeless> Daviey: (and would have just noted that the analysis was incomplete)
+2014-11-15T20:15:21  <mordred> foobio:     $ nosetests tempest/scenario/test_network_basic_ops.py
+2014-11-15T20:15:22  <mordred> foobio: that's in README.md ... that isn't still current, right?
+2014-11-15T20:15:24  <Daviey> lifeless: Fair enough :)
+2014-11-15T20:15:40  *** aalekov has quit IRC
+2014-11-15T20:15:54  <foobio> mordred: i think that's cruft, pretty sure we're a year into not using node for tempest at this point
+2014-11-15T20:16:00  *** gothicmindfood has joined #openstack-infra
+2014-11-15T20:16:04  <foobio> s/node/nose/
+2014-11-15T20:16:07  *** _nadya_ has quit IRC
+2014-11-15T20:16:13  *** asadoughi has joined #openstack-infra
+2014-11-15T20:16:20  <foobio> though we should _totally_ rewrite tempest in javascript and run it in node
+2014-11-15T20:16:22  *** aalekov has joined #openstack-infra
+2014-11-15T20:16:25  <lifeless> folk are still landing patches to make things work with nose
+2014-11-15T20:16:29  *** yamamoto has joined #openstack-infra
+2014-11-15T20:16:38  <lifeless> or py.test, or both. I forget.
+2014-11-15T20:16:43  *** schang has joined #openstack-infra
+2014-11-15T20:17:06  *** mugsie_ has joined #openstack-infra
+2014-11-15T20:17:19  <mordred> Daviey, foobio: https://review.openstack.org/134732 and https://review.openstack.org/134733
+2014-11-15T20:17:19  *** mugsie has quit IRC
+2014-11-15T20:17:30  *** larsks has joined #openstack-infra
+2014-11-15T20:17:43  *** abramley has joined #openstack-infra
+2014-11-15T20:18:04  <foobio> +6, -291
+2014-11-15T20:18:09  <foobio> that's a _good_ patch
+2014-11-15T20:18:24  *** e0ne has joined #openstack-infra
+2014-11-15T20:18:49  <lifeless> some of those may be C things
+2014-11-15T20:18:54  <lifeless> like qpid-proton
+2014-11-15T20:19:01  <lifeless> I guess we'll see what blows up :)
+2014-11-15T20:19:22  <foobio> was gonna say, it's a good thing these changes are self-testing ;)
+2014-11-15T20:19:38  <Daviey> mordred: Did you do that as a oneliner?
+2014-11-15T20:19:51  *** JoshNang has joined #openstack-infra
+2014-11-15T20:20:39  *** tteggel has quit IRC
+2014-11-15T20:21:26  *** harlowja_at_home has joined #openstack-infra
+2014-11-15T20:21:29  *** yamamoto has quit IRC
+2014-11-15T20:22:01  *** mordred has quit IRC
+2014-11-15T20:22:54  *** tteggel has joined #openstack-infra
+2014-11-15T20:23:38  *** Guest32088 has joined #openstack-infra
+2014-11-15T20:24:20  <foobio> okay, something's still "not quite right" with the devstack patch. tempest is failing to correctly filter tests with testtools==1.2.0 and unittest2==0.8.0 http://logs.openstack.org/28/134728/1/check/check-tempest-dsvm-postgres-full/2e83894/console.html
+2014-11-15T20:25:41  <Daviey> foobio: Did you also see RH's CI is failing?
+2014-11-15T20:26:10  <lifeless> foobio: are you talking about the 144 failures?
+2014-11-15T20:26:25  <lifeless> foobio: they look like setupClass skips not being honoured now.
+2014-11-15T20:26:29  *** krtaylor has joined #openstack-infra
+2014-11-15T20:26:43  <foobio> lifeless: yeah, looks like those are tests which tempest shouldn't have run because they assume e.g. ironic or neutron or other things devstack wasn't configured to set up
+2014-11-15T20:26:56  *** e0ne has quit IRC
+2014-11-15T20:26:59  <foobio> lifeless: oh maybe
+2014-11-15T20:27:08  <lifeless> poking at it now
+2014-11-15T20:27:36  *** mordred has joined #openstack-infra
+2014-11-15T20:27:47  <lifeless> setUpClass, which testtools has never supported
+2014-11-15T20:29:33  <lifeless> ok I think I need a 0.8.1 unittest2 for this
+2014-11-15T20:29:45  <lifeless> hmm no
+2014-11-15T20:29:46  <mordred> lifeless: netsplit casused e to miss something clearly cool
+2014-11-15T20:29:46  <lifeless> shouldn't
+2014-11-15T20:29:51  <mordred> where did setupclass stuff come from?
+2014-11-15T20:30:02  <lifeless> cPython's TestSuite object
+2014-11-15T20:30:12  <mordred> no - I mean, where did it come from in the conversation
+2014-11-15T20:30:13  <foobio> mordred: you probably want http://eavesdrop.openstack.org/irclogs/%23openstack-infra/%23openstack-infra.2014-11-15.log
+2014-11-15T20:30:27  <foobio> mordred: preliminary test results from my devstack change
+2014-11-15T20:31:04  <mordred> Daviey: I did is as a mostly one-liner with a few manual cleanups after looking at the diff
+2014-11-15T20:32:13  <Daviey> mordred: Nice
+2014-11-15T20:32:34  *** briancline has joined #openstack-infra
+2014-11-15T20:33:07  *** hogepodge has joined #openstack-infra
+2014-11-15T20:33:13  *** sc68cal has joined #openstack-infra
+2014-11-15T20:33:58  <lifeless> (Pdb) case.SkipTest
+2014-11-15T20:33:58  <lifeless> <class 'unittest2.case.SkipTest'>
+2014-11-15T20:33:58  <lifeless> (Pdb) exception
+2014-11-15T20:33:58  <lifeless> SkipTest('foo',)
+2014-11-15T20:33:58  <lifeless> (Pdb) exception.__class__
+2014-11-15T20:34:00  <lifeless> <class 'unittest.case.SkipTest'>
+2014-11-15T20:35:24  * harlowja_at_home reading over conversation, anyone know why oslo.messaging brings in oslo.middleware, seems a little odd, guess i should ask dhellmann whats up with that when this situation is resolved
+2014-11-15T20:36:01  *** e0ne has joined #openstack-infra
+2014-11-15T20:36:42  *** e0ne has quit IRC
+2014-11-15T20:36:54  <foobio> harlowja_at_home: yeah, it's declaring it in its requirements.txt since https://review.openstack.org/121899
+2014-11-15T20:37:05  *** e0ne has joined #openstack-infra
+2014-11-15T20:37:37  <foobio> harlowja_at_home: it was previously using the version copied from oslo-incubator
+2014-11-15T20:38:14  <foobio> harlowja_at_home: oslo/messaging/notify/middleware.py is apparently using it
+2014-11-15T20:38:19  <harlowja_at_home> gotcha, still sorta feels odd to have a messaging library have wsgi middleware in it, but i guess thats the situation we are in :-/
+2014-11-15T20:38:52  <harlowja_at_home> instead of the reverse (where oslo.middleware has this code)
+2014-11-15T20:38:54  *** gokrokve has quit IRC
+2014-11-15T20:39:01  <harlowja_at_home> anyways, something to fix later i guess
+2014-11-15T20:39:02  <Daviey> Well, it seems entirely appropriate change for Master.. but not something we can have on stable/*
+2014-11-15T20:39:19  <foobio> harlowja_at_home: might make sense to move the notification middleware into oslo.middleware i s'pose
+2014-11-15T20:39:32  <harlowja_at_home> foobio,  agreed
+2014-11-15T20:39:34  <mordred> yah. but that's where our some-libraries-do-not-have-stable-branches policy is kicking us in the face
+2014-11-15T20:39:37  <Daviey> Which is why I think we need to focus on installing oslo.middlware via pip if there is an upperbound version
+2014-11-15T20:39:42  *** mancdaz has joined #openstack-infra
+2014-11-15T20:40:09  <Daviey> Does that seem wrong to you?
+2014-11-15T20:40:10  <lifeless> foobio: writing a test forthe fix now
+2014-11-15T20:40:20  <foobio> lifeless: oh, excellent. thanks again!
+2014-11-15T20:40:30  *** viglesias has quit IRC
+2014-11-15T20:40:33  <mordred> I think, even though it's more complex, we may want to consider (even though I've said no in the past) having stable versions of _everything_ ... BUT - also making sure that master of python-*client can still consume api services of old stable releases
+2014-11-15T20:40:40  <mordred> since python-*client has double-duty
+2014-11-15T20:40:52  *** e0ne has quit IRC
+2014-11-15T20:41:02  <mordred> the reason to not have stables is to avoid a situation where an end user has to ahve two different versions of python-novaclient to talk to two different clouds
+2014-11-15T20:41:04  <foobio> mordred: long-term, we should fix *that* problem instead (the double-duty)
+2014-11-15T20:41:20  <mordred> foobio: the more I think about the double-duty problem, the more I think it's impossible to fix
+2014-11-15T20:41:35  <Daviey> It's a catch 22
+2014-11-15T20:41:38  <mordred> because if we make python-openstacksdk the end-user SDK, then why wouldn't the server projects also switch to use it
+2014-11-15T20:41:43  <mordred> they all consume public APIs
+2014-11-15T20:42:02  <foobio> mordred: openstack-sdk to the rescue? one set of libraries for stable inter-service communication, another for clients, end users and application developers?
+2014-11-15T20:42:07  *** jesusaurus has joined #openstack-infra
+2014-11-15T20:42:08  <mordred> we need stable versions of the python-*client or the sdks for stable versions of the servers to use
+2014-11-15T20:42:10  <foobio> ahh, yep
+2014-11-15T20:42:23  <mordred> but we also need to make sure we don't accidentally break backwards compat
+2014-11-15T20:42:24  *** banix has joined #openstack-infra
+2014-11-15T20:42:36  <foobio> mordred: so anyway, i guess the real answer is "stabilize our apis"
+2014-11-15T20:42:45  <mordred> actually, they're pretty stable
+2014-11-15T20:42:55  <Daviey> Ah, that is a graceful solution.  That means that the client themselves are thin wrappers around the SDK, and you can presumably have versioned SDK's installed concurrently?
+2014-11-15T20:43:13  <mordred> no - I think we don't need to be able to have concurrent SDKs installed
+2014-11-15T20:43:24  <mordred> I think more we need to understand that there are two different install vectors we care about
+2014-11-15T20:43:29  <mordred> people deploying, and people consuming
+2014-11-15T20:43:33  <mordred> and _those_ don't need to match
+2014-11-15T20:43:33  <Daviey> Doesn't that just move the problem up the stack?
+2014-11-15T20:43:41  <foobio> sdks that know how to properly interact with multiple api versions and degrade gracefully
+2014-11-15T20:43:49  <Daviey> Ah true
+2014-11-15T20:43:53  *** yodayosi has joined #openstack-infra
+2014-11-15T20:44:07  <mordred> right. but nothing about the current lib situation actually makes that better
+2014-11-15T20:44:16  <mordred> so we're not _solving_ the end user api problem with our current approach
+2014-11-15T20:44:22  <mordred> AND we're shooting ourselves in teh head
+2014-11-15T20:44:36  *** yodayosi has quit IRC
+2014-11-15T20:45:22  <Daviey> So.. back to the fire fight.  How are we solving the immediate problem?
+2014-11-15T20:45:43  <Daviey> I quite think that pinning is the correct fix for stable/*
+2014-11-15T20:45:46  <foobio> so perhaps the underlying problem is that we want it to be possible to install the latest client libs on the same systems where we're also installing stable server branches
+2014-11-15T20:45:46  <mordred> yes
+2014-11-15T20:45:54  <mordred> foobio: I don't think we do
+2014-11-15T20:45:54  <Daviey> But CI needs to install from pip not Master
+2014-11-15T20:46:09  <foobio> mordred: by "want" i mean our tooling as designed makes that assumption now
+2014-11-15T20:46:12  <mordred> foobio: I think that we currently have no other model than doing that
+2014-11-15T20:46:13  <mordred> yah
+2014-11-15T20:46:14  <foobio> not that it's a sane desire
+2014-11-15T20:47:08  *** viglesias has joined #openstack-infra
+2014-11-15T20:47:13  <mordred> Daviey: I agree with what you have said
+2014-11-15T20:47:17  <foobio> a way out would be to have stable branches of client libs, declare that those will be maintained to talk to servers at least as old as they are, and also make sure latest versions of the client libs can talk to older servers but don't necessarily have to be coinstallable on the same machines
+2014-11-15T20:47:44  <Daviey> foobio: the issue is that we want people to install a client, and be able to talk to any cloud
+2014-11-15T20:47:49  <Daviey> That doesn't help with that?
+2014-11-15T20:48:01  <foobio> that covers the end user/app dev use cases as well as the stable release server inter-communication case where we need coinstallability
+2014-11-15T20:48:41  *** p5ntangle has joined #openstack-infra
+2014-11-15T20:48:58  <foobio> Daviey: people who install a client will want to install a new enough client to talk to all the clouds they use. servers where we need the client installed as a dependency of a stable server mostly only need to talk to services of the same vintage
+2014-11-15T20:50:19  <mordred> ++
+2014-11-15T20:50:24  <mordred> I agree 100%
+2014-11-15T20:50:29  <foobio> and that solves the "new novaclient wants features in a more recent urllib2 than stable/icehouse nova can work with" or some such (contrived example)
+2014-11-15T20:50:56  <foobio> e.g. the conflicting dependencies problem
+2014-11-15T20:51:17  <mordred> I don't think it's reasonable to expect, if you are running precise and have installed python-novaclient from precise, that your novaclient will talk to all clouds in the wild - but I _do_ think it's reasonable that if you pip install latest novaclient that you should be able to talk to all clouds in existence
+2014-11-15T20:51:38  <Daviey> foobio: Ah, good point
+2014-11-15T20:51:53  <mordred> foobio: you wanna write this up for the list or you want me to?
+2014-11-15T20:52:00  <foobio> mordred: and conversely, that if you install nova and novaclient from precise, that they will work together correctly and not depend on conflicting things (basically as guarantee of the distro)
+2014-11-15T20:52:11  *** ildikov has joined #openstack-infra
+2014-11-15T20:52:16  <mordred> yes
+2014-11-15T20:52:23  <Daviey> Before writing it up.. Shall we fix gate? :)
+2014-11-15T20:52:26  <mordred> AND - if you install stable/icehouse of both, the same thing
+2014-11-15T20:52:36  *** otter768 has quit IRC
+2014-11-15T20:52:40  <foobio> mordred: i can write this up as a "we need to complete the discussion we started in the oslo versioning session at the summit" trhead
+2014-11-15T20:52:41  <mordred> Daviey: bah. :)
+2014-11-15T20:52:42  <foobio> thread
+2014-11-15T20:53:04  <mordred> foobio: yup. although I think we do have a solution here in teh scrollback that's workable and understanable
+2014-11-15T20:53:04  *** banix has quit IRC
+2014-11-15T20:53:15  <foobio> agreed
+2014-11-15T20:53:39  <foobio> so to bring it back to the currently relevant topic, what does our ideal requirements integration job look like in that new landscape
+2014-11-15T20:53:41  <foobio> >?
+2014-11-15T20:54:02  <foobio> because "install everything from branch tip" certainly isn't the answer any longer
+2014-11-15T20:54:16  <foobio> and we're already ditching that for devstack-based jobs
+2014-11-15T20:54:29  <Daviey> foobio: It is, unless the scenario I outlined earlier i think
+2014-11-15T20:55:04  <mordred> yah
+2014-11-15T20:55:09  <Daviey> ~If we don't default to installing from Master/tip, the issues won't be found until a pip release is cut.  So defering the problem
+2014-11-15T20:55:51  <foobio> going back to basic principles, what do we want to be testing with that job which we don't get from the other integration tests run on global-reqs changes (e.g. devstack already runs with requirements level-set to the proposed change)
+2014-11-15T20:56:18  <mordred> right. but - if we do that as step one (default to pip if not testing change on that repo)
+2014-11-15T20:56:33  <mordred> and we add pins in the stable branches
+2014-11-15T20:56:41  <foobio> for the job in question, i think "that repo" is always openstack/requirements right?
+2014-11-15T20:56:48  <mordred> then the only thing we'll be missing is how to make changes to the "stable" python clients
+2014-11-15T20:57:03  <Daviey> foobio: do you disagree with:
+2014-11-15T20:57:04  <Daviey> 19:49 < Daviey> Well, if it is a upper bound version - it should use pypi IMO.. If it isn't, then using Master (unless it is a project that contains stable/* and it is for a stable project, then use that branch latest)
+2014-11-15T20:57:11  <mordred> and then once we have stable/* branches for each client, we can go back to defaulting to $branch
+2014-11-15T20:57:19  <mordred> yes
+2014-11-15T20:57:25  <mordred> Daviey: you said it very succinctly
+2014-11-15T20:57:53  *** bhunter71 has quit IRC
+2014-11-15T20:58:36  <foobio> i need to reread the integration script to see how that would get implemented in the loop
+2014-11-15T20:59:15  <foobio> we're still running from http://git.openstack.org/cgit/openstack-dev/pbr/tree/tools/integration.sh right?
+2014-11-15T20:59:19  <Daviey> foobio: Do you have a handly link to the..
+2014-11-15T20:59:21  <Daviey> thanks
+2014-11-15T20:59:57  <mordred> not just there- this logic has to be implemented in devstack-gate too
+2014-11-15T21:00:02  <lifeless> foobio: https://github.com/testing-cabal/testtools/pull/123
+2014-11-15T21:00:14  <foobio> right, which that script is running within the context of
+2014-11-15T21:00:25  <mordred> right. but we dont' _just_ need to do it for requirements integration
+2014-11-15T21:00:27  <lifeless> stable branches for clients?
+2014-11-15T21:00:32  <mordred> we need that logic to cover every devstack install
+2014-11-15T21:00:35  <mordred> lifeless: yes
+2014-11-15T21:00:54  <mordred> lifeless: BUT - not so that an end user would be expected to install a stable client to talk to an older cloud
+2014-11-15T21:01:17  <lifeless> cause that was just about to concern me
+2014-11-15T21:02:07  <foobio> mordred: so... the recent changes to devstack-gate based jobs have solved that, but the requirements integration job has its own install tests which don't
+2014-11-15T21:02:17  <lifeless> mordred: so why then?
+2014-11-15T21:02:47  <foobio> lifeless: solving the co-installability problem
+2014-11-15T21:03:01  <lifeless> foobio: cocowhatwhatnownow?
+2014-11-15T21:03:30  <Daviey> If only we had an upcoming Summit to discuss this.
+2014-11-15T21:03:31  <mordred> lifeless: stable nova install needs to talk to keystone and uses python-keystoneclient
+2014-11-15T21:03:37  <foobio> lifeless: latest glanceclient conflicting with requirements of older nova so can't install them on the same machine allowing nova to talk to glance seamlessly
+2014-11-15T21:03:59  <mordred> lifeless: the current situation is that master python*client still work - but pull in new requirements
+2014-11-15T21:04:08  <mordred> like oslo.config
+2014-11-15T21:04:15  <mordred> which is then very weird for the stable server
+2014-11-15T21:04:26  <lifeless> mordred: ok, and oslo.config also has a semver stable approach, right?
+2014-11-15T21:04:26  <mordred> Daviey: I know, right?
+2014-11-15T21:04:28  *** tlbr has quit IRC
+2014-11-15T21:04:35  *** tlbr has joined #openstack-infra
+2014-11-15T21:05:19  <foobio> lifeless: yep, allowing juno to pin oslo.config <x.(y+1).0 when it released using x.y.z
+2014-11-15T21:05:55  *** banix has joined #openstack-infra
+2014-11-15T21:06:27  <foobio> and so we can then increment z for security backports to the juno version of oslo.config while introducing non-stable-compliant changes in master
+2014-11-15T21:07:02  <lifeless> foobio: so this makes me hate our stable branch guff all the more.
+2014-11-15T21:07:03  <foobio> essentially the same stable branching pattern the servers are using
+2014-11-15T21:07:18  <lifeless> The rest of the universe doesn't do stable branches just because someone happens to use a release.
+2014-11-15T21:07:33  <lifeless> e.g. glibc
+2014-11-15T21:07:39  <openstackgerrit> Cedric Brandily proposed openstack-infra/git-review: Test git-review CI (not to merge)  https://review.openstack.org/130949
+2014-11-15T21:07:46  <lifeless> ok, glibc is a bad example because it does. Sigh.
+2014-11-15T21:07:52  *** zz_dimtruck is now known as dimtruck
+2014-11-15T21:08:09  <foobio> lifeless: the rest of the (distro) universe instead manages what amounts to their own stable branches rather than collaborating on common stable branches
+2014-11-15T21:08:10  <Daviey> lifeless: Hmm.. Many projects maintain stable branches.
+2014-11-15T21:08:14  *** HeOS has joined #openstack-infra
+2014-11-15T21:08:37  <mordred> yah. I keep trying to justify killing them and I keep failing when I go to grab ammunition
+2014-11-15T21:09:00  <Daviey> The whole point of the stable/* was to stop, collaborate and listen. Ice
+2014-11-15T21:09:36  <foobio> the goal of our stable branch maintenance has always been to give distro packagers a place to collaborate on their backports, and to provide a means for our upstream devs to helpfully pre-roll security fixes for the benefit of the distro packagers collaborating there
+2014-11-15T21:09:57  <lifeless> so perhaps my feeling here is driven by conflating two things
+2014-11-15T21:10:07  <lifeless> three
+2014-11-15T21:10:12  <lifeless> one is 'we need to test upgrades'
+2014-11-15T21:10:50  <lifeless> two is 'we want to know that our new api-compatible project releases work with our break-the-world(apiservers)-project-releases'
+2014-11-15T21:11:02  <lifeless> three is 'we want stable maintenance work to be collaborative'
+2014-11-15T21:11:10  *** p5ntangle has quit IRC
+2014-11-15T21:11:15  <foobio> the complication which has arisen, i think, is mostly due to our insistence on testing what's proposed to stable branches rather than just crossing our fingers and hoping proposed changes don't break things for downstream packagers
+2014-11-15T21:11:40  <lifeless> we're using one mechanism to drive three very distinct things
+2014-11-15T21:11:54  <foobio> (e.g. giving packagers a place to collaborate on testing proposed backports rather than just a place to review them)
+2014-11-15T21:11:57  <lifeless> all of those things are valuable in different ways, to different audiences
+2014-11-15T21:11:57  <Daviey> I proposed stable branches, as I was at that pointed managing the ubuntu server team and I could see our delta growing and it seemed silly to watch other distros doing the same thing.
+2014-11-15T21:12:17  <Daviey> s/pointed/pont/
+2014-11-15T21:12:22  <lifeless> Daviey: I think collaborative stable maintenance is a good thing.
+2014-11-15T21:12:53  <lifeless> Daviey: the infectious nature of the implementation frustrates me from time to time
+2014-11-15T21:13:13  <lifeless> Daviey: I'm just starting to articulate why :)
+2014-11-15T21:13:15  <Daviey> well, it is indeed embarrasing that stable/* is currently blocking Master
+2014-11-15T21:13:16  <foobio> it does take on a life of its own if we don't step back and remind ourselves why it's there from time to time
+2014-11-15T21:13:54  <Daviey> Well, stable has grown to also include the CD deployers aswell now.
+2014-11-15T21:14:04  *** gokrokve has joined #openstack-infra
+2014-11-15T21:14:50  <lifeless> it has?
+2014-11-15T21:14:54  <lifeless> Daviey: which ones?
+2014-11-15T21:15:04  <foobio> i think continuous deployment from stable branches wasn't a design goal originally? i'm worried that declaring it's something we as a community find desirable may hamstring us in other ways
+2014-11-15T21:15:08  <Daviey> Well, *I* do.  And i know of a few others.
+2014-11-15T21:15:22  <lifeless> Daviey: so you deploy trunk using stable tooling?
+2014-11-15T21:15:31  <lifeless> Daviey: (I'm trying to reconcile the statement...)
+2014-11-15T21:16:31  *** yamamoto has joined #openstack-infra
+2014-11-15T21:17:02  <Daviey> lifeless: Going off topic now.. but the intent is to have a Production Series and a Development Series.  Production series is the latest stable/* tip, with internal dev, qa and prod enviroment.  But also a CD(?, sort of) deployment of Master, with dev and qa enviroments to flush out breakage before it impacts us.
+2014-11-15T21:17:26  <Daviey> When a Master release is cut, a prod enviroment is created from that, and Production and Development Series moves on one
+2014-11-15T21:17:58  <Daviey> But the underlying point is, stable/* is slurped up in a CD workflow.
+2014-11-15T21:18:39  *** gokrokve has quit IRC
+2014-11-15T21:19:57  *** talluri has joined #openstack-infra
+2014-11-15T21:20:52  *** yamamoto has quit IRC
+2014-11-15T21:21:42  *** ddieterl_ has joined #openstack-infra
+2014-11-15T21:21:53  *** ddieterly has quit IRC
+2014-11-15T21:22:09  <Daviey> lifeless: Does that sound crazy? :)
+2014-11-15T21:22:52  <mordred> I see no problems with that
+2014-11-15T21:22:55  <lifeless> Daviey: not crazy, since keeping inventory low is valuable anywhere
+2014-11-15T21:22:59  <foobio> i'm sure this is entirely because i'm missing the business logic driving those choices, but it does sound like overengineered process for process' sake
+2014-11-15T21:23:13  <Daviey> It does mix CD with traditional, in that there is a major upgrade every 6 months.. but to a tested and integrated enviroment
+2014-11-15T21:23:24  <lifeless> Daviey: but the increased pressure on stable/ to not change at all - transitively - I consider a bad thing.
+2014-11-15T21:23:32  <lifeless> Daviey: the point of CD is to *enable* change, not to prevent it.
+2014-11-15T21:24:06  <Daviey> foobio: business smisniss.
+2014-11-15T21:24:22  *** talluri has quit IRC
+2014-11-15T21:24:38  <Daviey> lifeless: The trouble with allowing new deps is that we break stable distros.
+2014-11-15T21:25:17  <foobio> Daviey: i think the disconnect here is between "allowing" new dependencies and "testing with" new dependencies
+2014-11-15T21:25:17  <Daviey> If we had complete confidence in upgrades, and distros switched to rolling releases.. Then this would work.  I agree.
+2014-11-15T21:26:05  <mordred> lifeless: I thin that stable/ should not change transitively
+2014-11-15T21:26:19  <Daviey> lifeless: BTW, in the ops summit. There were a bunch of hands that said they were using stable/* branches directly.
+2014-11-15T21:26:22  <mordred> lifeless: largely because the python ecosystem has proven itself consistently to not be able to do it
+2014-11-15T21:26:29  *** dimsum__ has joined #openstack-infra
+2014-11-15T21:26:41  <lifeless> Daviey: so thats fine, I don't object to folk using the branches directly
+2014-11-15T21:27:02  <lifeless> Daviey: my objection is to saying that we should tie everything down, because we know e.g. kernels have to change to support new hardware
+2014-11-15T21:27:24  <Daviey> (I tried to stop that)
+2014-11-15T21:28:02  * foobio pictures superman, hand outstretched, standing in front of the train that is the hardware industry
+2014-11-15T21:28:09  <lifeless> foobio: :)
+2014-11-15T21:28:48  <mordred> Gnawing off your leg (quiet quiet)
+2014-11-15T21:28:55  *** dims_ has quit IRC
+2014-11-15T21:29:07  <lifeless> mordred: I think saying that configuration X is known to work is valuable; but thats a lesser statement than 'will only work with' which is what we seem to be saying
+2014-11-15T21:29:21  <Daviey> Sorry, talking without context.  Initally there were plans to swap out the kernel from under users to a newer version
+2014-11-15T21:29:34  <Daviey> I was omgwtfno.
+2014-11-15T21:30:44  <lifeless> ok, https://github.com/testing-cabal/testtools/pull/123 is now green
+2014-11-15T21:30:53  <lifeless> I'm going to JFDI to unbreak things. Fingers crossed.
+2014-11-15T21:31:43  <Daviey> Regarding upper-pinning for no good reason.  This bit me recently, when I was stuck with a version of kerberos, and requests-kerberos had a no-good-reason pinning
+2014-11-15T21:31:46  <Daviey> https://github.com/requests/requests-kerberos/issues/37
+2014-11-15T21:32:09  <Daviey> So, upper-pinning does suck.  But for stable/* i kinda think it is the best thing
+2014-11-15T21:35:27  *** dimsum__ has quit IRC
+2014-11-15T21:35:52  <lifeless> Daviey: why?
+2014-11-15T21:36:04  <lifeless> Daviey: what risk is it addressing that is unique to stable/* ?
+2014-11-15T21:36:21  <lifeless> [if its not unique to stable/*, we should address it globally, since folk deploy master directly too...]
+2014-11-15T21:36:47  *** dimsum__ has joined #openstack-infra
+2014-11-15T21:37:50  <Daviey> lifeless: The upperpinning proposed is the latest version on pypi.  Therefore, for Master it would essentially be an unbounced check - unless CI had found it not to work.
+2014-11-15T21:38:05  <Daviey> So by that theory, I agree... It could make sense to upper-pin from the outset.
+2014-11-15T21:38:26  <lifeless> Daviey: or to not pin at all :)
+2014-11-15T21:39:01  <lifeless> ok, time to context switch
+2014-11-15T21:39:02  <Daviey> The issue on stable/* is that we are chasing broken newer versions constantly, both in other upstreams and openstack native projects
+2014-11-15T21:40:11  <foobio> Daviey: problem there is you're expecting <X on some requirement to have the effect of pip refusing to install >=X
+2014-11-15T21:40:25  <foobio> Daviey: pip doesn't work that way
+2014-11-15T21:40:31  <Daviey> lifeless: BTW, I am going to quote you with the idea of coming up with the idea of upper bound'ing Master. :)
+2014-11-15T21:40:48  <lifeless> Daviey: troll :)
+2014-11-15T21:41:19  <Daviey> foobio: It doesn't??
+2014-11-15T21:41:20  <foobio> Daviey: in fantasy land where none of our dependencies have dependencies on things we depend on, it would work out
+2014-11-15T21:41:42  <Daviey> That is ok, just bring everything into stackforge. :)
+2014-11-15T21:41:53  <lifeless> blanket statement time
+2014-11-15T21:42:12  <lifeless> any strategy that depends on changing the behaviour of other projects transitively is very likely to fail
+2014-11-15T21:42:25  <lifeless> 'make other projects release good API compatible code' is one such strategy
+2014-11-15T21:42:45  <lifeless> pinning just our direct dependencies is equivalent to 'make other projects release good API compatible code'
+2014-11-15T21:42:56  * foobio boils the ocean to make tea
+2014-11-15T21:43:08  <Daviey> I don't think anyone is suggesting changing other projects?
+2014-11-15T21:43:40  <lifeless> if we can show that what we're trying is equivalent to that, it should be a warning flag
+2014-11-15T21:43:52  <lifeless> at the moment we don't list transitive deps in requirements.txt
+2014-11-15T21:44:10  <foobio> Daviey: A depends on B<X and C, C depends on B>X, pip will install B>X when you ask it to install A
+2014-11-15T21:44:23  <lifeless> the proposal to pin everything *in requirements.txt* doesn't change behaviour for anything transitively depended on
+2014-11-15T21:44:29  <Daviey> lifeless: If $project does a release that either Master or stable/* have not prepared for, gating its support keeps the project flowing - whilst we have a measurable list of requirements we known to be broken that we can fix openstack code for (or just keep the block)
+2014-11-15T21:44:46  <lifeless> which means our stability is dependent on the deps of our deps not breaking anything every
+2014-11-15T21:45:00  <Daviey> foobio: I am struggling to parse your line myself. :)
+2014-11-15T21:45:06  <foobio> Daviey: so is pip
+2014-11-15T21:45:35  <Daviey> Ah.. penny has dropped.  We'd still have a regressive story.
+2014-11-15T21:45:45  <foobio> Daviey: stated differently, pip sees a list of dependencies as a recursive task list, it does not digest the entirely of all dependencies and determine a way to solve them
+2014-11-15T21:45:48  * Daviey drops lifeless idea of pinning stuff in Master
+2014-11-15T21:46:13  <lifeless> Daviey: twas not my idea
+2014-11-15T21:46:49  <foobio> s/entirely/entirety?
+2014-11-15T21:46:53  <lifeless> even if pip did do a global solve etc
+2014-11-15T21:47:01  * foobio gives up on typing and finds beer
+2014-11-15T21:47:02  <lifeless> we'd still need to start listing everything in requirements.txt
+2014-11-15T21:47:05  <lifeless> which we stopped doing
+2014-11-15T21:47:12  <lifeless> because it was hugely high maintenance
+2014-11-15T21:47:22  *** dimtruck is now known as zz_dimtruck
+2014-11-15T21:47:24  * dimsum__ peeks in. 
+2014-11-15T21:48:11  *** dimsum__ is now known as dims
+2014-11-15T21:49:20  <dims> lifeless: the JFDI comment above, cut a new release?
+2014-11-15T21:50:00  <foobio> dims: yeah, unittest2 0.8.1 so that https://review.openstack.org/#/q/Ib0e27fd,n,z will pass
+2014-11-15T21:50:41  <dims> foobio: cool
+2014-11-15T21:51:03  <dims> am just catching up on the mailing list as well
+2014-11-15T21:52:06  <foobio> dims: though the pin testtools in global-reqs changes from earlier exposed a previously unknown requirements integration challenge in stable/juno
+2014-11-15T21:52:22  *** AlexF has joined #openstack-infra
+2014-11-15T21:52:54  <lifeless> actually it will be testtools 1.3
+2014-11-15T21:53:00  <foobio> aha
+2014-11-15T21:53:23  <foobio> but needed the relevant plumbing in that unittest2 pr?
+2014-11-15T21:53:33  <foobio> nevermind
+2014-11-15T21:53:37  <lifeless> foobio: that was a testtools pr
+2014-11-15T21:53:37  <foobio> i see now that was a testtools pr
+2014-11-15T21:53:42  <foobio> heh
+2014-11-15T21:53:47  * foobio has weekend eyes
+2014-11-15T21:55:17  <lifeless> ok 1.3.0 up
+2014-11-15T21:55:54  <foobio> as soon as bandersnatch picks that up i'll recheck
+2014-11-15T21:56:18  <lifeless> it also now has a universal wheel
+2014-11-15T21:56:31  <foobio> awesomesauce
+2014-11-15T21:57:42  <lifeless> Daviey: mute?
+2014-11-15T21:57:46  <lifeless> Daviey: do you mean moot?
+2014-11-15T21:58:18  <Daviey> lifeless: indeed
+2014-11-15T21:58:46  *** Sukhdev has quit IRC
+2014-11-15T22:00:17  <foobio> okay, 1.3.0 is on our mirrors now
+2014-11-15T22:01:28  <foobio> and devstack fixes are all rechecked
+2014-11-15T22:03:35  *** MaxV has quit IRC
+2014-11-15T22:03:55  *** koolhead17 has quit IRC
+2014-11-15T22:04:24  *** koolhead17 has joined #openstack-infra
+2014-11-15T22:04:33  *** banix has quit IRC
+2014-11-15T22:09:15  <lifeless> foobio: urls for them ?
+2014-11-15T22:09:19  *** koolhead17 has quit IRC
+2014-11-15T22:09:37  <foobio> lifeless: https://review.openstack.org/#/q/Ib0e27fd,n,z links all three
+2014-11-15T22:10:59  <Daviey> publish docs, icehouse - failure expected?
+2014-11-15T22:11:14  <foobio> Daviey: on what change?
+2014-11-15T22:11:28  *** briancline has quit IRC
+2014-11-15T22:11:34  <foobio> Daviey: oh, the devstack changes, yeah probably (they're non-voting)
+2014-11-15T22:11:38  <Daviey> https://review.openstack.org/#/c/134730/
+2014-11-15T22:11:55  <Daviey> Right.. but curious what might have caused that.
+2014-11-15T22:12:28  <foobio> shocco.sh: 66: shocco.sh: Syntax error: "}" unexpected
+2014-11-15T22:13:09  <foobio> apparently shocco is broken and can't be installed
+2014-11-15T22:13:15  <Daviey> Failing on latest recheck for juno aswell
+2014-11-15T22:13:21  <foobio> and master
+2014-11-15T22:14:57  <Daviey> Wonder if a later version of unittest2 pushes out different style data?
+2014-11-15T22:14:59  *** gokrokve has joined #openstack-infra
+2014-11-15T22:16:29  *** yamamoto has joined #openstack-infra
+2014-11-15T22:19:26  *** gokrokve has quit IRC
+2014-11-15T22:20:44  *** yamamoto has quit IRC
+2014-11-15T22:24:24  *** ddieterl_ has quit IRC
+2014-11-15T22:35:27  *** zz_dimtruck is now known as dimtruck
+2014-11-15T22:35:44  *** bhunter71 has joined #openstack-infra
+2014-11-15T22:37:34  *** teran has quit IRC
+2014-11-15T22:37:47  *** boris-42 has quit IRC
+2014-11-15T22:38:10  *** ddieterly has joined #openstack-infra
+2014-11-15T22:43:51  *** teran has joined #openstack-infra
+2014-11-15T22:50:56  <foobio> mordred: dhellmann: client versioning conversation starter fired off to the dev ml
+2014-11-15T22:55:25  <foobio> lifeless: looking at the completed and near-completed rechecks of my devstack changes with testtools 1.3.0, i think that may have solved the problem
+2014-11-15T22:56:04  <Daviey> foobio: We still have the oslo.middleware problem on juno, right?
+2014-11-15T22:56:21  <foobio> Daviey: yes, but only on changes to openstack/requirements stable/juno
+2014-11-15T22:56:35  <foobio> Daviey: since that's the only place that job runs
+2014-11-15T22:56:56  <Daviey> Ah good.  We probably don't need to panic a fix in then!
+2014-11-15T22:57:30  <Daviey> foobio: I started looking at oslo.messaging|middleware in devstack.. but I didn't like what i was doing.
+2014-11-15T22:57:30  <foobio> i'm all for less panic and doing something more fun with the rest of my weekend
+2014-11-15T23:02:01  <foobio> ugh. tempest.scenario.test_baremetal_basic_ops.BaremetalBasicOps.test_baremetal_server_ops is flaky and times out. we might want to switch check-tempest-dsvm-ironic-pxe_ssh-nv back to non-voting on devstack changes
+2014-11-15T23:07:23  *** kirshil has quit IRC
+2014-11-15T23:08:26  *** kirshil has joined #openstack-infra
+2014-11-15T23:10:03  *** yamamoto has joined #openstack-infra
+2014-11-15T23:11:53  <openstackgerrit> Cedric Brandily proposed openstack-infra/git-review: Test git-review CI (not to merge)  https://review.openstack.org/130949
+2014-11-15T23:16:40  *** _nadya_ has joined #openstack-infra
+2014-11-15T23:17:24  *** gokrokve has joined #openstack-infra
+2014-11-15T23:19:52  <openstackgerrit> Jeremy Stanley proposed openstack-infra/elastic-recheck: Add query for test_baremetal_server_ops timeout  https://review.openstack.org/134738
+2014-11-15T23:20:42  *** _nadya_ has quit IRC
+2014-11-15T23:20:50  <openstackgerrit> Eduardo Costa proposed openstack-infra/reviewday: Escape double quotes for the subject field.  https://review.openstack.org/134739
+2014-11-15T23:21:37  *** bo_sh has joined #openstack-infra
+2014-11-15T23:22:19  *** gokrokve has quit IRC
+2014-11-15T23:23:35  *** bo_sh has left #openstack-infra
+2014-11-15T23:30:24  *** briancline has joined #openstack-infra
+2014-11-15T23:31:43  *** AlexF has quit IRC
+2014-11-15T23:33:13  *** pcrews has joined #openstack-infra
+2014-11-15T23:37:24  *** dimtruck is now known as zz_dimtruck
+2014-11-15T23:50:24  *** banix has joined #openstack-infra
+2014-11-15T23:51:56  *** otherwiseguy has joined #openstack-infra
+2014-11-15T23:55:55  <openstackgerrit> Cedric Brandily proposed openstack-infra/git-review: Test git-review CI (not to merge)  https://review.openstack.org/130949

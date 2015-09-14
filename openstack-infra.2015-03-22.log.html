@@ -1,0 +1,825 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Sunday, 2015-03-22</title>
+  <link rel="stylesheet" href="irclog.css" />
+  <meta name="generator" content="irclog2html.py 2.14.0 by Marius Gedminas" />
+  <meta name="version" content="2.14.0 - 2014-12-12" />
+</head>
+<body>
+<h1>Sunday, 2015-03-22</h1>
+<div class="navigation"> <a href="%23openstack-infra.2015-03-21.log.html">&#171; Saturday, 2015-03-21</a> <a href="index.html">Index</a> <a href="%23openstack-infra.2015-03-23.log.html">Monday, 2015-03-23 &#187;</a> </div>
+<table class="irclog">
+<tr id="t2015-03-22T00:02:03"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">mordred fwiw I assert hard capping was part of the issue on stable</td><td class="time"><a href="#t2015-03-22T00:02:03" class="time">00:02</a></td></tr>
+<tr id="t2015-03-22T00:02:21"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">pips dep resolver works better with more freedom</td><td class="time"><a href="#t2015-03-22T00:02:21" class="time">00:02</a></td></tr>
+<tr id="t2015-03-22T00:03:01"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T00:03:01" class="time">00:03</a></td></tr>
+<tr id="t2015-03-22T00:03:19"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">the looser ~=/&gt;=,&lt; is much better</td><td class="time"><a href="#t2015-03-22T00:03:19" class="time">00:03</a></td></tr>
+<tr id="t2015-03-22T00:04:02"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">mordred also are you watching nc state?</td><td class="time"><a href="#t2015-03-22T00:04:02" class="time">00:04</a></td></tr>
+<tr id="t2015-03-22T00:04:10"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T00:04:10" class="time">00:04</a></td></tr>
+<tr id="t2015-03-22T00:05:07"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2015-03-22T00:05:07" class="time">00:05</a></td></tr>
+<tr id="t2015-03-22T00:06:43"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">foobio trusty git broke stuff? also what about bare-trusty images?</td><td class="time"><a href="#t2015-03-22T00:06:43" class="time">00:06</a></td></tr>
+<tr id="t2015-03-22T00:07:14"><th class="nick" style="background: #42427e">dstufft</th><td class="text" style="color: #42427e">superbee: that is true (wrt the looser it is the better), primarily because multiple dependencies on the same thing mostly only works if you accidently happen to select something that works via the first found requirement specifier that works on the rest of the specifiers that we ignore</td><td class="time"><a href="#t2015-03-22T00:07:14" class="time">00:07</a></td></tr>
+<tr id="t2015-03-22T00:08:30"><th class="nick" style="background: #42427e">dstufft</th><td class="text" style="color: #42427e">so if everything has an open ended top, that's going to be more likely to work, since &quot;whatever the latest is&quot; will &quot;work&quot; for all of them</td><td class="time"><a href="#t2015-03-22T00:08:30" class="time">00:08</a></td></tr>
+<tr id="t2015-03-22T00:08:55"><th class="nick" style="background: #42427e">dstufft</th><td class="text" style="color: #42427e">what the bottom is matters less except in the case of not using -U and already having something installed</td><td class="time"><a href="#t2015-03-22T00:08:55" class="time">00:08</a></td></tr>
+<tr id="t2015-03-22T00:09:46"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">gotcha</td><td class="time"><a href="#t2015-03-22T00:09:46" class="time">00:09</a></td></tr>
+<tr id="t2015-03-22T00:13:02"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">superbee: yes nc state!</td><td class="time"><a href="#t2015-03-22T00:13:02" class="time">00:13</a></td></tr>
+<tr id="t2015-03-22T00:13:07"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">superbee: dude, that block</td><td class="time"><a href="#t2015-03-22T00:13:07" class="time">00:13</a></td></tr>
+<tr id="t2015-03-22T00:13:30"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">then the 3</td><td class="time"><a href="#t2015-03-22T00:13:30" class="time">00:13</a></td></tr>
+<tr id="t2015-03-22T00:13:33"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">yah</td><td class="time"><a href="#t2015-03-22T00:13:33" class="time">00:13</a></td></tr>
+<tr id="t2015-03-22T00:13:44"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">it was a big pile of yes</td><td class="time"><a href="#t2015-03-22T00:13:44" class="time">00:13</a></td></tr>
+<tr id="t2015-03-22T00:14:02"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">I was kinda hoping that ga state was going to pull it out against xavier - but that's clearly not going to happen</td><td class="time"><a href="#t2015-03-22T00:14:02" class="time">00:14</a></td></tr>
+<tr id="t2015-03-22T00:14:09"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">I think the ncsu game is theirs to lose</td><td class="time"><a href="#t2015-03-22T00:14:09" class="time">00:14</a></td></tr>
+<tr id="t2015-03-22T00:14:49"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">btw slingtv works great for this</td><td class="time"><a href="#t2015-03-22T00:14:49" class="time">00:14</a></td></tr>
+<tr id="t2015-03-22T00:18:43"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">superbee: nice</td><td class="time"><a href="#t2015-03-22T00:18:43" class="time">00:18</a></td></tr>
+<tr id="t2015-03-22T00:19:24"><td class="join" colspan="2">*** mjturek1 has joined #openstack-infra</td><td><a href="#t2015-03-22T00:19:24" class="time">00:19</a></td></tr>
+<tr id="t2015-03-22T00:19:31"><td class="part" colspan="2">*** mjturek1 has left #openstack-infra</td><td><a href="#t2015-03-22T00:19:31" class="time">00:19</a></td></tr>
+<tr id="t2015-03-22T00:19:52"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">superbee: whaddyamean bare-trusty? i said i re-updated those too...</td><td class="time"><a href="#t2015-03-22T00:19:52" class="time">00:19</a></td></tr>
+<tr id="t2015-03-22T00:22:32"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">i hear slingtv carries cartoon network. might have to sign up. been missin' my shows</td><td class="time"><a href="#t2015-03-22T00:22:32" class="time">00:22</a></td></tr>
+<tr id="t2015-03-22T00:24:52"><td class="part" colspan="2">*** fbo has quit IRC</td><td><a href="#t2015-03-22T00:24:52" class="time">00:24</a></td></tr>
+<tr id="t2015-03-22T00:25:38"><td class="join" colspan="2">*** fbo has joined #openstack-infra</td><td><a href="#t2015-03-22T00:25:38" class="time">00:25</a></td></tr>
+<tr id="t2015-03-22T00:26:39"><th class="nick" style="background: #488888">openstackgerrit</th><td class="text" style="color: #488888">Monty Taylor proposed openstack-infra/project-config: Add ansible role for building and uploading images&nbsp;&nbsp;<a href="https://review.openstack.org/166547" rel="nofollow">https://review.openstack.org/166547</a></td><td class="time"><a href="#t2015-03-22T00:26:39" class="time">00:26</a></td></tr>
+<tr id="t2015-03-22T00:27:18"><td class="part" colspan="2">*** mescanef_ has quit IRC</td><td><a href="#t2015-03-22T00:27:18" class="time">00:27</a></td></tr>
+<tr id="t2015-03-22T00:27:40"><td class="join" colspan="2">*** mescanef has joined #openstack-infra</td><td><a href="#t2015-03-22T00:27:40" class="time">00:27</a></td></tr>
+<tr id="t2015-03-22T00:27:52"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">foobio it does</td><td class="time"><a href="#t2015-03-22T00:27:52" class="time">00:27</a></td></tr>
+<tr id="t2015-03-22T00:27:56"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2015-03-22T00:27:56" class="time">00:27</a></td></tr>
+<tr id="t2015-03-22T00:28:18"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">foobio just trying tofigure out why rebuilds were necessary. look like we updated a job script</td><td class="time"><a href="#t2015-03-22T00:28:18" class="time">00:28</a></td></tr>
+<tr id="t2015-03-22T00:28:45"><td class="part" colspan="2">*** dboik has quit IRC</td><td><a href="#t2015-03-22T00:28:45" class="time">00:28</a></td></tr>
+<tr id="t2015-03-22T00:29:06"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">superbee: it's one of the ones installed on the nodes</td><td class="time"><a href="#t2015-03-22T00:29:06" class="time">00:29</a></td></tr>
+<tr id="t2015-03-22T00:29:13"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">superbee: not one of the ones that's a jenkins macro</td><td class="time"><a href="#t2015-03-22T00:29:13" class="time">00:29</a></td></tr>
+<tr id="t2015-03-22T00:32:31"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">superbee: yeah, git http backend on trusty isn't good with shallow clones, and we had one slave script which was shallow-cloning from the git mirror on review.o.o</td><td class="time"><a href="#t2015-03-22T00:32:31" class="time">00:32</a></td></tr>
+<tr id="t2015-03-22T00:32:56"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">superbee: BEAST</td><td class="time"><a href="#t2015-03-22T00:32:56" class="time">00:32</a></td></tr>
+<tr id="t2015-03-22T00:36:23"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2015-03-22T00:36:23" class="time">00:36</a></td></tr>
+<tr id="t2015-03-22T00:36:41"><td class="part" colspan="2">*** ianychoi has quit IRC</td><td><a href="#t2015-03-22T00:36:41" class="time">00:36</a></td></tr>
+<tr id="t2015-03-22T00:45:40"><td class="join" colspan="2">*** Bsony has joined #openstack-infra</td><td><a href="#t2015-03-22T00:45:40" class="time">00:45</a></td></tr>
+<tr id="t2015-03-22T00:47:28"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T00:47:28" class="time">00:47</a></td></tr>
+<tr id="t2015-03-22T00:50:30"><td class="part" colspan="2">*** Bsony has quit IRC</td><td><a href="#t2015-03-22T00:50:30" class="time">00:50</a></td></tr>
+<tr id="t2015-03-22T00:52:13"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T00:52:13" class="time">00:52</a></td></tr>
+<tr id="t2015-03-22T00:53:18"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2015-03-22T00:53:18" class="time">00:53</a></td></tr>
+<tr id="t2015-03-22T01:00:18"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T01:00:18" class="time">01:00</a></td></tr>
+<tr id="t2015-03-22T01:03:36"><td class="join" colspan="2">*** changbl has joined #openstack-infra</td><td><a href="#t2015-03-22T01:03:36" class="time">01:03</a></td></tr>
+<tr id="t2015-03-22T01:03:43"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T01:03:43" class="time">01:03</a></td></tr>
+<tr id="t2015-03-22T01:04:35"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T01:04:35" class="time">01:04</a></td></tr>
+<tr id="t2015-03-22T01:05:35"><td class="join" colspan="2">*** hdd has joined #openstack-infra</td><td><a href="#t2015-03-22T01:05:35" class="time">01:05</a></td></tr>
+<tr id="t2015-03-22T01:06:02"><td class="part" colspan="2">*** yamahata has quit IRC</td><td><a href="#t2015-03-22T01:06:02" class="time">01:06</a></td></tr>
+<tr id="t2015-03-22T01:11:52"><td class="part" colspan="2">*** ZZelle_ has quit IRC</td><td><a href="#t2015-03-22T01:11:52" class="time">01:11</a></td></tr>
+<tr id="t2015-03-22T01:13:25"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T01:13:25" class="time">01:13</a></td></tr>
+<tr id="t2015-03-22T01:22:45"><td class="part" colspan="2">*** tiswanso has quit IRC</td><td><a href="#t2015-03-22T01:22:45" class="time">01:22</a></td></tr>
+<tr id="t2015-03-22T01:25:23"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">superbee: what is going on?</td><td class="time"><a href="#t2015-03-22T01:25:23" class="time">01:25</a></td></tr>
+<tr id="t2015-03-22T01:25:38"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">superbee: I really need them to stop hitting big threes</td><td class="time"><a href="#t2015-03-22T01:25:38" class="time">01:25</a></td></tr>
+<tr id="t2015-03-22T01:26:00"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">wow</td><td class="time"><a href="#t2015-03-22T01:26:00" class="time">01:26</a></td></tr>
+<tr id="t2015-03-22T01:26:48"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">superbee: I need for this to be less exciting</td><td class="time"><a href="#t2015-03-22T01:26:48" class="time">01:26</a></td></tr>
+<tr id="t2015-03-22T01:27:16"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">GAHHHHHH</td><td class="time"><a href="#t2015-03-22T01:27:16" class="time">01:27</a></td></tr>
+<tr id="t2015-03-22T01:28:11"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2015-03-22T01:28:11" class="time">01:28</a></td></tr>
+<tr id="t2015-03-22T01:28:18"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">jbooboo: fwiw, your alma mater is kinda doing a good job right now</td><td class="time"><a href="#t2015-03-22T01:28:18" class="time">01:28</a></td></tr>
+<tr id="t2015-03-22T01:29:21"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">WOOOOO</td><td class="time"><a href="#t2015-03-22T01:29:21" class="time">01:29</a></td></tr>
+<tr id="t2015-03-22T01:29:48"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">bam</td><td class="time"><a href="#t2015-03-22T01:29:48" class="time">01:29</a></td></tr>
+<tr id="t2015-03-22T01:32:28"><td class="join" colspan="2">*** ajmiller__ has joined #openstack-infra</td><td><a href="#t2015-03-22T01:32:28" class="time">01:32</a></td></tr>
+<tr id="t2015-03-22T01:35:27"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">that's what I'm talking about</td><td class="time"><a href="#t2015-03-22T01:35:27" class="time">01:35</a></td></tr>
+<tr id="t2015-03-22T01:35:41"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">superbee: there could legit be 3 ACC teams in the sweet 16 in that region</td><td class="time"><a href="#t2015-03-22T01:35:41" class="time">01:35</a></td></tr>
+<tr id="t2015-03-22T01:35:51"><td class="part" colspan="2">*** ajmiller_ has quit IRC</td><td><a href="#t2015-03-22T01:35:51" class="time">01:35</a></td></tr>
+<tr id="t2015-03-22T01:36:59"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">jbooboo: the wolfpack has sportsballed, and now will continue to sportsball next weekend</td><td class="time"><a href="#t2015-03-22T01:36:59" class="time">01:36</a></td></tr>
+<tr id="t2015-03-22T01:40:43"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2015-03-22T01:40:43" class="time">01:40</a></td></tr>
+<tr id="t2015-03-22T01:41:43"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T01:41:43" class="time">01:41</a></td></tr>
+<tr id="t2015-03-22T01:42:27"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">lets see if oregon can do the same tomorrow</td><td class="time"><a href="#t2015-03-22T01:42:27" class="time">01:42</a></td></tr>
+<tr id="t2015-03-22T01:43:31"><th class="nick" style="background: #8c4a4a">mestery</th><td class="text" style="color: #8c4a4a">lol</td><td class="time"><a href="#t2015-03-22T01:43:31" class="time">01:43</a></td></tr>
+<tr id="t2015-03-22T01:43:32"><td class="action" colspan="2">* mestery reads the backscroll and chuckles</td><td><a href="#t2015-03-22T01:43:32" class="time">01:43</a></td></tr>
+<tr id="t2015-03-22T01:45:59"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T01:45:59" class="time">01:45</a></td></tr>
+<tr id="t2015-03-22T01:47:22"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2015-03-22T01:47:22" class="time">01:47</a></td></tr>
+<tr id="t2015-03-22T01:50:20"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2015-03-22T01:50:20" class="time">01:50</a></td></tr>
+<tr id="t2015-03-22T01:50:32"><td class="join" colspan="2">*** yamahata has joined #openstack-infra</td><td><a href="#t2015-03-22T01:50:32" class="time">01:50</a></td></tr>
+<tr id="t2015-03-22T01:51:51"><td class="join" colspan="2">*** salv-orlando has joined #openstack-infra</td><td><a href="#t2015-03-22T01:51:51" class="time">01:51</a></td></tr>
+<tr id="t2015-03-22T01:57:07"><td class="part" colspan="2">*** salv-orlando has quit IRC</td><td><a href="#t2015-03-22T01:57:07" class="time">01:57</a></td></tr>
+<tr id="t2015-03-22T01:58:05"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2015-03-22T01:58:05" class="time">01:58</a></td></tr>
+<tr id="t2015-03-22T01:58:48"><td class="join" colspan="2">*** baoli has joined #openstack-infra</td><td><a href="#t2015-03-22T01:58:48" class="time">01:58</a></td></tr>
+<tr id="t2015-03-22T01:58:51"><td class="part" colspan="2">*** baoli has quit IRC</td><td><a href="#t2015-03-22T01:58:51" class="time">01:58</a></td></tr>
+<tr id="t2015-03-22T02:00:09"><td class="join" colspan="2">*** baoli has joined #openstack-infra</td><td><a href="#t2015-03-22T02:00:09" class="time">02:00</a></td></tr>
+<tr id="t2015-03-22T02:00:29"><td class="part" colspan="2">*** woodster_ has quit IRC</td><td><a href="#t2015-03-22T02:00:29" class="time">02:00</a></td></tr>
+<tr id="t2015-03-22T02:00:59"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T02:00:59" class="time">02:00</a></td></tr>
+<tr id="t2015-03-22T02:05:52"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T02:05:52" class="time">02:05</a></td></tr>
+<tr id="t2015-03-22T02:07:16"><td class="join" colspan="2">*** sputnik13 has joined #openstack-infra</td><td><a href="#t2015-03-22T02:07:16" class="time">02:07</a></td></tr>
+<tr id="t2015-03-22T02:11:10"><td class="part" colspan="2">*** sputnik13 has quit IRC</td><td><a href="#t2015-03-22T02:11:10" class="time">02:11</a></td></tr>
+<tr id="t2015-03-22T02:14:03"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T02:14:03" class="time">02:14</a></td></tr>
+<tr id="t2015-03-22T02:14:09"><th class="nick" style="background: #488888">openstackgerrit</th><td class="text" style="color: #488888">Kota Tsuyuzaki proposed openstack-infra/project-config: Add new tox funxtional test and gate to swift3&nbsp;&nbsp;<a href="https://review.openstack.org/166568" rel="nofollow">https://review.openstack.org/166568</a></td><td class="time"><a href="#t2015-03-22T02:14:09" class="time">02:14</a></td></tr>
+<tr id="t2015-03-22T02:15:26"><td class="part" colspan="2">*** dims has quit IRC</td><td><a href="#t2015-03-22T02:15:26" class="time">02:15</a></td></tr>
+<tr id="t2015-03-22T02:16:03"><td class="join" colspan="2">*** dims has joined #openstack-infra</td><td><a href="#t2015-03-22T02:16:03" class="time">02:16</a></td></tr>
+<tr id="t2015-03-22T02:16:20"><td class="join" colspan="2">*** woodster_ has joined #openstack-infra</td><td><a href="#t2015-03-22T02:16:20" class="time">02:16</a></td></tr>
+<tr id="t2015-03-22T02:18:08"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">superbee: I will be cheering oregon on</td><td class="time"><a href="#t2015-03-22T02:18:08" class="time">02:18</a></td></tr>
+<tr id="t2015-03-22T02:20:28"><td class="part" colspan="2">*** dims has quit IRC</td><td><a href="#t2015-03-22T02:20:28" class="time">02:20</a></td></tr>
+<tr id="t2015-03-22T02:24:26"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T02:24:26" class="time">02:24</a></td></tr>
+<tr id="t2015-03-22T02:27:26"><td class="join" colspan="2">*** kaisers1 has joined #openstack-infra</td><td><a href="#t2015-03-22T02:27:26" class="time">02:27</a></td></tr>
+<tr id="t2015-03-22T02:28:52"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2015-03-22T02:28:52" class="time">02:28</a></td></tr>
+<tr id="t2015-03-22T02:29:19"><td class="part" colspan="2">*** kaisers has quit IRC</td><td><a href="#t2015-03-22T02:29:19" class="time">02:29</a></td></tr>
+<tr id="t2015-03-22T02:33:14"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2015-03-22T02:33:14" class="time">02:33</a></td></tr>
+<tr id="t2015-03-22T02:35:43"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T02:35:43" class="time">02:35</a></td></tr>
+<tr id="t2015-03-22T02:38:13"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2015-03-22T02:38:13" class="time">02:38</a></td></tr>
+<tr id="t2015-03-22T02:40:04"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T02:40:04" class="time">02:40</a></td></tr>
+<tr id="t2015-03-22T02:44:06"><td class="join" colspan="2">*** sputnik13 has joined #openstack-infra</td><td><a href="#t2015-03-22T02:44:06" class="time">02:44</a></td></tr>
+<tr id="t2015-03-22T02:45:04"><td class="join" colspan="2">*** tkelsey has joined #openstack-infra</td><td><a href="#t2015-03-22T02:45:04" class="time">02:45</a></td></tr>
+<tr id="t2015-03-22T02:46:07"><td class="join" colspan="2">*** ddieterl_ has joined #openstack-infra</td><td><a href="#t2015-03-22T02:46:07" class="time">02:46</a></td></tr>
+<tr id="t2015-03-22T02:49:24"><td class="part" colspan="2">*** tkelsey has quit IRC</td><td><a href="#t2015-03-22T02:49:24" class="time">02:49</a></td></tr>
+<tr id="t2015-03-22T03:01:49"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T03:01:49" class="time">03:01</a></td></tr>
+<tr id="t2015-03-22T03:06:30"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T03:06:30" class="time">03:06</a></td></tr>
+<tr id="t2015-03-22T03:18:41"><td class="part" colspan="2">*** ghostpl_ has quit IRC</td><td><a href="#t2015-03-22T03:18:41" class="time">03:18</a></td></tr>
+<tr id="t2015-03-22T03:19:45"><th class="nick" style="background: #488888">openstackgerrit</th><td class="text" style="color: #488888">James E. Blair proposed stackforge/gertty: Highlight starred changes in list&nbsp;&nbsp;<a href="https://review.openstack.org/166572" rel="nofollow">https://review.openstack.org/166572</a></td><td class="time"><a href="#t2015-03-22T03:19:45" class="time">03:19</a></td></tr>
+<tr id="t2015-03-22T03:20:52"><td class="part" colspan="2">*** hdd has quit IRC</td><td><a href="#t2015-03-22T03:20:52" class="time">03:20</a></td></tr>
+<tr id="t2015-03-22T03:24:23"><td class="part" colspan="2">*** sputnik13 has quit IRC</td><td><a href="#t2015-03-22T03:24:23" class="time">03:24</a></td></tr>
+<tr id="t2015-03-22T03:25:07"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T03:25:07" class="time">03:25</a></td></tr>
+<tr id="t2015-03-22T03:26:29"><td class="join" colspan="2">*** sputnik13 has joined #openstack-infra</td><td><a href="#t2015-03-22T03:26:29" class="time">03:26</a></td></tr>
+<tr id="t2015-03-22T03:27:12"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2015-03-22T03:27:12" class="time">03:27</a></td></tr>
+<tr id="t2015-03-22T03:29:52"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T03:29:52" class="time">03:29</a></td></tr>
+<tr id="t2015-03-22T03:30:39"><td class="join" colspan="2">*** hdd has joined #openstack-infra</td><td><a href="#t2015-03-22T03:30:39" class="time">03:30</a></td></tr>
+<tr id="t2015-03-22T03:34:19"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T03:34:19" class="time">03:34</a></td></tr>
+<tr id="t2015-03-22T03:35:31"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T03:35:31" class="time">03:35</a></td></tr>
+<tr id="t2015-03-22T03:43:37"><td class="part" colspan="2">*** bdpayne has quit IRC</td><td><a href="#t2015-03-22T03:43:37" class="time">03:43</a></td></tr>
+<tr id="t2015-03-22T03:44:18"><td class="join" colspan="2">*** armax has joined #openstack-infra</td><td><a href="#t2015-03-22T03:44:18" class="time">03:44</a></td></tr>
+<tr id="t2015-03-22T03:50:18"><td class="part" colspan="2">*** armax has quit IRC</td><td><a href="#t2015-03-22T03:50:18" class="time">03:50</a></td></tr>
+<tr id="t2015-03-22T03:52:09"><td class="join" colspan="2">*** sdake_ has joined #openstack-infra</td><td><a href="#t2015-03-22T03:52:09" class="time">03:52</a></td></tr>
+<tr id="t2015-03-22T03:53:02"><td class="part" colspan="2">*** sdake has quit IRC</td><td><a href="#t2015-03-22T03:53:02" class="time">03:53</a></td></tr>
+<tr id="t2015-03-22T03:53:37"><td class="join" colspan="2">*** sdake has joined #openstack-infra</td><td><a href="#t2015-03-22T03:53:37" class="time">03:53</a></td></tr>
+<tr id="t2015-03-22T03:55:14"><td class="join" colspan="2">*** harlowja_at_home has joined #openstack-infra</td><td><a href="#t2015-03-22T03:55:14" class="time">03:55</a></td></tr>
+<tr id="t2015-03-22T03:56:52"><td class="join" colspan="2">*** davide has joined #openstack-infra</td><td><a href="#t2015-03-22T03:56:52" class="time">03:56</a></td></tr>
+<tr id="t2015-03-22T03:57:28"><td class="part" colspan="2">*** sdake_ has quit IRC</td><td><a href="#t2015-03-22T03:57:28" class="time">03:57</a></td></tr>
+<tr id="t2015-03-22T03:57:37"><td class="join" colspan="2">*** raginbaj- has joined #openstack-infra</td><td><a href="#t2015-03-22T03:57:37" class="time">03:57</a></td></tr>
+<tr id="t2015-03-22T03:58:35"><td class="join" colspan="2">*** trey_ has joined #openstack-infra</td><td><a href="#t2015-03-22T03:58:35" class="time">03:58</a></td></tr>
+<tr id="t2015-03-22T03:58:58"><td class="part" colspan="2">*** raginbajin has quit IRC</td><td><a href="#t2015-03-22T03:58:58" class="time">03:58</a></td></tr>
+<tr id="t2015-03-22T03:58:59"><td class="part" colspan="2">*** mriedem has quit IRC</td><td><a href="#t2015-03-22T03:58:59" class="time">03:58</a></td></tr>
+<tr id="t2015-03-22T03:58:59"><td class="part" colspan="2">*** trey has quit IRC</td><td><a href="#t2015-03-22T03:58:59" class="time">03:58</a></td></tr>
+<tr id="t2015-03-22T03:58:59"><td class="nickchange" colspan="2">*** trey_ is now known as trey</td><td><a href="#t2015-03-22T03:58:59" class="time">03:58</a></td></tr>
+<tr id="t2015-03-22T03:59:00"><td class="join" colspan="2">*** mriedem has joined #openstack-infra</td><td><a href="#t2015-03-22T03:59:00" class="time">03:59</a></td></tr>
+<tr id="t2015-03-22T03:59:25"><td class="nickchange" colspan="2">*** raginbaj- is now known as raginbajin</td><td><a href="#t2015-03-22T03:59:25" class="time">03:59</a></td></tr>
+<tr id="t2015-03-22T04:02:41"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T04:02:41" class="time">04:02</a></td></tr>
+<tr id="t2015-03-22T04:03:56"><td class="part" colspan="2">*** sputnik13 has quit IRC</td><td><a href="#t2015-03-22T04:03:56" class="time">04:03</a></td></tr>
+<tr id="t2015-03-22T04:04:23"><td class="join" colspan="2">*** sputnik13 has joined #openstack-infra</td><td><a href="#t2015-03-22T04:04:23" class="time">04:04</a></td></tr>
+<tr id="t2015-03-22T04:04:58"><td class="part" colspan="2">*** niska has quit IRC</td><td><a href="#t2015-03-22T04:04:58" class="time">04:04</a></td></tr>
+<tr id="t2015-03-22T04:05:11"><td class="join" colspan="2">*** niska has joined #openstack-infra</td><td><a href="#t2015-03-22T04:05:11" class="time">04:05</a></td></tr>
+<tr id="t2015-03-22T04:05:52"><td class="part" colspan="2">*** davide has quit IRC</td><td><a href="#t2015-03-22T04:05:52" class="time">04:05</a></td></tr>
+<tr id="t2015-03-22T04:06:59"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T04:06:59" class="time">04:06</a></td></tr>
+<tr id="t2015-03-22T04:10:50"><td class="join" colspan="2">*** Darkwan has joined #openstack-infra</td><td><a href="#t2015-03-22T04:10:50" class="time">04:10</a></td></tr>
+<tr id="t2015-03-22T04:11:58"><td class="part" colspan="2">*** hdd has quit IRC</td><td><a href="#t2015-03-22T04:11:58" class="time">04:11</a></td></tr>
+<tr id="t2015-03-22T04:15:17"><td class="join" colspan="2">*** sdake_ has joined #openstack-infra</td><td><a href="#t2015-03-22T04:15:17" class="time">04:15</a></td></tr>
+<tr id="t2015-03-22T04:16:01"><td class="join" colspan="2">*** salv-orlando has joined #openstack-infra</td><td><a href="#t2015-03-22T04:16:01" class="time">04:16</a></td></tr>
+<tr id="t2015-03-22T04:19:03"><td class="part" colspan="2">*** sdake has quit IRC</td><td><a href="#t2015-03-22T04:19:03" class="time">04:19</a></td></tr>
+<tr id="t2015-03-22T04:19:04"><td class="join" colspan="2">*** ghostpl_ has joined #openstack-infra</td><td><a href="#t2015-03-22T04:19:04" class="time">04:19</a></td></tr>
+<tr id="t2015-03-22T04:20:29"><td class="part" colspan="2">*** woodster_ has quit IRC</td><td><a href="#t2015-03-22T04:20:29" class="time">04:20</a></td></tr>
+<tr id="t2015-03-22T04:21:24"><td class="part" colspan="2">*** salv-orlando has quit IRC</td><td><a href="#t2015-03-22T04:21:24" class="time">04:21</a></td></tr>
+<tr id="t2015-03-22T04:24:06"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T04:24:06" class="time">04:24</a></td></tr>
+<tr id="t2015-03-22T04:24:29"><td class="part" colspan="2">*** sputnik13 has quit IRC</td><td><a href="#t2015-03-22T04:24:29" class="time">04:24</a></td></tr>
+<tr id="t2015-03-22T04:25:23"><td class="join" colspan="2">*** sputnik13 has joined #openstack-infra</td><td><a href="#t2015-03-22T04:25:23" class="time">04:25</a></td></tr>
+<tr id="t2015-03-22T04:25:53"><td class="part" colspan="2">*** yamamoto has quit IRC</td><td><a href="#t2015-03-22T04:25:53" class="time">04:25</a></td></tr>
+<tr id="t2015-03-22T04:26:58"><td class="part" colspan="2">*** ghostpl_ has quit IRC</td><td><a href="#t2015-03-22T04:26:58" class="time">04:26</a></td></tr>
+<tr id="t2015-03-22T04:27:53"><td class="part" colspan="2">*** harlowja_at_home has quit IRC</td><td><a href="#t2015-03-22T04:27:53" class="time">04:27</a></td></tr>
+<tr id="t2015-03-22T04:28:51"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T04:28:51" class="time">04:28</a></td></tr>
+<tr id="t2015-03-22T04:29:50"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2015-03-22T04:29:50" class="time">04:29</a></td></tr>
+<tr id="t2015-03-22T04:34:05"><td class="join" colspan="2">*** hdd has joined #openstack-infra</td><td><a href="#t2015-03-22T04:34:05" class="time">04:34</a></td></tr>
+<tr id="t2015-03-22T04:34:29"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2015-03-22T04:34:29" class="time">04:34</a></td></tr>
+<tr id="t2015-03-22T04:34:33"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2015-03-22T04:34:33" class="time">04:34</a></td></tr>
+<tr id="t2015-03-22T04:36:07"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T04:36:07" class="time">04:36</a></td></tr>
+<tr id="t2015-03-22T04:37:12"><td class="join" colspan="2">*** dhritishikhar has joined #openstack-infra</td><td><a href="#t2015-03-22T04:37:12" class="time">04:37</a></td></tr>
+<tr id="t2015-03-22T04:40:06"><td class="part" colspan="2">*** ddieterl_ has quit IRC</td><td><a href="#t2015-03-22T04:40:06" class="time">04:40</a></td></tr>
+<tr id="t2015-03-22T04:41:58"><td class="join" colspan="2">*** ujuc has joined #openstack-infra</td><td><a href="#t2015-03-22T04:41:58" class="time">04:41</a></td></tr>
+<tr id="t2015-03-22T04:45:15"><td class="part" colspan="2">*** funzo has quit IRC</td><td><a href="#t2015-03-22T04:45:15" class="time">04:45</a></td></tr>
+<tr id="t2015-03-22T04:45:35"><td class="join" colspan="2">*** funzo has joined #openstack-infra</td><td><a href="#t2015-03-22T04:45:35" class="time">04:45</a></td></tr>
+<tr id="t2015-03-22T04:45:40"><td class="part" colspan="2">*** funzo has quit IRC</td><td><a href="#t2015-03-22T04:45:40" class="time">04:45</a></td></tr>
+<tr id="t2015-03-22T04:46:42"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T04:46:42" class="time">04:46</a></td></tr>
+<tr id="t2015-03-22T04:47:15"><td class="part" colspan="2">*** ajmiller__ has quit IRC</td><td><a href="#t2015-03-22T04:47:15" class="time">04:47</a></td></tr>
+<tr id="t2015-03-22T04:47:41"><td class="join" colspan="2">*** ajmiller__ has joined #openstack-infra</td><td><a href="#t2015-03-22T04:47:41" class="time">04:47</a></td></tr>
+<tr id="t2015-03-22T04:50:34"><td class="part" colspan="2">*** sputnik13 has quit IRC</td><td><a href="#t2015-03-22T04:50:34" class="time">04:50</a></td></tr>
+<tr id="t2015-03-22T04:51:25"><td class="join" colspan="2">*** sputnik13 has joined #openstack-infra</td><td><a href="#t2015-03-22T04:51:25" class="time">04:51</a></td></tr>
+<tr id="t2015-03-22T04:54:55"><td class="part" colspan="2">*** sdake_ has quit IRC</td><td><a href="#t2015-03-22T04:54:55" class="time">04:54</a></td></tr>
+<tr id="t2015-03-22T04:55:52"><td class="join" colspan="2">*** sdake has joined #openstack-infra</td><td><a href="#t2015-03-22T04:55:52" class="time">04:55</a></td></tr>
+<tr id="t2015-03-22T04:57:42"><td class="part" colspan="2">*** hdd has quit IRC</td><td><a href="#t2015-03-22T04:57:42" class="time">04:57</a></td></tr>
+<tr id="t2015-03-22T05:05:06"><td class="part" colspan="2">*** sputnik13 has quit IRC</td><td><a href="#t2015-03-22T05:05:06" class="time">05:05</a></td></tr>
+<tr id="t2015-03-22T05:08:35"><td class="join" colspan="2">*** dims has joined #openstack-infra</td><td><a href="#t2015-03-22T05:08:35" class="time">05:08</a></td></tr>
+<tr id="t2015-03-22T05:18:16"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T05:18:16" class="time">05:18</a></td></tr>
+<tr id="t2015-03-22T05:20:42"><td class="nickchange" colspan="2">*** ibiris_away is now known as ibiris</td><td><a href="#t2015-03-22T05:20:42" class="time">05:20</a></td></tr>
+<tr id="t2015-03-22T05:20:55"><td class="join" colspan="2">*** sdake_ has joined #openstack-infra</td><td><a href="#t2015-03-22T05:20:55" class="time">05:20</a></td></tr>
+<tr id="t2015-03-22T05:22:49"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T05:22:49" class="time">05:22</a></td></tr>
+<tr id="t2015-03-22T05:23:39"><td class="join" colspan="2">*** sputnik13 has joined #openstack-infra</td><td><a href="#t2015-03-22T05:23:39" class="time">05:23</a></td></tr>
+<tr id="t2015-03-22T05:24:34"><td class="part" colspan="2">*** sdake has quit IRC</td><td><a href="#t2015-03-22T05:24:34" class="time">05:24</a></td></tr>
+<tr id="t2015-03-22T05:25:34"><td class="part" colspan="2">*** Darkwan has quit IRC</td><td><a href="#t2015-03-22T05:25:34" class="time">05:25</a></td></tr>
+<tr id="t2015-03-22T05:26:01"><td class="part" colspan="2">*** sputnik13 has quit IRC</td><td><a href="#t2015-03-22T05:26:01" class="time">05:26</a></td></tr>
+<tr id="t2015-03-22T05:26:24"><td class="join" colspan="2">*** yamamoto has joined #openstack-infra</td><td><a href="#t2015-03-22T05:26:24" class="time">05:26</a></td></tr>
+<tr id="t2015-03-22T05:26:51"><td class="part" colspan="2">*** sdake_ has quit IRC</td><td><a href="#t2015-03-22T05:26:51" class="time">05:26</a></td></tr>
+<tr id="t2015-03-22T05:27:20"><td class="join" colspan="2">*** sdague_ has joined #openstack-infra</td><td><a href="#t2015-03-22T05:27:20" class="time">05:27</a></td></tr>
+<tr id="t2015-03-22T05:27:24"><td class="part" colspan="2">*** mriedem has quit IRC</td><td><a href="#t2015-03-22T05:27:24" class="time">05:27</a></td></tr>
+<tr id="t2015-03-22T05:27:24"><td class="part" colspan="2">*** briancline has quit IRC</td><td><a href="#t2015-03-22T05:27:24" class="time">05:27</a></td></tr>
+<tr id="t2015-03-22T05:27:24"><td class="part" colspan="2">*** sdague has quit IRC</td><td><a href="#t2015-03-22T05:27:24" class="time">05:27</a></td></tr>
+<tr id="t2015-03-22T05:27:31"><td class="join" colspan="2">*** briancline has joined #openstack-infra</td><td><a href="#t2015-03-22T05:27:31" class="time">05:27</a></td></tr>
+<tr id="t2015-03-22T05:27:54"><td class="nickchange" colspan="2">*** sdague_ is now known as sdague</td><td><a href="#t2015-03-22T05:27:54" class="time">05:27</a></td></tr>
+<tr id="t2015-03-22T05:28:54"><td class="join" colspan="2">*** sputnik13 has joined #openstack-infra</td><td><a href="#t2015-03-22T05:28:54" class="time">05:28</a></td></tr>
+<tr id="t2015-03-22T05:29:35"><td class="part" colspan="2">*** dhritishikhar has quit IRC</td><td><a href="#t2015-03-22T05:29:35" class="time">05:29</a></td></tr>
+<tr id="t2015-03-22T05:31:42"><td class="part" colspan="2">*** yamamoto has quit IRC</td><td><a href="#t2015-03-22T05:31:42" class="time">05:31</a></td></tr>
+<tr id="t2015-03-22T05:34:27"><td class="join" colspan="2">*** mriedem has joined #openstack-infra</td><td><a href="#t2015-03-22T05:34:27" class="time">05:34</a></td></tr>
+<tr id="t2015-03-22T05:37:02"><td class="part" colspan="2">*** baoli has quit IRC</td><td><a href="#t2015-03-22T05:37:02" class="time">05:37</a></td></tr>
+<tr id="t2015-03-22T05:39:02"><td class="part" colspan="2">*** dims has quit IRC</td><td><a href="#t2015-03-22T05:39:02" class="time">05:39</a></td></tr>
+<tr id="t2015-03-22T05:40:59"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2015-03-22T05:40:59" class="time">05:40</a></td></tr>
+<tr id="t2015-03-22T05:45:21"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2015-03-22T05:45:21" class="time">05:45</a></td></tr>
+<tr id="t2015-03-22T05:47:22"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T05:47:22" class="time">05:47</a></td></tr>
+<tr id="t2015-03-22T05:48:01"><td class="join" colspan="2">*** dhritishikhar has joined #openstack-infra</td><td><a href="#t2015-03-22T05:48:01" class="time">05:48</a></td></tr>
+<tr id="t2015-03-22T05:57:23"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T05:57:23" class="time">05:57</a></td></tr>
+<tr id="t2015-03-22T06:04:03"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T06:04:03" class="time">06:04</a></td></tr>
+<tr id="t2015-03-22T06:05:01"><td class="join" colspan="2">*** bdpayne has joined #openstack-infra</td><td><a href="#t2015-03-22T06:05:01" class="time">06:05</a></td></tr>
+<tr id="t2015-03-22T06:06:21"><td class="join" colspan="2">*** Hal1 has joined #openstack-infra</td><td><a href="#t2015-03-22T06:06:21" class="time">06:06</a></td></tr>
+<tr id="t2015-03-22T06:08:27"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T06:08:27" class="time">06:08</a></td></tr>
+<tr id="t2015-03-22T06:09:51"><td class="join" colspan="2">*** Hal2 has joined #openstack-infra</td><td><a href="#t2015-03-22T06:09:51" class="time">06:09</a></td></tr>
+<tr id="t2015-03-22T06:09:52"><td class="part" colspan="2">*** Hal1 has quit IRC</td><td><a href="#t2015-03-22T06:09:52" class="time">06:09</a></td></tr>
+<tr id="t2015-03-22T06:10:55"><td class="join" colspan="2">*** ghostpl_ has joined #openstack-infra</td><td><a href="#t2015-03-22T06:10:55" class="time">06:10</a></td></tr>
+<tr id="t2015-03-22T06:12:23"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T06:12:23" class="time">06:12</a></td></tr>
+<tr id="t2015-03-22T06:14:12"><td class="join" colspan="2">*** stevemar has joined #openstack-infra</td><td><a href="#t2015-03-22T06:14:12" class="time">06:14</a></td></tr>
+<tr id="t2015-03-22T06:16:23"><td class="part" colspan="2">*** bdpayne has quit IRC</td><td><a href="#t2015-03-22T06:16:23" class="time">06:16</a></td></tr>
+<tr id="t2015-03-22T06:16:46"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T06:16:46" class="time">06:16</a></td></tr>
+<tr id="t2015-03-22T06:16:47"><td class="part" colspan="2">*** ujuc has quit IRC</td><td><a href="#t2015-03-22T06:16:47" class="time">06:16</a></td></tr>
+<tr id="t2015-03-22T06:18:17"><td class="part" colspan="2">*** ghostpl_ has quit IRC</td><td><a href="#t2015-03-22T06:18:17" class="time">06:18</a></td></tr>
+<tr id="t2015-03-22T06:22:22"><td class="join" colspan="2">*** ianychoi has joined #openstack-infra</td><td><a href="#t2015-03-22T06:22:22" class="time">06:22</a></td></tr>
+<tr id="t2015-03-22T06:27:39"><td class="part" colspan="2">*** mriedem has quit IRC</td><td><a href="#t2015-03-22T06:27:39" class="time">06:27</a></td></tr>
+<tr id="t2015-03-22T06:27:40"><td class="part" colspan="2">*** briancline has quit IRC</td><td><a href="#t2015-03-22T06:27:40" class="time">06:27</a></td></tr>
+<tr id="t2015-03-22T06:30:40"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2015-03-22T06:30:40" class="time">06:30</a></td></tr>
+<tr id="t2015-03-22T06:32:00"><td class="join" colspan="2">*** woodster_ has joined #openstack-infra</td><td><a href="#t2015-03-22T06:32:00" class="time">06:32</a></td></tr>
+<tr id="t2015-03-22T06:34:59"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2015-03-22T06:34:59" class="time">06:34</a></td></tr>
+<tr id="t2015-03-22T06:42:24"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2015-03-22T06:42:24" class="time">06:42</a></td></tr>
+<tr id="t2015-03-22T06:43:00"><td class="join" colspan="2">*** briancline has joined #openstack-infra</td><td><a href="#t2015-03-22T06:43:00" class="time">06:43</a></td></tr>
+<tr id="t2015-03-22T06:46:55"><td class="join" colspan="2">*** mriedem has joined #openstack-infra</td><td><a href="#t2015-03-22T06:46:55" class="time">06:46</a></td></tr>
+<tr id="t2015-03-22T06:47:09"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2015-03-22T06:47:09" class="time">06:47</a></td></tr>
+<tr id="t2015-03-22T06:58:02"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T06:58:02" class="time">06:58</a></td></tr>
+<tr id="t2015-03-22T07:00:19"><td class="part" colspan="2">*** sputnik13 has quit IRC</td><td><a href="#t2015-03-22T07:00:19" class="time">07:00</a></td></tr>
+<tr id="t2015-03-22T07:02:03"><td class="join" colspan="2">*** sputnik13 has joined #openstack-infra</td><td><a href="#t2015-03-22T07:02:03" class="time">07:02</a></td></tr>
+<tr id="t2015-03-22T07:04:48"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T07:04:48" class="time">07:04</a></td></tr>
+<tr id="t2015-03-22T07:06:00"><td class="join" colspan="2">*** nilasae|zzz has joined #openstack-infra</td><td><a href="#t2015-03-22T07:06:00" class="time">07:06</a></td></tr>
+<tr id="t2015-03-22T07:06:36"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T07:06:36" class="time">07:06</a></td></tr>
+<tr id="t2015-03-22T07:08:32"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T07:08:32" class="time">07:08</a></td></tr>
+<tr id="t2015-03-22T07:09:21"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T07:09:21" class="time">07:09</a></td></tr>
+<tr id="t2015-03-22T07:11:13"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T07:11:13" class="time">07:11</a></td></tr>
+<tr id="t2015-03-22T07:14:25"><td class="join" colspan="2">*** ghostpl_ has joined #openstack-infra</td><td><a href="#t2015-03-22T07:14:25" class="time">07:14</a></td></tr>
+<tr id="t2015-03-22T07:18:33"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T07:18:33" class="time">07:18</a></td></tr>
+<tr id="t2015-03-22T07:19:30"><td class="part" colspan="2">*** ghostpl_ has quit IRC</td><td><a href="#t2015-03-22T07:19:30" class="time">07:19</a></td></tr>
+<tr id="t2015-03-22T07:22:21"><td class="join" colspan="2">*** _nadya_ has joined #openstack-infra</td><td><a href="#t2015-03-22T07:22:21" class="time">07:22</a></td></tr>
+<tr id="t2015-03-22T07:22:53"><td class="part" colspan="2">*** _nadya_ has quit IRC</td><td><a href="#t2015-03-22T07:22:53" class="time">07:22</a></td></tr>
+<tr id="t2015-03-22T07:23:01"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T07:23:01" class="time">07:23</a></td></tr>
+<tr id="t2015-03-22T07:24:32"><td class="join" colspan="2">*** dims has joined #openstack-infra</td><td><a href="#t2015-03-22T07:24:32" class="time">07:24</a></td></tr>
+<tr id="t2015-03-22T07:25:28"><td class="join" colspan="2">*** yfried has joined #openstack-infra</td><td><a href="#t2015-03-22T07:25:28" class="time">07:25</a></td></tr>
+<tr id="t2015-03-22T07:26:15"><td class="nickchange" colspan="2">*** ibiris is now known as ibiris_away</td><td><a href="#t2015-03-22T07:26:15" class="time">07:26</a></td></tr>
+<tr id="t2015-03-22T07:28:58"><td class="join" colspan="2">*** yamamoto has joined #openstack-infra</td><td><a href="#t2015-03-22T07:28:58" class="time">07:28</a></td></tr>
+<tr id="t2015-03-22T07:31:19"><td class="join" colspan="2">*** garyk has joined #openstack-infra</td><td><a href="#t2015-03-22T07:31:19" class="time">07:31</a></td></tr>
+<tr id="t2015-03-22T07:31:32"><th class="nick" style="background: #4b904b">garyk</th><td class="text" style="color: #4b904b">anyone know why git review is down?</td><td class="time"><a href="#t2015-03-22T07:31:32" class="time">07:31</a></td></tr>
+<tr id="t2015-03-22T07:33:17"><td class="part" colspan="2">*** yamamoto has quit IRC</td><td><a href="#t2015-03-22T07:33:17" class="time">07:33</a></td></tr>
+<tr id="t2015-03-22T07:43:08"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2015-03-22T07:43:08" class="time">07:43</a></td></tr>
+<tr id="t2015-03-22T07:45:43"><td class="join" colspan="2">*** _nadya_ has joined #openstack-infra</td><td><a href="#t2015-03-22T07:45:43" class="time">07:45</a></td></tr>
+<tr id="t2015-03-22T07:47:35"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2015-03-22T07:47:35" class="time">07:47</a></td></tr>
+<tr id="t2015-03-22T07:48:31"><td class="nickchange" colspan="2">*** ibiris_away is now known as ibiris</td><td><a href="#t2015-03-22T07:48:31" class="time">07:48</a></td></tr>
+<tr id="t2015-03-22T07:49:06"><td class="part" colspan="2">*** _nadya_ has quit IRC</td><td><a href="#t2015-03-22T07:49:06" class="time">07:49</a></td></tr>
+<tr id="t2015-03-22T07:58:12"><td class="part" colspan="2">*** dims has quit IRC</td><td><a href="#t2015-03-22T07:58:12" class="time">07:58</a></td></tr>
+<tr id="t2015-03-22T07:59:22"><td class="part" colspan="2">*** liusheng has quit IRC</td><td><a href="#t2015-03-22T07:59:22" class="time">07:59</a></td></tr>
+<tr id="t2015-03-22T07:59:24"><td class="part" colspan="2">*** niedbalski has quit IRC</td><td><a href="#t2015-03-22T07:59:24" class="time">07:59</a></td></tr>
+<tr id="t2015-03-22T07:59:36"><td class="join" colspan="2">*** liusheng has joined #openstack-infra</td><td><a href="#t2015-03-22T07:59:36" class="time">07:59</a></td></tr>
+<tr id="t2015-03-22T07:59:46"><td class="join" colspan="2">*** baoli has joined #openstack-infra</td><td><a href="#t2015-03-22T07:59:46" class="time">07:59</a></td></tr>
+<tr id="t2015-03-22T08:01:34"><td class="join" colspan="2">*** niedbalski has joined #openstack-infra</td><td><a href="#t2015-03-22T08:01:34" class="time">08:01</a></td></tr>
+<tr id="t2015-03-22T08:04:19"><td class="part" colspan="2">*** baoli has quit IRC</td><td><a href="#t2015-03-22T08:04:19" class="time">08:04</a></td></tr>
+<tr id="t2015-03-22T08:05:37"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T08:05:37" class="time">08:05</a></td></tr>
+<tr id="t2015-03-22T08:05:55"><td class="join" colspan="2">*** Somay has joined #openstack-infra</td><td><a href="#t2015-03-22T08:05:55" class="time">08:05</a></td></tr>
+<tr id="t2015-03-22T08:08:23"><td class="part" colspan="2">*** Hal2 has quit IRC</td><td><a href="#t2015-03-22T08:08:23" class="time">08:08</a></td></tr>
+<tr id="t2015-03-22T08:09:11"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T08:09:11" class="time">08:09</a></td></tr>
+<tr id="t2015-03-22T08:09:24"><td class="join" colspan="2">*** salv-orlando has joined #openstack-infra</td><td><a href="#t2015-03-22T08:09:24" class="time">08:09</a></td></tr>
+<tr id="t2015-03-22T08:10:13"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T08:10:13" class="time">08:10</a></td></tr>
+<tr id="t2015-03-22T08:12:44"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T08:12:44" class="time">08:12</a></td></tr>
+<tr id="t2015-03-22T08:12:56"><td class="part" colspan="2">*** Somay has quit IRC</td><td><a href="#t2015-03-22T08:12:56" class="time">08:12</a></td></tr>
+<tr id="t2015-03-22T08:14:08"><td class="part" colspan="2">*** salv-orlando has quit IRC</td><td><a href="#t2015-03-22T08:14:08" class="time">08:14</a></td></tr>
+<tr id="t2015-03-22T08:14:33"><td class="join" colspan="2">*** Somay has joined #openstack-infra</td><td><a href="#t2015-03-22T08:14:33" class="time">08:14</a></td></tr>
+<tr id="t2015-03-22T08:15:10"><td class="join" colspan="2">*** ghostpl_ has joined #openstack-infra</td><td><a href="#t2015-03-22T08:15:10" class="time">08:15</a></td></tr>
+<tr id="t2015-03-22T08:15:40"><td class="join" colspan="2">*** hyakuhei has joined #openstack-infra</td><td><a href="#t2015-03-22T08:15:40" class="time">08:15</a></td></tr>
+<tr id="t2015-03-22T08:17:22"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T08:17:22" class="time">08:17</a></td></tr>
+<tr id="t2015-03-22T08:19:26"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T08:19:26" class="time">08:19</a></td></tr>
+<tr id="t2015-03-22T08:22:37"><td class="part" colspan="2">*** ghostpl_ has quit IRC</td><td><a href="#t2015-03-22T08:22:37" class="time">08:22</a></td></tr>
+<tr id="t2015-03-22T08:28:05"><td class="part" colspan="2">*** Somay has quit IRC</td><td><a href="#t2015-03-22T08:28:05" class="time">08:28</a></td></tr>
+<tr id="t2015-03-22T08:30:03"><td class="part" colspan="2">*** stevemar has quit IRC</td><td><a href="#t2015-03-22T08:30:03" class="time">08:30</a></td></tr>
+<tr id="t2015-03-22T08:31:41"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2015-03-22T08:31:41" class="time">08:31</a></td></tr>
+<tr id="t2015-03-22T08:36:16"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2015-03-22T08:36:16" class="time">08:36</a></td></tr>
+<tr id="t2015-03-22T08:37:01"><td class="part" colspan="2">*** sputnik13 has quit IRC</td><td><a href="#t2015-03-22T08:37:01" class="time">08:37</a></td></tr>
+<tr id="t2015-03-22T08:40:01"><td class="join" colspan="2">*** Somay has joined #openstack-infra</td><td><a href="#t2015-03-22T08:40:01" class="time">08:40</a></td></tr>
+<tr id="t2015-03-22T08:40:29"><td class="part" colspan="2">*** woodster_ has quit IRC</td><td><a href="#t2015-03-22T08:40:29" class="time">08:40</a></td></tr>
+<tr id="t2015-03-22T08:41:09"><td class="join" colspan="2">*** sputnik13 has joined #openstack-infra</td><td><a href="#t2015-03-22T08:41:09" class="time">08:41</a></td></tr>
+<tr id="t2015-03-22T08:43:09"><td class="part" colspan="2">*** sputnik13 has quit IRC</td><td><a href="#t2015-03-22T08:43:09" class="time">08:43</a></td></tr>
+<tr id="t2015-03-22T08:43:55"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2015-03-22T08:43:55" class="time">08:43</a></td></tr>
+<tr id="t2015-03-22T08:46:13"><td class="join" colspan="2">*** sputnik13 has joined #openstack-infra</td><td><a href="#t2015-03-22T08:46:13" class="time">08:46</a></td></tr>
+<tr id="t2015-03-22T08:47:20"><td class="join" colspan="2">*** tkelsey has joined #openstack-infra</td><td><a href="#t2015-03-22T08:47:20" class="time">08:47</a></td></tr>
+<tr id="t2015-03-22T08:47:59"><td class="join" colspan="2">*** Hal1 has joined #openstack-infra</td><td><a href="#t2015-03-22T08:47:59" class="time">08:47</a></td></tr>
+<tr id="t2015-03-22T08:48:26"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2015-03-22T08:48:26" class="time">08:48</a></td></tr>
+<tr id="t2015-03-22T08:49:26"><td class="part" colspan="2">*** dhritishikhar has quit IRC</td><td><a href="#t2015-03-22T08:49:26" class="time">08:49</a></td></tr>
+<tr id="t2015-03-22T08:49:44"><td class="part" colspan="2">*** sputnik13 has quit IRC</td><td><a href="#t2015-03-22T08:49:44" class="time">08:49</a></td></tr>
+<tr id="t2015-03-22T08:51:00"><td class="join" colspan="2">*** sputnik13 has joined #openstack-infra</td><td><a href="#t2015-03-22T08:51:00" class="time">08:51</a></td></tr>
+<tr id="t2015-03-22T08:51:34"><td class="part" colspan="2">*** tkelsey has quit IRC</td><td><a href="#t2015-03-22T08:51:34" class="time">08:51</a></td></tr>
+<tr id="t2015-03-22T08:53:03"><td class="join" colspan="2">*** tnovacik has joined #openstack-infra</td><td><a href="#t2015-03-22T08:53:03" class="time">08:53</a></td></tr>
+<tr id="t2015-03-22T08:53:42"><td class="join" colspan="2">*** andreykurilin_ has joined #openstack-infra</td><td><a href="#t2015-03-22T08:53:42" class="time">08:53</a></td></tr>
+<tr id="t2015-03-22T08:55:01"><td class="part" colspan="2">*** sputnik13 has quit IRC</td><td><a href="#t2015-03-22T08:55:01" class="time">08:55</a></td></tr>
+<tr id="t2015-03-22T08:57:31"><td class="join" colspan="2">*** sputnik13 has joined #openstack-infra</td><td><a href="#t2015-03-22T08:57:31" class="time">08:57</a></td></tr>
+<tr id="t2015-03-22T08:58:53"><td class="part" colspan="2">*** hyakuhei has quit IRC</td><td><a href="#t2015-03-22T08:58:53" class="time">08:58</a></td></tr>
+<tr id="t2015-03-22T09:06:20"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T09:06:20" class="time">09:06</a></td></tr>
+<tr id="t2015-03-22T09:10:49"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T09:10:49" class="time">09:10</a></td></tr>
+<tr id="t2015-03-22T09:11:27"><td class="part" colspan="2">*** Hal1 has quit IRC</td><td><a href="#t2015-03-22T09:11:27" class="time">09:11</a></td></tr>
+<tr id="t2015-03-22T09:12:22"><td class="join" colspan="2">*** Hal1 has joined #openstack-infra</td><td><a href="#t2015-03-22T09:12:22" class="time">09:12</a></td></tr>
+<tr id="t2015-03-22T09:15:18"><td class="part" colspan="2">*** Hal1 has quit IRC</td><td><a href="#t2015-03-22T09:15:18" class="time">09:15</a></td></tr>
+<tr id="t2015-03-22T09:15:35"><td class="join" colspan="2">*** Hal1 has joined #openstack-infra</td><td><a href="#t2015-03-22T09:15:35" class="time">09:15</a></td></tr>
+<tr id="t2015-03-22T09:18:12"><td class="join" colspan="2">*** ghostpl_ has joined #openstack-infra</td><td><a href="#t2015-03-22T09:18:12" class="time">09:18</a></td></tr>
+<tr id="t2015-03-22T09:20:04"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T09:20:04" class="time">09:20</a></td></tr>
+<tr id="t2015-03-22T09:22:57"><td class="part" colspan="2">*** teran has quit IRC</td><td><a href="#t2015-03-22T09:22:57" class="time">09:22</a></td></tr>
+<tr id="t2015-03-22T09:23:04"><td class="part" colspan="2">*** ghostpl_ has quit IRC</td><td><a href="#t2015-03-22T09:23:04" class="time">09:23</a></td></tr>
+<tr id="t2015-03-22T09:24:36"><td class="join" colspan="2">*** dims has joined #openstack-infra</td><td><a href="#t2015-03-22T09:24:36" class="time">09:24</a></td></tr>
+<tr id="t2015-03-22T09:30:09"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T09:30:09" class="time">09:30</a></td></tr>
+<tr id="t2015-03-22T09:30:41"><td class="join" colspan="2">*** yamamoto has joined #openstack-infra</td><td><a href="#t2015-03-22T09:30:41" class="time">09:30</a></td></tr>
+<tr id="t2015-03-22T09:34:38"><td class="part" colspan="2">*** Hal1 has quit IRC</td><td><a href="#t2015-03-22T09:34:38" class="time">09:34</a></td></tr>
+<tr id="t2015-03-22T09:34:57"><td class="part" colspan="2">*** yamamoto has quit IRC</td><td><a href="#t2015-03-22T09:34:57" class="time">09:34</a></td></tr>
+<tr id="t2015-03-22T09:36:02"><td class="join" colspan="2">*** Hal1 has joined #openstack-infra</td><td><a href="#t2015-03-22T09:36:02" class="time">09:36</a></td></tr>
+<tr id="t2015-03-22T09:36:44"><td class="join" colspan="2">*** teran has joined #openstack-infra</td><td><a href="#t2015-03-22T09:36:44" class="time">09:36</a></td></tr>
+<tr id="t2015-03-22T09:39:05"><td class="part" colspan="2">*** yamahata has quit IRC</td><td><a href="#t2015-03-22T09:39:05" class="time">09:39</a></td></tr>
+<tr id="t2015-03-22T09:41:40"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2015-03-22T09:41:40" class="time">09:41</a></td></tr>
+<tr id="t2015-03-22T09:42:15"><td class="part" colspan="2">*** Hal1 has quit IRC</td><td><a href="#t2015-03-22T09:42:15" class="time">09:42</a></td></tr>
+<tr id="t2015-03-22T09:42:23"><td class="join" colspan="2">*** Hal1 has joined #openstack-infra</td><td><a href="#t2015-03-22T09:42:23" class="time">09:42</a></td></tr>
+<tr id="t2015-03-22T09:43:56"><td class="part" colspan="2">*** ZZelle has quit IRC</td><td><a href="#t2015-03-22T09:43:56" class="time">09:43</a></td></tr>
+<tr id="t2015-03-22T09:44:22"><td class="join" colspan="2">*** ZZelle has joined #openstack-infra</td><td><a href="#t2015-03-22T09:44:22" class="time">09:44</a></td></tr>
+<tr id="t2015-03-22T09:44:36"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2015-03-22T09:44:36" class="time">09:44</a></td></tr>
+<tr id="t2015-03-22T09:49:10"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2015-03-22T09:49:10" class="time">09:49</a></td></tr>
+<tr id="t2015-03-22T09:51:43"><td class="part" colspan="2">*** esker has quit IRC</td><td><a href="#t2015-03-22T09:51:43" class="time">09:51</a></td></tr>
+<tr id="t2015-03-22T09:53:04"><td class="part" colspan="2">*** Somay has quit IRC</td><td><a href="#t2015-03-22T09:53:04" class="time">09:53</a></td></tr>
+<tr id="t2015-03-22T09:54:00"><td class="join" colspan="2">*** Somay has joined #openstack-infra</td><td><a href="#t2015-03-22T09:54:00" class="time">09:54</a></td></tr>
+<tr id="t2015-03-22T09:56:51"><td class="part" colspan="2">*** Somay has quit IRC</td><td><a href="#t2015-03-22T09:56:51" class="time">09:56</a></td></tr>
+<tr id="t2015-03-22T09:58:33"><td class="part" colspan="2">*** dims has quit IRC</td><td><a href="#t2015-03-22T09:58:33" class="time">09:58</a></td></tr>
+<tr id="t2015-03-22T09:59:01"><td class="join" colspan="2">*** yamamoto has joined #openstack-infra</td><td><a href="#t2015-03-22T09:59:01" class="time">09:59</a></td></tr>
+<tr id="t2015-03-22T10:01:08"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T10:01:08" class="time">10:01</a></td></tr>
+<tr id="t2015-03-22T10:01:47"><td class="part" colspan="2">*** Hal1 has quit IRC</td><td><a href="#t2015-03-22T10:01:47" class="time">10:01</a></td></tr>
+<tr id="t2015-03-22T10:02:45"><td class="join" colspan="2">*** Somay has joined #openstack-infra</td><td><a href="#t2015-03-22T10:02:45" class="time">10:02</a></td></tr>
+<tr id="t2015-03-22T10:02:52"><td class="join" colspan="2">*** Hal1 has joined #openstack-infra</td><td><a href="#t2015-03-22T10:02:52" class="time">10:02</a></td></tr>
+<tr id="t2015-03-22T10:03:49"><td class="join" colspan="2">*** esker has joined #openstack-infra</td><td><a href="#t2015-03-22T10:03:49" class="time">10:03</a></td></tr>
+<tr id="t2015-03-22T10:05:49"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T10:05:49" class="time">10:05</a></td></tr>
+<tr id="t2015-03-22T10:07:12"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T10:07:12" class="time">10:07</a></td></tr>
+<tr id="t2015-03-22T10:09:54"><th class="nick" style="background: #488888">openstackgerrit</th><td class="text" style="color: #488888">Max Rydahl Andersen proposed openstack-infra/jenkins-job-builder: Add support for 'raw' to inject direct xml to job configs.&nbsp;&nbsp;<a href="https://review.openstack.org/160158" rel="nofollow">https://review.openstack.org/160158</a></td><td class="time"><a href="#t2015-03-22T10:09:54" class="time">10:09</a></td></tr>
+<tr id="t2015-03-22T10:11:53"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T10:11:53" class="time">10:11</a></td></tr>
+<tr id="t2015-03-22T10:16:43"><td class="nickchange" colspan="2">*** nilasae|zzz is now known as nilasae</td><td><a href="#t2015-03-22T10:16:43" class="time">10:16</a></td></tr>
+<tr id="t2015-03-22T10:20:35"><td class="part" colspan="2">*** andreykurilin_ has quit IRC</td><td><a href="#t2015-03-22T10:20:35" class="time">10:20</a></td></tr>
+<tr id="t2015-03-22T10:22:28"><td class="part" colspan="2">*** mmedvede has quit IRC</td><td><a href="#t2015-03-22T10:22:28" class="time">10:22</a></td></tr>
+<tr id="t2015-03-22T10:26:03"><td class="part" colspan="2">*** garyk has quit IRC</td><td><a href="#t2015-03-22T10:26:03" class="time">10:26</a></td></tr>
+<tr id="t2015-03-22T10:26:18"><td class="join" colspan="2">*** garyk has joined #openstack-infra</td><td><a href="#t2015-03-22T10:26:18" class="time">10:26</a></td></tr>
+<tr id="t2015-03-22T10:26:36"><td class="part" colspan="2">*** garyk has quit IRC</td><td><a href="#t2015-03-22T10:26:36" class="time">10:26</a></td></tr>
+<tr id="t2015-03-22T10:28:28"><td class="join" colspan="2">*** Longgeek has joined #openstack-infra</td><td><a href="#t2015-03-22T10:28:28" class="time">10:28</a></td></tr>
+<tr id="t2015-03-22T10:28:43"><td class="join" colspan="2">*** garyk has joined #openstack-infra</td><td><a href="#t2015-03-22T10:28:43" class="time">10:28</a></td></tr>
+<tr id="t2015-03-22T10:30:50"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T10:30:50" class="time">10:30</a></td></tr>
+<tr id="t2015-03-22T10:31:41"><td class="nickchange" colspan="2">*** yfried is now known as yfried|afk</td><td><a href="#t2015-03-22T10:31:41" class="time">10:31</a></td></tr>
+<tr id="t2015-03-22T10:32:27"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2015-03-22T10:32:27" class="time">10:32</a></td></tr>
+<tr id="t2015-03-22T10:33:30"><td class="part" colspan="2">*** garyk has quit IRC</td><td><a href="#t2015-03-22T10:33:30" class="time">10:33</a></td></tr>
+<tr id="t2015-03-22T10:33:58"><td class="join" colspan="2">*** garyk has joined #openstack-infra</td><td><a href="#t2015-03-22T10:33:58" class="time">10:33</a></td></tr>
+<tr id="t2015-03-22T10:35:53"><td class="part" colspan="2">*** teran has quit IRC</td><td><a href="#t2015-03-22T10:35:53" class="time">10:35</a></td></tr>
+<tr id="t2015-03-22T10:36:50"><td class="join" colspan="2">*** Bsony has joined #openstack-infra</td><td><a href="#t2015-03-22T10:36:50" class="time">10:36</a></td></tr>
+<tr id="t2015-03-22T10:37:33"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2015-03-22T10:37:33" class="time">10:37</a></td></tr>
+<tr id="t2015-03-22T10:41:15"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T10:41:15" class="time">10:41</a></td></tr>
+<tr id="t2015-03-22T10:44:15"><th class="nick" style="background: #488888">openstackgerrit</th><td class="text" style="color: #488888">Andrea Frittoli&nbsp;&nbsp;proposed openstack-infra/project-config: Add identity v3 jobs to periodic-qa&nbsp;&nbsp;<a href="https://review.openstack.org/166593" rel="nofollow">https://review.openstack.org/166593</a></td><td class="time"><a href="#t2015-03-22T10:44:15" class="time">10:44</a></td></tr>
+<tr id="t2015-03-22T10:44:29"><td class="join" colspan="2">*** ihrachyshka has joined #openstack-infra</td><td><a href="#t2015-03-22T10:44:29" class="time">10:44</a></td></tr>
+<tr id="t2015-03-22T10:44:58"><th class="nick" style="background: #4d4d93">Somay</th><td class="text" style="color: #4d4d93">yolanda: superbee : Could you review this please ? <a href="https://review.openstack.org/#/c/163137/" rel="nofollow">https://review.openstack.org/#/c/163137/</a></td><td class="time"><a href="#t2015-03-22T10:44:58" class="time">10:44</a></td></tr>
+<tr id="t2015-03-22T10:45:03"><td class="part" colspan="2">*** trey has quit IRC</td><td><a href="#t2015-03-22T10:45:03" class="time">10:45</a></td></tr>
+<tr id="t2015-03-22T10:45:19"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2015-03-22T10:45:19" class="time">10:45</a></td></tr>
+<tr id="t2015-03-22T10:45:48"><td class="join" colspan="2">*** baoli has joined #openstack-infra</td><td><a href="#t2015-03-22T10:45:48" class="time">10:45</a></td></tr>
+<tr id="t2015-03-22T10:46:50"><td class="join" colspan="2">*** trey has joined #openstack-infra</td><td><a href="#t2015-03-22T10:46:50" class="time">10:46</a></td></tr>
+<tr id="t2015-03-22T10:50:03"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2015-03-22T10:50:03" class="time">10:50</a></td></tr>
+<tr id="t2015-03-22T10:50:23"><td class="part" colspan="2">*** baoli has quit IRC</td><td><a href="#t2015-03-22T10:50:23" class="time">10:50</a></td></tr>
+<tr id="t2015-03-22T10:51:51"><td class="nickchange" colspan="2">*** yfried|afk is now known as yfried</td><td><a href="#t2015-03-22T10:51:51" class="time">10:51</a></td></tr>
+<tr id="t2015-03-22T10:53:37"><td class="part" colspan="2">*** esker has quit IRC</td><td><a href="#t2015-03-22T10:53:37" class="time">10:53</a></td></tr>
+<tr id="t2015-03-22T10:55:30"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T10:55:30" class="time">10:55</a></td></tr>
+<tr id="t2015-03-22T10:55:38"><td class="join" colspan="2">*** dims has joined #openstack-infra</td><td><a href="#t2015-03-22T10:55:38" class="time">10:55</a></td></tr>
+<tr id="t2015-03-22T11:00:15"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T11:00:15" class="time">11:00</a></td></tr>
+<tr id="t2015-03-22T11:03:12"><td class="part" colspan="2">*** sputnik13 has quit IRC</td><td><a href="#t2015-03-22T11:03:12" class="time">11:03</a></td></tr>
+<tr id="t2015-03-22T11:05:56"><th class="nick" style="background: #488888">openstackgerrit</th><td class="text" style="color: #488888">Andrea Frittoli&nbsp;&nbsp;proposed openstack-infra/project-config: Add identity v3 jobs to periodic-qa&nbsp;&nbsp;<a href="https://review.openstack.org/166593" rel="nofollow">https://review.openstack.org/166593</a></td><td class="time"><a href="#t2015-03-22T11:05:56" class="time">11:05</a></td></tr>
+<tr id="t2015-03-22T11:06:57"><td class="join" colspan="2">*** ghostpl_ has joined #openstack-infra</td><td><a href="#t2015-03-22T11:06:57" class="time">11:06</a></td></tr>
+<tr id="t2015-03-22T11:07:24"><td class="part" colspan="2">*** bradjones has quit IRC</td><td><a href="#t2015-03-22T11:07:24" class="time">11:07</a></td></tr>
+<tr id="t2015-03-22T11:07:50"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T11:07:50" class="time">11:07</a></td></tr>
+<tr id="t2015-03-22T11:10:23"><td class="join" colspan="2">*** bradjones has joined #openstack-infra</td><td><a href="#t2015-03-22T11:10:23" class="time">11:10</a></td></tr>
+<tr id="t2015-03-22T11:12:57"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T11:12:57" class="time">11:12</a></td></tr>
+<tr id="t2015-03-22T11:16:41"><td class="part" colspan="2">*** ghostpl_ has quit IRC</td><td><a href="#t2015-03-22T11:16:41" class="time">11:16</a></td></tr>
+<tr id="t2015-03-22T11:28:59"><td class="part" colspan="2">*** dims has quit IRC</td><td><a href="#t2015-03-22T11:28:59" class="time">11:28</a></td></tr>
+<tr id="t2015-03-22T11:38:10"><td class="join" colspan="2">*** salv-orlando has joined #openstack-infra</td><td><a href="#t2015-03-22T11:38:10" class="time">11:38</a></td></tr>
+<tr id="t2015-03-22T11:40:15"><td class="join" colspan="2">*** ZZelle_ has joined #openstack-infra</td><td><a href="#t2015-03-22T11:40:15" class="time">11:40</a></td></tr>
+<tr id="t2015-03-22T11:41:54"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T11:41:54" class="time">11:41</a></td></tr>
+<tr id="t2015-03-22T11:42:59"><td class="part" colspan="2">*** salv-orlando has quit IRC</td><td><a href="#t2015-03-22T11:42:59" class="time">11:42</a></td></tr>
+<tr id="t2015-03-22T11:44:36"><th class="nick" style="background: #488888">openstackgerrit</th><td class="text" style="color: #488888">Joshua Hesketh proposed openstack-infra/os-loganalyze: Add support for appending footers&nbsp;&nbsp;<a href="https://review.openstack.org/166596" rel="nofollow">https://review.openstack.org/166596</a></td><td class="time"><a href="#t2015-03-22T11:44:36" class="time">11:44</a></td></tr>
+<tr id="t2015-03-22T11:45:03"><td class="join" colspan="2">*** rlandy has joined #openstack-infra</td><td><a href="#t2015-03-22T11:45:03" class="time">11:45</a></td></tr>
+<tr id="t2015-03-22T11:49:24"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T11:49:24" class="time">11:49</a></td></tr>
+<tr id="t2015-03-22T11:50:43"><td class="nickchange" colspan="2">*** yfried is now known as yfried|afk</td><td><a href="#t2015-03-22T11:50:43" class="time">11:50</a></td></tr>
+<tr id="t2015-03-22T11:52:06"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T11:52:06" class="time">11:52</a></td></tr>
+<tr id="t2015-03-22T11:53:59"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T11:53:59" class="time">11:53</a></td></tr>
+<tr id="t2015-03-22T11:55:25"><td class="nickchange" colspan="2">*** yfried|afk is now known as yfried</td><td><a href="#t2015-03-22T11:55:25" class="time">11:55</a></td></tr>
+<tr id="t2015-03-22T11:57:02"><td class="part" colspan="2">*** tnovacik has quit IRC</td><td><a href="#t2015-03-22T11:57:02" class="time">11:57</a></td></tr>
+<tr id="t2015-03-22T11:57:18"><td class="join" colspan="2">*** mmedvede has joined #openstack-infra</td><td><a href="#t2015-03-22T11:57:18" class="time">11:57</a></td></tr>
+<tr id="t2015-03-22T12:06:06"><td class="join" colspan="2">*** dhritishikhar has joined #openstack-infra</td><td><a href="#t2015-03-22T12:06:06" class="time">12:06</a></td></tr>
+<tr id="t2015-03-22T12:08:41"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T12:08:41" class="time">12:08</a></td></tr>
+<tr id="t2015-03-22T12:11:04"><td class="part" colspan="2">*** dhritishikhar has quit IRC</td><td><a href="#t2015-03-22T12:11:04" class="time">12:11</a></td></tr>
+<tr id="t2015-03-22T12:13:12"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T12:13:12" class="time">12:13</a></td></tr>
+<tr id="t2015-03-22T12:13:25"><td class="join" colspan="2">*** ghostpl_ has joined #openstack-infra</td><td><a href="#t2015-03-22T12:13:25" class="time">12:13</a></td></tr>
+<tr id="t2015-03-22T12:16:38"><td class="join" colspan="2">*** baoli has joined #openstack-infra</td><td><a href="#t2015-03-22T12:16:38" class="time">12:16</a></td></tr>
+<tr id="t2015-03-22T12:19:48"><td class="part" colspan="2">*** ghostpl_ has quit IRC</td><td><a href="#t2015-03-22T12:19:48" class="time">12:19</a></td></tr>
+<tr id="t2015-03-22T12:20:54"><td class="nickchange" colspan="2">*** yfried is now known as yfried|afk</td><td><a href="#t2015-03-22T12:20:54" class="time">12:20</a></td></tr>
+<tr id="t2015-03-22T12:21:25"><td class="part" colspan="2">*** baoli has quit IRC</td><td><a href="#t2015-03-22T12:21:25" class="time">12:21</a></td></tr>
+<tr id="t2015-03-22T12:22:50"><td class="part" colspan="2">*** Longgeek has quit IRC</td><td><a href="#t2015-03-22T12:22:50" class="time">12:22</a></td></tr>
+<tr id="t2015-03-22T12:26:24"><td class="part" colspan="2">*** mmedvede has quit IRC</td><td><a href="#t2015-03-22T12:26:24" class="time">12:26</a></td></tr>
+<tr id="t2015-03-22T12:28:28"><td class="nickchange" colspan="2">*** yfried|afk is now known as yfried</td><td><a href="#t2015-03-22T12:28:28" class="time">12:28</a></td></tr>
+<tr id="t2015-03-22T12:28:44"><td class="part" colspan="2">*** Somay has quit IRC</td><td><a href="#t2015-03-22T12:28:44" class="time">12:28</a></td></tr>
+<tr id="t2015-03-22T12:33:02"><td class="join" colspan="2">*** hyakuhei has joined #openstack-infra</td><td><a href="#t2015-03-22T12:33:02" class="time">12:33</a></td></tr>
+<tr id="t2015-03-22T12:33:37"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2015-03-22T12:33:37" class="time">12:33</a></td></tr>
+<tr id="t2015-03-22T12:36:02"><td class="join" colspan="2">*** baoli has joined #openstack-infra</td><td><a href="#t2015-03-22T12:36:02" class="time">12:36</a></td></tr>
+<tr id="t2015-03-22T12:36:31"><td class="part" colspan="2">*** baoli has quit IRC</td><td><a href="#t2015-03-22T12:36:31" class="time">12:36</a></td></tr>
+<tr id="t2015-03-22T12:37:16"><td class="join" colspan="2">*** dims has joined #openstack-infra</td><td><a href="#t2015-03-22T12:37:16" class="time">12:37</a></td></tr>
+<tr id="t2015-03-22T12:37:51"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2015-03-22T12:37:51" class="time">12:37</a></td></tr>
+<tr id="t2015-03-22T12:40:32"><td class="join" colspan="2">*** mmedvede has joined #openstack-infra</td><td><a href="#t2015-03-22T12:40:32" class="time">12:40</a></td></tr>
+<tr id="t2015-03-22T12:40:33"><td class="part" colspan="2">*** nilasae has quit IRC</td><td><a href="#t2015-03-22T12:40:33" class="time">12:40</a></td></tr>
+<tr id="t2015-03-22T12:43:33"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T12:43:33" class="time">12:43</a></td></tr>
+<tr id="t2015-03-22T12:45:32"><td class="part" colspan="2">*** ihrachyshka has quit IRC</td><td><a href="#t2015-03-22T12:45:32" class="time">12:45</a></td></tr>
+<tr id="t2015-03-22T12:48:21"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T12:48:21" class="time">12:48</a></td></tr>
+<tr id="t2015-03-22T12:50:48"><td class="join" colspan="2">*** woodster_ has joined #openstack-infra</td><td><a href="#t2015-03-22T12:50:48" class="time">12:50</a></td></tr>
+<tr id="t2015-03-22T12:52:44"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T12:52:44" class="time">12:52</a></td></tr>
+<tr id="t2015-03-22T12:55:00"><td class="part" colspan="2">*** mmedvede has quit IRC</td><td><a href="#t2015-03-22T12:55:00" class="time">12:55</a></td></tr>
+<tr id="t2015-03-22T12:59:40"><td class="part" colspan="2">*** dims has quit IRC</td><td><a href="#t2015-03-22T12:59:40" class="time">12:59</a></td></tr>
+<tr id="t2015-03-22T13:02:34"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T13:02:34" class="time">13:02</a></td></tr>
+<tr id="t2015-03-22T13:02:35"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2015-03-22T13:02:35" class="time">13:02</a></td></tr>
+<tr id="t2015-03-22T13:03:13"><td class="join" colspan="2">*** ddieterl_ has joined #openstack-infra</td><td><a href="#t2015-03-22T13:03:13" class="time">13:03</a></td></tr>
+<tr id="t2015-03-22T13:03:26"><td class="join" colspan="2">*** ihrachyshka has joined #openstack-infra</td><td><a href="#t2015-03-22T13:03:26" class="time">13:03</a></td></tr>
+<tr id="t2015-03-22T13:06:44"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2015-03-22T13:06:44" class="time">13:06</a></td></tr>
+<tr id="t2015-03-22T13:08:45"><td class="part" colspan="2">*** hyakuhei has quit IRC</td><td><a href="#t2015-03-22T13:08:45" class="time">13:08</a></td></tr>
+<tr id="t2015-03-22T13:09:26"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T13:09:26" class="time">13:09</a></td></tr>
+<tr id="t2015-03-22T13:14:16"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T13:14:16" class="time">13:14</a></td></tr>
+<tr id="t2015-03-22T13:16:01"><td class="join" colspan="2">*** ghostpl_ has joined #openstack-infra</td><td><a href="#t2015-03-22T13:16:01" class="time">13:16</a></td></tr>
+<tr id="t2015-03-22T13:17:06"><td class="join" colspan="2">*** Somay has joined #openstack-infra</td><td><a href="#t2015-03-22T13:17:06" class="time">13:17</a></td></tr>
+<tr id="t2015-03-22T13:17:10"><th class="nick" style="background: #97974f">anteaya</th><td class="text" style="color: #97974f">garyk: I'm not sure what you are seeing that prompted your question, however if you are submitting to gerrit and happen to be doing so behind a firewall you might have issues</td><td class="time"><a href="#t2015-03-22T13:17:10" class="time">13:17</a></td></tr>
+<tr id="t2015-03-22T13:17:14"><th class="nick" style="background: #97974f">anteaya</th><td class="text" style="color: #97974f">garyk: <a href="http://lists.openstack.org/pipermail/openstack-infra/2015-February/002425.html" rel="nofollow">http://lists.openstack.org/pipermail/openstack-infra/2015-February/002425.html</a></td><td class="time"><a href="#t2015-03-22T13:17:14" class="time">13:17</a></td></tr>
+<tr id="t2015-03-22T13:17:40"><th class="nick" style="background: #97974f">anteaya</th><td class="text" style="color: #97974f">garyk: we changed servers yesterday and gerrit is now at a new ip, the above email explains</td><td class="time"><a href="#t2015-03-22T13:17:40" class="time">13:17</a></td></tr>
+<tr id="t2015-03-22T13:18:13"><th class="nick" style="background: #97974f">anteaya</th><td class="text" style="color: #97974f">garyk: we posted that to the mailing list with the intention of giving those who needed to address firewall concerns time to do so</td><td class="time"><a href="#t2015-03-22T13:18:13" class="time">13:18</a></td></tr>
+<tr id="t2015-03-22T13:18:37"><th class="nick" style="background: #97974f">anteaya</th><td class="text" style="color: #97974f">let us know if my explaination is contrary to what you are seeing</td><td class="time"><a href="#t2015-03-22T13:18:37" class="time">13:18</a></td></tr>
+<tr id="t2015-03-22T13:23:08"><td class="join" colspan="2">*** dhritishikhar has joined #openstack-infra</td><td><a href="#t2015-03-22T13:23:08" class="time">13:23</a></td></tr>
+<tr id="t2015-03-22T13:23:30"><th class="nick" style="background: #4b904b">garyk</th><td class="text" style="color: #4b904b">anteaya: thanks! the firewall at work worked until friday. so maybe the change has caused the problem.</td><td class="time"><a href="#t2015-03-22T13:23:30" class="time">13:23</a></td></tr>
+<tr id="t2015-03-22T13:25:11"><th class="nick" style="background: #97974f">anteaya</th><td class="text" style="color: #97974f">garyk: it is possible</td><td class="time"><a href="#t2015-03-22T13:25:11" class="time">13:25</a></td></tr>
+<tr id="t2015-03-22T13:25:18"><th class="nick" style="background: #97974f">anteaya</th><td class="text" style="color: #97974f">I also replied to the mailing list post</td><td class="time"><a href="#t2015-03-22T13:25:18" class="time">13:25</a></td></tr>
+<tr id="t2015-03-22T13:25:28"><th class="nick" style="background: #4b904b">garyk</th><td class="text" style="color: #4b904b">thanks.</td><td class="time"><a href="#t2015-03-22T13:25:28" class="time">13:25</a></td></tr>
+<tr id="t2015-03-22T13:25:39"><th class="nick" style="background: #97974f">anteaya</th><td class="text" style="color: #97974f">if changing the firewall rule to include the new ip doesn't solve it, please let us know</td><td class="time"><a href="#t2015-03-22T13:25:39" class="time">13:25</a></td></tr>
+<tr id="t2015-03-22T13:25:42"><th class="nick" style="background: #97974f">anteaya</th><td class="text" style="color: #97974f">thanks</td><td class="time"><a href="#t2015-03-22T13:25:42" class="time">13:25</a></td></tr>
+<tr id="t2015-03-22T13:26:18"><td class="part" colspan="2">*** ghostpl_ has quit IRC</td><td><a href="#t2015-03-22T13:26:18" class="time">13:26</a></td></tr>
+<tr id="t2015-03-22T13:27:19"><th class="nick" style="background: #4b904b">garyk</th><td class="text" style="color: #4b904b">thanks, will let you know</td><td class="time"><a href="#t2015-03-22T13:27:19" class="time">13:27</a></td></tr>
+<tr id="t2015-03-22T13:27:22"><th class="nick" style="background: #97974f">anteaya</th><td class="text" style="color: #97974f">thanks</td><td class="time"><a href="#t2015-03-22T13:27:22" class="time">13:27</a></td></tr>
+<tr id="t2015-03-22T13:29:19"><td class="join" colspan="2">*** Kiall has joined #openstack-infra</td><td><a href="#t2015-03-22T13:29:19" class="time">13:29</a></td></tr>
+<tr id="t2015-03-22T13:30:06"><td class="join" colspan="2">*** tnovacik has joined #openstack-infra</td><td><a href="#t2015-03-22T13:30:06" class="time">13:30</a></td></tr>
+<tr id="t2015-03-22T13:32:41"><td class="part" colspan="2">*** dhritishikhar has quit IRC</td><td><a href="#t2015-03-22T13:32:41" class="time">13:32</a></td></tr>
+<tr id="t2015-03-22T13:37:22"><td class="join" colspan="2">*** baoli has joined #openstack-infra</td><td><a href="#t2015-03-22T13:37:22" class="time">13:37</a></td></tr>
+<tr id="t2015-03-22T13:37:43"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T13:37:43" class="time">13:37</a></td></tr>
+<tr id="t2015-03-22T13:41:42"><td class="part" colspan="2">*** baoli has quit IRC</td><td><a href="#t2015-03-22T13:41:42" class="time">13:41</a></td></tr>
+<tr id="t2015-03-22T13:42:26"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T13:42:26" class="time">13:42</a></td></tr>
+<tr id="t2015-03-22T13:51:06"><td class="join" colspan="2">*** esker has joined #openstack-infra</td><td><a href="#t2015-03-22T13:51:06" class="time">13:51</a></td></tr>
+<tr id="t2015-03-22T13:55:14"><td class="part" colspan="2">*** esker has quit IRC</td><td><a href="#t2015-03-22T13:55:14" class="time">13:55</a></td></tr>
+<tr id="t2015-03-22T13:55:47"><td class="join" colspan="2">*** pfallenop has joined #openstack-infra</td><td><a href="#t2015-03-22T13:55:47" class="time">13:55</a></td></tr>
+<tr id="t2015-03-22T14:03:10"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T14:03:10" class="time">14:03</a></td></tr>
+<tr id="t2015-03-22T14:04:02"><td class="join" colspan="2">*** mjturek1 has joined #openstack-infra</td><td><a href="#t2015-03-22T14:04:02" class="time">14:04</a></td></tr>
+<tr id="t2015-03-22T14:06:47"><td class="part" colspan="2">*** mjturek1 has left #openstack-infra</td><td><a href="#t2015-03-22T14:06:47" class="time">14:06</a></td></tr>
+<tr id="t2015-03-22T14:10:11"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T14:10:11" class="time">14:10</a></td></tr>
+<tr id="t2015-03-22T14:12:55"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">SpamapS, greghaynes: oh - have I got a treat for you in dib world when you wake up</td><td class="time"><a href="#t2015-03-22T14:12:55" class="time">14:12</a></td></tr>
+<tr id="t2015-03-22T14:13:08"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">SpamapS, greghaynes: (it's entirely possible that you will not care at all)</td><td class="time"><a href="#t2015-03-22T14:13:08" class="time">14:13</a></td></tr>
+<tr id="t2015-03-22T14:13:33"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">SpamapS, greghaynes: I've got a replacement for rinse in the centos-minimal element that just uses yum working - WAY lighterweight than the rinse thing too</td><td class="time"><a href="#t2015-03-22T14:13:33" class="time">14:13</a></td></tr>
+<tr id="t2015-03-22T14:13:48"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T14:13:48" class="time">14:13</a></td></tr>
+<tr id="t2015-03-22T14:13:49"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">and should work equally on debian or redhat hosts</td><td class="time"><a href="#t2015-03-22T14:13:49" class="time">14:13</a></td></tr>
+<tr id="t2015-03-22T14:15:02"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T14:15:02" class="time">14:15</a></td></tr>
+<tr id="t2015-03-22T14:28:21"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">SpamapS, greghaynes: also, by &quot;wake up&quot; clearly I mean &quot;tomorrow&quot;</td><td class="time"><a href="#t2015-03-22T14:28:21" class="time">14:28</a></td></tr>
+<tr id="t2015-03-22T14:29:20"><td class="join" colspan="2">*** hyakuhei has joined #openstack-infra</td><td><a href="#t2015-03-22T14:29:20" class="time">14:29</a></td></tr>
+<tr id="t2015-03-22T14:30:35"><td class="join" colspan="2">*** mestery_ has joined #openstack-infra</td><td><a href="#t2015-03-22T14:30:35" class="time">14:30</a></td></tr>
+<tr id="t2015-03-22T14:31:48"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T14:31:48" class="time">14:31</a></td></tr>
+<tr id="t2015-03-22T14:33:31"><td class="part" colspan="2">*** Somay has quit IRC</td><td><a href="#t2015-03-22T14:33:31" class="time">14:33</a></td></tr>
+<tr id="t2015-03-22T14:33:44"><td class="part" colspan="2">*** mestery has quit IRC</td><td><a href="#t2015-03-22T14:33:44" class="time">14:33</a></td></tr>
+<tr id="t2015-03-22T14:34:15"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2015-03-22T14:34:15" class="time">14:34</a></td></tr>
+<tr id="t2015-03-22T14:36:14"><td class="join" colspan="2">*** armax has joined #openstack-infra</td><td><a href="#t2015-03-22T14:36:14" class="time">14:36</a></td></tr>
+<tr id="t2015-03-22T14:36:43"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T14:36:43" class="time">14:36</a></td></tr>
+<tr id="t2015-03-22T14:38:26"><td class="join" colspan="2">*** baoli has joined #openstack-infra</td><td><a href="#t2015-03-22T14:38:26" class="time">14:38</a></td></tr>
+<tr id="t2015-03-22T14:38:59"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2015-03-22T14:38:59" class="time">14:38</a></td></tr>
+<tr id="t2015-03-22T14:42:56"><td class="part" colspan="2">*** baoli has quit IRC</td><td><a href="#t2015-03-22T14:42:56" class="time">14:42</a></td></tr>
+<tr id="t2015-03-22T14:45:52"><td class="part" colspan="2">*** ddieterl_ has quit IRC</td><td><a href="#t2015-03-22T14:45:52" class="time">14:45</a></td></tr>
+<tr id="t2015-03-22T14:46:38"><td class="join" colspan="2">*** baoli has joined #openstack-infra</td><td><a href="#t2015-03-22T14:46:38" class="time">14:46</a></td></tr>
+<tr id="t2015-03-22T14:49:49"><td class="join" colspan="2">*** tkelsey has joined #openstack-infra</td><td><a href="#t2015-03-22T14:49:49" class="time">14:49</a></td></tr>
+<tr id="t2015-03-22T14:51:47"><td class="join" colspan="2">*** dhritishikhar has joined #openstack-infra</td><td><a href="#t2015-03-22T14:51:47" class="time">14:51</a></td></tr>
+<tr id="t2015-03-22T14:52:02"><td class="part" colspan="2">*** yamamoto has quit IRC</td><td><a href="#t2015-03-22T14:52:02" class="time">14:52</a></td></tr>
+<tr id="t2015-03-22T14:52:12"><td class="join" colspan="2">*** yamamoto has joined #openstack-infra</td><td><a href="#t2015-03-22T14:52:12" class="time">14:52</a></td></tr>
+<tr id="t2015-03-22T14:53:05"><td class="part" colspan="2">*** yamamoto has quit IRC</td><td><a href="#t2015-03-22T14:53:05" class="time">14:53</a></td></tr>
+<tr id="t2015-03-22T14:53:39"><td class="join" colspan="2">*** ghostpl_ has joined #openstack-infra</td><td><a href="#t2015-03-22T14:53:39" class="time">14:53</a></td></tr>
+<tr id="t2015-03-22T14:53:57"><td class="part" colspan="2">*** hyakuhei has quit IRC</td><td><a href="#t2015-03-22T14:53:57" class="time">14:53</a></td></tr>
+<tr id="t2015-03-22T14:54:16"><td class="part" colspan="2">*** tkelsey has quit IRC</td><td><a href="#t2015-03-22T14:54:16" class="time">14:54</a></td></tr>
+<tr id="t2015-03-22T14:59:48"><td class="part" colspan="2">*** ghostpl_ has quit IRC</td><td><a href="#t2015-03-22T14:59:48" class="time">14:59</a></td></tr>
+<tr id="t2015-03-22T15:01:51"><td class="join" colspan="2">*** hdd has joined #openstack-infra</td><td><a href="#t2015-03-22T15:01:51" class="time">15:01</a></td></tr>
+<tr id="t2015-03-22T15:02:28"><td class="join" colspan="2">*** hyakuhei has joined #openstack-infra</td><td><a href="#t2015-03-22T15:02:28" class="time">15:02</a></td></tr>
+<tr id="t2015-03-22T15:06:18"><td class="part" colspan="2">*** hyakuhei has quit IRC</td><td><a href="#t2015-03-22T15:06:18" class="time">15:06</a></td></tr>
+<tr id="t2015-03-22T15:07:38"><td class="join" colspan="2">*** yamamoto has joined #openstack-infra</td><td><a href="#t2015-03-22T15:07:38" class="time">15:07</a></td></tr>
+<tr id="t2015-03-22T15:09:12"><td class="part" colspan="2">*** YorikSar has quit IRC</td><td><a href="#t2015-03-22T15:09:12" class="time">15:09</a></td></tr>
+<tr id="t2015-03-22T15:10:55"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T15:10:55" class="time">15:10</a></td></tr>
+<tr id="t2015-03-22T15:11:53"><td class="part" colspan="2">*** yamamoto has quit IRC</td><td><a href="#t2015-03-22T15:11:53" class="time">15:11</a></td></tr>
+<tr id="t2015-03-22T15:15:40"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T15:15:40" class="time">15:15</a></td></tr>
+<tr id="t2015-03-22T15:17:06"><td class="part" colspan="2">*** baoli has quit IRC</td><td><a href="#t2015-03-22T15:17:06" class="time">15:17</a></td></tr>
+<tr id="t2015-03-22T15:17:12"><td class="part" colspan="2">*** hdd has quit IRC</td><td><a href="#t2015-03-22T15:17:12" class="time">15:17</a></td></tr>
+<tr id="t2015-03-22T15:17:35"><td class="join" colspan="2">*** salv-orlando has joined #openstack-infra</td><td><a href="#t2015-03-22T15:17:35" class="time">15:17</a></td></tr>
+<tr id="t2015-03-22T15:19:53"><td class="join" colspan="2">*** nilasae has joined #openstack-infra</td><td><a href="#t2015-03-22T15:19:53" class="time">15:19</a></td></tr>
+<tr id="t2015-03-22T15:22:32"><td class="part" colspan="2">*** salv-orlando has quit IRC</td><td><a href="#t2015-03-22T15:22:32" class="time">15:22</a></td></tr>
+<tr id="t2015-03-22T15:22:39"><td class="join" colspan="2">*** sushilkm has joined #openstack-infra</td><td><a href="#t2015-03-22T15:22:39" class="time">15:22</a></td></tr>
+<tr id="t2015-03-22T15:22:45"><td class="part" colspan="2">*** sushilkm has left #openstack-infra</td><td><a href="#t2015-03-22T15:22:45" class="time">15:22</a></td></tr>
+<tr id="t2015-03-22T15:25:57"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T15:25:57" class="time">15:25</a></td></tr>
+<tr id="t2015-03-22T15:26:24"><td class="join" colspan="2">*** _nadya_ has joined #openstack-infra</td><td><a href="#t2015-03-22T15:26:24" class="time">15:26</a></td></tr>
+<tr id="t2015-03-22T15:29:01"><td class="join" colspan="2">*** baoli has joined #openstack-infra</td><td><a href="#t2015-03-22T15:29:01" class="time">15:29</a></td></tr>
+<tr id="t2015-03-22T15:30:34"><td class="join" colspan="2">*** sdake has joined #openstack-infra</td><td><a href="#t2015-03-22T15:30:34" class="time">15:30</a></td></tr>
+<tr id="t2015-03-22T15:31:01"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T15:31:01" class="time">15:31</a></td></tr>
+<tr id="t2015-03-22T15:35:28"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2015-03-22T15:35:28" class="time">15:35</a></td></tr>
+<tr id="t2015-03-22T15:35:29"><td class="part" colspan="2">*** ihrachyshka has quit IRC</td><td><a href="#t2015-03-22T15:35:29" class="time">15:35</a></td></tr>
+<tr id="t2015-03-22T15:36:40"><td class="join" colspan="2">*** YorikSar has joined #openstack-infra</td><td><a href="#t2015-03-22T15:36:40" class="time">15:36</a></td></tr>
+<tr id="t2015-03-22T15:39:24"><td class="part" colspan="2">*** baoli has quit IRC</td><td><a href="#t2015-03-22T15:39:24" class="time">15:39</a></td></tr>
+<tr id="t2015-03-22T15:39:31"><td class="join" colspan="2">*** hdd has joined #openstack-infra</td><td><a href="#t2015-03-22T15:39:31" class="time">15:39</a></td></tr>
+<tr id="t2015-03-22T15:40:07"><td class="join" colspan="2">*** sputnik13 has joined #openstack-infra</td><td><a href="#t2015-03-22T15:40:07" class="time">15:40</a></td></tr>
+<tr id="t2015-03-22T15:43:25"><td class="part" colspan="2">*** armax has quit IRC</td><td><a href="#t2015-03-22T15:43:25" class="time">15:43</a></td></tr>
+<tr id="t2015-03-22T15:51:44"><td class="part" colspan="2">*** tnovacik has quit IRC</td><td><a href="#t2015-03-22T15:51:44" class="time">15:51</a></td></tr>
+<tr id="t2015-03-22T15:53:52"><td class="part" colspan="2">*** hdd has quit IRC</td><td><a href="#t2015-03-22T15:53:52" class="time">15:53</a></td></tr>
+<tr id="t2015-03-22T15:54:05"><td class="join" colspan="2">*** sdake_ has joined #openstack-infra</td><td><a href="#t2015-03-22T15:54:05" class="time">15:54</a></td></tr>
+<tr id="t2015-03-22T15:56:22"><td class="join" colspan="2">*** sdake__ has joined #openstack-infra</td><td><a href="#t2015-03-22T15:56:22" class="time">15:56</a></td></tr>
+<tr id="t2015-03-22T15:56:54"><td class="part" colspan="2">*** sdake has quit IRC</td><td><a href="#t2015-03-22T15:56:54" class="time">15:56</a></td></tr>
+<tr id="t2015-03-22T16:00:16"><td class="join" colspan="2">*** dims has joined #openstack-infra</td><td><a href="#t2015-03-22T16:00:16" class="time">16:00</a></td></tr>
+<tr id="t2015-03-22T16:00:21"><td class="part" colspan="2">*** sdake_ has quit IRC</td><td><a href="#t2015-03-22T16:00:21" class="time">16:00</a></td></tr>
+<tr id="t2015-03-22T16:03:10"><td class="nickchange" colspan="2">*** ibiris is now known as ibiris_away</td><td><a href="#t2015-03-22T16:03:10" class="time">16:03</a></td></tr>
+<tr id="t2015-03-22T16:03:46"><td class="part" colspan="2">*** garyk has quit IRC</td><td><a href="#t2015-03-22T16:03:46" class="time">16:03</a></td></tr>
+<tr id="t2015-03-22T16:08:42"><th class="nick" style="background: #488888">openstackgerrit</th><td class="text" style="color: #488888">Valeriy Ponomaryov proposed openstack/requirements: Bump ddt to min version 0.7.0&nbsp;&nbsp;<a href="https://review.openstack.org/166162" rel="nofollow">https://review.openstack.org/166162</a></td><td class="time"><a href="#t2015-03-22T16:08:42" class="time">16:08</a></td></tr>
+<tr id="t2015-03-22T16:09:33"><td class="join" colspan="2">*** hyakuhei has joined #openstack-infra</td><td><a href="#t2015-03-22T16:09:33" class="time">16:09</a></td></tr>
+<tr id="t2015-03-22T16:11:41"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T16:11:41" class="time">16:11</a></td></tr>
+<tr id="t2015-03-22T16:12:23"><td class="join" colspan="2">*** yamamoto has joined #openstack-infra</td><td><a href="#t2015-03-22T16:12:23" class="time">16:12</a></td></tr>
+<tr id="t2015-03-22T16:16:18"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T16:16:18" class="time">16:16</a></td></tr>
+<tr id="t2015-03-22T16:16:27"><td class="join" colspan="2">*** tehbrut_ has joined #openstack-infra</td><td><a href="#t2015-03-22T16:16:27" class="time">16:16</a></td></tr>
+<tr id="t2015-03-22T16:16:38"><td class="part" colspan="2">*** anthonyper has quit IRC</td><td><a href="#t2015-03-22T16:16:38" class="time">16:16</a></td></tr>
+<tr id="t2015-03-22T16:17:13"><td class="part" colspan="2">*** yamamoto has quit IRC</td><td><a href="#t2015-03-22T16:17:13" class="time">16:17</a></td></tr>
+<tr id="t2015-03-22T16:17:30"><td class="join" colspan="2">*** anthonyper has joined #openstack-infra</td><td><a href="#t2015-03-22T16:17:30" class="time">16:17</a></td></tr>
+<tr id="t2015-03-22T16:20:08"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T16:20:08" class="time">16:20</a></td></tr>
+<tr id="t2015-03-22T16:20:39"><td class="join" colspan="2">*** sdake has joined #openstack-infra</td><td><a href="#t2015-03-22T16:20:39" class="time">16:20</a></td></tr>
+<tr id="t2015-03-22T16:21:14"><td class="join" colspan="2">*** yamahata has joined #openstack-infra</td><td><a href="#t2015-03-22T16:21:14" class="time">16:21</a></td></tr>
+<tr id="t2015-03-22T16:23:44"><td class="part" colspan="2">*** sdake__ has quit IRC</td><td><a href="#t2015-03-22T16:23:44" class="time">16:23</a></td></tr>
+<tr id="t2015-03-22T16:24:43"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T16:24:43" class="time">16:24</a></td></tr>
+<tr id="t2015-03-22T16:25:58"><td class="join" colspan="2">*** bdpayne has joined #openstack-infra</td><td><a href="#t2015-03-22T16:25:58" class="time">16:25</a></td></tr>
+<tr id="t2015-03-22T16:28:40"><td class="part" colspan="2">*** hyakuhei has quit IRC</td><td><a href="#t2015-03-22T16:28:40" class="time">16:28</a></td></tr>
+<tr id="t2015-03-22T16:30:20"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T16:30:20" class="time">16:30</a></td></tr>
+<tr id="t2015-03-22T16:31:00"><td class="join" colspan="2">*** hyakuhei has joined #openstack-infra</td><td><a href="#t2015-03-22T16:31:00" class="time">16:31</a></td></tr>
+<tr id="t2015-03-22T16:31:58"><td class="part" colspan="2">*** hyakuhei has quit IRC</td><td><a href="#t2015-03-22T16:31:58" class="time">16:31</a></td></tr>
+<tr id="t2015-03-22T16:32:14"><td class="join" colspan="2">*** hyakuhei has joined #openstack-infra</td><td><a href="#t2015-03-22T16:32:14" class="time">16:32</a></td></tr>
+<tr id="t2015-03-22T16:35:13"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2015-03-22T16:35:13" class="time">16:35</a></td></tr>
+<tr id="t2015-03-22T16:35:49"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T16:35:49" class="time">16:35</a></td></tr>
+<tr id="t2015-03-22T16:35:49"><td class="part" colspan="2">*** tehbrut_ has quit IRC</td><td><a href="#t2015-03-22T16:35:49" class="time">16:35</a></td></tr>
+<tr id="t2015-03-22T16:38:13"><td class="part" colspan="2">*** trey has quit IRC</td><td><a href="#t2015-03-22T16:38:13" class="time">16:38</a></td></tr>
+<tr id="t2015-03-22T16:38:30"><td class="join" colspan="2">*** trey has joined #openstack-infra</td><td><a href="#t2015-03-22T16:38:30" class="time">16:38</a></td></tr>
+<tr id="t2015-03-22T16:39:33"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2015-03-22T16:39:33" class="time">16:39</a></td></tr>
+<tr id="t2015-03-22T16:44:01"><td class="join" colspan="2">*** ghostpl_ has joined #openstack-infra</td><td><a href="#t2015-03-22T16:44:01" class="time">16:44</a></td></tr>
+<tr id="t2015-03-22T16:48:57"><td class="part" colspan="2">*** ghostpl_ has quit IRC</td><td><a href="#t2015-03-22T16:48:57" class="time">16:48</a></td></tr>
+<tr id="t2015-03-22T16:50:29"><td class="part" colspan="2">*** woodster_ has quit IRC</td><td><a href="#t2015-03-22T16:50:29" class="time">16:50</a></td></tr>
+<tr id="t2015-03-22T16:53:08"><td class="part" colspan="2">*** yfried has quit IRC</td><td><a href="#t2015-03-22T16:53:08" class="time">16:53</a></td></tr>
+<tr id="t2015-03-22T17:00:15"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2015-03-22T17:00:15" class="time">17:00</a></td></tr>
+<tr id="t2015-03-22T17:03:41"><td class="part" colspan="2">*** cody-somerville has quit IRC</td><td><a href="#t2015-03-22T17:03:41" class="time">17:03</a></td></tr>
+<tr id="t2015-03-22T17:10:48"><td class="part" colspan="2">*** bswartz has quit IRC</td><td><a href="#t2015-03-22T17:10:48" class="time">17:10</a></td></tr>
+<tr id="t2015-03-22T17:10:49"><td class="join" colspan="2">*** carl_baldwin has joined #openstack-infra</td><td><a href="#t2015-03-22T17:10:49" class="time">17:10</a></td></tr>
+<tr id="t2015-03-22T17:12:25"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T17:12:25" class="time">17:12</a></td></tr>
+<tr id="t2015-03-22T17:14:17"><td class="join" colspan="2">*** mjturek1 has joined #openstack-infra</td><td><a href="#t2015-03-22T17:14:17" class="time">17:14</a></td></tr>
+<tr id="t2015-03-22T17:14:18"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T17:14:18" class="time">17:14</a></td></tr>
+<tr id="t2015-03-22T17:15:34"><td class="join" colspan="2">*** amotoki has joined #openstack-infra</td><td><a href="#t2015-03-22T17:15:34" class="time">17:15</a></td></tr>
+<tr id="t2015-03-22T17:16:59"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T17:16:59" class="time">17:16</a></td></tr>
+<tr id="t2015-03-22T17:17:08"><td class="join" colspan="2">*** hdd has joined #openstack-infra</td><td><a href="#t2015-03-22T17:17:08" class="time">17:17</a></td></tr>
+<tr id="t2015-03-22T17:17:13"><td class="join" colspan="2">*** cody-somerville has joined #openstack-infra</td><td><a href="#t2015-03-22T17:17:13" class="time">17:17</a></td></tr>
+<tr id="t2015-03-22T17:18:29"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T17:18:29" class="time">17:18</a></td></tr>
+<tr id="t2015-03-22T17:20:47"><td class="join" colspan="2">*** sushilkm has joined #openstack-infra</td><td><a href="#t2015-03-22T17:20:47" class="time">17:20</a></td></tr>
+<tr id="t2015-03-22T17:20:51"><td class="part" colspan="2">*** sushilkm has left #openstack-infra</td><td><a href="#t2015-03-22T17:20:51" class="time">17:20</a></td></tr>
+<tr id="t2015-03-22T17:22:24"><td class="part" colspan="2">*** dims has quit IRC</td><td><a href="#t2015-03-22T17:22:24" class="time">17:22</a></td></tr>
+<tr id="t2015-03-22T17:29:41"><td class="part" colspan="2">*** _nadya_ has quit IRC</td><td><a href="#t2015-03-22T17:29:41" class="time">17:29</a></td></tr>
+<tr id="t2015-03-22T17:31:49"><td class="join" colspan="2">*** sdake_ has joined #openstack-infra</td><td><a href="#t2015-03-22T17:31:49" class="time">17:31</a></td></tr>
+<tr id="t2015-03-22T17:33:58"><td class="join" colspan="2">*** yfried has joined #openstack-infra</td><td><a href="#t2015-03-22T17:33:58" class="time">17:33</a></td></tr>
+<tr id="t2015-03-22T17:34:04"><td class="join" colspan="2">*** ajmiller has joined #openstack-infra</td><td><a href="#t2015-03-22T17:34:04" class="time">17:34</a></td></tr>
+<tr id="t2015-03-22T17:35:08"><td class="part" colspan="2">*** mjturek1 has quit IRC</td><td><a href="#t2015-03-22T17:35:08" class="time">17:35</a></td></tr>
+<tr id="t2015-03-22T17:36:25"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T17:36:25" class="time">17:36</a></td></tr>
+<tr id="t2015-03-22T17:37:20"><td class="part" colspan="2">*** ajmiller__ has quit IRC</td><td><a href="#t2015-03-22T17:37:20" class="time">17:37</a></td></tr>
+<tr id="t2015-03-22T17:40:35"><td class="join" colspan="2">*** woodster_ has joined #openstack-infra</td><td><a href="#t2015-03-22T17:40:35" class="time">17:40</a></td></tr>
+<tr id="t2015-03-22T17:46:12"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T17:46:12" class="time">17:46</a></td></tr>
+<tr id="t2015-03-22T17:47:16"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2015-03-22T17:47:16" class="time">17:47</a></td></tr>
+<tr id="t2015-03-22T17:51:29"><td class="part" colspan="2">*** yamahata has quit IRC</td><td><a href="#t2015-03-22T17:51:29" class="time">17:51</a></td></tr>
+<tr id="t2015-03-22T17:54:43"><td class="part" colspan="2">*** Hal1 has quit IRC</td><td><a href="#t2015-03-22T17:54:43" class="time">17:54</a></td></tr>
+<tr id="t2015-03-22T17:59:36"><td class="part" colspan="2">*** carl_baldwin has quit IRC</td><td><a href="#t2015-03-22T17:59:36" class="time">17:59</a></td></tr>
+<tr id="t2015-03-22T18:00:14"><td class="join" colspan="2">*** _nadya_ has joined #openstack-infra</td><td><a href="#t2015-03-22T18:00:14" class="time">18:00</a></td></tr>
+<tr id="t2015-03-22T18:06:31"><td class="part" colspan="2">*** _nadya_ has quit IRC</td><td><a href="#t2015-03-22T18:06:31" class="time">18:06</a></td></tr>
+<tr id="t2015-03-22T18:13:13"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T18:13:13" class="time">18:13</a></td></tr>
+<tr id="t2015-03-22T18:14:46"><td class="join" colspan="2">*** yamamoto has joined #openstack-infra</td><td><a href="#t2015-03-22T18:14:46" class="time">18:14</a></td></tr>
+<tr id="t2015-03-22T18:14:59"><td class="join" colspan="2">*** ghostpl_ has joined #openstack-infra</td><td><a href="#t2015-03-22T18:14:59" class="time">18:14</a></td></tr>
+<tr id="t2015-03-22T18:17:29"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T18:17:29" class="time">18:17</a></td></tr>
+<tr id="t2015-03-22T18:18:59"><td class="part" colspan="2">*** yamamoto has quit IRC</td><td><a href="#t2015-03-22T18:18:59" class="time">18:18</a></td></tr>
+<tr id="t2015-03-22T18:22:25"><td class="part" colspan="2">*** ghostpl_ has quit IRC</td><td><a href="#t2015-03-22T18:22:25" class="time">18:22</a></td></tr>
+<tr id="t2015-03-22T18:28:15"><td class="part" colspan="2">*** hyakuhei has quit IRC</td><td><a href="#t2015-03-22T18:28:15" class="time">18:28</a></td></tr>
+<tr id="t2015-03-22T18:34:34"><td class="part" colspan="2">*** hdd has quit IRC</td><td><a href="#t2015-03-22T18:34:34" class="time">18:34</a></td></tr>
+<tr id="t2015-03-22T18:38:13"><td class="nickchange" colspan="2">*** ibiris_away is now known as ibiris</td><td><a href="#t2015-03-22T18:38:13" class="time">18:38</a></td></tr>
+<tr id="t2015-03-22T18:42:49"><td class="join" colspan="2">*** Somay has joined #openstack-infra</td><td><a href="#t2015-03-22T18:42:49" class="time">18:42</a></td></tr>
+<tr id="t2015-03-22T18:43:45"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">SpamapS, greghaynes, ianw: <a href="https://review.openstack.org/166640" rel="nofollow">https://review.openstack.org/166640</a> and <a href="https://review.openstack.org/166641" rel="nofollow">https://review.openstack.org/166641</a></td><td class="time"><a href="#t2015-03-22T18:43:45" class="time">18:43</a></td></tr>
+<tr id="t2015-03-22T18:44:02"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">ianw: ^^ this is what I was talking about the other day - turns out, it's not as hard as I was thinking</td><td class="time"><a href="#t2015-03-22T18:44:02" class="time">18:44</a></td></tr>
+<tr id="t2015-03-22T18:44:18"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">I think we can still tune those considerably - the fedora image is still 10x the size of the ubuntu-minimal image</td><td class="time"><a href="#t2015-03-22T18:44:18" class="time">18:44</a></td></tr>
+<tr id="t2015-03-22T18:44:46"><td class="join" colspan="2">*** salv-orlando has joined #openstack-infra</td><td><a href="#t2015-03-22T18:44:46" class="time">18:44</a></td></tr>
+<tr id="t2015-03-22T18:44:50"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">although I'm pleased that the new centos-minimal image is actually smaller than the fedora one</td><td class="time"><a href="#t2015-03-22T18:44:50" class="time">18:44</a></td></tr>
+<tr id="t2015-03-22T18:46:52"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T18:46:52" class="time">18:46</a></td></tr>
+<tr id="t2015-03-22T18:48:55"><td class="nickchange" colspan="2">*** ibiris is now known as ibiris_away</td><td><a href="#t2015-03-22T18:48:55" class="time">18:48</a></td></tr>
+<tr id="t2015-03-22T18:49:51"><td class="part" colspan="2">*** salv-orlando has quit IRC</td><td><a href="#t2015-03-22T18:49:51" class="time">18:49</a></td></tr>
+<tr id="t2015-03-22T18:51:11"><td class="join" colspan="2">*** tkelsey has joined #openstack-infra</td><td><a href="#t2015-03-22T18:51:11" class="time">18:51</a></td></tr>
+<tr id="t2015-03-22T18:55:28"><td class="part" colspan="2">*** tkelsey has quit IRC</td><td><a href="#t2015-03-22T18:55:28" class="time">18:55</a></td></tr>
+<tr id="t2015-03-22T18:56:44"><td class="join" colspan="2">*** hdd has joined #openstack-infra</td><td><a href="#t2015-03-22T18:56:44" class="time">18:56</a></td></tr>
+<tr id="t2015-03-22T18:57:03"><td class="nickchange" colspan="2">*** ibiris_away is now known as ibiris</td><td><a href="#t2015-03-22T18:57:03" class="time">18:57</a></td></tr>
+<tr id="t2015-03-22T18:57:30"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T18:57:30" class="time">18:57</a></td></tr>
+<tr id="t2015-03-22T18:59:02"><td class="part" colspan="2">*** Somay has quit IRC</td><td><a href="#t2015-03-22T18:59:02" class="time">18:59</a></td></tr>
+<tr id="t2015-03-22T19:01:28"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">SpamapS: I'm going to do the same thing for debian/ubuntu&nbsp;&nbsp;minimal next - making a debootstrap element, making a new debian-minimal element that uses it, making the ubuntu-minimal element use it - and then rework the current debian element to use it too but add all the extra stuff teh debian element installs</td><td class="time"><a href="#t2015-03-22T19:01:28" class="time">19:01</a></td></tr>
+<tr id="t2015-03-22T19:06:16"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2015-03-22T19:06:16" class="time">19:06</a></td></tr>
+<tr id="t2015-03-22T19:14:04"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T19:14:04" class="time">19:14</a></td></tr>
+<tr id="t2015-03-22T19:15:03"><td class="join" colspan="2">*** stevemar has joined #openstack-infra</td><td><a href="#t2015-03-22T19:15:03" class="time">19:15</a></td></tr>
+<tr id="t2015-03-22T19:15:21"><td class="part" colspan="2">*** dhritishikhar has quit IRC</td><td><a href="#t2015-03-22T19:15:21" class="time">19:15</a></td></tr>
+<tr id="t2015-03-22T19:18:18"><td class="join" colspan="2">*** tkelsey has joined #openstack-infra</td><td><a href="#t2015-03-22T19:18:18" class="time">19:18</a></td></tr>
+<tr id="t2015-03-22T19:18:57"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T19:18:57" class="time">19:18</a></td></tr>
+<tr id="t2015-03-22T19:22:44"><td class="part" colspan="2">*** tkelsey has quit IRC</td><td><a href="#t2015-03-22T19:22:44" class="time">19:22</a></td></tr>
+<tr id="t2015-03-22T19:26:40"><td class="join" colspan="2">*** ajmiller_ has joined #openstack-infra</td><td><a href="#t2015-03-22T19:26:40" class="time">19:26</a></td></tr>
+<tr id="t2015-03-22T19:30:07"><td class="part" colspan="2">*** ajmiller has quit IRC</td><td><a href="#t2015-03-22T19:30:07" class="time">19:30</a></td></tr>
+<tr id="t2015-03-22T19:33:19"><td class="join" colspan="2">*** LinuxJed_ has joined #openstack-infra</td><td><a href="#t2015-03-22T19:33:19" class="time">19:33</a></td></tr>
+<tr id="t2015-03-22T19:36:57"><td class="part" colspan="2">*** LinuxJedi has quit IRC</td><td><a href="#t2015-03-22T19:36:57" class="time">19:36</a></td></tr>
+<tr id="t2015-03-22T19:40:26"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2015-03-22T19:40:26" class="time">19:40</a></td></tr>
+<tr id="t2015-03-22T19:52:00"><td class="join" colspan="2">*** mjturek1 has joined #openstack-infra</td><td><a href="#t2015-03-22T19:52:00" class="time">19:52</a></td></tr>
+<tr id="t2015-03-22T19:57:14"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2015-03-22T19:57:14" class="time">19:57</a></td></tr>
+<tr id="t2015-03-22T19:58:08"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T19:58:08" class="time">19:58</a></td></tr>
+<tr id="t2015-03-22T19:58:42"><td class="part" colspan="2">*** tsg has quit IRC</td><td><a href="#t2015-03-22T19:58:42" class="time">19:58</a></td></tr>
+<tr id="t2015-03-22T20:02:01"><td class="part" colspan="2">*** hdd has quit IRC</td><td><a href="#t2015-03-22T20:02:01" class="time">20:02</a></td></tr>
+<tr id="t2015-03-22T20:03:49"><td class="join" colspan="2">*** salv-orlando has joined #openstack-infra</td><td><a href="#t2015-03-22T20:03:49" class="time">20:03</a></td></tr>
+<tr id="t2015-03-22T20:06:31"><td class="join" colspan="2">*** ghostpl_ has joined #openstack-infra</td><td><a href="#t2015-03-22T20:06:31" class="time">20:06</a></td></tr>
+<tr id="t2015-03-22T20:07:47"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2015-03-22T20:07:47" class="time">20:07</a></td></tr>
+<tr id="t2015-03-22T20:08:08"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T20:08:08" class="time">20:08</a></td></tr>
+<tr id="t2015-03-22T20:11:04"><td class="part" colspan="2">*** ghostpl_ has quit IRC</td><td><a href="#t2015-03-22T20:11:04" class="time">20:11</a></td></tr>
+<tr id="t2015-03-22T20:13:36"><td class="part" colspan="2">*** LinuxJed_ has quit IRC</td><td><a href="#t2015-03-22T20:13:36" class="time">20:13</a></td></tr>
+<tr id="t2015-03-22T20:13:58"><td class="join" colspan="2">*** LinuxJedi has joined #openstack-infra</td><td><a href="#t2015-03-22T20:13:58" class="time">20:13</a></td></tr>
+<tr id="t2015-03-22T20:14:42"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T20:14:42" class="time">20:14</a></td></tr>
+<tr id="t2015-03-22T20:16:07"><td class="join" colspan="2">*** ZZelle__ has joined #openstack-infra</td><td><a href="#t2015-03-22T20:16:07" class="time">20:16</a></td></tr>
+<tr id="t2015-03-22T20:16:16"><td class="join" colspan="2">*** yamamoto has joined #openstack-infra</td><td><a href="#t2015-03-22T20:16:16" class="time">20:16</a></td></tr>
+<tr id="t2015-03-22T20:19:14"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T20:19:14" class="time">20:19</a></td></tr>
+<tr id="t2015-03-22T20:20:23"><td class="part" colspan="2">*** yamamoto has quit IRC</td><td><a href="#t2015-03-22T20:20:23" class="time">20:20</a></td></tr>
+<tr id="t2015-03-22T20:21:01"><td class="join" colspan="2">*** dims has joined #openstack-infra</td><td><a href="#t2015-03-22T20:21:01" class="time">20:21</a></td></tr>
+<tr id="t2015-03-22T20:21:11"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2015-03-22T20:21:11" class="time">20:21</a></td></tr>
+<tr id="t2015-03-22T20:23:44"><td class="join" colspan="2">*** hyakuhei has joined #openstack-infra</td><td><a href="#t2015-03-22T20:23:44" class="time">20:23</a></td></tr>
+<tr id="t2015-03-22T20:24:00"><td class="part" colspan="2">*** dims has quit IRC</td><td><a href="#t2015-03-22T20:24:00" class="time">20:24</a></td></tr>
+<tr id="t2015-03-22T20:25:41"><th class="nick" style="background: #488888">openstackgerrit</th><td class="text" style="color: #488888">Andrey Pavlov proposed openstack-infra/project-config: Improve ec2-api gating jobs&nbsp;&nbsp;<a href="https://review.openstack.org/166648" rel="nofollow">https://review.openstack.org/166648</a></td><td class="time"><a href="#t2015-03-22T20:25:41" class="time">20:25</a></td></tr>
+<tr id="t2015-03-22T20:29:35"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2015-03-22T20:29:35" class="time">20:29</a></td></tr>
+<tr id="t2015-03-22T20:31:34"><td class="join" colspan="2">*** sdake__ has joined #openstack-infra</td><td><a href="#t2015-03-22T20:31:34" class="time">20:31</a></td></tr>
+<tr id="t2015-03-22T20:35:15"><td class="part" colspan="2">*** sdake has quit IRC</td><td><a href="#t2015-03-22T20:35:15" class="time">20:35</a></td></tr>
+<tr id="t2015-03-22T20:40:09"><td class="part" colspan="2">*** ZZelle__ has quit IRC</td><td><a href="#t2015-03-22T20:40:09" class="time">20:40</a></td></tr>
+<tr id="t2015-03-22T20:40:10"><td class="part" colspan="2">*** hyakuhei has quit IRC</td><td><a href="#t2015-03-22T20:40:10" class="time">20:40</a></td></tr>
+<tr id="t2015-03-22T20:45:06"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">SpamapS, greghaynes: <a href="https://review.openstack.org/166650" rel="nofollow">https://review.openstack.org/166650</a> there's the debootstrap split out</td><td class="time"><a href="#t2015-03-22T20:45:06" class="time">20:45</a></td></tr>
+<tr id="t2015-03-22T20:46:06"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T20:46:06" class="time">20:46</a></td></tr>
+<tr id="t2015-03-22T20:47:05"><td class="nickchange" colspan="2">*** mrda-afk is now known as mrda</td><td><a href="#t2015-03-22T20:47:05" class="time">20:47</a></td></tr>
+<tr id="t2015-03-22T20:49:12"><td class="part" colspan="2">*** emagana has quit IRC</td><td><a href="#t2015-03-22T20:49:12" class="time">20:49</a></td></tr>
+<tr id="t2015-03-22T20:49:54"><th class="nick" style="background: #9b519b">greghaynes</th><td class="text" style="color: #9b519b">mordred: ooo dib fun</td><td class="time"><a href="#t2015-03-22T20:49:54" class="time">20:49</a></td></tr>
+<tr id="t2015-03-22T20:50:02"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">greghaynes: I had me some fun today</td><td class="time"><a href="#t2015-03-22T20:50:02" class="time">20:50</a></td></tr>
+<tr id="t2015-03-22T20:50:31"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">greghaynes: I also uploaded an ansible role and a playbook to the project-config change that handles builing and then uploading to clouds</td><td class="time"><a href="#t2015-03-22T20:50:31" class="time">20:50</a></td></tr>
+<tr id="t2015-03-22T20:50:44"><th class="nick" style="background: #9b519b">greghaynes</th><td class="text" style="color: #9b519b">yep, saw those, in my review queue</td><td class="time"><a href="#t2015-03-22T20:50:44" class="time">20:50</a></td></tr>
+<tr id="t2015-03-22T20:50:47"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">woot</td><td class="time"><a href="#t2015-03-22T20:50:47" class="time">20:50</a></td></tr>
+<tr id="t2015-03-22T20:51:04"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">(I'm hoping it lesens the onboarding time for dealing with this - since uploading images to clouds is HARD)</td><td class="time"><a href="#t2015-03-22T20:51:04" class="time">20:51</a></td></tr>
+<tr id="t2015-03-22T20:51:10"><th class="nick" style="background: #9b519b">greghaynes</th><td class="text" style="color: #9b519b">just EWEEKENDING</td><td class="time"><a href="#t2015-03-22T20:51:10" class="time">20:51</a></td></tr>
+<tr id="t2015-03-22T20:51:19"><th class="nick" style="background: #9b519b">greghaynes</th><td class="text" style="color: #9b519b">out fishing all morning</td><td class="time"><a href="#t2015-03-22T20:51:19" class="time">20:51</a></td></tr>
+<tr id="t2015-03-22T20:51:23"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">greghaynes: the right choice</td><td class="time"><a href="#t2015-03-22T20:51:23" class="time">20:51</a></td></tr>
+<tr id="t2015-03-22T20:52:22"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">mordred shouldnt you be watching cbs?</td><td class="time"><a href="#t2015-03-22T20:52:22" class="time">20:52</a></td></tr>
+<tr id="t2015-03-22T20:52:38"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">also how many teams from NC will be in sweet 16</td><td class="time"><a href="#t2015-03-22T20:52:38" class="time">20:52</a></td></tr>
+<tr id="t2015-03-22T20:53:33"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">superbee: well, at leat 3 :)</td><td class="time"><a href="#t2015-03-22T20:53:33" class="time">20:53</a></td></tr>
+<tr id="t2015-03-22T20:53:40"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">superbee: and yes - I am very much watching CBS</td><td class="time"><a href="#t2015-03-22T20:53:40" class="time">20:53</a></td></tr>
+<tr id="t2015-03-22T20:54:06"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">superbee: I've got a glass of booze, a cat and duke basketball ... why not add dib hacking :)</td><td class="time"><a href="#t2015-03-22T20:54:06" class="time">20:54</a></td></tr>
+<tr id="t2015-03-22T20:54:27"><td class="nickchange" colspan="2">*** yfried is now known as yfried|afk</td><td><a href="#t2015-03-22T20:54:27" class="time">20:54</a></td></tr>
+<tr id="t2015-03-22T20:56:46"><td class="join" colspan="2">*** sdake has joined #openstack-infra</td><td><a href="#t2015-03-22T20:56:46" class="time">20:56</a></td></tr>
+<tr id="t2015-03-22T20:57:59"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2015-03-22T20:57:59" class="time">20:57</a></td></tr>
+<tr id="t2015-03-22T21:00:14"><td class="join" colspan="2">*** tnovacik has joined #openstack-infra</td><td><a href="#t2015-03-22T21:00:14" class="time">21:00</a></td></tr>
+<tr id="t2015-03-22T21:00:41"><td class="part" colspan="2">*** sdake__ has quit IRC</td><td><a href="#t2015-03-22T21:00:41" class="time">21:00</a></td></tr>
+<tr id="t2015-03-22T21:02:22"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2015-03-22T21:02:22" class="time">21:02</a></td></tr>
+<tr id="t2015-03-22T21:04:33"><td class="join" colspan="2">*** hyakuhei has joined #openstack-infra</td><td><a href="#t2015-03-22T21:04:33" class="time">21:04</a></td></tr>
+<tr id="t2015-03-22T21:06:09"><td class="part" colspan="2">*** rwsu has quit IRC</td><td><a href="#t2015-03-22T21:06:09" class="time">21:06</a></td></tr>
+<tr id="t2015-03-22T21:07:45"><td class="join" colspan="2">*** ihrachyshka has joined #openstack-infra</td><td><a href="#t2015-03-22T21:07:45" class="time">21:07</a></td></tr>
+<tr id="t2015-03-22T21:07:59"><td class="join" colspan="2">*** rwsu has joined #openstack-infra</td><td><a href="#t2015-03-22T21:07:59" class="time">21:07</a></td></tr>
+<tr id="t2015-03-22T21:08:47"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T21:08:47" class="time">21:08</a></td></tr>
+<tr id="t2015-03-22T21:08:52"><td class="part" colspan="2">*** salv-orlando has quit IRC</td><td><a href="#t2015-03-22T21:08:52" class="time">21:08</a></td></tr>
+<tr id="t2015-03-22T21:12:47"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">mordred: nc has more than 3 teams?</td><td class="time"><a href="#t2015-03-22T21:12:47" class="time">21:12</a></td></tr>
+<tr id="t2015-03-22T21:13:35"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">(the 95% of nc outside the triangle metro area don't really count, after all)</td><td class="time"><a href="#t2015-03-22T21:13:35" class="time">21:13</a></td></tr>
+<tr id="t2015-03-22T21:14:45"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">unc, nc st, duke are all in the sweet 16</td><td class="time"><a href="#t2015-03-22T21:14:45" class="time">21:14</a></td></tr>
+<tr id="t2015-03-22T21:14:52"><td class="nickchange" colspan="2">*** yfried|afk is now known as yfried</td><td><a href="#t2015-03-22T21:14:52" class="time">21:14</a></td></tr>
+<tr id="t2015-03-22T21:14:59"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">and also all within ~30 miles of one another</td><td class="time"><a href="#t2015-03-22T21:14:59" class="time">21:14</a></td></tr>
+<tr id="t2015-03-22T21:15:06"><td class="join" colspan="2">*** dims has joined #openstack-infra</td><td><a href="#t2015-03-22T21:15:06" class="time">21:15</a></td></tr>
+<tr id="t2015-03-22T21:15:22"><td class="action" colspan="2">* foobio smells a conspiracy</td><td><a href="#t2015-03-22T21:15:22" class="time">21:15</a></td></tr>
+<tr id="t2015-03-22T21:15:26"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T21:15:26" class="time">21:15</a></td></tr>
+<tr id="t2015-03-22T21:18:58"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T21:18:58" class="time">21:18</a></td></tr>
+<tr id="t2015-03-22T21:19:39"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T21:19:39" class="time">21:19</a></td></tr>
+<tr id="t2015-03-22T21:20:38"><td class="part" colspan="2">*** achanda has quit IRC</td><td><a href="#t2015-03-22T21:20:38" class="time">21:20</a></td></tr>
+<tr id="t2015-03-22T21:20:39"><td class="join" colspan="2">*** andreykurilin_ has joined #openstack-infra</td><td><a href="#t2015-03-22T21:20:39" class="time">21:20</a></td></tr>
+<tr id="t2015-03-22T21:21:42"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">foobio: if louisville wins tonight, there will be 5 ACC teams in the sweet 16</td><td class="time"><a href="#t2015-03-22T21:21:42" class="time">21:21</a></td></tr>
+<tr id="t2015-03-22T21:21:58"><td class="nickchange" colspan="2">*** zz_dimtruck is now known as dimtruck</td><td><a href="#t2015-03-22T21:21:58" class="time">21:21</a></td></tr>
+<tr id="t2015-03-22T21:22:27"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">foobio: of course we all know &quot;ACC&quot; stands for &quot;We really wish we were in NC, but couldn't figure out how to move our college yet&quot;</td><td class="time"><a href="#t2015-03-22T21:22:27" class="time">21:22</a></td></tr>
+<tr id="t2015-03-22T21:22:28"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">mordred: and all the entire state of kentucky will be drunk</td><td class="time"><a href="#t2015-03-22T21:22:28" class="time">21:22</a></td></tr>
+<tr id="t2015-03-22T21:22:44"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">which, well, is a typical sunday from what i hear</td><td class="time"><a href="#t2015-03-22T21:22:44" class="time">21:22</a></td></tr>
+<tr id="t2015-03-22T21:22:55"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">yup</td><td class="time"><a href="#t2015-03-22T21:22:55" class="time">21:22</a></td></tr>
+<tr id="t2015-03-22T21:24:53"><td class="nickchange" colspan="2">*** yfried is now known as yfried|afk</td><td><a href="#t2015-03-22T21:24:53" class="time">21:24</a></td></tr>
+<tr id="t2015-03-22T21:25:22"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2015-03-22T21:25:22" class="time">21:25</a></td></tr>
+<tr id="t2015-03-22T21:27:18"><td class="join" colspan="2">*** Hal1 has joined #openstack-infra</td><td><a href="#t2015-03-22T21:27:18" class="time">21:27</a></td></tr>
+<tr id="t2015-03-22T21:27:19"><td class="join" colspan="2">*** e0ne has joined #openstack-infra</td><td><a href="#t2015-03-22T21:27:19" class="time">21:27</a></td></tr>
+<tr id="t2015-03-22T21:27:30"><th class="nick" style="background: #488888">openstackgerrit</th><td class="text" style="color: #488888">Jeremy Stanley proposed openstack-infra/system-config: Generate machine-readable tree of change approvers&nbsp;&nbsp;<a href="https://review.openstack.org/80437" rel="nofollow">https://review.openstack.org/80437</a></td><td class="time"><a href="#t2015-03-22T21:27:30" class="time">21:27</a></td></tr>
+<tr id="t2015-03-22T21:28:46"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">we're up to 615 git repos in gerrit now</td><td class="time"><a href="#t2015-03-22T21:28:46" class="time">21:28</a></td></tr>
+<tr id="t2015-03-22T21:28:52"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">foobio: dude</td><td class="time"><a href="#t2015-03-22T21:28:52" class="time">21:28</a></td></tr>
+<tr id="t2015-03-22T21:29:14"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">foobio: that's a non-small number of repos</td><td class="time"><a href="#t2015-03-22T21:29:14" class="time">21:29</a></td></tr>
+<tr id="t2015-03-22T21:29:15"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">241 are currently inside the &quot;tent&quot;</td><td class="time"><a href="#t2015-03-22T21:29:15" class="time">21:29</a></td></tr>
+<tr id="t2015-03-22T21:29:33"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">s/tent/yurt/</td><td class="time"><a href="#t2015-03-22T21:29:33" class="time">21:29</a></td></tr>
+<tr id="t2015-03-22T21:30:05"><td class="part" colspan="2">*** hyakuhei has quit IRC</td><td><a href="#t2015-03-22T21:30:05" class="time">21:30</a></td></tr>
+<tr id="t2015-03-22T21:30:37"><td class="join" colspan="2">*** mpaolino has joined #openstack-infra</td><td><a href="#t2015-03-22T21:30:37" class="time">21:30</a></td></tr>
+<tr id="t2015-03-22T21:31:33"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">foobio: what if it's really neither and is more of a pile inside of a ditch</td><td class="time"><a href="#t2015-03-22T21:31:33" class="time">21:31</a></td></tr>
+<tr id="t2015-03-22T21:32:19"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">atc count for yurt projects since october 16 (juno release day) is up to 1533 now</td><td class="time"><a href="#t2015-03-22T21:32:19" class="time">21:32</a></td></tr>
+<tr id="t2015-03-22T21:33:07"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">that's unique contributors to accepted projects for just over 5 months</td><td class="time"><a href="#t2015-03-22T21:33:07" class="time">21:33</a></td></tr>
+<tr id="t2015-03-22T21:33:36"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">wow</td><td class="time"><a href="#t2015-03-22T21:33:36" class="time">21:33</a></td></tr>
+<tr id="t2015-03-22T21:33:57"><td class="part" colspan="2">*** stevemar has quit IRC</td><td><a href="#t2015-03-22T21:33:57" class="time">21:33</a></td></tr>
+<tr id="t2015-03-22T21:35:24"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">pretty exciting</td><td class="time"><a href="#t2015-03-22T21:35:24" class="time">21:35</a></td></tr>
+<tr id="t2015-03-22T21:35:29"><td class="part" colspan="2">*** ihrachyshka has quit IRC</td><td><a href="#t2015-03-22T21:35:29" class="time">21:35</a></td></tr>
+<tr id="t2015-03-22T21:36:05"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">almost as exciting as things i could be doing with my sunday which don't involve statistical analysis</td><td class="time"><a href="#t2015-03-22T21:36:05" class="time">21:36</a></td></tr>
+<tr id="t2015-03-22T21:36:14"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">maybe i'll go do some of those things for a bit ;)</td><td class="time"><a href="#t2015-03-22T21:36:14" class="time">21:36</a></td></tr>
+<tr id="t2015-03-22T21:36:48"><th class="nick" style="background: #539e9e">ianw</th><td class="text" style="color: #539e9e">mordred: looks ok, i'll do some test runs and see if it works for me</td><td class="time"><a href="#t2015-03-22T21:36:48" class="time">21:36</a></td></tr>
+<tr id="t2015-03-22T21:37:29"><td class="nickchange" colspan="2">*** ibiris is now known as ibiris_away</td><td><a href="#t2015-03-22T21:37:29" class="time">21:37</a></td></tr>
+<tr id="t2015-03-22T21:37:55"><td class="join" colspan="2">*** hdd has joined #openstack-infra</td><td><a href="#t2015-03-22T21:37:55" class="time">21:37</a></td></tr>
+<tr id="t2015-03-22T21:38:10"><td class="part" colspan="2">*** nilasae has quit IRC</td><td><a href="#t2015-03-22T21:38:10" class="time">21:38</a></td></tr>
+<tr id="t2015-03-22T21:38:55"><th class="nick" style="background: #818144">mordred</th><td class="text" style="color: #818144">ianw: the not-cloud-init networking stuff may not work for you - we're still working on that - just as an FYI</td><td class="time"><a href="#t2015-03-22T21:38:55" class="time">21:38</a></td></tr>
+<tr id="t2015-03-22T21:40:30"><th class="nick" style="background: #a25555">bknudson</th><td class="text" style="color: #a25555">this was odd: <a href="https://review.openstack.org/#/c/166543/10" rel="nofollow">https://review.openstack.org/#/c/166543/10</a> -- This change depends on a change that failed to merge.</td><td class="time"><a href="#t2015-03-22T21:40:30" class="time">21:40</a></td></tr>
+<tr id="t2015-03-22T21:41:50"><td class="part" colspan="2">*** yfried|afk has quit IRC</td><td><a href="#t2015-03-22T21:41:50" class="time">21:41</a></td></tr>
+<tr id="t2015-03-22T21:42:05"><td class="join" colspan="2">*** yfried|afk has joined #openstack-infra</td><td><a href="#t2015-03-22T21:42:05" class="time">21:42</a></td></tr>
+<tr id="t2015-03-22T21:46:39"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">bknudson: it's a relatively rare but known issue jbooboo tracked down. for some reason gerrit doesn't always include git dependencies in the stream events, which can confuse zuul. we have a couple options for addressing it, not yet implemented</td><td class="time"><a href="#t2015-03-22T21:46:39" class="time">21:46</a></td></tr>
+<tr id="t2015-03-22T21:47:00"><th class="nick" style="background: #a25555">bknudson</th><td class="text" style="color: #a25555">ok</td><td class="time"><a href="#t2015-03-22T21:47:00" class="time">21:47</a></td></tr>
+<tr id="t2015-03-22T21:47:20"><th class="nick" style="background: #a25555">bknudson</th><td class="text" style="color: #a25555">I just rechecked... hopefully that's the correct thing to do.</td><td class="time"><a href="#t2015-03-22T21:47:20" class="time">21:47</a></td></tr>
+<tr id="t2015-03-22T21:47:21"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">regardless, a recheck should work fine</td><td class="time"><a href="#t2015-03-22T21:47:21" class="time">21:47</a></td></tr>
+<tr id="t2015-03-22T21:47:25"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">yep</td><td class="time"><a href="#t2015-03-22T21:47:25" class="time">21:47</a></td></tr>
+<tr id="t2015-03-22T21:50:20"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">the number of deleting nodes is quite sad</td><td class="time"><a href="#t2015-03-22T21:50:20" class="time">21:50</a></td></tr>
+<tr id="t2015-03-22T21:53:06"><td class="part" colspan="2">*** e0ne has quit IRC</td><td><a href="#t2015-03-22T21:53:06" class="time">21:53</a></td></tr>
+<tr id="t2015-03-22T21:54:39"><td class="join" colspan="2">*** ajmiller__ has joined #openstack-infra</td><td><a href="#t2015-03-22T21:54:39" class="time">21:54</a></td></tr>
+<tr id="t2015-03-22T21:55:16"><td class="join" colspan="2">*** ghostpl_ has joined #openstack-infra</td><td><a href="#t2015-03-22T21:55:16" class="time">21:55</a></td></tr>
+<tr id="t2015-03-22T21:55:19"><td class="part" colspan="2">*** Bsony has quit IRC</td><td><a href="#t2015-03-22T21:55:19" class="time">21:55</a></td></tr>
+<tr id="t2015-03-22T21:56:31"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">it's all in the unreachable tripleo-test-cloud-rh1 provider</td><td class="time"><a href="#t2015-03-22T21:56:31" class="time">21:56</a></td></tr>
+<tr id="t2015-03-22T21:57:14"><th class="nick" style="background: #407a40">superbee</th><td class="text" style="color: #407a40">dprince seemed to have narrowed down the issue hopefully goes away soon</td><td class="time"><a href="#t2015-03-22T21:57:14" class="time">21:57</a></td></tr>
+<tr id="t2015-03-22T21:57:16"><th class="nick" style="background: #854685">foobio</th><td class="text" style="color: #854685">presumably we can clean that up once they fix their switch and get it back online</td><td class="time"><a href="#t2015-03-22T21:57:16" class="time">21:57</a></td></tr>
+<tr id="t2015-03-22T21:58:03"><td class="part" colspan="2">*** ajmiller_ has quit IRC</td><td><a href="#t2015-03-22T21:58:03" class="time">21:58</a></td></tr>
+<tr id="t2015-03-22T21:58:50"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2015-03-22T21:58:50" class="time">21:58</a></td></tr>
+<tr id="t2015-03-22T22:00:56"><td class="nickchange" colspan="2">*** jamielennox|away is now known as jamielennox</td><td><a href="#t2015-03-22T22:00:56" class="time">22:00</a></td></tr>
+<tr id="t2015-03-22T22:03:25"><td class="part" colspan="2">*** ddieterly has quit IRC</td><td><a href="#t2015-03-22T22:03:25" class="time">22:03</a></td></tr>
+<tr id="t2015-03-22T22:04:11"><td class="join" colspan="2">*** sabeen has joined #openstack-infra</td><td><a href="#t2015-03-22T22:04:11" class="time">22:04</a></td></tr>
+<tr id="t2015-03-22T22:04:57"><td class="part" colspan="2">*** ghostpl_ has quit IRC</td><td><a href="#t2015-03-22T22:04:57" class="time">22:04</a></td></tr>
+<tr id="t2015-03-22T22:07:03"><td class="part" colspan="2">*** mpaolino has quit IRC</td><td><a href="#t2015-03-22T22:07:03" class="time">22:07</a></td></tr>
+<tr id="t2015-03-22T22:11:05"><td class="join" colspan="2">*** mwagner_lap has joined #openstack-infra</td><td><a href="#t2015-03-22T22:11:05" class="time">22:11</a></td></tr>
+<tr id="t2015-03-22T22:11:55"><td class="join" colspan="2">*** achanda has joined #openstack-infra</td><td><a href="#t2015-03-22T22:11:55" class="time">22:11</a></td></tr>
+<tr id="t2015-03-22T22:16:14"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T22:16:14" class="time">22:16</a></td></tr>
+<tr id="t2015-03-22T22:17:53"><td class="join" colspan="2">*** tkelsey has joined #openstack-infra</td><td><a href="#t2015-03-22T22:17:53" class="time">22:17</a></td></tr>
+<tr id="t2015-03-22T22:19:11"><td class="part" colspan="2">*** dims has quit IRC</td><td><a href="#t2015-03-22T22:19:11" class="time">22:19</a></td></tr>
+<tr id="t2015-03-22T22:19:28"><td class="part" colspan="2">*** andreykurilin_ has quit IRC</td><td><a href="#t2015-03-22T22:19:28" class="time">22:19</a></td></tr>
+<tr id="t2015-03-22T22:19:32"><td class="join" colspan="2">*** asettle has joined #openstack-infra</td><td><a href="#t2015-03-22T22:19:32" class="time">22:19</a></td></tr>
+<tr id="t2015-03-22T22:19:37"><td class="join" colspan="2">*** garyh has joined #openstack-infra</td><td><a href="#t2015-03-22T22:19:37" class="time">22:19</a></td></tr>
+<tr id="t2015-03-22T22:19:50"><td class="join" colspan="2">*** sdake__ has joined #openstack-infra</td><td><a href="#t2015-03-22T22:19:50" class="time">22:19</a></td></tr>
+<tr id="t2015-03-22T22:20:39"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T22:20:39" class="time">22:20</a></td></tr>
+<tr id="t2015-03-22T22:21:25"><td class="part" colspan="2">*** prad has quit IRC</td><td><a href="#t2015-03-22T22:21:25" class="time">22:21</a></td></tr>
+<tr id="t2015-03-22T22:22:22"><td class="part" colspan="2">*** tkelsey has quit IRC</td><td><a href="#t2015-03-22T22:22:22" class="time">22:22</a></td></tr>
+<tr id="t2015-03-22T22:23:14"><td class="part" colspan="2">*** sdake has quit IRC</td><td><a href="#t2015-03-22T22:23:14" class="time">22:23</a></td></tr>
+<tr id="t2015-03-22T22:23:27"><td class="join" colspan="2">*** dims has joined #openstack-infra</td><td><a href="#t2015-03-22T22:23:27" class="time">22:23</a></td></tr>
+<tr id="t2015-03-22T22:24:22"><td class="part" colspan="2">*** dims has quit IRC</td><td><a href="#t2015-03-22T22:24:22" class="time">22:24</a></td></tr>
+<tr id="t2015-03-22T22:25:39"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2015-03-22T22:25:39" class="time">22:25</a></td></tr>
+<tr id="t2015-03-22T22:27:38"><td class="join" colspan="2">*** otter768 has joined #openstack-infra</td><td><a href="#t2015-03-22T22:27:38" class="time">22:27</a></td></tr>
+<tr id="t2015-03-22T22:29:48"><td class="part" colspan="2">*** garyh has quit IRC</td><td><a href="#t2015-03-22T22:29:48" class="time">22:29</a></td></tr>
+<tr id="t2015-03-22T22:30:39"><th class="nick" style="background: #97974f">anteaya</th><td class="text" style="color: #97974f">so apparently the limit for git repos on one gerrit is something greater than 615</td><td class="time"><a href="#t2015-03-22T22:30:39" class="time">22:30</a></td></tr>
+<tr id="t2015-03-22T22:30:48"><td class="join" colspan="2">*** ociuhandu has joined #openstack-infra</td><td><a href="#t2015-03-22T22:30:48" class="time">22:30</a></td></tr>
+<tr id="t2015-03-22T22:30:49"><th class="nick" style="background: #97974f">anteaya</th><td class="text" style="color: #97974f">but we don't know exactly how much greater than</td><td class="time"><a href="#t2015-03-22T22:30:49" class="time">22:30</a></td></tr>
+<tr id="t2015-03-22T22:30:58"><th class="nick" style="background: #97974f">anteaya</th><td class="text" style="color: #97974f">what are we going to do when we find out?</td><td class="time"><a href="#t2015-03-22T22:30:58" class="time">22:30</a></td></tr>
+<tr id="t2015-03-22T22:33:07"><td class="part" colspan="2">*** sabeen has quit IRC</td><td><a href="#t2015-03-22T22:33:07" class="time">22:33</a></td></tr>
+<tr id="t2015-03-22T22:33:27"><td class="join" colspan="2">*** sabeen has joined #openstack-infra</td><td><a href="#t2015-03-22T22:33:27" class="time">22:33</a></td></tr>
+<tr id="t2015-03-22T22:40:20"><td class="join" colspan="2">*** carl_baldwin has joined #openstack-infra</td><td><a href="#t2015-03-22T22:40:20" class="time">22:40</a></td></tr>
+<tr id="t2015-03-22T22:41:30"><td class="part" colspan="2">*** carl_baldwin has quit IRC</td><td><a href="#t2015-03-22T22:41:30" class="time">22:41</a></td></tr>
+<tr id="t2015-03-22T22:43:46"><td class="join" colspan="2">*** harlowja_at_home has joined #openstack-infra</td><td><a href="#t2015-03-22T22:43:46" class="time">22:43</a></td></tr>
+<tr id="t2015-03-22T22:46:35"><td class="nickchange" colspan="2">*** dimtruck is now known as zz_dimtruck</td><td><a href="#t2015-03-22T22:46:35" class="time">22:46</a></td></tr>
+<tr id="t2015-03-22T22:48:27"><td class="join" colspan="2">*** sdake has joined #openstack-infra</td><td><a href="#t2015-03-22T22:48:27" class="time">22:48</a></td></tr>
+<tr id="t2015-03-22T22:50:16"><td class="part" colspan="2">*** hdd has quit IRC</td><td><a href="#t2015-03-22T22:50:16" class="time">22:50</a></td></tr>
+<tr id="t2015-03-22T22:51:35"><td class="part" colspan="2">*** sdake__ has quit IRC</td><td><a href="#t2015-03-22T22:51:35" class="time">22:51</a></td></tr>
+<tr id="t2015-03-22T22:58:06"><td class="join" colspan="2">*** stevemar has joined #openstack-infra</td><td><a href="#t2015-03-22T22:58:06" class="time">22:58</a></td></tr>
+<tr id="t2015-03-22T23:01:34"><td class="join" colspan="2">*** Bsony has joined #openstack-infra</td><td><a href="#t2015-03-22T23:01:34" class="time">23:01</a></td></tr>
+<tr id="t2015-03-22T23:03:24"><td class="part" colspan="2">*** ociuhandu has quit IRC</td><td><a href="#t2015-03-22T23:03:24" class="time">23:03</a></td></tr>
+<tr id="t2015-03-22T23:04:20"><td class="part" colspan="2">*** harlowja_at_home has quit IRC</td><td><a href="#t2015-03-22T23:04:20" class="time">23:04</a></td></tr>
+<tr id="t2015-03-22T23:06:21"><td class="part" colspan="2">*** Bsony has quit IRC</td><td><a href="#t2015-03-22T23:06:21" class="time">23:06</a></td></tr>
+<tr id="t2015-03-22T23:14:53"><td class="join" colspan="2">*** hdd has joined #openstack-infra</td><td><a href="#t2015-03-22T23:14:53" class="time">23:14</a></td></tr>
+<tr id="t2015-03-22T23:15:37"><td class="part" colspan="2">*** hdd has quit IRC</td><td><a href="#t2015-03-22T23:15:37" class="time">23:15</a></td></tr>
+<tr id="t2015-03-22T23:17:00"><td class="join" colspan="2">*** markvoelker has joined #openstack-infra</td><td><a href="#t2015-03-22T23:17:00" class="time">23:17</a></td></tr>
+<tr id="t2015-03-22T23:17:57"><td class="part" colspan="2">*** tnovacik has quit IRC</td><td><a href="#t2015-03-22T23:17:57" class="time">23:17</a></td></tr>
+<tr id="t2015-03-22T23:20:29"><td class="part" colspan="2">*** woodster_ has quit IRC</td><td><a href="#t2015-03-22T23:20:29" class="time">23:20</a></td></tr>
+<tr id="t2015-03-22T23:21:17"><td class="part" colspan="2">*** markvoelker has quit IRC</td><td><a href="#t2015-03-22T23:21:17" class="time">23:21</a></td></tr>
+<tr id="t2015-03-22T23:26:56"><td class="join" colspan="2">*** chlong has joined #openstack-infra</td><td><a href="#t2015-03-22T23:26:56" class="time">23:26</a></td></tr>
+<tr id="t2015-03-22T23:28:31"><td class="part" colspan="2">*** mjturek1 has quit IRC</td><td><a href="#t2015-03-22T23:28:31" class="time">23:28</a></td></tr>
+<tr id="t2015-03-22T23:30:02"><td class="part" colspan="2">*** otter768 has quit IRC</td><td><a href="#t2015-03-22T23:30:02" class="time">23:30</a></td></tr>
+<tr id="t2015-03-22T23:38:04"><td class="join" colspan="2">*** hdd has joined #openstack-infra</td><td><a href="#t2015-03-22T23:38:04" class="time">23:38</a></td></tr>
+<tr id="t2015-03-22T23:40:00"><td class="part" colspan="2">*** chlong has quit IRC</td><td><a href="#t2015-03-22T23:40:00" class="time">23:40</a></td></tr>
+<tr id="t2015-03-22T23:40:23"><td class="join" colspan="2">*** chlong has joined #openstack-infra</td><td><a href="#t2015-03-22T23:40:23" class="time">23:40</a></td></tr>
+<tr id="t2015-03-22T23:41:38"><td class="join" colspan="2">*** ddieterly has joined #openstack-infra</td><td><a href="#t2015-03-22T23:41:38" class="time">23:41</a></td></tr>
+<tr id="t2015-03-22T23:44:42"><td class="part" colspan="2">*** hdd has quit IRC</td><td><a href="#t2015-03-22T23:44:42" class="time">23:44</a></td></tr>
+<tr id="t2015-03-22T23:47:45"><td class="join" colspan="2">*** emagana has joined #openstack-infra</td><td><a href="#t2015-03-22T23:47:45" class="time">23:47</a></td></tr>
+<tr id="t2015-03-22T23:54:17"><td class="part" colspan="2">*** julim has quit IRC</td><td><a href="#t2015-03-22T23:54:17" class="time">23:54</a></td></tr>
+<tr id="t2015-03-22T23:54:46"><td class="join" colspan="2">*** sdake__ has joined #openstack-infra</td><td><a href="#t2015-03-22T23:54:46" class="time">23:54</a></td></tr>
+<tr id="t2015-03-22T23:58:26"><td class="part" colspan="2">*** sdake has quit IRC</td><td><a href="#t2015-03-22T23:58:26" class="time">23:58</a></td></tr>
+</table>
+<div class="navigation"> <a href="%23openstack-infra.2015-03-21.log.html">&#171; Saturday, 2015-03-21</a> <a href="index.html">Index</a> <a href="%23openstack-infra.2015-03-23.log.html">Monday, 2015-03-23 &#187;</a> </div>
+
+<div class="generatedby">
+<p>Generated by irclog2html.py 2.14.0 by <a href="mailto:marius@pov.lt">Marius Gedminas</a>
+ - find it at <a href="http://mg.pov.lt/irclog2html/">mg.pov.lt</a>!</p>
+</div>
+</body>
+</html>
