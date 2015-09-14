@@ -1,0 +1,1787 @@
+2013-08-27T00:00:33  *** dims has quit IRC
+2013-08-27T00:01:11  *** dims has joined #openstack-infra
+2013-08-27T00:04:22  <quantumfly> jbooboo: I am going to disable puppet on old git.o.o, remove localhost from the haproxy config and reload haproxy. That way we don't possibly end up with weirdness once gerrit replication stops
+2013-08-27T00:05:55  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Fix graceful exit  https://review.openstack.org/43803
+2013-08-27T00:06:01  *** mikal has quit IRC
+2013-08-27T00:06:07  *** mikal has joined #openstack-infra
+2013-08-27T00:06:19  <jbooboo> quantumfly: sounds good.
+2013-08-27T00:06:48  <quantumfly> and all done
+2013-08-27T00:06:58  <jbooboo> quantumfly: reviewing https://review.openstack.org/#/c/43743/ now
+2013-08-27T00:07:11  <quantumfly> the old DNS TTL was for one hour and I change it about an hour ago. I think I am ready to move onto switching over when you are
+2013-08-27T00:07:45  <jbooboo> quantumfly: ok, aiui the process should be to change dns, wait a bit, then kill the old server, yeah?
+2013-08-27T00:08:10  <jbooboo> quantumfly: there shouldn't really be a downtime since the two servers behave the same and can remain up
+2013-08-27T00:08:20  <jbooboo> quantumfly: the new one will just take over from the old one as dns propogates
+2013-08-27T00:08:47  <quantumfly> change dns, merge my puppet change, make sure puppet runs everywhere, restart gerrit, kill old server
+2013-08-27T00:09:34  <jbooboo> quantumfly: *nod(
+2013-08-27T00:10:15  *** michchap has joined #openstack-infra
+2013-08-27T00:11:20  <jbooboo> quantumfly: ready for me to merge?
+2013-08-27T00:11:52  <quantumfly> jbooboo: sure, do you want me to update DNS now?
+2013-08-27T00:11:58  <jbooboo> quantumfly: sounds good
+2013-08-27T00:13:59  <openstackgerrit> A change was merged to openstack-infra/config: Split git.o.o haproxy out of cgit module.  https://review.openstack.org/43743
+2013-08-27T00:14:18  <quantumfly> DNS records modified
+2013-08-27T00:14:44  *** UtahDave has quit IRC
+2013-08-27T00:15:07  <quantumfly> er only the A and AAAA records are done. Doing reverse PTRs now
+2013-08-27T00:15:32  <jbooboo> quantumfly: oh, in the future you can go ahead and do those when creating the server
+2013-08-27T00:20:04  *** weshay has joined #openstack-infra
+2013-08-27T00:20:56  <quantumfly> jbooboo: which env do I need to have sourced to do reverse dns records?
+2013-08-27T00:21:22  <jbooboo> quantumfly: do you have the output from when you created the server?
+2013-08-27T00:21:27  <quantumfly> running dns.py git.openstack.org complains about OS_USERNAME and running the commands that launch node spat out gives me unauthorized errors
+2013-08-27T00:21:29  <quantumfly> jbooboo: I do
+2013-08-27T00:21:55  *** michchap has quit IRC
+2013-08-27T00:21:56  <jbooboo> quantumfly: you'll want:
+2013-08-27T00:21:57  <jbooboo> . ~root/rackdns-venv/bin/activate
+2013-08-27T00:22:02  <jbooboo> and...
+2013-08-27T00:22:12  <jbooboo> . ~root/ci-launch/openstackci-rs-nova.sh
+2013-08-27T00:22:30  *** michchap has joined #openstack-infra
+2013-08-27T00:22:31  <quantumfly> that is what I have
+2013-08-27T00:22:41  <quantumfly> or I think that is what I have. I will start with a claen env and do that
+2013-08-27T00:22:43  <jbooboo> quantumfly: you may want to start with a new shell then
+2013-08-27T00:23:47  <quantumfly> that seems to have worked. new shell was needed
+2013-08-27T00:24:25  *** dolphm has joined #openstack-infra
+2013-08-27T00:24:39  *** sarob_ has joined #openstack-infra
+2013-08-27T00:24:44  <quantumfly> according to haproxy.log on the new server we have connections going through it
+2013-08-27T00:25:27  <jbooboo> quantumfly: new is 192.237.223.224 ?
+2013-08-27T00:25:33  <quantumfly> jbooboo: yes
+2013-08-27T00:25:49  <quantumfly> old is 166.78.182.231
+2013-08-27T00:26:38  <jbooboo> restarted snmpd
+2013-08-27T00:27:04  <quantumfly> I am going to make sure that puppet is running everywhere and picking up the change
+2013-08-27T00:28:13  *** sarob has quit IRC
+2013-08-27T00:29:02  *** sarob_ has quit IRC
+2013-08-27T00:30:05  <quantumfly> git nodes look good and review.o.o's replication config is up to date
+2013-08-27T00:30:14  <pleia2> \o/
+2013-08-27T00:30:20  <quantumfly> jbooboo: should we restart gerrit now?
+2013-08-27T00:31:13  <jbooboo> quantumfly: yep
+2013-08-27T00:31:18  <quantumfly> doing that now
+2013-08-27T00:32:11  <harlowja> oh no 503
+2013-08-27T00:32:13  *** markmcclain has joined #openstack-infra
+2013-08-27T00:32:14  <harlowja> oh, nm,
+2013-08-27T00:32:34  <jbooboo> harlowja: ;|
+2013-08-27T00:32:45  <quantumfly> jbooboo: gerrit should be back
+2013-08-27T00:32:46  <morganfainberg> harlowja: restarting gerrit (in my experience) tends to do that.
+2013-08-27T00:32:49  <harlowja> ;)
+2013-08-27T00:33:01  *** dina_belova has joined #openstack-infra
+2013-08-27T00:33:57  <jbooboo> quantumfly: quite a lot of tests have started since the ttl expired and none have blown up
+2013-08-27T00:34:16  <quantumfly> jbooboo: cool
+2013-08-27T00:34:26  <quantumfly> jbooboo: I don't see any unexpected errors in the gerrit error log
+2013-08-27T00:34:43  <quantumfly> jbooboo: it is complaining about not being able to replicate All-Projects and API-Projects to gitXX
+2013-08-27T00:35:03  <jbooboo> quantumfly: yep; someday we should do something about that.  :)
+2013-08-27T00:35:12  <jbooboo> quantumfly: but it's a perfectly normal error for now.
+2013-08-27T00:35:46  <quantumfly> jbooboo: I started a tail on the haproxy log on old git.o.o and haven't seen any new connections for over 10 minutes
+2013-08-27T00:36:03  <pleia2> thinking tomorrow I'll take a little time to update https://wiki.openstack.org/wiki/Gerrit_Workflow & https://wiki.openstack.org/wiki/GerritJenkinsGithub (maybe rename+redirect too)
+2013-08-27T00:36:04  <quantumfly> jbooboo: I am going to stop haproxy there and if we continue to see no breakage we can delete the server
+2013-08-27T00:36:11  <jbooboo> quantumfly: sounds good
+2013-08-27T00:36:22  <pleia2> to point to git.o.o and mention it instead of github for things
+2013-08-27T00:36:29  <quantumfly> haproxy is stopped. keep your eyes open
+2013-08-27T00:37:18  <jbooboo> pleia2: yeah, i've been thinking that we should split up the gerritjenkinsgithub article into a series of 'reference guides' targeted to specific users (ptls, core, devs, release managers)
+2013-08-27T00:37:26  *** dina_belova has quit IRC
+2013-08-27T00:37:27  *** portante|afk is now known as portante
+2013-08-27T00:37:44  <pleia2> jbooboo: that's a good idea, it has gotten a bit out of hand length-wise
+2013-08-27T00:37:45  <jbooboo> pleia2: that may be more than what you're thinking of doing; just throwing that out there.
+2013-08-27T00:38:21  <jbooboo> quantumfly: i am curious about some changes at the bottom of the gate queue
+2013-08-27T00:38:44  <quantumfly> jbooboo: because they have passed but are still in the pipeline?
+2013-08-27T00:38:53  <jbooboo> yep
+2013-08-27T00:38:59  <anteaya> pleia2: I can help you with that if you want
+2013-08-27T00:39:03  <jbooboo> quantumfly: and the nova change has failed and is still there
+2013-08-27T00:39:18  <anteaya> new contributors get rather lost
+2013-08-27T00:39:23  <quantumfly> perhaps my gerrit restart caught them at the wrong time?
+2013-08-27T00:39:48  <jbooboo> quantumfly: i'm starting to think so
+2013-08-27T00:39:59  <pleia2> anteaya: thanks, I'm going out for some fresh air now, but tomorrow I'll get to work on it and let you know :)
+2013-08-27T00:40:21  <anteaya> pleia2: yeah, I am close to closing out too, just watching the git change over unfold
+2013-08-27T00:40:27  <anteaya> tomorrow is good for me
+2013-08-27T00:41:47  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Remove testr-full job  https://review.openstack.org/43797
+2013-08-27T00:44:50  <jbooboo> restarting zuul
+2013-08-27T00:45:03  <quantumfly> ok
+2013-08-27T00:45:17  <jbooboo> though it's a shame that change didn't make it in first
+2013-08-27T00:45:21  <quantumfly> jbooboo: did you grab a stack trace first?
+2013-08-27T00:46:08  <jbooboo> quantumfly: no, i have a handle on the bug from the logs
+2013-08-27T00:46:28  <jbooboo> it marked the change as reported despite it having failed to report, so it wouldn't touch it again
+2013-08-27T00:46:36  <quantumfly> gotcha
+2013-08-27T00:46:37  <jbooboo> it wasn't wedged
+2013-08-27T00:47:14  *** dolphm has quit IRC
+2013-08-27T00:49:19  <quantumfly> jbooboo: should I go ahead and delete the old git.o.o?
+2013-08-27T00:49:37  <jbooboo> quantumfly: i think so.  want to delete the old static.o.o while you're there?
+2013-08-27T00:49:43  <jbooboo> quantumfly: should be in SHUTDOWN state
+2013-08-27T00:49:48  <quantumfly> jbooboo: sure
+2013-08-27T00:50:58  *** dkliban has quit IRC
+2013-08-27T00:51:45  <quantumfly> both are in the process of being deleted
+2013-08-27T00:53:26  *** jhesketh has quit IRC
+2013-08-27T00:54:19  *** jhesketh has joined #openstack-infra
+2013-08-27T00:55:01  *** alexpilotti has quit IRC
+2013-08-27T00:56:11  <quantumfly> old git.o.o doesn't show up in nova list, but old static.o.o still has a status of DELETED
+2013-08-27T00:57:56  <jbooboo> quantumfly: i wonder if i'll have to patch nodepool to deal with that too (i just did that for images)
+2013-08-27T00:58:38  <quantumfly> that?
+2013-08-27T00:58:46  <quantumfly> I am going to increase the DNS TTLs back up to an hour
+2013-08-27T01:01:47  <quantumfly> hmm I seem to have two git.o.o AAAA records. Oh I know, it says it modified the existing records with a TTL of 5 minutes but I bet it didn't
+2013-08-27T01:02:00  <openstackgerrit> James E. Blair proposed a change to openstack-infra/gear: Fix ordering of state change in server  https://review.openstack.org/43809
+2013-08-27T01:02:22  <quantumfly> jbooboo: I am just going to remove the record with a TTL of 5
+2013-08-27T01:02:24  <jbooboo> that == servers sticking around in 'DELETED' state
+2013-08-27T01:02:35  <jbooboo> quantumfly: sounds good, i think the AAAA handling is not right
+2013-08-27T01:03:01  <jbooboo> i've gotten in similar situations (though i think i removed both and added a new one)
+2013-08-27T01:03:33  <jbooboo> quantumfly: ^ that gear change is, i believe, what caused the zuul 26 test failures
+2013-08-27T01:03:43  <jbooboo> er, i mean it fixes what caused them
+2013-08-27T01:04:04  <quantumfly> I think git.o.o should be good now
+2013-08-27T01:04:14  <quantumfly> removing the extra AAAA record left the existing one behind best I can tell
+2013-08-27T01:04:56  <quantumfly> static is still "DELETED"
+2013-08-27T01:07:30  *** weshay has quit IRC
+2013-08-27T01:12:13  <quantumfly> jbooboo: everything look good to you?
+2013-08-27T01:12:30  <quantumfly> jbooboo: we seem to have survived a gate restart
+2013-08-27T01:12:52  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Report item stats when removing a change  https://review.openstack.org/43812
+2013-08-27T01:13:16  <jbooboo> quantumfly: new cacti graphs seem reasonable
+2013-08-27T01:13:30  <jbooboo> quantumfly: and i'm kinda counting on all those jobs to turn red if they have problems with git
+2013-08-27T01:13:39  <jbooboo> quantumfly: so i'd say lgtm
+2013-08-27T01:14:55  *** sandywalsh has quit IRC
+2013-08-27T01:15:20  *** markmcclain has quit IRC
+2013-08-27T01:16:38  *** rcleere has quit IRC
+2013-08-27T01:22:08  <quantumfly> jbooboo: what is the difference between change.ref and change.refspec in zuul?
+2013-08-27T01:22:16  <quantumfly> jbooboo: seems to manifest as event.ref and event.refspec as well
+2013-08-27T01:22:53  *** nati_ueno has joined #openstack-infra
+2013-08-27T01:23:17  *** jhesketh has quit IRC
+2013-08-27T01:24:17  <quantumfly> jbooboo: looking at https://review.openstack.org/#/c/43775/2/zuul/scheduler.py
+2013-08-27T01:24:28  <quantumfly> jbooboo: and merger.py _mergeChange uses change.refspec
+2013-08-27T01:24:34  *** nati_ueno has joined #openstack-infra
+2013-08-27T01:28:26  <jbooboo> quantumfly: a Changeish only has a refspec if it is a Change (and has a ref only if it is a Ref)
+2013-08-27T01:28:35  <jbooboo> quantumfly: Refs are created for ref-updated events
+2013-08-27T01:29:16  <jbooboo> quantumfly: but that is referring to an event
+2013-08-27T01:29:19  <jbooboo> which is an Event
+2013-08-27T01:29:24  <anteaya> that was fast, the speed at which all jobs below the gate failure cancelled was impressive
+2013-08-27T01:29:32  <jbooboo> which always has both attributes (though one may be None)
+2013-08-27T01:29:39  <jbooboo> which makes that code really really wrong
+2013-08-27T01:29:53  <quantumfly> jbooboo: does https://review.openstack.org/#/c/43775/2/zuul/scheduler.py fix a bug then?
+2013-08-27T01:30:25  <jbooboo> quantumfly: an inefficiency -- that's why the commit message says it always updates the repo on every change or ref-updated event
+2013-08-27T01:30:29  <jbooboo> quantumfly: because the if was always true
+2013-08-27T01:30:36  <quantumfly> jbooboo: or is it adding a bug? trying to parse your statement at 01:30:07
+2013-08-27T01:31:31  <jbooboo> quantumfly: the old behavior was inefficient because the code was incorrect (it made no sense and did not match its comments) but it was harmless (other than sucking up lots and lots of time)
+2013-08-27T01:32:32  *** sjing has joined #openstack-infra
+2013-08-27T01:33:14  <quantumfly> so now we only fetch individual refs when they update
+2013-08-27T01:33:18  *** xchu has joined #openstack-infra
+2013-08-27T01:33:25  *** jhesketh_ has joined #openstack-infra
+2013-08-27T01:33:26  <quantumfly> which is more efficient
+2013-08-27T01:33:27  *** jhesketh has joined #openstack-infra
+2013-08-27T01:33:30  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Set merge result correctly on exceptions  https://review.openstack.org/43815
+2013-08-27T01:33:32  *** dina_belova has joined #openstack-infra
+2013-08-27T01:34:00  <jbooboo> quantumfly: yep; that should be about half of 1 minute spent dealing with a nova event.  the next change in that series deals with the other half.
+2013-08-27T01:34:12  <jbooboo> quantumfly: i think 43815 fixes what we just saw
+2013-08-27T01:34:35  *** sandywalsh has joined #openstack-infra
+2013-08-27T01:36:00  <jbooboo> jhesketh: you pinged earlier?
+2013-08-27T01:36:11  <jbooboo> jhesketh: er, like yesterday from your pov? :)
+2013-08-27T01:36:18  <jhesketh> heh, yep
+2013-08-27T01:36:34  <jhesketh> jbooboo: in regards to the reporter separation if you have a few minutes?
+2013-08-27T01:36:43  <jbooboo> jhesketh: yep
+2013-08-27T01:37:00  <Alex_Gaynor> mtreinish: So the tmpest-testr builds still say non-voting, is that change waiting on a <something> restart?
+2013-08-27T01:37:18  <jbooboo> Alex_Gaynor: the non-testr builds are now testr
+2013-08-27T01:37:23  <jbooboo> Alex_Gaynor: and the testr jobs are being deleted
+2013-08-27T01:37:26  <Alex_Gaynor> oh.
+2013-08-27T01:37:29  <Alex_Gaynor> Righton.
+2013-08-27T01:37:38  <Alex_Gaynor> I imagine I didn't read the original email closely enough?
+2013-08-27T01:37:56  <Alex_Gaynor> Does this apply to the postgresql ones as well?
+2013-08-27T01:38:01  <jhesketh> so I've nearly finished the refactoring to your suggestion. I had actually initially started towards that model but ended up doing what was easier at the time.
+2013-08-27T01:38:02  <openstackgerrit> A change was merged to openstack-infra/gear: Fix ordering of state change in server  https://review.openstack.org/43809
+2013-08-27T01:38:10  <jbooboo> Alex_Gaynor: yeah, i think it's everything except neutron
+2013-08-27T01:38:18  *** dina_belova has quit IRC
+2013-08-27T01:38:20  <Alex_Gaynor> jbooboo: righton!
+2013-08-27T01:38:24  <jhesketh> jbooboo: anyway, I just have to deal with BasePipelineManager.getSubmitAllowNeeds()
+2013-08-27T01:38:36  <jbooboo> jhesketh: yeah, isn't that ugly?  :)
+2013-08-27T01:38:40  <jhesketh> heh, yep
+2013-08-27T01:38:45  <quantumfly> jbooboo: your zuul changes lgtm
+2013-08-27T01:38:50  <quantumfly> I am going to AFK now
+2013-08-27T01:39:06  <quantumfly> dinner needs to be found
+2013-08-27T01:39:41  <jbooboo> jhesketh: ok, so how is that causing a problem?
+2013-08-27T01:40:19  <jhesketh> (sorry my typing is a bit slow, I have one hand at the moment - silly rsi)
+2013-08-27T01:40:24  <jhesketh>  work out how I want to explain/tackle it
+2013-08-27T01:40:37  <jbooboo> jhesketh: because it's not clear which reporter should provide the list of allow-needs that should be given to the trigger... yeah?
+2013-08-27T01:40:49  <jhesketh> yep :-)
+2013-08-27T01:41:11  <jhesketh> so we can either scrape the gerrit reporters or we may need to change the layout a bit more
+2013-08-27T01:41:54  <jbooboo> jhesketh: so what if you asked the reporter if it can merge?
+2013-08-27T01:41:56  <jhesketh> or rethink how it determines wen can merge
+2013-08-27T01:41:58  <jbooboo> jhesketh: instead of the trigger
+2013-08-27T01:42:03  *** nati_ueno has quit IRC
+2013-08-27T01:42:14  *** nati_ueno has joined #openstack-infra
+2013-08-27T01:42:18  <jhesketh> hmm, I don't think a reporter should care
+2013-08-27T01:42:20  <jbooboo> that seems to make a bit of sense...
+2013-08-27T01:42:26  <jbooboo> jhesketh: but the reporter is the one doing the actual merge
+2013-08-27T01:43:22  <jhesketh> jbooboo: doesn't it just report to gerrit that it is okay to merge?
+2013-08-27T01:43:45  <jbooboo> jhesketh: so reporters get the canMerge method, and by default return True; the gerrit reporter does what its canMerge method does now (being passed the getsubmitallowneeds from the configuration of that reporter)
+2013-08-27T01:44:07  <jbooboo> jhesketh: if 'submit: True' is in the list, then that's the thing that actually tells gerrit to merge the change
+2013-08-27T01:44:36  <jhesketh> okay, your suggestion makes sense
+2013-08-27T01:44:46  <jbooboo> jhesketh: (that gets turned into a 'gerrit review ... --submit' command which does the deed)
+2013-08-27T01:44:59  <jhesketh> but I'm wondering if it would be too crazy to watch for another gerrit event of the --submit/merge and add that into the scheduler elsehow
+2013-08-27T01:45:45  <openstackgerrit> A change was merged to openstack-infra/config: Remove testr-full job  https://review.openstack.org/43797
+2013-08-27T01:45:51  <jbooboo> jhesketh: as opposed to the busy-wait (is this discussion moving on to the isMerged method?)
+2013-08-27T01:45:56  <jbooboo> Alex_Gaynor: ^ https://review.openstack.org/43797
+2013-08-27T01:46:17  <Alex_Gaynor> cool
+2013-08-27T01:46:55  <jhesketh> jbooboo: not sure what you mean by busy-wait sorry..
+2013-08-27T01:47:12  <jhesketh> but kinda related to the isMerged, but more 'is going to merge' (if that makes sense)
+2013-08-27T01:47:35  <jbooboo> jhesketh: oh... well, uh, don't worry about that then; definitely don't look at how that method works.  :)
+2013-08-27T01:47:46  <jhesketh> lol
+2013-08-27T01:48:00  <jbooboo> jhesketh: so what canMerge is trying to do is determine whether zuul should even pay attention to a change before enqueuing it...
+2013-08-27T01:48:44  <jbooboo> jhesketh: as a specific example, if someone on openstack's gerrit sets 'approved +1' without a code-review +2, the change can't actually merge
+2013-08-27T01:49:03  <jbooboo> jhesketh: but our trigger is approved +1, so zuul uses the canMerge method to determine that it should actually ignore that change for now
+2013-08-27T01:49:17  <jbooboo> jhesketh: so this is all happening on the enqueueing side of things
+2013-08-27T01:49:47  <jhesketh> right, okay
+2013-08-27T01:49:58  <jbooboo> jhesketh: (isMerged happens on the dequeuing side - where it has to find out if a change really did merge to determine if following changes which had assumed that the change had merged can proceed, or if it needs to reset)
+2013-08-27T01:52:02  *** jinkoo has joined #openstack-infra
+2013-08-27T01:52:08  <jbooboo> jhesketh: (your suggestion of looking for the event from gerrit is applicable to isMerged, but that's almost certainly a separate change to zuul, and i'm not sure if it would be worth the trouble)
+2013-08-27T01:52:31  <jhesketh> yeah, agreed
+2013-08-27T01:52:38  <jbooboo> jhesketh: got what you need?
+2013-08-27T01:52:43  <jhesketh> I think so, thanks for that
+2013-08-27T01:52:52  <jhesketh> just wrapping my head around it (looking through code a bit deeper)
+2013-08-27T01:53:08  <jbooboo> jhesketh: no prob; thanks for doing this :)  i'm going to go try to find some food myself now...
+2013-08-27T01:53:26  <jhesketh> jbooboo: so what happens if somebody (other then zuul) posts a 'verified: +1'?
+2013-08-27T01:53:28  <jhesketh> no worries :-)
+2013-08-27T01:53:44  <anteaya> it looks to me like testing in the gate is taking a third of the time it took yesterday
+2013-08-27T01:54:06  <jbooboo> jhesketh: ah, so that's where get allow needs comes in
+2013-08-27T01:54:21  <jbooboo> jhesketh: because verified is in the config as something that zuul can set, it ignores it in canMerge
+2013-08-27T01:54:33  <jbooboo> jhesketh: and a +/-1 vote has no impact in gerrit, only a +/-2 vote
+2013-08-27T01:54:40  <jbooboo> jhesketh: and zuul is the only user permitted to leave those.
+2013-08-27T01:55:18  *** svarnau has quit IRC
+2013-08-27T01:55:52  *** yaguang has joined #openstack-infra
+2013-08-27T01:56:38  <anteaya> a third to a half
+2013-08-27T01:56:59  *** dkliban has joined #openstack-infra
+2013-08-27T01:57:12  <jhesketh> jbooboo: my reading of canMerge is that it requires zuul to be the one who set it
+2013-08-27T01:57:26  <jhesketh> so I'm not sure what you mean by ignore?
+2013-08-27T02:00:15  *** anteaya has quit IRC
+2013-08-27T02:05:19  *** jfriedly has quit IRC
+2013-08-27T02:08:34  *** nati_ueno has quit IRC
+2013-08-27T02:09:07  *** nati_ueno has joined #openstack-infra
+2013-08-27T02:11:42  *** jamiem has quit IRC
+2013-08-27T02:13:09  *** emagana has quit IRC
+2013-08-27T02:13:21  *** nati_ueno has quit IRC
+2013-08-27T02:17:03  <jbooboo> jhesketh: right, zuul knows (due to the configuration that says that this pipeline reports 'verified'; that's in getSubmitAllowNeeds) that it can ignore verified, so it passes that to canMerge as one of the things canMerge can ignore
+2013-08-27T02:17:36  <jbooboo> jhesketh: canMerge gets its information (other than what it should ignore) from gerrit, which says things like "this needs verified to merge"
+2013-08-27T02:18:03  <jhesketh> oh I see, I read the logic inversely. Sorry!
+2013-08-27T02:29:38  *** melwitt has quit IRC
+2013-08-27T02:34:00  *** dina_belova has joined #openstack-infra
+2013-08-27T02:35:44  *** rcleere has joined #openstack-infra
+2013-08-27T02:38:52  *** dina_belova has quit IRC
+2013-08-27T02:39:04  *** mikal has quit IRC
+2013-08-27T02:47:53  *** nati_ueno has joined #openstack-infra
+2013-08-27T02:51:52  <pabelanger> So, aside from vagrant, any other methods -infra is leaning towards for launch cloud instance?  I know nodepool has something embedded and there is https://github.com/openstack-infra/config/tree/master/launch.  I'd be curious to see if launch could / would move to another project.
+2013-08-27T02:52:10  <pabelanger> I've been playing with it locally, and see like a good tool to have
+2013-08-27T03:00:52  *** zul has quit IRC
+2013-08-27T03:02:56  *** zul has joined #openstack-infra
+2013-08-27T03:04:50  *** ^d has quit IRC
+2013-08-27T03:05:22  *** ^d has joined #openstack-infra
+2013-08-27T03:05:22  *** ^d has joined #openstack-infra
+2013-08-27T03:06:40  <jhesketh> jbooboo: next time you're around we should have a quick chat about backwards incompatibility with zuul
+2013-08-27T03:07:45  *** HenryG has quit IRC
+2013-08-27T03:09:35  *** ^d has quit IRC
+2013-08-27T03:12:34  *** nati_ueno has quit IRC
+2013-08-27T03:13:08  *** nati_ueno has joined #openstack-infra
+2013-08-27T03:17:48  *** nati_ueno has quit IRC
+2013-08-27T03:21:12  <openstackgerrit> Joshua Hesketh proposed a change to openstack-infra/zuul: Add support for emailing results via SMTP  https://review.openstack.org/42645
+2013-08-27T03:21:12  <openstackgerrit> Joshua Hesketh proposed a change to openstack-infra/zuul: Separate reporters from triggers  https://review.openstack.org/42643
+2013-08-27T03:22:34  *** DennyZhang has joined #openstack-infra
+2013-08-27T03:23:43  *** emagana has joined #openstack-infra
+2013-08-27T03:27:07  *** vipul has quit IRC
+2013-08-27T03:27:25  *** vipul has joined #openstack-infra
+2013-08-27T03:28:05  *** emagana has quit IRC
+2013-08-27T03:29:00  *** DennyZhang has quit IRC
+2013-08-27T03:34:38  *** dina_belova has joined #openstack-infra
+2013-08-27T03:35:02  *** changbl has quit IRC
+2013-08-27T03:35:34  *** fifieldt has joined #openstack-infra
+2013-08-27T03:39:17  *** dina_belova has quit IRC
+2013-08-27T03:40:41  *** dguitarbite has quit IRC
+2013-08-27T03:44:51  *** michchap_ has joined #openstack-infra
+2013-08-27T03:45:41  *** michchap has quit IRC
+2013-08-27T03:47:00  *** vogxn has joined #openstack-infra
+2013-08-27T03:50:22  *** morganfainberg is now known as morganfainberg|a
+2013-08-27T03:52:09  *** morganfainberg|a is now known as morganfainberg
+2013-08-27T04:00:02  <lifeless> can regular novaclient talk to rackspace? I'm getting nova list
+2013-08-27T04:00:03  <lifeless> ERROR: AuthSystemNotFound: 'rackspace'
+2013-08-27T04:01:18  <quantumfly> it can but you either have to use tokens or passwords. I don't remember. Or install the rackspace auth plugin
+2013-08-27T04:06:28  *** nati_ueno has joined #openstack-infra
+2013-08-27T04:12:56  <lifeless> quantumfly: sigh, why can't upstream be enough :(
+2013-08-27T04:14:10  <lifeless> ahha, got it
+2013-08-27T04:19:34  <jhesketh> is there any way to change your email address with gerrit?
+2013-08-27T04:20:53  <quantumfly> jhesketh: https://review.openstack.org/#/settings/contact I think it needs to be one of the emails you have configured with the openstack foundation
+2013-08-27T04:21:21  <jhesketh> quantumfly: clearly I'm very blind. Thanks for that
+2013-08-27T04:24:01  *** michchap_ has quit IRC
+2013-08-27T04:24:38  *** michchap has joined #openstack-infra
+2013-08-27T04:31:57  *** vipul is now known as vipul-away
+2013-08-27T04:35:19  *** dina_belova has joined #openstack-infra
+2013-08-27T04:39:46  *** dina_belova has quit IRC
+2013-08-27T04:40:00  *** morganfainberg is now known as morganfainberg|a
+2013-08-27T04:40:51  *** dstufft has quit IRC
+2013-08-27T04:48:11  *** nati_ueno has quit IRC
+2013-08-27T04:48:12  *** Ryan_Lane has quit IRC
+2013-08-27T04:48:45  *** nati_ueno has joined #openstack-infra
+2013-08-27T04:50:30  *** nati_ueno has joined #openstack-infra
+2013-08-27T05:00:11  *** emagana has joined #openstack-infra
+2013-08-27T05:00:21  *** afazekas has quit IRC
+2013-08-27T05:02:27  *** morganfainberg|a is now known as morganfainberg
+2013-08-27T05:04:25  *** boris-42 has joined #openstack-infra
+2013-08-27T05:05:51  *** vogxn has quit IRC
+2013-08-27T05:10:41  *** michchap_ has joined #openstack-infra
+2013-08-27T05:13:03  *** nati_ueno has quit IRC
+2013-08-27T05:13:09  *** michchap has quit IRC
+2013-08-27T05:13:37  *** nati_ueno has joined #openstack-infra
+2013-08-27T05:14:42  *** vogxn has joined #openstack-infra
+2013-08-27T05:16:40  *** nicedice_ has quit IRC
+2013-08-27T05:17:11  *** xBsd has joined #openstack-infra
+2013-08-27T05:17:14  *** SergeyLukjanov has joined #openstack-infra
+2013-08-27T05:18:06  *** nati_ueno has quit IRC
+2013-08-27T05:18:29  *** Ryan_Lane has joined #openstack-infra
+2013-08-27T05:18:40  *** afazekas has joined #openstack-infra
+2013-08-27T05:21:02  *** dims has quit IRC
+2013-08-27T05:23:24  *** xBsd has quit IRC
+2013-08-27T05:29:23  *** vipul-away is now known as vipul
+2013-08-27T05:35:50  *** dina_belova has joined #openstack-infra
+2013-08-27T05:40:26  *** dina_belova has quit IRC
+2013-08-27T06:00:16  *** dina_belova has joined #openstack-infra
+2013-08-27T06:04:22  <mkoderer> Hi folks, is there an overview picture about the full CI workflow somewhere?
+2013-08-27T06:04:36  <mkoderer> maybe in your documentation?
+2013-08-27T06:10:30  <jhesketh> mkoderer: Is this kinda what you're looking for: https://wiki.openstack.org/wiki/Gerrit_Workflow
+2013-08-27T06:11:22  <mkoderer> jhesketh: great thank you!
+2013-08-27T06:11:32  <jhesketh> no worries
+2013-08-27T06:14:42  *** gareth_kun has joined #openstack-infra
+2013-08-27T06:16:48  *** odyssey4me has joined #openstack-infra
+2013-08-27T06:16:57  *** dstufft has joined #openstack-infra
+2013-08-27T06:24:54  *** vipul is now known as vipul-away
+2013-08-27T06:29:13  *** emagana has quit IRC
+2013-08-27T06:34:36  *** jpich has joined #openstack-infra
+2013-08-27T06:41:48  *** michchap_ has quit IRC
+2013-08-27T06:42:26  *** michchap has joined #openstack-infra
+2013-08-27T06:47:21  *** dina_belova has quit IRC
+2013-08-27T06:47:54  *** dina_belova has joined #openstack-infra
+2013-08-27T06:48:52  *** dolphm has joined #openstack-infra
+2013-08-27T06:49:10  *** ruhe has joined #openstack-infra
+2013-08-27T06:52:54  *** dina_belova has quit IRC
+2013-08-27T06:53:52  *** dolphm has quit IRC
+2013-08-27T06:57:15  *** ruhe has quit IRC
+2013-08-27T07:02:30  *** sjing has quit IRC
+2013-08-27T07:03:21  *** sjing has joined #openstack-infra
+2013-08-27T07:14:59  *** hashar has joined #openstack-infra
+2013-08-27T07:15:53  *** jinkoo has quit IRC
+2013-08-27T07:16:11  *** jinkoo has joined #openstack-infra
+2013-08-27T07:19:47  *** sileht has quit IRC
+2013-08-27T07:20:14  *** sileht has joined #openstack-infra
+2013-08-27T07:20:16  *** thomasbiege has joined #openstack-infra
+2013-08-27T07:20:52  *** jinkoo has quit IRC
+2013-08-27T07:20:55  *** thomasbiege has quit IRC
+2013-08-27T07:27:23  *** SergeyLukjanov has quit IRC
+2013-08-27T07:38:41  *** Bada has joined #openstack-infra
+2013-08-27T07:39:48  *** emagana has joined #openstack-infra
+2013-08-27T07:44:49  *** emagana has quit IRC
+2013-08-27T07:45:39  *** shardy_afk is now known as shardy
+2013-08-27T07:48:46  *** jinkoo has joined #openstack-infra
+2013-08-27T07:48:58  *** jinkoo has quit IRC
+2013-08-27T07:54:28  *** amotoki_ has joined #openstack-infra
+2013-08-27T07:56:32  *** amotoki has quit IRC
+2013-08-27T07:57:52  *** thomasbiege1 has joined #openstack-infra
+2013-08-27T07:58:29  *** dina_belova has joined #openstack-infra
+2013-08-27T08:00:14  *** thomasbiege1 has quit IRC
+2013-08-27T08:02:56  *** dina_belova has quit IRC
+2013-08-27T08:04:18  *** xBsd has joined #openstack-infra
+2013-08-27T08:05:08  *** morganfainberg is now known as morganfainberg|a
+2013-08-27T08:05:26  *** ruhe has joined #openstack-infra
+2013-08-27T08:10:05  *** fbo_away is now known as fbo
+2013-08-27T08:18:38  *** BobBallAway is now known as BobBall
+2013-08-27T08:20:46  *** thomasbiege1 has joined #openstack-infra
+2013-08-27T08:24:10  *** thomasbiege1 has quit IRC
+2013-08-27T08:26:26  *** derekh has joined #openstack-infra
+2013-08-27T08:26:45  *** derekh has quit IRC
+2013-08-27T08:27:08  *** derekh has joined #openstack-infra
+2013-08-27T08:42:17  *** vogxn has quit IRC
+2013-08-27T08:44:54  *** xBsd has quit IRC
+2013-08-27T08:46:27  *** xBsd has joined #openstack-infra
+2013-08-27T08:52:42  *** sjing has quit IRC
+2013-08-27T08:59:01  *** dina_belova has joined #openstack-infra
+2013-08-27T08:59:01  *** johnthetubaguy has joined #openstack-infra
+2013-08-27T08:59:44  *** hashar has quit IRC
+2013-08-27T09:03:30  *** dina_belova has quit IRC
+2013-08-27T09:04:35  *** xBsd has quit IRC
+2013-08-27T09:07:06  *** xBsd has joined #openstack-infra
+2013-08-27T09:09:59  *** saper has quit IRC
+2013-08-27T09:13:13  *** saper has joined #openstack-infra
+2013-08-27T09:16:46  *** hashar has joined #openstack-infra
+2013-08-27T09:23:27  <EmilienM> Hi, someone from core team could have a look at this blueprint ? https://blueprints.launchpad.net/openstack-ci/+spec/jenkins-job-builder-plot
+2013-08-27T09:23:48  <EmilienM> and if it's approved, review also this patch : https://review.openstack.org/#/c/43685/
+2013-08-27T09:24:08  *** Dr01d has joined #openstack-infra
+2013-08-27T09:33:41  <hashar> EmilienM: hey :-]  I am not sure what blueprints are but I can confirm you that patches in Gerrit are reviewed  :-]
+2013-08-27T09:34:14  <hashar> voilà :-]
+2013-08-27T09:34:36  <EmilienM> hashar: thx
+2013-08-27T09:44:04  *** xBsd has quit IRC
+2013-08-27T09:45:50  *** xBsd has joined #openstack-infra
+2013-08-27T09:46:03  *** vogxn has joined #openstack-infra
+2013-08-27T09:49:24  *** dolphm has joined #openstack-infra
+2013-08-27T09:53:26  *** dolphm has quit IRC
+2013-08-27T09:59:34  *** dina_belova has joined #openstack-infra
+2013-08-27T10:04:18  *** dina_belova has quit IRC
+2013-08-27T10:04:19  *** xchu has quit IRC
+2013-08-27T10:12:28  <yaguang> hi, all may be something wrong with jenkins check, I see https://review.openstack.org/#/c/35365/ fails
+2013-08-27T10:12:41  <openstackgerrit> Emilien Macchi proposed a change to openstack-infra/jenkins-job-builder: Add SLOCCount plugin support  https://review.openstack.org/43852
+2013-08-27T10:12:44  *** ruhe has quit IRC
+2013-08-27T10:14:32  *** DennyZhang has joined #openstack-infra
+2013-08-27T10:16:36  *** dstufft_ has joined #openstack-infra
+2013-08-27T10:16:53  *** gareth_kun has left #openstack-infra
+2013-08-27T10:18:45  *** dstufft has quit IRC
+2013-08-27T10:19:42  *** vogxn has quit IRC
+2013-08-27T10:19:42  *** xBsd has quit IRC
+2013-08-27T10:20:50  *** xBsd has joined #openstack-infra
+2013-08-27T10:22:17  *** vogxn has joined #openstack-infra
+2013-08-27T10:29:34  <jd__> FWIW something changed and now causes failure on devstack http://logs.openstack.org/51/43851/1/check/gate-tempest-devstack-vm-full/352a390/
+2013-08-27T10:29:50  <jd__> I won't have time to look into it today, so if anybody's up for the task..
+2013-08-27T10:35:39  *** fifieldt has quit IRC
+2013-08-27T10:39:11  *** dstufft_ is now known as dstufft
+2013-08-27T10:40:37  *** yaguang has quit IRC
+2013-08-27T10:44:26  *** ruhe has joined #openstack-infra
+2013-08-27T10:45:13  *** Bada has quit IRC
+2013-08-27T10:46:40  *** DennyZhang has quit IRC
+2013-08-27T10:54:31  *** dhellmann_ is now known as dhellmann
+2013-08-27T11:00:08  *** dina_belova has joined #openstack-infra
+2013-08-27T11:03:05  *** jamiem has joined #openstack-infra
+2013-08-27T11:04:35  *** dina_belova has quit IRC
+2013-08-27T11:06:50  *** dolphm has joined #openstack-infra
+2013-08-27T11:21:17  *** weshay has joined #openstack-infra
+2013-08-27T11:24:38  *** jamiem has quit IRC
+2013-08-27T11:27:24  *** dolphm has quit IRC
+2013-08-27T11:28:45  *** lcestari has joined #openstack-infra
+2013-08-27T11:30:20  *** sjing has joined #openstack-infra
+2013-08-27T11:33:21  *** vogxn has quit IRC
+2013-08-27T11:34:11  *** pcm_ has joined #openstack-infra
+2013-08-27T11:35:02  *** lcestari_ has joined #openstack-infra
+2013-08-27T11:37:54  *** HenryG has joined #openstack-infra
+2013-08-27T11:38:30  *** lcestari has quit IRC
+2013-08-27T11:41:50  *** Bada has joined #openstack-infra
+2013-08-27T11:44:25  *** sjing has quit IRC
+2013-08-27T11:44:57  *** sjing has joined #openstack-infra
+2013-08-27T11:46:05  *** sjing has quit IRC
+2013-08-27T11:46:20  *** hashar has quit IRC
+2013-08-27T11:46:54  *** david-lyle has quit IRC
+2013-08-27T11:50:15  *** xBsd has quit IRC
+2013-08-27T11:50:51  *** yaguang has joined #openstack-infra
+2013-08-27T11:51:52  *** xBsd has joined #openstack-infra
+2013-08-27T11:52:02  *** yaguang has quit IRC
+2013-08-27T11:52:18  *** yaguang has joined #openstack-infra
+2013-08-27T11:53:01  *** jhesketh_ has quit IRC
+2013-08-27T11:53:42  *** david-lyle has joined #openstack-infra
+2013-08-27T11:55:26  *** dolphm has joined #openstack-infra
+2013-08-27T12:00:06  *** jamiem has joined #openstack-infra
+2013-08-27T12:00:39  *** dina_belova has joined #openstack-infra
+2013-08-27T12:04:55  *** dina_belova has quit IRC
+2013-08-27T12:14:07  *** dina_belova has joined #openstack-infra
+2013-08-27T12:16:54  *** hashar has joined #openstack-infra
+2013-08-27T12:18:20  *** dina_belova has quit IRC
+2013-08-27T12:21:55  *** alexpilotti has joined #openstack-infra
+2013-08-27T12:24:16  *** redbeard2 has quit IRC
+2013-08-27T12:26:45  *** rfolco has joined #openstack-infra
+2013-08-27T12:29:42  <lifeless> hmm
+2013-08-27T12:29:44  <lifeless> Puppet::Parser::AST::Resource failed with error ArgumentError: Could not find declared class ntp at /root/config/modules/openstack_project/manifests/template.pp:24 on node gerrit
+2013-08-27T12:29:53  <lifeless> trying the etherpad demo on http://ci.openstack.org/sysadmin.html
+2013-08-27T12:30:43  <lifeless> where is the source code for the docs?
+2013-08-27T12:31:24  *** dprince has joined #openstack-infra
+2013-08-27T12:32:59  <hashar> lifeless: in puppet repo : openstack-infra/config
+2013-08-27T12:33:16  <hashar> lifeless: the relevant file is  ./doc/source/sysadmin.rst
+2013-08-27T12:33:36  <lifeless> hashar: thanks; any thoughts on the error I am seeing about the ntp class ?
+2013-08-27T12:35:34  <hashar> there is no ntp module ? :D
+2013-08-27T12:35:58  <lifeless> hashar: I don't know.
+2013-08-27T12:36:46  <openstackgerrit> lifeless proposed a change to openstack-infra/config: Fix copy-n-paste example to be clearer.  https://review.openstack.org/43870
+2013-08-27T12:39:01  *** dkranz has joined #openstack-infra
+2013-08-27T12:43:24  *** hashar_ has joined #openstack-infra
+2013-08-27T12:45:30  *** thomasbiege has joined #openstack-infra
+2013-08-27T12:45:44  *** thomasbiege has quit IRC
+2013-08-27T12:46:42  *** hashar has quit IRC
+2013-08-27T12:46:43  *** hashar_ is now known as hashar
+2013-08-27T12:52:59  *** ArxCruz has joined #openstack-infra
+2013-08-27T12:56:10  *** michchap has quit IRC
+2013-08-27T12:56:36  *** michchap has joined #openstack-infra
+2013-08-27T12:57:55  *** dkranz has quit IRC
+2013-08-27T13:00:55  *** xBsd has quit IRC
+2013-08-27T13:01:09  *** vogxn has joined #openstack-infra
+2013-08-27T13:03:42  *** xBsd has joined #openstack-infra
+2013-08-27T13:04:38  *** vogxn has quit IRC
+2013-08-27T13:06:01  *** anteaya has joined #openstack-infra
+2013-08-27T13:06:22  *** dkliban has quit IRC
+2013-08-27T13:07:04  *** changbl has joined #openstack-infra
+2013-08-27T13:12:10  *** vogxn has joined #openstack-infra
+2013-08-27T13:14:43  *** dina_belova has joined #openstack-infra
+2013-08-27T13:19:11  *** dina_belova has quit IRC
+2013-08-27T13:19:50  *** ruhe has quit IRC
+2013-08-27T13:23:02  *** ruhe has joined #openstack-infra
+2013-08-27T13:23:03  *** changbl has quit IRC
+2013-08-27T13:25:07  *** rpodolyaka has joined #openstack-infra
+2013-08-27T13:27:29  *** sgviking has quit IRC
+2013-08-27T13:27:31  *** mriedem has joined #openstack-infra
+2013-08-27T13:36:03  *** rcleere has quit IRC
+2013-08-27T13:42:15  *** ruhe has quit IRC
+2013-08-27T13:44:20  <openstackgerrit> A change was merged to openstack/requirements: pin keyring to < 2.0  https://review.openstack.org/43690
+2013-08-27T13:44:54  *** sandywalsh has quit IRC
+2013-08-27T13:44:58  <ArxCruz> ALL: I'm trying to replicate openstack infrastructure (jenkins, gerrit, zuul) in the company I work, does anyone knows where can I start? I read ci.openstack.org but isn't helping…
+2013-08-27T13:45:51  *** ruhe has joined #openstack-infra
+2013-08-27T13:47:55  *** dkliban has joined #openstack-infra
+2013-08-27T13:48:32  *** _TheDodd_ has joined #openstack-infra
+2013-08-27T13:48:49  *** sgviking has joined #openstack-infra
+2013-08-27T13:50:43  *** cppcabrera has joined #openstack-infra
+2013-08-27T13:50:49  *** cppcabrera has left #openstack-infra
+2013-08-27T13:54:11  *** xBsd has quit IRC
+2013-08-27T13:55:59  *** xBsd has joined #openstack-infra
+2013-08-27T13:57:48  *** sandywalsh has joined #openstack-infra
+2013-08-27T14:00:06  <anteaya> hi ArxCruz well replicating all of openstack infra is a bit of a task, have you selected a starting point? something you would like to launch first?
+2013-08-27T14:00:52  <ArxCruz> anteaya: yes, Gerrit, I was able to install Gerrit in one of my machines manually, but I would like to use puppet could you please help me ?
+2013-08-27T14:01:02  <ArxCruz> it's hard to find a how to
+2013-08-27T14:01:03  <ArxCruz> :/
+2013-08-27T14:01:36  <anteaya> well I haven't done that myself, but recognizing that Gerrit is the first point of departure can help me dig up somethings that may help you
+2013-08-27T14:01:46  <anteaya> what have you got in place so far?
+2013-08-27T14:01:53  *** burt has joined #openstack-infra
+2013-08-27T14:02:22  <ArxCruz> anteaya: well, not much, I have a machine prepared to install stuff
+2013-08-27T14:02:30  <ArxCruz> I also have played with puppet
+2013-08-27T14:02:36  <ArxCruz> but no success so far
+2013-08-27T14:02:38  *** michchap has quit IRC
+2013-08-27T14:03:02  *** _TheDodd_ has quit IRC
+2013-08-27T14:03:12  <anteaya> ArxCruz: I'm assuming you are familiar with this page: http://ci.openstack.org/gerrit.html
+2013-08-27T14:03:15  *** michchap has joined #openstack-infra
+2013-08-27T14:03:20  <ArxCruz> anteaya: yes!
+2013-08-27T14:03:27  <anteaya> and here: http://ci.openstack.org/sysadmin.html#sysadmin
+2013-08-27T14:03:34  <ttx> anteaya: https://review.openstack.org/#/c/42999/ and https://review.openstack.org/#/c/42340/ have been approved yesterday and not on the gate queue yet
+2013-08-27T14:03:41  *** _TheDodd_ has joined #openstack-infra
+2013-08-27T14:03:46  *** dkranz has joined #openstack-infra
+2013-08-27T14:03:57  <anteaya> ttx will look
+2013-08-27T14:03:58  <ttx> anteaya: I "reverified no bug" them but that doesn't seem to work either
+2013-08-27T14:04:06  <anteaya> ArxCruz: and you have a copy of: http://git.openstack.org/cgit/openstack-infra/gerrit/tree/
+2013-08-27T14:04:07  <ttx> although queue was done to 0
+2013-08-27T14:04:08  *** dkranz has quit IRC
+2013-08-27T14:04:11  <anteaya> ttx odd
+2013-08-27T14:04:12  <ttx> down
+2013-08-27T14:04:47  <burt> ttx: do patches make it into the gate even if the patches they depend on are not approved?
+2013-08-27T14:05:16  <ArxCruz> anteaya: now I have :) I've downloaded gerrit from gerrit web page
+2013-08-27T14:05:32  <ttx> anteaya: that's why I ask :)
+2013-08-27T14:05:45  <ttx> burt: oh, nice catch
+2013-08-27T14:05:56  <ttx> no they don't
+2013-08-27T14:06:04  <ttx> anteaya: ignore me
+2013-08-27T14:06:20  *** ruhe has quit IRC
+2013-08-27T14:07:31  <ttx> patch queue for that blueprint is pretty huge
+2013-08-27T14:08:03  <anteaya> ttx no worries - I just found the verification at timestamp 2013-08-27T01:49:03 in last night's log: http://eavesdrop.openstack.org/irclogs/%23openstack-infra/%23openstack-infra.2013-08-27.log
+2013-08-27T14:08:26  <anteaya> only patches that can merge make it into the gate pipeline
+2013-08-27T14:08:50  <anteaya> glad I was paying attention last night
+2013-08-27T14:08:52  <anteaya> :D
+2013-08-27T14:10:53  <anteaya> ArxCruz: might this be of use? http://git.openstack.org/cgit/openstack-infra/gerrit/plain/Documentation/install.txt
+2013-08-27T14:11:24  <ArxCruz> anteaya: I will try it
+2013-08-27T14:11:25  *** olaph has quit IRC
+2013-08-27T14:11:39  *** ruhe has joined #openstack-infra
+2013-08-27T14:11:42  <ArxCruz> and let you know If I got in trouble :) thanks!
+2013-08-27T14:11:58  <anteaya> ArxCruz: give it a whirl - in an isolated environment of course and then yes, ask about your blockages
+2013-08-27T14:11:58  *** rcleere has joined #openstack-infra
+2013-08-27T14:12:06  <anteaya> np
+2013-08-27T14:12:30  <krtaylor> anteaya, we have been trying to get puppet up and working, I feel that may be our first hurdle
+2013-08-27T14:13:02  <krtaylor> anteaya, but ArxCruz and I will try working though a real example with gerrit
+2013-08-27T14:13:11  <anteaya> ah okay
+2013-08-27T14:13:22  <anteaya> yes, try standing up a gerrit first
+2013-08-27T14:13:28  <anteaya> and see how far you get
+2013-08-27T14:13:39  <anteaya> then stand up puppet separately
+2013-08-27T14:13:55  <anteaya> then when you understand each in isolation try them both together
+2013-08-27T14:14:03  <anteaya> the together part will have its own fun
+2013-08-27T14:14:20  <krtaylor> anteaya, yes, I bet so, thanks
+2013-08-27T14:14:26  *** hashar has quit IRC
+2013-08-27T14:14:39  <anteaya> np
+2013-08-27T14:15:14  *** dina_belova has joined #openstack-infra
+2013-08-27T14:15:28  <anteaya> krtaylor: regarding puppet - I assume you have seen this: http://docs.puppetlabs.com/guides/introduction.html
+2013-08-27T14:16:16  *** redbeard2 has joined #openstack-infra
+2013-08-27T14:16:45  *** ruhe has quit IRC
+2013-08-27T14:17:07  *** vogxn has quit IRC
+2013-08-27T14:17:59  <mriedem> question about jenkins.openstack.org - how to get that fancy overview page? is that something in the latest jenkins b/c i'm not seeing a plugin. i'm using 1.514 and community is using 1.525.
+2013-08-27T14:18:31  <anteaya> mriedem: is this the page you want? https://jenkins.openstack.org/
+2013-08-27T14:18:47  <mriedem> anteaya: yeah, i'm just wondering how they got the overview page
+2013-08-27T14:18:51  <anteaya> I go to ci.openstack.org and in the top menu select the jenkins link
+2013-08-27T14:19:07  <anteaya> ah when setting up their jenkins?
+2013-08-27T14:19:13  <mriedem> anteaya: correct
+2013-08-27T14:19:19  <anteaya> so in your jenkins you don't see this
+2013-08-27T14:19:26  *** dina_belova has quit IRC
+2013-08-27T14:19:27  <mriedem> anteaya: nope, but i'm backlevel
+2013-08-27T14:19:35  <anteaya> hmmm, I don't know the answer to this question
+2013-08-27T14:19:37  <mriedem> been thinking about updating but updating jenkins always scares me when i'm stable
+2013-08-27T14:19:42  *** jpich has quit IRC
+2013-08-27T14:19:45  <anteaya> yeah, I hear that
+2013-08-27T14:20:11  * anteaya goes looking
+2013-08-27T14:20:15  *** dkranz has joined #openstack-infra
+2013-08-27T14:20:18  <mriedem> anteaya: this looks like it: https://wiki.jenkins-ci.org/display/JENKINS/Dashboard+View
+2013-08-27T14:20:26  <openstackgerrit> David Kranz proposed a change to openstack-infra/config: WIP test of slow heat gate job  https://review.openstack.org/43891
+2013-08-27T14:21:12  <anteaya> mriedem: does that plugin work with your version?
+2013-08-27T14:21:30  <mriedem> anteaya: yeah, requires jenkins >= 1.509.1
+2013-08-27T14:21:46  *** jpich has joined #openstack-infra
+2013-08-27T14:22:05  <mriedem> anyway, this doesn't really have anything to do with openstack, i just like to see what the pros are doing :)
+2013-08-27T14:22:18  <anteaya> okay, I am looking at that page and the screenshots don't look the same to me, but if it gives you what you want, then good
+2013-08-27T14:22:29  <anteaya> mriedem: sure, happy to help when we can
+2013-08-27T14:22:47  <anteaya> sometimes it is only to show support and encourage you to try something yourself
+2013-08-27T14:23:11  <anteaya> at least for me, I know the least, I am just the only one on the East coast right now
+2013-08-27T14:23:25  *** michchap has quit IRC
+2013-08-27T14:25:03  <ttx> anteaya: do we have early feedback on the impact of parallel-test on queue health ?
+2013-08-27T14:25:19  *** olaph has joined #openstack-infra
+2013-08-27T14:26:01  <anteaya> ttx my early assessment is that it cuts the gate pipeline tests in half - needs about 30 minutes to test a patch rather than 1 hour+
+2013-08-27T14:26:34  <ttx> anteaya: without a significant raise in the gate resets so far ?
+2013-08-27T14:26:42  <anteaya> I also believe this means we require fewer test nodes up at the same time, since tests finish faster and then go back to the pool
+2013-08-27T14:26:46  *** jkt_ has joined #openstack-infra
+2013-08-27T14:26:49  *** jkt_ has joined #openstack-infra
+2013-08-27T14:26:57  <ttx> in the end the metric should be number of patches merged per hour
+2013-08-27T14:26:57  *** jkt has quit IRC
+2013-08-27T14:27:11  <anteaya> ttx I don't have access to any data on number of gate resets since the change to parallel-testing
+2013-08-27T14:27:24  <anteaya> if it is publicly consumable, I don't yet know where to look
+2013-08-27T14:27:27  *** jkt_ is now known as jkt
+2013-08-27T14:27:53  <anteaya> ttx the merge sparkline (next to post) seems to be doing pretty good business
+2013-08-27T14:28:09  <anteaya> but I also don't have the number of patches merged per hour
+2013-08-27T14:28:20  <dkliban> I submitted a patch to Nova, Jenkins marked it as a failure, however, it did not provide any test results.  Is this normal?  https://review.openstack.org/#/c/43513/
+2013-08-27T14:28:31  <anteaya> if it is on cacti or graphite, I hope to learn where so I can answer that question in future
+2013-08-27T14:28:42  <anteaya> dkliban: I'll look
+2013-08-27T14:29:35  <anteaya> dkliban: I see test logs attached to the patch: http://logs.openstack.org/13/43513/2/check/gate-nova-python26/c73210e/console.html
+2013-08-27T14:29:47  <krtaylor> anteaya, re: puppet, yes, ArxCruz and I have been doing a lot of reading, thanks
+2013-08-27T14:29:49  <anteaya> perhaps they arrived in the time between your question and me looking
+2013-08-27T14:29:57  <anteaya> krtaylor: great
+2013-08-27T14:30:11  *** changbl has joined #openstack-infra
+2013-08-27T14:31:04  <ttx> anteaya: I guess we could graph change-merged events but my graphite-foo is a bit lacking
+2013-08-27T14:31:12  <anteaya> ttx mine too
+2013-08-27T14:31:20  <anteaya> let me see if I can figure it out
+2013-08-27T14:31:48  <ttx> I have a graph but it's a bit too discrete to make any sense
+2013-08-27T14:32:14  *** adalbas has quit IRC
+2013-08-27T14:32:21  <openstackgerrit> David Kranz proposed a change to openstack-infra/config: Add experimental slow heat job  https://review.openstack.org/43891
+2013-08-27T14:32:52  <anteaya> ttx does this help? http://tinyurl.com/llpf8fv
+2013-08-27T14:32:54  <dkliban> anteaya, thanks for checking
+2013-08-27T14:32:58  *** dina_belova has joined #openstack-infra
+2013-08-27T14:33:16  <anteaya> dkliban: np
+2013-08-27T14:33:42  <anteaya> and yes, if Jenkins reported a failure and failed to provide logs that would be a bug and we would want to know
+2013-08-27T14:33:46  *** ruhe has joined #openstack-infra
+2013-08-27T14:34:24  <ttx> anteaya: htat's what I got too. We need some aggregation over a significant time period like "one day"
+2013-08-27T14:34:45  <anteaya> ttx okay, let me change the time frame
+2013-08-27T14:34:51  <ttx> but then it's probably too early to have enough data
+2013-08-27T14:36:05  *** vogxn has joined #openstack-infra
+2013-08-27T14:38:02  <anteaya> this is from 8pm Eastern time yesterday to 8am Eastern this morning: http://tinyurl.com/mt7mv6j
+2013-08-27T14:38:23  *** hashar has joined #openstack-infra
+2013-08-27T14:38:36  <anteaya> it takes time in Eastern (my time zone) and then converts to UTC (I think) for the graphalot graph
+2013-08-27T14:39:41  <pabelanger> lifeless, ntp is pulled in when install_modules.sh is run
+2013-08-27T14:39:49  *** pentameter has joined #openstack-infra
+2013-08-27T14:39:54  <anteaya> sorry the last one was out by an hour, try this one: http://tinyurl.com/mhd3g2v
+2013-08-27T14:40:52  <anteaya> graphalot doesn't do daylight savings time apparently
+2013-08-27T14:42:15  *** datsun180b has joined #openstack-infra
+2013-08-27T14:46:19  <anteaya> for instance the vertical scale for that graph has a lot of 1.8 changes merged, no idea how you have 0.8 of a change merged. I don't know how the vertical scale is set
+2013-08-27T14:48:28  *** adalbas has joined #openstack-infra
+2013-08-27T14:50:25  *** xBsd has quit IRC
+2013-08-27T14:53:04  <ttx> anteaya: you have an equivalent counter in stats_counter
+2013-08-27T14:53:14  <ttx> which will give integer values :)
+2013-08-27T14:53:55  *** xBsd has joined #openstack-infra
+2013-08-27T14:54:01  *** reed has joined #openstack-infra
+2013-08-27T14:55:11  <anteaya> ttx ah ha, I will look
+2013-08-27T14:56:04  <anteaya> look at that, thanks ttx
+2013-08-27T15:03:36  *** rcleere_ has joined #openstack-infra
+2013-08-27T15:03:43  *** dkranz has quit IRC
+2013-08-27T15:04:10  *** rcleere has quit IRC
+2013-08-27T15:04:10  *** rcleere_ is now known as rcleere
+2013-08-27T15:04:37  *** xBsd has quit IRC
+2013-08-27T15:08:05  *** xBsd has joined #openstack-infra
+2013-08-27T15:11:34  *** nati_ueno has joined #openstack-infra
+2013-08-27T15:13:11  *** ruhe has quit IRC
+2013-08-27T15:13:24  *** yaguang has quit IRC
+2013-08-27T15:16:54  *** nati_ueno has quit IRC
+2013-08-27T15:17:04  *** dkranz has joined #openstack-infra
+2013-08-27T15:17:21  *** nati_ueno has joined #openstack-infra
+2013-08-27T15:20:16  <rpodolyaka> Hey, guys! I've been wondering, is there a way to test changes to openstack-infra/config (e. g. a few new jobs have been added) before the corresponding change is actually merged?
+2013-08-27T15:21:05  <anteaya> rpodolyaka: all patches submitted to gerrit are testing in our zuul and jenkins infrastructure
+2013-08-27T15:21:17  <anteaya> what kind of testing do you mean, rpodolyaka?
+2013-08-27T15:21:21  *** nati_ueno has quit IRC
+2013-08-27T15:21:37  <anteaya> do you mean local testing before the patch is submitted to gerrit?
+2013-08-27T15:21:53  <rpodolyaka> anteya: ok, I made a change to openstack-infra/config, which adds two new jobs for sqlalchemy-migrate
+2013-08-27T15:22:20  <rpodolyaka> anteya: this change was merged, and then I made a "recheck" comment to my patch to sqlalchemy-migrate
+2013-08-27T15:22:49  <rpodolyaka> anteya: it failed due to a mistake in the corresponding change to oopenstack-infra/config (I use run-tox.sh incorrectly...)
+2013-08-27T15:23:12  *** ruhe has joined #openstack-infra
+2013-08-27T15:23:17  <rpodolyaka> anteya: I want to fix my mistake, but this time I want to be sure my patch is actually OK before it's merged
+2013-08-27T15:23:18  *** branen_ has quit IRC
+2013-08-27T15:23:27  <anteaya> I question your use of the word merged in this context
+2013-08-27T15:23:38  <anteaya> do you mean submitted to gerrit?
+2013-08-27T15:23:49  <anteaya> rpodolyaka: have you a url for the patch?
+2013-08-27T15:23:50  <rpodolyaka> anteya: submitted and approved in openstack-infra/config
+2013-08-27T15:24:01  <anteaya> do you have a url?
+2013-08-27T15:24:15  *** branen has joined #openstack-infra
+2013-08-27T15:24:25  <openstackgerrit> Dan Prince proposed a change to openstack-infra/reviewday: Update the URL's in the reviewday report for SSL  https://review.openstack.org/43901
+2013-08-27T15:24:31  <anteaya> you can run tests locally, here is a way to get started: http://git.openstack.org/cgit/openstack/oslo-incubator/plain/TESTING.rst
+2013-08-27T15:24:49  <rpodolyaka> anteya: here is patch to openstack-infra/config https://review.openstack.org/#/c/39304/
+2013-08-27T15:24:57  <anteaya> thanks, I'll look
+2013-08-27T15:25:21  <rpodolyaka> anteya: and here is one to sqlalchemy-migrate https://review.openstack.org/#/c/40436/ which now has two new jobs that always fail...
+2013-08-27T15:25:24  <anteaya> you are correct, the patch was merged
+2013-08-27T15:25:48  <branen> jbooboo, ping
+2013-08-27T15:27:02  <anteaya> rpodolyaka: so you want to run the tests locally, on the 40436 patch is that correct?
+2013-08-27T15:27:31  <anteaya> does the TESTING.rst file I shared with you help answer your question?
+2013-08-27T15:27:58  <openstackgerrit> Dan Prince proposed a change to openstack-infra/reviewday: Update the URL's in the reviewday report for SSL  https://review.openstack.org/43901
+2013-08-27T15:29:08  <anteaya> rpodolyaka: it is the tests to the tox file that are failing, correct?
+2013-08-27T15:29:34  <openstackgerrit> A change was merged to openstack-infra/reviewday: Update the URL's in the reviewday report for SSL  https://review.openstack.org/43901
+2013-08-27T15:32:06  *** Bada has quit IRC
+2013-08-27T15:33:18  *** UtahDave has joined #openstack-infra
+2013-08-27T15:34:19  <anteaya> rpodolyaka: if I understand this correctly, the tests that are failing for 40436 are the tests introduced by patch https://review.openstack.org/#/c/38459/4/
+2013-08-27T15:34:37  <anteaya> if that is the case, I think you need to talk to jbooboo to get this sorted out
+2013-08-27T15:34:50  *** emagana has joined #openstack-infra
+2013-08-27T15:34:58  <anteaya> since some tests may need to be over-ridden to get the correct code in place
+2013-08-27T15:35:28  <anteaya> rpodolyaka: how crucial are these changes? do you have to meet the code freeze deadline with this?
+2013-08-27T15:36:27  <anteaya> we are sorting things on a time based priority right now
+2013-08-27T15:40:33  *** shadower is now known as shadower|ragequi
+2013-08-27T15:40:42  *** hashar has quit IRC
+2013-08-27T15:40:47  *** shadower|ragequi is now known as shadower
+2013-08-27T15:41:09  <jbooboo> branen: pong
+2013-08-27T15:41:22  *** odyssey4me has quit IRC
+2013-08-27T15:42:12  *** jruzicka has joined #openstack-infra
+2013-08-27T15:43:21  <jbooboo> quantumfly: https://review.openstack.org/#/c/42608/  i'll spin that up when it lgty
+2013-08-27T15:43:31  <ArxCruz> anteaya: gerrit installed, is there a way to import the openstack projects automatically to gerrit, or need to do this manually ?
+2013-08-27T15:43:45  <branen> jbooboo, Hi, can you help me get a very simple version change approved? https://review.openstack.org/#/c/42991/ This library is only used by the HP 3PAR cinder drivers. Thanks
+2013-08-27T15:44:52  *** dkranz has quit IRC
+2013-08-27T15:46:10  <jbooboo> branen: done (i don't believe gr-base needed to be changed)
+2013-08-27T15:46:24  <anteaya> ArxCruz: congratulations on getting gerrit up
+2013-08-27T15:46:27  <anteaya> that was fast
+2013-08-27T15:46:37  <anteaya> I suggest you next get gerrit up with puppet
+2013-08-27T15:46:40  <branen> jbooboo, Thank you!
+2013-08-27T15:47:00  <anteaya> once you understand how to get gerrit up with puppet it should be easier for you to get the other pieces
+2013-08-27T15:47:15  <anteaya> what is the next piece you want, after gerrit is up with puppet?
+2013-08-27T15:47:38  *** afazekas has quit IRC
+2013-08-27T15:51:40  <rpodolyaka> anteaya: yes, you are absolutely correct, the new Jenkins jobs fail, though I can run tests locally. They aren't crucial at all, so I can wait, but it would be nice to have this fixed...
+2013-08-27T15:52:24  <anteaya> rpodolyaka: great thanks, jbooboo is here I will let him prioritize the work accordingly and he will fix or ping you with questions when he can get to it
+2013-08-27T15:52:47  <jbooboo> rpodolyaka: have you proposed a fix to infra/config?
+2013-08-27T15:52:58  <rpodolyaka> anteaya: cool, thanks!
+2013-08-27T15:53:38  *** gyee has joined #openstack-infra
+2013-08-27T15:53:43  <rpodolyaka> jbooboo: not yet, I wanted to test them first, but wasn't sure there was a way to do this, until the change is actually merged to openstack-infra/config
+2013-08-27T15:54:02  <jbooboo> rpodolyaka: well, you can run the 'run-tox' script locally
+2013-08-27T15:54:15  <jbooboo> rpodolyaka: but it seems like a pretty straightforward error and easy to fix
+2013-08-27T15:54:41  *** odyssey4me has joined #openstack-infra
+2013-08-27T15:54:55  <rpodolyaka> jbooboo: sure. I'm just a little bit worried on all these magical job template substitution like 'github-org' or 'name'
+2013-08-27T15:55:02  <jbooboo> rpodolyaka: you can also put new jobs into the experimental or silent pipelines in zuul , or make them non-voting to have jenkins run them and make sure they work.
+2013-08-27T15:55:23  <jbooboo> rpodolyaka: you can see the output of that by running jenkins-job-builder on your change locally
+2013-08-27T15:55:38  <jbooboo> rpodolyaka: it will produce xml files that you can inspect
+2013-08-27T15:55:52  <rpodolyaka> jbooboo: cool! that's what I'm looking for!  Thanks!
+2013-08-27T15:58:06  *** dkranz has joined #openstack-infra
+2013-08-27T15:58:20  *** nati_ueno has joined #openstack-infra
+2013-08-27T15:58:34  <jbooboo> tagged gear 0.4.0
+2013-08-27T15:59:18  <anteaya> jbooboo quantumfly I have been asked to officiate the Tuskar PTL elections, I am going with the notion I can get the mailing list of eligible voters from gerrit somehow
+2013-08-27T16:01:14  *** rpodolyaka has left #openstack-infra
+2013-08-27T16:01:26  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Require gear 0.4.0  https://review.openstack.org/43912
+2013-08-27T16:01:27  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Use the 'resolve' merge strategy by default  https://review.openstack.org/43629
+2013-08-27T16:01:27  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Fix graceful exit  https://review.openstack.org/43803
+2013-08-27T16:01:28  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Set merge result correctly on exceptions  https://review.openstack.org/43815
+2013-08-27T16:01:28  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Report item stats when removing a change  https://review.openstack.org/43812
+2013-08-27T16:01:29  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Don't reset the local repo  https://review.openstack.org/43792
+2013-08-27T16:01:29  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Fetch specific refs on ref-updated events  https://review.openstack.org/43775
+2013-08-27T16:04:21  <jbooboo> anteaya: i'd use git
+2013-08-27T16:04:47  <jbooboo> anteaya: there's an email address for everyone who has written a patch merged to the repo
+2013-08-27T16:04:55  <anteaya> ah okay, thanks
+2013-08-27T16:05:26  <anteaya> is there currently a script or known command for extracting email addresses from contributors?
+2013-08-27T16:06:03  <jbooboo> anteaya: we use a different script for openstack that does use gerrit, but it requires admin access, and we have particular rules about when contributions were merged, etc.
+2013-08-27T16:06:17  <jbooboo> anteaya: you should be able to construct something with 'git log'.
+2013-08-27T16:06:29  <anteaya> okay, let me try some things with git log
+2013-08-27T16:07:02  <anteaya> as I write up the wiki page for "how to run an election" shall I mention both gerrit and git for getting a list of voters?
+2013-08-27T16:09:37  *** rnirmal has joined #openstack-infra
+2013-08-27T16:11:18  <quantumfly> morning
+2013-08-27T16:11:33  *** nicedice_ has joined #openstack-infra
+2013-08-27T16:11:41  *** odyssey4me has quit IRC
+2013-08-27T16:12:11  <quantumfly> anteaya: probably just git as gerrit needs special permissions
+2013-08-27T16:12:24  <anteaya> morning quantumfly
+2013-08-27T16:12:26  <anteaya> okay
+2013-08-27T16:13:15  <quantumfly> mornings are so busy. jbooboo I will get to that review asap
+2013-08-27T16:13:23  *** ^d has joined #openstack-infra
+2013-08-27T16:13:23  *** ^d has joined #openstack-infra
+2013-08-27T16:15:28  *** pcrews has quit IRC
+2013-08-27T16:15:53  <jbooboo> reed: sure you don't want to have a generic 'conference-track-chairs' list and just repopulate it every 6 months?
+2013-08-27T16:16:38  <jbooboo> reed: or do you plan on deleting it after the summit?
+2013-08-27T16:16:52  <reed> jbooboo, I like to delete
+2013-08-27T16:17:11  <reed> btw, how do you delete it with puppet?
+2013-08-27T16:17:17  <jbooboo> reed: ok.  we can probably do that with puppet too (ensure => absent or something) it will be fun to test.  :)
+2013-08-27T16:17:32  <reed> cool
+2013-08-27T16:18:49  *** odyssey4me has joined #openstack-infra
+2013-08-27T16:19:03  <openstackgerrit> A change was merged to openstack-infra/jenkins-job-builder: Revert "Adding AnsiColor Support"  https://review.openstack.org/43771
+2013-08-27T16:22:06  <quantumfly> puppet should be able to delete lists. it can add and remove but not update
+2013-08-27T16:27:24  *** mattf has joined #openstack-infra
+2013-08-27T16:27:34  <mattf> ruhe, here?
+2013-08-27T16:28:19  <ruhe> yes
+2013-08-27T16:29:13  <ruhe> mattf, i've seen anteaya and jbooboo discussing election process. so i thought you might help since you did the same just recently
+2013-08-27T16:29:36  <mattf> ahh, gotcha. sure, is the discussion still going?
+2013-08-27T16:29:40  <anteaya> ruhe mattf sure, mind if we go to -dev?
+2013-08-27T16:30:00  *** xBsd has quit IRC
+2013-08-27T16:30:12  *** mattf has left #openstack-infra
+2013-08-27T16:31:23  *** nati_ueno has quit IRC
+2013-08-27T16:31:58  *** nati_ueno has joined #openstack-infra
+2013-08-27T16:32:57  *** xBsd has joined #openstack-infra
+2013-08-27T16:36:35  *** nati_ueno has quit IRC
+2013-08-27T16:37:48  *** nati_ueno has joined #openstack-infra
+2013-08-27T16:39:26  *** dina_belova has quit IRC
+2013-08-27T16:39:41  <openstackgerrit> A change was merged to openstack-infra/jenkins-job-builder: Not sending description or disabled by default  https://review.openstack.org/39995
+2013-08-27T16:40:02  *** dina_belova has joined #openstack-infra
+2013-08-27T16:41:50  <ArxCruz> anteaya: jenkins
+2013-08-27T16:41:51  *** jfriedly has joined #openstack-infra
+2013-08-27T16:41:55  <ArxCruz> anteaya: thanks :)
+2013-08-27T16:42:27  <ArxCruz> anteaya: now with puppet, I don't know how to begin...
+2013-08-27T16:42:36  <openstackgerrit> Steven Hardy proposed a change to openstack/requirements: bump keystoneclient to 0.3.2  https://review.openstack.org/43919
+2013-08-27T16:43:41  <openstackgerrit> James E. Blair proposed a change to openstack-infra/config: Add SSH user/key info to nodepool config  https://review.openstack.org/43920
+2013-08-27T16:43:44  *** dims has joined #openstack-infra
+2013-08-27T16:44:03  *** dina_belova has quit IRC
+2013-08-27T16:48:29  <anteaya> ArxCruz: I suggest learning and standing up puppet on its own first, and then using it to stand up a new gerrit, since you have done gerrit once already
+2013-08-27T16:48:48  *** morganfainberg|a is now known as morganfainberg
+2013-08-27T16:49:08  *** Dr01d has quit IRC
+2013-08-27T16:49:14  <anteaya> ArxCruz: there used to be a great puppet vm tutorial - you downloaded a vm with puppet already installed - but it seems to have disappeared - only option if for puppet enterprise
+2013-08-27T16:49:20  *** nati_ueno has quit IRC
+2013-08-27T16:49:56  *** nati_ueno has joined #openstack-infra
+2013-08-27T16:50:01  *** ruhe has quit IRC
+2013-08-27T16:52:05  <quantumfly> ArxCruz: anteaya: http://ci.openstack.org/sysadmin.html#making-a-change-in-puppet has useful info on how to use puppet in our environment
+2013-08-27T16:52:16  *** fbo is now known as fbo_away
+2013-08-27T16:53:18  *** nati_ueno_2 has joined #openstack-infra
+2013-08-27T16:53:43  <pleia2> ArxCruz: and on http://ci.openstack.org/gerrit.html the "Puppet" section shows you the specific puppet modules + files we're using, it all comes from our config/ repo
+2013-08-27T16:54:06  <pleia2> review.pp is the manifest for our gerrit server, for instance
+2013-08-27T16:54:21  *** nati_ueno has quit IRC
+2013-08-27T16:58:03  *** xBsd has quit IRC
+2013-08-27T16:58:45  *** jpich has quit IRC
+2013-08-27T16:59:37  *** mgagne has joined #openstack-infra
+2013-08-27T17:00:31  *** dina_belova has joined #openstack-infra
+2013-08-27T17:00:51  *** ruhe has joined #openstack-infra
+2013-08-27T17:01:34  *** vipul-away is now known as vipul
+2013-08-27T17:01:54  *** adalbas has quit IRC
+2013-08-27T17:01:59  <ArxCruz> pleia2: so, if I install puppet, and ran  puppet apply review.pp I suposed to have gerrit installed? (removing all those hiera stuff of course)
+2013-08-27T17:03:00  *** vipul is now known as vipul-away
+2013-08-27T17:03:10  <pleia2> ArxCruz: it's more complicated than that, you'll need to configure things, review.pp is specifically designed for openstack, you'll notice it's in the openstack_project module directory
+2013-08-27T17:03:40  <pleia2> ArxCruz: so have a browse through the gerrit/ module first, then look at our review.pp as an example, but you'll want to write your own with your own info and settings
+2013-08-27T17:03:42  <ArxCruz> pleia2: that's the problem, it's "complicated" not so easy as ci.openstack.org/sysadmin.html shows
+2013-08-27T17:04:43  *** Bada has joined #openstack-infra
+2013-08-27T17:04:44  <pleia2> ArxCruz: right, the sysadmin.html page shows just shows the super basics of spinning up any system in our infrastructure, beyond that you need to dig into the specific application to do the application-level configuration
+2013-08-27T17:04:45  <ArxCruz> i believe it's should be cool if infra had a directory in git called puppet_generic for example
+2013-08-27T17:05:17  <pleia2> ArxCruz: well, everything that is not in the openstack_project/ module *should* be usable by other projects
+2013-08-27T17:05:43  <pleia2> openstack_project/ module applies our specific things
+2013-08-27T17:06:18  <ArxCruz> pleia2: okay, I will digg into puppet now, if I got in trouble I will yell here :)
+2013-08-27T17:06:20  <ArxCruz> pleia2: thanks!
+2013-08-27T17:06:27  <pleia2> ArxCruz: sure, good luck :)
+2013-08-27T17:06:50  <quantumfly> jbooboo: I have reviewed the groups-dev patch and I think there are a couple things that need fixing
+2013-08-27T17:06:51  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Use an OrderedDict for pipelines  https://review.openstack.org/43922
+2013-08-27T17:07:04  *** derekh has quit IRC
+2013-08-27T17:07:59  *** thomasbiege has joined #openstack-infra
+2013-08-27T17:08:05  <quantumfly> jgriffith: you are awesome thank you
+2013-08-27T17:08:40  <jbooboo> reed: ^ clark found some things on the groups-dev patch https://review.openstack.org/#/c/42608/4
+2013-08-27T17:08:51  <jbooboo> quantumfly: nice catches
+2013-08-27T17:09:13  *** thomasbiege has quit IRC
+2013-08-27T17:10:20  *** pcrews has joined #openstack-infra
+2013-08-27T17:10:21  <jbooboo> quantumfly: https://review.openstack.org/#/c/43920/ should get us back to puppet-controlled nodepool
+2013-08-27T17:10:41  <jbooboo> quantumfly: and when you review https://review.openstack.org/#/c/43912/ and https://review.openstack.org/#/c/43922/ i'll upgrade zuul
+2013-08-27T17:11:20  <quantumfly> jbooboo: ok I will look at those now. Seems like a reasonable place to continue the review
+2013-08-27T17:12:43  <dkranz> quantumfly: So I'm good to go on what we discussed yesterday and just need +A on https://review.openstack.org/#/c/43891/
+2013-08-27T17:12:55  <quantumfly> jbooboo: does the nodepool change not use jenkins credential store?
+2013-08-27T17:13:00  <quantumfly> jbooboo: is there a reason for that?
+2013-08-27T17:13:14  <dkranz> quantumfly: After that works I'll submit non-voting to all projects.
+2013-08-27T17:13:36  <jbooboo> quantumfly: it does use it; see the bottom in the targets section (credentials-id)
+2013-08-27T17:13:50  <jbooboo> quantumfly: what's being added there is info for nodepool itself to be able to log into hosts
+2013-08-27T17:13:55  <quantumfly> jbooboo: and for dkranz's change are you still concerned that all of the exerpimental jobs are nonvoting?
+2013-08-27T17:14:00  <jbooboo> quantumfly: (which it has always done, just with hardcoded values)
+2013-08-27T17:14:02  <quantumfly> jbooboo: should we make them voting first?
+2013-08-27T17:14:16  <jbooboo> quantumfly, dkranz: I'm looking into current behavior of the experimental pipeline now
+2013-08-27T17:14:17  *** nati_ueno_2 has quit IRC
+2013-08-27T17:14:20  <openstackgerrit> Mathieu Gagné proposed a change to openstack-infra/jenkins-job-builder: Sort entry_points in setup.py for maintainability  https://review.openstack.org/43924
+2013-08-27T17:14:42  <quantumfly> jbooboo: dkranz's change lgtm. Can I +2 it and let you +A if you are happy with the non voting behavior?
+2013-08-27T17:14:53  *** nati_ueno has joined #openstack-infra
+2013-08-27T17:15:08  <jbooboo> quantumfly: yes
+2013-08-27T17:15:46  <jbooboo> quantumfly: it looks like it works, but i lose my nickel bet;  it reports overall 'success' regardless of outcome.
+2013-08-27T17:15:51  <jbooboo> https://review.openstack.org/#/c/43791/
+2013-08-27T17:16:01  <jbooboo> quantumfly, dkranz, jog0: ^
+2013-08-27T17:16:16  <quantumfly> because they are not voting. I see
+2013-08-27T17:16:48  <dkranz> The plan is to make it voting asap but I don't see how it can avoid going through a non-voting prelim.
+2013-08-27T17:17:16  <quantumfly> dkranz: this is non voting in the experimental pipeline
+2013-08-27T17:17:39  <quantumfly> dkranz: independent of the process of making it gating. Notice that even when a job fails jenkins says the experimental jobs succeed because they are both non voting
+2013-08-27T17:17:44  <dkranz> quantumfly: For experimental, what does it mean to be voting?
+2013-08-27T17:17:51  <jbooboo> dkranz: it doesn't matter in the experimental pipeline; all things being equal, i'd like everything there to be voting; however, if the penultimate stage is non-voting in the check and gate pipelines, then, well, it's less typing to leave it as-is.  :)
+2013-08-27T17:18:03  *** adalbas has joined #openstack-infra
+2013-08-27T17:18:11  <dkranz> jbooboo: Yes, thank you :)
+2013-08-27T17:18:15  <quantumfly> dkranz: not much, you just end up with slightly confusing report comments when a test fails
+2013-08-27T17:18:23  <quantumfly> dkranz: but everything else works as expected
+2013-08-27T17:19:10  *** nati_ueno has quit IRC
+2013-08-27T17:19:17  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Use an OrderedDict for pipelines  https://review.openstack.org/43922
+2013-08-27T17:19:29  <openstackgerrit> A change was merged to openstack-infra/config: Add experimental slow heat job  https://review.openstack.org/43891
+2013-08-27T17:19:29  *** branen has quit IRC
+2013-08-27T17:19:38  <jbooboo> dkranz: ^
+2013-08-27T17:20:12  <dkranz> jbooboo: Thanks!
+2013-08-27T17:20:29  *** ruhe has quit IRC
+2013-08-27T17:20:50  <quantumfly> jbooboo: nodepool change reviewed. It would be nice to manage that ssh key on the nodepool host as well
+2013-08-27T17:21:27  <pabelanger> So, to continue with my question from this morning.  Now playing with cloudenvy for provisioning
+2013-08-27T17:21:35  <jbooboo> quantumfly: pretty sure it is
+2013-08-27T17:21:45  <jbooboo> quantumfly: it should be the jenkins private key
+2013-08-27T17:21:46  <jog0> you guys see this thread on the
+2013-08-27T17:21:50  <jog0> ML http://lists.openstack.org/pipermail/openstack-dev/2013-August/014298.html
+2013-08-27T17:21:54  <quantumfly> jbooboo: I skimmed through the puppet manifests and didn't see it. I may have missed it though
+2013-08-27T17:22:01  <jog0> ^ about rechecks
+2013-08-27T17:22:02  <uvirtbot> jog0: Error: "about" is not a valid command.
+2013-08-27T17:22:18  *** branen has joined #openstack-infra
+2013-08-27T17:22:44  <quantumfly> jog0: yes, that is potentially one of the things elasticsearch would be useful for
+2013-08-27T17:22:44  <ArxCruz> pleia2: first question, Tue Aug 27 17:22:19 +0000 2013 Puppet (warning): Found multiple default providers for vcsrepo: cvs, svn, git, hg, bzr; using cvs
+2013-08-27T17:23:03  <ArxCruz> why is always using cvs instead of git ?
+2013-08-27T17:23:24  <quantumfly> jog0: but it is still in its infancy and I don't want to contradict jgriffith's argument because it is really good
+2013-08-27T17:23:36  <jog0> quantumfly: thats what I thought, but figured it would be better for you guys to respond then me
+2013-08-27T17:23:40  <jog0> quantumfly: good point
+2013-08-27T17:24:05  <jog0> quantumfly: perhaps you could say +1 to his and say we are working on the second idea ... but its a ways off
+2013-08-27T17:24:07  <openstackgerrit> Mathieu Gagné proposed a change to openstack-infra/jenkins-job-builder: Sort entry_points in setup.py for maintainability  https://review.openstack.org/43924
+2013-08-27T17:24:13  <jog0> quantumfly: or not
+2013-08-27T17:24:15  <openstackgerrit> will soula proposed a change to openstack-infra/jenkins-job-builder: Adding validation to the ansicolor plugin  https://review.openstack.org/43926
+2013-08-27T17:24:17  <quantumfly> jog0: ya I can do that
+2013-08-27T17:24:49  <jbooboo> quantumfly, jog0: I also read the following:
+2013-08-27T17:24:50  <jbooboo> I'd love to see our CI system enhanced to do all of the pattern
+2013-08-27T17:24:50  <jbooboo> matching to group failures by common patterns, and then when a technical
+2013-08-27T17:24:50  <jbooboo> contributor looks at these groups they have tons of data points to _fix_
+2013-08-27T17:24:50  <jbooboo> the problem rather than just spending their precious time identifying it.
+2013-08-27T17:25:00  <jbooboo> as SpamapS volunteering to help out with that work
+2013-08-27T17:25:02  <jbooboo> SpamapS: so, thanks!
+2013-08-27T17:25:15  <jbooboo> SpamapS: quantumfly will be following up with all the info you need to get started! :)
+2013-08-27T17:25:40  <pleia2> ArxCruz: afaik that's just the way the vcsrepo works (we didn't write it), you can configure your manifest to use the one you want
+2013-08-27T17:25:46  *** pcm_ has quit IRC
+2013-08-27T17:25:53  *** HenryG has quit IRC
+2013-08-27T17:26:03  <quantumfly> jog0: I think the point that maybe hasn't been stressed enough is that we are in the home stretch of havana when we need to be diligent and people are not
+2013-08-27T17:26:19  *** pcm_ has joined #openstack-infra
+2013-08-27T17:26:20  *** vipul-away is now known as vipul
+2013-08-27T17:26:20  <quantumfly> jog0: so while having automagic tomorrow would be super duper this is a problem today with a known work around
+2013-08-27T17:26:26  <jog0> quantumfly: ++
+2013-08-27T17:27:28  <jog0> quantumfly: I do think being able to clean out and correct the recheck list would make that easier. yesterday I found a bug in recheck that was marked as a duplicate in launchpad
+2013-08-27T17:27:36  <jog0> so I did recheck the original bug not the dup
+2013-08-27T17:28:00  <quantumfly> jog0: yeah there is definitely work that can be done on the recheck tracking side too
+2013-08-27T17:28:02  <jog0> but that is neither here nor there
+2013-08-27T17:28:06  <quantumfly> that script is fairly naive and simple
+2013-08-27T17:28:08  <jbooboo> quantumfly: https://etherpad.openstack.org/havana-ci-logging in case you want to mention that
+2013-08-27T17:29:05  *** vogxn has quit IRC
+2013-08-27T17:29:23  <jog0> quick question: if I am resubmitting a reverted patch with proper fixes, do I use teh same commit iD?
+2013-08-27T17:29:26  <jog0> or a new one?
+2013-08-27T17:29:32  *** pcm__ has joined #openstack-infra
+2013-08-27T17:29:33  <jog0> I am thinking a new one?
+2013-08-27T17:29:40  <jbooboo> jog0: change id?  new one.
+2013-08-27T17:29:44  <jog0> jbooboo: thanks
+2013-08-27T17:30:10  <jbooboo> jog0: (at least part of the reason is that you can't upload a new patchset to a closed (merged or abandoned) change.
+2013-08-27T17:30:22  <jog0> jbooboo: good to know
+2013-08-27T17:30:26  *** pcm_ has quit IRC
+2013-08-27T17:30:33  *** dina_belova has quit IRC
+2013-08-27T17:31:09  *** dina_belova has joined #openstack-infra
+2013-08-27T17:31:46  *** nati_ueno has joined #openstack-infra
+2013-08-27T17:33:38  <jog0> one more random question: if I wanted to add a test to make sure nova's compute rpcapi is backwards compat like it is supposed to be (done by running tempest tests against trunk everything but nova-compute which would be grizz) where should that live
+2013-08-27T17:33:57  <jog0> grenade or devstack?
+2013-08-27T17:34:53  <jbooboo> jog0: nova-compute is part of nova?
+2013-08-27T17:34:56  *** thomasbiege has joined #openstack-infra
+2013-08-27T17:34:58  <quantumfly> My first thought is grenade but grenade is really worried about upgrades and not mixed installs
+2013-08-27T17:35:17  <jbooboo> jog0: so _part_ of nova is one release, part is another?
+2013-08-27T17:35:19  <quantumfly> maybe a special devstack tempest test that deploys the desired environment with devstack?
+2013-08-27T17:35:26  *** dina_belova has quit IRC
+2013-08-27T17:37:48  <jog0> jbooboo: correct on both.  I was thinking putting nova-compute in a venv. to make sure we can run nova-compute (controls libvirt) as grizzly
+2013-08-27T17:38:12  <jog0> jbooboo: so this seems like a not great fit for devstck either
+2013-08-27T17:39:07  <SpamapS> jbooboo: any time! :)
+2013-08-27T17:39:18  <reed> jbooboo, quantumfly: thanks, saw the comments
+2013-08-27T17:40:21  <openstackgerrit> Joe Gordon proposed a change to openstack-infra/config: Add gate-tempest-devstack-vm-large-ops job  https://review.openstack.org/43781
+2013-08-27T17:40:36  <jbooboo> jog0: i'd talk to dtroyer and see if it fits with grenade
+2013-08-27T17:40:59  <jbooboo> quantumfly: the re-run jobs change to zuul seems to be working
+2013-08-27T17:41:18  <jbooboo> quantumfly: i found this example, which isn't great because the buildset was eventually canceled, but before that happened i think it worked as expected
+2013-08-27T17:41:22  <jbooboo> https://jenkins01.openstack.org/job/gate-grenade-devstack-vm/4151/console
+2013-08-27T17:41:46  <jog0> jbooboo: cool
+2013-08-27T17:42:01  <SpamapS> jog0: eventually I think tripleo's CI will handle this case btw
+2013-08-27T17:42:29  <jog0> SpamapS: even running last stable release nova-compute vs trunk rest?
+2013-08-27T17:42:49  <SpamapS> jog0: thats just a different tag for the nova-compute element b[D[Duild. :)
+2013-08-27T17:43:03  <jog0> SpamapS: the triplo setup will make this much easier, right
+2013-08-27T17:43:03  <jbooboo> quantumfly: follow the link to the description of the build, then follow one of the other links to another job-build eg https://jenkins02.openstack.org/job/gate-tempest-devstack-vm-testr-full/4280/ and then note the link to a different (newer) grenade test
+2013-08-27T17:43:31  <SpamapS> jog0: though anything "stable release" is somewhat far down on the "tripleo cares about it" list.
+2013-08-27T17:43:32  <jog0> SpamapS: actually the fun test would be trunk everything and a second nova-compute on latest stable
+2013-08-27T17:44:15  <jog0> SpamapS: yeah but some folks in OpenStack care, and we don't test taht yet
+2013-08-27T17:45:14  *** dina_belova has joined #openstack-infra
+2013-08-27T17:45:27  <jog0> SpamapS: but yeah Triplo will help this big  time. perhaps the right answer for now is just test using upgrade_levels.compute=grizzly
+2013-08-27T17:45:47  <jog0> SpamapS: how far off do you think Triplo CI is? <6 months?
+2013-08-27T17:46:12  <quantumfly> jbooboo: cool
+2013-08-27T17:46:59  *** branen has quit IRC
+2013-08-27T17:47:23  *** branen has joined #openstack-infra
+2013-08-27T17:47:24  <quantumfly> jog0: SpamapS jbooboo response sent.
+2013-08-27T17:48:12  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Use an OrderedDict for pipelines  https://review.openstack.org/43922
+2013-08-27T17:48:21  *** thomasbiege has quit IRC
+2013-08-27T17:51:02  <jog0> quantumfly: now that mroe people now about logstash it should be fun to see if it crashes
+2013-08-27T17:52:04  <quantumfly> jog0: hopefulyl it doesn't :) it was very crash happy in the past but it seems to be doing much better now that we index less data
+2013-08-27T17:52:28  <quantumfly> jog0: will be interesting to see.
+2013-08-27T17:52:58  <quantumfly> mtreinish: how is the tempest testr stuff doing?
+2013-08-27T17:53:44  <mtreinish> quantumfly: well we've got 2 big flaky fails that people seem to be hitting right now but no one has gone out of their way to yell at me
+2013-08-27T17:53:48  <mtreinish> so I count it as a win :)
+2013-08-27T17:53:54  <quantumfly> hurray
+2013-08-27T17:54:00  *** fbo_away is now known as fbo
+2013-08-27T17:54:10  <mtreinish> https://bugs.launchpad.net/python-keystoneclient/+bug/1217159 and https://bugs.launchpad.net/tempest/+bug/1217163 in case anyone is interested
+2013-08-27T17:54:11  <uvirtbot> Launchpad bug 1217159 in tempest "tempest SimpleReadOnlyKeystoneClientTest fails" [Critical,Confirmed]
+2013-08-27T17:54:14  <jbooboo> quantumfly: https://git.openstack.org/cgit/openstack-infra/config/tree/modules/openstack_project/manifests/nodepool.pp#n26
+2013-08-27T17:54:23  *** sarob has joined #openstack-infra
+2013-08-27T17:55:15  <quantumfly> jbooboo: thanks. I was looking for use of the jenkins user manifest in the jenkins module
+2013-08-27T17:55:18  <dkranz> quantumfly: My first run of slow heat in experimental failed with LOST https://review.openstack.org/#/c/43927/
+2013-08-27T17:55:30  <dkranz> quantumfly: Should I retry or is some other action needed?
+2013-08-27T17:55:47  <quantumfly> dkranz: I think you were faster than JJB. So the job hadn't been created in jenkins yet
+2013-08-27T17:56:04  *** branen_ has joined #openstack-infra
+2013-08-27T17:56:13  <quantumfly> dkranz: if you go to https://jenkins01.openstack.org and search for the job do you see it?
+2013-08-27T17:56:19  <quantumfly> dkranz: if you do then go ahead and give it another try
+2013-08-27T17:56:22  *** ^d is now known as ^demon|away
+2013-08-27T17:57:06  *** CaptTofu_ has quit IRC
+2013-08-27T17:57:09  <quantumfly> jbooboo: review on nodepool ssh key change updated
+2013-08-27T17:57:42  <dkranz> quantumfly: Don't see it.
+2013-08-27T17:58:28  <quantumfly> dkranz: the change merged long enough ago that it should have been applied. I will investigate
+2013-08-27T17:58:43  <dkranz> quantumfly: Thanks
+2013-08-27T17:58:46  *** branen has quit IRC
+2013-08-27T17:58:49  *** emagana_ has joined #openstack-infra
+2013-08-27T17:59:49  <quantumfly> dkranz: https://jenkins02.openstack.org/job/gate-tempest-devstack-vm-heat-slow/ you can change jenkins02 to jenkins01 to see it on the other server
+2013-08-27T18:00:04  <quantumfly> dkranz: let me check one more thing then you can try again
+2013-08-27T18:00:14  *** SergeyLukjanov has joined #openstack-infra
+2013-08-27T18:00:50  <quantumfly> dkranz: I think it will work if run this time. Go ahead and try again
+2013-08-27T18:00:59  <dkranz> quantumfly: OK
+2013-08-27T18:01:41  *** markmcclain has joined #openstack-infra
+2013-08-27T18:01:50  *** emagana has quit IRC
+2013-08-27T18:01:59  <SpamapS> jog0: I hope that we can have tripleo deploying and updating a whole cloud automatically/efficiently in 6 months yes.
+2013-08-27T18:02:17  <SpamapS> jog0: but I won't make that promise :)
+2013-08-27T18:02:48  <openstackgerrit> A change was merged to openstack-infra/config: Add SSH user/key info to nodepool config  https://review.openstack.org/43920
+2013-08-27T18:06:44  <jog0> SpamapS: thats good enough for me, I will focus on the easier test for now then
+2013-08-27T18:06:47  <jog0> thanks
+2013-08-27T18:06:51  <mriedem> can anyone tell me why this hasn't run since 8/6? https://jenkins.openstack.org/view/All/job/nova-coverage/
+2013-08-27T18:07:35  <quantumfly> mriedem: probably because we have three jenkins masters now, if you look on jenkins01 and jenkins02 you should see job runs
+2013-08-27T18:07:55  <mriedem> quantumfly: oh yeah, octojenkins
+2013-08-27T18:07:56  <mriedem> checking
+2013-08-27T18:08:31  <jbooboo> quantumfly: nodepool is running master and puppet is running on nodepool
+2013-08-27T18:08:42  <quantumfly> jbooboo: awesome
+2013-08-27T18:09:47  *** ^demon|away is now known as ^d
+2013-08-27T18:10:31  <quantumfly> jbooboo: the two zuul changes you mentioned lgtm
+2013-08-27T18:11:25  <mriedem> quantumfly: so the coverage jobs must only keep a build history of a couple of days?
+2013-08-27T18:11:47  <mriedem> quantumfly: trying to find something like this but for another commit: http://logs.openstack.org/5c/5cc63c91d045f7a37136107053f71db1d8edf425/post/nova-coverage/e91683d/cover/
+2013-08-27T18:12:39  <quantumfly> mriedem: you want http://logs.openstack.org/gitsha[:2]/gitsha/post/nova-coverage
+2013-08-27T18:13:18  <quantumfly> mriedem: make sure you use the gitsha that ended up being merged as that may be different than what you have locally
+2013-08-27T18:13:31  <mriedem> quantumfly: so is that only for merged commits?
+2013-08-27T18:14:02  <quantumfly> mriedem: yes, nova-coverage runs in the post queue which happens after merges
+2013-08-27T18:14:51  <mriedem> quantumfly: ah, ok. in #openstack-nova we were talking about how nice it would be if we had coverage reports for patches so we could know on a giant blueprint patch how much is actually covered in the tests,
+2013-08-27T18:15:10  <mriedem> sort of going on about long review times in nova and what slows it down, one of which is giant patches
+2013-08-27T18:15:26  <mriedem> and you have to dig into the tests to compare to the new code to make sure everything is reasonably covered
+2013-08-27T18:15:38  <quantumfly> mriedem: it would be nice :). The reason we don't run those tests prior to merging is they take forever to run and I think people want to see trends
+2013-08-27T18:15:46  <openstackgerrit> A change was merged to openstack-infra/zuul: Require gear 0.4.0  https://review.openstack.org/43912
+2013-08-27T18:15:49  <openstackgerrit> A change was merged to openstack-infra/zuul: Use the 'resolve' merge strategy by default  https://review.openstack.org/43629
+2013-08-27T18:15:50  <openstackgerrit> A change was merged to openstack-infra/zuul: Fetch specific refs on ref-updated events  https://review.openstack.org/43775
+2013-08-27T18:15:50  <openstackgerrit> A change was merged to openstack-infra/zuul: Don't reset the local repo  https://review.openstack.org/43792
+2013-08-27T18:15:51  <openstackgerrit> A change was merged to openstack-infra/zuul: Fix graceful exit  https://review.openstack.org/43803
+2013-08-27T18:15:52  <openstackgerrit> A change was merged to openstack-infra/zuul: Report item stats when removing a change  https://review.openstack.org/43812
+2013-08-27T18:15:56  <openstackgerrit> A change was merged to openstack-infra/zuul: Set merge result correctly on exceptions  https://review.openstack.org/43815
+2013-08-27T18:16:03  <quantumfly> mriedem: we have fiddled with the idea of running them in the check queue instead for the reason you want them
+2013-08-27T18:16:04  <mriedem> quantumfly: ah, ok - cuz i was thinking just getting the coverage report for a patch set should be trivial
+2013-08-27T18:16:07  <openstackgerrit> A change was merged to openstack-infra/zuul: Use an OrderedDict for pipelines  https://review.openstack.org/43922
+2013-08-27T18:16:09  <mriedem> quantumfly: yup
+2013-08-27T18:16:17  <quantumfly> mriedem: it is trivial `tox -ecover`
+2013-08-27T18:16:24  <mriedem> i didn't realize it took a long time
+2013-08-27T18:16:32  <quantumfly> mriedem: but instrumenting the code makes it much slower
+2013-08-27T18:16:54  <jbooboo> quantumfly: are those run in parallel or serially?
+2013-08-27T18:16:55  <quantumfly> mriedem: you could `git review -d $CHANGE && tox -ecover` to generate it locally
+2013-08-27T18:16:56  <mriedem> quantumfly: ok, got it - thanks, glad you guys already looked into it (though i'm not surprised :) )
+2013-08-27T18:16:59  <quantumfly> jbooboo: parallel
+2013-08-27T18:17:20  <mriedem> quantumfly: yeah, generating locally for some guy that i don't know or care what his blueprint does isn't going to probably happen :)
+2013-08-27T18:17:28  <mriedem> just brainstorming how to make reviews more efficient in nova
+2013-08-27T18:17:44  <quantumfly> jbooboo: now that you mention it it isn't too slow with testr
+2013-08-27T18:18:00  <jbooboo> maybe worth a look; maybe after h3
+2013-08-27T18:18:05  <quantumfly> jbooboo: ++
+2013-08-27T18:18:32  <quantumfly> mriedem: with testr we run the job with parallel test runners like the normal unittests do which makes the job quite a bit faster
+2013-08-27T18:18:40  <jbooboo> quantumfly: what would be really nice is a return message from gearman saying "coverage: 98%" :)
+2013-08-27T18:18:44  <quantumfly> mriedem: we can look at shifting when that job is run after H3
+2013-08-27T18:19:29  <mriedem> quantumfly: jbooboo: ok, yeah, sounds great
+2013-08-27T18:19:30  <openstackgerrit> A change was merged to openstack-infra/zuul: Add a graphite key for all jobs in a pipeline  https://review.openstack.org/43586
+2013-08-27T18:19:35  <quantumfly> jbooboo: or maybe abuse the experimental queue some more :)
+2013-08-27T18:19:45  <openstackgerrit> A change was merged to openstack-infra/zuul: Report pipeline queue length on startup to statsd  https://review.openstack.org/43588
+2013-08-27T18:20:06  <jbooboo> quantumfly: i own 0 open changes in gerrit!
+2013-08-27T18:20:11  <quantumfly> wow
+2013-08-27T18:20:27  <quantumfly> I only have WIP and draft changes
+2013-08-27T18:20:43  <jbooboo> quantumfly: i will write some more soon.  :)
+2013-08-27T18:20:49  <quantumfly> after the meeting I hope to get some code review in and work on mysql backups a little more
+2013-08-27T18:21:12  <quantumfly> I think I am ready to start mysqldumping on review and review-dev
+2013-08-27T18:21:20  <jbooboo> quantumfly: great!
+2013-08-27T18:21:24  <quantumfly> then will follow that up with a bup change (if necessary)
+2013-08-27T18:22:35  *** melwitt has joined #openstack-infra
+2013-08-27T18:22:36  <quantumfly> going to find food before the meeting today back by noon
+2013-08-27T18:25:03  *** bodepd has quit IRC
+2013-08-27T18:25:09  <mtreinish> jbooboo: do you guys have a raw recheck count somewhere? (probably graphite right?)
+2013-08-27T18:25:12  *** bodepd has joined #openstack-infra
+2013-08-27T18:25:19  <mtreinish> I'm just curious how much it's spiked since last night
+2013-08-27T18:26:30  <jbooboo> mtreinish: i don't think so
+2013-08-27T18:27:36  <mtreinish> jbooboo: ok
+2013-08-27T18:27:39  <openstackgerrit> Khai Do proposed a change to openstack-infra/gear: Update gear docs to include gearman server daemon  https://review.openstack.org/43780
+2013-08-27T18:27:54  *** dina_belova has quit IRC
+2013-08-27T18:28:05  * mtreinish starts working on a script to watch recheck count from gerrit stream
+2013-08-27T18:28:26  <jbooboo> mtreinish: you can start with the recheckwatch script since that's what it does
+2013-08-27T18:28:29  *** dina_belova has joined #openstack-infra
+2013-08-27T18:28:34  <mtreinish> jbooboo: ok cool
+2013-08-27T18:32:27  *** dina_belova has quit IRC
+2013-08-27T18:32:43  *** thomasbiege has joined #openstack-infra
+2013-08-27T18:33:06  *** anteaya has quit IRC
+2013-08-27T18:35:57  <quantumfly> jbooboo we could grep zuul logs or query gerrit db possibly
+2013-08-27T18:36:26  <quantumfly> (to get a number now)
+2013-08-27T18:37:37  *** thomasbiege has quit IRC
+2013-08-27T18:39:00  *** ruhe has joined #openstack-infra
+2013-08-27T18:39:00  <jgriffith> jbooboo: speaking of parallel testr etc
+2013-08-27T18:39:04  *** ruhe has quit IRC
+2013-08-27T18:39:12  <jgriffith> jbooboo: what's up with the times reported by zuul now?
+2013-08-27T18:39:30  <jgriffith> jbooboo: are we getting faster just by reporting the wrong elapsed times?
+2013-08-27T18:40:16  <jgriffith> jbooboo: the countdown is really nice, don't get me wrong
+2013-08-27T18:40:19  <jbooboo> jgriffith: that sounds like a great strategy, but i don't think i'm following your question.  :)
+2013-08-27T18:40:57  <jbooboo> jgriffith: (scotty: how else can i keep my reputation as a miracle worker?)
+2013-08-27T18:41:06  <jgriffith> jbooboo: :)
+2013-08-27T18:41:31  <jgriffith> jbooboo: so I'm looking again today (noticed this yesterday after the email went out that this was on)
+2013-08-27T18:41:38  <jgriffith> jbooboo: it's actually much better it seems
+2013-08-27T18:41:59  <jbooboo> jgriffith: yes, a tempest run is expected to take 20-30 minutes now
+2013-08-27T18:41:59  <jgriffith> jbooboo: what i noticed last night was like: on zuul, test kids off and the countdown says like 7 minutes
+2013-08-27T18:42:13  <jgriffith> jbooboo: right.. which is SWEET!
+2013-08-27T18:42:42  <jbooboo> jgriffith: oh, you're saying the "X mins" countdown for the whole change is reporting a value that's too low?
+2013-08-27T18:42:47  <jgriffith> jbooboo: did we always do a time remaining on the status page or is that new?
+2013-08-27T18:42:53  <jgriffith> jbooboo: correct
+2013-08-27T18:43:02  <jgriffith> jbooboo: but it seems MUCH more accurate today
+2013-08-27T18:43:04  <jbooboo> jgriffith: maybe a month old?
+2013-08-27T18:43:17  <jgriffith> jbooboo: so much for that excuse :)
+2013-08-27T18:43:32  <jbooboo> jgriffith: it's entirely possible it's wrong; i'll keep an eye on it
+2013-08-27T18:43:33  <jgriffith> jbooboo: maybe my math was just off... or my eyes were so blurry I was looking at the wrong jobs
+2013-08-27T18:43:46  <mtreinish> jgriffith: I noticed it too. Last night when I pushed through the parallel change it was way off.
+2013-08-27T18:43:51  <mtreinish> I think it's better now
+2013-08-27T18:44:01  <jgriffith> mtreinish: phewwwww
+2013-08-27T18:44:15  <jgriffith> mtreinish: I thought I was making myself look REALLY stupid
+2013-08-27T18:44:32  <jbooboo> jgriffith: it should be, roughly, max([all running jobs for this change] + time_for_change_ahead)
+2013-08-27T18:44:35  <jgriffith> mtreinish: you're right, it is wayyyyy better today
+2013-08-27T18:44:56  <jgriffith> jbooboo: cool... sorry for the false alarm :)
+2013-08-27T18:45:08  <jgriffith> jbooboo: the new changes are pretty neat
+2013-08-27T18:45:19  <jbooboo> jgriffith: well, it may just be less wrong because the numbers are closer together.  i'll keep an eye on it.
+2013-08-27T18:45:51  <jgriffith> jbooboo: cool, and if I"m completely wrong let's just say it was mtreinish that brought it up :)
+2013-08-27T18:46:13  *** alexpilotti has quit IRC
+2013-08-27T18:46:56  <mtreinish> jgriffith: well the thing I actually noticed last night was the little bars actually. The job would finish when it was at about 50%.
+2013-08-27T18:47:03  <mtreinish> so you're on your own for the number
+2013-08-27T18:47:10  <jgriffith> mtreinish: :)
+2013-08-27T18:47:29  <jgriffith> mtreinish: actually we were seeing the same thing I believe, I was messing with it right after your email
+2013-08-27T18:47:33  <jgriffith> mtreinish: nice job by the way!
+2013-08-27T18:48:22  <mtreinish> jgriffith: thanks! I'm actually surprised that no one has tried to kill me yet because of the recheck rate going up...
+2013-08-27T18:49:48  <jgriffith> mtreinish: nahh...
+2013-08-27T18:49:51  <jbooboo> mtreinish: oh, yeah, the bars being wrong would be due to the runtime of the existing job changing
+2013-08-27T18:50:02  <jgriffith> mtreinish: IMO I haven't noticed anything signficant except for one test
+2013-08-27T18:50:09  <jbooboo> jenkins will adapt (i think it has)
+2013-08-27T18:50:11  <jgriffith> mtreinish: which now has a patch submitted
+2013-08-27T18:50:23  <jbooboo> jgriffith: if the bars were off, then the overall time would be off too
+2013-08-27T18:50:24  <mtreinish> jgriffith: the aggregates one?
+2013-08-27T18:50:27  <jgriffith> jbooboo: Ohhhh... thats interesting
+2013-08-27T18:50:29  <jgriffith> mtreinish: yes
+2013-08-27T18:50:32  <jbooboo> so maybe that's what it was
+2013-08-27T18:50:53  <mtreinish> yeah I pushed that patch I'm actually not sure that it's a legit fix. It was just my best guess based on looking at the error
+2013-08-27T18:51:04  <jgriffith> mtreinish: yeah but it failed :(
+2013-08-27T18:51:05  <mtreinish> I'm waiting for vishy to get back to me about it
+2013-08-27T18:51:38  <mtreinish> jgriffith: pep8 :(
+2013-08-27T18:51:44  *** rnirmal has quit IRC
+2013-08-27T18:51:46  <jgriffith> indeed.. and pylint
+2013-08-27T18:51:50  <jgriffith> silly things
+2013-08-27T18:52:09  <jgriffith> mtreinish: I almost hit "recheck no bug" just to be a smart allec
+2013-08-27T18:52:18  <jgriffith> mtreinish: but I don't think people would appreciate the humor
+2013-08-27T18:53:14  *** anteaya has joined #openstack-infra
+2013-08-27T18:53:23  <mtreinish> jgriffith: hahaha. Although the pylint error actually shows how it doesn't work. I missed a class name...
+2013-08-27T18:53:36  <jgriffith> mtreinish: just saw that
+2013-08-27T18:53:43  <jgriffith> mtreinish: kinda cool eh
+2013-08-27T18:54:17  *** svarnau has joined #openstack-infra
+2013-08-27T18:57:10  <mtreinish> jgriffith: yeah, it just teaches me that I should try to remember to run things before I push it out for review.
+2013-08-27T19:00:42  *** odyssey4me has quit IRC
+2013-08-27T19:01:41  *** vipul is now known as vipul-away
+2013-08-27T19:02:05  *** reed has quit IRC
+2013-08-27T19:02:56  <jbooboo> meeting time!
+2013-08-27T19:11:02  *** HenryG has joined #openstack-infra
+2013-08-27T19:11:21  *** sarob has quit IRC
+2013-08-27T19:16:26  *** hashar has joined #openstack-infra
+2013-08-27T19:21:22  *** mberwanger has joined #openstack-infra
+2013-08-27T19:22:41  <lifeless> mtreinish: hi?
+2013-08-27T19:23:20  <mtreinish> lifeless: hi
+2013-08-27T19:24:13  <lifeless> pabelanger: ah, thanks!
+2013-08-27T19:28:57  *** dina_belova has joined #openstack-infra
+2013-08-27T19:31:13  *** lcestari_ has quit IRC
+2013-08-27T19:31:31  *** lcestari has joined #openstack-infra
+2013-08-27T19:33:09  *** dina_belova has quit IRC
+2013-08-27T19:34:15  *** markmcclain has quit IRC
+2013-08-27T19:35:24  *** markmc has joined #openstack-infra
+2013-08-27T19:36:06  *** lcestari has quit IRC
+2013-08-27T19:36:24  *** lcestari has joined #openstack-infra
+2013-08-27T19:39:01  *** dina_belova has joined #openstack-infra
+2013-08-27T19:39:08  *** lcestari has quit IRC
+2013-08-27T19:41:08  *** mberwanger has quit IRC
+2013-08-27T19:41:38  <annegentle> oh. missed open discussion. -- was going to ask about moving clouddocs-maven-plugin to openstack,how's the pre-work?
+2013-08-27T19:42:01  <quantumfly> annegentle: mordred jumped the gone and made the switch
+2013-08-27T19:42:05  <quantumfly> s/gone/gun/
+2013-08-27T19:42:13  <quantumfly> then we got really busy and I forgot to say anything ...
+2013-08-27T19:42:16  <annegentle> heh
+2013-08-27T19:42:34  <annegentle> so that patch merging wasn't a prereq completion
+2013-08-27T19:42:45  * annegentle talks really vaguely when unsure of real words
+2013-08-27T19:42:47  <quantumfly> annegentle: http://git.openstack.org/cgit/stackforge/clouddocs-maven-plugin/
+2013-08-27T19:43:01  *** gyee has quit IRC
+2013-08-27T19:43:08  <openstackgerrit> Ryan Petrello proposed a change to openstack-infra/config: Provide a more generic run-tox.sh.  https://review.openstack.org/43145
+2013-08-27T19:43:09  <annegentle> quantumfly: so.
+2013-08-27T19:43:11  <quantumfly> annegentle: I personally would've liked there to be a little more communication particularly with David but I didn't mark the change WIP so my bad
+2013-08-27T19:43:26  *** dina_belova has quit IRC
+2013-08-27T19:43:36  <annegentle> quantumfly: if David's still producing releases not on stackforge (pretty sure he did this last week) what's the next step?
+2013-08-27T19:43:59  <quantumfly> annegentle: we will need to force push those changes into gerrit
+2013-08-27T19:44:05  <annegentle> quantumfly: ok
+2013-08-27T19:44:17  <quantumfly> annegentle: and we should do that when david is ready to switch over to using gerrit
+2013-08-27T19:44:26  <quantumfly> so that we only need to do it once
+2013-08-27T19:44:38  <quantumfly> I did send david email with a link to the change but didn't get any feedback from him
+2013-08-27T19:44:45  <annegentle> quantumfly: ok
+2013-08-27T19:44:49  <annegentle> quantumfly: IMing with David now
+2013-08-27T19:44:57  <anteaya> just as an fyi, I requested an upgrade to my internet speed and the telecom monopoly that owns the lines downgraded me instead - I am pushing for a fix but if someone flips the wrong switch I might end up disconnected. If it happens that is why.
+2013-08-27T19:45:07  <quantumfly> so next step is getting david involved so that we can plan getting gerrit up to date and getting maven publishing jobs going for it
+2013-08-27T19:45:38  <annegentle> quantumfly: ok, so the gerrit updates are still pending? and with FF coming it might be a while? or?
+2013-08-27T19:46:07  <quantumfly> annegentle: the force push latest clouddocs into gerrit is pending. I only want to do that once
+2013-08-27T19:46:15  <annegentle> quantumfly: yeah makes sense
+2013-08-27T19:46:21  <quantumfly> annegentle: and that isn't affected by FF
+2013-08-27T19:46:39  <quantumfly> other than I may be busy if things fall over again
+2013-08-27T19:46:44  <annegentle> quantumfly: right
+2013-08-27T19:47:01  <annegentle> quantumfly: understandable
+2013-08-27T19:47:33  <quantumfly> anteaya: that wasn't very nice of them
+2013-08-27T19:47:54  <anteaya> quantumfly: I'll keep my response to arrrrrrrrggggghhhh
+2013-08-27T19:48:12  <pleia2> anteaya: ugh, that's awful
+2013-08-27T19:48:15  <anteaya> quantumfly: long boring story that hopefully has a happy ending soon
+2013-08-27T19:48:29  <anteaya> pleia2: yeah, my ISP is stumped too
+2013-08-27T19:49:32  <openstackgerrit> Ryan Petrello proposed a change to openstack-infra/config: Provide a more generic run-tox.sh.  https://review.openstack.org/43145
+2013-08-27T19:50:33  *** CaptTofu has joined #openstack-infra
+2013-08-27T19:50:43  <openstackgerrit> Ryan Petrello proposed a change to openstack-infra/config: Provide a more generic run-tox.sh.  https://review.openstack.org/43145
+2013-08-27T19:53:52  *** johnthetubaguy1 has joined #openstack-infra
+2013-08-27T19:54:29  *** johnthetubaguy has quit IRC
+2013-08-27T19:57:07  *** weshay has quit IRC
+2013-08-27T19:57:25  *** weshay has joined #openstack-infra
+2013-08-27T19:59:12  *** dolphm has left #openstack-infra
+2013-08-27T19:59:48  <jbooboo> i'm going to restart zuul right after the next gate reset
+2013-08-27T20:00:20  <jbooboo> mtreinish: you should ignore "recheck" comments from me, btw.  :)
+2013-08-27T20:00:25  <quantumfly> jbooboo: ok
+2013-08-27T20:00:33  <jbooboo> mtreinish: in your stats
+2013-08-27T20:00:40  <openstackgerrit> lifeless proposed a change to openstack-infra/reviewstats: Update TripleO projects.  https://review.openstack.org/42511
+2013-08-27T20:01:03  <lifeless> russellb: ^ tada
+2013-08-27T20:01:39  <mtreinish> jbooboo: ok, yeah that's probably a good idea.
+2013-08-27T20:01:59  <openstackgerrit> A change was merged to openstack-infra/reviewstats: Update TripleO projects.  https://review.openstack.org/42511
+2013-08-27T20:02:04  <openstackgerrit> A change was merged to openstack/requirements: Allow use of hp3parclient 2.0  https://review.openstack.org/42991
+2013-08-27T20:02:09  *** jhesketh has quit IRC
+2013-08-27T20:02:10  <russellb> lifeless: tada ^
+2013-08-27T20:02:16  <jbooboo> jgriffith: E: cinder.conf.sample is not up to date, please run tools/conf/generate_sample.sh
+2013-08-27T20:02:19  <lifeless> \o/
+2013-08-27T20:02:36  <jbooboo> jgriffith: there are a lot of cinder changes in the gate, and that's showing up
+2013-08-27T20:02:44  <russellb> lifeless: just kicked it to re-run.  it takes a bit though
+2013-08-27T20:02:58  <quantumfly> jbooboo: I keep meaning to figure out what that hacking check is supposed to do and how to fix it when it breaks
+2013-08-27T20:03:04  <quantumfly> jog0: ^ are you in the know?
+2013-08-27T20:03:16  <openstackgerrit> Emilien Macchi proposed a change to openstack-infra/jenkins-job-builder: Add SLOCCount plugin support  https://review.openstack.org/43852
+2013-08-27T20:03:18  <quantumfly> it might not even be run by hacking but it trips people up all the time
+2013-08-27T20:03:25  <jgriffith> jbooboo: I was afraid of that
+2013-08-27T20:03:33  <jgriffith> jbooboo: I just turned on auto-checking of conf updates
+2013-08-27T20:03:39  *** dprince has quit IRC
+2013-08-27T20:03:40  <jbooboo> restarting zuul now
+2013-08-27T20:03:42  *** jfriedly has quit IRC
+2013-08-27T20:03:44  <jgriffith> jbooboo: I suspect I should turn it off and let everything merge then turn it back on
+2013-08-27T20:03:59  *** morganfainberg is now known as morganfainberg|a
+2013-08-27T20:04:22  *** ianw has quit IRC
+2013-08-27T20:04:32  *** vipul-away is now known as vipul
+2013-08-27T20:04:35  *** pcm__ has quit IRC
+2013-08-27T20:05:02  *** ianw has joined #openstack-infra
+2013-08-27T20:06:39  *** yjiang5 has joined #openstack-infra
+2013-08-27T20:07:10  <jbooboo> stopped zuul again
+2013-08-27T20:07:14  <jbooboo> because it did not install
+2013-08-27T20:07:21  <jbooboo> because of pbr
+2013-08-27T20:07:52  <quantumfly> jbooboo: :/ want an extra set of eyes?
+2013-08-27T20:07:58  <jbooboo> quantumfly: sure
+2013-08-27T20:07:59  <jbooboo> pkg_resources.VersionConflict: (pbr 0.5.18 (/usr/local/lib/python2.7/dist-packages), Requirement.parse('pbr>=0.5.21,<1.0'))
+2013-08-27T20:08:02  *** nati_ueno has quit IRC
+2013-08-27T20:08:09  <jbooboo> quantumfly: should i pip -U install pbr ?
+2013-08-27T20:08:13  <quantumfly> jbooboo: oh, manually upgrade pbr with pip first
+2013-08-27T20:08:14  <quantumfly> jbooboo: yes
+2013-08-27T20:08:30  <quantumfly> jbooboo: I believe that issue is caused by pbr being a setup_requires and how that is treated specially
+2013-08-27T20:08:37  *** nati_ueno has joined #openstack-infra
+2013-08-27T20:09:05  <jbooboo> quantumfly: oh, didn't read far enough back, i think this is caused by gear
+2013-08-27T20:09:07  <jbooboo> http://paste.openstack.org/
+2013-08-27T20:09:11  <jbooboo> gcc
+2013-08-27T20:09:12  <jbooboo> grr
+2013-08-27T20:09:16  <jbooboo> http://paste.openstack.org/show/45236/
+2013-08-27T20:09:49  <quantumfly> jbooboo: I think the fix is to manually update pbr first
+2013-08-27T20:09:52  <jbooboo> root@zuul:/opt/zuul# pip
+2013-08-27T20:09:52  <jbooboo> -su: /usr/bin/pip: No such file or directory
+2013-08-27T20:10:03  * jbooboo stabs mordred in the eyes with pbr
+2013-08-27T20:10:37  <jbooboo> #status alert zuul is offline because of a pbr-related installation issue
+2013-08-27T20:10:37  <openstackstatus> NOTICE: zuul is offline because of a pbr-related installation issue
+2013-08-27T20:10:44  *** ChanServ changes topic to "zuul is offline because of a pbr-related installation issue"
+2013-08-27T20:10:50  <quantumfly> jbooboo: I can find pip on zuul.o.o
+2013-08-27T20:10:50  *** HenryG has quit IRC
+2013-08-27T20:10:59  <quantumfly> /usr/local/bin/pip
+2013-08-27T20:11:12  <quantumfly> I am guessing root doesn't have that in its path
+2013-08-27T20:11:20  <jbooboo> quantumfly: i think it changed
+2013-08-27T20:12:15  *** morganfainberg|a is now known as morganfainberg
+2013-08-27T20:12:25  <jbooboo> quantumfly: ok, i think it's good now
+2013-08-27T20:12:30  *** hashar has quit IRC
+2013-08-27T20:12:38  *** nati_ueno has quit IRC
+2013-08-27T20:13:52  <quantumfly> jbooboo: was the fix pip install -U pbr?
+2013-08-27T20:13:59  <jbooboo> quantumfly: several times
+2013-08-27T20:14:10  <jbooboo> quantumfly: and the pip install -U gear
+2013-08-27T20:14:14  <jbooboo> now i'm removing old versions of zuul
+2013-08-27T20:14:22  <jog0> quantumfly: pong
+2013-08-27T20:14:38  <jbooboo> because pip freeze wasn't reporting the correct value
+2013-08-27T20:14:41  <quantumfly> jog0: the .conf check that runs in the pep8 jobs
+2013-08-27T20:14:55  <jbooboo> starting zuul
+2013-08-27T20:15:00  *** emagana_ has quit IRC
+2013-08-27T20:15:04  <quantumfly> jog0: are you familiar with the problem that solves and how to fix failures?
+2013-08-27T20:15:06  <jog0> ohh I don't like that one
+2013-08-27T20:15:30  <quantumfly> jog0: it seems to happen fairly regularly and devs swear they are rebased on latest versions of the code but it still fails
+2013-08-27T20:15:30  <jog0> quantumfly: that is to keep the nova.conf file in sync  (and its not part of hacking FWIW).
+2013-08-27T20:15:41  <jog0> I swear at it too
+2013-08-27T20:15:41  <quantumfly> and I don't really know what to tell people other than to follow the directions in teh failure
+2013-08-27T20:15:59  *** rcleere has quit IRC
+2013-08-27T20:16:05  <jog0> quantumfly: for some reason it gets funny during rebases and stuff.
+2013-08-27T20:16:12  <jog0> to fix I usually just manually update the file
+2013-08-27T20:16:12  <quantumfly> which are minimal. So I thought I would see if you knew anything about it
+2013-08-27T20:16:19  <jog0> which is not the right way
+2013-08-27T20:16:31  <annegentle> jog0: man I've got a patch where I want to update the nova.conf.sample too and it's just not working
+2013-08-27T20:16:32  *** hashar has joined #openstack-infra
+2013-08-27T20:16:38  <annegentle> jog0: at least I'm not alone
+2013-08-27T20:16:46  <jog0> annegentle: yeah I saw yours
+2013-08-27T20:16:54  <jog0> annegentle: whats the patch for yours again
+2013-08-27T20:17:08  <annegentle> jog0: so what am I doing wrong? https://review.openstack.org/#/c/40271/5
+2013-08-27T20:17:53  <jog0> you need to run the build new conf file code inside the venv
+2013-08-27T20:17:59  <jog0> .tox/py27/bin/activate
+2013-08-27T20:18:04  <jog0> source ^
+2013-08-27T20:18:11  <jog0> or something like that
+2013-08-27T20:18:25  <jog0> but what I do, sometimes is just manaully update teh file until 'tox -epep8' shuts up
+2013-08-27T20:18:34  *** thomasm has joined #openstack-infra
+2013-08-27T20:19:10  <yjiang5> annegentle: I didn't use venv to create the confif sample, simply "./tools/config/generate_sample.sh  -b . -p nova  -o etc/nova"
+2013-08-27T20:19:32  *** markmcclain has joined #openstack-infra
+2013-08-27T20:20:42  <anteaya> I was just getting used to experimental being in the middle but it makes more sense where it is now
+2013-08-27T20:21:02  <quantumfly> anteaya: that is a result of one of the many bugfixes jbooboo added to zuul
+2013-08-27T20:21:06  <annegentle> yjiang5: ok, that's good to know. That's what I did for the patch but it's not passing pep8
+2013-08-27T20:21:11  <anteaya> quantumfly: yes
+2013-08-27T20:21:29  <anteaya> makes sense
+2013-08-27T20:21:30  <annegentle> jog0: ok. heh. Hmmm.
+2013-08-27T20:21:37  *** morganfainberg is now known as morganfainberg|a
+2013-08-27T20:21:56  *** rnirmal has joined #openstack-infra
+2013-08-27T20:22:01  <jog0> annegentle: 'git checkout HEAD^ etc/nova/nova.conf.sample' and fix by hand
+2013-08-27T20:22:04  <jog0> is the lazy wrong way
+2013-08-27T20:22:10  *** morganfainberg|a is now known as morganfainberg
+2013-08-27T20:22:19  <annegentle> jog0: LOL
+2013-08-27T20:22:31  <quantumfly> jog0: this discussion makes me think there is at least one major bug in that test :)
+2013-08-27T20:22:56  <jog0> quantumfly: its the import module issue again
+2013-08-27T20:23:05  <yjiang5> annegentle: but your patch seems really strange with so many removed lines.
+2013-08-27T20:23:17  <quantumfly> jog0: where it has to actually import stuff?
+2013-08-27T20:23:19  <jog0> quantumfly: if a pre-req is missing you cannot import it right now
+2013-08-27T20:23:28  <quantumfly> gotcha
+2013-08-27T20:23:30  <jog0> quantumfly: I am just making things up right now
+2013-08-27T20:23:32  <annegentle> yjiang5: yeah I don't know how that happens unless I need the venv?
+2013-08-27T20:23:35  <jog0> and hoping I am right
+2013-08-27T20:23:38  <quantumfly> :)
+2013-08-27T20:25:54  <yjiang5> annegentle: I cherry-pick your patch and regenerate the conf.sample and seems my result is correct, strange.
+2013-08-27T20:26:06  <jog0> quantumfly: openstack.common.config.generator:82
+2013-08-27T20:26:10  <jog0> and trace from there
+2013-08-27T20:26:24  <jog0> yjiang5: I bet you have more deps installed then annegentle on your box
+2013-08-27T20:26:42  <jog0> quantumfly: yeah we try __import__
+2013-08-27T20:26:47  <yjiang5> jog0: possibly that's the reason.
+2013-08-27T20:27:20  *** thomasbiege has joined #openstack-infra
+2013-08-27T20:28:02  *** dina_belova has joined #openstack-infra
+2013-08-27T20:28:43  <jog0> quantumfly: if something exceptions out during an import we cannot generate the conf for that file
+2013-08-27T20:29:24  <openstackgerrit> Emilien Macchi proposed a change to openstack-infra/jenkins-job-builder: Add Plot plugin support  https://review.openstack.org/43685
+2013-08-27T20:29:35  <annegentle> jog0: yeah this is a rackspace cloud server running ubuntu 12.04 lts
+2013-08-27T20:30:08  <annegentle> yjiang5: can you help me out and patch that patch ? :) I do want to figure out why my environment is bad, but.
+2013-08-27T20:30:18  <jbooboo> quantumfly: i'm spot checking that zuul is creating correct patchsets
+2013-08-27T20:30:40  <quantumfly> jbooboo: ok. This is to double check the new merger is working as expected?
+2013-08-27T20:30:40  <jbooboo> so far it looks good, though i noticed something that suggests we need more work on the zuul merge check --
+2013-08-27T20:30:55  <quantumfly> I have just starred a bunch of changes I intend on reviewing
+2013-08-27T20:30:56  <jbooboo> quantumfly: https://review.openstack.org/#/c/39890/
+2013-08-27T20:30:57  <dkranz> quantumfly: I had a strange infrastructure failure on slow heat. I did another 'check experimental' almost two hours ago and nothing seems to have happened.
+2013-08-27T20:31:06  <yjiang5> annegentle: you mean I update the patch for you?
+2013-08-27T20:31:07  <jog0> annegentle: run 'source .tox/py27/bin/activate' and try again
+2013-08-27T20:31:17  <dkranz> quantumfly: I can't see anything in the zuul queue or jenkins  https://review.openstack.org/#/c/43927/
+2013-08-27T20:31:30  <anteaya> dkranz: we did just restart zuul
+2013-08-27T20:31:31  <jbooboo> quantumfly: ps27 of that change has a parent that is not a gerrit change, but zuul doesn't care.  presumably gerrit will refuse to merge it.
+2013-08-27T20:31:48  <quantumfly> dkranz: 'check experimental' not 'recheck experimental'
+2013-08-27T20:32:01  <dkranz> quantumfly: Arghhhhh
+2013-08-27T20:32:07  <quantumfly> jbooboo: yeah we ran into that with SpamapS in the past iirc
+2013-08-27T20:32:14  <quantumfly> jbooboo: gerrit gets really cranky with that case
+2013-08-27T20:32:32  <jbooboo> quantumfly: we'll want to take care of that to (a) make zuul kick that change out and (b) if zuul performs merges in the future, reject that case
+2013-08-27T20:33:08  <SpamapS> quantumfly: I'd say that SpamapS ran into "we" in the past.. but 6 -- 1/2 dozen.. ;)
+2013-08-27T20:33:21  <dkranz> quantumfly: Sorry about that. It's in zuul now.
+2013-08-27T20:33:28  <quantumfly> dkranz: no problem
+2013-08-27T20:34:07  <quantumfly> SpamapS: we should just put a crash test helmet on you and let you loose
+2013-08-27T20:34:34  <openstackgerrit> Emilien Macchi proposed a change to openstack-infra/jenkins-job-builder: Add SLOCCount plugin support  https://review.openstack.org/43852
+2013-08-27T20:34:49  <openstackgerrit> A change was merged to openstack-infra/config: Reduce state-management channel noise  https://review.openstack.org/43613
+2013-08-27T20:35:10  <anteaya> jbooboo: channel status update?
+2013-08-27T20:35:22  <jbooboo> #status ok Zuul has been restarted
+2013-08-27T20:35:23  <openstackstatus> NOTICE: Zuul has been restarted
+2013-08-27T20:35:23  *** ChanServ changes topic to "Discussion of OpenStack Project Infrastructure | Docs http://ci.openstack.org/ | Bugs https://launchpad.net/openstack-ci | Code https://git.openstack.org/cgit/openstack-infra/"
+2013-08-27T20:35:24  <jbooboo> anteaya: thx
+2013-08-27T20:35:27  <anteaya> np
+2013-08-27T20:35:45  <quantumfly> jd__: still around? https://review.openstack.org/#/c/42692/6/modules/jenkins/manifests/slave.pp I think you also need to install the pypy package in your if include_pypy conditional
+2013-08-27T20:36:21  <jd__> quantumfly: not guily for this one, I think you meant Alex_Gaynor?
+2013-08-27T20:36:32  <quantumfly> jd__: maybe
+2013-08-27T20:36:45  <Alex_Gaynor> quantumfly: yeah that PR is me, did I puppet badly?
+2013-08-27T20:36:48  <quantumfly> jd__: yes I meant Alex_Gaynor not sure why I thought that was your chnange. sorry for the noise
+2013-08-27T20:36:49  <jd__> but it's cool that Alex_Gaynor is doing this since I was thinking about doing so, starting with pbr
+2013-08-27T20:36:59  *** rnirmal has quit IRC
+2013-08-27T20:37:04  <quantumfly> Alex_Gaynor: I think that file needs to also install pypy
+2013-08-27T20:37:14  <quantumfly> Alex_Gaynor: I will leave a comment with what it should look like
+2013-08-27T20:37:20  <Alex_Gaynor> quantumfly: So I'm bad at puppet, does apt::ppa not install? ok thanks!
+2013-08-27T20:37:58  <SpamapS> quantumfly: we did the let me lose part, its called "working on Heat and TripleO", but the crash test helmet.. crap.. that could have come in handy a few times ;)
+2013-08-27T20:38:09  *** jfriedly has joined #openstack-infra
+2013-08-27T20:38:11  *** mberwanger has joined #openstack-infra
+2013-08-27T20:39:49  <quantumfly> Alex_Gaynor: comment left
+2013-08-27T20:39:54  <Alex_Gaynor> quantumfly: thanks
+2013-08-27T20:41:15  <quantumfly> jbooboo: I am approving https://review.openstack.org/#/c/42694/2 should only touch review-dev
+2013-08-27T20:42:22  <quantumfly> jbooboo: nevermind just found an issue with it
+2013-08-27T20:42:24  <openstackgerrit> Alex Gaynor proposed a change to openstack-infra/config: Add support for running tox with PyPy and use it for Marconi  https://review.openstack.org/42692
+2013-08-27T20:42:45  *** gyee has joined #openstack-infra
+2013-08-27T20:44:19  <openstackgerrit> Alex Gaynor proposed a change to openstack-infra/config: Add support for running tox with PyPy and use it for Marconi  https://review.openstack.org/42692
+2013-08-27T20:44:59  <Alex_Gaynor> quantumfly: I failed at aligning some columns, new patch updated :)
+2013-08-27T20:45:15  <quantumfly> thanks lgtm
+2013-08-27T20:45:18  <quantumfly> jbooboo: ^
+2013-08-27T20:50:23  <jbooboo> quantumfly: done
+2013-08-27T20:51:33  *** mberwanger has quit IRC
+2013-08-27T20:52:18  <annegentle> yjiang5: yes that's what I meant... not that I really want to do that I'd rather get a good dev env.
+2013-08-27T20:52:37  <annegentle> jog0: hm. I have .tox/venv/bin/python2.7
+2013-08-27T20:53:18  *** mberwanger has joined #openstack-infra
+2013-08-27T20:53:26  *** thomasm has quit IRC
+2013-08-27T20:53:28  *** johnthetubaguy1 has quit IRC
+2013-08-27T20:53:42  <annegentle> jog0: file not found for source .tox/py27/bin/activate
+2013-08-27T20:54:16  <quantumfly> jbooboo: https://review.openstack.org/#/c/42393/ LGTM but I am not +2 or +A because the js at the end of the js file is a bit obtuse to my not js friendly brain
+2013-08-27T20:54:39  <quantumfly> jbooboo: I get that we are adding event handlers that do things like save and read the cookie but I am not sure when exactly they would fire
+2013-08-27T20:54:53  <quantumfly> jbooboo: tl;dr feel free to approve if you are comfortable with the change
+2013-08-27T20:55:03  <yjiang5> annegentle: sure, let me know if you still need me to update the patch for you after you can't get a god dev env.
+2013-08-27T20:55:55  *** openstackgerrit has quit IRC
+2013-08-27T20:56:08  *** openstackgerrit has joined #openstack-infra
+2013-08-27T20:56:40  <quantumfly> annegentle: for https://review.openstack.org/#/c/43734/1 have you built the ja docs yourself?
+2013-08-27T20:56:49  <annegentle> quantumfly: nope
+2013-08-27T20:56:51  <quantumfly> annegentle: trying to figure out how we might tell if the line you have questions about is correct
+2013-08-27T20:57:11  <annegentle> quantumfly: I have an email in to Daisy about the pom.xml, whether there's a separate one for building ja
+2013-08-27T20:57:13  <quantumfly> annegentle: I have a feeling that you will end up generating english docs with that pom.xml
+2013-08-27T20:57:43  <quantumfly> generated/ja/openstack-ops/pom.xml fits into what I expect with what little I know of the process
+2013-08-27T20:57:59  <quantumfly> basically you end up with a separate set of source files generated from the english files
+2013-08-27T21:00:10  <jog0> annegentle: di you run 'tox -epy27'?
+2013-08-27T21:00:27  <jog0> what does 'ls .tox/' give you
+2013-08-27T21:01:16  *** ArxCruz has quit IRC
+2013-08-27T21:03:33  *** johnthetubaguy has joined #openstack-infra
+2013-08-27T21:04:17  *** johnthetubaguy has quit IRC
+2013-08-27T21:04:36  <openstackgerrit> A change was merged to openstack-infra/config: Add support for running tox with PyPy and use it for Marconi  https://review.openstack.org/42692
+2013-08-27T21:08:30  <Alex_Gaynor> quantumfly: Does something somewhere need to be restarted before ^ takes effect?
+2013-08-27T21:08:58  <quantumfly> Alex_Gaynor: no, it should slowly happen (JJB updates jenkins, zuul reloads its configs, puppet install pypy)
+2013-08-27T21:09:15  <Alex_Gaynor> quantumfly: ok, but it's nto instant is the primary takeaway :)
+2013-08-27T21:09:18  <quantumfly> Alex_Gaynor: the central git repo updates in ~5 minutes then everything else can happen over the next 10-15 minutes
+2013-08-27T21:09:28  *** rfolco has quit IRC
+2013-08-27T21:09:31  <quantumfly> Alex_Gaynor: correct. I would give it 20 minutes
+2013-08-27T21:09:34  <Alex_Gaynor> quantumfly: thanks
+2013-08-27T21:10:16  <openstackgerrit> Emilien Macchi proposed a change to openstack-infra/jenkins-job-builder: Add Plot plugin support  https://review.openstack.org/43685
+2013-08-27T21:12:05  *** CaptTofu has quit IRC
+2013-08-27T21:13:11  *** erfanian has joined #openstack-infra
+2013-08-27T21:13:16  *** mberwanger has quit IRC
+2013-08-27T21:13:27  *** erfanian has quit IRC
+2013-08-27T21:13:55  *** erfanian has joined #openstack-infra
+2013-08-27T21:14:18  *** jruzicka has quit IRC
+2013-08-27T21:14:34  *** hashar has quit IRC
+2013-08-27T21:18:14  <yjiang5> can anyone help me to have a look on https://review.openstack.org/#/c/39890/ . It's really strange that it has no dependency list, while it in fact depends on https://review.openstack.org/#/c/39606/
+2013-08-27T21:18:29  *** cyeoh_ has joined #openstack-infra
+2013-08-27T21:18:59  <yjiang5> is this the right challell asking for gerrit question?
+2013-08-27T21:19:35  *** cyeoh has quit IRC
+2013-08-27T21:19:53  <markmc> "This change was unable to be automatically merged with the current state of the repository and the following changes which were enqueued ahead of it"
+2013-08-27T21:19:56  <markmc> this is new?
+2013-08-27T21:19:56  <quantumfly> yjiang5: yes this is the right channel
+2013-08-27T21:20:08  <quantumfly> markmc: semi new, I think it is at least a month old
+2013-08-27T21:20:12  <markmc> what happens if an enqueued change caused the conflict and then fails to merge?
+2013-08-27T21:20:15  <markmc> quantumfly, ah, ok
+2013-08-27T21:20:22  <quantumfly> markmc: then you reverify
+2013-08-27T21:20:25  *** sandywalsh has quit IRC
+2013-08-27T21:20:46  <quantumfly> markmc: but we think that happens in the minority of cases and that the majority of conflicts happen against $branch. Greater good and all
+2013-08-27T21:20:52  <markmc> quantumfly, hmm - why don't we hold off failing until the conflict merges ?
+2013-08-27T21:21:06  <quantumfly> markmc: because that stops everything in the gate until it merges
+2013-08-27T21:21:13  <quantumfly> markmc: which led to really shallow queueus
+2013-08-27T21:21:27  <quantumfly> yjiang5: is there a recent draft patchset on 39606?
+2013-08-27T21:21:27  <yjiang5> quantumfly: I'm really surprised why it lost the dependency. After all, w/o the dependency it's sure to have conflict.
+2013-08-27T21:21:49  <yjiang5> quantumfly: I don't think so.
+2013-08-27T21:22:03  <jbooboo> markmc: wasn't this your idea at the havana summit?
+2013-08-27T21:22:07  <quantumfly> yjiang5: what is the most recent patchset on 39606?
+2013-08-27T21:22:13  <quantumfly> yjiang5: I see 25
+2013-08-27T21:22:24  <markmc> jbooboo, I doubt it, but who knows :)
+2013-08-27T21:22:25  <yjiang5> quantumfly: I think it is.
+2013-08-27T21:22:51  <yjiang5> quantumfly: even if it has, there should be 'outdated' in the 39890
+2013-08-27T21:22:55  <markmc> jbooboo, I'm just looking at a failure now with 10 changes listed as enqueued ahead
+2013-08-27T21:23:11  <markmc> jbooboo, if the conflict is in one of those, I'm going to struggle to figure out which one
+2013-08-27T21:23:16  <quantumfly> yjiang5: not if there is a draft
+2013-08-27T21:23:24  <quantumfly> yjiang5: drafts make everything weird. Can you check 39606?
+2013-08-27T21:23:29  <markmc> jbooboo, and if it is, do I rebase onto it? what if it fails to merge? I've rebased myself behind a failing change
+2013-08-27T21:23:54  <yjiang5> quantumfly: draft? No, that patch series has been there sooo long, I don't think any draft for it.
+2013-08-27T21:23:58  *** erfanian has quit IRC
+2013-08-27T21:24:02  <markmc> jbooboo, I think I'd prefer not to be told my change failed to merge until the conflict change actually got merged
+2013-08-27T21:24:13  <quantumfly> yjiang5: is patchset 25 the latest patchset?
+2013-08-27T21:24:19  <yjiang5> quantumfly: yes, it is.
+2013-08-27T21:24:22  <markmc> jbooboo, not a huge deal right now, just feedback :)
+2013-08-27T21:24:24  <jbooboo> markmc: you are saying the things i'm pretty sure i said to you or someone who looks like you at the havana summit
+2013-08-27T21:24:31  <yjiang5> there is a DRAFT in patchset 1, I think that's ok, right?
+2013-08-27T21:24:32  <quantumfly> jbooboo: yes
+2013-08-27T21:24:41  <markmc> jbooboo, lies :)
+2013-08-27T21:24:42  <quantumfly> yjiang5: yeah that should be ok, what is the sha of that patchset?
+2013-08-27T21:24:53  <quantumfly> markmc: fwiw this has made zuul a lot more responsive
+2013-08-27T21:25:01  <markmc> jbooboo, honestly don't recall discussing this at all
+2013-08-27T21:25:03  <markmc> quantumfly, ok
+2013-08-27T21:25:06  <quantumfly> markmc: I think it is one of the more important zuul improvements that has gone in this cycle
+2013-08-27T21:25:19  <yjiang5> quantumfly: you mean my local sha?
+2013-08-27T21:25:30  <quantumfly> yjiang5: no, the sha for the commit in patchset 1
+2013-08-27T21:25:39  <quantumfly> yjiang5: I cannot see your draft which is why I am asking you
+2013-08-27T21:25:40  <jbooboo> markmc: another thing that may make that show up more often...
+2013-08-27T21:26:01  <quantumfly> markmc: we are currently running tests for 29 changes in the gate queue. Preivously we would never get above 10 because something would conflict
+2013-08-27T21:26:17  <yjiang5> quantumfly: how can I see the sha in gerrit?
+2013-08-27T21:26:25  <jbooboo> markmc: is that after the discussion about your patch series the other day, i found that zuul was not mimicking gerrit's merge strategy correctly
+2013-08-27T21:26:34  <jbooboo> markmc: so it should be much closer now
+2013-08-27T21:26:40  <markmc> jbooboo, cool
+2013-08-27T21:26:42  <yjiang5> b95a461a4226607ae2506a2311c2edf09b0a1e87
+2013-08-27T21:26:58  <quantumfly> yjiang5: ok so that is different than what 39890 depends on
+2013-08-27T21:27:00  *** ^d has left #openstack-infra
+2013-08-27T21:27:00  <markmc> quantumfly, I don't really follow - we were leaving merge conflicts in the gate queue previously ?
+2013-08-27T21:27:14  <quantumfly> markmc: yes, until we knew that we could get rid of them nicely
+2013-08-27T21:27:29  <quantumfly> markmc: that takes a long time. So we decided to not be so nice at the last summit
+2013-08-27T21:27:36  <quantumfly> yjiang5: there is a phantom sha here.
+2013-08-27T21:27:40  <markmc> quantumfly, I guess I'm saying, if a gate reset happens then my change should be considered again
+2013-08-27T21:27:44  <jbooboo> markmc: the good side of that is that zuul will more correctly predict whether gerrit can merge something, the bad side is that when it predicts that it can't, you'll see that message (whereas before, zuul would have kept it in the queue and have been surprised)
+2013-08-27T21:27:53  <markmc> quantumfly, since the conflicting change ahead of me may have gotten kicked out
+2013-08-27T21:28:00  <quantumfly> markmc: I understand what you are saying
+2013-08-27T21:28:04  <yjiang5> quantumfly: the strangest is, I saw it several success for it in zull, I can't imagine how can that work considering the dependency in the exception.py  on previous patch.
+2013-08-27T21:29:00  <quantumfly> yjiang5: patchset 26 of 39890 depends on patchset 25 of 39606. patchset 27 of 39890 depends on a sha that is not present in gerrit
+2013-08-27T21:29:06  <markmc> quantumfly, well, I don't understand what you're saying :)
+2013-08-27T21:29:10  * markmc heads off to rebase his change
+2013-08-27T21:29:16  <quantumfly> yjiang5: so somehow you pushed patchset 27 without updating 39606
+2013-08-27T21:29:20  *** dina_belova has quit IRC
+2013-08-27T21:29:23  <mtreinish> jbooboo, quantumfly: you keep throwing me for a loop moving where the gate pipeline is on the status page. :)
+2013-08-27T21:29:24  <quantumfly> markmc: I am saying that these things were considered at the last summit
+2013-08-27T21:29:41  <markmc> quantumfly, so no further feedback/discussion welcomed ?
+2013-08-27T21:29:44  <quantumfly> markmc: but we collectively made a decision there that these tradeoffs were worth the increased throughput
+2013-08-27T21:29:54  *** dina_belova has joined #openstack-infra
+2013-08-27T21:29:58  <markmc> quantumfly, don't mind the snark, joking honest :)
+2013-08-27T21:30:13  <quantumfly> markmc: I am fine with further input. I am justifying the "brokeness"
+2013-08-27T21:30:20  <jbooboo> quantumfly: do you remember who was pushing for this?
+2013-08-27T21:30:27  <quantumfly> I think we all agree that this is not "correct"
+2013-08-27T21:30:32  <markmc> quantumfly, yeah, I just don't follow how keeping the change around for reconsideration if the gate resets decreases throughput
+2013-08-27T21:30:37  <quantumfly> jbooboo: sdague was definitely there. It may have been sdague
+2013-08-27T21:30:55  <quantumfly> markmc: because then you potentially wait hours for feedback on your change
+2013-08-27T21:31:05  <quantumfly> markmc: or you can be told asap that an issue occurred
+2013-08-27T21:31:23  <markmc> quantumfly, ah, so it slows down feedback on my specific change, not slows down the gate as a whole?
+2013-08-27T21:31:24  *** HenryG has joined #openstack-infra
+2013-08-27T21:31:31  <quantumfly> correct
+2013-08-27T21:31:47  <markmc> quantumfly, you mentioned shallow queues before this, though ?
+2013-08-27T21:32:06  <jbooboo> markmc: zuul doesn't have alternate scenarios -- it only tests one scenario at a time (keep in mind that testing the current scenario is using >150 machines)
+2013-08-27T21:32:48  <jbooboo> markmc: so within that framework, our only choices are keep a change in the queue or not;  there's no facility for keeping an alternate branch prediction around
+2013-08-27T21:33:01  *** sandywalsh has joined #openstack-infra
+2013-08-27T21:33:02  <jbooboo> markmc: i'm not opposed to that, it's just a bunch of complicated code that hasn't been written yet
+2013-08-27T21:33:17  <yjiang5> quantumfly: hmm, I noticed the parents of 39890 is aa1c5ef, which is my local patch's sha.
+2013-08-27T21:33:30  <quantumfly> yjiang5: correct, but aa1c5ef is not in gerrit
+2013-08-27T21:33:34  <markmc> jbooboo, it's not really an alternate branch prediction though - say, you've commits A, B, C, D and C conflicts with A
+2013-08-27T21:33:39  <quantumfly> yjiang5: do you remember how you constructed that branch and pushed it to gerrit?
+2013-08-27T21:33:44  *** erfanian has joined #openstack-infra
+2013-08-27T21:33:45  <markmc> jbooboo, we predict and test A, B, D
+2013-08-27T21:33:48  <jbooboo> markmc: so our immediate tradeoff is, keep it in the queue which means that by odds, we'll hit a change that can't merge, and only test, say, the top 5 commits out of a queue that's 20 deep
+2013-08-27T21:33:51  <markmc> jbooboo, A fails and we get a gate reset
+2013-08-27T21:33:55  <anteaya> mtreinish: like a game of where's waldo, we need to keep status.o.o/zuul exciting :D
+2013-08-27T21:33:55  <jbooboo> markmc: or kick it out and test all 20
+2013-08-27T21:34:01  <markmc> jbooboo, when not now predict B, C, D and test that?
+2013-08-27T21:34:18  *** dina_belova has quit IRC
+2013-08-27T21:34:37  <yjiang5> quantumfly: git checkcout, git cherry-pick, ...., git cherry-pick, git push gerrit HEAD:refs/for/master/pci-passthrough-enhancement.
+2013-08-27T21:35:29  <markmc> jbooboo, honestly, I'm just curious - if it's a waste of time explaining, nevermind. Over beers sometime :)
+2013-08-27T21:35:51  <quantumfly> yjiang5: does aa1c5ef have a change-id in your local branch? canyou `git log -2` and paste that?
+2013-08-27T21:35:58  <quantumfly> yjiang5: also is there a reason you are not using git-review?
+2013-08-27T21:36:19  <jbooboo> markmc: the two sconarios we can currently handle are ABCD (which includes BCD -- this is the old behavior where we were conservative about merge conflicts), and ABD (where we have already forgotten about C)
+2013-08-27T21:36:35  <yjiang5> quantumfly: I was told by others that this can avoid upload un-needed patches.
+2013-08-27T21:36:38  *** dkliban has quit IRC
+2013-08-27T21:36:58  <quantumfly> yjiang5: I think it has avoided uploading a needed patch
+2013-08-27T21:37:12  <jbooboo> markmc: getting from ABCD to BCD is an scenario that zuul can't handle atm; it involves branching the prediction of ABCD to include both BCD and ABD
+2013-08-27T21:37:15  <anteaya> yjiang5: what others?
+2013-08-27T21:37:23  <quantumfly> yjiang5: git review checks bunch of stuff and makes sure things are in order before pushing. It is quite useful
+2013-08-27T21:37:24  *** thomasbiege has quit IRC
+2013-08-27T21:37:41  <markmc> jbooboo, ok, thanks
+2013-08-27T21:37:45  *** thomasbiege has joined #openstack-infra
+2013-08-27T21:37:52  <jbooboo> markmc: beers are the best way to talk about zuul
+2013-08-27T21:37:59  *** thomasbiege has quit IRC
+2013-08-27T21:38:05  <yjiang5> quantumfly: http://paste.openstack.org/show/45243/
+2013-08-27T21:38:15  <yjiang5> anteaya: another member in our team :$
+2013-08-27T21:38:59  <anteaya> yjiang5: might I encourage both of you to read https://wiki.openstack.org/wiki/Gerrit_Workflow
+2013-08-27T21:39:18  <anteaya> it is our standard workflow and uses git review
+2013-08-27T21:39:26  <quantumfly> yjiang5: I have a feeling that if you use git review instead or manually push the missing commit then gerrit will tie them back up again
+2013-08-27T21:39:41  <quantumfly> yjiang5: for some reason pushing directly allowed gerrit to ignore that one commit
+2013-08-27T21:39:42  <yjiang5> anteaya: I use git review before, changed recently :$
+2013-08-27T21:39:57  <jog0> the stats on http://status.openstack.org/zuul/ are impressive we hit 500 zuul jobs in an hour
+2013-08-27T21:40:01  <quantumfly> yjiang5: what unneeded commits are you trying to avoid?
+2013-08-27T21:40:04  <jog0> go team
+2013-08-27T21:40:19  <yjiang5> quantumfly: what do you mean of unneeded commits?
+2013-08-27T21:40:39  *** markmcclain has quit IRC
+2013-08-27T21:40:43  <quantumfly> yjiang5: earlier you said you use this workflow to avoid pushing unneeded patches
+2013-08-27T21:41:00  <quantumfly> (I am trying to understand the need so that we can fix git review if there is a bug or missing feature)
+2013-08-27T21:41:15  *** changbl has quit IRC
+2013-08-27T21:41:31  <yjiang5> quantumfly: uneeded means, I get patch set (like >10), and then changes only 1 or 2. IIRC, if using git review, it will update the whole patchset, even if I only change like the last one or two.
+2013-08-27T21:41:51  <anteaya> jog0 \o/
+2013-08-27T21:42:31  *** dkranz has quit IRC
+2013-08-27T21:42:36  <yjiang5> quantumfly: like A, B, C, .... F, G. I get the patches in the morning,  and changes F, G, then I do git review, the whole patchset from A~E will be updated.
+2013-08-27T21:43:08  <quantumfly> yjiang5: if you have an up to date git review that will only happen if it is necessary to resolve merge conflicts with the target branch
+2013-08-27T21:43:22  <quantumfly> yjiang5: it is a good thing that git review does that otherwise you will fail to merge further down the line
+2013-08-27T21:43:31  <openstackgerrit> lifeless proposed a change to openstack-infra/reviewstats: Ng is spelt cmsj.  https://review.openstack.org/43954
+2013-08-27T21:43:48  <quantumfly> yjiang5: older git review will do it on every push which is a bug and was fixed
+2013-08-27T21:44:00  <lifeless> russellb: ^ that just flags Ng's actual lp account properly.
+2013-08-27T21:44:08  <Ng> :)
+2013-08-27T21:44:15  <yjiang5> quantumfly: what version the  'old' is?
+2013-08-27T21:44:27  <quantumfly> yjiang5: I will look in the git long, one sec
+2013-08-27T21:45:02  *** markmc has quit IRC
+2013-08-27T21:47:22  <quantumfly> yjiang5: >= 1.19 should have the fix
+2013-08-27T21:48:06  <yjiang5> quantumfly: strange, mine is 1.22 already.
+2013-08-27T21:48:16  <quantumfly> yjiang5: 1.22 will rebase but only if it is a good thing
+2013-08-27T21:48:37  <yjiang5> quantumfly: thanks for the explain and I will ask my team member to use the right method in future also.
+2013-08-27T21:48:39  <quantumfly> yjiang5: that case is when you are proposing a change to a branch that you conflict with. The rebase is necessary to resolve the conflicts
+2013-08-27T21:48:56  <quantumfly> yjiang5: if you really don't want to rebase even when there are conflicts you can use `git review -R`
+2013-08-27T21:49:14  <yjiang5> quantumfly: got it. Thanks.
+2013-08-27T21:49:22  <quantumfly> yjiang5: back to fixing the current problem I would try running git review on your branch
+2013-08-27T21:49:35  *** redbeard2 has quit IRC
+2013-08-27T21:49:36  <quantumfly> to push aa1 into gerrit
+2013-08-27T21:50:17  <yjiang5> quantumfly: can I just push aa1, i..e git checkout aa1, git review?
+2013-08-27T21:50:27  <quantumfly> yjiang5: yes
+2013-08-27T21:51:04  <Alex_Gaynor> quantumfly: Hmm, so https://jenkins02.openstack.org/job/gate-marconi-pypy/1/console does this mean JJB refreshed before the PPA was installed from?
+2013-08-27T21:51:42  <quantumfly> Alex_Gaynor: possibly, I will take a look at that slave
+2013-08-27T21:51:47  <Alex_Gaynor> quantumfly: thanks
+2013-08-27T21:51:48  *** ftcjeff has joined #openstack-infra
+2013-08-27T21:53:53  <yjiang5> quantumfly: seems if I git review now, it will update the 39893 , which is in gate already. Will do it after 39893 is done. thanks.
+2013-08-27T21:54:42  <quantumfly> Alex_Gaynor: http://paste.openstack.org/show/45248/ looking into that now
+2013-08-27T21:54:46  *** mriedem has quit IRC
+2013-08-27T21:55:02  <Alex_Gaynor> quantumfly: :/
+2013-08-27T21:55:09  <quantumfly> yjiang5: are you using the list that warns you of mutliple changes to make that determination? if your git sha matches gerrit it won't actually update the existing change
+2013-08-27T21:55:18  <quantumfly> yjiang5: however there is no harm in being careful
+2013-08-27T21:56:28  <quantumfly> Alex_Gaynor: ppa:pypy/ppa is what the ppa should be according to https://launchpad.net/~pypy/+archive/ppa
+2013-08-27T21:56:38  *** weshay has quit IRC
+2013-08-27T21:56:48  <Alex_Gaynor> quantumfly: did I typo a thing?
+2013-08-27T21:56:52  <yjiang5> quantumfly: it warns "you have more than one commit that you are about to submit". A bit strange how to make sure the sha will be the same after cherry-pick or after 'git review'? I think after git review, gerrit will get a new sha1 in gerrit, righ?
+2013-08-27T21:57:18  <quantumfly> Alex_Gaynor: possibly. I am still double checking that that is the correct ppa
+2013-08-27T21:57:42  <Alex_Gaynor> quantumfly: http://bpaste.net/show/126875/
+2013-08-27T21:58:19  <quantumfly> yjiang5: it may or may not get a new sha after git review. depends on whether or not there are conflicts. The warning message is there to help prevent you fro pushing hundreds of commits from a personal branch (it has happened in the past)
+2013-08-27T21:58:33  <quantumfly> Alex_Gaynor: ya, if what I am looking at pans out that is the fix
+2013-08-27T21:59:15  <Alex_Gaynor> quantumfly: I wonder if it makes sense for there to be tests for that repo which really spin up an image and verify that stuff installs clean?
+2013-08-27T21:59:16  <quantumfly> Alex_Gaynor: yes  Ithink that is the fix you want
+2013-08-27T21:59:20  <Alex_Gaynor> quantumfly: sending patch
+2013-08-27T21:59:49  *** markmcclain has joined #openstack-infra
+2013-08-27T21:59:50  <openstackgerrit> Alex Gaynor proposed a change to openstack-infra/config: Fixed the name of the PPA to install PyPy from  https://review.openstack.org/43958
+2013-08-27T21:59:51  <quantumfly> Alex_Gaynor: it makes a ton of sense, it is something we have thought about for a while but most of our stuff isn't inteded to cleanly install all in one. The tricky bit is partitioning what you install
+2013-08-27T22:00:25  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/reviewstats: Support for unofficial projects and add savanna  https://review.openstack.org/40953
+2013-08-27T22:00:34  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Fix checkout when preparing a ref  https://review.openstack.org/43959
+2013-08-27T22:01:08  <jbooboo> quantumfly: can you look at that?  we should either install that or revert soon; some zuul refs are not correct currently
+2013-08-27T22:01:22  <quantumfly> jbooboo: looking
+2013-08-27T22:02:02  <jbooboo> quantumfly: (the remote update that zuul does at startup was masking then during my testing)
+2013-08-27T22:02:13  *** boris-42 has quit IRC
+2013-08-27T22:02:50  <openstackgerrit> A change was merged to openstack-infra/reviewstats: Ng is spelt cmsj.  https://review.openstack.org/43954
+2013-08-27T22:02:51  <quantumfly> jbooboo: it looks good to me. I assume the if block was changed for consistency?
+2013-08-27T22:03:11  <quantumfly> jbooboo: when you are not busy fixing zuul https://review.openstack.org/#/c/43958/
+2013-08-27T22:03:12  <openstackgerrit> Sergey Lukjanov proposed a change to openstack-infra/reviewstats: Support for unofficial projects and add savanna  https://review.openstack.org/40953
+2013-08-27T22:03:59  *** burt has quit IRC
+2013-08-27T22:04:25  <jbooboo> quantumfly: yep; two different methods of doing checkouts didn't seem like a good idea
+2013-08-27T22:05:43  *** morganfainberg is now known as morganfainberg|a
+2013-08-27T22:05:45  <jbooboo> quantumfly: i have aprvd the zuul change; when it merges i will hard restart zuul because the longer it runs the more incorrect it gets.
+2013-08-27T22:05:51  <quantumfly> jbooboo: ok
+2013-08-27T22:05:55  *** SergeyLukjanov has quit IRC
+2013-08-27T22:06:06  *** morganfainberg|a is now known as morganfainberg
+2013-08-27T22:07:08  <openstackgerrit> A change was merged to openstack-infra/config: Add Jenkins jobs for Tuskar  https://review.openstack.org/43461
+2013-08-27T22:07:15  <openstackgerrit> A change was merged to openstack-infra/config: Fixed the name of the PPA to install PyPy from  https://review.openstack.org/43958
+2013-08-27T22:08:32  <openstackgerrit> A change was merged to openstack-dev/hacking: Adds ability to ignore hacking validations with noqa  https://review.openstack.org/41713
+2013-08-27T22:09:25  *** senk has quit IRC
+2013-08-27T22:10:48  *** CaptTofu has joined #openstack-infra
+2013-08-27T22:13:07  *** shardy is now known as shardy_afk
+2013-08-27T22:13:23  *** _TheDodd_ has quit IRC
+2013-08-27T22:13:53  <quantumfly> Alex_Gaynor: one way we might be able to test that is to run puppet apply for each node in site.pp in its own LXC
+2013-08-27T22:14:14  <quantumfly> Alex_Gaynor: then we don't have to throw away a ton of slaves to test it, but can get a reasonable check that each node def works
+2013-08-27T22:14:15  *** pentameter has quit IRC
+2013-08-27T22:14:25  <Alex_Gaynor> quantumfly: sounds pretty reasonable
+2013-08-27T22:15:30  <quantumfly> I really like that idea the more I think about it
+2013-08-27T22:16:10  <quantumfly> the last major hurdle to making it work is supplying enough useful info to the nodes to test something production like. We could possibly do that with an example hiera file
+2013-08-27T22:17:47  <jbooboo> quantumfly, Alex_Gaynor: I mean, we _can_ use a ton of slaves if we want.
+2013-08-27T22:18:01  <quantumfly> jbooboo: I think this is the perfect use case for containers though
+2013-08-27T22:18:13  <quantumfly> jbooboo: we don't need security we just need enough isolation that puppe tdoesn't throw up
+2013-08-27T22:18:24  <jbooboo> quantumfly: i agree.  just making conversation.  :)
+2013-08-27T22:18:53  <openstackgerrit> James E. Blair proposed a change to openstack-infra/zuul: Fix checkout when preparing a ref  https://review.openstack.org/43959
+2013-08-27T22:18:59  <jbooboo> quantumfly: ^ now with more test passing
+2013-08-27T22:20:11  <quantumfly> jbooboo: should the clean happen after the checkout? does it matter?
+2013-08-27T22:20:26  <jbooboo> quantumfly: i updated the commit msg: Also, reset and clean _before_ checking out, since that's supposed
+2013-08-27T22:20:37  <jbooboo> to clean up from messy merges, etc.
+2013-08-27T22:20:43  <jbooboo> quantumfly: that's what the test caught.
+2013-08-27T22:32:17  <openstackgerrit> A change was merged to openstack-infra/config: Added list for Track Chairs Committee for Summit Nov 2013  https://review.openstack.org/43773
+2013-08-27T22:35:28  *** Bada has quit IRC
+2013-08-27T22:36:37  <openstackgerrit> A change was merged to openstack-infra/config: Fix copy-n-paste example to be clearer.  https://review.openstack.org/43870
+2013-08-27T22:37:33  <openstackgerrit> A change was merged to openstack-infra/zuul: Fix checkout when preparing a ref  https://review.openstack.org/43959
+2013-08-27T22:38:09  <jbooboo> stopping zuul
+2013-08-27T22:38:52  *** jhesketh has joined #openstack-infra
+2013-08-27T22:39:22  <jbooboo> starting zuul
+2013-08-27T22:40:30  *** dina_belova has joined #openstack-infra
+2013-08-27T22:44:31  *** ftcjeff has quit IRC
+2013-08-27T22:45:01  *** dina_belova has quit IRC
+2013-08-27T22:45:36  *** ArxCruz has joined #openstack-infra
+2013-08-27T22:45:44  *** ArxCruz has quit IRC
+2013-08-27T22:50:41  *** rcleere has joined #openstack-infra
+2013-08-27T22:50:56  *** senk has joined #openstack-infra
+2013-08-27T22:50:57  *** dkliban has joined #openstack-infra
+2013-08-27T22:52:27  <Alex_Gaynor> Does nodepool not create more of the centos nodes?
+2013-08-27T22:52:50  <jbooboo> Alex_Gaynor: currently nodepool only manages devstack-precise nodes; all the others are static
+2013-08-27T22:52:58  <jbooboo> Alex_Gaynor: we're thinking about having it manage everything
+2013-08-27T22:53:16  <Alex_Gaynor> jbooboo: seem pretty reasonable
+2013-08-27T22:53:48  *** thomasm has joined #openstack-infra
+2013-08-27T22:54:01  <notmyname> jbooboo: are you scripting reverify comments?
+2013-08-27T22:54:24  <jbooboo> notmyname: yes
+2013-08-27T22:54:51  <jbooboo> notmyname: i had to restart zuul a couple of times
+2013-08-27T22:55:02  <notmyname> jbooboo: ok. you may be a little aggressive ;-) re https://review.openstack.org/#/c/42447/
+2013-08-27T22:55:11  *** portante is now known as portante|afk
+2013-08-27T22:55:49  *** jhesketh_ has joined #openstack-infra
+2013-08-27T22:56:59  <yjiang5> quantumfly: seems still not working :(
+2013-08-27T22:57:08  <jbooboo> notmyname: yeah, i had to restart 3 times.  i'll get around to making a way to re-enqueue things that don't leave comments someday
+2013-08-27T22:57:30  *** jhesketh has quit IRC
+2013-08-27T22:57:56  <yjiang5> I cherry-pick everything and then git review -t , but seems 39890 still have parent in my local sha1
+2013-08-27T22:58:27  <quantumfly> yjiang5: you only need to push to https://review.openstack.org/#/c/39606/
+2013-08-27T22:58:39  <quantumfly> you shouldn't need to cherry pick everything, just push what you have
+2013-08-27T22:59:51  <yjiang5> quantumfly: I'm totally lost :$ now I have do the cherry-pick. How can I push that single change?
+2013-08-27T23:00:16  <quantumfly> yjiang5: just run git review when you have aa1c checked out
+2013-08-27T23:00:50  <yjiang5> quantumfly: now in the latest 39890, it's 480a, then I check out that one and git review, right?
+2013-08-27T23:01:26  *** dkliban has quit IRC
+2013-08-27T23:02:13  <quantumfly> yjiang5: yes
+2013-08-27T23:02:17  <yjiang5> quantumfly: thanks.
+2013-08-27T23:02:53  <Alex_Gaynor> quantumfly: pypy tests for marconi seem to be going smoothly now!
+2013-08-27T23:03:01  <quantumfly> Alex_Gaynor: woot
+2013-08-27T23:03:29  <quantumfly> jhesketh_: jbooboo: I have reviewed the Zuul reporters changes
+2013-08-27T23:04:00  <jhesketh_> quantumfly: yep, I saw. Thanks for that
+2013-08-27T23:04:05  <jhesketh_> I'll take a look shortly :-)
+2013-08-27T23:04:20  <yjiang5> quantumfly:  sorry for disturbing again. http://paste.openstack.org/show/45251/
+2013-08-27T23:04:44  *** jhesketh has joined #openstack-infra
+2013-08-27T23:05:19  <quantumfly> yjiang5: aha! I think that is why we have been broken all along
+2013-08-27T23:05:29  <yjiang5> quantumfly: ?
+2013-08-27T23:05:44  <quantumfly> yjiang5: gerrit is being smart and saying that you are not changing anything in the patch you are trying to push so it rejects it
+2013-08-27T23:06:06  <quantumfly> yjiang5: you can try making a trivial update to the commit message and pushing that
+2013-08-27T23:06:20  <yjiang5> yjiang5: nooo, it's really not easy to get +A :)
+2013-08-27T23:06:22  <jbooboo> quantumfly: should the parent be updated?
+2013-08-27T23:06:55  <quantumfly> jbooboo: the sha has definitely changed so the parent is probably different but gerrit is doing additional checks iirc
+2013-08-27T23:07:13  *** rcleere has quit IRC
+2013-08-27T23:07:39  <quantumfly> jbooboo: this is related to cherry picking iirc
+2013-08-27T23:07:40  <jbooboo> quantumfly: and the reparenting isn't enough to let it in?  perhaps because of the current situation with the parent.
+2013-08-27T23:08:55  *** senk has quit IRC
+2013-08-27T23:09:17  <jbooboo> nodepool seems to have done semi-sane things with its image cleanup
+2013-08-27T23:09:31  <yjiang5> jbooboo: so anything I can do? Really sorry for bothering.
+2013-08-27T23:09:53  <jbooboo> yjiang5: i don't have any ideas quantumfly doesn't have
+2013-08-27T23:10:45  <yjiang5> jbooboo: what's the trival changes in commit message that make sure to contain the +A?
+2013-08-27T23:10:52  <quantumfly> I think what may have happened is the commit was pushed into gerrit so gerrit knows about it somewhere, but it wasn't pushed into the special refs/for/foo so a change wasn't created for it
+2013-08-27T23:11:24  <quantumfly> jbooboo: yjiang5 so all of these commits are in gerrit's git but not as gerrit patchsets
+2013-08-27T23:12:07  <quantumfly> jbooboo: how are the new zuul refs looking?
+2013-08-27T23:12:42  <jbooboo> quantumfly: the first batch looked good; i'm waiting to check the second batch (after a reset, which is where i saw the drift last time)
+2013-08-27T23:13:21  <yjiang5> quantumfly: so possibly I can wait till the parents are merged :)
+2013-08-27T23:15:13  <jbooboo> quantumfly: second batch looks good (it picked up the merged change in the refs created after the reset)
+2013-08-27T23:15:20  <quantumfly> jbooboo: great
+2013-08-27T23:20:11  *** datsun180b has quit IRC
+2013-08-27T23:20:31  *** vipul is now known as vipul-away
+2013-08-27T23:21:33  <anteaya> I'm tired and going to wrap up, see you tomorrow
+2013-08-27T23:21:36  *** anteaya has quit IRC
+2013-08-27T23:25:00  *** sarob has joined #openstack-infra
+2013-08-27T23:25:52  <jbooboo> quantumfly: i think the current times for git processing are about 20-25 seconds to fetch a branch, and another 10-25 seconds to fetch the ref
+2013-08-27T23:26:09  <jbooboo> quantumfly: so it's only marginally better than what we had before :/
+2013-08-27T23:26:42  <jbooboo> quantumfly: (though, gate queue processing should be much faster because it only incurs the second fetch for changes after the first)
+2013-08-27T23:27:07  <jbooboo> quantumfly: i think that the number of zuul refs in the local repo has an effect.
+2013-08-27T23:28:42  *** michchap has joined #openstack-infra
+2013-08-27T23:31:14  <openstackgerrit> David Kranz proposed a change to openstack-infra/config: Add slow heat job to devstack experimental for debug  https://review.openstack.org/43971
+2013-08-27T23:36:07  *** sarob_ has joined #openstack-infra
+2013-08-27T23:37:57  *** markmcclain has quit IRC
+2013-08-27T23:38:06  <jbooboo> jhesketh_: ping
+2013-08-27T23:38:13  <jhesketh> jbooboo: pong
+2013-08-27T23:38:26  <jbooboo> jhesketh: do you really want to keep backwards compat?
+2013-08-27T23:38:44  <jhesketh> I'm open to either way
+2013-08-27T23:38:47  <jbooboo> jhesketh: i don't; i think it's easy enough to change the config file
+2013-08-27T23:38:56  *** sarob has quit IRC
+2013-08-27T23:39:02  <jhesketh> ( lifeless had suggested it)
+2013-08-27T23:39:15  <jbooboo> jhesketh: and i think if we kept backwards compat, it should be done without the legacy flag;
+2013-08-27T23:39:33  <jhesketh> jbooboo: so how will openstack's zuul get updated to not break the queues?
+2013-08-27T23:39:34  <jbooboo> jhesketh: so i was thinking that it would be easier to just drop it
+2013-08-27T23:39:54  <jbooboo> jhesketh: downtime.  but short.
+2013-08-27T23:40:19  <jbooboo> jhesketh: (we'll merge the config file change, stop zuul, apply the change, start zuul)
+2013-08-27T23:40:29  <jhesketh> okay, is there an easy way to snapshot what is in the queue and requeue them after?
+2013-08-27T23:40:43  <jbooboo> jhesketh: yeah, the graceful shutdown will take care of that
+2013-08-27T23:40:59  *** dina_belova has joined #openstack-infra
+2013-08-27T23:41:19  <jbooboo> jhesketh: it's very similar to the multiple trigger change, where we also broke backwards compat
+2013-08-27T23:41:34  <jhesketh> okay cool
+2013-08-27T23:41:38  <jbooboo> jhesketh: soon, we'll release a zuul 2.0, and after that we'll want to try to maintain compatability
+2013-08-27T23:41:45  <jhesketh> well if you're happy with no back-compat I'll remove it
+2013-08-27T23:42:12  <jbooboo> jhesketh: but for now, we're breaking it in several other places, so i'd rather break it in one more and not deal with extra code
+2013-08-27T23:42:22  <jhesketh> sure
+2013-08-27T23:42:24  <jhesketh> makes sense
+2013-08-27T23:43:13  <jbooboo> jhesketh: i'll finish reviewing patchset 5, aside from that
+2013-08-27T23:43:22  <quantumfly> jbooboo: maybe packing refs in zuul repos would help?
+2013-08-27T23:43:31  <quantumfly> jbooboo: that makes it hard to delete them though
+2013-08-27T23:43:59  <jhesketh_> jbooboo: I have some changes I'm about to push if you want to wait and save double-reviewing
+2013-08-27T23:44:18  <jhesketh_> but I'll remove the backwards compat first
+2013-08-27T23:44:26  <jbooboo> quantumfly: i think they are occasionally getting packed; there were only 400 loose and 36000 packed
+2013-08-27T23:44:32  <jbooboo> jhesketh_: ok
+2013-08-27T23:44:43  *** dkranz has joined #openstack-infra
+2013-08-27T23:44:55  <jbooboo> quantumfly: (though it's easy to delete them by just deleting the repo
+2013-08-27T23:45:26  *** dina_belova has quit IRC
+2013-08-27T23:47:44  *** jhesketh has quit IRC
+2013-08-27T23:47:50  *** pcrews has quit IRC
+2013-08-27T23:55:20  <quantumfly> jbooboo: it is amazing how much fun you can have looking at graphite graphs. According to graphite we merged >1k changes the week of the 15th
+2013-08-27T23:56:40  *** jergerber has quit IRC
+2013-08-27T23:59:04  <jbooboo> wheee
